@@ -1,0 +1,17 @@
+#!/bin/bash
+
+generalPrivate="~/.ssh/private"
+hostnames=(
+  "user,host/ip,port,specificPrivate" \
+  "user2,host/ip,port,specificPrivate" \
+  "user3,host/ip,port,specificPrivate" \
+  "user4,host/ip,port,specificPrivate" \
+)
+hosttarget="$1"
+
+
+for host in ${hostnames}; do
+  if [[ $(echo "$host" | grep -w "$hosttarget") != "" ]]; then
+    echo "$host"
+  fi
+done
