@@ -34,6 +34,4 @@ To enable custom icons, just install this package:
 #### Arch Linux
 ```pacman -S zsh curl git```
 
-After install Zsh, Git and Curl, just copy this command to install.
 
-```curl -s repository/install.sh | sh```

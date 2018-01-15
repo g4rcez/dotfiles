@@ -1,12 +1,12 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Allan Garcez Vimrc config, based on MacGregor Vimrc configuration
+" Allan Garcez Vimrc config, based on MacGregor
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set encoding=utf8
 
 """" START Vundle Configuration
 
 " Disable file type for vundle
-filetype off                  " required
+filetype off
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
