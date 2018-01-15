@@ -2,6 +2,8 @@
 
 This is a repository with all dotfiles to making a power and awesome Shell
 
+![My Shell](shell.png)
+
 ## Requirements
 
 * [Oh-My-Zsh](https://github.com/robbyrussell/oh-my-zsh)
@@ -32,7 +34,9 @@ cat /tmp/dotfiles/zsh/master_themes.zsh > $HOME/.zsh/master_themes.zsh
 cat /tmp/dotfiles/zsh/master_functions.zsh > $HOME/.zsh/master_functions.zsh
 ```
 
-Good...
+**Good...**
 Shell: Zsh
+
 Theme: Powerlevel 9k
-Functions: A little touch of [vandalvnl](https://vandalvnl.github.io)
+
+Functions: A little touch of [vandalvnl](https://vandalvnl)
