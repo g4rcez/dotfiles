@@ -1,6 +1,3 @@
-# OhMyZSH
-alias reload="source ~/.zshrc"
-
 # Advanced CP/MV
 alias cp="acp -g"
 alias mv="amv -g"
@@ -14,32 +11,50 @@ alias zshconf="vim ~/.zshrc"
 
 # Grep Family
 alias fgrep='fgrep --color=auto'
-alias ls="ls --color"
+alias ls="ls --color -Fh"
 alias egrep='egrep --color=auto'
 alias grep='grep --color=auto'
 
 # For monitor sys
 alias cmd10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-alias today="date +'%A, %d de %B[%m] de %Y - %H:%M:%S - Semana: %W'"
+alias today="date +'%A, %d de %B[%m] de %Y - %H:%M:%S - Week: %W'"
 
 # ls-icons
-alias ls="/opt/coreutils/bin/ls"
+if [[ -e "/opt/coreutils/bin/ls" ]];then
+    alias ls="/opt/coreutils/bin/ls"
+fi
 
 # Required Git
 alias add="git add ."
 alias commit="git commit -m"
-alias push="git push"
 alias gitrem="git remote add origin"
 
 # Arch - Pacman aliases
 alias pacin="sudo pacman -S"
+alias auri="yaourt -S"
+alias pacs="pacman -Ss"
+alias aurs="yaourt -Ss"
 alias pacoptmize="sudo pacman-db-upgrade && sudo pacman-optimize "
-
-# For WebDevs
-alias react="create-react-app"
-alias npmi="npm install"
-alias npms="npm start"
 
 # Prevent troubles
 alias sl='ls'
 alias cd..='cd ..'
+
+# Systemctl Alias
+alias start='systemctl start '
+alias hello='systemctl start '
+alias stop="systemctl stop "
+alias restart='systemctl restart '
+alias status='systemctl status '
+
+# Root operations
+alias root="sudo su"
+alias s="sudo "
+
+# Polybar
+alias bar="polybar -r mybar"
+
+# Laravel
+alias laravel="/home/garcez/.config/composer/vendor/bin/laravel"
+export jekyll="/home/garcez/.gem/ruby/2.4.0/bin/jekyll"
+export bundle="/home/garcez/.gem/ruby/2.4.0/bin/bundle"

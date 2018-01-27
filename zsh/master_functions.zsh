@@ -56,14 +56,9 @@ extract() {
   fi
 }
 
-# top #n process
-cpu(){
-  count=10
-  if [[ "$1" == "" ]]; then
-    count=10
-  fi
-  count=$(($1+1))
-  ps -A --sort -rsz -o pid,comm,pmem,pcpu|awk "NR<=$count"
+# Get system info 
+sysinfo(){
+    ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=$@"
 }
 
 # count words in output
@@ -77,3 +72,49 @@ clone()
     git clone "${1:?"usage: clone <url_to_clone>"}"
     cd ${${1%%.git}##*/}
 }
+
+# Get current path to clipboard && Require alias pbcopy
+pwdc(){
+  emulate -L zsh
+  echo "$(pwd)" | pbcopy
+}
+
+filec(){
+  emulate -L zsh
+  clipcopy "$1"
+}
+
+wtf(){
+  systemctl status "$1"
+}
+
+# Create and Entry in directory
+cdir(){
+  mkdir "$1" && cd "$1"
+}
+
+# Delete the current directory
+killme(){
+  curdir="$(pwd)"
+  cd .. && rm -rf "$curdir"
+  ls
+}
+
+paclist() {
+  # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
+  LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
+    awk 'BEGIN {FS=":"} /^Name/{printf("\033[1;36m%s\033[1;37m", $2)} /^Description/{print $2}'
+}
+
+push(){
+  if [[ "$(git config remote.origin.url)" == "" ]]; then 
+    echo 'You must be inside a Git repository'; 
+  else
+    url="$(git config remote.origin.url | sed "s#http\(\|s\)://#&YOUR_USER_HERE:YOUR_PASSWORD_HERE@#g")"
+    git push $url $@
+  fi
+}
+
+source ~/.zsh/jsfuncs.zsh
+source ~/.zsh/ctf_stuff.zsh
+
