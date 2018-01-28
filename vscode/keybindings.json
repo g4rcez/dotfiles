@@ -1,0 +1,243 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+	{
+		"key": "ctrl+shift+w",
+		"command": "editor.emmet.action.wrapWithAbbreviation"
+	},
+	{
+		"key": "ctrl+shift+d",
+		"command": "lafe.duplicateCode"
+	},
+	{
+		"key": "ctrl+shift+i",
+		"command": "editor.action.formatDocument"
+	},
+	{
+		"key": "ctrl+shift+o",
+		"command": "workbench.action.files.openFolder"
+	},
+	{
+		"key": "ctrl+shift+down",
+		"command": "editor.action.copyLinesDownAction",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+shift+up",
+		"command": "editor.action.copyLinesUpAction",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+n",
+		"command": "workbench.action.files.newUntitledFile"
+	},
+	{
+		"key": "ctrl+n",
+		"command": "-workbench.action.files.newUntitledFile"
+	},
+	{
+		"key": "ctrl+f4",
+		"command": "workbench.action.closeActiveEditor"
+	},
+	{
+		"key": "ctrl+f4",
+		"command": "-workbench.action.closeActiveEditor"
+	},
+	{
+		"key": "ctrl+l",
+		"command": "workbench.action.editor.changeLanguageMode"
+	},
+	{
+		"key": "ctrl+k m",
+		"command": "-workbench.action.editor.changeLanguageMode"
+	},
+	{
+		"key": "ctrl+;",
+		"command": "macros.addSemicolon"
+	},
+	{
+		"key": "ctrl+shift+space",
+		"command": "editor.action.triggerParameterHints",
+		"when": "editorHasSignatureHelpProvider && editorTextFocus"
+	},
+	{
+		"key": "ctrl+shift+space",
+		"command": "-editor.action.triggerParameterHints",
+		"when": "editorHasSignatureHelpProvider && editorTextFocus"
+	},
+	{
+		"key": "ctrl+shift+f6",
+		"command": "fileutils.renameFile"
+	},
+	{
+		"key": "shift+alt+left",
+		"command": "editor.action.smartSelect.shrink",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "shift+alt+left",
+		"command": "-editor.action.smartSelect.shrink",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+t",
+		"command": "workbench.action.showAllSymbols"
+	},
+	{
+		"key": "ctrl+t",
+		"command": "-workbench.action.showAllSymbols"
+	},
+	{
+		"key": "ctrl+n",
+		"command": "-workbench.action.showAllSymbols"
+	},
+	{
+		"key": "ctrl+r",
+		"command": "editor.action.changeAll",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+f2",
+		"command": "-editor.action.changeAll",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+shift+alt+n",
+		"command": "workbench.action.newWindow"
+	},
+	{
+		"key": "ctrl+shift+n",
+		"command": "-workbench.action.newWindow"
+	},
+	{
+		"key": "ctrl+b",
+		"command": "workbench.action.toggleSidebarVisibility"
+	},
+	{
+		"key": "ctrl+b",
+		"command": "-workbench.action.toggleSidebarVisibility"
+	},
+	{
+		"key": "ctrl+delete",
+		"command": "editor.action.deleteLines",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+y",
+		"command": "-editor.action.deleteLines",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+shift+m",
+		"command": "markdown.showPreviewToSide",
+		"when": "editorLangId == 'markdown'"
+	},
+	{
+		"key": "ctrl+k v",
+		"command": "-markdown.showPreviewToSide",
+		"when": "editorLangId == 'markdown'"
+	},
+	{
+		"key": "ctrl+shift+c",
+		"command": "copyFilePath",
+		"when": "explorerViewletFocus && explorerViewletVisible && !inputFocus"
+	},
+	{
+		"key": "ctrl+alt+c",
+		"command": "-copyFilePath",
+		"when": "explorerViewletFocus && explorerViewletVisible && !inputFocus"
+	},
+	{
+		"key": "ctrl+[BracketLeft]",
+		"command": "terminal.open"
+	},
+	{
+		"key": "ctrl+alt+o",
+		"command": "-terminal.open"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "expandLineSelection",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "-expandLineSelection",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+w",
+		"command": "workbench.action.terminal.deleteWordLeft",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "ctrl+backspace",
+		"command": "-workbench.action.terminal.deleteWordLeft",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "ctrl+shift+m",
+		"command": "editor.action.insertSnippet",
+		"when": "editorTextFocus",
+		"args": {
+			"snippet":
+				"Mussum Ipsum, cacilds vidis litro abertis. In elementis mé pra quem é amistosis quis leo. Em pé sem cair, deitado sem dormir, sentado sem cochilar e fazendo pose. Pra lá , depois divoltis porris, paradis. Cevadis im ampola pa arma uma pindureta."
+		}
+	},
+	{
+		"key": "ctrl+alt+p",
+		"command": "editor.action.insertSnippet",
+		"when": "editorTextFocus",
+		"args": {
+			"snippet":
+				"Eiiitaaa Mainhaaa!! Esse Lorem ipsum é só na sacanageeem!! E que abundância meu irmão viuu!! Assim você vai matar o papai. Só digo uma coisa, Domingo ela não vai! Danadaa!! Vem minha odalisca, agora faz essa cobra coral subir!!! "
+		}
+	},
+	{
+		"key": "ctrl+w",
+		"command": "-extension.vim_ctrl+w",
+		"when": "editorTextFocus && vim.active && vim.use<C-w> && !inDebugRepl"
+	},
+	{
+		"key": "ctrl+f",
+		"command": "-extension.vim_ctrl+f",
+		"when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl"
+	},
+	{
+		"key": "ctrl+space",
+		"command": "extension.colorHelper.pick",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "alt+c p",
+		"command": "-extension.colorHelper.pick",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+a",
+		"command": "editor.action.selectAll"
+	},
+	{
+		"key": "ctrl+a",
+		"command": "-editor.action.selectAll"
+	},
+	{
+		"key": "ctrl+c",
+		"command": "editor.action.clipboardCopyAction",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+c",
+		"command": "-editor.action.clipboardCopyAction",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+v",
+		"command": "editor.action.clipboardPasteAction",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+v",
+		"command": "-editor.action.clipboardPasteAction",
+		"when": "editorTextFocus && !editorReadonly"
+	}
+]

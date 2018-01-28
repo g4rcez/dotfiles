@@ -7,7 +7,7 @@ whatcripto(){
 
 64d(){
     if [[ -e "$1" ]]; then
-        cat "$1" | base64 -di
+        cat "$1" | base64 -d
     else
         echo "$@" | base64 -d
     fi
