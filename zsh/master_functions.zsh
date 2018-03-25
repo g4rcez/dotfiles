@@ -115,6 +115,28 @@ push(){
   fi
 }
 
+whereami(){
+  myip=$(curl -s https://4.ifcfg.me/)
+  curl -s freegeoip.net/json/$myip | tr ',' '\'n | tr -d "{}" | tr -d '"' | sed 's/^./\u&/g; s/:/:\t/g' | expand -t 20
+}
+
+wttr(){
+    if [[ "$@" == "" ]]; then
+        city="$(whereami | grep "City" | cut -d ':' -f2 | tr -s ' \t'|sed 's/^ \+//g'|sed 's@ @\%20@g')"
+    else
+        city="$(echo $@ | sed 's@  @\%20@g')"
+    fi
+    curl -s "wttr.in/$city"
+}
+
+has(){
+  find "." -iname "$@"
+}
+
+contains(){
+  has "$@"
+}
+
 source ~/.zsh/jsfuncs.zsh
 source ~/.zsh/ctf_stuff.zsh
 

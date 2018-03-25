@@ -36,20 +36,25 @@ alias pacs="pacman -Ss"
 alias aurs="yaourt -Ss"
 alias pacoptmize="sudo pacman-db-upgrade && sudo pacman-optimize "
 
+# Debian - Apt aliases
+alias apti="sudo apt install "
+alias purge="sudo apt purge"
+alias search="apt search "
+
+
 # Prevent troubles
 alias sl='ls'
 alias cd..='cd ..'
 
 # Systemctl Alias
-alias start='systemctl start '
-alias hello='systemctl start '
-alias stop="systemctl stop "
-alias restart='systemctl restart '
-alias status='systemctl status '
+alias start='sudo systemctl start '
+alias hello='sudo systemctl start '
+alias stop="sudo systemctl stop "
+alias restart='sudo systemctl restart '
+alias status='sudo systemctl status '
 
 # Root operations
 alias root="sudo su"
-alias s="sudo "
 
 # Polybar
 alias bar="polybar -r mybar"

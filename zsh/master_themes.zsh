@@ -25,14 +25,14 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
 
 # RAM Control
 POWERLEVEL9K_RAM_ICON='\uF472'
-POWERLEVEL9K_RAM_FOREGROUND='black'
-POWERLEVEL9K_RAM_BACKGROUND='white'
+POWERLEVEL9K_RAM_FOREGROUND='white'
+POWERLEVEL9K_RAM_BACKGROUND='black'
 
 # Time Control
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 
 # Elements in Line Right-Left <>
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status ip ram battery root_indicator time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status ram battery root_indicator)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs dir_writable)
 
 # Batery Elements

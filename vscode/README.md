@@ -3,7 +3,8 @@
 ## Info
 
 - Keymap: Vim (with IntelliJ shortcuts modifieds)
-- Theme: Atom One Dark
+- Theme: One Dark Pro Vivid
+- Font: Fira Code
 
 ## Plugins
 
@@ -16,10 +17,7 @@
 - Git Lens
 - HTML CSS Support
 - IntelliSense for CSS class
-- Macros
 - Material Icon Theme
-- Material Theme
 - Path Intellisense
 - Prettier - Code formatter
-- Vim
 - Vscode Icons

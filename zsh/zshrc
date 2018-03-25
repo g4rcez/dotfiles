@@ -50,7 +50,7 @@ HIST_STAMPS="dd/mm/yyyy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 #
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize jekyll zsh-syntax-highlighting branch-manager docker docker-compose python spring alias-tips zsh-peco-history k zsh-autosuggestions z)
+plugins=(git zsh-syntax-highlighting branch-manager docker docker-compose python spring alias-tips zsh-peco-history zsh-autosuggestions z)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -136,7 +136,6 @@ zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 zplug "plugins/git",   from:oh-my-zsh
 zplug "hlissner/zsh-autopair", defer:2
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
-zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
 zplug "zsh-users/zsh-completions",              defer:0
 zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
@@ -168,9 +167,4 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
-
-# Export Ruby gems
-export jekyll="/home/garcez/.gem/ruby/2.4.0/bin/jekyll"
-export bundle="/home/garcez/.gem/ruby/2.4.0/bin/bundle"
-export laravel="$HOME/.config/composer/vendor/bin/laravel"
 

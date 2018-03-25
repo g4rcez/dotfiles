@@ -1,96 +1,68 @@
 {
-	"emmet.triggerExpansionOnTab": true,
-	"emmet.showExpandedAbbreviation": "always",
-	"emmet.showSuggestionsAsSnippets": true,
-	"editor.snippetSuggestions": "top",
-	"emmet.includeLanguages": {
-		"javascript": "javascriptreact",
-		"vue-html": "html",
-		"plaintext": "jade"
-	},
-	"emmet.syntaxProfiles": {
-		"html": {
-			"attr_quotes": "self_closing_tag"
-		},
-		"jsx": {
-			"self_closing_tag": true
-		}
-	},
-	"files.autoSave": "afterDelay",
-	"files.exclude": {
-		"**/.git": true,
-		"**/.svn": true,
-		"**/.hg": true,
-		"**/CVS": true,
-		"**/.DS_Store": true,
-		"**/.vscode": true,
-		"**/.idea": true
-	},
-	"editor.cursorStyle": "underline",
-	"editor.fontLigatures": true,
-	"editor.smoothScrolling": true,
-	"workbench.editor.labelFormat": "medium",
-	"files.insertFinalNewline": true,
-	"html.format.endWithNewline": true,
-	"html.format.indentInnerHtml": true,
-	"html.suggest.ionic": false,
-	"workbench.colorTheme": "Material Theme",
-	"highlight-matching-tag.leftStyle": {
-		"borderWidth": "0 0 0 3px",
-		"borderStyle": "solid",
-		"borderColor": "red",
-		"borderRadius": "5px"
-	},
-	"editor.minimap.enabled": false,
-	"editor.scrollBeyondLastLine": false,
-	"window.menuBarVisibility": "toggle",
-	"explorer.confirmDelete": false,
-	"explorer.confirmDragAndDrop": false,
-	"macros": {
-		"addSemicolon": [
-			"cursorEnd",
-			{
-				"command": "type",
-				"args": {
-					"text": ";"
-				}
-			}
-		]
-	},
-	"workbench.iconTheme": "material-icon-theme",
-	"editor.fontFamily": "'Inconsolata', 'monospace', monospace, 'Droid Sans Fallback'",
-	"editor.fontSize": 15,
-	"terminal.integrated.fontFamily": "'Inconsolata'",
-	"terminal.integrated.cursorStyle": "underline",
-	"window.zoomLevel": 0,
-	"vim.history": 50,
-	"vim.showcmd": true,
-	"workbench.colorCustomizations": {
-		"activityBar.background": "#090909",
-		"editor.background": "#050505",
-		"statusBar.background": "#121212",
-		"editorLineNumber.foreground": "#ddd",
-		"contrastBorder": "#000",
-		"editorBracketMatch.border": "#ff0",
-		"editorGutter.background": "#151515",
-		"editor.selectionBackground": "#212987",
-		"editorIndentGuide.background": "#63747c",
-		"editorSuggestWidget.background": "#212d3e",
-		"editorSuggestWidget.foreground": "#ccd",
-		"activityBarBadge.background": "#b47f00",
-		"sideBar.background": "#191d22",
-		"sideBar.foreground": "#ddd"
-	},
-	"colorHelper.pickerForm": "compact",
-	"colorHelper.formatsOrder": ["hex"],
-	"vim.startInInsertMode": true,
-	"vim.useSystemClipboard": true,
-	"html-css-class-completion.includeGlobPattern": "**/*.{css,html,js,jsx,ts,tsx}",
-	"material-icon-theme.activeIconPack": "angular,react",
-	"prettier.printWidth": 120,
-	"prettier.singleQuote": true,
-	"prettier.useTabs": true,
-	"path-intellisense.autoSlashAfterDirectory": true,
-	"path-intellisense.showHiddenFiles": true,
-	"less.lint.duplicateProperties": "warning"
+    "emmet.triggerExpansionOnTab": true,
+    "emmet.showExpandedAbbreviation": "always",
+    "emmet.showSuggestionsAsSnippets": true,
+    "editor.snippetSuggestions": "top",
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact",
+        "vue-html": "html",
+        "plaintext": "jade"
+    },
+    "emmet.syntaxProfiles": {
+        "html": {
+            "attr_quotes": "self_closing_tag"
+        },
+        "jsx": {
+            "self_closing_tag": true
+        }
+    },
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.vscode": true,
+        "**/.idea": true
+    },
+    "editor.cursorStyle": "underline",
+    "editor.fontLigatures": true,
+    "editor.smoothScrolling": true,
+    "workbench.editor.labelFormat": "medium",
+    "files.insertFinalNewline": true,
+    "html.format.endWithNewline": true,
+    "html.format.indentInnerHtml": true,
+    "html.suggest.ionic": false,
+    "workbench.colorTheme": "One Dark Pro Vivid",
+    "editor.minimap.enabled": false,
+    "editor.scrollBeyondLastLine": false,
+    "window.menuBarVisibility": "toggle",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "workbench.iconTheme": "vscode-icons",
+    "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 14,
+    "terminal.integrated.fontFamily": "'Fira Code'",
+    "terminal.integrated.cursorStyle": "underline",
+    "window.zoomLevel": 0,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#090909",
+        "editor.background": "#050505",
+        "statusBar.background": "#121212",
+        "editorLineNumber.foreground": "#ddd",
+        "contrastBorder": "#000",
+        "editorBracketMatch.border": "#ff0",
+        "editorGutter.background": "#151515",
+        "editor.selectionBackground": "#212987",
+        "editorIndentGuide.background": "#63747c",
+        "editorSuggestWidget.background": "#212d3e",
+        "editorSuggestWidget.foreground": "#ccd",
+        "activityBarBadge.background": "#b47f00",
+        "sideBar.background": "#191d22",
+        "sideBar.foreground": "#ddd"
+    },
+    "path-intellisense.autoSlashAfterDirectory": true,
+    "path-intellisense.showHiddenFiles": true,
+    "less.lint.duplicateProperties": "warning"
 }
