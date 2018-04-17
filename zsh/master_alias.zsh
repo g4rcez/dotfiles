@@ -1,10 +1,6 @@
-# Advanced CP/MV
-alias cp="acp -g"
-alias mv="amv -g"
-
 # Pbpaste/copy
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
+alias pbcopy="xclip -sel clip"
+alias pbpaste='xclip -selection clipboard -o'
 
 # ZSH Config
 alias zshconf="vim ~/.zshrc"
@@ -21,7 +17,7 @@ alias today="date +'%A, %d de %B[%m] de %Y - %H:%M:%S - Week: %W'"
 
 # ls-icons
 if [[ -e "/opt/coreutils/bin/ls" ]];then
-    alias ls="/opt/coreutils/bin/ls"
+    alias ls="/opt/coreutils/bin/ls --group-directories-first -F"
 fi
 
 # Required Git
@@ -30,16 +26,22 @@ alias commit="git commit -m"
 alias gitrem="git remote add origin"
 
 # Arch - Pacman aliases
-alias pacin="sudo pacman -S"
-alias auri="yaourt -S"
-alias pacs="pacman -Ss"
-alias aurs="yaourt -Ss"
-alias pacoptmize="sudo pacman-db-upgrade && sudo pacman-optimize "
+# alias pacin="sudo pacman -S"
+# alias auri="yaourt -S"
+# alias pacs="pacman -Ss"
+# alias aurs="yaourt -Ss"
+# alias pacoptmize="sudo pacman-db-upgrade && sudo pacman-optimize "
 
 # Debian - Apt aliases
-alias apti="sudo apt install "
-alias purge="sudo apt purge"
-alias search="apt search "
+alias search="apt-cache search"
+alias install="sudo apt install -y "
+alias upgrade="sudo apt upgrade"
+alias update="sudo apt update"
+alias remove="sudo apt remove"
+alias purge="sudo apt remove --purge"
+alias autoclean="sudo apt autoclean"
+alias autoremove="sudo apt autoremove"
+alias reconfigure="sudo dpkg-reconfigure"
 
 
 # Prevent troubles
@@ -56,10 +58,5 @@ alias status='sudo systemctl status '
 # Root operations
 alias root="sudo su"
 
-# Polybar
-alias bar="polybar -r mybar"
-
-# Laravel
-alias laravel="/home/garcez/.config/composer/vendor/bin/laravel"
-export jekyll="/home/garcez/.gem/ruby/2.4.0/bin/jekyll"
-export bundle="/home/garcez/.gem/ruby/2.4.0/bin/bundle"
+# Vi => Vim
+alias vi="vim"

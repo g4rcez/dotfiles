@@ -114,7 +114,6 @@ push(){
     git push $url $@
   fi
 }
-
 whereami(){
   myip=$(curl -s https://4.ifcfg.me/)
   curl -s freegeoip.net/json/$myip | tr ',' '\'n | tr -d "{}" | tr -d '"' | sed 's/^./\u&/g; s/:/:\t/g' | expand -t 20
@@ -139,4 +138,3 @@ contains(){
 
 source ~/.zsh/jsfuncs.zsh
 source ~/.zsh/ctf_stuff.zsh
-
