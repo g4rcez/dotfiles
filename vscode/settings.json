@@ -1,68 +1,78 @@
 {
-    "emmet.triggerExpansionOnTab": true,
-    "emmet.showExpandedAbbreviation": "always",
-    "emmet.showSuggestionsAsSnippets": true,
-    "editor.snippetSuggestions": "top",
-    "emmet.includeLanguages": {
-        "javascript": "javascriptreact",
-        "vue-html": "html",
-        "plaintext": "jade"
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
     },
-    "emmet.syntaxProfiles": {
-        "html": {
-            "attr_quotes": "self_closing_tag"
-        },
-        "jsx": {
-            "self_closing_tag": true
-        }
-    },
+    "workbench.colorTheme": "One Dark Pro",
     "files.autoSave": "afterDelay",
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/.vscode": true,
-        "**/.idea": true
-    },
     "editor.cursorStyle": "underline",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.accessibilitySupport": "off",
     "editor.fontLigatures": true,
+    "editor.formatOnPaste": true,
+    "editor.letterSpacing": 1.1,
+    "editor.mouseWheelZoom": true,
+    "editor.renderLineHighlight": "gutter",
     "editor.smoothScrolling": true,
+    "editor.tabCompletion": true,
+    "workbench.commandPalette.preserveInput": true,
     "workbench.editor.labelFormat": "medium",
-    "files.insertFinalNewline": true,
-    "html.format.endWithNewline": true,
-    "html.format.indentInnerHtml": true,
-    "html.suggest.ionic": false,
-    "workbench.colorTheme": "One Dark Pro Vivid",
-    "editor.minimap.enabled": false,
-    "editor.scrollBeyondLastLine": false,
-    "window.menuBarVisibility": "toggle",
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
     "workbench.iconTheme": "vscode-icons",
-    "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Droid Sans Fallback'",
-    "editor.fontSize": 14,
-    "terminal.integrated.fontFamily": "'Fira Code'",
-    "terminal.integrated.cursorStyle": "underline",
-    "window.zoomLevel": 0,
+    "window.menuBarVisibility": "toggle",
+    "files.autoSaveDelay": 500,
+    "files.insertFinalNewline": true,
+    "files.maxMemoryForLargeFilesMB": 8192,
+    "html.format.endWithNewline": true,
+    "terminal.external.linuxExec": "terminator",
+    "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+    "editor.fontFamily": "'Fira Code', 'Inconsolata', monospace, 'Droid Sans Fallback'",
     "workbench.colorCustomizations": {
-        "activityBar.background": "#090909",
-        "editor.background": "#050505",
-        "statusBar.background": "#121212",
-        "editorLineNumber.foreground": "#ddd",
-        "contrastBorder": "#000",
-        "editorBracketMatch.border": "#ff0",
-        "editorGutter.background": "#151515",
-        "editor.selectionBackground": "#212987",
-        "editorIndentGuide.background": "#63747c",
-        "editorSuggestWidget.background": "#212d3e",
-        "editorSuggestWidget.foreground": "#ccd",
-        "activityBarBadge.background": "#b47f00",
-        "sideBar.background": "#191d22",
-        "sideBar.foreground": "#ddd"
+        "editor.background": "#15191f"
     },
-    "path-intellisense.autoSlashAfterDirectory": true,
-    "path-intellisense.showHiddenFiles": true,
-    "less.lint.duplicateProperties": "warning"
+    "editor.minimap.enabled": false,
+    "editor.wordWrapColumn": 120,
+    "javascript.format.enable": true,
+    "eslint.options": {
+        "env": {
+            "node": true,
+            "es6": true,
+            "browser": true
+        },
+        "parserOptions": {
+            "ecmaVersion": 6,
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true
+            }
+        },
+        "ecmaFeatures":{
+            "arrowFunctions": true,
+            "blockBindings": true,
+            "classes": true,
+            "defaultParameters": true,
+            "destructuring": true,
+            "forOf": true,
+            "generators": true,
+            "modules": true
+        },
+        "extends": "eslint:recommended",
+    },
+    "beautify.config": {
+        "brace_style": "collapse",
+    },
+    "svgviewer.enableautopreview": true,
+    "svgviewer.previewcolumn": "Two",
+    "npm-intellisense.showBuildInLibs": true,
+    "FSharp.fsacRuntime": "netcore",
+    "FSharp.lineLens.enabled": "always",
+    "FSharp.minimizeBackgroundParsing": true,
+    "colorHelper.disableGpu": 0,
+    "colorHelper.disableShadow": true,
+    "colorHelper.disableTransparent": true,
+    "colorHelper.pickerForm": "compact",
+    "colorHelper.resident": true,
+    "html-css-class-completion.enableEmmetSupport": true,
+    "bracketPairColorizer.forceIterationColorCycle": true,
+    "bracketPairColorizer.forceUniqueOpeningColor": true,
+    "bracketPairColorizer.highlightActiveScope": true,
+    "bracketPairColorizer.showBracketsInGutter": true
 }
