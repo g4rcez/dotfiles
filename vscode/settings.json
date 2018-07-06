@@ -1,17 +1,76 @@
 {
+    "eslint.options": {
+        "env": {
+            "browser": false,
+            "node": false,
+            "amd": false,
+            "mocha": false,
+            "jasmine": false,
+            "phantomjs": false,
+            "jquery": false,
+            "prototypejs": false,
+            "shelljs": false,
+        },
+        "ecmaFeatures": {
+            "forOf": false,
+            "jsx": false,
+            "classes": false
+        },
+        "presets": [
+            "react-app",
+            "env"
+        ],
+        "plugins": [
+            "react"
+        ],
+        "parser": "babel-eslint",
+        "parserOptions": {
+            "ecmaFeatures": {
+                "spread": true,
+                "blockBindings": true,
+                "destructuring": true,
+                "templateStrings": true,
+                "jsx": true,
+                "generators": true,
+                "defaultParams": true,
+                "modules": true,
+                "arrowFunctions": true,
+                "forOf": true,
+                "classes": true
+            },
+            "ecmaVersion": 6,
+            "sourceType": "module"
+        },
+        "rules": {
+            "no-this-before-super": "warn",
+            "no-undef": 1,
+            "no-console": 0,
+            "no-unreachable": "warn",
+            "no-unused-vars": "warn",
+            "constructor-super": "warn",
+            "valid-typeof": "warn",
+            "no-var": 1,
+            "strict": 1,
+            "eqeqeq": 1,
+            "no-extra-semi": 0,
+            "no-dupe-keys": 0,
+            "no-shadow": 0,
+
+        },
+        "extends": "eslint:recommended",
+    },
     "gitlens.advanced.messages": {
         "suppressShowKeyBindingsNotice": true
     },
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "One Dark Pro Vivid",
     "files.autoSave": "afterDelay",
     "editor.cursorStyle": "underline",
-    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrap": "on",
     "editor.accessibilitySupport": "off",
     "editor.fontLigatures": true,
-    "editor.formatOnPaste": true,
-    "editor.letterSpacing": 1.1,
+    "editor.letterSpacing": 1.2,
+    "editor.lineHeight": 22,
     "editor.mouseWheelZoom": true,
-    "editor.renderLineHighlight": "gutter",
     "editor.smoothScrolling": true,
     "editor.tabCompletion": true,
     "workbench.commandPalette.preserveInput": true,
@@ -21,44 +80,62 @@
     "files.autoSaveDelay": 500,
     "files.insertFinalNewline": true,
     "files.maxMemoryForLargeFilesMB": 8192,
-    "html.format.endWithNewline": true,
-    "terminal.external.linuxExec": "terminator",
     "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
-    "editor.fontFamily": "'Fira Code', 'Inconsolata', monospace, 'Droid Sans Fallback'",
+    "editor.fontFamily": "Fira Code",
     "workbench.colorCustomizations": {
-        "editor.background": "#15191f"
+        "editor.background": "#121212",
+        "activityBar.background": "#101010",
+        "statusBar.foreground": "#ddd",
+        "tab.activeBackground": "#202020",
+        "tab.inactiveBackground": "#121212",
+        "input.background": "#121212",
+        "badge.background": "#ffe031",
+        "badge.foreground": "#000",
+        "activityBar.border": "#000",
+        "statusBar.background": "#000",
+        "editorIndentGuide.background": "#63747c",
+        "sideBar.background": "#000",
+        "sideBar.foreground": "#ddd",
+        "statusBar.noFolderBackground": "#000",
+        "statusBar.debuggingBackground": "#000",
+        "editor.lineHighlightBackground": "#101010"
     },
+    "editor.tokenColorCustomizations": {
+        "types": "#ffce49",
+        "functions": "#4887cf",
+        "keywords": "#c567fc",
+        "numbers": "#ffe031",
+        "strings": "#8ad383",
+        "comments": "#888",
+        "textMateRules": [{
+                "scope": "keyword.operator.assignment",
+                "settings": {
+                    "foreground": "#ffe031"
+                }
+            },
+            {
+                "scope": "entity.name.class",
+                "settings": {
+                    "foreground": "#ffee00"
+                },
+            },
+            {
+                "scope": "string.quoted.single",
+                "settings": {
+                    "foreground": "#eee"
+                }
+            },
+            {
+                "scope": "string.quoted.double",
+                "settings": {
+                    "foreground": "#8ad383"
+                }
+            },
+        ]
+    },
+    "editor.fontSize": 14,
     "editor.minimap.enabled": false,
-    "editor.wordWrapColumn": 120,
-    "javascript.format.enable": true,
-    "eslint.options": {
-        "env": {
-            "node": true,
-            "es6": true,
-            "browser": true
-        },
-        "parserOptions": {
-            "ecmaVersion": 6,
-            "sourceType": "module",
-            "ecmaFeatures": {
-                "jsx": true
-            }
-        },
-        "ecmaFeatures":{
-            "arrowFunctions": true,
-            "blockBindings": true,
-            "classes": true,
-            "defaultParameters": true,
-            "destructuring": true,
-            "forOf": true,
-            "generators": true,
-            "modules": true
-        },
-        "extends": "eslint:recommended",
-    },
-    "beautify.config": {
-        "brace_style": "collapse",
-    },
+    "editor.wordWrapColumn": 80,
     "svgviewer.enableautopreview": true,
     "svgviewer.previewcolumn": "Two",
     "npm-intellisense.showBuildInLibs": true,
@@ -70,9 +147,12 @@
     "colorHelper.disableTransparent": true,
     "colorHelper.pickerForm": "compact",
     "colorHelper.resident": true,
-    "html-css-class-completion.enableEmmetSupport": true,
     "bracketPairColorizer.forceIterationColorCycle": true,
     "bracketPairColorizer.forceUniqueOpeningColor": true,
     "bracketPairColorizer.highlightActiveScope": true,
-    "bracketPairColorizer.showBracketsInGutter": true
+    "bracketPairColorizer.showBracketsInGutter": true,
+    "window.zoomLevel": 0,
+    "workbench.statusBar.feedback.visible": false,
+    "editor.scrollBeyondLastLine": false,
+    "editor.tabSize": 2,
 }
