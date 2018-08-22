@@ -2,13 +2,11 @@
 
 ## Info
 
-- Keymap: Vim (with IntelliJ shortcuts modifieds)
-- Theme: One Dark Pro Vivid
+- Theme: Atom One Dark (Custom Themes)
 - Font: Fira Code
 
 ## Plugins
 
-- Atom One Dark Theme
 - Auto Close Tag
 - Close Highlight
 - Color Picker
