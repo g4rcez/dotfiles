@@ -1,0 +1,79 @@
+set runtimepath+=~/.vim_runtime
+
+source ~/.vim_runtime/vimrcs/basic.vim
+source ~/.vim_runtime/vimrcs/filetypes.vim
+source ~/.vim_runtime/vimrcs/plugins_config.vim
+source ~/.vim_runtime/vimrcs/extended.vim
+
+try
+source ~/.vim_runtime/my_configs.vim
+catch
+endtry
+
+set ai
+set ruler
+set number
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+
+" Always display the status line
+set laststatus=1
+
+" Enable highlighting of the current line
+set cursorline
+
+" Theme and Styling
+syntax on
+set t_Co=256
+
+if (has("termguicolors"))
+  set termguicolors
+endif
+set background=dark
+let base16colorspace=256
+
+"""" START Vundle Configuration
+
+" Disable file type for vundle
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Utility
+Plugin 'scrooloose/nerdtree'
+
+" Generic Programming Support
+Plugin 'honza/vim-snippets'
+Plugin 'Townk/vim-autoclose'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'vim-syntastic/syntastic'
+
+" Markdown / Writting
+Plugin 'reedes/vim-pencil'
+Plugin 'tpope/vim-markdown'
+Plugin 'jtratner/vim-flavored-markdown'
+Plugin 'LanguageTool'
+
+" Git Support
+Plugin 'kablamo/vim-git-log'
+Plugin 'gregsexton/gitv'
+Plugin 'tpope/vim-fugitive'
+
+" Theme / Interface
+Plugin 'AnsiEsc.vim'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tomasr/molokai'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+colorscheme molokai

@@ -1,286 +1,201 @@
 {
-	"editor.formatOnSave": false,
-	"eslint.autoFixOnSave": true,
-	"javascript.format.enable": false,
-	"eslint.validate": [
-		"javascript",
-		"javascriptreact",
-		{
-			"language": "html",
-			"autoFix": true
-		}
-	],
-	"eslint.options": {
-		"extends": ["eslint:recommended"],
-		"env": {
-			"browser": true,
-			"node": true,
-			"amd": true,
-			"mocha": false,
-			"jasmine": false,
-			"phantomjs": false,
-			"jquery": false,
-			"prototypejs": false,
-			"shelljs": false,
-			"es6": true
-		},
-		"globals": ["document", "navigator", "window", "console"],
-		"ecmaFeatures": {
-			"forOf": true,
-			"jsx": true,
-			"classes": true
-		},
-		"presets": ["react-app", "env"],
-		"plugins": ["react", "import", "node", "jsx-a11y", "promise", "standard"],
-		"parser": "babel-eslint",
-		"parserOptions": {
-			"ecmaFeatures": {
-				"spread": true,
-				"blockBindings": false,
-				"destructuring": true,
-				"templateStrings": true,
-				"jsx": true,
-				"generators": true,
-				"defaultParams": true,
-				"modules": true,
-				"arrowFunctions": true,
-				"forOf": true,
-				"classes": true
-			},
-			"ecmaVersion": 9,
-			"sourceType": "module"
-		},
-		"rules": {
-			"no-this-before-super": "warn",
-			"no-undef": 1,
-			"no-console": 0,
-			"block-scoped-var": 0,
-			"complexity": 0,
-			"no-regex-spaces": 0,
-			"no-unreachable": "warn",
-			"no-unused-vars": "warn",
-			"constructor-super": "warn",
-			"valid-typeof": "warn",
-			"no-var": 1,
-			"global-strict": 0,
-			"strict": 0,
-			"no-extra-strict": 0,
-			"eqeqeq": 1,
-			"camelcase": 0,
-			"no-extra-semi": 0,
-			"no-dupe-keys": 0,
-			"no-shadow": 0
-		}
+	"files.watcherExclude": {
+	  "**/.git/objects/**": true,
+	  "**/.git/subtree-cache/**": true,
+	  "**/node_modules/*/**": true,
+	  "**/out/": true,
+	  "**/target/": true,
+	  "**/lib/": true,
+	  "**/dist/": true,
+	  "**/build/": true
 	},
-	"gitlens.advanced.messages": {
-		"suppressShowKeyBindingsNotice": true
+	"files.exclude": {
+	  "**/.git": true,
+	  "**/.svn": true,
+	  "**/.hg": true,
+	  "**/CVS": true,
+	  "**/target": true,
+	  "**/out": true,
+	  "**/.DS_Store": true,
+	  "**/node_modules": true,
+	  "**/build": true,
+	  "**/*.map.js": true
 	},
-	"workbench.colorTheme": "Atom One Dark",
-	"files.autoSave": "off",
-	"editor.cursorStyle": "underline-thin",
-	"editor.accessibilitySupport": "off",
+	"editor.fontFamily": "'Inconsolata',monospace, 'Droid Sans Fallback'",
 	"editor.fontLigatures": true,
-	"editor.letterSpacing": 1.5,
-	"editor.lineHeight": 23,
+	"editor.fontSize": 15,
+	"editor.lineHeight": 25,
 	"editor.mouseWheelZoom": true,
-	"editor.smoothScrolling": true,
-	"editor.tabCompletion": true,
-	"workbench.commandPalette.preserveInput": true,
-	"workbench.editor.labelFormat": "medium",
-	"files.insertFinalNewline": true,
-	"files.maxMemoryForLargeFilesMB": 8192,
-	"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
-	"editor.fontFamily": "Fira Code",
-	"workbench.colorCustomizations": {
-		"editor.background": "#0c0e11",
-		"activityBar.background": "#101010",
-		"statusBar.foreground": "#ddd",
-		"tab.activeBackground": "#202020",
-		"tab.inactiveBackground": "#121212",
-		"input.background": "#0c0e11",
-		"badge.background": "#2283f1",
-		"editor.selectionBackground": "#333",
-		"activityBar.border": "#000",
-		"statusBar.background": "#000",
-		"editorIndentGuide.background": "#63747c",
-		"sideBar.background": "#000",
-		"sideBar.foreground": "#ddd",
-		"editorCursor.foreground": "#fff",
-		"statusBar.noFolderBackground": "#000",
-		"statusBar.debuggingBackground": "#000"
-	},
-	"editor.tokenColorCustomizations": {
-		"numbers": "#e5ff00",
-		"types": "#8ad0fb",
-		"strings": "#97ffbf",
-		"functions": "#478bf0",
-		"variables": "#eb4842",
-		"keywords": "#b18afb",
-		"textMateRules": [
-			{
-				"scope": "keyword.operator",
-				"settings": {
-					"foreground": "#fff"
-				}
-			},
-			{
-				"scope": "comment",
-				"settings": {
-					"foreground": "#616161"
-				}
-			},
-			{
-				"scope": "string.regexp",
-				"settings": {
-					"foreground": "#dd60dd"
-				}
-			},
-			{
-				"scope": "variable",
-				"settings": {
-					"foreground": "#eb4842"
-				}
-			},
-			{
-				"scope": "keyword.control",
-				"settings": {
-					"foreground": "#c267ff"
-				}
-			},
-			{
-				"scope": "keyword.operator.logical",
-				"settings": {
-					"foreground": "#f1af34"
-				}
-			},
-			{
-				"scope": "variable.parameter",
-				"settings": {
-					"foreground": "#df3173"
-				}
-			},
-			{
-				"scope": "keyword.operator.arithmetic",
-				"settings": {
-					"foreground": "#1cec1c"
-				}
-			}
-		]
-	},
-	"editor.fontSize": 13,
+	"editor.cursorBlinking": "smooth",
+	"editor.suggest.localityBonus": true,
 	"editor.minimap.enabled": false,
+	"editor.autoClosingBrackets": "beforeWhitespace",
+	"editor.autoClosingQuotes": "beforeWhitespace",
+	"editor.rulers": [120],
 	"editor.wordWrapColumn": 120,
-	"svgviewer.enableautopreview": false,
-	"npm-intellisense.showBuildInLibs": true,
-	"FSharp.fsacRuntime": "netcore",
-	"FSharp.lineLens.enabled": "always",
-	"FSharp.minimizeBackgroundParsing": true,
-	"colorHelper.disableGpu": 0,
-	"colorHelper.disableShadow": true,
-	"colorHelper.disableTransparent": true,
-	"colorHelper.pickerForm": "compact",
-	"colorHelper.resident": true,
-	"bracketPairColorizer.forceIterationColorCycle": true,
-	"bracketPairColorizer.forceUniqueOpeningColor": false,
-	"bracketPairColorizer.highlightActiveScope": true,
-	"window.zoomLevel": 0,
-	"workbench.statusBar.feedback.visible": false,
+	"editor.smoothScrolling": true,
+	"editor.scrollBeyondLastColumn": 2,
 	"editor.scrollBeyondLastLine": false,
-	"gitlens.settings.mode": "advanced",
-	"gitlens.codeLens.scopes": ["document", "containers"],
-	"gitlens.currentLine.scrollable": false,
-	"explorer.confirmDragAndDrop": false,
+	"editor.snippetSuggestions": "inline",
+	"editor.wordBasedSuggestions": true,
+	"editor.suggest.filterGraceful": true,
+	"editor.suggestSelection": "recentlyUsedByPrefix",
+	"editor.quickSuggestionsDelay": 5,
+	"editor.trimAutoWhitespace": true,
+	"editor.letterSpacing": 1.15,
+	"editor.formatOnSave": false,
+	"editor.formatOnType": false,
+	"editor.formatOnPaste": false,
+	"editor.insertSpaces": true,
+	"editor.useTabStops": true,
+	"editor.codeLens": false,
+	"editor.links": true,
+	"editor.overviewRulerBorder": true,
+	"editor.suggestOnTriggerCharacters": true,
+	"editor.quickSuggestions": {
+	  "other": false,
+	  "comments": false,
+	  "strings": false
+	},
+	"workbench.editor.centeredLayoutAutoResize": true,
 	"workbench.iconTheme": "vscode-icons",
-	"prettier.stylelintIntegration": true,
-	"prettier.jsxBracketSameLine": true,
-	"prettier.useTabs": true,
-	"prettier.arrowParens": "always",
-	"prettier.printWidth": 120,
-	"sync.quietSync": false,
-	"sync.askGistName": false,
-	"sync.removeExtensions": true,
-	"sync.syncExtensions": true,
-	"sync.autoDownload": false,
-	"sync.autoUpload": false,
-	"sync.forceDownload": false,
-	"npm.enableScriptExplorer": true,
-	"javascript.implicitProjectConfig.checkJs": false,
-	"terminal.integrated.cursorStyle": "underline",
-	"importCost.showCalculatingDecoration": true,
-	"importCost.bundleSizeDecoration": "both",
-	"workbench.sideBar.location": "left",
-	"editor.codeLens": true,
-	"editor.largeFileOptimizations": true,
-	"explorer.autoReveal": true,
-	"explorer.decorations.badges": true,
-	"auto-close-tag.enableAutoCloseTag": true,
-	"auto-close-tag.fullMode": true,
-	"auto-close-tag.enableAutoCloseSelfClosingTag": true,
-	"color-highlight.markerType": "background",
-	"editor.foldingStrategy": "indentation",
-	"editor.hideCursorInOverviewRuler": true,
-	"editor.renderControlCharacters": true,
-	"editor.renderLineHighlight": "gutter",
-	"editor.wordSeparators": "`~!@#$%^&*()-_=+[{]}\\|;:'\",.<>/?",
-	"workbench.panel.defaultLocation": "bottom",
-	"workbench.settings.settingsSearchTocBehavior": "filter",
-	"workbench.tree.horizontalScrolling": true,
-	"autoimport.doubleQuotes": true,
-	"autoimport.showNotifications": true,
-	"prettier.bracketSpacing": true,
-	"prettier.parser": "flow",
-	"prettier.proseWrap": "always",
-	"prettier.trailingComma": "all",
-	"path-autocomplete.extensionOnImport": true,
-	"path-autocomplete.triggerOutsideStrings": true,
-	"bracketPairColorizer.rulerPosition": "Full",
-	"bracketPairColorizer.showBracketsInRuler": true,
-	"bracketPairColorizer.showBracketsInGutter": true,
-	"eslint.alwaysShowStatus": true,
-	"solargraph.formatting": true,
-	"path-intellisense.extensionOnImport": true,
-	"prettier.tabWidth": 4,
-	"prettier.tslintIntegration": true,
-	"csharpfixformat.style.spaces.afterParenthesis": false,
-	"csharpfixformat.style.spaces.beforeParenthesis": false,
-	"csharpfixformat.style.spaces.beforeBracket": false,
-	"csharpfixformat.style.newline.atEnd": true,
-	"breadcrumbs.enabled": true,
-	"markdown.preview.breaks": true,
-	"typescript.useCodeSnippetsOnMethodSuggest": true,
-	"typescript.implementationsCodeLens.enabled": true,
-	"importCost.javascriptExtensions": ["\\.jsx?$", "\\.js?$", "\\.tsx?$", "\\.ts?$"],
-	"javascript.referencesCodeLens.enabled": true,
-	"javascript.preferences.quoteStyle": "double",
-	"javascript.preferences.importModuleSpecifier": "relative",
-	"prettier.eslintIntegration": true,
-	"editor.wordWrap": "bounded",
-	"files.trimFinalNewlines": true,
+	"workbench.colorTheme": "dark-aee",
+	"window.menuBarVisibility": "hidden",
+	"files.maxMemoryForLargeFilesMB": 8192,
 	"files.trimTrailingWhitespace": true,
 	"files.useExperimentalFileWatcher": true,
-	"workbench.editor.revealIfOpen": true,
-	"window.newWindowDimensions": "maximized",
-	"window.openFilesInNewWindow": "on",
-	"auto-close-tag.SublimeText3Mode": true,
-	"boot-java.change-detection.on": true,
-	"omnisharp.loggingLevel": "debug",
-	"csharpfixformat.style.spaces.insideEmptyBraces": false,
-	"html-css-class-completion.enableEmmetSupport": true,
-	"emmet.showSuggestionsAsSnippets": true,
-	"gitlens.defaultGravatarsStyle": "wavatar",
-	"npm-intellisense.importQuotes": "\"",
-	"npm-intellisense.packageSubfoldersIntellisense": true,
-	"Paket.autoInstall": true,
-	"path-intellisense.autoSlashAfterDirectory": true,
-	"typescript.format.insertSpaceAfterConstructor": true,
-	"svgviewer.previewcolumn": "One",
-	"bracketPairColorizer.colorMode": "Consecutive",
-	"csharp.format.enable": false,
-	"javascript.updateImportsOnFileMove.enabled": "always",
-	"emmet.triggerExpansionOnTab": true,
-	"bracketPairColorizer.showVerticalScopeLine": true,
-	"npm-intellisense.scanDevDependencies": false,
-	"terminal.explorerKind": "external",
+	"editor.renderLineHighlight": "gutter",
+	"editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\_|;:'\",.<>/?`",
+	"explorer.openEditors.visible": 5,
+	"workbench.view.alwaysShowHeaderActions": true,
+	"workbench.editor.highlightModifiedTabs": true,
+	"workbench.editor.labelFormat": "short",
+	"workbench.editor.tabSizing": "shrink",
+	"workbench.settings.editor": "json",
+	"search.showLineNumbers": true,
+	"search.usePCRE2": true,
 	"terminal.external.linuxExec": "konsole",
-	"editor.cursorBlinking": "smooth"
-}
+	"terminal.integrated.cursorBlinking": true,
+	"terminal.integrated.cursorStyle": "underline",
+	"terminal.integrated.enableBell": true,
+	"terminal.integrated.experimentalBufferImpl": "TypedArray",
+	"css.lint.compatibleVendorPrefixes": "warning",
+	"css.lint.duplicateProperties": "error",
+	"css.lint.float": "warning",
+	"css.lint.zeroUnits": "warning",
+	"emmet.includeLanguages": {
+	  "javascript": "javascriptreact"
+	},
+	"emmet.showAbbreviationSuggestions": false,
+	"emmet.triggerExpansionOnTab": true,
+	"eslint.alwaysShowStatus": true,
+	"search.location": "panel",
+	"vim.useCtrlKeys": false,
+	"vim.useSystemClipboard": true,
+	"vim.enableNeovim": true,
+	"vim.leader": "<space>",
+	"vim.insertModeKeyBindings": [
+	  {
+		"before": ["j", "j"],
+		"after": ["<Esc>"],
+		"when": "editorTextFocus"
+	  },
+	  {
+		"before": ["v", "v"],
+		"after": ["<Esc>", "V"],
+		"when": "editorTextFocus"
+	  }
+	],
+	"vim.neovimPath": "nvim",
+	"vim.normalModeKeyBindingsNonRecursive": [
+	  {
+		"before": ["<leader>", "<leader>"],
+		"after": [],
+		"commands": [
+		  {
+			"command": "workbench.action.showCommands"
+		  }
+		]
+	  },
+	  {
+		"before": ["leader", "t"],
+		"commands": [
+		  {
+			"command": "terminal.toggle"
+		  }
+		]
+	  },
+	  {
+		"before": ["<leader>", "p"],
+		"commands": [
+		  {
+			"command": "workbench.action.quickOpen"
+		  }
+		]
+	  },
+	  {
+		"before": ["leader", "c"],
+		"commands": [
+		  {
+			"command": "editor.action.commentLine",
+		  }
+		]
+	  },
+	  {
+		"before": ["w"],
+		"after":["k"],
+	  },
+	  {
+		"before": ["s"],
+		"after":["j"],
+	  },
+	  {
+		"before": ["a"],
+		"after":["h"],
+	  },
+	  {
+		"before": ["d"],
+		"after":["l"],
+	  },
+	  {
+		"before":["f","f"],
+		"after":["d","d"]
+	  },
+	  {
+		"before":["e"],
+		"after":["a"]
+	  }
+	],
+	"vim.handleKeys": {
+	  "<C-a>": false,
+	  "<C-f>": false,
+	  "<C-c>": false
+	},
+	"vim.overrideCopy": true,
+	"go.autocompleteUnimportedPackages": true,
+	"FSharp.codeOutline": false,
+	"FSharp.enableReferenceCodeLens": false,
+	"FSharp.showProjectExplorerIn": "fsharp",
+	"javascript.format.enable": false,
+	"prettier.arrowParens": "always",
+	"prettier.eslintIntegration": true,
+	"prettier.jsxBracketSameLine": true,
+	"prettier.trailingComma": "es5",
+	"prettier.printWidth": 120,
+	"prettier.singleQuote": true,
+	"prettier.tabWidth": 2,
+	"prettier.useTabs": false,
+	"eslint.autoFixOnSave": false,
+	"eslint.enable": true,
+	"eslint.packageManager": "npm",
+	"eslint.run": "onSave",
+	"eslint.validate": [
+	  "javascript",
+	  "javascriptreact"
+	],
+	"color-highlight.markRuler": false,
+	"color-highlight.markerType": "underline",
+	"csharp.referencesCodeLens.enabled": false,
+	"extensions.ignoreRecommendations": true,
+	"vim.disableExtension": false,
+  }

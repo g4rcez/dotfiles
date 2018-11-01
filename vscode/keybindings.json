@@ -1,82 +1,74 @@
+// Place your key bindings in this file to overwrite the defaults
 [
 	{
-		"key": "ctrl+shift+w",
-		"command": "editor.emmet.action.wrapWithAbbreviation"
+	  "key": "ctrl+shift+m",
+	  "command": "editor.action.codeAction",
+	  "args": {
+		"kind": "refactor.extract.function"
+	  }
 	},
 	{
-		"key": "ctrl+shift+d",
-		"command": "lafe.duplicateCode"
+	  "key": "ctrl+alt+l",
+	  "command": "editor.action.formatDocument",
+	  "when": "editorTextFocus && !editorReadonly"
 	},
 	{
-		"key": "ctrl+shift+m",
-		"command": "editor.action.insertSnippet",
-		"when": "editorTextFocus",
-		"args": {
-			"snippet": "Mussum Ipsum, cacilds vidis litro abertis. In elementis mé pra quem é amistosis quis leo. Em pé sem cair, deitado sem dormir, sentado sem cochilar e fazendo pose. Pra lá , depois divoltis porris, paradis. Cevadis im ampola pa arma uma pindureta."
-		}
+	  "key": "ctrl+shift+i",
+	  "command": "-editor.action.formatDocument",
+	  "when": "editorTextFocus && !editorReadonly"
 	},
 	{
-		"key": "ctrl+alt+p",
-		"command": "editor.action.insertSnippet",
-		"when": "editorTextFocus",
-		"args": {
-			"snippet": "Eiiitaaa Mainhaaa!! Esse Lorem ipsum é só na sacanageeem!! E que abundância meu irmão viuu!! Assim você vai matar o papai. Só digo uma coisa, Domingo ela não vai! Danadaa!! Vem minha odalisca, agora faz essa cobra coral subir!!! "
-		}
+	  "key": "ctrl+shift+w",
+	  "command": "editor.emmet.action.wrapWithAbbreviation"
 	},
 	{
-		"key": "ctrl+alt+l",
-		"command": "editor.action.formatDocument",
-		"when": "editorTextFocus && !editorReadonly"
+	  "key": "alt+left",
+	  "command": "workbench.action.previousEditor"
 	},
 	{
-		"key": "ctrl+shift+i",
-		"command": "-editor.action.formatDocument",
-		"when": "editorTextFocus && !editorReadonly"
+	  "key": "ctrl+pageup",
+	  "command": "-workbench.action.previousEditor"
 	},
 	{
-		"key": "alt+right",
-		"command": "workbench.action.nextEditor"
+	  "key": "alt+right",
+	  "command": "workbench.action.nextEditor"
 	},
 	{
-		"key": "ctrl+pagedown",
-		"command": "-workbench.action.nextEditor"
+	  "key": "ctrl+pagedown",
+	  "command": "-workbench.action.nextEditor"
 	},
 	{
-		"key": "alt+left",
-		"command": "workbench.action.previousEditor"
+	  "key": "alt+enter",
+	  "command": "editor.action.quickFix",
+	  "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
 	},
 	{
-		"key": "ctrl+pageup",
-		"command": "-workbench.action.previousEditor"
-	},
-	{
-		"key": "alt+left",
-		"command": "-subwordNavigation.cursorSubwordLeft",
-		"when": "editorTextFocus"
-	},
-	{
-		"key": "alt+right",
-		"command": "-subwordNavigation.cursorSubwordRight",
-		"when": "editorTextFocus"
-	},
-	{
-		"key": "alt+backspace",
-		"command": "-subwordNavigation.deleteSubwordLeft",
-		"when": "editorTextFocus && !editorReadonly"
-	},
-	{
-		"key": "alt+delete",
-		"command": "-subwordNavigation.deleteSubwordRight",
-		"when": "editorTextFocus && !editorReadonly"
-	},
-	{
-		"key": "alt+enter",
-		"command": "editor.action.quickFix",
-		"when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
-	},
-	{
-		"key": "ctrl+.",
-		"command": "-editor.action.quickFix",
-		"when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
-	}
-]
+	  "key": "ctrl+.",
+	  "command": "editor.action.quickFix",
+	  "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+	  "key": "ctrl+shift+q",
+	  "command": "workbench.action.splitEditor"
+  },
+  {
+	  "key": "ctrl+\\",
+	  "command": "-workbench.action.splitEditor"
+  },
+  {
+	  "key": "ctrl+shift+e",
+	  "command": "workbench.action.splitEditorOrthogonal"
+  },
+  {
+	  "key": "ctrl+k ctrl+\\",
+	  "command": "-workbench.action.splitEditorOrthogonal"
+  },
+  {
+	  "key": "ctrl+e",
+	  "command": "workbench.view.explorer"
+  },
+  {
+	  "key": "ctrl+shift+e",
+	  "command": "-workbench.view.explorer"
+  }
+  ]
