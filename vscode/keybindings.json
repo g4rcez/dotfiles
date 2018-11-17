@@ -1,74 +1,111 @@
 // Place your key bindings in this file to overwrite the defaults
 [
-	{
-	  "key": "ctrl+shift+m",
-	  "command": "editor.action.codeAction",
-	  "args": {
-		"kind": "refactor.extract.function"
-	  }
-	},
-	{
-	  "key": "ctrl+alt+l",
-	  "command": "editor.action.formatDocument",
-	  "when": "editorTextFocus && !editorReadonly"
-	},
-	{
-	  "key": "ctrl+shift+i",
-	  "command": "-editor.action.formatDocument",
-	  "when": "editorTextFocus && !editorReadonly"
-	},
-	{
-	  "key": "ctrl+shift+w",
-	  "command": "editor.emmet.action.wrapWithAbbreviation"
-	},
-	{
-	  "key": "alt+left",
-	  "command": "workbench.action.previousEditor"
-	},
-	{
-	  "key": "ctrl+pageup",
-	  "command": "-workbench.action.previousEditor"
-	},
-	{
-	  "key": "alt+right",
-	  "command": "workbench.action.nextEditor"
-	},
-	{
-	  "key": "ctrl+pagedown",
-	  "command": "-workbench.action.nextEditor"
-	},
-	{
-	  "key": "alt+enter",
-	  "command": "editor.action.quickFix",
-	  "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
-	},
-	{
-	  "key": "ctrl+.",
-	  "command": "editor.action.quickFix",
-	  "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+  {
+    "key": "ctrl+alt+l",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
   },
   {
-	  "key": "ctrl+shift+q",
-	  "command": "workbench.action.splitEditor"
+    "key": "ctrl+shift+i",
+    "command": "-editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
   },
   {
-	  "key": "ctrl+\\",
-	  "command": "-workbench.action.splitEditor"
+    "key": "ctrl+shift+w",
+    "command": "editor.emmet.action.wrapWithAbbreviation"
   },
   {
-	  "key": "ctrl+shift+e",
-	  "command": "workbench.action.splitEditorOrthogonal"
+    "key": "alt+left",
+    "command": "workbench.action.previousEditor"
   },
   {
-	  "key": "ctrl+k ctrl+\\",
-	  "command": "-workbench.action.splitEditorOrthogonal"
+    "key": "ctrl+pageup",
+    "command": "-workbench.action.previousEditor"
   },
   {
-	  "key": "ctrl+e",
-	  "command": "workbench.view.explorer"
+    "key": "alt+right",
+    "command": "workbench.action.nextEditor"
   },
   {
-	  "key": "ctrl+shift+e",
-	  "command": "-workbench.view.explorer"
-  }
-  ]
+    "key": "ctrl+pagedown",
+    "command": "-workbench.action.nextEditor"
+  },
+  {
+    "key": "alt+enter",
+    "command": "editor.action.quickFix",
+    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+.",
+    "command": "editor.action.quickFix",
+    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+q",
+    "command": "workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+shift+e",
+    "command": "workbench.action.splitEditorOrthogonal"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "workbench.view.explorer"
+  },
+  {
+    "key": "ctrl+shift+e",
+    "command": "-workbench.view.explorer"
+  },
+  {
+    "key": "ctrl+alt+c",
+    "command": "copyFilePath"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "extension.advancedNewFile"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "editor.action.triggerParameterHints",
+    "when": "editorHasSignatureHelpProvider && editorTextFocus"
+  },
+  {
+    "key": "shift+f6",
+    "command": "editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+f6",
+    "command": "renameFile",
+    "when": "explorerViewletVisible && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+alt+m",
+    "command": "editor.action.codeAction",
+    "when": "editorTextFocus",
+    "args": {
+      "kind": "refactor.extract.function",
+      "apply": "ifSingle"
+    }
+  },
+  {
+    "key": "ctrl+shift+n",
+    "command": "workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "-workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+shift+j",
+    "command": "workbench.action.editor.changeLanguageMode"
+  },
+  {
+    "key": "ctrl+k m",
+    "command": "-workbench.action.editor.changeLanguageMode"
+  },
+]

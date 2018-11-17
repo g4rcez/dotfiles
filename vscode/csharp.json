@@ -1,0 +1,40 @@
+{
+    "GetterAndSetter": {
+      "body": "{ get;set; }",
+      "prefix": "gst",
+      "description": "Create Getter and Setter inline"
+    },
+    "Sysout": {
+      "prefix": "clw",
+      "body": "\rConsole.WriteLine(${TM_CURRENT_LINE/(^[\t\r ]+|.?clw$)//gi});",
+      "description": "Sysout variables"
+    },
+    "Dictionary": {
+      "prefix": "dct",
+      "body": "var $1 = new Dictionary<$2, $3>();"
+    },
+    "Convert no target": {
+      "prefix": "conv",
+      "body": "var $1 = Convert.$2($3);"
+    },
+    "Convert to int": {
+      "prefix": "convi",
+      "body": "var $1 = Convert.ToInt32($0);"
+    },
+    "Convert to double": {
+      "prefix": "convd",
+      "body": "var $1 = Convert.ToDouble($0);"
+    },
+    "Convert to string": {
+      "prefix": "convs",
+      "body": "var $1 = Convert.ToString($0);"
+    },
+    "Class with Constructor": {
+      "body": ["public class $TM_FILENAME_BASE", "{", "\tpublic $TM_FILENAME_BASE(){ }", "}"],
+      "prefix": "className"
+    },
+    "Main": {
+      "prefix": "Main",
+      "body": ["static void Main(String[] args)", "{", "\t$0", "}"]
+    }
+  }
