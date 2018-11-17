@@ -13,10 +13,26 @@ endtry
 set ai
 set ruler
 set number
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set showcmd
+set shiftwidth=2
 set smarttab
 set expandtab
+set esckeys
+set wildmenu
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+set hlsearch
+set incsearch
+set laststatus=2
+set mouse=a
+set showmode
+
+let mapleader="<space>"
+
+if exists("&undodir")
+	set undodir=~/.vim/undo
+endif
 
 " Always display the status line
 set laststatus=1
