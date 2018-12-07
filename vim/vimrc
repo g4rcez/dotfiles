@@ -25,8 +25,8 @@ set directory=~/.vim/swaps
 set hlsearch
 set incsearch
 set laststatus=2
-set mouse=a
 set showmode
+set mouse=a
 
 let mapleader="<space>"
 
@@ -92,4 +92,14 @@ Plugin 'tomasr/molokai'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-colorscheme molokai
+colorscheme ir_black
+
+" Configure nerdtree
+let g:NERDTreeWinPos = "left"
+map <C-n> :NERDTreeToggle<CR>
+map <C-m> :TagbarToggle<CR>
+
+" Shortcuts map
+
+imap jj <Esc>
+imap <space><space> <ESC>
