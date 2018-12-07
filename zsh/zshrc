@@ -38,12 +38,12 @@ ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
 ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=yellow,bold"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[function]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=yellow,bold"
 ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green"
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
@@ -52,21 +52,25 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_STYLES[default]=none
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
 ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-ZSH_HIGHLIGHT_STYLES[path]="fg=blue,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=blue,underline"
+ZSH_HIGHLIGHT_STYLES[path]="fg=cyan,underline"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=cyan,underline"
 ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
 ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=cyan,italic"
 ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 
 ########### ALIAS #############
 
-alias apt='sudo apt'
+alias ls='exa'
+alias more='less'
+alias df='df -h'
+alias add='git add'
+alias commit='git commit -m'
 alias pacman='sudo pacman'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -78,8 +82,25 @@ alias restart='sudo systemctl restart '
 alias start='sudo systemctl start '
 alias status='sudo systemctl status '
 alias stop="sudo systemctl stop "
-alias zshrc='code ~/.zshrc'
 alias free='free -htmlw'
+alias insiders='~/Applications/VisualStudioCode/VSCode-linux-x64/bin/code-insiders'
+alias code='insiders'
+alias zshrc='code ~/.zshrc'
+
+npmi(){
+  customFunction="no"
+  test -e tslint.json && customFunction="yes"
+
+  if [[ "$customFunction" == "yes" ]]; then
+    if [[ "$1" == "install" ]] || [[ "$1" == "i" ]]; then
+      packages="$(echo "$@" | sed "s/$1//g")"
+      npm install --save $packages
+      npm install --save-dev "$(echo $packages | sed 's/ /&@types\//g')"
+    fi
+  else
+    npm $@
+  fi
+}
 
 mp3(){
   tmp=$PWD
@@ -103,6 +124,7 @@ transfer() {
   cat $tmpfile;
   rm -f $tmpfile;
 }
+
 extract() {
   if [ -f "$1" ]; then
     case "$1" in
@@ -125,34 +147,42 @@ extract() {
      echo "'$1' is not a valid file to extract"
   fi
 }
+
 sysinfo(){
     ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=$@"
 }
+
 words(){
   egrep -o '\w+' | sort -f | uniq -ci | sort -nr | head $1
 }
+
 clone(){
     git clone "${1:?"usage: clone <url_to_clone>"}"
     cd ${${1%%.git}##*/}
 }
+
 clones(){
   for repo in $@; do
     git clone "$repo"
   done
 }
+
 pwdc(){
   emulate -L zsh
   echo "$(pwd)" | pbcopy
 }
+
 killme(){
   curdir="$(pwd)"
   cd .. && rm -rf "$curdir"
   ls
 }
+
 filec(){
   emulate -L zsh
   clipcopy "$1"
 }
+
 ############ Dev Tools ############
 # NVM - Node
 export NVM_DIR="$HOME/.nvm"
@@ -161,7 +191,14 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/.rbenv/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="~/.sdkman"
+[[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
+[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
 
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+export PATH="$PATH:~/.dotnet/tools"
+export ANDROID_HOME='~/Android/Sdk'
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+REACT_EDITOR=insiders
