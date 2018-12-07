@@ -19,11 +19,19 @@
     "command": "workbench.action.previousEditor"
   },
   {
+    "key": "alt+k",
+    "command": "workbench.action.previousEditor"
+  },
+  {
     "key": "ctrl+pageup",
     "command": "-workbench.action.previousEditor"
   },
   {
     "key": "alt+right",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    "key": "alt+j",
     "command": "workbench.action.nextEditor"
   },
   {
@@ -65,10 +73,6 @@
     "command": "copyFilePath"
   },
   {
-    "key": "ctrl+n",
-    "command": "extension.advancedNewFile"
-  },
-  {
     "key": "ctrl+alt+p",
     "command": "editor.action.triggerParameterHints",
     "when": "editorHasSignatureHelpProvider && editorTextFocus"
@@ -93,14 +97,6 @@
     }
   },
   {
-    "key": "ctrl+shift+n",
-    "command": "workbench.action.files.newUntitledFile"
-  },
-  {
-    "key": "ctrl+n",
-    "command": "-workbench.action.files.newUntitledFile"
-  },
-  {
     "key": "ctrl+shift+j",
     "command": "workbench.action.editor.changeLanguageMode"
   },
@@ -108,4 +104,17 @@
     "key": "ctrl+k m",
     "command": "-workbench.action.editor.changeLanguageMode"
   },
+  {
+    "key": "ctrl+backspace",
+    "command": "deleteWordLeft",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+f4",
+    "command": "workbench.action.closePanel"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.terminal.new"
+  }
 ]
