@@ -12,7 +12,6 @@ endtry
 
 set ai
 set ruler
-set number
 set tabstop=2
 set showcmd
 set shiftwidth=2
