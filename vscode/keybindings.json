@@ -1,120 +1,178 @@
-// Place your key bindings in this file to overwrite the defaults
 [
+  // JetBrains shortcuts copy
   {
-    "key": "ctrl+alt+l",
-    "command": "editor.action.formatDocument",
-    "when": "editorTextFocus && !editorReadonly"
+      "key": "ctrl+f4",
+      "command": "workbench.action.closePanel"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "-editor.action.formatDocument",
-    "when": "editorTextFocus && !editorReadonly"
+      "key": "ctrl+alt+l",
+      "command": "editor.action.formatDocument",
+      "when": "editorTextFocus && !editorReadonly"
   },
   {
-    "key": "ctrl+shift+w",
-    "command": "editor.emmet.action.wrapWithAbbreviation"
+      "key": "alt+left",
+      "command": "workbench.action.previousEditor"
   },
   {
-    "key": "alt+left",
-    "command": "workbench.action.previousEditor"
+      "key": "alt+k",
+      "command": "workbench.action.previousEditor"
   },
   {
-    "key": "alt+k",
-    "command": "workbench.action.previousEditor"
+      "key": "ctrl+pageup",
+      "command": "-workbench.action.previousEditor"
   },
   {
-    "key": "ctrl+pageup",
-    "command": "-workbench.action.previousEditor"
+      "key": "alt+right",
+      "command": "workbench.action.nextEditor"
   },
   {
-    "key": "alt+right",
-    "command": "workbench.action.nextEditor"
+      "key": "alt+j",
+      "command": "workbench.action.nextEditor"
   },
   {
-    "key": "alt+j",
-    "command": "workbench.action.nextEditor"
+      "key": "ctrl+pagedown",
+      "command": "-workbench.action.nextEditor"
   },
   {
-    "key": "ctrl+pagedown",
-    "command": "-workbench.action.nextEditor"
+      "key": "ctrl+shift+i",
+      "command": "editor.action.formatDocument",
+      "when": "editorTextFocus && !editorReadonly"
   },
   {
-    "key": "alt+enter",
-    "command": "editor.action.quickFix",
-    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+      "key": "shift+f6",
+      "command": "editor.action.rename",
+      "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
   },
   {
-    "key": "ctrl+.",
-    "command": "editor.action.quickFix",
-    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+      "key": "shift+f6",
+      "command": "renameFile",
+      "when": "explorerViewletVisible && filesExplorerFocus"
   },
   {
-    "key": "ctrl+shift+q",
-    "command": "workbench.action.splitEditor"
+      "key": "ctrl+alt+m",
+      "command": "editor.action.codeAction",
+      "when": "editorTextFocus",
+      "args": {
+          "kind": "refactor.extract.function",
+          "apply": "ifSingle"
+      }
+  },
+  // Emmet utils
+  {
+      "key": "ctrl+shift+w",
+      "command": "editor.emmet.action.wrapWithAbbreviation"
+  },
+  // IDE Like QuickFix
+  {
+      "key": "alt+enter",
+      "command": "editor.action.quickFix",
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
   },
   {
-    "key": "ctrl+\\",
-    "command": "-workbench.action.splitEditor"
+      "key": "ctrl+.",
+      "command": "editor.action.quickFix",
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+  },
+  // Terminator shortcut to split editor
+  {
+      "key": "ctrl+shift+q",
+      "command": "workbench.action.splitEditor"
   },
   {
-    "key": "ctrl+shift+e",
-    "command": "workbench.action.splitEditorOrthogonal"
+      "key": "ctrl+\\",
+      "command": "-workbench.action.splitEditor"
   },
   {
-    "key": "ctrl+e",
-    "command": "workbench.view.explorer"
+      "key": "ctrl+shift+e",
+      "command": "workbench.action.splitEditorOrthogonal"
   },
   {
-    "key": "ctrl+shift+e",
-    "command": "-workbench.view.explorer"
+      "key": "ctrl+shift+e",
+      "command": "-workbench.view.explorer"
+  },
+  // Change the default shortcut for explorer
+  {
+      "key": "ctrl+e",
+      "command": "workbench.view.explorer"
+  },
+  // CopyFilePath
+  {
+      "key": "ctrl+alt+c",
+      "command": "copyFilePath",
+      "when": "editorTextFocus"
+  },
+  // Parameter hints
+  {
+      "key": "ctrl+alt+p",
+      "command": "editor.action.triggerParameterHints",
+      "when": "editorHasSignatureHelpProvider && editorTextFocus"
   },
   {
-    "key": "ctrl+alt+c",
-    "command": "copyFilePath"
+      "key": "ctrl+shift+j",
+      "command": "workbench.action.editor.changeLanguageMode"
   },
   {
-    "key": "ctrl+alt+p",
-    "command": "editor.action.triggerParameterHints",
-    "when": "editorHasSignatureHelpProvider && editorTextFocus"
+      "key": "ctrl+k m",
+      "command": "-workbench.action.editor.changeLanguageMode"
   },
   {
-    "key": "shift+f6",
-    "command": "editor.action.rename",
-    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+      "key": "ctrl+shift+t",
+      "command": "workbench.action.terminal.new",
+      "when": "terminalFocus"
   },
   {
-    "key": "shift+f6",
-    "command": "renameFile",
-    "when": "explorerViewletVisible && filesExplorerFocus"
+      "key": "shift+alt+up",
+      "command": "editor.action.insertCursorAbove",
+      "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+alt+m",
-    "command": "editor.action.codeAction",
-    "when": "editorTextFocus",
-    "args": {
-      "kind": "refactor.extract.function",
-      "apply": "ifSingle"
-    }
+      "key": "ctrl+shift+up",
+      "command": "-editor.action.insertCursorAbove",
+      "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+shift+j",
-    "command": "workbench.action.editor.changeLanguageMode"
+      "key": "shift+alt+down",
+      "command": "editor.action.insertCursorBelow",
+      "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+k m",
-    "command": "-workbench.action.editor.changeLanguageMode"
+      "key": "ctrl+shift+down",
+      "command": "-editor.action.insertCursorBelow",
+      "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+backspace",
-    "command": "deleteWordLeft",
-    "when": "textInputFocus && !editorReadonly"
+      "key": "ctrl+k ctrl+z",
+      "command": "workbench.action.toggleZenMode"
   },
   {
-    "key": "ctrl+f4",
-    "command": "workbench.action.closePanel"
+      "key": "ctrl+k z",
+      "command": "-workbench.action.toggleZenMode"
   },
   {
-    "key": "ctrl+shift+t",
-    "command": "workbench.action.terminal.new"
-  }
+      "key": "ctrl+d",
+      "command": "editor.action.copyLinesDownAction",
+      "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+      "key": "alt+p",
+      "command": "toggleVim"
+  },
+  {
+      "key": "ctrl+w",
+      "command": "-workbench.action.closeWindow",
+      "when": "!editorIsOpen && !multipleEditorGroups"
+  },
+  {
+      "key": "ctrl+w",
+      "command": "deleteWordLeft",
+      "when": "textInputFocus && !editorReadonly"
+  },
+  {
+      "key": "ctrl+q",
+      "command": "workbench.action.closeActiveEditor"
+  },
+  {
+      "key": "ctrl+w",
+      "command": "-workbench.action.closeActiveEditor"
+  },
 ]
