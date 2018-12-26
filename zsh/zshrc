@@ -1,8 +1,10 @@
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="/home/garcez/.oh-my-zsh"
 ZSH_THEME="vandalvnl"
-HYPHEN_INSENSITIVE="true"
-export UPDATE_ZSH_DAYS=7
+CASE_SENSITIVE="false"
 ENABLE_CORRECTION="true"
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
   git
@@ -11,61 +13,39 @@ plugins=(
   zsh-256color
 )
 source $ZSH/oh-my-zsh.sh
+
 export MANPATH="/usr/local/man:$MANPATH"
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='insiders'
+else
+  export EDITOR='vim'
+fi
 export ARCHFLAGS="-arch x86_64"
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-########## CLI Utils ##########
+## Dev settings
+# SDKMAN - Java
+export SDKMAN_DIR="/home/garcez/.sdkman"
+[[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
+[[ -s "/home/garcez/.gvm/scripts/gvm" ]] && source "/home/garcez/.gvm/scripts/gvm"
+# NVM - NodeJS
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Rbenv - Ruby
+export PATH="$HOME/.rbenv/bin:$PATH"
+# Dotnet - (C|F)#
+export PATH="$PATH:~/.dotnet/tools"
+# Android - Java
+export ANDROID_HOME='~/Android/Sdk'
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+# React - Javascript
+REACT_EDITOR=insiders
 
-setopt append_history
-setopt auto_pushd
-setopt autocd
-setopt extended_glob
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_reduce_blanks
-setopt hist_save_no_dups
-setopt pushd_ignore_dups
-setopt pushd_minus
-setopt share_history
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
-ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
-ZSH_HIGHLIGHT_STYLES[alias]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green"
-ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow"
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_STYLES[default]=none
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-ZSH_HIGHLIGHT_STYLES[path]="fg=cyan,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=cyan,underline"
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=cyan,italic"
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
-
-########### ALIAS #############
-
+## Alias and Functions
 alias ls='exa'
 alias more='less'
 alias df='df -h'
@@ -86,6 +66,8 @@ alias free='free -htmlw'
 alias insiders='~/Applications/VisualStudioCode/VSCode-linux-x64/bin/code-insiders'
 alias code='insiders'
 alias zshrc='code ~/.zshrc'
+alias nodeList='npm list -g --depth=0'
+
 
 npmi(){
   customFunction="no"
@@ -183,22 +165,51 @@ filec(){
   clipcopy "$1"
 }
 
-############ Dev Tools ############
-# NVM - Node
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="$HOME/.rbenv/bin:$PATH"
+## Frufru CLI
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="~/.sdkman"
-[[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
-[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
-
-export PATH="$PATH:~/.dotnet/tools"
-export ANDROID_HOME='~/Android/Sdk'
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-REACT_EDITOR=insiders
+setopt append_history
+setopt auto_pushd
+setopt autocd
+setopt extended_glob
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt pushd_ignore_dups
+setopt pushd_minus
+setopt share_history
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
+ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
+ZSH_HIGHLIGHT_STYLES[alias]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[function]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green"
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow"
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+ZSH_HIGHLIGHT_STYLES[default]=none
+ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
+ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
+ZSH_HIGHLIGHT_STYLES[path]="fg=cyan,underline"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=cyan,underline"
+ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
+ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=cyan,italic"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
