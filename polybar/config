@@ -17,7 +17,7 @@
 ;==========================================================
 
 [colors]
-background = #252527
+background = #0C1014
 background-alt = #444
 foreground = #bbb
 foreground-alt = #555
@@ -25,16 +25,16 @@ primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
 
-[bar/mybar2]
-monitor = eDP1
+[bar/edp1]
+monitor = eDP-1
 separator =
-width = 76%
+width = 100%
 height = 22
 margin-bottom = 0
 margin-top = 0
 radius = 0.0
-fixed-center = false
-bottom = false
+fixed-center = true
+bottom = true
 background = ${colors.background}
 foreground = ${colors.foreground}
 line-size = 0
@@ -44,24 +44,55 @@ padding-right = 1
 module-margin-left = 1
 module-margin-right = 1
 font-0 = "NotoSans:size=8;1"
-font-1 = "FontAwesome:size=9:weight=bold;1"
-modules-left = wlan
+font-1 = "Ubuntu Nerd Font:size=9:weight=bold;1"
+modules-left = wlan menu-apps works
 modules-center = xwindow
 modules-right = pulseaudio spotify
-override-redirect = true
+override-redirect = false
 wm-name = kwin
-pseudo-transparency = false
+pseudo-transparency = true
+
+[bar/hdmi1]
+monitor = HDMI-1
+separator =
+width = 100%
+height = 22
+margin-bottom = 0
+margin-top = 0
+radius = 0.0
+fixed-center = true
+bottom = true
+background = ${colors.background}
+foreground = ${colors.foreground}
+line-size = 0
+border-size = 0
+padding-left = 1
+padding-right = 1
+module-margin-left = 1
+module-margin-right = 1
+font-0 = "NotoSans:size=8;1"
+font-1 = "Ubuntu Nerd Font:size=9:weight=bold;1"
+modules-left = wlan menu-apps works
+modules-center = xwindow
+modules-right = pulseaudio spotify
+override-redirect = false
+wm-name = kwin
+pseudo-transparency = true
 
 [module/spotify]
 type = custom/script
 interval = 5
-format =  <label>
+format-prefix = " "
+format = <label>
+format-prefix-foreground = #1db954
 exec = python ~/.config/polybar/spoti.py -f '{artist}: {song}'
 format-underline = #1db954
 
 [module/xwindow]
 type = internal/xwindow
-label =  %{T1}  %{T-}  %title:...%
+format-prefix = "%{T1}  %{T-} "
+format-prefix-foreground = #0a81f5
+label = %title:...%
 format-underline = #0a81f5
 
 [module/wlan]
@@ -69,13 +100,14 @@ type = custom/script
 exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2,6 | sed 's/:/ - /g' | sed 's/$/%/g'
 interval = 20
 format-prefix = " "
+format-prefix-foreground = "#0a6cf5"
 format-underline = #0a6cf5
 
 [module/pulseaudio]
 type = internal/pulseaudio
 use-ui-max = true
 interval = 5
-format-volume = <label-volume> <ramp-volume>
+format-volume = <ramp-volume> <label-volume>
 format-underline = #0a81f5
 label-muted = 0% 
 label-muted-foreground = #666
@@ -85,6 +117,27 @@ ramp-volume-1 = 
 ramp-volume-1-foreground = #f4a42c
 ramp-volume-2-foreground = #cc2929
 ramp-volume-2 = 
+
+[module/menu-apps]
+type = custom/menu
+expand-right = true
+menu-0-0 = 玲
+menu-0-0-exec = bash $HOME/.config/polybar/spotify-media.sh previous
+menu-0-1 = 懶
+menu-0-1-exec = bash $HOME/.config/polybar/spotify-media.sh playPause
+menu-0-2 = 怜
+menu-0-2-exec = bash $HOME/.config/polybar/spotify-media.sh next
+label-open =  Spotify
+label-open-foreground = #1db954
+label-close = 
+label-close-foreground = #DE3C3C
+label-separator = " "
+
+[module/works]
+type = internal/xworkspaces
+pin-workspaces = true
+enable-click = false
+enable-scroll = false
 
 [settings]
 screenchange-reload = true

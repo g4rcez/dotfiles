@@ -9,7 +9,7 @@ configuration {
     padding: 10;
     fixed-num-lines: true;
     show-icons: true;
-    combi-modi: "run";
+    combi-modi: "window";
     separator-style: "none";
     hide-scrollbar: false;
     fullscreen: false;
@@ -52,7 +52,7 @@ configuration {
 }
 * {
     selected-normal-foreground:  #fff;
-    foreground:                  rgba ( 224, 224, 224, 100 % );
+    foreground:                  rgba ( 224, 224, 224, 20% );
     normal-foreground:           @foreground;
     alternate-normal-background: rgba ( 52, 60, 72, 100 % );
     red:                         rgba ( 220, 50, 47, 100 % );
@@ -81,7 +81,7 @@ configuration {
     selected-active-background:  rgba ( 224, 224, 224, 100 % );
 }
 window {
-    background-color: #162229;
+    background-color: #191e24fa;
     border: 0;
     border-color: @x14;
     border-radius: 0px;

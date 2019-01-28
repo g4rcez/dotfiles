@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 configuration {
-    modi: "combi,run";
+    modi: "combi,drun";
     columns: 2;
     font: "Inconsolata 13";
     bw: 0;
@@ -9,7 +9,7 @@ configuration {
     padding: 0;
     fixed-num-lines: true;
     show-icons: true;
-    combi-modi: "run";
+    combi-modi: "drun";
     separator-style: "none";
     hide-scrollbar: false;
     fullscreen: false;
@@ -26,7 +26,7 @@ configuration {
     display-windowcd: "=>";
     display-run: "";
     display-ssh: "ssh";
-    display-drun: "";
+    display-drun: "> ";
     display-combi: ">_";
     kb-remove-word-back: "Control+BackSpace,Alt+d,Alt+BackSpace";
     kb-accept-entry: "Control+m,Return,KP_Enter,Alt+m";

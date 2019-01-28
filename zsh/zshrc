@@ -1,49 +1,57 @@
-export ZSH="/home/garcez/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="vandalvnl"
 CASE_SENSITIVE="false"
-ENABLE_CORRECTION="true"
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
+ENABLE_CORRECTION="false"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
   git
+  github
   zsh-syntax-highlighting
   zsh-autosuggestions
-  zsh-256color
+  zsh-better-npm-completion
 )
 source $ZSH/oh-my-zsh.sh
 
 export MANPATH="/usr/local/man:$MANPATH"
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='insiders'
-else
   export EDITOR='vim'
+else
+  export EDITOR='code-insiders'
 fi
 export ARCHFLAGS="-arch x86_64"
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 ## Dev settings
 # SDKMAN - Java
-export SDKMAN_DIR="/home/garcez/.sdkman"
-[[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
-[[ -s "/home/garcez/.gvm/scripts/gvm" ]] && source "/home/garcez/.gvm/scripts/gvm"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 # NVM - NodeJS
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # Rbenv - Ruby
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.rbenv/gem:$PATH"
+export GEM_PATH="$HOME/.gem"
+export GEM_HOME="$HOME/.gem"
+eval "$(rbenv init -)"
 # Dotnet - (C|F)#
-export PATH="$PATH:~/.dotnet/tools"
+export PATH="$PATH:$HOME/.dotnet/tools"
 # Android - Java
-export ANDROID_HOME='~/Android/Sdk'
+export ANDROID_HOME="$HOME/Tools/android"
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# My scripts
+export PATH=$PATH:$HOME/.bin
+# Golang
+[[ -s "/home/garcez/.gvm/scripts/gvm" ]] && source "/home/garcez/.gvm/scripts/gvm"
 # React - Javascript
-REACT_EDITOR=insiders
+REACT_EDITOR="code-insiders"
 
 ## Alias and Functions
 alias ls='exa'
@@ -51,7 +59,7 @@ alias more='less'
 alias df='df -h'
 alias add='git add'
 alias commit='git commit -m'
-alias pacman='sudo pacman'
+alias push='git push -u'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
@@ -63,26 +71,18 @@ alias start='sudo systemctl start '
 alias status='sudo systemctl status '
 alias stop="sudo systemctl stop "
 alias free='free -htmlw'
-alias insiders='~/Applications/VisualStudioCode/VSCode-linux-x64/bin/code-insiders'
-alias code='insiders'
 alias zshrc='code ~/.zshrc'
 alias nodeList='npm list -g --depth=0'
 
+# Alias tools
+alias code='code-insiders'
+alias insiders='code-insiders'
 
-npmi(){
-  customFunction="no"
-  test -e tslint.json && customFunction="yes"
+# Android Alias
+alias droid-restart='adb kill-server && adb start-server'
 
-  if [[ "$customFunction" == "yes" ]]; then
-    if [[ "$1" == "install" ]] || [[ "$1" == "i" ]]; then
-      packages="$(echo "$@" | sed "s/$1//g")"
-      npm install --save $packages
-      npm install --save-dev "$(echo $packages | sed 's/ /&@types\//g')"
-    fi
-  else
-    npm $@
-  fi
-}
+# Ctf Stuff
+alias pshell="echo python -c 'import pty;pty.spawn(\"/bin/bash\")'"
 
 mp3(){
   tmp=$PWD
@@ -184,20 +184,20 @@ setopt pushd_minus
 setopt share_history
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
+ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red,bold")
 ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
-ZSH_HIGHLIGHT_STYLES[alias]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[function]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=blue,bold"
 ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=magenta"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green"
-ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=blue"
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=red"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_STYLES[default]=none
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
