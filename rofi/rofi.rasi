@@ -1,198 +1,146 @@
-@import "colors.rasi"
+/**
+ * ROFI Color theme
+ * User: mbfraga
+ * Copyright: Martin B. Fraga
+ */
 
-configuration {
-    modi: "combi,drun";
-    columns: 2;
-    font: "Inconsolata 13";
-    bw: 0;
-    location: 0;
-    padding: 0;
-    fixed-num-lines: true;
-    show-icons: true;
-    combi-modi: "drun";
-    separator-style: "none";
-    hide-scrollbar: false;
-    fullscreen: false;
-    fake-transparency: true;
-    scroll-method: 2;
-    click-to-exit: false;
-    show-match: true;
-    color-normal: "@xbg, @xfg, @xbg, @xfg, @xbg";
-    color-urgent: "@xbg, @x1, @xbg, @x1, @xfg";
-    color-active: "@xbg, @xfg, @xbg, @xfg, @xbg";
-    color-window: "@xbg, @x1, @xfg";
-    combi-hide-mode-prefix: true;
-    display-window: ">_";
-    display-windowcd: "=>";
-    display-run: "";
-    display-ssh: "ssh";
-    display-drun: "> ";
-    display-combi: ">_";
-    kb-remove-word-back: "Control+BackSpace,Alt+d,Alt+BackSpace";
-    kb-accept-entry: "Control+m,Return,KP_Enter,Alt+m";
-    kb-mode-next: "Shift+Right,Control+Tab,Alt+l,Alt+Tab";
-    kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab,Alt+h";
-    kb-row-left: "Control+Page_Up,Control+Alt+h";
-    kb-row-right: "Control+Page_Down,Control+Alt+l";
-    kb-row-up: "Up,Control+p,ISO_Left_Tab,Alt+k";
-    kb-row-down: "Down,Control+n,Alt+j";
-    kb-select-1: "";
-    kb-select-2: "";
-    kb-select-3: "";
-    kb-select-4: "";
-    kb-select-5: "";
-    kb-select-6: "";
-    kb-select-7: "";
-    kb-select-8: "";
-    kb-select-9: "";
-    kb-select-10: "";
-    me-select-entry: "";
-    me-accept-entry: "MousePrimary";
-    me-accept-custom: "MouseMiddle";
-}
+/* global settings and color variables */
 * {
-    selected-normal-foreground:  #fff;
-    foreground:                  rgba ( 224, 224, 224, 100 % );
-    normal-foreground:           @foreground;
-    alternate-normal-background: rgba ( 52, 60, 72, 100 % );
-    red:                         rgba ( 220, 50, 47, 100 % );
-    selected-urgent-foreground:  rgba ( 224, 224, 224, 100 % );
-    blue:                        rgba ( 38, 139, 210, 100 % );
-    urgent-foreground:           rgba ( 240, 98, 146, 100 % );
-    alternate-urgent-background: rgba ( 52, 60, 72, 100 % );
-    active-foreground:           #888;
-    lightbg:                     rgba ( 238, 232, 213, 100 % );
-    selected-active-foreground:  rgba ( 52, 60, 72, 100 % );
-    alternate-active-background: rgba ( 52, 60, 72, 100 % );
-    background:                  #121212;
-    alternate-normal-foreground: @foreground;
-    normal-background:           rgba ( 52, 60, 72, 100 % );
-    lightfg:                     rgba ( 88, 104, 117, 100 % );
-    selected-normal-background:  rgba ( 224, 224, 224, 100 % );
-    border-color: #000;
-    spacing:                     5;
-    separatorcolor:              rgba ( 224, 224, 224, 100 % );
-    urgent-background:           rgba ( 52, 60, 72, 100 % );
-    selected-urgent-background:  rgba ( 240, 98, 146, 100 % );
-    alternate-urgent-foreground: @urgent-foreground;
-    background-color:            rgba ( 0, 0, 0, 0 % );
-    alternate-active-foreground: @active-foreground;
-    active-background:           rgba ( 52, 60, 72, 100 % );
-    selected-active-background:  rgba ( 224, 224, 224, 100 % );
+   maincolor:        #ed8712;
+   highlight:        bold #ed8712;
+   urgentcolor:      #e53714;
+   fgwhite:          #cfcfcf;
+   blackdarkest:     #101010;
+   blackwidget:      #151515;
+   blackentry:       #181818;
+   blackselect:      #252525;
+   darkgray:         #848484;
+   scrollbarcolor:   #505050;
+   font: "Inconsolata 14";
+   background-color: @blackdarkest;
 }
+
 window {
-    background-color: #212121;
-    border: 0;
-    border-color: @x14;
-    border-radius: 0px;
-    padding: 20;
-    width: 50%;
-    height: 40%;
+   background-color: @blackdarkest;
+   anchor: north;
+   location: north;
+   y-offset: 20%;
 }
+
 mainbox {
-    border: 0;
-    padding: 10;
+   background-color: @blackdarkest;
+   spacing:0px;
+   children: [inputbar, message, sidebar, listview];
 }
+
 message {
-    border: 0px;
-    border-color: @x6;
-    padding: 1px;
+   padding: 6px 10px;
+   background-color:@blackwidget;
 }
+
 textbox {
-    text-color: #fff;
+   text-color:@darkgray;
+   background-color:@blackwidget;
 }
+
 listview {
-    fixed-height: 0;
-    border: 0px;
-    border-color: @x6;
-    spacing: 5px;
-    scrollbar: false;
-    padding: 2px 0px 0px;
+   fixed-height: false;
+   dynamic: true;
+   scrollbar: true;
+   spacing: 0px;
+   padding: 1px 0px 0px 0px;
+   margin: 0px 0px 1px 0px;
+   background: @blackdarkest;
 }
+
 element {
-    border: 0;
-    padding: 1px;
+   padding: 2px 15px;
 }
+
 element normal.normal {
-    background-color: rgba (0,0,0,0%);
-    text-color:       #fff;
+   padding: 0px 15px;
+   background-color: @blackentry;
+   text-color: @fgwhite;
 }
+
 element normal.urgent {
-    background-color: rgba (0,0,0,0%);
-    text-color:       @x9;
+   background-color: @blackentry;
+   text-color: @urgentcolor;
 }
+
 element normal.active {
-    background-color: rgba (0,0,0,0%);
-    text-color:       #1fb0f6;
+   background-color: @blackentry;
+   text-color: @maincolor;
 }
+
 element selected.normal {
-    background-color: rgba (0,0,0,0%);
-    text-color:       #2378a1;
+    background-color: @blackselect;
+    text-color:       @fgwhite;
 }
+
 element selected.urgent {
-    background-color: rgba (0,0,0,0%);
-    text-color:       @x13;
+    background-color: @urgentcolor;
+    text-color:       @blackdarkest;
 }
+
 element selected.active {
-    background-color: rgba (0,0,0,0%);
-    text-color:       #176cba;
+    background-color: @maincolor;
+    text-color:       @blackdarkest;
 }
+
 element alternate.normal {
-    background-color: rgba (0,0,0,0%);
-    text-color:       @xfg;
+    background-color: @blackentry;
+    text-color:       @fgwhite;
 }
+
 element alternate.urgent {
-    background-color: rgba (0,0,0,0%);
-    text-color:       @x9;
+    background-color: @blackentry;
+    text-color:       @urgentcolor;
 }
+
 element alternate.active {
-    background-color: rgba (0,0,0,0%);
-    text-color:       @x5;
+    background-color: @blackentry;
+    text-color:       @maincolor;
 }
+
 scrollbar {
-    width:        4px ;
-    border:       0;
-    handle-color: @xfg;
-    handle-width: 8px ;
-    padding:      0;
+   background-color: @blackwidget;
+   handle-color: @darkgray;
+   handle-width: 15px;
 }
+
 sidebar {
-    border:       0px;
-    border-color: @x4;
-    border-radius: 20px;
+   background-color: @blackwidget;
 }
+
 button {
-    margin: 5px;
-    padding: 5px;
-    background-color: @xbg;
-    text-color: @x8;
-    border: 0px;
-    border-radius: 20px;
-    border-color: @x8;
+   background-color: @blackwidget;
+   text-color:       @darkgray;
 }
+
 button selected {
-    background-color: @xbg;
-    text-color:       @x7;
-    border:       3px;
-    border-radius: 20px;
-    border-color:     @x7;
+    text-color:       @maincolor;
 }
-case-indicator {
-    spacing:    0;
-    text-color: #fff;
+
+inputbar {
+   background-color: @blackdarkest;
+   spacing: 0px;
 }
-entry {
-    spacing:    0;
-    text-color: @xfg;
-}
+
 prompt {
-    spacing:    0;
-    border:     0;
-    text-color: #fff;
+   padding:6px 9px;
+   background-color: @maincolor;
+   text-color:@blackwidget;
 }
-textbox-prompt-colon {
-    expand:     false;
-    str:        " ";
-    margin: 0px 0.3000em 0.0000em 0.0000em ;
-    text-color: inherit;
+
+entry {
+   padding:6px 10px;
+   background-color:@blackwidget;
+   text-color:@fgwhite;
+}
+
+case-indicator {
+   padding:6px 10px;
+   text-color:@maincolor;
+   background-color:@blackwidget;
 }

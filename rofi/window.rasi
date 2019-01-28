@@ -1,4 +1,52 @@
-@import "colors.rasi"
+* {
+    xbg:    #1D1F28;
+    xfg:    #FDFDFD;
+    x0:     #282A36;
+    x1:     #F37F97;
+    x2:     #5ADECD;
+    x3:     #F2A272;
+    x4:     #8897F4;
+    x5:     #C574DD;
+    x6:     #79E6F3;
+    x7:     #FDFDFD;
+    x8:     #414458;
+    x9:     #FF4971;
+    x10:    #18E3C8;
+    x11:    #FF8037;
+    x12:    #556FFF;
+    x13:    #B043D1;
+    x14:    #3FDCEE;
+    x15:    #FDFDFD;
+    selected-normal-foreground:  #fff;
+    foreground:                  rgba ( 224, 224, 224, 20% );
+    normal-foreground:           @foreground;
+    alternate-normal-background: rgba ( 52, 60, 72, 100 % );
+    red:                         rgba ( 220, 50, 47, 100 % );
+    selected-urgent-foreground:  rgba ( 224, 224, 224, 100 % );
+    blue:                        rgba ( 38, 139, 210, 100 % );
+    urgent-foreground:           rgba ( 240, 98, 146, 100 % );
+    alternate-urgent-background: rgba ( 52, 60, 72, 100 % );
+    active-foreground:           #888;
+    lightbg:                     rgba ( 238, 232, 213, 100 % );
+    selected-active-foreground:  rgba ( 52, 60, 72, 100 % );
+    alternate-active-background: rgba ( 52, 60, 72, 100 % );
+    background:                  #121212;
+    alternate-normal-foreground: @foreground;
+    normal-background:           rgba ( 52, 60, 72, 100 % );
+    lightfg:                     rgba ( 88, 104, 117, 100 % );
+    selected-normal-background:  rgba ( 224, 224, 224, 100 % );
+    border-color: #000;
+    spacing:                     5;
+    separatorcolor:              rgba ( 224, 224, 224, 100 % );
+    urgent-background:           rgba ( 52, 60, 72, 100 % );
+    selected-urgent-background:  rgba ( 240, 98, 146, 100 % );
+    alternate-urgent-foreground: @urgent-foreground;
+    background-color:            rgba ( 0, 0, 0, 0 % );
+    alternate-active-foreground: @active-foreground;
+    active-background:           rgba ( 52, 60, 72, 100 % );
+    selected-active-background:  rgba ( 224, 224, 224, 100 % );
+}
+
 
 configuration {
     modi: "window";
@@ -50,36 +98,7 @@ configuration {
     me-accept-entry: "MousePrimary";
     me-accept-custom: "MouseMiddle";
 }
-* {
-    selected-normal-foreground:  #fff;
-    foreground:                  rgba ( 224, 224, 224, 20% );
-    normal-foreground:           @foreground;
-    alternate-normal-background: rgba ( 52, 60, 72, 100 % );
-    red:                         rgba ( 220, 50, 47, 100 % );
-    selected-urgent-foreground:  rgba ( 224, 224, 224, 100 % );
-    blue:                        rgba ( 38, 139, 210, 100 % );
-    urgent-foreground:           rgba ( 240, 98, 146, 100 % );
-    alternate-urgent-background: rgba ( 52, 60, 72, 100 % );
-    active-foreground:           #888;
-    lightbg:                     rgba ( 238, 232, 213, 100 % );
-    selected-active-foreground:  rgba ( 52, 60, 72, 100 % );
-    alternate-active-background: rgba ( 52, 60, 72, 100 % );
-    background:                  #121212;
-    alternate-normal-foreground: @foreground;
-    normal-background:           rgba ( 52, 60, 72, 100 % );
-    lightfg:                     rgba ( 88, 104, 117, 100 % );
-    selected-normal-background:  rgba ( 224, 224, 224, 100 % );
-    border-color: #000;
-    spacing:                     5;
-    separatorcolor:              rgba ( 224, 224, 224, 100 % );
-    urgent-background:           rgba ( 52, 60, 72, 100 % );
-    selected-urgent-background:  rgba ( 240, 98, 146, 100 % );
-    alternate-urgent-foreground: @urgent-foreground;
-    background-color:            rgba ( 0, 0, 0, 0 % );
-    alternate-active-foreground: @active-foreground;
-    active-background:           rgba ( 52, 60, 72, 100 % );
-    selected-active-background:  rgba ( 224, 224, 224, 100 % );
-}
+
 window {
     background-color: #191e24fa;
     border: 0;
