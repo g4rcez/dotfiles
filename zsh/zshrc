@@ -54,8 +54,8 @@ export PATH=$PATH:$HOME/.bin
 REACT_EDITOR="code-insiders"
 
 ## Alias and Functions
-alias ls='exa'
 alias more='less'
+alias ls='ls --color=always'
 alias df='df -h'
 alias add='git add'
 alias commit='git commit -m'
@@ -214,3 +214,5 @@ ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 
+export NVM_DIR="${XDG_CONFIG_HOME/:-$HOME/.}nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
