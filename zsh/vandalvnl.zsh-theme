@@ -10,6 +10,14 @@ gitverify(){
     fi
 }
 
+exitstatus() {
+    if [[ $? == 0 ]]; then
+        echo -n "%{$fg_bold[green]%}\uf00c%{$reset_color%}"
+    else
+        echo -n "%{$fg_bold[red]%}\uf00d%{$reset_color%}"
+    fi
+}
+
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 
 fishify() {
@@ -41,8 +49,8 @@ current_env() {
     fi
 }
 PROMPT='
-%{$fg_bold[green]%n%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%}$(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}Σ%{$resetcolor%} '
+$(exitstatus) %{$fg_bold[green]%n%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
+%{$fg_bold[$CARETCOLOR]%}λ%{$resetcolor%} '
 RPROMPT='%{$(echotc UP 1)%}$(current_env) %{$(echotc DO 1)%}'
 _git_time_since_commit() {
   if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then

@@ -4,41 +4,46 @@ CASE_SENSITIVE="false"
 ENABLE_CORRECTION="false"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(
+  z
   git
-  github
+  # github
+  command-time
   zsh-syntax-highlighting
   zsh-autosuggestions
-  zsh-better-npm-completion
+  # zsh-better-npm-completion
 )
 source $ZSH/oh-my-zsh.sh
-
-export MANPATH="/usr/local/man:$MANPATH"
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='code-insiders'
-fi
-export ARCHFLAGS="-arch x86_64"
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+source $HOME/.private-alias.sh
 
 ## Dev settings
+
+export EDITOR=/usr/bin/vim
+export PATH=$PATH:$HOME/Tools/VSCode-linux-x64
+export PATH=$PATH:$HOME/Tools/VSCode-linux-x64
+export PATH=$PATH:$HOME/.watchman/bin
+export MANPATH="/usr/local/man:$MANPATH"
+export ARCHFLAGS="-arch x86_64"
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+# Terraform
+export PATH="$HOME/.tfenv/bin:$PATH"
+
 # SDKMAN - Java
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
-# NVM - NodeJS
+
+# NPM - Node
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Rbenv - Ruby
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 export PATH="$HOME/.rbenv/gem:$PATH"
 export GEM_PATH="$HOME/.gem"
 export GEM_HOME="$HOME/.gem"
-eval "$(rbenv init -)"
+
 # Dotnet - (C|F)#
-export PATH="$PATH:$HOME/.dotnet/tools"
+export DOTNET_ROOT=$HOME/Tools/dotnet
+export PATH=$PATH:$HOME/Tools/dotnet
+
 # Android - Java
 export ANDROID_HOME="$HOME/Tools/android"
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -48,41 +53,104 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # My scripts
 export PATH=$PATH:$HOME/.bin
+
+PATH="$PATH:$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
+
+# ASDF - Erlang and Elixir
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
 # Golang
-[[ -s "/home/garcez/.gvm/scripts/gvm" ]] && source "/home/garcez/.gvm/scripts/gvm"
-# React - Javascript
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+alias code-insiders="$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
+alias code="$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
 REACT_EDITOR="code-insiders"
 
-## Alias and Functions
+# SDKMAN - Java
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+# NPM - Node
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Rbenv - Ruby
+eval "$(rbenv init -)"
+
+PATH="$PATH:$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
+
+# Unix utils
+alias ls='ls -FNG --color=auto --time-style=long-iso'
+alias lz='ls -lSr'
+alias wtf='pwd'
+alias cp='cp -v'
+alias rm='rm -v'
+alias mv='mv -v'
 alias more='less'
-alias ls='ls --color=always'
 alias df='df -h'
-alias add='git add'
-alias commit='git commit -m'
-alias push='git push -u'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
-alias hello='sudo systemctl start '
+
+# For MacOS fanboys
 alias pbcopy='xclip -sel clip'
 alias pbpaste='xclip -selection clipboard -o'
+
+# Git utils
+alias add='git add'
+alias commit='git commit -m'
+alias push='git push -u'
+
+# System utils
+alias hello='sudo systemctl start '
 alias restart='sudo systemctl restart '
 alias start='sudo systemctl start '
 alias status='sudo systemctl status '
 alias stop="sudo systemctl stop "
 alias free='free -htmlw'
+
+# Dev stuff
 alias zshrc='code ~/.zshrc'
 alias nodeList='npm list -g --depth=0'
-
-# Alias tools
-alias code='code-insiders'
-alias insiders='code-insiders'
 
 # Android Alias
 alias droid-restart='adb kill-server && adb start-server'
 
 # Ctf Stuff
 alias pshell="echo python -c 'import pty;pty.spawn(\"/bin/bash\")'"
+
+ZSH_COMMAND_TIME_MIN_SECONDS=5
+ZSH_COMMAND_TIME_MSG="Time: %s seconds"
+ZSH_COMMAND_TIME_COLOR="cyan"
+
+zsh_command_time() {
+    if [ -n "$ZSH_COMMAND_TIME" ]; then
+        hours=$(($ZSH_COMMAND_TIME/3600))
+        min=$(($ZSH_COMMAND_TIME/60))
+        sec=$(($ZSH_COMMAND_TIME%60))
+        if [ "$ZSH_COMMAND_TIME" -le 60 ]; then
+            timer_show="$fg[green]$ZSH_COMMAND_TIME s."
+        elif [ "$ZSH_COMMAND_TIME" -gt 60 ] && [ "$ZSH_COMMAND_TIME" -le 180 ]; then
+            timer_show="$fg[yellow]$min min. $sec s."
+        else
+            if [ "$hours" -gt 0 ]; then
+                min=$(($min%60))
+                timer_show="$fg[red]$hours h. $min min. $sec s."
+            else
+                timer_show="$fg[red]$min min. $sec s."
+            fi
+        fi
+        printf "${ZSH_COMMAND_TIME_MSG}\n" "$timer_show"
+    fi
+}
+
+cs() {
+  if [ -d "$1" ] ; then
+      cd "$1"
+  elif [ -f "$1" ] ; then
+      cat "$1"
+  fi
+}
 
 mp3(){
   tmp=$PWD
@@ -214,5 +282,9 @@ ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 
-export NVM_DIR="${XDG_CONFIG_HOME/:-$HOME/.}nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash

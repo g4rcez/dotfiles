@@ -17,8 +17,8 @@ cd $HOME/dotfiles
 
 # ZSH Config
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-cat zsh/zshrc > ~/.zshrc
-cp ~/.oh-my-zsh/themes/ zsh/vandalvnl.zsh-theme
+ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
+ln -sf $HOME/dotfiles/zsh/vandalvnl.zsh-theme $HOME/.oh-my-zsh/themes/vandalvnl.zsh-theme
 cd $ZSH_CUSTOM/plugins && git clone https://github.com/chrissicool/zsh-256color
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting

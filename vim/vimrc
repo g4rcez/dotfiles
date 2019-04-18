@@ -10,6 +10,7 @@ source ~/.vim_runtime/my_configs.vim
 catch
 endtry
 
+set nu
 set ai
 set ruler
 set tabstop=2
@@ -91,14 +92,14 @@ Plugin 'tomasr/molokai'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-colorscheme ir_black
+colorscheme molokai
 
 " Configure nerdtree
 let g:NERDTreeWinPos = "left"
+let NERDTreeShowHidden=1
 map <C-n> :NERDTreeToggle<CR>
 map <C-m> :TagbarToggle<CR>
 
 " Shortcuts map
-
 imap jj <Esc>
 imap <space><space> <ESC>
