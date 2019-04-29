@@ -1,83 +1,49 @@
-export ZSH="$HOME/.oh-my-zsh"
+# If you come from bash you might have to change your $PATH.
+# Path to your oh-my-zsh installation.
+export ZSH="/home/garcez/.oh-my-zsh"
 ZSH_THEME="vandalvnl"
-CASE_SENSITIVE="false"
-ENABLE_CORRECTION="false"
+ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
+
 plugins=(
-  z
-  git
-  # github
-  command-time
-  zsh-syntax-highlighting
-  zsh-autosuggestions
-  # zsh-better-npm-completion
+    git
+    github
+    compleat
+    z
+    zsh-syntax-highlighting
+    zsh-autosuggestions
 )
+
 source $ZSH/oh-my-zsh.sh
-source $HOME/.private-alias.sh
 
-## Dev settings
-
-export EDITOR=/usr/bin/vim
-export PATH=$PATH:$HOME/Tools/VSCode-linux-x64
-export PATH=$PATH:$HOME/Tools/VSCode-linux-x64
-export PATH=$PATH:$HOME/.watchman/bin
+# User configuration
 export MANPATH="/usr/local/man:$MANPATH"
+
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
+
 export ARCHFLAGS="-arch x86_64"
-export SSH_KEY_PATH="~/.ssh/rsa_id"
-# Terraform
-export PATH="$HOME/.tfenv/bin:$PATH"
 
-# SDKMAN - Java
-export SDKMAN_DIR="$HOME/.sdkman"
-
-# NPM - Node
-export NVM_DIR="$HOME/.nvm"
-
-# Rbenv - Ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
-export PATH="$HOME/.rbenv/shims:$PATH"
-export PATH="$HOME/.rbenv/gem:$PATH"
-export GEM_PATH="$HOME/.gem"
-export GEM_HOME="$HOME/.gem"
-
-# Dotnet - (C|F)#
-export DOTNET_ROOT=$HOME/Tools/dotnet
-export PATH=$PATH:$HOME/Tools/dotnet
-
-# Android - Java
-export ANDROID_HOME="$HOME/Tools/android"
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-# My scripts
-export PATH=$PATH:$HOME/.bin
-
-PATH="$PATH:$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
-
-# ASDF - Erlang and Elixir
 . $HOME/.asdf/asdf.sh
+
 . $HOME/.asdf/completions/asdf.bash
-# Golang
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
-alias code-insiders="$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
-alias code="$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
-REACT_EDITOR="code-insiders"
+export PATH=$PATH:$HOME/.bin/VSCode-linux-x64
 
-# SDKMAN - Java
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/garcez/.sdkman"
+[[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
 
-# NPM - Node
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export DOTNET_ROOT=$HOME/.bin/dotnet
+export PATH=$PATH:$HOME/.bin/dotnet
+export PATH=$PATH:$HOME/.local/bin
 
-# Rbenv - Ruby
-eval "$(rbenv init -)"
-
-PATH="$PATH:$HOME/Tools/VSCode-linux-x64/bin/code-insiders"
+if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ] ; then
+ export PATH="$HOME/.bin/adb-fastboot/platform-tools:$PATH"
+fi
 
 # Unix utils
 alias ls='ls -FNG --color=auto --time-style=long-iso'
@@ -101,190 +67,19 @@ alias add='git add'
 alias commit='git commit -m'
 alias push='git push -u'
 
-# System utils
-alias hello='sudo systemctl start '
-alias restart='sudo systemctl restart '
-alias start='sudo systemctl start '
-alias status='sudo systemctl status '
-alias stop="sudo systemctl stop "
-alias free='free -htmlw'
+# Editors
+alias code="code-insiders"
+alias vim='nvim'
 
-# Dev stuff
-alias zshrc='code ~/.zshrc'
-alias nodeList='npm list -g --depth=0'
-
-# Android Alias
-alias droid-restart='adb kill-server && adb start-server'
-
-# Ctf Stuff
-alias pshell="echo python -c 'import pty;pty.spawn(\"/bin/bash\")'"
-
-ZSH_COMMAND_TIME_MIN_SECONDS=5
-ZSH_COMMAND_TIME_MSG="Time: %s seconds"
-ZSH_COMMAND_TIME_COLOR="cyan"
-
-zsh_command_time() {
-    if [ -n "$ZSH_COMMAND_TIME" ]; then
-        hours=$(($ZSH_COMMAND_TIME/3600))
-        min=$(($ZSH_COMMAND_TIME/60))
-        sec=$(($ZSH_COMMAND_TIME%60))
-        if [ "$ZSH_COMMAND_TIME" -le 60 ]; then
-            timer_show="$fg[green]$ZSH_COMMAND_TIME s."
-        elif [ "$ZSH_COMMAND_TIME" -gt 60 ] && [ "$ZSH_COMMAND_TIME" -le 180 ]; then
-            timer_show="$fg[yellow]$min min. $sec s."
-        else
-            if [ "$hours" -gt 0 ]; then
-                min=$(($min%60))
-                timer_show="$fg[red]$hours h. $min min. $sec s."
-            else
-                timer_show="$fg[red]$min min. $sec s."
-            fi
-        fi
-        printf "${ZSH_COMMAND_TIME_MSG}\n" "$timer_show"
-    fi
+function clone(){
+	git clone git@github.com:$1
+	cd $(echo $1 | cut -d '/' -f2-)
 }
 
-cs() {
-  if [ -d "$1" ] ; then
-      cd "$1"
-  elif [ -f "$1" ] ; then
-      cat "$1"
-  fi
-}
-
-mp3(){
-  tmp=$PWD
-  cd ~/Music
-  youtube-dl --extract-audio --audio-format mp3 "$1"
-  cd $tmp
-}
-
-transfer() {
-  if [ $# -eq 0 ]; then
-    echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md";
-    return 1;
-  fi
-  tmpfile=$( mktemp -t transferXXX );
-  if tty -s; then
-    basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g');
-    curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile;
-  else
-    curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ;
-  fi;
-  cat $tmpfile;
-  rm -f $tmpfile;
-}
-
-extract() {
-  if [ -f "$1" ]; then
-    case "$1" in
-      *.tar.bz2)  tar -jxvf "$1"                        ;;
-      *.tar.gz)   tar -zxvf "$1"                        ;;
-      *.bz2)      bunzip2 "$1"                          ;;
-      *.dmg)      hdiutil mount "$1"                    ;;
-      *.gz)       gunzip "$1"                           ;;
-      *.tar)      tar -xvf "$1"                         ;;
-      *.tbz2)     tar -jxvf "$1"                        ;;
-      *.tgz)      tar -zxvf "$1"                        ;;
-      *.zip)      unzip "$1"                            ;;
-      *.ZIP)      unzip "$1"                            ;;
-      *.pax)      cat "$1" | pax -r                     ;;
-      *.pax.Z)    uncompress "$1" --stdout | pax -r     ;;
-      *.Z)        uncompress "$1"                       ;;
-      *) echo "'$1' cannot be extracted/mounted via extract()" ;;
-    esac
-  else
-     echo "'$1' is not a valid file to extract"
-  fi
-}
-
-sysinfo(){
+function sysinfo(){
     ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=$@"
 }
 
-words(){
-  egrep -o '\w+' | sort -f | uniq -ci | sort -nr | head $1
-}
-
-clone(){
-    git clone "${1:?"usage: clone <url_to_clone>"}"
-    cd ${${1%%.git}##*/}
-}
-
-clones(){
-  for repo in $@; do
-    git clone "$repo"
-  done
-}
-
-pwdc(){
-  emulate -L zsh
-  echo "$(pwd)" | pbcopy
-}
-
-killme(){
-  curdir="$(pwd)"
-  cd .. && rm -rf "$curdir"
-  ls
-}
-
-filec(){
-  emulate -L zsh
-  clipcopy "$1"
-}
-
-## Frufru CLI
-
-setopt append_history
-setopt auto_pushd
-setopt autocd
-setopt extended_glob
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_reduce_blanks
-setopt hist_save_no_dups
-setopt pushd_ignore_dups
-setopt pushd_minus
-setopt share_history
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red,bold")
-ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
-ZSH_HIGHLIGHT_STYLES[alias]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green"
-ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=blue"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=red"
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_STYLES[default]=none
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-ZSH_HIGHLIGHT_STYLES[path]="fg=cyan,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=cyan,underline"
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=cyan,italic"
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
-
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-. $HOME/.asdf/asdf.sh
-
-. $HOME/.asdf/completions/asdf.bash
+autoload -Uz compinit
+compinit
+kitty + complete setup zsh | source /dev/stdin
