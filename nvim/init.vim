@@ -28,15 +28,22 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'mxw/vim-jsx'
 Plug 'hail2u/vim-css3-syntax', {'for': 'css'}
 Plug 'tomasr/molokai'
-Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install({'tag':1})}}
 " Or install lastest release tag
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 " Or build from source code
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'leafgarland/typescript-vim'
 Plug 'joshdick/onedark.vim'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+ " For async completion
+Plug 'Shougo/deoplete.nvim'
+" For Denite features
+Plug 'Shougo/denite.nvim'
 call plug#end()
 
+let g:deoplete#enable_at_startup = 1
 map <F2> :NERDTreeToggle<CR>
 
 let g:NERDTreeIndicatorMapCustom = {
@@ -51,7 +58,7 @@ let g:NERDTreeIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 
-let g:mapleader=','
+let g:mapleader='\<space>'
 
 syntax on
 filetype on
