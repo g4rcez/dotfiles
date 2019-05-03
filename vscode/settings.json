@@ -1,0 +1,104 @@
+{
+    "workbench.iconTheme": "vscode-icons",
+    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"/home/garcez/.vscode-insiders/extensions/gabrielbb.vscode-lombok-0.9.7/server/lombok.jar\" -Xbootclasspath/a:\"/home/garcez/.vscode-insiders/extensions/gabrielbb.vscode-lombok-0.9.7/server/lombok.jar\"",
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Inconsolata",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-x>": false,
+        "<C-c>": false,
+        "<C-v>": false,
+        "<C-k>": false,
+        "<C-e>": false,
+        "<C-h>": false,
+        "<C-o>": false,
+        "<C-d>": false,
+        "<C-j>": false,
+        "<C-b>": false,
+        "<C-f>": false
+    },
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "j"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<C-w>",
+            ],
+            "after": [],
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ]
+        },
+        {
+            "before": [
+                "<Enter>",
+            ],
+            "after": [
+                "o"
+            ],
+        },
+        {
+            "before": [
+                "<C-n>"
+            ],
+            "commands": [
+                ":nohl"
+            ]
+        }
+    ],
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.minimap.enabled": false,
+    "vim.easymotion": false,
+    "vim.sneak": false,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": false,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "workbench.colorTheme": "Lambda",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorStyle": "line-thin",
+    "editor.scrollBeyondLastColumn": 0,
+    "editor.smoothScrolling": true,
+    "editor.scrollBeyondLastLine": false,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.arrowParens": "always",
+    "prettier.eslintIntegration": true,
+    "prettier.printWidth": 120,
+    "prettier.stylelintIntegration": true,
+    "prettier.tabWidth": 4,
+    "prettier.tslintIntegration": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "javascript.preferences.importModuleSpecifier": "relative",
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.preferences.quoteStyle": "double",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "michelemelluso.code-beautifier"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+}

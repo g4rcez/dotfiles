@@ -1,0 +1,30 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    {
+        "key": "alt+right",
+        "command": "workbench.action.nextEditor"
+    },
+    {
+        "key": "alt+left",
+        "command": "workbench.action.previousEditor"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "command": "editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+alt+left",
+        "command": "cursorHome",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "ctrl+alt+right",
+        "command": "cursorEnd",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "editor.emmet.action.wrapWithAbbreviation"
+    },
+]
