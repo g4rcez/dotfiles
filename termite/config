@@ -1,0 +1,103 @@
+[options]
+allow_bold = true
+audible_bell = false
+bold_is_bright = true
+clickable_url = true
+dynamic_title = true
+font = Inconsolata 12
+#fullscreen = true
+icon_name = terminal
+#mouse_autohide = false
+scroll_on_output = true
+#scroll_on_keystroke = true
+# Length of the scrollback buffer, 0 disabled the scrollback buffer
+# and setting it to a negative value means "infinite scrollback"
+scrollback_lines = 10000
+#search_wrap = true
+urgent_on_bell = true
+hyperlinks = true
+
+# $BROWSER is used by default if set, with xdg-open as a fallback
+browser = google-chrome-stable
+
+# "system", "on" or "off"
+cursor_blink = on
+
+# "block", "underline" or "ibeam"
+#cursor_shape = block
+
+# Hide links that are no longer valid in url select overlay mode
+#filter_unmatched_urls = true
+
+# Emit escape sequences for extra modified keys
+#modify_other_keys = false
+
+# set size hints for the window
+size_hints = 10
+
+# "off", "left" or "right"
+#scrollbar = off
+
+[colors]
+# If both of these are unset, cursor falls back to the foreground color,
+# and cursor_foreground falls back to the background color.
+cursor = #eeeeee
+#cursor_foreground = #dcdccc
+
+#foreground = #dcdccc
+#foreground_bold = #ffffff
+background = #28313e
+
+# 20% background transparency (requires a compositor)
+#background = rgba(63, 63, 63, 0.8)
+
+# If unset, will reverse foreground and background
+# highlight = #2f2f2f
+
+# Colors from color0 to color254 can be set
+
+# black
+color0  = #282c34
+color8  = #3d4047
+
+# red
+color1  = #e06c75
+color9  = #be5046
+
+# green
+color2  = #98c379
+color10 = #7a9f60
+
+# yellow
+color3  = #e5c07b
+color11 = #d19a66
+
+# blue
+color4  = #61afef
+color12 = #3b84c0
+
+# magenta
+color5  = #c678dd
+color13 = #9a52af
+
+# cyan
+color6  = #56b6c2
+color14 = #3c909b
+
+# white
+color7  = #abb2bf
+color15 = #828997
+
+
+[hints]
+#font = Monospace 12
+#foreground = #dcdccc
+#background = #3f3f3f
+#active_foreground = #e68080
+#active_background = #3f3f3f
+#padding = 2
+#border = #3f3f3f
+#border_width = 0.5
+#roundness = 2.0
+
+# vim: ft=dosini cms=#%s
