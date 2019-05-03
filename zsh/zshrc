@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # Path to your oh-my-zsh installation.
 export ZSH="/home/garcez/.oh-my-zsh"
+export TERM=xterm-color
 ZSH_THEME="vandalvnl"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
@@ -82,4 +83,8 @@ function sysinfo(){
 
 autoload -Uz compinit
 compinit
-kitty + complete setup zsh | source /dev/stdin
+source /etc/profile.d/vte.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="$PATH:/home/garcez/.dotnet/tools"
+export DOTNET_ROOT="/home/garcez/.dotnet"
