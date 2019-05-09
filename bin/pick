@@ -1,0 +1,3 @@
+#!/bin/bash
+xcolor -f hex | tr -d '\n' | xclip -sel clip && notify-send -t 3000 "Picked Color" -u normal
+

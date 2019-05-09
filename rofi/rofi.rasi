@@ -1,13 +1,6 @@
-/**
- * ROFI Color theme
- * User: mbfraga
- * Copyright: Martin B. Fraga
- */
-
-/* global settings and color variables */
 * {
-   maincolor:        #ed8712;
-   highlight:        bold #ed8712;
+   maincolor:        #2F4898;
+   highlight:        bold #2F4898;
    urgentcolor:      #e53714;
    fgwhite:          #cfcfcf;
    blackdarkest:     #101010;
@@ -130,7 +123,7 @@ inputbar {
 prompt {
    padding:6px 9px;
    background-color: @maincolor;
-   text-color:@blackwidget;
+   text-color:@fgwhite;
 }
 
 entry {

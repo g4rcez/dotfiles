@@ -92,13 +92,19 @@
     "javascript.preferences.quoteStyle": "double",
     "typescript.preferences.importModuleSpecifier": "relative",
     "typescript.preferences.quoteStyle": "double",
-    "explorer.confirmDragAndDrop": false,
     "explorer.confirmDelete": false,
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[css]": {
-        "editor.defaultFormatter": "michelemelluso.code-beautifier"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "typescript.updateImportsOnFileMove.enabled": "always",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "window.menuBarVisibility": "hidden",
+    "git.autofetch": true,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
 }

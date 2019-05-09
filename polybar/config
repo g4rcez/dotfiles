@@ -1,143 +1,186 @@
-;==========================================================
-;
-;
-;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
-;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
-;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
-;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
-;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
-;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-;
-;
-;   To learn more about how to configure Polybar
-;   go to https://github.com/jaagr/polybar
-;
-;   The README contains alot of information
-;
-;==========================================================
-
 [colors]
-background = #0C1014
+background = #232831
 background-alt = #444
 foreground = #bbb
 foreground-alt = #555
-primary = #ffb52a
+primary = #6e84ab
 secondary = #e60053
 alert = #bd2c40
 
-[bar/edp1]
-monitor = eDP-1
-separator =
+[bar/note]
+monitor = eDP1
 width = 100%
-height = 22
+height = 18
 margin-bottom = 0
 margin-top = 0
 radius = 0.0
 fixed-center = true
-bottom = true
+bottom = false
 background = ${colors.background}
 foreground = ${colors.foreground}
 line-size = 0
 border-size = 0
-padding-left = 1
-padding-right = 1
-module-margin-left = 1
-module-margin-right = 1
-font-0 = "NotoSans:size=8;1"
-font-1 = "Ubuntu Nerd Font:size=9:weight=bold;1"
-modules-left = wlan menu-apps works
+padding-left = 2
+padding-right = 2
+module-margin-left = 2
+module-margin-right = 2
+font-0 = "UbuntuNerdFont:size=10;2"
+modules-left = i3 spotify
 modules-center = xwindow
-modules-right = pulseaudio spotify
+modules-right = wlan backlight battery date
 override-redirect = false
-wm-name = kwin
 pseudo-transparency = true
+tray-position = none
+tray-background = ${colors.background}
 
-[bar/hdmi1]
-monitor = HDMI-1
-separator =
+[bar/tv]
+monitor = HDMI1
 width = 100%
-height = 22
+height = 18
 margin-bottom = 0
 margin-top = 0
 radius = 0.0
 fixed-center = true
-bottom = true
+bottom = false
 background = ${colors.background}
 foreground = ${colors.foreground}
 line-size = 0
 border-size = 0
-padding-left = 1
-padding-right = 1
-module-margin-left = 1
-module-margin-right = 1
-font-0 = "NotoSans:size=8;1"
-font-1 = "Ubuntu Nerd Font:size=9:weight=bold;1"
-modules-left = wlan menu-apps works
+padding-left = 2
+padding-right = 2
+module-margin-left = 2
+module-margin-right = 2
+font-0 = "UbuntuNerdFont:size=10;2"
+modules-left = i3 spotify
 modules-center = xwindow
-modules-right = pulseaudio spotify
+modules-right = wlan backlight battery date
 override-redirect = false
-wm-name = kwin
 pseudo-transparency = true
+tray-position = none
+tray-background = ${colors.background}
 
 [module/spotify]
 type = custom/script
 interval = 5
 format-prefix = " "
 format = <label>
-format-prefix-foreground = #1db954
-exec = python ~/.config/polybar/spoti.py -f '{artist}: {song}'
+format-prefix-foreground = ${colors.foreground}
+exec = python /home/garcez/dotfiles/polybar/spoti.py -f '{artist}: {song}'
 format-underline = #1db954
-
-[module/xwindow]
-type = internal/xwindow
-format-prefix = "%{T1}  %{T-} "
-format-prefix-foreground = #0a81f5
-label = %title:...%
-format-underline = #0a81f5
 
 [module/wlan]
 type = custom/script
-exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2,6 | sed 's/:/ - /g' | sed 's/$/%/g'
+exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2 
 interval = 20
 format-prefix = " "
-format-prefix-foreground = "#0a6cf5"
+format-prefix-foreground = ${colors.foreground}
 format-underline = #0a6cf5
 
-[module/pulseaudio]
-type = internal/pulseaudio
-use-ui-max = true
-interval = 5
-format-volume = <ramp-volume> <label-volume>
-format-underline = #0a81f5
-label-muted = 0% 
-label-muted-foreground = #666
-ramp-volume-0 = 
-ramp-volume-0-foreground = #777
-ramp-volume-1 = 
-ramp-volume-1-foreground = #f4a42c
-ramp-volume-2-foreground = #cc2929
-ramp-volume-2 = 
+[module/battery]
+type = internal/battery
+full-at = 98
+battery = BAT1
+adapter = ACAD
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <ramp-capacity> <label-full>
+ramp-capacity-0-foreground = #f53c3c
+ramp-capacity-0 = 0
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = #ffa900
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+bar-capacity-width = 10
+bar-capacity-format = %{+u}%{+o}%fill%%empty%%{-u}%{-o}
+bar-capacity-fill = █
+bar-capacity-fill-foreground = #ddffffff
+bar-capacity-fill-font = 3
+bar-capacity-empty = █
+bar-capacity-empty-font = 3
+bar-capacity-empty-foreground = #44ffffff
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+format-underline = ${colors.primary}
 
-[module/menu-apps]
-type = custom/menu
-expand-right = true
-menu-0-0 = 玲
-menu-0-0-exec = bash $HOME/.config/polybar/spotify-media.sh previous
-menu-0-1 = 懶
-menu-0-1-exec = bash $HOME/.config/polybar/spotify-media.sh playPause
-menu-0-2 = 怜
-menu-0-2-exec = bash $HOME/.config/polybar/spotify-media.sh next
-label-open =  Spotify
-label-open-foreground = #1db954
-label-close = 
-label-close-foreground = #DE3C3C
-label-separator = " "
+[module/xwindow]
+type = internal/xwindow
+format = <label>
+format-padding = 4
+label = %title%
+label-maxlen = 50
+label-empty = Nothing here
+label-empty-foreground = #707880
 
-[module/works]
-type = internal/xworkspaces
+[module/backlight]
+type = internal/xbacklight
+format = <ramp> <label>
+label = %percentage%%
+ramp-0-foreground = ${colors.foreground}
+ramp-0 = 
+
+[module/i3]
+type = internal/i3
 pin-workspaces = true
-enable-click = false
-enable-scroll = false
+strip-wsnumbers = true
+enable-scroll = true
+format = <label-state> <label-mode>
+index-sort = true
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = #ffffff
+label-focused = %icon%
+label-focused-background = #191d24
+label-focused-foreground = ${colors.primary}
+label-focused-padding = 2
+label-focused-underline = #aaaaaa
+label-unfocused = %icon%
+label-unfocused-padding = 2
+label-unfocused-foreground = ${colors.foreground}
+label-unfocused-underline = ${colors.background}
+label-urgent = %icon%
+label-urgent-padding = 2
+label-urgent-underline = #ffffff
+label-urgent-background = ${colors.primary}
+label-urgent-foreground = ${colors.background}
+label-visible = %name%
+label-visible-padding = 2
+ws-icon-0 = "1;"
+ws-icon-1 = "2;"
+ws-icon-2 = "3;"
+ws-icon-3 = "4;"
+ws-icon-4 = "5;"
+ws-icon-5 = "6;"
+ws-icon-6 = "7;"
+ws-icon-7 = "8;"
+ws-icon-8 = "9;"
+
+[module/date]
+type = internal/date
+interval = 1.0
+format-underline = #5591f5
+date =  %Y-%m-%d - %H:%M
+format-prefix = "  "
+format-prefix-foreground = ${colors.foreground}
+
+[module/alsa]
+type = internal/alsa
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage%%
+format-muted-prefix = 
+label-muted = " Muted"
+label-muted-foreground = #777777
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-3 = 
+ramp-volume-4 = 
+ramp-headphones-0 = 
+ramp-headphones-1 = 
 
 [settings]
 screenchange-reload = true

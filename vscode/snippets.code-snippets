@@ -1,0 +1,23 @@
+{
+	"Print to console": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "clg",
+		"body": [
+			"console.log($0);",
+		],
+		"description": "Log output to console"
+	},
+	"Print file name": {
+		"prefix": "filename",
+		"body": "${TM_FILENAME_BASE}"
+	},
+	"Create useEffect function": {
+		"scope": "javascript,javascriptreact,typescriptreact",
+		"prefix": "uet",
+		"body": [
+			"useEffect(() => {",
+			"\t$0",
+			"}, [$1]);"
+		]
+	},
+}

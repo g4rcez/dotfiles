@@ -24,7 +24,7 @@ browser = google-chrome-stable
 cursor_blink = on
 
 # "block", "underline" or "ibeam"
-#cursor_shape = block
+cursor_shape = underline
 
 # Hide links that are no longer valid in url select overlay mode
 #filter_unmatched_urls = true

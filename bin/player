@@ -1,0 +1,19 @@
+#!/bin/bash
+
+stop(){
+   playerctl stop
+}
+
+playPause(){
+   playerctl play-pause
+}
+
+next(){
+   playerctl next && sleep 2 && notify-send -t 3000 "$(playerctl metadata --format '{{ artist }} - {{ title }}')" -u normal
+}
+
+prev(){
+   playerctl previous && sleep 2 && notify-send -t 3000 "$(playerctl metadata --format '{{ artist }} - {{ title }}')" -u normal
+}
+
+$1
