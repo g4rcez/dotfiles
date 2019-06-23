@@ -1,23 +1,23 @@
 * {
-   maincolor:        #2F4898;
-   highlight:        bold #2F4898;
+   maincolor:        #2c313c;
+   highlight:        bold #2c313c;
    urgentcolor:      #e53714;
    fgwhite:          #cfcfcf;
-   blackdarkest:     #101010;
-   blackwidget:      #151515;
-   blackentry:       #181818;
+   blackdarkest:     #101010FF;
+   blackwidget:      #151515FF;
+   blackentry:       #181818FF;
    blackselect:      #252525;
    darkgray:         #848484;
    scrollbarcolor:   #505050;
    font: "Inconsolata 14";
-   background-color: @blackdarkest;
+   background-color: #2c313c;
 }
 
 window {
    background-color: @blackdarkest;
    anchor: north;
    location: north;
-   y-offset: 20%;
+   y-offset: 25%;
 }
 
 mainbox {
