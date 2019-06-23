@@ -6,7 +6,10 @@ This is a repository with all dotfiles to making a power and awesome Shell
 
 ## Desktop Environment
 
-[KDE](https://github.com/KDE) with some [i3](https://github.com/i3) shortcuts
+- [i3](https://github.com/i3)
+- LockScreen: [betterlockscreen](https://github.com/pavanjadhaw/betterlockscreen)
+- [Rofi](https://github.com/davatorium/rofi)
+- [Polybar](https://github.com/polybar/polybar)
 
 
 ## Requirements
@@ -28,18 +31,21 @@ curl -fsSl "https://raw.githubusercontent.com/vandalvnl/dotfiles/master/zsh/zshr
 
 ## Warning
 
-I use [`nvm`](https://github.com/creationix/nvm), [`rbenv`](https://github.com/rbenv/rbenv),
-[SDKMAN!](http://sdkman.io) for control my development env.
+I use [`asdf`](https://github.com/asdf-vm/asdf) for: Node, Ruby, GoLang Haskell, PHP and Postgres
+[SDKMAN!](http://sdkman.io) for control my development Java env.
+
+## Wallpaper
+Find in [Reddit](https://www.reddit.com/r/wallpapers/comments/c29pfb/2b_nier_automata/)
 
 
 ## Software List
 
 - Screenshot -> [Flameshot](https://github.com/lupoDharkael/flameshot), thx [@barci](https://github.com/flaviobarci)
-- TextEditor -> [VscodeInsiders](https://code.visualstudio.com/insiders/) and [Vim](https://github.com/vim/vim)
+- TextEditor -> [VscodeInsiders](https://code.visualstudio.com/insiders/) and [Vim](https://github.com/neovim/neovim)
 - IRC -> [Konversation](https://konversation.kde.org/)
 - Terminal Emulator -> [Konsole](https://konsole.kde.org/), [Yakuake, DropDown terminal](https://www.kde.org/applications/system/yakuake/)
-- Database Management -> [DataGrip](https://www.jetbrains.com/datagrip/), [MyCli](https://www.mycli.net/), [PgCli](https://www.pgcli.com/)
+- Database Management -> [MyCli](https://www.mycli.net/), [PgCli](https://www.pgcli.com/)
 - Music -> [Spotify](https://www.spotify.com/br/download/linux/), [Audacious](https://audacious-media-player.org/)
-- FileManager -> [Dolphin](https://github.com/KDE/dolphin)
+- FileManager -> [Thunar](https://wiki.archlinux.org/index.php/Thunar)
 - [Postman](https://www.getpostman.com/)
-- Browser: [Opera](https://www.opera.com/)
+- Browser: [Chromium](https://www.chromium.org/)
