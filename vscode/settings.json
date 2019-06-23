@@ -1,23 +1,125 @@
 {
-    "workbench.iconTheme": "vscode-icons",
-    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"/home/garcez/.vscode-insiders/extensions/gabrielbb.vscode-lombok-0.9.7/server/lombok.jar\" -Xbootclasspath/a:\"/home/garcez/.vscode-insiders/extensions/gabrielbb.vscode-lombok-0.9.7/server/lombok.jar\"",
-    "files.autoSave": "afterDelay",
+    "breadcrumbs.enabled": false,
+    "cSpell.language": "en,pt,pt_BR",
+    "editor.codeActionsOnSaveTimeout": 1000,
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorStyle": "underline-thin",
+    "editor.fontFamily": "Ligconsolata",
+    "editor.fontLigatures": true,
     "editor.fontSize": 16,
-    "editor.fontFamily": "Inconsolata",
-    "vim.handleKeys": {
-        "<C-a>": false,
-        "<C-x>": false,
-        "<C-c>": false,
-        "<C-v>": false,
-        "<C-k>": false,
-        "<C-e>": false,
-        "<C-h>": false,
-        "<C-o>": false,
-        "<C-d>": false,
-        "<C-j>": false,
-        "<C-b>": false,
-        "<C-f>": false
+    "editor.formatOnSaveTimeout": 1000,
+    "editor.parameterHints.cycle": true,
+    "editor.renderControlCharacters": true,
+    "editor.renderWhitespace": "boundary",
+    "editor.scrollBeyondLastColumn": 0,
+    "editor.scrollBeyondLastLine": false,
+    "editor.smoothScrolling": true,
+    "editor.stablePeek": true,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "on",
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
+    "editor.wordWrapColumn": 120,
+    "git.autofetch": true,
+    "javascript.implicitProjectConfig.checkJs": true,
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "underline",
+    "terminal.integrated.enableBell": true,
+    "terminal.integrated.rendererType": "dom",
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Lambda",
+    "workbench.iconTheme": "material-icon-theme",
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double",
+    "explorer.confirmDelete": false,
+    "window.menuBarVisibility": "hidden",
+    "beautify.tabSize": 4,
+    "cSpell.allowCompoundWords": true,
+    "cSpell.spellCheckDelayMs": 100,
+    "color-highlight.matchWords": true,
+    "emmet.triggerExpansionOnTab": true,
+    "highlight-matching-tag.highlightFromContent": true,
+    "highlight-matching-tag.highlightSelfClosing": true,
+    "material-icon-theme.activeIconPack": "react_redux",
+    "material-icon-theme.hidesExplorerArrows": true,
+    "material-icon-theme.showUpdateMessage": true,
+    "npm.packageManager": "yarn",
+    "tslint.jsEnable": true,
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "javascript.suggest.completeFunctionCalls": true,
+    "typescript.implementationsCodeLens.enabled": true,
+    "terminal.external.linuxExec": "termite",
+    "terminal.integrated.experimentalRefreshOnResume": true,
+    "explorer.confirmDragAndDrop": false,
+    "files.autoSave": "afterDelay",
+    "tslint.suppressWhileTypeErrorsPresent": true,
+    "typescript.tsc.autoDetect": "watch",
+    "workbench.useExperimentalGridLayout": true,
+    "workbench.tree.renderIndentGuides": "none",
+    "workbench.startupEditor": "welcomePage",
+    "workbench.editor.tabSizing": "shrink",
+    "editor.suggest.maxVisibleSuggestions": 10,
+    "editor.snippetSuggestions": "inline",
+    "editor.suggest.localityBonus": true,
+    "typescript.format.insertSpaceAfterTypeAssertion": true,
+    "typescript.suggest.completeFunctionCalls": true,
+    "debug.inlineValues": true,
+    "debug.enableAllHovers": true,
+    "css.lint.duplicateProperties": "warning",
+    "tslint.packageManager": "yarn",
+    "git.alwaysShowStagedChangesResourceGroup": true,
+    "editor.accessibilitySupport": "off",
+    "editor.autoClosingBrackets": "beforeWhitespace",
+    "editor.autoClosingQuotes": "beforeWhitespace",
+    "editor.renderLineHighlight": "gutter",
+    "editor.wordWrap": "on",
+    "editor.find.autoFindInSelection": true,
+    "editor.formatOnPaste": true,
+    "extensions.showRecommendationsOnlyOnDemand": true,
+    "editor.suggest.shareSuggestSelections": true,
+    "editor.acceptSuggestionOnEnter": "smart",
+    "workbench.view.alwaysShowHeaderActions": true,
+    "workbench.settings.openDefaultKeybindings": true,
+    "workbench.settings.openDefaultSettings": true,
+    "workbench.settings.useSplitJSON": true,
+    "zenMode.restore": true,
+    "emmet.includeLanguages": {
+        "typescriptreact": "javascriptreact"
     },
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "vim.autoindent": false,
+    "vim.easymotionMarkerFontFamily": "Cantarell",
+    "vim.enableNeovim": true,
+    "vim.hlsearch": true,
+    "vim.leader": "<space>",
+    "vim.neovimPath": "/usr/bin/nvim",
+    "vim.overrideCopy": false,
+    "vim.surround": false,
+    "vim.useCtrlKeys": false,
+    "vim.textwidth": 120,
     "vim.insertModeKeyBindings": [
         {
             "before": [
@@ -32,79 +134,22 @@
     "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [
-                "<C-w>",
+                "<leader>",
+                "<leader>",
             ],
             "after": [],
             "commands": [
-                "workbench.action.closeActiveEditor"
+                "editor.action.organizeImports",
+                "editor.action.formatDocument"
             ]
         },
-        {
-            "before": [
-                "<Enter>",
-            ],
-            "after": [
-                "o"
-            ],
-        },
-        {
-            "before": [
-                "<C-n>"
-            ],
-            "commands": [
-                ":nohl"
-            ]
-        }
     ],
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "editor.minimap.enabled": false,
-    "vim.easymotion": false,
-    "vim.sneak": false,
-    "vim.incsearch": true,
-    "vim.useSystemClipboard": false,
-    "vim.useCtrlKeys": true,
-    "vim.hlsearch": true,
-    "workbench.colorTheme": "Lambda",
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "editor.cursorBlinking": "phase",
-    "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "line-thin",
-    "editor.scrollBeyondLastColumn": 0,
-    "editor.smoothScrolling": true,
-    "editor.scrollBeyondLastLine": false,
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "prettier.arrowParens": "always",
-    "prettier.eslintIntegration": true,
-    "prettier.printWidth": 120,
-    "prettier.stylelintIntegration": true,
-    "prettier.tabWidth": 4,
-    "prettier.tslintIntegration": true,
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "javascript.preferences.importModuleSpecifier": "relative",
-    "javascript.preferences.quoteStyle": "double",
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "typescript.preferences.quoteStyle": "double",
-    "explorer.confirmDelete": false,
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[css]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
+    "prettier.tslintIntegration": true,
+    "prettier.useTabs": true,
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "window.menuBarVisibility": "hidden",
-    "git.autofetch": true,
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
     },
 }

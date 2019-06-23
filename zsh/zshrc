@@ -7,12 +7,12 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
-    git
-    github
-    compleat
-    z
-    zsh-syntax-highlighting
-    zsh-autosuggestions
+  git
+  github
+  compleat
+  z
+  zsh-syntax-highlighting
+  zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -23,7 +23,7 @@ export MANPATH="/usr/local/man:$MANPATH"
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='nvim'
 fi
 
 export ARCHFLAGS="-arch x86_64"
@@ -38,16 +38,14 @@ export PATH=$PATH:$HOME/.bin/VSCode-linux-x64
 export SDKMAN_DIR="/home/garcez/.sdkman"
 [[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
 
-export DOTNET_ROOT=$HOME/.bin/dotnet
-export PATH=$PATH:$HOME/.bin/dotnet
 export PATH=$PATH:$HOME/.local/bin
 
 if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ] ; then
- export PATH="$HOME/.bin/adb-fastboot/platform-tools:$PATH"
+  export PATH="$HOME/.bin/adb-fastboot/platform-tools:$PATH"
 fi
 
 # Unix utils
-alias ls='ls -FNG --color=auto --time-style=long-iso'
+alias ls="$HOME/.bin/ls/bin/ls -FNG --time-style=long-iso"
 alias lz='ls -lSr'
 alias wtf='pwd'
 alias cp='cp -v'
@@ -72,13 +70,17 @@ alias push='git push -u'
 alias code="code-insiders"
 alias vim='nvim'
 
+function memory(){
+	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+}
+
 function clone(){
 	git clone git@github.com:$1
 	cd $(echo $1 | cut -d '/' -f2-)
 }
 
 function sysinfo(){
-    ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=$@"
+	ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=30"
 }
 
 autoload -Uz compinit
@@ -87,4 +89,3 @@ source /etc/profile.d/vte.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="$PATH:/home/garcez/.dotnet/tools"
-export DOTNET_ROOT="/home/garcez/.dotnet"

@@ -1,4 +1,3 @@
-// Place your key bindings in this file to override the defaultsauto[]
 [
     {
         "key": "alt+right",
@@ -10,7 +9,7 @@
     },
     {
         "key": "ctrl+alt+l",
-        "command": "editor.action.formatDocument",
+        "command": "macros.ideaFormat",
         "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
     },
     {
@@ -26,5 +25,41 @@
     {
         "key": "ctrl+shift+w",
         "command": "editor.emmet.action.wrapWithAbbreviation"
+    },
+    {
+        "key": "ctrl+shift+j",
+        "command": "editor.action.joinLines"
+    },
+    {
+        "key": "ctrl+shift+alt+l",
+        "command": "editor.action.organizeImports",
+        "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
+    },
+    {
+        "key": "ctrl+shift+d",
+        "command": "editor.action.moveSelectionToNextFindMatch",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+k ctrl+d",
+        "command": "editor.action.moveSelectionToNextFindMatch",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+alt+j",
+        "command": "extension.jumpy-word"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "command": "beautify.format",
+        "when": ""
+    },
+    {
+        "key": "shift+f11",
+        "command": "workbench.action.toggleZenMode"
+    },
+    {
+        "key": "ctrl+k z",
+        "command": "-workbench.action.toggleZenMode"
     },
 ]

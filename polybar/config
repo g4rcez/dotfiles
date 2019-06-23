@@ -1,9 +1,9 @@
 [colors]
-background = #232831
+background = #202020
 background-alt = #444
 foreground = #bbb
 foreground-alt = #555
-primary = #6e84ab
+primary = #fff
 secondary = #e60053
 alert = #bd2c40
 
@@ -20,18 +20,25 @@ background = ${colors.background}
 foreground = ${colors.foreground}
 line-size = 0
 border-size = 0
-padding-left = 2
-padding-right = 2
+padding-left = 1
+padding-right = 1
 module-margin-left = 2
 module-margin-right = 2
-font-0 = "UbuntuNerdFont:size=10;2"
-modules-left = i3 spotify
-modules-center = xwindow
-modules-right = wlan backlight battery date
+font-0 = "NotoSansNerdFont:size=10;2"
+modules-left = i3 xwindow
+modules-center = 
+modules-right = keyboard wifi-mod batt calendar
 override-redirect = false
-pseudo-transparency = true
-tray-position = none
+pseudo-transparency = false
+tray-position = right
+tray-detached = false
+tray-transparency = true
+tray-maxsize = 14
 tray-background = ${colors.background}
+tray-offset-x = 0
+tray-offset-y = 0
+tray-padding = 5
+tray-scale = 1
 
 [bar/tv]
 monitor = HDMI1
@@ -51,61 +58,19 @@ padding-right = 2
 module-margin-left = 2
 module-margin-right = 2
 font-0 = "UbuntuNerdFont:size=10;2"
-modules-left = i3 spotify
+modules-left = i3 
 modules-center = xwindow
-modules-right = wlan backlight battery date
+modules-right = wlan battery date
 override-redirect = false
 pseudo-transparency = true
-tray-position = none
+tray-position = right
+tray-detached = false
+tray-maxsize = 20
 tray-background = ${colors.background}
-
-[module/spotify]
-type = custom/script
-interval = 5
-format-prefix = " "
-format = <label>
-format-prefix-foreground = ${colors.foreground}
-exec = python /home/garcez/dotfiles/polybar/spoti.py -f '{artist}: {song}'
-format-underline = #1db954
-
-[module/wlan]
-type = custom/script
-exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2 
-interval = 20
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground}
-format-underline = #0a6cf5
-
-[module/battery]
-type = internal/battery
-full-at = 98
-battery = BAT1
-adapter = ACAD
-format-charging = <animation-charging> <label-charging>
-format-discharging = <ramp-capacity> <label-discharging>
-format-full = <ramp-capacity> <label-full>
-ramp-capacity-0-foreground = #f53c3c
-ramp-capacity-0 = 0
-ramp-capacity-1 = 
-ramp-capacity-1-foreground = #ffa900
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
-bar-capacity-width = 10
-bar-capacity-format = %{+u}%{+o}%fill%%empty%%{-u}%{-o}
-bar-capacity-fill = █
-bar-capacity-fill-foreground = #ddffffff
-bar-capacity-fill-font = 3
-bar-capacity-empty = █
-bar-capacity-empty-font = 3
-bar-capacity-empty-foreground = #44ffffff
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-4 = 
-animation-charging-framerate = 750
-format-underline = ${colors.primary}
+tray-offset-x = 0
+tray-offset-y = 0
+tray-padding = 0
+tray-scale = 1.0
 
 [module/xwindow]
 type = internal/xwindow
@@ -113,7 +78,7 @@ format = <label>
 format-padding = 4
 label = %title%
 label-maxlen = 50
-label-empty = Nothing here
+label-empty = VandalOS
 label-empty-foreground = #707880
 
 [module/backlight]
@@ -126,31 +91,31 @@ ramp-0 = 
 [module/i3]
 type = internal/i3
 pin-workspaces = true
-strip-wsnumbers = true
+strip-wsnumbers = false
 enable-scroll = true
+fuzzy-match = true
 format = <label-state> <label-mode>
 index-sort = true
 label-mode = %mode%
 label-mode-padding = 2
-label-mode-background = #ffffff
 label-focused = %icon%
 label-focused-background = #191d24
-label-focused-foreground = ${colors.primary}
+label-focused-foreground = #0a6cf5
 label-focused-padding = 2
-label-focused-underline = #aaaaaa
+label-focused-underline = #888
 label-unfocused = %icon%
 label-unfocused-padding = 2
 label-unfocused-foreground = ${colors.foreground}
 label-unfocused-underline = ${colors.background}
 label-urgent = %icon%
 label-urgent-padding = 2
-label-urgent-underline = #ffffff
+label-urgent-underline = ${colors.alert}
 label-urgent-background = ${colors.primary}
 label-urgent-foreground = ${colors.background}
 label-visible = %name%
 label-visible-padding = 2
 ws-icon-0 = "1;"
-ws-icon-1 = "2;"
+ws-icon-1 = "2;"
 ws-icon-2 = "3;"
 ws-icon-3 = "4;"
 ws-icon-4 = "5;"
@@ -182,10 +147,59 @@ ramp-volume-4 = 
 ramp-headphones-0 = 
 ramp-headphones-1 = 
 
+[module/keyboard]
+type = internal/xkeyboard
+format = <label-indicator>
+format-spacing = 0
+label-layout = %name%
+label-layout-padding = 2
+label-layout-background = #bc99ed
+label-layout-foreground = #000
+label-indicator = %name%
+label-indicator-padding = 2
+label-indicator-background = #8139e8
+indicator-icon-default = 
+indicator-icon-0 = caps lock;-CL;+CL
+indicator-icon-1 = scroll lock;;+SL
+indicator-icon-2 = num lock;-NL;+NL
+label-indicator-on = +%name%
+label-indicator-off = -%name%
+label-indicator-on-capslock = 
+label-indicator-off-capslock = 
+label-indicator-off-capslock-foreground = #333
+label-indicator-off-numlock-foreground = #333
+label-indicator-on-numlock = 
+label-indicator-off-numlock = 
+label-indicator-on-scrolllock = 
+label-indicator-off-scrolllock = 
+
 [settings]
 screenchange-reload = true
 compositing-background = source
 compositing-border = over
+
+[module/wifi-mod]
+type = custom/script
+click-left = nm-connection-editor
+exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2 
+interval = 10
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground}
+
+[module/batt]
+type = custom/script
+click-left = nm-connection-editor
+exec = upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep percentage | sed 's/[^0-9%]*//g'
+interval = 5
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground}
+
+[module/calendar]
+type = custom/script
+exec = /home/garcez/dotfiles/polybar/cal.sh
+format-prefix = "  "
+interval = 10
+click-left = /home/garcez/dotfiles/polybar/cal.sh --popup
 
 [global/wm]
 margin-top = 0
