@@ -21,10 +21,8 @@ bindsym $mod+y border pixel 0
 bindsym $mod+n border normal
 
 # Keyboard config
-exec --no-startup-id xset r rate 180 120
-exec_always --no-startup-id "killall -q polybar; polybar -r note; polybar -r tv"
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
+exec --no-startup-id xset r rate 160 110
+exec_always --no-startup-id "killall -q polybar; polybar -r note& polybar -r tv&"
 font pango:"Cantarell" 11px
 
 # Use Mouse+$mod to drag floating windows
@@ -38,44 +36,58 @@ bindsym $mod+Shift+q kill
 bindsym $alt+F4 kill
 bindsym $mod+d kill
 
-# Rofi menu
-bindsym $alt+space exec --no-startup-id "rofi -modi window,drun,run -show drun -show-icons -drun-icon-theme 'ePapirus' -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
-bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/window.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
-
 # launch categorized menu
 bindsym $mod+z exec --no-startup-id morc_menu
 
-################################################################################################
-## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
-################################################################################################
+##################################################################################################
+#############################  Custom keybinds and config     ####################################
+##################################################################################################
 
-exec --no-startup-id volumeicon
-bindsym $mod+Shift+m exec terminal -e 'alsamixer'
-#exec --no-startup-id pulseaudio
-#exec --no-startup-id pa-applet
-#bindsym $mod+Ctrl+m exec pavucontrol
+# betterlockscreen
+exec --no-startup-id betterlockscreen -w dim
+bindsym $mod+9 exec betterlockscreen -l dimblur -t "Dica: Não use"
+
+# Music and Audio config
 bindsym $mod+s exec "player next"
+bindsym $mod+$alt+Shift+R exec "i3-msg restart"
 bindsym $mod+w exec "player prev"
 bindsym $mod+Escape exec "player playPause"
-
-################################################################################################
+bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
+bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
 
 # Screen brightness controls
 bindsym $mod+Right exec "xbacklight -inc 5"
 bindsym $mod+Left exec "xbacklight -dec 5"
 bindsym $mod+Shift+b exec "xbacklight -set 100"
 
-# Start Applications
-bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
-bindsym $mod+F2 exec google-chrome-stable
-bindsym $mod+F3 exec thunar
-# bindsym $mod+F3 exec ranger
-# bindsym $mod+Shift+F3 exec gksu pcmanfm
-bindsym $mod+F5 exec terminal -e 'mocp'
-bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
+# Flameshot
 bindsym Print exec --no-startup-id "flameshot gui"
+
+# Rofi menu
+bindsym $mod+Shift+w exec --no-startup-id "bash /home/garcez/dotfiles/rofi/rofi-wifi-menu/rofi-wifi-menu.sh"
+bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
+bindsym $alt+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
+bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/window.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+
+################################################################################################
+## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
+################################################################################################
+
+exec --no-startup-id volumeicon
+bindsym $mod+Shift+m exec termite -e 'alsamixer'
+#exec --no-startup-id pulseaudio
+#exec --no-startup-id pa-applet
+#bindsym $mod+Ctrl+m exec pavucontrol
+
+################################################################################################
+
+# Start Applications
+bindsym $mod+Ctrl+b exec termite -e 'bmenu'
+bindsym $mod+F2 exec chromium
+bindsym $mod+F3 exec ranger
+bindsym $mod+t exec --no-startup-id pkill compton
+bindsym $mod+Ctrl+t exec --no-startup-id compton -cbf
+bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
@@ -87,15 +99,13 @@ bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-
 # move focused window
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
+bindsym $alt+Tab focus right
+bindsym $alt+Shift+Tab focus left
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -104,8 +114,8 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split orientation
-bindsym $mod+h split h;exec notify-send 'tile horizontally'
-bindsym $mod+v split v;exec notify-send 'tile vertically'
+bindsym $mod+h split h;exec notify-send 'Tile horizontally'
+bindsym $mod+v split v;exec notify-send 'Tile vertically'
 bindsym $mod+q split toggle
 
 # toggle fullscreen mode for the focused container
@@ -123,24 +133,12 @@ bindsym $mod+space focus mode_toggle
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
 
-# focus the parent container
-bindsym $mod+a focus parent
-
-# move the currently focused window to the scratchpad
-bindsym $mod+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+minus scratchpad show
-
 #navigate workspaces next / previous
-bindsym $mod+Ctrl+Right workspace next
-bindsym $mod+Ctrl+Left workspace prev
+bindsym $mod+$alt+Right workspace next
+bindsym $mod+$alt+Left workspace prev
 
 # Workspace names
 # to display names or symbols instead of plain workspace numbers you can use
-# something like: set $ws1 1:mail
-#                 set $ws2 2:
 set $ws1 1
 set $ws2 2
 set $ws3 3
@@ -180,11 +178,6 @@ bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 
-# Open applications on specific workspaces
-# assign [class="Pale moon"] $ws2
-# assign [class="Pcmanfm"] $ws3
-# assign [class="Skype"] $ws5
-
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
 for_window [class="calamares"] floating enable border normal
@@ -212,6 +205,11 @@ for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Xfburn"] floating enable
 
+# My for_window rules
+for_window [title="(?i)Network Connections"] floating enable
+for_window [title="(?i)SimpleScreenRecorder"] floating enable
+for_window [class="Yad" title="yad-calendar"] floating enable
+
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
 
@@ -235,7 +233,6 @@ mode "$mode_system" {
     bindsym h exec --no-startup-id i3exit hibernate, mode "default"
     bindsym r exec --no-startup-id i3exit reboot, mode "default"
     bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
-
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -244,54 +241,29 @@ mode "$mode_system" {
 # Resize window (you can also use the mouse for that)
 bindsym $mod+r mode "resize"
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
         bindsym j resize shrink width 5 px or 5 ppt
         bindsym k resize grow height 5 px or 5 ppt
         bindsym l resize shrink height 5 px or 5 ppt
         bindsym semicolon resize grow width 5 px or 5 ppt
-
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
-
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
 
-# Lock screen
-bindsym $mod+9 exec --no-startup-id blurlock
-
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton -b
+exec --no-startup-id nitrogen --restore; sleep 1; compton -cbf 
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
-exec --no-startup-id clipit
-# exec --no-startup-id blueman-applet
-# exec_always --no-startup-id sbxkb
 exec --no-startup-id xautolock -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
-# Color palette used for the terminal ( ~/.Xresources file )
-# Colors are gathered based on the documentation:
-# https://i3wm.org/docs/userguide.html#xresources
-# Change the variable name at the place you want to match the color
-# of your terminal like this:
-# [example]
-# If you want your bar to have the same background color as your 
-# terminal background change the line 362 from:
-# background #14191D
-# to:
-# background $term_background
-# Same logic applied to everything else.
 set_from_resource $term_background background
 set_from_resource $term_foreground foreground
 set_from_resource $term_color0     color0
@@ -316,8 +288,8 @@ set_from_resource $term_color15    color15
 #############################
 
 # Set inner/outer gaps
-gaps inner 2
-gaps outer -2
+gaps inner 5
+gaps outer -5
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
@@ -347,11 +319,9 @@ mode "$mode_gaps_inner" {
         bindsym plus  gaps inner current plus 5
         bindsym minus gaps inner current minus 5
         bindsym 0     gaps inner current set 0
-
         bindsym Shift+plus  gaps inner all plus 5
         bindsym Shift+minus gaps inner all minus 5
         bindsym Shift+0     gaps inner all set 0
-
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
@@ -359,11 +329,9 @@ mode "$mode_gaps_outer" {
         bindsym plus  gaps outer current plus 5
         bindsym minus gaps outer current minus 5
         bindsym 0     gaps outer current set 0
-
         bindsym Shift+plus  gaps outer all plus 5
         bindsym Shift+minus gaps outer all minus 5
         bindsym Shift+0     gaps outer all set 0
-
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
