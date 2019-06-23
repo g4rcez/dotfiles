@@ -22,7 +22,7 @@ plain_text = no
 #   %I  iconname (without its path)
 #   %p  progress value if set ([  0%] to [100%]) or nothing
 # Markup is allowed
-format = "<b>%s</b>\n%b"
+format = "<b>%a - %s</b>\n%b"
 
 # Sort messages by urgency.
 sort = yes
@@ -56,7 +56,6 @@ ignore_newline = no
 stack_duplicates = yes
 hide_duplicates_count = yes
 
-
 # The geometry of the window:
 geometry = "500x50-15+49"
 
@@ -67,7 +66,7 @@ shrink = yes
 # The transparency of the window.  Range: [0; 100].
 # This option will only work if a compositing windowmanager is
 # present (e.g. xcompmgr, compiz, etc.).
-transparency = 20
+transparency = 15
 
 # Don't remove messages, if the user is idle (no mouse or keyboard input)
 # for longer than idle_threshold seconds.
@@ -133,11 +132,11 @@ startup_notification = false
 dmenu = /usr/bin/dmenu -p dunst:
 
 # Browser for opening urls in context menu.
-browser = /usr/bin/google-chrome
+browser = /usr/bin/chromium
 
 # Align icons left/right/off
 icon_position = off
-max_icon_size = 80
+max_icon_size = 128
 
 # Paths to default icons.
 icon_path = /usr/share/icons/Paper/16x16/mimetypes/:/usr/share/icons/Paper/48x48/status/:/usr/share/icons/Paper/16x16/devices/:/usr/share/icons/Paper/48x48/notifications/:/usr/share/icons/Paper/48x48/emblems/
@@ -169,14 +168,14 @@ context = ctrl+shift+period
 [urgency_low]
 # IMPORTANT: colors have to be defined in quotation marks.
 # Otherwise the "#" and following would be interpreted as a comment.
-frame_color = "#3B7C87"
-foreground = "#3B7C87"
+frame_color = "#eeeeee"
+foreground = "#eeeeee"
 background = "#282c34"
 timeout = 5
 
 [urgency_normal]
-frame_color = "#3173c0"
-foreground = "#3173c0"
+frame_color = "#191311"
+foreground = "#999999"
 background = "#191311"
 #background = "#2B313C"
 timeout = 4
