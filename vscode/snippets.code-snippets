@@ -7,6 +7,22 @@
 		],
 		"description": "Log output to console"
 	},
+	"Import default": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "imp",
+		"body": [
+			"import $0 from \"$1\";",
+		],
+		"description": "Import default JS/TS"
+	},
+	"Named import": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "imn",
+		"body": [
+			"import { $0 } from \"$1\";",
+		],
+		"description": "Named imports JS/TS"
+	},
 	"Print file name": {
 		"prefix": "filename",
 		"body": "${TM_FILENAME_BASE}"
@@ -20,4 +36,83 @@
 			"}, [$1]);"
 		]
 	},
+	"useState": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "ush",
+		"body": [
+			"const [${1}, set${1/(.*)/${1:/capitalize}/}] = useState($2);$0"
+		],
+		"description": "React useState() hook"
+	},
+	"useEffect": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "ueh",
+		"body": [
+			"useEffect(() => {",
+			"\n\t$LINE_COMMENT componentDidMount(), componentDidUpdate()",
+			"\t$1",
+			"\n\treturn cleanUp = () => {",
+			"\t$LINE_COMMENT componentWillUnmount()",
+			"\t\t$2",
+			"\t}",
+			"$LINE_COMMENT effect dependency array",
+			"}, [${3:dependencies}]);$0"
+		],
+		"description": "React useEffect() hook"
+	},
+	"useContext": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "uch",
+		"body": [
+			"const $1 = useContext($2);$0"
+		],
+		"description": "React useContext() hook"
+	},
+	"useCallback": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "ucbh",
+		"body": [
+			"const ${1:memoizedCallback} = useCallback(",
+			"\t() => {",
+			"\t\t${2:doSomething}(${3:a}, ${4:b})",
+			"\t},",
+			"\t[${5:a}, ${6:b}],",
+			");$0"
+		],
+		"description": "React useCallback() hook"
+	},
+	"useMemo": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "umh",
+		"body": [
+			"const ${1:memoizedValue} = useMemo(() => ${2:computeExpensiveValue}(${3:a}, ${4:b}), [${5:a}, ${6:b}]);$0"
+		],
+		"description": "React useMemo() hook"
+	},
+	"import react hooks": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "irh",
+		"body": [
+			"import React, { useState, useContext, useEffect, useCallback, useMemo } from 'react';"
+		]
+	},
+	"useRef": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "urh",
+		"body": [
+			"const $1 = useRef($2)$0"
+		],
+		"description": "React useRef() hook"
+	},
+	"useReducer": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "urdh",
+		"body": [
+			"const [${1:state},${2: dispatch}] = useReducer(state, $0);",
+			"\n\treturn (",
+			"\t\t",
+			"\t);"
+		],
+		"description": "React useReducer() hook"
+	}
 }

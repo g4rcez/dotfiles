@@ -9,8 +9,8 @@
     },
     {
         "key": "ctrl+alt+l",
-        "command": "macros.ideaFormat",
-        "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
+        "command": "editor.action.formatDocument.none",
+        "when": "editorTextFocus"
     },
     {
         "key": "ctrl+alt+left",
@@ -46,20 +46,26 @@
         "when": "editorFocus"
     },
     {
-        "key": "ctrl+alt+j",
-        "command": "extension.jumpy-word"
-    },
-    {
-        "key": "ctrl+alt+l",
-        "command": "beautify.format",
-        "when": ""
-    },
-    {
         "key": "shift+f11",
         "command": "workbench.action.toggleZenMode"
     },
     {
         "key": "ctrl+k z",
         "command": "-workbench.action.toggleZenMode"
+    },
+    {
+        "key": "ctrl+escape ctrl+escape",
+        "command": "editor.action.organizeImports",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "command": "editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+i",
+        "command": "-editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
     },
 ]

@@ -39,9 +39,22 @@ bindsym $mod+d kill
 # launch categorized menu
 bindsym $mod+z exec --no-startup-id morc_menu
 
+# Window configs
+title_align center
+workspace_layout default
+default_orientation horizontal
+popup_during_fullscreen smart
+
 ##################################################################################################
 #############################  Custom keybinds and config     ####################################
 ##################################################################################################
+
+# OSX Custom keys exec
+# bindsym --release $alt+v exec --no-startup-id xdotool key --clearmodifiers ctrl+v
+# bindsym --release $alt+c exec --no-startup-id xdotool key --clearmodifiers ctrl+c
+
+# Flashwindow
+# exec_always --no-startup-id flashfocus
 
 # betterlockscreen
 exec --no-startup-id betterlockscreen -w dim
@@ -56,8 +69,8 @@ bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
 bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
 
 # Screen brightness controls
-bindsym $mod+Right exec "xbacklight -inc 5"
-bindsym $mod+Left exec "xbacklight -dec 5"
+bindsym $mod+Right exec "xbacklight -inc 3"
+bindsym $mod+Left exec "xbacklight -dec 3"
 bindsym $mod+Shift+b exec "xbacklight -set 100"
 
 # Flameshot
@@ -66,8 +79,9 @@ bindsym Print exec --no-startup-id "flameshot gui"
 # Rofi menu
 bindsym $mod+Shift+w exec --no-startup-id "bash /home/garcez/dotfiles/rofi/rofi-wifi-menu/rofi-wifi-menu.sh"
 bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
-bindsym $alt+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
+bindsym $mod+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
 bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/window.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+bindsym $mod+Next exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -85,38 +99,33 @@ bindsym $mod+Shift+m exec termite -e 'alsamixer'
 bindsym $mod+Ctrl+b exec termite -e 'bmenu'
 bindsym $mod+F2 exec chromium
 bindsym $mod+F3 exec ranger
-bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -cbf
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 focus_follows_mouse true
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+h focus left
+# split orientation
+bindsym $alt+Shift+h split h;exec notify-send 'Tile horizontally'
+bindsym $alt+Shift+v split v;exec notify-send 'Tile vertically'
+bindsym $alt+Shift+q split toggle
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+h move left
+# Traditional keys for focus
 bindsym $alt+Tab focus right
 bindsym $alt+Shift+Tab focus left
-
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
-
-# split orientation
-bindsym $mod+h split h;exec notify-send 'Tile horizontally'
-bindsym $mod+v split v;exec notify-send 'Tile vertically'
-bindsym $mod+q split toggle
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -128,7 +137,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+# bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
@@ -138,7 +147,6 @@ bindsym $mod+$alt+Right workspace next
 bindsym $mod+$alt+Left workspace prev
 
 # Workspace names
-# to display names or symbols instead of plain workspace numbers you can use
 set $ws1 1
 set $ws2 2
 set $ws3 3
@@ -257,10 +265,10 @@ mode "resize" {
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton -cbf 
+exec --no-startup-id nitrogen --restore; sleep 1;
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
-exec --no-startup-id xautolock -locker blurlock
+# exec --no-startup-id xautolock -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
@@ -298,40 +306,3 @@ gaps outer -5
 
 # Smart gaps (gaps used if only more than one container on the workspace)
 smart_gaps on
-
-# Smart borders (draw borders around container only if it is not the only container on this workspace) 
-# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
-smart_borders on
-
-# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
-set $mode_gaps Gaps: (o) outer, (i) inner
-set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
-
-mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}

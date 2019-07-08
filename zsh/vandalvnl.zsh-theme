@@ -2,11 +2,11 @@
 gitverify(){
     local URL="$(git config --get remote.origin.url)"
     if [[ "$(echo $URL| grep 'github')" != "" ]]; then
-        echo -n " \uf09b %{$fg_bold[white]%} "
+        echo -n " \uf09b %{$fg_bold[white]%}%{$resetcolor%} "
     elif [[ "$(echo $URL| grep 'gitlab')" != "" ]]; then
-        echo -n " \uf296 %{$fg_bold[white]%} "
+        echo -n " \uf296 %{$fg_bold[white]%}%{$resetcolor%} "
     elif [[ "$(echo $URL| grep 'bitbucket')" != "" ]]; then
-        echo -n " \uf171 %{$fg_bold[white]%} "
+        echo -n " \uf171 %{$fg_bold[white]%}%{$resetcolor%} "
     fi
 }
 
@@ -32,9 +32,6 @@ current_env() {
     if [[ -e "./package.json" ]]; then
         echo -n "%{$fg_bold[green]%}\uf898 $(node --version|tr -d '\n \t\ra-z')%{$reset_color%} "
     fi
-    if [[ -e "./Gemfile" ]]; then
-        echo -n "%{$fg_bold[red]%}\ue23e $(ruby --version | cut -d ' ' -f2)%{$reset_color%} "
-    fi
     if [[ -e "./pom.xml" ]]; then
         echo -n "%{$fg_bold[yellow]%}\ue738 $(javac -version 2>&1 | head -1 | tr -d '\n\t\r '|sed 's/[^0-9.]//g')%{$reset_color%} "
     fi
@@ -49,9 +46,9 @@ current_env() {
     fi
 }
 PROMPT='
-$(exitstatus) %{$fg_bold[green]%n%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
+%{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
 %{$fg_bold[$CARETCOLOR]%}λ%{$resetcolor%} '
-RPROMPT='%{$(echotc UP 1)%}$(current_env) %{$(echotc DO 1)%}'
+RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env) %{$(echotc DO 1)%}%{$resetcolor%}'
 _git_time_since_commit() {
   if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then
     now=$(date +%s)

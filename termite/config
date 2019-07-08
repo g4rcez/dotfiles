@@ -24,7 +24,7 @@ browser = chromium
 cursor_blink = on
 
 # "block", "underline" or "ibeam"
-cursor_shape = underline
+cursor_shape = block
 
 # Hide links that are no longer valid in url select overlay mode
 #filter_unmatched_urls = true
@@ -48,7 +48,8 @@ foreground = #d0d0d0
 foreground_bold = #eeeeee
 
 # 20% background transparency (requires a compositor)
-background = rgba(0, 0, 0, 0.65)
+#background = rgba(0, 0, 0, 0.0)
+background = #202020
 
 # If unset, will reverse foreground and background
 # highlight = #2f2f2f
@@ -64,8 +65,8 @@ color1  = #e06c75
 color9  = #be5046
 
 # green
-color2  = #98c379
-color10 = #7a9f60
+color2  = #8ce34d
+color10 = #50a315
 
 # yellow
 color3  = #e5c07b
@@ -85,12 +86,12 @@ color14 = #3c909b
 
 # white
 color7  = #eee
-color15 = #828997
+color15 = #85878b
 
 
 [hints]
 #font = Monospace 12
-foreground = #999
+foreground = #aaa
 #background = #3f3f3f
 #active_foreground = #e68080
 #active_background = #3f3f3f

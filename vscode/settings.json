@@ -1,8 +1,8 @@
 {
     "breadcrumbs.enabled": false,
-    "cSpell.language": "en,pt,pt_BR",
+    "cSpell.language": "en,pt,pt-BR,en-US",
     "editor.codeActionsOnSaveTimeout": 1000,
-    "editor.cursorBlinking": "smooth",
+    "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
     "editor.cursorStyle": "underline-thin",
     "editor.fontFamily": "Ligconsolata",
@@ -16,7 +16,6 @@
     "editor.scrollBeyondLastLine": false,
     "editor.smoothScrolling": true,
     "editor.stablePeek": true,
-    "editor.suggestSelection": "first",
     "editor.tabCompletion": "on",
     "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
     "editor.wordWrapColumn": 120,
@@ -36,7 +35,6 @@
     "javascript.preferences.quoteStyle": "double",
     "typescript.preferences.quoteStyle": "double",
     "explorer.confirmDelete": false,
-    "window.menuBarVisibility": "hidden",
     "beautify.tabSize": 4,
     "cSpell.allowCompoundWords": true,
     "cSpell.spellCheckDelayMs": 100,
@@ -55,7 +53,6 @@
     "terminal.external.linuxExec": "termite",
     "terminal.integrated.experimentalRefreshOnResume": true,
     "explorer.confirmDragAndDrop": false,
-    "files.autoSave": "afterDelay",
     "tslint.suppressWhileTypeErrorsPresent": true,
     "typescript.tsc.autoDetect": "watch",
     "workbench.useExperimentalGridLayout": true,
@@ -76,9 +73,6 @@
     "editor.autoClosingBrackets": "beforeWhitespace",
     "editor.autoClosingQuotes": "beforeWhitespace",
     "editor.renderLineHighlight": "gutter",
-    "editor.wordWrap": "on",
-    "editor.find.autoFindInSelection": true,
-    "editor.formatOnPaste": true,
     "extensions.showRecommendationsOnlyOnDemand": true,
     "editor.suggest.shareSuggestSelections": true,
     "editor.acceptSuggestionOnEnter": "smart",
@@ -98,9 +92,6 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -110,46 +101,68 @@
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
-    "vim.autoindent": false,
-    "vim.easymotionMarkerFontFamily": "Cantarell",
-    "vim.enableNeovim": true,
-    "vim.hlsearch": true,
-    "vim.leader": "<space>",
-    "vim.neovimPath": "/usr/bin/nvim",
-    "vim.overrideCopy": false,
-    "vim.surround": false,
-    "vim.useCtrlKeys": false,
-    "vim.textwidth": 120,
-    "vim.insertModeKeyBindings": [
-        {
-            "before": [
-                "j",
-                "j"
-            ],
-            "after": [
-                "<Esc>"
-            ]
-        }
-    ],
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<leader>",
-                "<leader>",
-            ],
-            "after": [],
-            "commands": [
-                "editor.action.organizeImports",
-                "editor.action.formatDocument"
-            ]
-        },
-    ],
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "prettier.tslintIntegration": true,
     "prettier.useTabs": true,
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "files.associations": {
+        "**/.i3/config": "i3",
+        "**/i3/config": "i3",
+    },
+    "files.autoSaveDelay": 1000,
+    "files.defaultLanguage": "javascript",
+    "files.insertFinalNewline": true,
+    "files.maxMemoryForLargeFilesMB": 8192,
+    "files.trimTrailingWhitespace": true,
+    "files.watcherExclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/node_modules/**": true,
+        "**/target/**": true,
+    },
+    "workbench.tree.indent": 7,
+    "breadcrumbs.filePath": "off",
+    "breadcrumbs.symbolPath": "off",
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.labelFormat": "short",
+    "workbench.editor.openPositioning": "last",
+    "workbench.editor.revealIfOpen": true,
+    "window.enableMenuBarMnemonics": false,
+    "window.menuBarVisibility": "hidden",
+    "explorer.openEditors.visible": 7,
+    "explorer.sortOrder": "type",
+    "search.quickOpen.includeSymbols": false,
+    "search.runInExtensionHost": true,
+    "search.showLineNumbers": true,
+    "search.smartCase": true,
+    "scm.alwaysShowProviders": true,
+    "scm.alwaysShowActions": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/node_modules/**": true,
+        "**/target/**": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "editor.minimap.enabled": false,
+    "editor.suggestSelection": "first",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"/home/garcez/.vscode-insiders/extensions/gabrielbb.vscode-lombok-0.9.8/server/lombok.jar\"",
+    "workbench.editor.mouseBackForwardToNavigate": false,
+    "files.simpleDialog.enable": true,
 }

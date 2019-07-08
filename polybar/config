@@ -7,6 +7,39 @@ primary = #fff
 secondary = #e60053
 alert = #bd2c40
 
+[bar/tv]
+monitor = HDMI1
+width = 100%
+height = 18
+margin-bottom = 0
+margin-top = 0
+radius = 0.0
+fixed-center = true
+bottom = false
+background = ${colors.background}
+foreground = ${colors.foreground}
+line-size = 0
+border-size = 0
+padding-left = 1
+padding-right = 1
+module-margin-left = 2
+module-margin-right = 2
+font-0 = "NotoSansNerdFont:size=10;2"
+modules-left = i3 window-name
+modules-center =
+modules-right = keyboard wifi-mod batt calendar
+override-redirect = false
+pseudo-transparency = false
+tray-position = none
+tray-detached = false
+tray-transparency = true
+tray-maxsize = 14
+tray-background = ${colors.background}
+tray-offset-x = 0
+tray-offset-y = 0
+tray-padding = 5
+tray-scale = 1
+
 [bar/note]
 monitor = eDP1
 width = 100%
@@ -25,52 +58,20 @@ padding-right = 1
 module-margin-left = 2
 module-margin-right = 2
 font-0 = "NotoSansNerdFont:size=10;2"
-modules-left = i3 xwindow
-modules-center = 
+modules-left = i3 window-name
+modules-center =
 modules-right = keyboard wifi-mod batt calendar
 override-redirect = false
-pseudo-transparency = false
-tray-position = right
-tray-detached = false
-tray-transparency = true
+pseudo-transparency = true
+tray-position = none
+tray-detached = true
+tray-transparency = false
 tray-maxsize = 14
 tray-background = ${colors.background}
 tray-offset-x = 0
 tray-offset-y = 0
 tray-padding = 5
 tray-scale = 1
-
-[bar/tv]
-monitor = HDMI1
-width = 100%
-height = 18
-margin-bottom = 0
-margin-top = 0
-radius = 0.0
-fixed-center = true
-bottom = false
-background = ${colors.background}
-foreground = ${colors.foreground}
-line-size = 0
-border-size = 0
-padding-left = 2
-padding-right = 2
-module-margin-left = 2
-module-margin-right = 2
-font-0 = "UbuntuNerdFont:size=10;2"
-modules-left = i3 
-modules-center = xwindow
-modules-right = wlan battery date
-override-redirect = false
-pseudo-transparency = true
-tray-position = right
-tray-detached = false
-tray-maxsize = 20
-tray-background = ${colors.background}
-tray-offset-x = 0
-tray-offset-y = 0
-tray-padding = 0
-tray-scale = 1.0
 
 [module/xwindow]
 type = internal/xwindow
@@ -91,7 +92,7 @@ ramp-0 = 
 [module/i3]
 type = internal/i3
 pin-workspaces = true
-strip-wsnumbers = false
+strip-wsnumbers = true
 enable-scroll = true
 fuzzy-match = true
 format = <label-state> <label-mode>
@@ -158,7 +159,7 @@ label-layout-foreground = #000
 label-indicator = %name%
 label-indicator-padding = 2
 label-indicator-background = #8139e8
-indicator-icon-default = 
+indicator-icon-default =
 indicator-icon-0 = caps lock;-CL;+CL
 indicator-icon-1 = scroll lock;;+SL
 indicator-icon-2 = num lock;-NL;+NL
@@ -170,25 +171,32 @@ label-indicator-off-capslock-foreground = #333
 label-indicator-off-numlock-foreground = #333
 label-indicator-on-numlock = 
 label-indicator-off-numlock = 
-label-indicator-on-scrolllock = 
-label-indicator-off-scrolllock = 
+label-indicator-on-scrolllock =
+label-indicator-off-scrolllock =
 
 [settings]
 screenchange-reload = true
 compositing-background = source
 compositing-border = over
 
+[module/window-name]
+type = custom/script
+exec = bash /home/garcez/dotfiles/polybar/scripts/xwindow.sh
+click-middle = xdotool getactivewindow windowkill
+interval = 1
+format-prefix-foreground = ${colors.foreground}
+
 [module/wifi-mod]
 type = custom/script
 click-left = nm-connection-editor
-exec = nmcli -t -c no dev wifi | grep '^*' | cut -d ':' -f2 
-interval = 10
+exec = bash /home/garcez/dotfiles/polybar/scripts/wifi.sh
+interval = 1
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
 
 [module/batt]
 type = custom/script
-click-left = nm-connection-editor
+click-left = xfce4-power-manager-settings
 exec = upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep percentage | sed 's/[^0-9%]*//g'
 interval = 5
 format-prefix = " "
@@ -196,10 +204,10 @@ format-prefix-foreground = ${colors.foreground}
 
 [module/calendar]
 type = custom/script
-exec = /home/garcez/dotfiles/polybar/cal.sh
+exec = date +"%Y-%m-%d %H:%M"
 format-prefix = "  "
 interval = 10
-click-left = /home/garcez/dotfiles/polybar/cal.sh --popup
+click-left = orage
 
 [global/wm]
 margin-top = 0

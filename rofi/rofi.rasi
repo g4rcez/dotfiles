@@ -1,139 +1,115 @@
+configuration {
+    display-drun: "Apps";
+    display-window: "Window";
+    display-run: ">_";
+    display-calc: "λ";
+    show-icons: true;
+    fullscreen: false;
+    fake-transparency: true;
+    fake-background: true;
+}
+
 * {
-   maincolor:        #2c313c;
-   highlight:        bold #2c313c;
-   urgentcolor:      #e53714;
-   fgwhite:          #cfcfcf;
-   blackdarkest:     #101010FF;
-   blackwidget:      #151515FF;
-   blackentry:       #181818FF;
-   blackselect:      #252525;
-   darkgray:         #848484;
-   scrollbarcolor:   #505050;
-   font: "Inconsolata 14";
-   background-color: #2c313c;
+    backgroundcolor: #202020;
+    bg1: #202020;
+    backgroundcoloralternate: #202020;
+    separatorcolor: #202020;
+    scrollbarcolor: #449daa;
+    foregroundcolor: #839496;
+    foregroundcolorinverse: #839496;
+    selectioncolor: #3b4252;
+    font-size: 16px;
+    border-color: @separatorcolor;
+    background-color: @backgroundcolor;
+    text-color: @foregroundcolor;
+    margin: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    spacing: 0;
 }
 
-window {
-   background-color: @blackdarkest;
-   anchor: north;
-   location: north;
-   y-offset: 25%;
+#listview {
+    spacing: 0;
+    scrollbar: true;
+    margin: 0;
+    dynamic: true;
+
 }
 
-mainbox {
-   background-color: @blackdarkest;
-   spacing:0px;
-   children: [inputbar, message, sidebar, listview];
+#window {
+    background-color: @backgroundcolor;
+    border-color: @separatorcolor;
+    border: 1;
+    border-radius: 2px;
 }
 
-message {
-   padding: 6px 10px;
-   background-color:@blackwidget;
+#mainbox {
+    border: 0;
+    padding: 0;
+    background-color: @backgroundcoloralternate;
 }
 
-textbox {
-   text-color:@darkgray;
-   background-color:@blackwidget;
+#element {
+    padding: 5;
+    border: 0 0 1 0;
+    border-color: @separatorcolor;
+    background-color: @backgroundcoloralternate;
 }
 
-listview {
-   fixed-height: false;
-   dynamic: true;
-   scrollbar: true;
-   spacing: 0px;
-   padding: 1px 0px 0px 0px;
-   margin: 0px 0px 1px 0px;
-   background: @blackdarkest;
+#element.selected.normal {
+    background-color: @selectioncolor;
+    text-color: @foregroundcolorinverse;
+    border-radius: 0px;
+    border: 0 0 1 0;
+    border-color: @separatorcolor;
 }
 
-element {
-   padding: 2px 15px;
+#element.alternate.normal {
+    background-color: @backgroundcoloralternate;
 }
 
-element normal.normal {
-   padding: 0px 15px;
-   background-color: @blackentry;
-   text-color: @fgwhite;
+#element.normal.active {
+    background-color: #434c5e;
 }
 
-element normal.urgent {
-   background-color: @blackentry;
-   text-color: @urgentcolor;
+#element.alternate.active {
+    background-color: #434c5e;
 }
 
-element normal.active {
-   background-color: @blackentry;
-   text-color: @maincolor;
+#element.selected.active {
+    background-color: @selectioncolor;
+    text-color: @foregroundcolorinverse;
+    border-radius: 0px;
+    border: 0 0 1 0;
+    border-color: @separatorcolor;
 }
 
-element selected.normal {
-    background-color: @blackselect;
-    text-color:       @fgwhite;
+#inputbar {
+    border: 0 solid 0 solid 1 solid 0 solid;
+    margin: 0;
+    spacing: 0;
+    border-color: @separatorcolor;
 }
 
-element selected.urgent {
-    background-color: @urgentcolor;
-    text-color:       @blackdarkest;
+#prompt {
+    padding: 5;
+    background-color: @backgroundcoloralternate;
+    border: 0 1 0 0;
 }
 
-element selected.active {
-    background-color: @maincolor;
-    text-color:       @blackdarkest;
+#entry {
+    padding: 5;
 }
 
-element alternate.normal {
-    background-color: @blackentry;
-    text-color:       @fgwhite;
+#scrollbar {
+    border: 0;
+    width: 16px;
+    handle-color: @scrollbarcolor;
+    handle-width: 8px;
+    background-color: @backgroundcoloralternate;
 }
 
-element alternate.urgent {
-    background-color: @blackentry;
-    text-color:       @urgentcolor;
-}
-
-element alternate.active {
-    background-color: @blackentry;
-    text-color:       @maincolor;
-}
-
-scrollbar {
-   background-color: @blackwidget;
-   handle-color: @darkgray;
-   handle-width: 15px;
-}
-
-sidebar {
-   background-color: @blackwidget;
-}
-
-button {
-   background-color: @blackwidget;
-   text-color:       @darkgray;
-}
-
-button selected {
-    text-color:       @maincolor;
-}
-
-inputbar {
-   background-color: @blackdarkest;
-   spacing: 0px;
-}
-
-prompt {
-   padding:6px 9px;
-   background-color: @maincolor;
-   text-color:@fgwhite;
-}
-
-entry {
-   padding:6px 10px;
-   background-color:@blackwidget;
-   text-color:@fgwhite;
-}
-
-case-indicator {
-   padding:6px 10px;
-   text-color:@maincolor;
-   background-color:@blackwidget;
+#scrollbar handle {
+    border: 1px;
+    border-color: #ff0000;
 }

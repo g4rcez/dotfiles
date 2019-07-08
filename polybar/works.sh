@@ -1,1 +1,0 @@
-qdbus org.kde.KWin /KWin setCurrentDesktop $1

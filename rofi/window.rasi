@@ -45,6 +45,7 @@ window {
 
 mainbox {
 	spacing:  0.5em;
+	color: #eeeeee;
 	children: [ entry,listview,sidebar ];
 }
 
