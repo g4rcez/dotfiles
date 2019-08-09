@@ -47,7 +47,7 @@ current_env() {
 }
 PROMPT='
 %{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}λ%{$resetcolor%} '
+%{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env) %{$(echotc DO 1)%}%{$resetcolor%}'
 _git_time_since_commit() {
   if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then

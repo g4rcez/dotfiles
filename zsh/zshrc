@@ -67,7 +67,6 @@ alias push='git push -u'
 
 # Editors
 alias code="code-insiders"
-alias vim='nvim'
 
 function memory(){
 	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -88,7 +87,6 @@ function sysinfo(){
 
 autoload -Uz compinit
 compinit
-source /etc/profile.d/vte.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="$PATH:/home/garcez/.dotnet/tools"
@@ -114,11 +112,11 @@ typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
 ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
-ZSH_HIGHLIGHT_STYLES[alias]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=yellow,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=blue,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[function]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=blue,bold"
 ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow,bold"
