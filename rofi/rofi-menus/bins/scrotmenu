@@ -1,0 +1,4 @@
+#!/bin/sh
+
+~/.config/rofi/scripts/scrotmenu.sh
+

@@ -7,12 +7,12 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
+  compleat
   git
   github
-  compleat
   z
-  zsh-syntax-highlighting
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -38,13 +38,13 @@ export SDKMAN_DIR="/home/garcez/.sdkman"
 [[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
 
 export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/dotfiles/bin
 
 if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ] ; then
   export PATH="$HOME/.bin/adb-fastboot/platform-tools:$PATH"
 fi
 
 # Unix utils
-# alias ls="$HOME/.bin/ls/bin/ls -FNG --time-style=long-iso"
 alias lz='ls -lSr'
 alias wtf='pwd'
 alias cp='cp -v'
@@ -64,9 +64,17 @@ alias pbpaste='xclip -selection clipboard -o'
 alias add='git add'
 alias commit='git commit -m'
 alias push='git push -u'
+alias tags='git tag | sort -V'
+alias tag='git tag'
 
-# Editors
-alias code="code-insiders"
+# Alias Tools
+alias icat="kitty +kitten icat --silent"
+alias alfred="/home/garcez/Workspace/alfred/cli/index.js"
+alias kali="docker run -t -v /home/garcez/.bin/kali -i kalilinux/kali-linux-docker /bin/bash"
+
+autoload -Uz compinit
+compinit
+kitty + complete setup zsh | source /dev/stdin
 
 function memory(){
 	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -139,3 +147,6 @@ ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line

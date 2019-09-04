@@ -1,5 +1,6 @@
 [colors]
-background = #202020
+yellow = #f8c113
+background = #121212
 background-alt = #444
 foreground = #bbb
 foreground-alt = #555
@@ -7,52 +8,38 @@ primary = #fff
 secondary = #e60053
 alert = #bd2c40
 
-[bar/tv]
-monitor = HDMI1
-width = 100%
-height = 18
-margin-bottom = 0
-margin-top = 0
-radius = 0.0
+[bar/note-bot]
+monitor = eDP1
+height = 16
 fixed-center = true
-bottom = false
+bottom = true
 background = ${colors.background}
 foreground = ${colors.foreground}
-line-size = 0
-border-size = 0
-padding-left = 1
-padding-right = 1
+padding-left = 2
+padding-right = 2
 module-margin-left = 2
 module-margin-right = 2
 font-0 = "NotoSansNerdFont:size=10;2"
-modules-left = i3 window-name
-modules-center =
-modules-right = keyboard wifi-mod batt calendar
+font-1 = "InconsolataLGCNerdFont:size=10;2"
+modules-left = wireless-network wireless-ip
+modules-center = 
+modules-right = backlight memory batt volume keyboard
 override-redirect = false
-pseudo-transparency = false
-tray-position = none
+pseudo-transparency = true
+tray-position = right
 tray-detached = false
 tray-transparency = true
 tray-maxsize = 14
 tray-background = ${colors.background}
-tray-offset-x = 0
-tray-offset-y = 0
-tray-padding = 5
-tray-scale = 1
+tray-padding = 2
 
-[bar/note]
+[bar/note-top]
 monitor = eDP1
-width = 100%
 height = 18
-margin-bottom = 0
-margin-top = 0
-radius = 0.0
 fixed-center = true
 bottom = false
 background = ${colors.background}
 foreground = ${colors.foreground}
-line-size = 0
-border-size = 0
 padding-left = 1
 padding-right = 1
 module-margin-left = 2
@@ -60,18 +47,9 @@ module-margin-right = 2
 font-0 = "NotoSansNerdFont:size=10;2"
 modules-left = i3 window-name
 modules-center =
-modules-right = keyboard wifi-mod batt calendar
+modules-right = calendar-date calendar-hour
 override-redirect = false
 pseudo-transparency = true
-tray-position = none
-tray-detached = true
-tray-transparency = false
-tray-maxsize = 14
-tray-background = ${colors.background}
-tray-offset-x = 0
-tray-offset-y = 0
-tray-padding = 5
-tray-scale = 1
 
 [module/xwindow]
 type = internal/xwindow
@@ -82,71 +60,18 @@ label-maxlen = 50
 label-empty = VandalOS
 label-empty-foreground = #707880
 
-[module/backlight]
-type = internal/xbacklight
-format = <ramp> <label>
-label = %percentage%%
-ramp-0-foreground = ${colors.foreground}
-ramp-0 = 
-
-[module/i3]
-type = internal/i3
-pin-workspaces = true
-strip-wsnumbers = true
-enable-scroll = true
-fuzzy-match = true
-format = <label-state> <label-mode>
-index-sort = true
-label-mode = %mode%
-label-mode-padding = 2
-label-focused = %icon%
-label-focused-background = #191d24
-label-focused-foreground = #0a6cf5
-label-focused-padding = 2
-label-focused-underline = #888
-label-unfocused = %icon%
-label-unfocused-padding = 2
-label-unfocused-foreground = ${colors.foreground}
-label-unfocused-underline = ${colors.background}
-label-urgent = %icon%
-label-urgent-padding = 2
-label-urgent-underline = ${colors.alert}
-label-urgent-background = ${colors.primary}
-label-urgent-foreground = ${colors.background}
-label-visible = %name%
-label-visible-padding = 2
-ws-icon-0 = "1;"
-ws-icon-1 = "2;"
-ws-icon-2 = "3;"
-ws-icon-3 = "4;"
-ws-icon-4 = "5;"
-ws-icon-5 = "6;"
-ws-icon-6 = "7;"
-ws-icon-7 = "8;"
-ws-icon-8 = "9;"
-
-[module/date]
-type = internal/date
-interval = 1.0
-format-underline = #5591f5
-date =  %Y-%m-%d - %H:%M
-format-prefix = "  "
-format-prefix-foreground = ${colors.foreground}
-
-[module/alsa]
-type = internal/alsa
+[module/volume]
+type = internal/volume
+speaker-mixer = Speaker
+headphone-mixer = Headphone
+headphone-id = 9
 format-volume = <ramp-volume> <label-volume>
-label-volume = %percentage%%
-format-muted-prefix = 
-label-muted = " Muted"
-label-muted-foreground = #777777
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-3 = 
-ramp-volume-4 = 
-ramp-headphones-0 = 
-ramp-headphones-1 = 
+label-muted = 婢  muted
+label-muted-foreground = #66
+ramp-volume-0 = 奄
+ramp-volume-1 = 奔
+ramp-volume-2 = 墳
+ramp-volume-3 = 
 
 [module/keyboard]
 type = internal/xkeyboard
@@ -179,12 +104,42 @@ screenchange-reload = true
 compositing-background = source
 compositing-border = over
 
+[module/memory]
+type = internal/memory
+format = <label> 
+label =  %gb_used%/%gb_total%
+;bar-used-width = 15
+;bar-used-foreground-0 = #aaff77
+;bar-used-foreground-1 = #aaff77
+;bar-used-foreground-2 = #fba922
+;bar-used-foreground-3 = #ff5555
+;bar-used-indicator = |
+;bar-used-indicator-font = 6
+;bar-used-indicator-foreground = #ff
+;bar-used-fill = 
+;bar-used-fill-font = 6
+;bar-used-empty = 
+;bar-used-empty-font = 6
+;bar-used-empty-foreground = #444444
+
 [module/window-name]
 type = custom/script
 exec = bash /home/garcez/dotfiles/polybar/scripts/xwindow.sh
 click-middle = xdotool getactivewindow windowkill
 interval = 1
 format-prefix-foreground = ${colors.foreground}
+
+[module/wireless-network]
+type = internal/network
+interface = wlp2s0
+format-connected =   <label-connected>
+label-connected = %essid%
+
+[module/wireless-ip]
+type = internal/network
+interface = wlp2s0
+format-connected =   <label-connected>
+label-connected = %local_ip%
 
 [module/wifi-mod]
 type = custom/script
@@ -202,15 +157,67 @@ interval = 5
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
 
-[module/calendar]
+[module/calendar-date]
 type = custom/script
-exec = date +"%Y-%m-%d %H:%M"
+exec = date +"%Y-%m-%d"
 format-prefix = "  "
 interval = 10
 click-left = orage
 
+[module/calendar-hour]
+type = custom/script
+exec = date +"%H:%M"
+format-prefix = "  "
+interval = 10
+click-left = orage
+
+[module/backlight]
+type = internal/xbacklight
+format =  <ramp> <bar>
+ramp-0 = 
+bar-fill =%{T2}%{T-}
+bar-empty =%{T2}%{T-}
+bar-width = 6
+bar-indicator = 
+bar-indicator-foreground = #ff
+bar-fill-foreground = ${colors.yellow}
+bar-empty-foreground = #444
+
 [global/wm]
 margin-top = 0
 margin-bottom = 0
+
+[module/i3]
+type = internal/i3
+pin-workspaces = true
+strip-wsnumbers = true
+enable-scroll = true
+fuzzy-match = true
+format = <label-state> <label-mode>
+index-sort = true
+label-mode = %mode%
+label-mode-padding = 1
+label-focused = %icon%
+label-focused-background = #191919
+label-focused-foreground = #12acf5
+label-focused-padding = 2
+label-focused-underline = #888
+label-unfocused = %icon%
+label-unfocused-padding = 2
+label-unfocused-foreground = ${colors.foreground}
+label-unfocused-underline = ${colors.background}
+label-urgent = %icon%
+label-urgent-padding = 2
+label-urgent-underline = ${colors.alert}
+label-urgent-background = ${colors.primary}
+label-urgent-foreground = ${colors.background}
+label-visible = %name%
+label-visible-padding = 2
+ws-icon-0 = "1; Web"
+ws-icon-1 = "2; Code"
+ws-icon-2 = "3; CLI"
+ws-icon-3 = "4; Media"
+ws-icon-4 = "5; Files"
+ws-icon-5 = "6; Others"
 
 ; vim:ft=dosini

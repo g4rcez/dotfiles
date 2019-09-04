@@ -4,7 +4,7 @@ audible_bell = false
 bold_is_bright = true
 clickable_url = true
 dynamic_title = true
-font = Ligconsolata 12
+font = Inconsolata 12
 #fullscreen = true
 icon_name = terminal
 mouse_autohide = true
@@ -48,8 +48,8 @@ foreground = #d0d0d0
 foreground_bold = #eeeeee
 
 # 20% background transparency (requires a compositor)
-#background = rgba(0, 0, 0, 0.0)
-background = #202020
+background = rgba(0, 0, 0, 0.5)
+#background = #202020
 
 # If unset, will reverse foreground and background
 # highlight = #2f2f2f

@@ -22,14 +22,17 @@ bindsym $mod+n border normal
 
 # Keyboard config
 exec --no-startup-id xset r rate 160 110
-exec_always --no-startup-id "killall -q polybar; polybar -r note& polybar -r tv&"
+
+# Polybar start
+exec_always --no-startup-id "killall -q polybar; polybar -r note-top&polybar -r note-bot"
+
 font pango:"Cantarell" 11px
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -49,16 +52,12 @@ popup_during_fullscreen smart
 #############################  Custom keybinds and config     ####################################
 ##################################################################################################
 
-# OSX Custom keys exec
-# bindsym --release $alt+v exec --no-startup-id xdotool key --clearmodifiers ctrl+v
-# bindsym --release $alt+c exec --no-startup-id xdotool key --clearmodifiers ctrl+c
-
 # Flashwindow
-# exec_always --no-startup-id flashfocus
+exec_always --no-startup-id numlockx on
 
 # betterlockscreen
 exec --no-startup-id betterlockscreen -w dim
-bindsym $mod+9 exec betterlockscreen -l dimblur -t "Dica: Não use"
+bindsym $mod+9 exec betterlockscreen -l dimblur
 
 # Music and Audio config
 bindsym $mod+s exec "player next"
@@ -67,21 +66,26 @@ bindsym $mod+w exec "player prev"
 bindsym $mod+Escape exec "player playPause"
 bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
 bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
+bindsym $mod+m exec --no-startup-id "amixer set 'Master' 0%"
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioStop exec playerctl stop
 
 # Screen brightness controls
-bindsym $mod+Right exec "xbacklight -inc 3"
-bindsym $mod+Left exec "xbacklight -dec 3"
+bindsym $mod+Right exec "xbacklight -inc 10"
+bindsym $mod+Left exec "xbacklight -dec 10"
 bindsym $mod+Shift+b exec "xbacklight -set 100"
 
 # Flameshot
 bindsym Print exec --no-startup-id "flameshot gui"
 
 # Rofi menu
-bindsym $mod+Shift+w exec --no-startup-id "bash /home/garcez/dotfiles/rofi/rofi-wifi-menu/rofi-wifi-menu.sh"
-bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
-bindsym $mod+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi.rasi'"
-bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/window.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
-bindsym $mod+Next exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
+bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
+bindsym $mod+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
+bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+bindsym $mod+F12 exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
+bindsym $mod+Shift+w exec --no-startup-id "python /home/garcez/dotfiles/rofi/rofi-menus/scripts/networkmenu.py"
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -97,7 +101,7 @@ bindsym $mod+Shift+m exec termite -e 'alsamixer'
 
 # Start Applications
 bindsym $mod+Ctrl+b exec termite -e 'bmenu'
-bindsym $mod+F2 exec chromium
+bindsym $mod+F2 exec google-chrome-stable
 bindsym $mod+F3 exec ranger
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
@@ -199,7 +203,7 @@ for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [title="MuseScore: Play Panel"] floating enable
-for_window [class="Nitrogen"] floating enable sticky enable border normal
+for_window [class="Nitrogen"] floating enable sticky enable
 for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [class="Pamac-manager"] floating enable
@@ -268,8 +272,8 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1;
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
-# exec --no-startup-id xautolock -locker blurlock
-exec_always --no-startup-id ff-theme-util
+exec --no-startup-id "compton -cbf"
+# exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
 set_from_resource $term_background background
@@ -306,3 +310,113 @@ gaps outer -5
 
 # Smart gaps (gaps used if only more than one container on the workspace)
 smart_gaps on
+
+# bar {
+#     height 15
+#     status_command i3status -c ~/.i3status.conf
+#     strip_workspace_numbers no
+#     separator_symbol |
+#     workspace_buttons no
+#     modifier Mod1
+#     mode dock
+#     tray_output primary
+#     font pango: NotoSans,Icons 8
+#     colors {
+#         separator  #eeeeee
+#         background #000000
+#         statusline #eeeeee #border  backgr.  text
+#         focused_workspace  $color1 $000000 $color1
+#         inactive_workspace #eeeeee #000000 #eeeeee
+#         urgent_workspace   #1bb2f2 #000000 #1bb2f2
+#     }
+# }
+
+# Mouse movement
+mode "mouse" {
+
+	# set your three speeds here
+
+	set $slow 10
+	set $quick 10
+	set $fast 10
+
+	bindsym a exec xdotool mousemove_relative -- -$slow 0
+	bindsym s exec xdotool mousemove_relative 0 $slow
+	bindsym w exec xdotool mousemove_relative -- 0 -$slow
+	bindsym d exec xdotool mousemove_relative $slow 0
+
+	# Mouse movement (slow/fine-tuned) -- vim keybindings
+
+	bindsym h exec xdotool mousemove_relative -- -$slow 0
+	bindsym j exec xdotool mousemove_relative 0 $slow
+	bindsym k exec xdotool mousemove_relative -- 0 -$slow
+	bindsym l exec xdotool mousemove_relative $slow 0
+
+	# Mouse movement (slow/fine-tuned) -- arrow keys
+
+	bindsym Left exec xdotool mousemove_relative -- -$slow 0
+	bindsym Down exec xdotool mousemove_relative 0 $slow
+	bindsym Up exec xdotool mousemove_relative -- 0 -$slow
+	bindsym Right exec xdotool mousemove_relative $slow 0
+
+	# Mouse movement (quicker) -- vim keybindings
+
+	bindsym Shift+h exec xdotool mousemove_relative -- -$quick 0
+	bindsym Shift+j exec xdotool mousemove_relative 0 $quick
+	bindsym Shift+k exec xdotool mousemove_relative -- 0 -$quick
+	bindsym Shift+l exec xdotool mousemove_relative $quick 0
+
+	# Mouse movement (quicker) -- arrow keys
+
+	bindsym Shift+Left exec xdotool mousemove_relative -- -$quick 0
+	bindsym Shift+Down exec xdotool mousemove_relative 0 $quick
+	bindsym Shift+Up exec xdotool mousemove_relative -- 0 -$quick
+	bindsym Shift+Right exec xdotool mousemove_relative $quick 0
+
+	# Mouse movement (fast) -- vim keybindings
+
+	bindsym Shift+$mod2+h exec xdotool mousemove_relative -- -$fast 0
+	bindsym Shift+$mod2+j exec xdotool mousemove_relative 0 $fast
+	bindsym Shift+$mod2+k exec xdotool mousemove_relative -- 0 -$fast
+	bindsym Shift+$mod2+l exec xdotool mousemove_relative $fast 0
+
+	# Mouse movement (fast) -- arrow keys
+
+	bindsym Shift+$mod2+Left exec xdotool mousemove_relative -- -$fast 0
+	bindsym Shift+$mod2+Down exec xdotool mousemove_relative 0 $fast
+	bindsym Shift+$mod2+Up exec xdotool mousemove_relative -- 0 -$fast
+	bindsym Shift+$mod2+Right exec xdotool mousemove_relative $fast 0
+
+	# Left Click
+	bindsym q exec xdotool click 1
+
+	# Middle Click
+	bindsym Shift+w exec xdotool click 2
+
+	# Right Click
+	bindsym e exec xdotool click 3
+
+	# Left Click-and-drag
+	# bindsym Shift+f exec xdotool mousedown 1
+
+	# Middle Click-and-drag 
+	# bindsym Shift+d exec xdotool mousedown 2
+
+	# Right Click-and-drag
+	# bindsym Shift+s exec xdotool mousedown 3
+
+	# Left Drag release
+	# bindsym $mod2+f exec xdotool mouseup 1
+
+	# Middle Drag release
+	# bindsym $mod2+d exec xdotool mouseup 2
+
+	# Right Drag release
+	# bindsym $mod2+s exec xdotool mouseup 3
+
+
+	# return to normal keybindings -- IMPORTANT!!
+	bindsym Escape mode "default"
+}
+
+bindsym $mod+Ctrl+Shift+m mode "mouse"
