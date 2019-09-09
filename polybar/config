@@ -10,7 +10,7 @@ alert = #bd2c40
 
 [bar/note-bot]
 monitor = eDP1
-height = 16
+height = 14
 fixed-center = true
 bottom = true
 background = ${colors.background}
@@ -19,8 +19,8 @@ padding-left = 2
 padding-right = 2
 module-margin-left = 2
 module-margin-right = 2
-font-0 = "NotoSansNerdFont:size=10;2"
-font-1 = "InconsolataLGCNerdFont:size=10;2"
+font-0 = "NotoSansNerdFont:size=8;2"
+font-1 = "InconsolataLGCNerdFont:size=8;2"
 modules-left = wireless-network wireless-ip
 modules-center = 
 modules-right = backlight memory batt volume keyboard
@@ -35,7 +35,7 @@ tray-padding = 2
 
 [bar/note-top]
 monitor = eDP1
-height = 18
+height = 16
 fixed-center = true
 bottom = false
 background = ${colors.background}
@@ -44,7 +44,7 @@ padding-left = 1
 padding-right = 1
 module-margin-left = 2
 module-margin-right = 2
-font-0 = "NotoSansNerdFont:size=10;2"
+font-0 = "NotoSansNerdFont:size=8;2"
 modules-left = i3 window-name
 modules-center =
 modules-right = calendar-date calendar-hour

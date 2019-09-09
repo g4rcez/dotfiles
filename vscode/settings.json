@@ -1,9 +1,10 @@
 {
+    "telemetry.enableTelemetry": false,
     "breadcrumbs.enabled": false,
     "cSpell.language": "en,pt,pt-BR,en-US",
     "editor.cursorBlinking": "smooth",
     "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "underline-thin",
+    "editor.cursorStyle": "line-thin",
     "editor.fontFamily": "Ligconsolata",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
@@ -16,7 +17,6 @@
     "files.autoSave": "afterDelay",
     "prettier.printWidth": 120,
     "prettier.tabWidth": 4,
-    "workbench.colorTheme": "Plastic",
     "workbench.iconTheme": "material-icon-theme",
     "files.watcherExclude": {
         "**/.git": true,
@@ -26,9 +26,17 @@
         "**/.DS_Store": true,
         "**/node_modules/**": true,
         "**/target/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/env/**": true,
+        "**/venv/**": true,
+        "env-*": true
     },
     "files.associations": {
-        "*.vm": "html"
+        "*.vm": "html",
+        "**/.i3/config": "i3",
+        "**/i3/config": "i3",
+        "**zshrc": "shellscript",
     },
     "files.exclude": {
         "**/.git": true,
@@ -41,7 +49,12 @@
         "**/.classpath": true,
         "**/.project": true,
         "**/.settings": true,
-        "**/.factorypath": true
+        "**/.factorypath": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/env/**": true,
+        "**/venv/**": true,
+        "env-*": true
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -56,7 +69,6 @@
     },
     "javascript.implicitProjectConfig.checkJs": true,
     "prettier.arrowParens": "always",
-    "prettier.stylelintIntegration": true,
     "prettier.useTabs": true,
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -71,7 +83,6 @@
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "prettier.tslintIntegration": true,
     "tslint.suppressWhileTypeErrorsPresent": true,
     "extensions.ignoreRecommendations": false,
     "javascript.preferences.importModuleSpecifier": "non-relative",
@@ -92,11 +103,28 @@
     "javascript.referencesCodeLens.enabled": true,
     "typescript.implementationsCodeLens.enabled": true,
     "typescript.referencesCodeLens.enabled": true,
-    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"C:\\Users\\Garcez\\.vscode\\extensions\\gabrielbb.vscode-lombok-0.9.8/server/lombok.jar\"",
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "window.zoomLevel": 0,
     "[css]": {
         "editor.defaultFormatter": "aeschli.vscode-css-formatter"
     },
+    "workbench.colorTheme": "Plastic",
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/env": true,
+        "**/venv": true
+    },
+    "tslint.jsEnable": true,
+    "tslint.packageManager": "yarn",
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "javascript.suggest.completeFunctionCalls": true,
+    "typescript.suggest.completeFunctionCalls": true,
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "underline"
 }
