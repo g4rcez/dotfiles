@@ -9,46 +9,50 @@ secondary = #e60053
 alert = #bd2c40
 
 [bar/note-bot]
-monitor = eDP1
-height = 14
-fixed-center = true
-bottom = true
 background = ${colors.background}
-foreground = ${colors.foreground}
-padding-left = 2
-padding-right = 2
-module-margin-left = 2
-module-margin-right = 2
+bottom = true
+cursor-click = pointer
+cursor-scroll = ns-resize
+fixed-center = true
 font-0 = "NotoSansNerdFont:size=8;2"
 font-1 = "InconsolataLGCNerdFont:size=8;2"
-modules-left = wireless-network wireless-ip
-modules-center = 
-modules-right = backlight memory batt volume keyboard
-override-redirect = false
-pseudo-transparency = true
-tray-position = right
-tray-detached = false
-tray-transparency = true
-tray-maxsize = 14
-tray-background = ${colors.background}
-tray-padding = 2
-
-[bar/note-top]
-monitor = eDP1
-height = 16
-fixed-center = true
-bottom = false
-background = ${colors.background}
 foreground = ${colors.foreground}
-padding-left = 1
-padding-right = 1
+height = 14
 module-margin-left = 2
 module-margin-right = 2
-font-0 = "NotoSansNerdFont:size=8;2"
-modules-left = i3 window-name
-modules-center =
-modules-right = calendar-date calendar-hour
+modules-center = 
+modules-left = wireless-network wireless-ip
+modules-right = backlight memory batt volume keyboard
+monitor = eDP1
 override-redirect = false
+padding-left = 2
+padding-right = 2
+pseudo-transparency = true
+tray-background = ${colors.background}
+tray-detached = false
+tray-maxsize = 14
+tray-padding = 2
+tray-position = right
+tray-transparency = true
+
+[bar/note-top]
+background = ${colors.background}
+bottom = false
+cursor-click = pointer
+cursor-scroll = ns-resize
+fixed-center = true
+font-0 = "NotoSansNerdFont:size=8;2"
+foreground = ${colors.foreground}
+height = 16
+module-margin-left = 2
+module-margin-right = 2
+modules-center =
+modules-left = i3 window-name
+modules-right = calendar-date calendar-hour
+monitor = eDP1
+override-redirect = false
+padding-left = 1
+padding-right = 1
 pseudo-transparency = true
 
 [module/xwindow]
@@ -190,11 +194,13 @@ margin-bottom = 0
 [module/i3]
 type = internal/i3
 pin-workspaces = true
-strip-wsnumbers = true
+strip-wsnumbers = false
 enable-scroll = true
 fuzzy-match = true
 format = <label-state> <label-mode>
 index-sort = true
+ws-num = 6
+show-all = true
 label-mode = %mode%
 label-mode-padding = 1
 label-focused = %icon%
