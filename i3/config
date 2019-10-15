@@ -24,7 +24,7 @@ bindsym $mod+n border normal
 exec --no-startup-id xset r rate 160 110
 
 # Polybar start
-exec_always --no-startup-id "killall -q polybar; polybar -r note-top&polybar -r note-bot"
+exec_always --no-startup-id "killall -q polybar; polybar note-top & polybar note-bot"
 
 font pango:"Cantarell" 11px
 
@@ -43,29 +43,30 @@ bindsym $mod+d kill
 bindsym $mod+z exec --no-startup-id morc_menu
 
 # Window configs
-title_align center
+title_align left
 workspace_layout default
-default_orientation horizontal
+default_orientation vertical
 popup_during_fullscreen smart
 
 ##################################################################################################
 #############################  Custom keybinds and config     ####################################
 ##################################################################################################
 
-# Flashwindow
+# Enable numlock
 exec_always --no-startup-id numlockx on
 
 # betterlockscreen
-exec --no-startup-id betterlockscreen -w dim
+# exec --no-startup-id betterlockscreen -w dim
 bindsym $mod+9 exec betterlockscreen -l dimblur
+exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen --nofork
 
 # Music and Audio config
 bindsym $mod+s exec "player next"
 bindsym $mod+$alt+Shift+R exec "i3-msg restart"
 bindsym $mod+w exec "player prev"
 bindsym $mod+Escape exec "player playPause"
-bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
-bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
+# bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
+# bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
 bindsym $mod+m exec --no-startup-id "amixer set 'Master' 0%"
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
@@ -84,6 +85,7 @@ bindsym Print exec --no-startup-id "flameshot gui"
 bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
 bindsym $mod+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
 bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
 bindsym $mod+F12 exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
 bindsym $mod+Shift+w exec --no-startup-id "python /home/garcez/dotfiles/rofi/rofi-menus/scripts/networkmenu.py"
 
@@ -92,17 +94,16 @@ bindsym $mod+Shift+w exec --no-startup-id "python /home/garcez/dotfiles/rofi/rof
 ################################################################################################
 
 exec --no-startup-id volumeicon
-bindsym $mod+Shift+m exec termite -e 'alsamixer'
+bindsym $mod+Shift+m exec kitty -e 'alsamixer'
 #exec --no-startup-id pulseaudio
 #exec --no-startup-id pa-applet
-#bindsym $mod+Ctrl+m exec pavucontrol
+# bindsym $mod+Ctrl+m exec pavucontrol
 
 ################################################################################################
 
 # Start Applications
-bindsym $mod+Ctrl+b exec termite -e 'bmenu'
+bindsym $mod+Ctrl+b exec kitty -e 'bmenu'
 bindsym $mod+F2 exec google-chrome-stable
-bindsym $mod+F3 exec ranger
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
@@ -113,18 +114,22 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 bindsym $mod+h focus left
+
 # split orientation
 bindsym $alt+Shift+h split h;exec notify-send 'Tile horizontally'
 bindsym $alt+Shift+v split v;exec notify-send 'Tile vertically'
-bindsym $alt+Shift+q split toggle
+bindsym $alt+Shift+q split toggle;exec notify-send 'Title toggle'
+
 # move focused window
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 bindsym $mod+Shift+h move left
+
 # Traditional keys for focus
-bindsym $alt+Tab focus right
-bindsym $alt+Shift+Tab focus left
+# bindsym $alt+Tab focus right
+# bindsym $alt+Shift+Tab focus left
+
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
@@ -141,7 +146,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-# bindsym $mod+space focus mode_toggle
+bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
@@ -231,9 +236,6 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
 # Set shut down, restart and locking features
 bindsym $mod+0 mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
@@ -253,10 +255,10 @@ mode "$mode_system" {
 # Resize window (you can also use the mouse for that)
 bindsym $mod+r mode "resize"
 mode "resize" {
-        bindsym j resize shrink width 5 px or 5 ppt
-        bindsym k resize grow height 5 px or 5 ppt
-        bindsym l resize shrink height 5 px or 5 ppt
-        bindsym semicolon resize grow width 5 px or 5 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
@@ -268,11 +270,11 @@ mode "resize" {
 }
 
 # Autostart applications
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1;
-exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id "compton -cbf"
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id nm-applet
 # exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
@@ -300,42 +302,38 @@ set_from_resource $term_color15    color15
 #############################
 
 # Set inner/outer gaps
-gaps inner 5
-gaps outer -5
-
-# Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
-# gaps inner|outer current|all set|plus|minus <px>
-# gaps inner all set 10
-# gaps outer all plus 5
+gaps inner 2
+gaps outer -2
 
 # Smart gaps (gaps used if only more than one container on the workspace)
 smart_gaps on
 
 # bar {
-#     height 15
-#     status_command i3status -c ~/.i3status.conf
-#     strip_workspace_numbers no
-#     separator_symbol |
-#     workspace_buttons no
-#     modifier Mod1
-#     mode dock
-#     tray_output primary
 #     font pango: NotoSans,Icons 8
-#     colors {
-#         separator  #eeeeee
-#         background #000000
-#         statusline #eeeeee #border  backgr.  text
-#         focused_workspace  $color1 $000000 $color1
-#         inactive_workspace #eeeeee #000000 #eeeeee
-#         urgent_workspace   #1bb2f2 #000000 #1bb2f2
-#     }
+# 	position top
+# 	mode dock
+#     height 13
+# 	position top
+# 	mode dock
+#     tray_output primary
+#     status_command i3status
+#     separator_symbol\ 
+#     workspace_buttons yes
+#     modifier Mod1
+#     # colors {
+#     #     separator  #eeeeee
+#     #     background #000000
+#     #     statusline #eeeeee #border  backgr.  text
+#     #     focused_workspace  $color1 $000000 $color1
+#     #     inactive_workspace #eeeeee #000000 #eeeeee
+#     #     urgent_workspace   #1bb2f2 #000000 #1bb2f2
+#     # }
 # }
 
 # Mouse movement
+bindsym $mod+Ctrl+Shift+m mode "mouse"
 mode "mouse" {
-
 	# set your three speeds here
-
 	set $slow 10
 	set $quick 10
 	set $fast 10
@@ -346,42 +344,36 @@ mode "mouse" {
 	bindsym d exec xdotool mousemove_relative $slow 0
 
 	# Mouse movement (slow/fine-tuned) -- vim keybindings
-
 	bindsym h exec xdotool mousemove_relative -- -$slow 0
 	bindsym j exec xdotool mousemove_relative 0 $slow
 	bindsym k exec xdotool mousemove_relative -- 0 -$slow
 	bindsym l exec xdotool mousemove_relative $slow 0
 
 	# Mouse movement (slow/fine-tuned) -- arrow keys
-
 	bindsym Left exec xdotool mousemove_relative -- -$slow 0
 	bindsym Down exec xdotool mousemove_relative 0 $slow
 	bindsym Up exec xdotool mousemove_relative -- 0 -$slow
 	bindsym Right exec xdotool mousemove_relative $slow 0
 
 	# Mouse movement (quicker) -- vim keybindings
-
 	bindsym Shift+h exec xdotool mousemove_relative -- -$quick 0
 	bindsym Shift+j exec xdotool mousemove_relative 0 $quick
 	bindsym Shift+k exec xdotool mousemove_relative -- 0 -$quick
 	bindsym Shift+l exec xdotool mousemove_relative $quick 0
 
 	# Mouse movement (quicker) -- arrow keys
-
 	bindsym Shift+Left exec xdotool mousemove_relative -- -$quick 0
 	bindsym Shift+Down exec xdotool mousemove_relative 0 $quick
 	bindsym Shift+Up exec xdotool mousemove_relative -- 0 -$quick
 	bindsym Shift+Right exec xdotool mousemove_relative $quick 0
 
 	# Mouse movement (fast) -- vim keybindings
-
 	bindsym Shift+$mod2+h exec xdotool mousemove_relative -- -$fast 0
 	bindsym Shift+$mod2+j exec xdotool mousemove_relative 0 $fast
 	bindsym Shift+$mod2+k exec xdotool mousemove_relative -- 0 -$fast
 	bindsym Shift+$mod2+l exec xdotool mousemove_relative $fast 0
 
 	# Mouse movement (fast) -- arrow keys
-
 	bindsym Shift+$mod2+Left exec xdotool mousemove_relative -- -$fast 0
 	bindsym Shift+$mod2+Down exec xdotool mousemove_relative 0 $fast
 	bindsym Shift+$mod2+Up exec xdotool mousemove_relative -- 0 -$fast
@@ -413,10 +405,6 @@ mode "mouse" {
 
 	# Right Drag release
 	# bindsym $mod2+s exec xdotool mouseup 3
-
-
 	# return to normal keybindings -- IMPORTANT!!
 	bindsym Escape mode "default"
 }
-
-bindsym $mod+Ctrl+Shift+m mode "mouse"

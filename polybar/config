@@ -1,6 +1,6 @@
 [colors]
 yellow = #f8c113
-background = #121212
+background = #151515
 background-alt = #444
 foreground = #bbb
 foreground-alt = #555
@@ -17,23 +17,22 @@ fixed-center = true
 font-0 = "NotoSansNerdFont:size=8;2"
 font-1 = "InconsolataLGCNerdFont:size=8;2"
 foreground = ${colors.foreground}
-height = 14
-module-margin-left = 2
-module-margin-right = 2
+height = 15
+module-margin-left = 1
+module-margin-right = 1
 modules-center = 
 modules-left = wireless-network wireless-ip
-modules-right = backlight memory batt volume keyboard
+modules-right = backlight batt keyboard 
 monitor = eDP1
 override-redirect = false
-padding-left = 2
-padding-right = 2
+padding-left = 1
+padding-right = 1
 pseudo-transparency = true
 tray-background = ${colors.background}
 tray-detached = false
 tray-maxsize = 14
 tray-padding = 2
 tray-position = right
-tray-transparency = true
 
 [bar/note-top]
 background = ${colors.background}
@@ -43,24 +42,23 @@ cursor-scroll = ns-resize
 fixed-center = true
 font-0 = "NotoSansNerdFont:size=8;2"
 foreground = ${colors.foreground}
-height = 16
+height = 15
 module-margin-left = 2
 module-margin-right = 2
+modules-left = i3 xwindow
 modules-center =
-modules-left = i3 window-name
 modules-right = calendar-date calendar-hour
 monitor = eDP1
 override-redirect = false
 padding-left = 1
 padding-right = 1
-pseudo-transparency = true
 
 [module/xwindow]
 type = internal/xwindow
 format = <label>
-format-padding = 4
+format-padding = 1
 label = %title%
-label-maxlen = 50
+label-maxlen = 75
 label-empty = VandalOS
 label-empty-foreground = #707880
 
@@ -103,36 +101,6 @@ label-indicator-off-numlock = 
 label-indicator-on-scrolllock =
 label-indicator-off-scrolllock =
 
-[settings]
-screenchange-reload = true
-compositing-background = source
-compositing-border = over
-
-[module/memory]
-type = internal/memory
-format = <label> 
-label =  %gb_used%/%gb_total%
-;bar-used-width = 15
-;bar-used-foreground-0 = #aaff77
-;bar-used-foreground-1 = #aaff77
-;bar-used-foreground-2 = #fba922
-;bar-used-foreground-3 = #ff5555
-;bar-used-indicator = |
-;bar-used-indicator-font = 6
-;bar-used-indicator-foreground = #ff
-;bar-used-fill = 
-;bar-used-fill-font = 6
-;bar-used-empty = 
-;bar-used-empty-font = 6
-;bar-used-empty-foreground = #444444
-
-[module/window-name]
-type = custom/script
-exec = bash /home/garcez/dotfiles/polybar/scripts/xwindow.sh
-click-middle = xdotool getactivewindow windowkill
-interval = 1
-format-prefix-foreground = ${colors.foreground}
-
 [module/wireless-network]
 type = internal/network
 interface = wlp2s0
@@ -145,19 +113,11 @@ interface = wlp2s0
 format-connected =   <label-connected>
 label-connected = %local_ip%
 
-[module/wifi-mod]
-type = custom/script
-click-left = nm-connection-editor
-exec = bash /home/garcez/dotfiles/polybar/scripts/wifi.sh
-interval = 1
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground}
-
 [module/batt]
 type = custom/script
 click-left = xfce4-power-manager-settings
 exec = upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep percentage | sed 's/[^0-9%]*//g'
-interval = 5
+interval = 60
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
 
@@ -165,14 +125,14 @@ format-prefix-foreground = ${colors.foreground}
 type = custom/script
 exec = date +"%Y-%m-%d"
 format-prefix = "  "
-interval = 10
+interval = 60
 click-left = orage
 
 [module/calendar-hour]
 type = custom/script
 exec = date +"%H:%M"
 format-prefix = "  "
-interval = 10
+interval = 30
 click-left = orage
 
 [module/backlight]
@@ -194,7 +154,7 @@ margin-bottom = 0
 [module/i3]
 type = internal/i3
 pin-workspaces = true
-strip-wsnumbers = false
+strip-wsnumbers = true
 enable-scroll = true
 fuzzy-match = true
 format = <label-state> <label-mode>
@@ -219,11 +179,22 @@ label-urgent-background = ${colors.primary}
 label-urgent-foreground = ${colors.background}
 label-visible = %name%
 label-visible-padding = 2
-ws-icon-0 = "1; Web"
-ws-icon-1 = "2; Code"
-ws-icon-2 = "3; CLI"
-ws-icon-3 = "4; Media"
-ws-icon-4 = "5; Files"
-ws-icon-5 = "6; Others"
+ws-icon-0 = "1;"
+ws-icon-1 = "2;"
+ws-icon-2 = "3;"
+ws-icon-3 = "4;"
+ws-icon-4 = "5;"
+ws-icon-5 = "6;"
+
+[settings]
+compositing-background = over
+compositing-border = over
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+screenchange-reload = true
+throttle-output-for = 10
+throttle-input-for = 30
+throttle-output = 5
 
 ; vim:ft=dosini

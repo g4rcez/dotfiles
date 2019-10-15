@@ -7,10 +7,10 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
-  compleat
+  z
   git
   github
-  z
+  compleat
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -31,8 +31,6 @@ export ARCHFLAGS="-arch x86_64"
 . $HOME/.asdf/asdf.sh
 
 . $HOME/.asdf/completions/asdf.bash
-
-export PATH=$PATH:$HOME/.bin/VSCode-linux-x64
 
 export SDKMAN_DIR="/home/garcez/.sdkman"
 [[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
@@ -68,13 +66,13 @@ alias tags='git tag | sort -V'
 alias tag='git tag'
 
 # Alias Tools
-alias icat="kitty +kitten icat --silent"
-alias alfred="/home/garcez/Workspace/alfred/cli/index.js"
-alias kali="docker run -t -v /home/garcez/.bin/kali -i kalilinux/kali-linux-docker /bin/bash"
+# alias icat="kitty +kitten icat --silent"
+# alias alfred="/home/garcez/Workspace/alfred/cli/index.js"
+# alias kali="docker run -t -v /home/garcez/.bin/kali -i kalilinux/kali-linux-docker /bin/bash"
 
 autoload -Uz compinit
 compinit
-kitty + complete setup zsh | source /dev/stdin
+# kitty + complete setup zsh | source /dev/stdin
 
 function memory(){
 	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -90,7 +88,7 @@ function clonecd(){
 }
 
 function sysinfo(){
-	ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=30"
+	ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
 }
 
 autoload -Uz compinit
@@ -150,3 +148,5 @@ ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

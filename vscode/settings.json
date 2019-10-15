@@ -1,10 +1,10 @@
 {
-    "telemetry.enableTelemetry": false,
+    "telemetry.enableTelemetry": true,
     "breadcrumbs.enabled": false,
     "cSpell.language": "en,pt,pt-BR,en-US",
     "editor.cursorBlinking": "smooth",
     "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "line-thin",
+    "editor.cursorStyle": "underline",
     "editor.fontFamily": "Ligconsolata",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
@@ -14,8 +14,7 @@
     "editor.snippetSuggestions": "inline",
     "editor.suggest.localityBonus": true,
     "editor.suggest.shareSuggestSelections": true,
-    "files.autoSave": "afterDelay",
-    "prettier.printWidth": 120,
+    "prettier.printWidth": 150,
     "prettier.tabWidth": 4,
     "workbench.iconTheme": "material-icon-theme",
     "files.watcherExclude": {
@@ -94,7 +93,6 @@
     },
     "terminal.integrated.lineHeight": 1.5,
     "editor.wordWrapColumn": 120,
-    "editor.fontSize": 16,
     "editor.stablePeek": true,
     "editor.tabCompletion": "on",
     "workbench.editor.highlightModifiedTabs": true,
@@ -108,7 +106,7 @@
     "[css]": {
         "editor.defaultFormatter": "aeschli.vscode-css-formatter"
     },
-    "workbench.colorTheme": "Plastic",
+    "workbench.colorTheme": "Afrodite",
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -126,5 +124,10 @@
     "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
     "terminal.integrated.fontSize": 12,
     "terminal.integrated.cursorBlinking": true,
-    "terminal.integrated.cursorStyle": "underline"
+    "terminal.integrated.cursorStyle": "underline",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "editor.lineHeight": 22,
+    "window.menuBarVisibility": "toggle",
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 16
 }
