@@ -35,9 +35,6 @@ current_env() {
     if [[ -e "./pom.xml" ]]; then
         echo -n "%{$fg_bold[yellow]%}\ue738 $(javac -version 2>&1 | head -1 | tr -d '\n\t\r '|sed 's/[^0-9.]//g')%{$reset_color%} "
     fi
-    if [[ "$(ls | grep -i docker)" != "" ]]; then
-        echo -n "%{$fg_bold[blue]%}\uf308 $(docker --version | cut -d ' ' -f3 | tr -d ',')%{$reset_color%} "
-    fi
     if [[ -e "./Program.cs" ]]; then
         echo -n "%{$fg_bold[cyan]%}\ue77f $(dotnet --version)%{$reset_color%} "
     fi

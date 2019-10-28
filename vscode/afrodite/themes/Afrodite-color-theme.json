@@ -5,7 +5,7 @@
 		"activityBar.background": "#21232c",
 		"activityBar.foreground": "#f6f6f4",
 		"activityBar.inactiveForeground": "#7b7f8b",
-		"activityBarBadge.background": "#ec329c",
+		"activityBarBadge.background": "#20b41b",
 		"activityBarBadge.foreground": "#f6f6f4",
 		"badge.background": "#44475a",
 		"badge.foreground": "#f6f6f4",
@@ -287,100 +287,76 @@
 	},
 	"tokenColors": [
 		{
-			"scope": [
-				"emphasis"
-			],
+			"scope": "emphasis",
 			"settings": {
 				"fontStyle": "bold"
 			}
 		},
 		{
-			"scope": [
-				"strong"
-			],
+			"scope": "strong",
 			"settings": {
 				"fontStyle": "bold"
 			}
 		},
 		{
-			"scope": [
-				"header"
-			],
+			"scope": "header",
 			"settings": {
 				"foreground": "#bf9eee"
 			}
 		},
 		{
-			"scope": [
-				"source"
-			],
+			"scope": "source",
 			"settings": {
 				"foreground": "#f6f6f4"
 			}
 		},
 		{
-			"scope": [
-				"meta.diff",
-				"meta.diff.header"
-			],
+			"scope": "meta.diff",
+			"meta.diff.header",
 			"settings": {
 				"foreground": "#7b7f8b"
 			}
 		},
 		{
-			"scope": [
-				"markup.inserted"
-			],
+			"scope": "markup.inserted",
 			"settings": {
 				"foreground": "#62e884"
 			}
 		},
 		{
-			"scope": [
-				"markup.deleted"
-			],
+			"scope": "markup.deleted",
 			"settings": {
 				"foreground": "#ee6666"
 			}
 		},
 		{
-			"scope": [
-				"markup.changed"
-			],
+			"scope": "markup.changed",
 			"settings": {
 				"foreground": "#FFB86C"
 			}
 		},
 		{
-			"scope": [
-				"invalid"
-			],
+			"scope": "invalid",
 			"settings": {
 				"foreground": "#ee6666",
 				"fontStyle": "underline bold"
 			}
 		},
 		{
-			"scope": [
-				"invalid.deprecated"
-			],
+			"scope": "invalid.deprecated",
 			"settings": {
 				"foreground": "#f6f6f4",
 				"fontStyle": "underline bold"
 			}
 		},
 		{
-			"scope": [
-				"entity.name.filename"
-			],
+			"scope": "entity.name.filename",
 			"settings": {
 				"foreground": "#ffc548"
 			}
 		},
 		{
-			"scope": [
-				"markup.error"
-			],
+			"scope": "markup.error",
 			"settings": {
 				"foreground": "#ee6666"
 			}
@@ -396,9 +372,7 @@
 		},
 		{
 			"name": "Bold markup",
-			"scope": [
-				"markup.bold"
-			],
+			"scope": "markup.bold",
 			"settings": {
 				"fontStyle": "bold",
 				"foreground": "#FFB86C"
@@ -1248,9 +1222,22 @@
 				"string.quoted",
 				"string.interpolated",
 				"punctuation.definition.string",
+				"punctuation.definition.string.begin",
+				"punctuation.definition.string.end",
 			],
 			"settings": {
 				"fontStyle": "bold italic"
+			}
+		},
+		{
+			"scope": [
+				"keyword.control.flow",
+				"keyword.control",
+				"storage.type",
+				"keyword.operator.logical"
+			],
+			"settings": {
+				"fontStyle": "bold"
 			}
 		}
 	]

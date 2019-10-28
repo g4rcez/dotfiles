@@ -1,5 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# Path to your oh-my-zsh installation.
 export ZSH="/home/garcez/.oh-my-zsh"
 export TERM=xterm-color
 ZSH_THEME="vandalvnl"

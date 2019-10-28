@@ -73,21 +73,20 @@
         "command": "toggleVim"
     },
     {
-        "key": "ctrl+abnt_c1",
-        "command": "editor.action.commentLine",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-        "key": "ctrl+oem_2",
-        "command": "editor.action.commentLine",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    {
         "key": "ctrl+k ctrl+enter",
         "command": "workbench.action.keepEditor"
     },
     {
         "key": "ctrl+k enter",
         "command": "-workbench.action.keepEditor"
+    },
+    {
+        "key": "ctrl+shift+s",
+        "command": "editor.action.sortLinesAscending"
+    },
+    {
+        "key": "alt+enter",
+        "command": "editor.action.quickFix",
+        "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
     },
 ]

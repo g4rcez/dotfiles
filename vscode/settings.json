@@ -1,133 +1,145 @@
 {
-    "telemetry.enableTelemetry": true,
-    "breadcrumbs.enabled": false,
-    "cSpell.language": "en,pt,pt-BR,en-US",
-    "editor.cursorBlinking": "smooth",
-    "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "underline",
-    "editor.fontFamily": "Ligconsolata",
-    "editor.fontLigatures": true,
-    "editor.minimap.enabled": false,
-    "editor.parameterHints.cycle": true,
-    "editor.scrollBeyondLastLine": false,
-    "editor.smoothScrolling": true,
-    "editor.snippetSuggestions": "inline",
-    "editor.suggest.localityBonus": true,
-    "editor.suggest.shareSuggestSelections": true,
-    "prettier.printWidth": 150,
-    "prettier.tabWidth": 4,
-    "workbench.iconTheme": "material-icon-theme",
-    "files.watcherExclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/node_modules/**": true,
-        "**/target/**": true,
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/env/**": true,
-        "**/venv/**": true,
-        "env-*": true
-    },
-    "files.associations": {
-        "*.vm": "html",
-        "**/.i3/config": "i3",
-        "**/i3/config": "i3",
-        "**zshrc": "shellscript",
-    },
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/node_modules/**": true,
-        "**/target/**": true,
-        "**/.classpath": true,
-        "**/.project": true,
-        "**/.settings": true,
-        "**/.factorypath": true,
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/env/**": true,
-        "**/venv/**": true,
-        "env-*": true
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "files.autoSaveDelay": 1350,
-    "material-icon-theme.activeIconPack": "react_redux",
-    "material-icon-theme.hidesExplorerArrows": true,
-    "workbench.tree.renderIndentGuides": "none",
-    "workbench.useExperimentalGridLayout": true,
-    "[javascript]": {
+    "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "breadcrumbs.enabled": false,
+    "color-highlight.markerType": "underline",
+    "cSpell.language": "en,pt,pt_BR",
+    "editor.accessibilitySupport": "off",
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorStyle": "underline-thin",
+    "editor.fontLigatures": true,
+    "editor.gotoLocation.multiple": "goto",
+    "editor.minimap.enabled": false,
+    "editor.parameterHints.cycle": true,
+    "editor.renderControlCharacters": true,
+    "editor.renderLineHighlight": "gutter",
+    "editor.renderWhitespace": "boundary",
+    "editor.scrollBeyondLastLine": false,
+    "editor.smoothScrolling": true,
+    "editor.stablePeek": true,
+    "editor.suggest.localityBonus": true,
+    "editor.suggest.maxVisibleSuggestions": 10,
+    "editor.suggest.shareSuggestSelections": true,
+    "editor.tabCompletion": "on",
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
+    "editor.wordWrapColumn": 150,
+    "emmet.triggerExpansionOnTab": true,
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "**/node_modules/**": true
+    },
     "javascript.implicitProjectConfig.checkJs": true,
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "javascript.referencesCodeLens.enabled": true,
+    "javascript.suggest.completeFunctionCalls": true,
+    "material-icon-theme.activeIconPack": "react_redux",
     "prettier.arrowParens": "always",
+    "prettier.printWidth": 150,
+    "prettier.requireConfig": true,
+    "prettier.tabWidth": 4,
     "prettier.useTabs": true,
+    "references.preferredLocation": "view",
+    "tslint.jsEnable": true,
+    "typescript.implementationsCodeLens.enabled": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "typescript.suggest.completeFunctionCalls": true,
+    "workbench.colorTheme": "Afrodite",
+    "workbench.editor.labelFormat": "short",
+    "workbench.editor.tabSizing": "shrink",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.tree.indent": 4,
+    "workbench.tree.renderIndentGuides": "none",
+    "editor.fontFamily": "'Ligconsolata'",
+    "git.autofetch": true,
+    "terminal.external.linuxExec": "konsole",
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "terminal.integrated.rendererType": "dom",
-    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
-    "[typescriptreact]": {
+    "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "tslint.suppressWhileTypeErrorsPresent": true,
-    "extensions.ignoreRecommendations": false,
-    "javascript.preferences.importModuleSpecifier": "non-relative",
-    "javascript.preferences.quoteStyle": "double",
-    "typescript.preferences.importModuleSpecifier": "non-relative",
-    "typescript.preferences.quoteStyle": "double",
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "terminal.integrated.lineHeight": 1.5,
-    "editor.wordWrapColumn": 120,
-    "editor.stablePeek": true,
-    "editor.tabCompletion": "on",
-    "workbench.editor.highlightModifiedTabs": true,
-    "workbench.editor.tabSizing": "shrink",
-    "emmet.triggerExpansionOnTab": true,
-    "javascript.referencesCodeLens.enabled": true,
-    "typescript.implementationsCodeLens.enabled": true,
-    "typescript.referencesCodeLens.enabled": true,
-    "editor.suggestSelection": "first",
-    "window.zoomLevel": 0,
-    "[css]": {
-        "editor.defaultFormatter": "aeschli.vscode-css-formatter"
+    "vim.easymotion": true,
+    "vim.sneak": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "<C-w>",
+            ],
+            "after": [],
+            "commands": [
+                "workbench.action.terminal.deleteWordLeft"
+            ]
+        },
+        {
+            "before": [
+                "j",
+                "j"
+            ],
+            "after": [
+                "<Esc>"
+            ],
+        },
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<C-w>",
+            ],
+            "after": [],
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "<leader>",
+            ],
+            "after": [],
+            "commands": [
+                "editor.action.formatDocument",
+                "editor.action.organizeImports",
+                "editor.action.formatDocument",
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "d"
+            ],
+            "after": [
+                "d",
+                "d"
+            ]
+        },
+    ],
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-c>": false,
+        "<C-v>": false,
+        "<C-o>": false,
+        "<C-k>": false,
+        "<C-j>": false,
+        "<C-p>": false,
+        "<C-d>": false,
+        "<C-r>": false,
+        "<C-h>": false,
+        "<C-b>": false,
+        "<C-e>": false,
+        "<C-f>": false
     },
-    "workbench.colorTheme": "Afrodite",
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/bower_components": true,
-        "**/env": true,
-        "**/venv": true
-    },
-    "tslint.jsEnable": true,
-    "tslint.packageManager": "yarn",
-    "javascript.implicitProjectConfig.experimentalDecorators": true,
-    "javascript.suggest.completeFunctionCalls": true,
-    "typescript.suggest.completeFunctionCalls": true,
-    "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
-    "terminal.integrated.fontSize": 12,
-    "terminal.integrated.cursorBlinking": true,
-    "terminal.integrated.cursorStyle": "underline",
-    "liveServer.settings.donotShowInfoMsg": true,
-    "editor.lineHeight": 22,
-    "window.menuBarVisibility": "toggle",
-    "files.autoSave": "afterDelay",
     "editor.fontSize": 16
 }
