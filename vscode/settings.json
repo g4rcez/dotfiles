@@ -5,7 +5,7 @@
     "editor.accessibilitySupport": "off",
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "underline-thin",
+    "editor.cursorStyle": "underline",
     "editor.fontFamily": "'Ligconsolata'",
     "editor.fontLigatures": true,
     "editor.fontSize": 16,
@@ -25,7 +25,6 @@
     "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
     "editor.wordWrapColumn": 150,
     "emmet.triggerExpansionOnTab": true,
-    "files.autoSave": "afterDelay",
     "git.autofetch": true,
     "javascript.implicitProjectConfig.checkJs": true,
     "javascript.implicitProjectConfig.experimentalDecorators": true,
@@ -43,88 +42,12 @@
     "typescript.implementationsCodeLens.enabled": true,
     "typescript.referencesCodeLens.enabled": true,
     "typescript.suggest.completeFunctionCalls": true,
-    "vim.easymotion": true,
-    "vim.hlsearch": true,
-    "vim.incsearch": true,
-    "vim.leader": "<space>",
-    "vim.sneak": true,
-    "vim.useCtrlKeys": true,
-    "vim.useSystemClipboard": true,
     "workbench.colorTheme": "Afrodite",
     "workbench.editor.labelFormat": "short",
     "workbench.editor.tabSizing": "shrink",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.tree.indent": 4,
     "workbench.tree.renderIndentGuides": "none",
-    "vim.insertModeKeyBindings": [
-        {
-            "before": [
-                "<C-w>",
-            ],
-            "after": [],
-            "commands": [
-                "workbench.action.terminal.deleteWordLeft"
-            ]
-        },
-        {
-            "before": [
-                "j",
-                "j"
-            ],
-            "after": [
-                "<Esc>"
-            ],
-        },
-    ],
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<C-w>",
-            ],
-            "after": [],
-            "commands": [
-                "workbench.action.closeActiveEditor"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "<leader>",
-            ],
-            "after": [],
-            "commands": [
-                "editor.action.formatDocument",
-                "editor.action.organizeImports",
-                "editor.action.formatDocument",
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "d"
-            ],
-            "after": [
-                "d",
-                "d"
-            ]
-        },
-    ],
-    "vim.handleKeys": {
-        "<C-a>": false,
-        "<C-c>": false,
-        "<C-v>": false,
-        "<C-o>": false,
-        "<C-k>": false,
-        "<C-j>": false,
-        "<C-p>": false,
-        "<C-x>": false,
-        "<C-d>": false,
-        "<C-r>": false,
-        "<C-h>": false,
-        "<C-b>": false,
-        "<C-e>": false,
-        "<C-f>": false
-    },
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -143,4 +66,98 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "eslint.options": {
+        "rules": {
+            "react/jsx-props-no-spreading": "off",
+            "operator-linebreak": "off",
+            "camelcase": "warn",
+            "prefer-destructuring": "warn",
+            "no-console": "off",
+            "object-curly-newline": "off",
+            "no-underscore-dangle": "off",
+            "react/jsx-one-expression-per-line": "off",
+            "comma-dangle": "off",
+            "react/jsx-indent-props": "off",
+            "indent": [
+                "warn",
+                "tab"
+            ],
+            "quotes": [
+                "error",
+                "double"
+            ],
+            "semi": [
+                "error",
+                "always"
+            ],
+            "react/sort-comp": "off",
+            "react/prop-types": "warn",
+            "react/jsx-filename-extension": "off",
+            "no-tabs": "off",
+            "max-len": [
+                "warn",
+                150,
+                4
+            ],
+            "indent": "off",
+            "react/destructuring-assignment": "off",
+            "implicit-arrow-linebreak": "off",
+            "react/jsx-indent": [
+                "warn",
+                "tab",
+                {
+                    "checkAttributes": true,
+                    "indentLogicalExpressions": false
+                }
+            ],
+            "class-methods-use-this": [
+                "error",
+                {
+                    "exceptMethods": [
+                        "render",
+                        "getInitialState",
+                        "getDefaultProps",
+                        "getChildContext",
+                        "componentWillMount",
+                        "UNSAFE_componentWillMount",
+                        "componentDidMount",
+                        "componentWillReceiveProps",
+                        "UNSAFE_componentWillReceiveProps",
+                        "shouldComponentUpdate",
+                        "componentWillUpdate",
+                        "UNSAFE_componentWillUpdate",
+                        "componentDidUpdate",
+                        "componentWillUnmount",
+                        "componentDidCatch",
+                        "getSnapshotBeforeUpdate"
+                    ]
+                }
+            ]
+        }
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.experimental.incrementalSync": true,
+    "eslint.lintTask.enable": true,
+    "eslint.packageManager": "yarn",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "autoFix": true,
+            "language": "typescript"
+        },
+        {
+            "autoFix": true,
+            "language": "typescriptreact"
+        }
+    ],
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "window.zoomLevel": 0,
+    "files.autoSave": "afterDelay",
 }
