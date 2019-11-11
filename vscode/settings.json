@@ -1,15 +1,14 @@
 {
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "breadcrumbs.enabled": false,
-    "color-highlight.markerType": "underline",
     "cSpell.language": "en,pt,pt_BR",
+    "color-highlight.markerType": "underline",
     "editor.accessibilitySupport": "off",
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
     "editor.cursorStyle": "underline-thin",
+    "editor.fontFamily": "'Ligconsolata'",
     "editor.fontLigatures": true,
+    "editor.fontSize": 16,
     "editor.gotoLocation.multiple": "goto",
     "editor.minimap.enabled": false,
     "editor.parameterHints.cycle": true,
@@ -34,6 +33,7 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
+    "git.autofetch": true,
     "javascript.implicitProjectConfig.checkJs": true,
     "javascript.implicitProjectConfig.experimentalDecorators": true,
     "javascript.referencesCodeLens.enabled": true,
@@ -45,107 +45,21 @@
     "prettier.tabWidth": 4,
     "prettier.useTabs": true,
     "references.preferredLocation": "view",
+    "terminal.external.linuxExec": "konsole",
     "tslint.jsEnable": true,
     "typescript.implementationsCodeLens.enabled": true,
     "typescript.referencesCodeLens.enabled": true,
     "typescript.suggest.completeFunctionCalls": true,
+    "vim.leader": "<space>",
+    "vim.sneak": true,
+    "vim.useCtrlKeys": true,
+    "vim.useSystemClipboard": true,
     "workbench.colorTheme": "Afrodite",
     "workbench.editor.labelFormat": "short",
     "workbench.editor.tabSizing": "shrink",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.tree.indent": 4,
     "workbench.tree.renderIndentGuides": "none",
-    "editor.fontFamily": "'Ligconsolata'",
-    "git.autofetch": true,
-    "terminal.external.linuxExec": "konsole",
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "vim.easymotion": true,
-    "vim.sneak": true,
-    "vim.incsearch": true,
-    "vim.useSystemClipboard": true,
-    "vim.useCtrlKeys": true,
-    "vim.hlsearch": true,
-    "vim.insertModeKeyBindings": [
-        {
-            "before": [
-                "<C-w>",
-            ],
-            "after": [],
-            "commands": [
-                "workbench.action.terminal.deleteWordLeft"
-            ]
-        },
-        {
-            "before": [
-                "j",
-                "j"
-            ],
-            "after": [
-                "<Esc>"
-            ],
-        },
-    ],
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<C-w>",
-            ],
-            "after": [],
-            "commands": [
-                "workbench.action.closeActiveEditor"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "<leader>",
-            ],
-            "after": [],
-            "commands": [
-                "editor.action.formatDocument",
-                "editor.action.organizeImports",
-                "editor.action.formatDocument",
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "d"
-            ],
-            "after": [
-                "d",
-                "d"
-            ]
-        },
-    ],
-    "vim.leader": "<space>",
-    "vim.handleKeys": {
-        "<C-a>": false,
-        "<C-c>": false,
-        "<C-v>": false,
-        "<C-o>": false,
-        "<C-k>": false,
-        "<C-j>": false,
-        "<C-p>": false,
-        "<C-d>": false,
-        "<C-r>": false,
-        "<C-h>": false,
-        "<C-b>": false,
-        "<C-e>": false,
-        "<C-f>": false
-    },
-    "editor.fontSize": 16,
     "python.jediEnabled": false,
     "cSpell.enabledLanguageIds": [
         "asciidoc",
@@ -187,5 +101,20 @@
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "[css]": {
         "editor.defaultFormatter": "aeschli.vscode-css-formatter"
-    }
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
 }
