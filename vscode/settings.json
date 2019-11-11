@@ -28,7 +28,11 @@
     "emmet.triggerExpansionOnTab": true,
     "files.autoSave": "afterDelay",
     "files.exclude": {
-        "**/node_modules/**": true
+        "**/node_modules/**": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
     },
     "javascript.implicitProjectConfig.checkJs": true,
     "javascript.implicitProjectConfig.experimentalDecorators": true,
@@ -141,5 +145,47 @@
         "<C-e>": false,
         "<C-f>": false
     },
-    "editor.fontSize": 16
+    "editor.fontSize": 16,
+    "python.jediEnabled": false,
+    "cSpell.enabledLanguageIds": [
+        "asciidoc",
+        "c",
+        "cpp",
+        "csharp",
+        "css",
+        "git-commit",
+        "go",
+        "handlebars",
+        "haskell",
+        "html",
+        "jade",
+        "java",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "jsonc",
+        "latex",
+        "less",
+        "markdown",
+        "php",
+        "plaintext",
+        "pug",
+        "restructuredtext",
+        "rust",
+        "scala",
+        "scss",
+        "text",
+        "typescript",
+        "typescriptreact",
+        "yaml",
+        "yml"
+    ],
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "[css]": {
+        "editor.defaultFormatter": "aeschli.vscode-css-formatter"
+    }
 }
