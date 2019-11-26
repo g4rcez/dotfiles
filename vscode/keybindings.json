@@ -70,7 +70,7 @@
     },
     {
         "key": "shift+f12",
-        "command": "toggleVim"
+        "command": "workbench.action.terminal.toggleTerminal"
     },
     {
         "key": "ctrl+k ctrl+enter",

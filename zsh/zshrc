@@ -1,4 +1,4 @@
-export ZSH="/home/garcez/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 export TERM=xterm-color
 ZSH_THEME="vandalvnl"
 ENABLE_CORRECTION="true"
@@ -30,8 +30,8 @@ export ARCHFLAGS="-arch x86_64"
 
 . $HOME/.asdf/completions/asdf.bash
 
-export SDKMAN_DIR="/home/garcez/.sdkman"
-[[ -s "/home/garcez/.sdkman/bin/sdkman-init.sh" ]] && source "/home/garcez/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/dotfiles/bin
@@ -51,6 +51,12 @@ alias df='df -h'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
+alias downloads="cd $HOME/Downloads"
+alias Downloads="cd $HOME/Downloads"
+alias Documents="cd $HOME/Documents"
+alias documents="cd $HOME/Documents"
+alias work="cd $HOME/Workspace"
+alias Work="cd $HOME/Workspace"
 
 # For MacOS fanboys
 alias pbcopy='xclip -sel clip'
@@ -63,14 +69,8 @@ alias push='git push -u'
 alias tags='git tag | sort -V'
 alias tag='git tag'
 
-# Alias Tools
-# alias icat="kitty +kitten icat --silent"
-# alias alfred="/home/garcez/Workspace/alfred/cli/index.js"
-# alias kali="docker run -t -v /home/garcez/.bin/kali -i kalilinux/kali-linux-docker /bin/bash"
-
 autoload -Uz compinit
 compinit
-# kitty + complete setup zsh | source /dev/stdin
 
 function memory(){
 	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -93,7 +93,7 @@ autoload -Uz compinit
 compinit
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export PATH="$PATH:/home/garcez/.dotnet/tools"
+export PATH="$PATH:$HOME/.dotnet/tools"
 
 ########## CLI Utils ##########
 

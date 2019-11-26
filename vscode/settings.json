@@ -25,17 +25,20 @@
     "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
     "editor.wordWrapColumn": 150,
     "emmet.triggerExpansionOnTab": true,
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "**/node_modules/**": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
     "git.autofetch": true,
     "javascript.implicitProjectConfig.checkJs": true,
     "javascript.implicitProjectConfig.experimentalDecorators": true,
     "javascript.referencesCodeLens.enabled": true,
     "javascript.suggest.completeFunctionCalls": true,
     "material-icon-theme.activeIconPack": "react_redux",
-    "prettier.arrowParens": "always",
-    "prettier.printWidth": 150,
-    "prettier.requireConfig": true,
-    "prettier.tabWidth": 4,
-    "prettier.useTabs": true,
     "references.preferredLocation": "view",
     "terminal.external.linuxExec": "konsole",
     "tslint.jsEnable": true,
@@ -48,11 +51,50 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.tree.indent": 4,
     "workbench.tree.renderIndentGuides": "none",
+    "python.jediEnabled": false,
+    "cSpell.enabledLanguageIds": [
+        "asciidoc",
+        "c",
+        "cpp",
+        "csharp",
+        "css",
+        "git-commit",
+        "go",
+        "handlebars",
+        "haskell",
+        "html",
+        "jade",
+        "java",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "jsonc",
+        "latex",
+        "less",
+        "markdown",
+        "php",
+        "plaintext",
+        "pug",
+        "restructuredtext",
+        "rust",
+        "scala",
+        "scss",
+        "text",
+        "typescript",
+        "typescriptreact",
+        "yaml",
+        "yml"
+    ],
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "[css]": {
+        "editor.defaultFormatter": "michelemelluso.code-beautifier"
+    },
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "files.exclude": {
-        "**/node_modules/**": true
     },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -68,16 +110,13 @@
     },
     "eslint.options": {
         "rules": {
-            "react/jsx-props-no-spreading": "off",
             "operator-linebreak": "off",
             "camelcase": "warn",
             "prefer-destructuring": "warn",
             "no-console": "off",
             "object-curly-newline": "off",
             "no-underscore-dangle": "off",
-            "react/jsx-one-expression-per-line": "off",
             "comma-dangle": "off",
-            "react/jsx-indent-props": "off",
             "indent": [
                 "warn",
                 "tab"
@@ -90,9 +129,6 @@
                 "error",
                 "always"
             ],
-            "react/sort-comp": "off",
-            "react/prop-types": "warn",
-            "react/jsx-filename-extension": "off",
             "no-tabs": "off",
             "max-len": [
                 "warn",
@@ -100,39 +136,7 @@
                 4
             ],
             "indent": "off",
-            "react/destructuring-assignment": "off",
             "implicit-arrow-linebreak": "off",
-            "react/jsx-indent": [
-                "warn",
-                "tab",
-                {
-                    "checkAttributes": true,
-                    "indentLogicalExpressions": false
-                }
-            ],
-            "class-methods-use-this": [
-                "error",
-                {
-                    "exceptMethods": [
-                        "render",
-                        "getInitialState",
-                        "getDefaultProps",
-                        "getChildContext",
-                        "componentWillMount",
-                        "UNSAFE_componentWillMount",
-                        "componentDidMount",
-                        "componentWillReceiveProps",
-                        "UNSAFE_componentWillReceiveProps",
-                        "shouldComponentUpdate",
-                        "componentWillUpdate",
-                        "UNSAFE_componentWillUpdate",
-                        "componentDidUpdate",
-                        "componentWillUnmount",
-                        "componentDidCatch",
-                        "getSnapshotBeforeUpdate"
-                    ]
-                }
-            ]
         }
     },
     "[javascriptreact]": {
@@ -159,5 +163,7 @@
     ],
     "typescript.updateImportsOnFileMove.enabled": "always",
     "window.zoomLevel": 0,
-    "files.autoSave": "afterDelay",
+    "terminal.integrated.rendererType": "dom",
+    "explorer.confirmDragAndDrop": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
 }
