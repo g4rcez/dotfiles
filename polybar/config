@@ -1,3 +1,6 @@
+[monitor]
+name = HDMI-1
+
 [colors]
 yellow = #f8c113
 background = #151515
@@ -23,7 +26,7 @@ module-margin-right = 1
 modules-center = 
 modules-left = wireless-network wireless-ip
 modules-right = backlight batt keyboard 
-monitor = eDP1
+monitor = ${monitor.name}
 override-redirect = false
 padding-left = 1
 padding-right = 1
@@ -48,7 +51,7 @@ module-margin-right = 2
 modules-left = i3 xwindow
 modules-center =
 modules-right = calendar-date calendar-hour
-monitor = eDP1
+monitor = ${monitor.name}
 override-redirect = false
 padding-left = 1
 padding-right = 1

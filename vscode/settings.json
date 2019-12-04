@@ -108,37 +108,6 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "eslint.options": {
-        "rules": {
-            "operator-linebreak": "off",
-            "camelcase": "warn",
-            "prefer-destructuring": "warn",
-            "no-console": "off",
-            "object-curly-newline": "off",
-            "no-underscore-dangle": "off",
-            "comma-dangle": "off",
-            "indent": [
-                "warn",
-                "tab"
-            ],
-            "quotes": [
-                "error",
-                "double"
-            ],
-            "semi": [
-                "error",
-                "always"
-            ],
-            "no-tabs": "off",
-            "max-len": [
-                "warn",
-                150,
-                4
-            ],
-            "indent": "off",
-            "implicit-arrow-linebreak": "off",
-        }
-    },
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -146,7 +115,6 @@
         "editor.defaultFormatter": "vscode.html-language-features"
     },
     "eslint.alwaysShowStatus": true,
-    "eslint.experimental.incrementalSync": true,
     "eslint.lintTask.enable": true,
     "eslint.packageManager": "yarn",
     "eslint.validate": [
@@ -166,4 +134,6 @@
     "terminal.integrated.rendererType": "dom",
     "explorer.confirmDragAndDrop": false,
     "javascript.updateImportsOnFileMove.enabled": "always",
+    "workbench.statusBar.visible": true,
+    "window.menuBarVisibility": "toggle",
 }

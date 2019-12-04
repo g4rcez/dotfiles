@@ -66,6 +66,7 @@ alias pbpaste='xclip -selection clipboard -o'
 alias add='git add'
 alias commit='git commit -m'
 alias push='git push -u'
+alias pull='git pull'
 alias tags='git tag | sort -V'
 alias tag='git tag'
 
@@ -78,6 +79,10 @@ function memory(){
 
 function clone(){
 	git clone git@github.com:$1
+}
+
+function cmd(){
+	mkdir -p $1 && cd $1
 }
 
 function clonecd(){

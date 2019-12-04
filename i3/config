@@ -57,21 +57,22 @@ exec_always --no-startup-id numlockx on
 
 # betterlockscreen
 # exec --no-startup-id betterlockscreen -w dim
-bindsym $mod+9 exec betterlockscreen -l dimblur
-exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen --nofork
+bindsym $mod+9 exec --no-startup-id "i3lock"
 
 # Music and Audio config
-bindsym $mod+s exec "player next"
 bindsym $mod+$alt+Shift+R exec "i3-msg restart"
-bindsym $mod+w exec "player prev"
-bindsym $mod+Escape exec "player playPause"
 # bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
 # bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
 bindsym $mod+m exec --no-startup-id "amixer set 'Master' 0%"
+
+bindsym $mod+Escape exec playerctl play-pause
+bindsym $mod+w exec playerctl previous
+bindsym $mod+s exec playerctl next
+
+bindsym XF86AudioStop exec playerctl stop
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86AudioStop exec playerctl stop
 
 # Screen brightness controls
 bindsym $mod+Right exec "xbacklight -inc 10"
@@ -82,8 +83,7 @@ bindsym $mod+Shift+b exec "xbacklight -set 100"
 bindsym Print exec --no-startup-id "flameshot gui"
 
 # Rofi menu
-bindsym $alt+space exec --no-startup-id "rofi -modi window,calc,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
-bindsym $mod+c exec --no-startup-id "rofi -modi calc -show calc -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
+bindsym $alt+space exec --no-startup-id "rofi -modi window,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
 bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
 bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
 bindsym $mod+F12 exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
