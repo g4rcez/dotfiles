@@ -1,8 +1,9 @@
 [monitor]
-name = HDMI-1
+name = eDP1
+height = 16
 
 [colors]
-yellow = #f8c113
+yellow = #fad971
 background = #151515
 background-alt = #444
 foreground = #bbb
@@ -20,22 +21,17 @@ fixed-center = true
 font-0 = "NotoSansNerdFont:size=8;2"
 font-1 = "InconsolataLGCNerdFont:size=8;2"
 foreground = ${colors.foreground}
-height = 15
+height = ${monitor.height}
 module-margin-left = 1
 module-margin-right = 1
-modules-center = 
-modules-left = wireless-network wireless-ip
-modules-right = backlight batt keyboard 
+modules-left =
+modules-center =
+modules-right = wireless-network wireless-ip
 monitor = ${monitor.name}
 override-redirect = false
 padding-left = 1
 padding-right = 1
 pseudo-transparency = true
-tray-background = ${colors.background}
-tray-detached = false
-tray-maxsize = 14
-tray-padding = 2
-tray-position = right
 
 [bar/note-top]
 background = ${colors.background}
@@ -45,16 +41,21 @@ cursor-scroll = ns-resize
 fixed-center = true
 font-0 = "NotoSansNerdFont:size=8;2"
 foreground = ${colors.foreground}
-height = 15
+height = ${monitor.height}
 module-margin-left = 2
 module-margin-right = 2
 modules-left = i3 xwindow
-modules-center =
-modules-right = calendar-date calendar-hour
+modules-center = calendar-date calendar-hour
+modules-right = backlight batt keyboard
 monitor = ${monitor.name}
 override-redirect = false
 padding-left = 1
 padding-right = 1
+tray-background = ${colors.background}
+tray-detached = false
+tray-maxsize = 14
+tray-padding = 2
+tray-position = right
 
 [module/xwindow]
 type = internal/xwindow
@@ -128,7 +129,7 @@ format-prefix-foreground = ${colors.foreground}
 type = custom/script
 exec = date +"%Y-%m-%d"
 format-prefix = "  "
-interval = 60
+interval = 10
 click-left = orage
 
 [module/calendar-hour]
@@ -144,7 +145,7 @@ format =  <ramp> <bar>
 ramp-0 = 
 bar-fill =%{T2}%{T-}
 bar-empty =%{T2}%{T-}
-bar-width = 6
+bar-width = 4
 bar-indicator = 
 bar-indicator-foreground = #ff
 bar-fill-foreground = ${colors.yellow}
