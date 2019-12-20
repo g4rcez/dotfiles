@@ -1,23 +1,23 @@
 * {
   /* General */
-  text-font:                            "NotoSans 14";
+  text-font:                            "Open Sans 12";
   text-font-mono:                       "RobotoMono Nerd Font Regular 14";
-  icon-font:                            "Ligconsolata 50";
-  icon-font-small:                      "Ligconsolata 24";
-  inputbar-margin:                      4px 4px;
-  prompt-padding:                       14px 18px;
-  entry-padding:                        16px 14px 14px 0px;
-  list-element-padding:                 13px;
+  icon-font:                            "NotoSansNerdFont 50";
+  icon-font-small:                      "NotoSansNerdFont 24";
+  inputbar-margin:                      2px 2px;
+  prompt-padding:                       14px 12px;
+  entry-padding:                        14px 0;
+  list-element-padding:                 9px;
   list-element-margin:                  @inputbar-margin;
   list-element-border:                  0px 0px 0px 8px;
-  list-8-window-padding:                120px 100px;
+  list-8-window-padding:                150px 100px;
   option-element-padding:               60px  70px  55px  -9px;
-  option-3-window-padding:              293px 271px;
+  option-3-window-padding:              300px 271px;
   option-3-listview-spacing:            140px;
-  option-5-window-padding:              293px 130px;
+  option-5-window-padding:              300px 130px;
   option-5-listview-spacing:            50px;
   option-6-listview-spacing:            30px;
-  apps-textbox-prompt-colon-padding:    16px;
+  apps-textbox-prompt-colon-padding:    10px;
   mpd-window-padding:                   257px 64px;
   mpd-inputbar-margin:                  10px 0px;
   mpd-prompt-padding:                   14px 20px 10px 20px;

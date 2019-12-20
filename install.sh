@@ -33,8 +33,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PATH/plu
 
 # Install asdf
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
-echo ". $HOME/.asdf/asdf.sh" > "$HOME/.zshrc"
-echo ". $HOME/.asdf/completions/asdf.bash" > $HOME/.zshrc
 asdf update --head
 # asdf NodeJS plugin
 asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git

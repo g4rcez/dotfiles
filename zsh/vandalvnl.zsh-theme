@@ -69,7 +69,7 @@ PROMPT='
 %{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n@%m%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
 %{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
 
-RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%M-%d %H:%m") %{$(echotc DO 1)%}%{$resetcolor%}'
+RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'
 
 if [[ $USER == "root" ]]; then
   CARETCOLOR="red"

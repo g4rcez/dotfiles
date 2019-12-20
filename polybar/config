@@ -4,34 +4,13 @@ height = 16
 
 [colors]
 yellow = #fad971
-background = #151515
+background = #181c24
 background-alt = #444
-foreground = #bbb
-foreground-alt = #555
+foreground = #eeeeee
+foreground-alt = #eeeeee
 primary = #fff
 secondary = #e60053
 alert = #bd2c40
-
-[bar/note-bot]
-background = ${colors.background}
-bottom = true
-cursor-click = pointer
-cursor-scroll = ns-resize
-fixed-center = true
-font-0 = "NotoSansNerdFont:size=8;2"
-font-1 = "InconsolataLGCNerdFont:size=8;2"
-foreground = ${colors.foreground}
-height = ${monitor.height}
-module-margin-left = 1
-module-margin-right = 1
-modules-left =
-modules-center =
-modules-right = wireless-network wireless-ip
-monitor = ${monitor.name}
-override-redirect = false
-padding-left = 1
-padding-right = 1
-pseudo-transparency = true
 
 [bar/note-top]
 background = ${colors.background}
@@ -39,22 +18,23 @@ bottom = false
 cursor-click = pointer
 cursor-scroll = ns-resize
 fixed-center = true
-font-0 = "NotoSansNerdFont:size=8;2"
+font-0 = "OpenSans:size=8;2"
+font-1 = "NotoSansNerdFont:size=8;2"
 foreground = ${colors.foreground}
 height = ${monitor.height}
 module-margin-left = 2
 module-margin-right = 2
-modules-left = i3 xwindow
-modules-center = calendar-date calendar-hour
-modules-right = backlight batt keyboard
+modules-left = xwindow
+modules-center = calendar-date
+modules-right = keyboard batt backlight
 monitor = ${monitor.name}
 override-redirect = false
 padding-left = 1
 padding-right = 1
 tray-background = ${colors.background}
 tray-detached = false
-tray-maxsize = 14
-tray-padding = 2
+tray-maxsize = 10
+tray-padding = 1
 tray-position = right
 
 [module/xwindow]
@@ -127,15 +107,15 @@ format-prefix-foreground = ${colors.foreground}
 
 [module/calendar-date]
 type = custom/script
-exec = date +"%Y-%m-%d"
-format-prefix = "  "
+exec = date +"%a %b %d, %Y-%m-%d %H:%M"
+; format-prefix = "  "
 interval = 10
 click-left = orage
 
 [module/calendar-hour]
 type = custom/script
 exec = date +"%H:%M"
-format-prefix = "  "
+; format-prefix = "  "
 interval = 30
 click-left = orage
 

@@ -41,6 +41,7 @@ if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ] ; then
 fi
 
 # Unix utils
+alias ls='exa --icons'
 alias lz='ls -lSr'
 alias wtf='pwd'
 alias cp='cp -v'

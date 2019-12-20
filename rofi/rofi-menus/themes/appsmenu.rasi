@@ -1,5 +1,5 @@
 configuration {
-  display-drun: "App";
+  display-drun: "Applications";
   display-window: "Window";
   display-run: ">_";
   display-calc: "λ";
