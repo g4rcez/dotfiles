@@ -67,8 +67,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Screen brightness controls
-bindsym $mod+Right exec "xbacklight -inc 10"
-bindsym $mod+Left exec "xbacklight -dec 10"
+bindsym $mod+Right exec "xbacklight -dec 10;"
+bindsym $mod+Left exec "xbacklight -inc 10;"
 bindsym $mod+Shift+b exec "xbacklight -set 100"
 
 # Flameshot
@@ -85,7 +85,6 @@ bindsym $mod+Shift+w exec --no-startup-id "python /home/garcez/dotfiles/rofi/rof
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
 ################################################################################################
 
-exec --no-startup-id volumeicon
 bindsym $mod+Shift+m exec kitty -e 'alsamixer'
 
 ################################################################################################
@@ -223,6 +222,7 @@ for_window [class="Yad" title="yad-calendar"] floating enable
 
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
+bindsym $mod+Ctrl+a [urgent=latest] focus
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
@@ -272,16 +272,17 @@ mode "resize" {
 bindsym $mod+9 exec --no-startup-id dm-tool lock
 
 bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
+bindsym $mod+Ctrl+t exec --no-startup-id bash /home/garcez/dotfiles/start-compton.sh
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton --config ~/.config/compton.conf --blur-method kawase --blur-strength 20 --backend glx -b
+exec --no-startup-id nitrogen --restore; sleep 1; bash /home/garcez/dotfiles/start-compton.sh
 exec --no-startup-id nm-applet;
 exec --no-startup-id xfce4-power-manager
 exec_always --no-startup-id ff-theme-util
+exec_always --no-startup-id volumeicon
 exec_always --no-startup-id fix_xcursor
-exec_always --no-startup-id sbxkb
+# exec_always --no-startup-id sbxkb
 # Keyboard config
 exec --no-startup-id xset r rate 160 110
 
@@ -317,27 +318,31 @@ set_from_resource $term_color14    color14
 set_from_resource $term_color15    color15
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
+bindsym $mod+b bar mode toggle
 bar {
-	i3bar_command i3bar -t
+	i3bar_command i3bar
 	status_command i3status -c /home/garcez/.i3status.conf
 	position top
         workspace_buttons true
+        tray_padding 2
 	bindsym button4 nop
 	bindsym button5 nop
-        font xft:Roboto 8
-	strip_workspace_numbers no
+        font pango:NotoSans 8
+        separator_symbol ":|:"
+	strip_workspace_numbers yes
+        height 17
 
     colors {
         background #181c24
         statusline #eeeeee
-        separator  #454947
+        separator  #2f3239
 
         #                  border  backgr. text
-        focused_workspace  #181c24 #181c24 #ffffff
-        active_workspace   #181c24 #202020 #ffffff
-        inactive_workspace #181c24 #222D31 #EEE8D5
-        binding_mode       #181c24 #2C2C2C #F9FAF9
-        urgent_workspace   #181c24 #FDF6E3 #E5201D
+        focused_workspace  #2f3239 #2f3239 #ffffff
+        active_workspace   #181c24 #181c24  #ffffff
+        inactive_workspace #181c24 #222D31  #EEE8D5
+        binding_mode       #181c24 #2C2C2C  #F9FAF9
+        urgent_workspace   #181c24 #FDF6E3  #E5201D
     }
 }
 
