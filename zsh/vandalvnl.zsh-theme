@@ -33,9 +33,9 @@ gitverify(){
 
 exitstatus() {
     if [[ $? == 0 ]]; then
-        echo -n "%{$fg_bold[green]%}+%{$reset_color%}"
+        echo -n "%{$fg_bold[green]%}%{$reset_color%}"
     else
-        echo -n "%{$fg_bold[red]%}x%{$reset_color%}"
+        echo -n "%{$fg_bold[red]%}%{$reset_color%}"
     fi
 }
 
@@ -66,7 +66,7 @@ current_env() {
 }
 
 PROMPT='
-%{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n@%m%}%{$reset_color%} %{$fg_bold[blue][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
+%{$resetcolor%}$(exitstatus) %{$fg_bold[magenta]%n@%m%}%{$reset_color%} %{$fg_bold[green][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
 %{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
 
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'

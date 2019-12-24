@@ -29,6 +29,7 @@ modules-center = calendar-date
 modules-right = keyboard batt backlight
 monitor = ${monitor.name}
 override-redirect = false
+pseudo-transparency = true
 padding-left = 1
 padding-right = 1
 tray-background = ${colors.background}
