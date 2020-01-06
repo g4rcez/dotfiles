@@ -67,8 +67,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Screen brightness controls
-bindsym $mod+Right exec "xbacklight -dec 10;"
-bindsym $mod+Left exec "xbacklight -inc 10;"
+bindsym $mod+Right exec "xbacklight -inc 10;"
+bindsym $mod+Left exec "xbacklight -dec 10;"
 bindsym $mod+Shift+b exec "xbacklight -set 100"
 
 # Flameshot
@@ -280,7 +280,8 @@ exec --no-startup-id nitrogen --restore; sleep 1; bash /home/garcez/dotfiles/sta
 exec --no-startup-id nm-applet;
 exec --no-startup-id xfce4-power-manager
 exec_always --no-startup-id ff-theme-util
-exec_always --no-startup-id volumeicon
+exec_always --no-startup-id killall volumeicon; volumeicon
+exec --no-startup-id autotiling
 exec_always --no-startup-id fix_xcursor
 # exec_always --no-startup-id sbxkb
 # Keyboard config
