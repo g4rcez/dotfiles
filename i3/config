@@ -269,7 +269,7 @@ mode "resize" {
 }
 
 # Lock screen
-bindsym $mod+9 exec --no-startup-id dm-tool lock
+bindsym $mod+9 exec --no-startup-id i3lock -c 000000
 
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id bash /home/garcez/dotfiles/start-compton.sh

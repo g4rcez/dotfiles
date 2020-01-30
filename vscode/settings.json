@@ -5,11 +5,10 @@
     "editor.accessibilitySupport": "off",
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
-    "editor.cursorStyle": "underline",
-    "editor.fontFamily": "'Inconsolata'",
+    "editor.fontFamily": "Fira Code",
     "editor.fontLigatures": true,
-    "editor.fontSize": 16,
-    "editor.gotoLocation.multiple": "goto",
+    "editor.fontSize": 15,
+    "editor.gotoLocation.multipleDeclarations": "goto",
     "editor.minimap.enabled": false,
     "editor.parameterHints.cycle": true,
     "editor.renderControlCharacters": true,
@@ -40,12 +39,11 @@
     "javascript.suggest.completeFunctionCalls": true,
     "material-icon-theme.activeIconPack": "react_redux",
     "references.preferredLocation": "view",
-    "terminal.external.linuxExec": "konsole",
     "tslint.jsEnable": true,
     "typescript.implementationsCodeLens.enabled": true,
     "typescript.referencesCodeLens.enabled": true,
     "typescript.suggest.completeFunctionCalls": true,
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "Atom One Dark",
     "workbench.editor.labelFormat": "short",
     "workbench.editor.tabSizing": "shrink",
     "workbench.iconTheme": "material-icon-theme",
@@ -89,7 +87,6 @@
         "editor.defaultFormatter": "vscode.html-language-features"
     },
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "[css]": {
         "editor.defaultFormatter": "michelemelluso.code-beautifier"
     },
@@ -111,24 +108,9 @@
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
-    },
     "eslint.alwaysShowStatus": true,
     "eslint.lintTask.enable": true,
     "eslint.packageManager": "yarn",
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        {
-            "autoFix": true,
-            "language": "typescript"
-        },
-        {
-            "autoFix": true,
-            "language": "typescriptreact"
-        }
-    ],
     "typescript.updateImportsOnFileMove.enabled": "always",
     "window.zoomLevel": 0,
     "terminal.integrated.rendererType": "dom",
@@ -136,4 +118,14 @@
     "javascript.updateImportsOnFileMove.enabled": "always",
     "workbench.statusBar.visible": true,
     "window.menuBarVisibility": "toggle",
+    "editor.cursorStyle": "line-thin",
+    "workbench.activityBar.visible": true,
+    "jest.disabledWorkspaceFolders": [
+        "ui-andario-backoffice",
+        "ui-home",
+        "ui-iam",
+        "ui-company"
+    ],
+    "jest.autoEnable": false,
+    "terminal.external.linuxExec": "kitty"
 }
