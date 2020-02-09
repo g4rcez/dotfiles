@@ -22,7 +22,7 @@
 
 git clone https://github.com/vandalvnl/dotfiles $HOME/dotfiles
 cd $HOME/dotfiles
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 $ZSH_PATH=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 $ZSHRC=

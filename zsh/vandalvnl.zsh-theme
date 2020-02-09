@@ -66,7 +66,7 @@ current_env() {
 }
 
 PROMPT='
-%{$resetcolor%}$(exitstatus) %{$fg_bold[magenta]%n@%m%}%{$reset_color%} %{$fg_bold[green][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
+%{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n%{$reset_color%} %{$fg_bold[cyan][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
 %{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
 
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'
@@ -92,3 +92,55 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[magenta]%}"
 ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
+
+########## CLI Utils ##########
+
+setopt append_history
+setopt auto_pushd
+setopt autocd
+setopt extended_glob
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt pushd_ignore_dups
+setopt pushd_minus
+setopt share_history
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
+ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
+ZSH_HIGHLIGHT_STYLES[alias]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[function]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=blue"
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+ZSH_HIGHLIGHT_STYLES[default]=none
+ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
+ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
+ZSH_HIGHLIGHT_STYLES[path]="fg=blue,underline"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=blue,underline"
+ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
+ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line

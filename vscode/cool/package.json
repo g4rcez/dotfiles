@@ -1,0 +1,21 @@
+{
+    "name": "cool",
+    "displayName": "cool",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Themes"
+    ],
+    "contributes": {
+        "themes": [
+            {
+                "label": "Cool",
+                "uiTheme": "vs-dark",
+                "path": "./themes/Cool-color-theme.json"
+            }
+        ]
+    }
+}
