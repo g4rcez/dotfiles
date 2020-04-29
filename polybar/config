@@ -1,5 +1,5 @@
 [monitor]
-name = eDP1
+name = HDMI1
 height = 16
 
 [colors]
@@ -12,7 +12,7 @@ primary = #fff
 secondary = #e60053
 alert = #bd2c40
 
-[bar/note-top]
+[bar/main]
 background = ${colors.background}
 bottom = false
 cursor-click = pointer

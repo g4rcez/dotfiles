@@ -563,7 +563,6 @@
 		{
 			"name": "Function names",
 			"scope": [
-				"entity.name.function",
 				"meta.function-call.generic",
 				"meta.function-call.object",
 				"meta.function-call.php",
@@ -637,10 +636,11 @@
 		{
 			"name": "Language Built-ins",
 			"scope": [
-				"support"
+				"support",
+				"entity.name.function"
 			],
 			"settings": {
-				"foreground": "#8BE9FD"
+				"foreground": "#69ddf7"
 			}
 		},
 		{
@@ -648,7 +648,8 @@
 			"scope": [
 				"support.function.magic",
 				"support.variable",
-				"variable.other.predefined"
+				"variable.other.predefined",
+				"string.regexp"
 			],
 			"settings": {
 				"fontStyle": "regular",
@@ -658,7 +659,6 @@
 		{
 			"name": "Built-in functions / properties",
 			"scope": [
-				"support.function",
 				"support.type.property-name"
 			],
 			"settings": {
@@ -827,7 +827,8 @@
 		{
 			"name": "Modifiers",
 			"scope": [
-				"storage.modifier"
+				"storage.modifier",
+				"support.type.builtin.graphql"
 			],
 			"settings": {
 				"foreground": "#FF79C6"
@@ -836,7 +837,6 @@
 		{
 			"name": "RegExp string",
 			"scope": [
-				"string.regexp",
 				"constant.other.character-class.set.regexp",
 				"constant.character.escape.backslash.regexp"
 			],
@@ -866,7 +866,8 @@
 		{
 			"name": "Character group",
 			"scope": [
-				"punctuation.definition.character-class.regexp"
+				"punctuation.definition.character-class.regexp",
+				"keyword.type.graphql"
 			],
 			"settings": {
 				"foreground": "#8BE9FD"
@@ -875,7 +876,7 @@
 		{
 			"name": "Capture groups",
 			"scope": [
-				"punctuation.definition.group.regexp"
+				"punctuation.definition.group.regexp",
 			],
 			"settings": {
 				"foreground": "#FFB86C"
@@ -898,9 +899,11 @@
 				"string.quoted.double",
 				"string.interpolated",
 				"string.quoted.single",
+				"string.template",
 				"punctuation.definition.string.begin",
 				"punctuation.definition.string.begin",
-				"punctuation.definition.string.end.css"
+				"punctuation.definition.string.end.css",
+				"support.type.graphql"
 			],
 			"settings": {
 				"foreground": "#75f395"
@@ -945,6 +948,8 @@
 			"name": "Destructuring / aliasing reference name (LHS)",
 			"scope": [
 				"meta.import variable.other.readwrite",
+				"constant.language.json",
+				"constant.numeric.json",
 				"meta.object-binding-pattern-variable variable.object.property",
 				"meta.variable.assignment.destructured.object.coffee variable"
 			],

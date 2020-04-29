@@ -75,6 +75,7 @@ bindsym $mod+Shift+b exec "xbacklight -set 100"
 bindsym Print exec --no-startup-id "flameshot gui"
 
 # Rofi menu
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 bindsym $alt+space exec --no-startup-id "rofi -modi window,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
 bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
 bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
@@ -320,32 +321,32 @@ set_from_resource $term_color15    color15
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bindsym $mod+b bar mode toggle
-bar {
-	i3bar_command i3bar
-	status_command i3status -c /home/garcez/.i3status.conf
-	position top
-        workspace_buttons true
-        tray_padding 2
-	bindsym button4 nop
-	bindsym button5 nop
-        font pango:NotoSans 8
-        separator_symbol ":|:"
-	strip_workspace_numbers yes
-        height 17
-
-    colors {
-        background #181c24
-        statusline #eeeeee
-        separator  #2f3239
-
-        #                  border  backgr. text
-        focused_workspace  #2f3239 #2f3239 #ffffff
-        active_workspace   #181c24 #181c24  #ffffff
-        inactive_workspace #181c24 #222D31  #EEE8D5
-        binding_mode       #181c24 #2C2C2C  #F9FAF9
-        urgent_workspace   #181c24 #FDF6E3  #E5201D
-    }
-}
+# bar {
+# 	i3bar_command i3bar
+# 	status_command i3status -c /home/garcez/.i3status.conf
+# 	position top
+#         workspace_buttons true
+#         tray_padding 2
+# 	bindsym button4 nop
+# 	bindsym button5 nop
+#         font pango:NotoSans 8
+#         separator_symbol ":|:"
+# 	strip_workspace_numbers yes
+#         height 17
+# 
+#     colors {
+#         background #181c24
+#         statusline #eeeeee
+#         separator  #2f3239
+# 
+#         #                  border  backgr. text
+#         focused_workspace  #2f3239 #2f3239 #ffffff
+#         active_workspace   #181c24 #181c24  #ffffff
+#         inactive_workspace #181c24 #222D31  #EEE8D5
+#         binding_mode       #181c24 #2C2C2C  #F9FAF9
+#         urgent_workspace   #181c24 #FDF6E3  #E5201D
+#     }
+# }
 
 
 # Theme colors
