@@ -1,16 +1,41 @@
 [monitor]
-name = HDMI1
-height = 16
+height = 20
 
 [colors]
 yellow = #fad971
-background = #181c24
+background = #121212
 background-alt = #444
-foreground = #eeeeee
-foreground-alt = #eeeeee
-primary = #fff
+foreground = #ffffff
+foreground-alt = #ffffff
+primary = #ffffff
 secondary = #e60053
 alert = #bd2c40
+
+[bar/side]
+background = ${colors.background}
+bottom = false
+cursor-click = pointer
+cursor-scroll = ns-resize
+fixed-center = true
+font-0 = "Cantarell:size=9;2"
+font-1 = "NotoSansNerdFont:size=8;2"
+foreground = ${colors.foreground}
+height = ${monitor.height}
+module-margin-left = 1
+module-margin-right = 1
+modules-left = i3 xwindow
+modules-center = calendar-date
+modules-right = keyboard batt backlight
+monitor = HDMI1
+override-redirect = false
+pseudo-transparency = true
+padding-left = 1
+padding-right = 1
+tray-background = ${colors.background}
+tray-detached = false
+tray-maxsize = 20
+tray-padding = 0
+tray-position = right
 
 [bar/main]
 background = ${colors.background}
@@ -18,24 +43,24 @@ bottom = false
 cursor-click = pointer
 cursor-scroll = ns-resize
 fixed-center = true
-font-0 = "OpenSans:size=8;2"
+font-0 = "Cantarell:size=9;2"
 font-1 = "NotoSansNerdFont:size=8;2"
 foreground = ${colors.foreground}
 height = ${monitor.height}
-module-margin-left = 2
-module-margin-right = 2
-modules-left = xwindow
+module-margin-left = 1
+module-margin-right = 1
+modules-left = i3 xwindow
 modules-center = calendar-date
 modules-right = keyboard batt backlight
-monitor = ${monitor.name}
+monitor = eDP1
 override-redirect = false
 pseudo-transparency = true
 padding-left = 1
 padding-right = 1
 tray-background = ${colors.background}
 tray-detached = false
-tray-maxsize = 10
-tray-padding = 1
+tray-maxsize = 20
+tray-padding = 0
 tray-position = right
 
 [module/xwindow]

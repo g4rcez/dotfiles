@@ -34,7 +34,7 @@ font pango:"Roboto" 11px
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -53,8 +53,8 @@ exec_always --no-startup-id numlockx on
 
 # Music and Audio config
 bindsym $mod+$alt+Shift+R exec "i3-msg restart"
-bindsym $mod+Up exec --no-startup-id "amixer set 'Master' 2%+"
-bindsym $mod+Down exec --no-startup-id "amixer set 'Master' 2%-"
+bindsym $mod+Up exec --no-startup-id "pactl set-sink-volume 0 +5%"
+bindsym $mod+Down exec --no-startup-id "pactl set-sink-volume 0 -5%"
 bindsym $mod+m exec --no-startup-id "amixer set 'Master' 0%"
 
 bindsym $mod+Escape exec playerctl play-pause
@@ -75,19 +75,27 @@ bindsym $mod+Shift+b exec "xbacklight -set 100"
 bindsym Print exec --no-startup-id "flameshot gui"
 
 # Rofi menu
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-bindsym $alt+space exec --no-startup-id "rofi -modi window,drun,run -show drun -show-icons -theme '/home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
-bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
-bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/garcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
-# bindsym $mod+F12 exec --no-startup-id bash /home/garcez/dotfiles/polybar/scripts/shutdown-menu.sh
-bindsym $mod+Shift+w exec --no-startup-id "python /home/garcez/dotfiles/rofi/rofi-menus/scripts/networkmenu.py"
+exec_always killall polybar; polybar -r main;polybar -r side
+# bindsym $alt+space exec --no-startup-id "rofi -modi window,drun,run -show drun -show-icons -theme '/home/g4rcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi'"
+bindsym $alt+space exec --no-startup-id "bash /home/g4rcez/.config/rofi/launchers-git/launcher.sh"
+bindsym $mod+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/g4rcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+bindsym $alt+Tab exec --no-startup-id "rofi -modi window -show window -theme /home/g4rcez/dotfiles/rofi/rofi-menus/themes/appsmenu.rasi -drun-icon-theme 'ePapirus' -window-format '{w} {c}'"
+bindsym $mod+F12 exec --no-startup-id bash /home/g4rcez/.config/rofi/scripts/menu_powermenu.sh
+bindsym $mod+Shift+w exec --no-startup-id "python /home/g4rcez/dotfiles/rofi/rofi-menus/scripts/networkmenu.py"
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
 ################################################################################################
 
-bindsym $mod+Shift+m exec kitty -e 'alsamixer'
+exec_always pulseaudio -k; pulseaudio --start
+bindsym $mod+Shift+m exec kitty -e 'pulsemixer'
+exec --no-startup-id pulseaudio
+exec --no-startup-id pa-applet
+# bindsym $mod+Shift+m exec pavucontrol
 
+################################################################################################
+# Screen Commands
+bindsym $mod+Shift+Ctrl+m exec "xrandr --output eDP1 --off --output DP1 --off --output HDMI1 --primary --mode 1920x1080i --pos 0x0 --rotate normal --output VIRTUAL1 --off"
 ################################################################################################
 
 # Start Applications
@@ -272,16 +280,16 @@ mode "resize" {
 # Lock screen
 bindsym $mod+9 exec --no-startup-id i3lock -c 000000
 
-bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id bash /home/garcez/dotfiles/start-compton.sh
+bindsym $mod+t exec --no-startup-id pkill picom
+bindsym $mod+Ctrl+t exec --no-startup-id picom -cbf --config /home/g4rcez/.config/compton.cbf
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; bash /home/garcez/dotfiles/start-compton.sh
+exec --no-startup-id nitrogen --restore; sleep 1;
 exec --no-startup-id nm-applet;
 exec --no-startup-id xfce4-power-manager
 exec_always --no-startup-id ff-theme-util
-exec_always --no-startup-id killall volumeicon; volumeicon
+# exec_always --no-startup-id killall volumeicon; volumeicon
 exec --no-startup-id autotiling
 exec_always --no-startup-id fix_xcursor
 # exec_always --no-startup-id sbxkb
@@ -323,7 +331,7 @@ set_from_resource $term_color15    color15
 bindsym $mod+b bar mode toggle
 # bar {
 # 	i3bar_command i3bar
-# 	status_command i3status -c /home/garcez/.i3status.conf
+# 	status_command i3status -c /home/g4rcez/.i3status.conf
 # 	position top
 #         workspace_buttons true
 #         tray_padding 2

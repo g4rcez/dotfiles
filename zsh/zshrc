@@ -102,3 +102,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/garcez/.local/bin/terraform terraform
+
+if [ -x "$(command -v kitty)" ]; then
+  alias icat="kitty +kitten icat"
+fi
