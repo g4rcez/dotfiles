@@ -20,28 +20,14 @@
 #
 ##############################################################
 
-git clone https://github.com/vandalvnl/dotfiles $HOME/dotfiles
-cd $HOME/dotfiles
+#git clone https://github.com/vandalvnl/dotfiles $HOME/dotfiles
+#cd $HOME/dotfiles
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-$ZSH_PATH=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-$ZSHRC=
-# ZSH Config
-git clone https://github.com/chrissicool/zsh-256color $ZSH_PATH/plugins
-git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PATH/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_PATH/plugins/zsh-syntax-highlighting
-
-# Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
-asdf update --head
-# asdf NodeJS plugin
-asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-NODE_LATEST_VERSION="$(asdf list-all nodejs | tail -n1)"
-asdf install nodejs $NODE_LATEST_VERSION
-asdf global nodejs $NODE_LATEST_VERSION
-
-# npm install
-npm i -g npm create-react-app create-react-library typescript expo-cli ts-node serve http-server yarn
+ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
+git clone https://github.com/chrissicool/zsh-256color $ZSH_CUSTOM/plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
 # SDKMAN
 curl -s "https://get.sdkman.io" | zsh

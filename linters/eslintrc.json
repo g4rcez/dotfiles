@@ -1,6 +1,9 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react", "jsx-a11y"],
+  "plugins": [
+    "react",
+    "jsx-a11y"
+  ],
   "parserOptions": {
     "ecmaVersion": 9,
     "sourceType": "module",
@@ -22,7 +25,11 @@
     "parseInt": true
   },
   "settings": {},
-  "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb-base"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb-base"
+  ],
   "rules": {
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
@@ -88,7 +95,10 @@
     "prefer-spread": "error",
     "prefer-template": "error",
     "quote-props": "error",
-    "react/destructuring-assignment": ["off", "warn"],
+    "react/destructuring-assignment": [
+      "off",
+      "warn"
+    ],
     "react/jsx-filename-extension": "warn",
     "react/jsx-key": "error",
     "react/jsx-no-duplicate-props": "error",
