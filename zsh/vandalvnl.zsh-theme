@@ -1,10 +1,9 @@
-# # vim:ft=zsh ts=2 sw=2 sts=2
-_git_time_since_commit() {
-  if last_commit=$(git log --pretty=format:'%at' -1 2> /dev/null); then
+time_since_last_commit() {
+  if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
     now=$(date +%s)
-    seconds_since_last_commit=$((now-last_commit))
+    seconds_since_last_commit=$((now - last_commit))
     minutes=$((seconds_since_last_commit / 60))
-    hours=$((seconds_since_last_commit/3600))
+    hours=$((seconds_since_last_commit / 3600))
     days=$((seconds_since_last_commit / 86400))
     sub_hours=$((hours % 24))
     sub_minutes=$((minutes % 60))
@@ -20,23 +19,21 @@ _git_time_since_commit() {
   fi
 }
 
-gitverify(){
-    local URL="$(git config --get remote.origin.url)"
-    if [[ "$(echo $URL| grep 'github')" != "" ]]; then
-        echo -n " \uf09b %{$fg_bold[white]%}%{$resetcolor%} "
-    elif [[ "$(echo $URL| grep 'gitlab')" != "" ]]; then
-        echo -n " \uf296 %{$fg_bold[white]%}%{$resetcolor%} "
-    elif [[ "$(echo $URL| grep 'bitbucket')" != "" ]]; then
-        echo -n " \uf171 %{$fg_bold[white]%}%{$resetcolor%} "
-    fi
+check_git() {
+  local URL="$(git config --get remote.origin.url)"
+  if [[ "$(echo $URL | grep 'github')" != "" ]]; then
+    echo -n " \uf09b %{$fg_bold[white]%}%{$resetcolor%} "
+  elif [[ "$(echo $URL | grep 'gitlab')" != "" ]]; then
+    echo -n " \uf296 %{$fg_bold[white]%}%{$resetcolor%} "
+  elif [[ "$(echo $URL | grep 'bitbucket')" != "" ]]; then
+    echo -n " \uf171 %{$fg_bold[white]%}%{$resetcolor%} "
+  fi
 }
 
 exitstatus() {
-    if [[ $? == 0 ]]; then
-        echo -n "%{$fg_bold[green]%}%{$reset_color%}"
-    else
-        echo -n "%{$fg_bold[red]%}%{$reset_color%}"
-    fi
+  if [[ $? != 0 ]]; then
+    echo -n "%{$fg_bold[red]%} %{$reset_color%}"
+  fi
 }
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
@@ -51,23 +48,34 @@ fishify() {
 }
 
 current_env() {
-    if [[ -e "./package.json" ]]; then
-        echo -n "%{$fg_bold[green]%}\uf898 $(node --version|tr -d '\n \t\ra-z')%{$reset_color%} "
-    fi
-    if [[ -e "./pom.xml" ]]; then
-        echo -n "%{$fg_bold[yellow]%}\ue738 $(javac -version 2>&1 | head -1 | tr -d '\n\t\r '|sed 's/[^0-9.]//g')%{$reset_color%} "
-    fi
-    if [[ -e "./Program.cs" ]]; then
-        echo -n "%{$fg_bold[cyan]%}\ue77f $(dotnet --version)%{$reset_color%} "
-    fi
-    if [[ -e "./tsconfig.json" ]]; then
-        echo -n "%{$fg_bold[blue]%}\ue628 $(tsc --version|cut -d ' ' -f2)%{$reset_color%} "
-    fi
+  if [[ -e "./package.json" ]]; then
+    echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
+  fi
+  if [[ -e "./pom.xml" ]]; then
+    echo -n "%{$fg_bold[yellow]%}\ue738%{$reset_color%} "
+  fi
+  if [[ -e "./Program.cs" ]]; then
+    echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
+  fi
+  if [[ -e "./tsconfig.json" ]]; then
+    echo -n "%{$fg_bold[blue]%}\ue628%{$reset_color%} "
+  fi
+}
+
+dir_name() {
+  local URL="$(git config --get remote.origin.url)"
+  if [[ "$URL" =~ ^git@.* ]]; then
+    D2=$(dirname "$PWD")
+    PATH_SHOW=$(basename "$D2")/$(basename "$PWD")
+    echo "$(git config --get remote.origin.url | cut -d ':' -f2) [$PATH_SHOW]"
+    return
+  fi
+  fishify
 }
 
 PROMPT='
-%{$resetcolor%}$(exitstatus) %{$fg_bold[green]%n%{$reset_color%} %{$fg_bold[cyan][$(fishify)]%}%{$reset_color%} $(gitverify)$(git_prompt_info)%{$fg_bold[green]$(_git_time_since_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
+%{$resetcolor%}$(exitstatus)%{$fg_bold[cyan]$(dir_name)%}%{$reset_color%} $(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
+%{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
 
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'
 
@@ -112,8 +120,8 @@ setopt pushd_minus
 setopt share_history
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=red")
-ZSH_HIGHLIGHT_PATTERNS+=("mv *" "fg=yellow")
+ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
+ZSH_HIGHLIGHT_PATTERNS+=("mv" "fg=yellow,bold")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[function]="fg=magenta,bold"

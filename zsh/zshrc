@@ -4,6 +4,7 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
+  z
   git
   zsh-autosuggestions
   zsh-syntax-highlighting
@@ -34,7 +35,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ] ; then
+if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ]; then
   export PATH="$HOME/.bin/adb-fastboot/platform-tools:$PATH"
 fi
 
@@ -74,33 +75,50 @@ alias tag='git tag'
 # Yarn alias
 alias types="yarn add --dev"
 
-function memory(){
-	ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+# VsCode
+alias code="code-insiders"
+
+function memory() {
+  ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
 }
 
-function clone(){
-	git clone git@github.com:$1
+function clone() {
+  git clone git@github.com:$1
 }
 
-function cmd(){
-	mkdir -p $1 && cd $1
+function cdm() {
+  mkdir -p $1 && cd $1
 }
 
-function clonecd(){
-	git clone git@github.com:$1
-	cd $(echo $1 | cut -d '/' -f2-)
+function clonecd() {
+  git clone git@github.com:$1
+  cd $(echo $1 | cut -d '/' -f2-)
 }
 
-function sysinfo(){
-	ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
+function sysinfo() {
+  ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
+}
+
+function yarni() {
+  yarn add $@
+  for dep in $@; do
+    yarn add -D @types/$dep
+  done
+}
+
+function yarnd() {
+  yarn add -D $@
+  for dep in $@; do
+    yarn add -D @types/$dep
+  done
 }
 
 autoload -Uz compinit
 compinit
+zstyle ':completion::complete:*' gain-privileges 1
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/garcez/.local/bin/terraform terraform
