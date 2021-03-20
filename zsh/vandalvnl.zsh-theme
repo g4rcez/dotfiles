@@ -75,7 +75,7 @@ dir_name() {
 
 PROMPT='
 %{$resetcolor%}$(exitstatus)%{$fg_bold[cyan]$(dir_name)%}%{$reset_color%} $(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}%{$resetcolor%} '
+%{$fg_bold[$CARETCOLOR]%}>_%{$resetcolor%} '
 
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'
 
