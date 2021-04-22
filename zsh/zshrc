@@ -40,14 +40,12 @@ if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ]; then
 fi
 
 # Unix utils
-alias ls='exa --icons'
 alias lz='ls -lSr'
 alias wtf='pwd'
 alias cp='cp -v'
 alias rm='rm -v'
 alias mv='mv -v'
 alias more='less'
-alias vim='nvim'
 alias df='df -h'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -125,4 +123,7 @@ complete -o nospace -C /home/garcez/.local/bin/terraform terraform
 
 if [ -x "$(command -v kitty)" ]; then
   alias icat="kitty +kitten icat"
+  autoload -Uz compinit
+  compinit
+  kitty + complete setup zsh | source /dev/stdin
 fi
