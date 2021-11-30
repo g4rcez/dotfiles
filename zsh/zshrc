@@ -15,11 +15,6 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
 
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
 
 export PATH="$PATH:$HOME/.dotnet/tools"
 export PATH=$HOME/tools/nvim-linux64/bin:$PATH
@@ -73,9 +68,6 @@ alias tag='git tag'
 
 # Yarn alias
 alias types="yarn add --dev"
-
-# VsCode
-alias code="code-insiders"
 
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
