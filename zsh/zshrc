@@ -15,11 +15,9 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
 
-
 export PATH="$PATH:$HOME/.dotnet/tools"
 export PATH=$HOME/tools/nvim-linux64/bin:$PATH
-export DOTNET_ROOT=$HOME/dotnet
-export PATH=$PATH:$HOME/dotnet
+export PATH=$PATH:$HOME/go/bin
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export ARCHFLAGS="-arch x86_64"
 export PATH=$PATH:$HOME/.local/bin
@@ -65,9 +63,11 @@ alias push='git push -u'
 alias pull='git pull'
 alias tags='git tag | sort -V'
 alias tag='git tag'
+alias checkout='git checkout'
+alias vim='nvim'
 
-# Yarn alias
-alias types="yarn add --dev"
+# pnpm
+alias n="pnpm"
 
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -90,20 +90,6 @@ function sysinfo() {
   ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
 }
 
-function yarni() {
-  yarn add $@
-  for dep in $@; do
-    yarn add -D @types/$dep
-  done
-}
-
-function yarnd() {
-  yarn add -D $@
-  for dep in $@; do
-    yarn add -D @types/$dep
-  done
-}
-
 autoload -Uz compinit
 compinit
 zstyle ':completion::complete:*' gain-privileges 1
@@ -120,3 +106,16 @@ if [ -x "$(command -v kitty)" ]; then
   compinit
   kitty + complete setup zsh | source /dev/stdin
 fi
+export PATH="$HOME/tools:$PATH"
+export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '$HOME/tools/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/completion.zsh.inc'; fi
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
