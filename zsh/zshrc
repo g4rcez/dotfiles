@@ -4,26 +4,31 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
-  z
+  dirhistory
+  fast-syntax-highlighting
+  fzf
   git
+  httpie
+  lpass
+  nvm
+  z
   zsh-autosuggestions
-  zsh-syntax-highlighting
+  zsh-interactive-cd
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
-
-export PATH="$PATH:$HOME/.dotnet/tools"
-export PATH=$HOME/tools/nvim-linux64/bin:$PATH
-export PATH=$PATH:$HOME/go/bin
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export ARCHFLAGS="-arch x86_64"
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:$HOME/dotfiles/bin
-export PATH="$PATH:/snap/bin"
 export SDKMAN_DIR="$HOME/.sdkman"
+export PATH="$PATH:$HOME/.dotnet/tools"
+export PATH="$HOME/tools/nvim-linux64/bin:$PATH"
+export PATH="$PATH:$HOME/go/bin"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/dotfiles/bin"
+export PATH="$PATH:/snap/bin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -64,10 +69,13 @@ alias pull='git pull'
 alias tags='git tag | sort -V'
 alias tag='git tag'
 alias checkout='git checkout'
-alias vim='nvim'
+alias ghc="gh pr checkout"
 
 # pnpm
 alias n="pnpm"
+
+# general stuff
+alias lastpass="lpass"
 
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -98,7 +106,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /$HOME/.local/bin/terraform terraform
+complete -o nospace -C "$HOME/.local/bin/terraform" terraform
 
 if [ -x "$(command -v kitty)" ]; then
   alias icat="kitty +kitten icat"
@@ -109,13 +117,15 @@ fi
 export PATH="$HOME/tools:$PATH"
 export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
 
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '$HOME/tools/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/completion.zsh.inc'; fi
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
