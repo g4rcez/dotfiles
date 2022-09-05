@@ -12,6 +12,7 @@ plugins=(
   lpass
   nvm
   z
+  zsh-256color
   zsh-autosuggestions
   zsh-interactive-cd
 )
@@ -70,11 +71,14 @@ alias tags='git tag | sort -V'
 alias tag='git tag'
 alias checkout='git checkout'
 alias ghc="gh pr checkout"
+alias ghl="gh pr list"
 
 # pnpm
 alias n="pnpm"
 
 # general stuff
+alias dockerkill="docker kill $(docker ps -q)"
+alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
 alias lastpass="lpass"
 
 function memory() {
