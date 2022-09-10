@@ -40,7 +40,6 @@ if [ -d "$HOME/.bin/adb-fastboot/platform-tools" ]; then
 fi
 
 # Unix utils
-alias lz='ls -lSr'
 alias wtf='pwd'
 alias cp='cp -v'
 alias rm='rm -v'
@@ -80,6 +79,9 @@ alias n="pnpm"
 alias dockerkill="docker kill $(docker ps -q)"
 alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
 alias lastpass="lpass"
+
+# ls -> exa
+alias ls="exa -x -F --icons"
 
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
