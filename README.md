@@ -1,28 +1,25 @@
 # Awesome Shell
 
-This is a repository with all dotfiles to making a power and awesome Shell
+My shell
 
-![My Shell](shell.png)
+- [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh)
+- [fzf](https://github.com/junegunn/fzf)
+- [PowerLevel10k](https://github.com/romkatv/powerlevel10k)
 
-## Desktop Environment
+## Install
 
-Manjaro Gnome
+```bash
+git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/chrissicool/zsh-256color $ZSH_CUSTOM/plugins/zsh-256color
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
-## Requirements
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
-- [Oh-My-Zsh](https://github.com/robbyrussell/oh-my-zsh)
-- [Nerd-Fonts](https://github.com/ryanoasis/nerd-fonts)
-- [MyCli](https://github.com/dbcli/mycli)
-- [PgCli](https://www.pgcli.com/)
-
-
-## Wallpaper
-
-Find in [Reddit](https://www.reddit.com/r/wallpapers/comments/c29pfb/2b_nier_automata/)
-
-## Software List
-
-- Screenshot -> [Flameshot](https://github.com/lupoDharkael/flameshot), thx [@barci](https://github.com/flaviobarci)
-- Database Management -> [MyCli](https://www.mycli.net/), [PgCli](https://www.pgcli.com/)
-- Music -> [Spotify](https://www.spotify.com/br/download/linux/), [Audacious](https://audacious-media-player.org/)
-- [Postman](https://www.getpostman.com/)
+ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
+ln -sf $HOME/dotfiles/zsh/.p10k.zsh $HOME/.p10k.zsh
+```
