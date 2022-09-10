@@ -24,6 +24,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 cp curlrc ~/.curlrc
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+curl https://get.volta.sh | bash
 
 ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
 ln -sf $HOME/dotfiles/zsh/vandalvnl.zsh-theme $HOME/.oh-my-zsh/themes/vandalvnl.zsh-theme
