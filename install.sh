@@ -26,5 +26,11 @@ cp curlrc ~/.curlrc
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 curl https://get.volta.sh | bash
 
+# Symlinks
 ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
 ln -sf $HOME/dotfiles/zsh/vandalvnl.zsh-theme $HOME/.oh-my-zsh/themes/vandalvnl.zsh-theme
+ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
+
+# Git
+git config --global core.excludesFile '~/.gitignore'
+
