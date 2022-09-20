@@ -1,0 +1,74 @@
+"" Main config
+let mapleader=" "
+map Q gq
+set autoindent
+set backspace=indent,eol,start
+set expandtab
+set hlsearch
+set incsearch
+set lookupkeys-=<Tab>
+set magic
+set matchpairs
+set modeline
+set norelativenumber
+set ruler
+set scrolloff=5
+set showcmd
+set showmode
+set smarttab
+set surround
+set viminfo
+set visualbell
+set wildignorecase
+syntax on
+
+"" -- Plugins
+set NERDTree
+set multiple-cursors
+packadd matchit		" Extended matching. Supports % (matching motion) and g% (reverse motion)
+Plug 'chrisbra/matchit'
+
+"" -- Idea things
+set clipboard+=ideaput
+set ideajoin
+set ideamarks
+set idearefactormode=keep
+set ideastrictmode
+
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+vnoremap < <gv
+vnoremap > >gv
+nnoremap L $
+nnoremap H ^
+vnoremap L $
+vnoremap H ^
+inoremap jj <Esc>
+inoremap kk <Esc>
+
+"" Refactor
+nmap <leader><leader> <action>(ReformatCode)
+nmap <leader>r <action>(RenameElement)
+
+"" Errors
+nmap <leader>e <action>(GotoNextError)
+nmap <leader>/ <action>(ShowErrorDescription)
+
+nmap <leader>z <Action>(ToggleDistractionFreeMode)
+nmap <leader>g <action>(Git.Menu)
+nmap <leader>t <action>(ActivateTerminalToolWindow)
+nnoremap <leader>u <action>(FindUsages)
+
+"" Split
+nnoremap <c-\> <action>(SplitVertically)
+nnoremap <c--> <action>(SplitHorizontally)
+nnoremap <c-=> <action>(Unsplit)
+
+nmap <S-Enter> O<Esc>
+nmap gu <action>(ShowUsages)
+nmap gU <action>(FindUsages)
+
+"" Bookmarks
+nmap gb <Action>(ShowBookmarks)
+nmap gm <Action>(ToggleBookmark)
+
+" Find more examples here: https://jb.gg/share-ideavimrc

@@ -111,6 +111,7 @@ if [ -x "$(command -v kitty)" ]; then
   kitty + complete setup zsh | source /dev/stdin
 fi
 export PATH="$HOME/tools:$PATH"
+export PATH="/home/garcez/.local/share:$PATH"
 export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
 
 # pnpm
