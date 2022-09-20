@@ -1,9 +1,6 @@
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+export EDITOR="vim"
+ZSH_THEME="vandalvnl"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
@@ -24,9 +21,6 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
 export ARCHFLAGS="-arch x86_64"
-export PATH="$PATH:$HOME/.dotnet/tools"
-export PATH="$HOME/tools/nvim-linux64/bin:$PATH"
-export PATH="$PATH:$HOME/go/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/dotfiles/bin"
@@ -69,6 +63,7 @@ alias ghl="gh pr list"
 
 # pnpm
 alias n="pnpm"
+alias node:scripts="cat $PWD/package.json | jq .scripts"
 
 # general stuff
 alias dockerkill="docker kill $(docker ps -q)"
@@ -130,13 +125,4 @@ if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-=======
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
->>>>>>> Stashed changes
-=======
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
->>>>>>> Stashed changes
