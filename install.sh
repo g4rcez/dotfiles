@@ -30,6 +30,7 @@ curl https://get.volta.sh | bash
 ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
 ln -sf $HOME/dotfiles/zsh/vandalvnl.zsh-theme $HOME/.oh-my-zsh/themes/vandalvnl.zsh-theme
 ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
+ln -sf $HOME/dotfiles/global_gitignore $HOME/.gitignore
 
 # Git
 git config --global core.excludesFile '~/.gitignore'
