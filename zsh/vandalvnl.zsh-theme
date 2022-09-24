@@ -51,9 +51,6 @@ current_env() {
   if [[ -e "./package.json" ]]; then
     echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
   fi
-  if [[ -e "./pom.xml" ]]; then
-    echo -n "%{$fg_bold[yellow]%}\ue738%{$reset_color%} "
-  fi
   if [[ -e "./Program.cs" ]]; then
     echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
   fi

@@ -1,68 +1,64 @@
-let mapleader=" "
-let g:argtextobj_pairs="[:],(:),<:>"
-
-"" -- Main config
-set ignorecase
-set incsearch
-set number
-set showmode
-set smartcase
-set visualbell
-
-"" -- Idea things
-set ideajoin
-set ideamarks
-set idearefactormode=keep
-
-"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
-inoremap jj <Esc>
-inoremap kk <Esc>
-vnoremap < <gv
-vnoremap > >gv
-
-"" -- Refactor
-nmap <leader><leader> <action>(ReformatCode)
-nmap <leader>r <action>(RenameElement)
-
-"" -- Errors
-nmap <leader>e <action>(GotoNextError)
-nmap <leader>/ <action>(ShowErrorDescription)
-
-nmap <leader>z <Action>(ToggleDistractionFreeMode)
-nmap <leader>g <action>(Git.Menu)
-nmap <leader>t <action>(ActivateTerminalToolWindow)
-nnoremap <leader>u <action>(FindUsages)
-
-map <S-Enter> O<Esc>
-nmap gu <action>(ShowUsages)
-nmap gU <action>(FindUsages)
-
-"" -- Bookmarks
-nmap gb <Action>(ShowBookmarks)
-nmap gm <Action>(ToggleBookmark)
-
 "" Find more examples here: https://jb.gg/share-ideavimrc
+let mapleader=" "
 
-" Remap multiple-cursors shortcuts to match terryma/vim-multiple-cursors
-set multiple-cursors
-nmap <C-n> <Plug>NextWholeOccurrence
-xmap <C-n> <Plug>NextWholeOccurrence
-nmap g<C-n> <Plug>NextOccurrence
-xmap g<C-n> <Plug>NextOccurrence
-xmap <C-x> <Plug>SkipOccurrence
-xmap <C-p> <Plug>RemoveOccurrence
-
-"" easu-motion
-set easymotion
-
-"" -- Surround plugin
-set surround
-
+""""""""""""""""""""""""""""""""""" Plugin """"""""""""""""""""""""""""""""""""""
 "" -- Nerdtree
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
 let g:NERDTreeMapJumpParent='l'
 
+"" -- Surround
+set surround
+
+"" -- Multiple cursors
+set multiple-cursors
+nmap <C-n> <plug>NextWholeOccurrence
+xmap <C-n> <plug>NextWholeOccurrence
+nmap g<C-n> <plug>NextOccurrence
+xmap g<C-n> <plug>NextOccurrence
+xmap <C-x> <plug>SkipOccurrence
+xmap <C-p> <plug>RemoveOccurrence
+
+"" matchit.vim
+set matchit
+
+"" --- easymotion
+set easymotion
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set ignorecase
+set incsearch
+set number
+set showmode
+set smartcase
+set smartindent
+set autoindent
+set magic
+set visualbell
+set matchpairs
+set nrformats
+set encoding=utf-8
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" -- Idea things
+set ideajoin
+set ideamarks
+set idearefactormode=keep
+set ideaput
+set clipboard+=ideaput
+set ideastrictmode
+
+"""""""""""""" Clipboard support
+nnoremap yy "+yy
+vnoremap y "+y
+nnoremap p "+p
+vnoremap p "+p
+nnoremap P "+P
+vnoremap P "+P
 " system clipboard
 vmap <leader>y "+y
 vmap <leader>d "+d
@@ -71,3 +67,39 @@ nmap <leader>p "+p
 nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
+
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+inoremap jj <Esc>
+inoremap kk <Esc>
+vnoremap < <gv
+vnoremap > >gv
+map Q gq
+map U <C-R>
+
+""""""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
+map <leader>j <action>(SurroundWithLiveTemplate)
+nmap <leader>/ <action>(ShowErrorDescription)
+nmap <leader><leader> <action>(ReformatCode)
+nmap <leader>e <action>(GotoNextError)
+nmap <leader>f <plug>(easymotion-f)
+nmap <leader>g <action>(Git.Menu)
+nmap <leader>h <action>(SplitHorizontally)
+nmap <leader>q <action>(CloseEditor)
+nmap <leader>r <action>(RenameElement)
+nmap <leader>s <plug>(easymotion-s)
+nmap <leader>t <action>(ActivateTerminalToolWindow)
+nmap <leader>u <action>(FindUsages)
+nmap <leader>v <action>(SplitVertically)
+nmap <leader>z <action>(ToggleDistractionFreeMode)
+
+""""""""""""""""""""""""""""Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <S-Enter> O<Esc>
+nmap gu <action>(ShowUsages)
+nmap gU <action>(FindUsages)
+nmap gb <Action>(ShowBookmarks)
+nmap gm <Action>(ToggleBookmark)
+nmap [[ <action>(MethodUp)
+nmap ]] <action>(MethodDown)
+vnoremap / :action Find<CR>
+nnoremap / :action Find<CR>
+nnoremap <C-t> :NERDTreeFocus<CR>
