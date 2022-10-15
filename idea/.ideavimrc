@@ -29,11 +29,13 @@ let g:EasyMotion_smartcase = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible
 set expandtab
 set ignorecase
 set incsearch
 set number
 set showmode
+set showcmd
 set smartcase
 set smartindent
 set autoindent
@@ -42,6 +44,20 @@ set visualbell
 set matchpairs
 set nrformats
 set encoding=utf-8
+set spell
+set hlsearch
+set smarttab
+set ttyfast
+set cursorline
+set cursorcolumn
+set si
+set laststatus=2
+set title
+set autoread
+set shiftwidth=4
+set tabstop=4
+set sneak
+set exchange
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" -- Idea things
@@ -49,7 +65,7 @@ set ideajoin
 set ideamarks
 set idearefactormode=keep
 set ideaput
-set clipboard+=ideaput
+set clipboard+=ideaput,unnamed
 set ideastrictmode
 
 """""""""""""" Clipboard support
@@ -69,8 +85,6 @@ vmap <leader>p "+p
 vmap <leader>P "+P
 
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
-inoremap jj <Esc>
-inoremap kk <Esc>
 vnoremap < <gv
 vnoremap > >gv
 map Q gq
@@ -83,15 +97,27 @@ nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>f <plug>(easymotion-f)
 nmap <leader>g <action>(Git.Menu)
-nmap <leader>h <action>(SplitHorizontally)
 nmap <leader>q <action>(CloseEditor)
+nmap <leader>w <action>(SaveAll)
 nmap <leader>r <action>(RenameElement)
 nmap <leader>s <plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
+nmap <leader>T <action>(ReopenClosedTab)
+nmap <leader>Q <action>(ReopenClosedTab)
 nmap <leader>u <action>(FindUsages)
-nmap <leader>v <action>(SplitVertically)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 
+"" Split
+nmap <leader>H <action>(SplitHorizontally)
+nmap <leader>V <action>(SplitVertically)
+
+"" Move Tabs
+nmap <leader>k <action>(PreviousTab)
+nmap <leader>h <action>(PreviousTab)
+nmap <leader>a <action>(PreviousTab)
+nmap <leader>j <action>(NextTab)
+nmap <leader>l <action>(NextTab)
+nmap <leader>d <action>(NextTab)
 """"""""""""""""""""""""""""Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
 nmap gu <action>(ShowUsages)
