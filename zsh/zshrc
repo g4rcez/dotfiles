@@ -67,12 +67,6 @@ alias dockerkill="docker kill $(docker ps -q)"
 alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
 alias lastpass="lpass"
 
-# ls -> exa
-if [ -x "$(command -v exa)" ]; then
-  alias ls="exa -x -F --icons --color-scale --color=always"
-  alias la="ls --long --all --group"
-fi
-
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
 }
@@ -128,3 +122,8 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# ls -> exa
+if [ -x "$(command -v logo-ls)" ]; then
+  alias ls="logo-ls -DUX"
+fi

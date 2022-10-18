@@ -1,6 +1,5 @@
 "" Find more examples here: https://jb.gg/share-ideavimrc
 let mapleader=" "
-
 """"""""""""""""""""""""""""""""""" Plugin """"""""""""""""""""""""""""""""""""""
 "" -- Nerdtree
 set NERDTree
