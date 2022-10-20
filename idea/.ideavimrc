@@ -1,6 +1,12 @@
 "" Find more examples here: https://jb.gg/share-ideavimrc
+""""""""""""""""""""""""""""""""""" Plugins """"""""""""""""""""""""""""""""""""""
+"" --- easymotion
+set easymotion
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+
 let mapleader=" "
-""""""""""""""""""""""""""""""""""" Plugin """"""""""""""""""""""""""""""""""""""
+
 "" -- Nerdtree
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
@@ -21,10 +27,24 @@ xmap <C-p> <plug>RemoveOccurrence
 "" matchit.vim
 set matchit
 
-"" --- easymotion
-set easymotion
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
+""" Yank + Clipboard
+set highlightedyank
+set clipboard=unnamedplus
+nnoremap yy "+yy
+vnoremap y "+y
+nnoremap p "+p
+vnoremap p "+p
+nnoremap P "+P
+vnoremap P "+P
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>y "+yy
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+nnoremap dd "+dd
+vnoremap d "+d
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,31 +77,14 @@ set shiftwidth=4
 set tabstop=4
 set sneak
 set exchange
+set viminfo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" -- Idea things
 set ideajoin
 set ideamarks
 set idearefactormode=keep
-set ideaput
-set clipboard+=ideaput,unnamed
 set ideastrictmode
-
-"""""""""""""" Clipboard support
-nnoremap yy "+yy
-vnoremap y "+y
-nnoremap p "+p
-vnoremap p "+p
-nnoremap P "+P
-vnoremap P "+P
-" system clipboard
-vmap <leader>y "+y
-vmap <leader>d "+d
-nmap <leader>y "+yy
-nmap <leader>p "+p
-nmap <leader>P "+P
-vmap <leader>p "+p
-vmap <leader>P "+P
 
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 vnoremap < <gv
@@ -93,17 +96,17 @@ map U <C-R>
 map <leader>j <action>(SurroundWithLiveTemplate)
 nmap <leader>/ <action>(ShowErrorDescription)
 nmap <leader><leader> <action>(ReformatCode)
+nmap <leader>Q <action>(ReopenClosedTab)
+nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
-nmap <leader>f <plug>(easymotion-f)
+nmap <leader>f <Plug>(easymotion-f)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>q <action>(CloseEditor)
-nmap <leader>w <action>(SaveAll)
 nmap <leader>r <action>(RenameElement)
-nmap <leader>s <plug>(easymotion-s)
+nmap <leader>s <Plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
-nmap <leader>T <action>(ReopenClosedTab)
-nmap <leader>Q <action>(ReopenClosedTab)
 nmap <leader>u <action>(FindUsages)
+nmap <leader>w <action>(SaveAll)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 
 "" Split
@@ -128,3 +131,4 @@ nmap ]] <action>(MethodDown)
 vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
 nnoremap <C-t> :NERDTreeFocus<CR>
+noremap ' "-

@@ -6,11 +6,12 @@ HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
   dirhistory
-  fast-syntax-highlighting
   git
   lpass
   z
+  command-time
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh

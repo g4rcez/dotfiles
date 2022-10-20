@@ -74,7 +74,18 @@ PROMPT='
 %{$resetcolor%}$(exitstatus)%{$fg_bold[cyan]$(dir_name)%}%{$reset_color%} $(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
 %{$fg_bold[$CARETCOLOR]%}>_%{$resetcolor%} '
 
-RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") %{$(echotc DO 1)%}%{$resetcolor%}'
+function preexec() {
+    timer=${timer:-$SECONDS}
+}
+
+function precmd() {
+    if [ $timer ]; then
+        timer_show=$(($SECONDS - $timer))
+        timer_show=$(printf '%.*f\n' 3 $timer_show)
+        unset timer
+    fi
+}
+RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") - ${timer_show}s%{$(echotc DO 1)%}%{$resetcolor%}'
 
 if [[ $USER == "root" ]]; then
   CARETCOLOR="red"
@@ -118,12 +129,12 @@ setopt share_history
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
-ZSH_HIGHLIGHT_PATTERNS+=("mv" "fg=yellow,bold")
+ZSH_HIGHLIGHT_PATTERNS+=("mv " "fg=yellow,bold")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[function]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=blue,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow,bold"
@@ -135,8 +146,8 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_STYLES[default]=none
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
 ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-ZSH_HIGHLIGHT_STYLES[path]="fg=blue,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=blue,underline"
+ZSH_HIGHLIGHT_STYLES[path]="fg=yellow,underline"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=yellow,underline"
 ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
 ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
