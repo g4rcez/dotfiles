@@ -52,7 +52,7 @@ set nocompatible
 set expandtab
 set ignorecase
 set incsearch
-set number
+set number relativenumber
 set showmode
 set showcmd
 set smartcase
