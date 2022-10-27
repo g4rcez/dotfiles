@@ -4,6 +4,8 @@ ZSH_THEME="vandalvnl"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
+ZSH_COMMAND_TIME_MSG="Execution time: %s sec"
+
 plugins=(
   dirhistory
   git
@@ -54,9 +56,7 @@ alias gitree="git log --oneline --graph --decorate --all"
 alias push='git push -u'
 alias pull='git pull'
 alias tags='git tag | sort -V'
-alias tag='git tag'
-alias checkout='git checkout'
-alias ghc="gh pr checkout"
+alias tag='git tag' alias checkout='git checkout' alias ghc="gh pr checkout"
 alias ghl="gh pr list"
 
 # pnpm
@@ -96,6 +96,7 @@ function sysinfo() {
 autoload -Uz compinit
 compinit
 zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' rehash true
 
 
 if [ -x "$(command -v kitty)" ]; then
