@@ -1,6 +1,6 @@
 export ZSH="$HOME/.oh-my-zsh"
-export EDITOR="vim"
 ZSH_THEME="vandalvnl"
+export EDITOR="vim"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 
@@ -17,7 +17,6 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-
 # User configuration
 export MANPATH="/usr/local/man:$MANPATH"
 export ARCHFLAGS="-arch x86_64"
@@ -129,3 +128,5 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 if [ -x "$(command -v logo-ls)" ]; then
   alias ls="logo-ls -DUX"
 fi
+
+eval "$(starship init zsh)"

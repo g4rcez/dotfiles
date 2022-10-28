@@ -29,7 +29,7 @@ set matchit
 
 """ Yank + Clipboard
 set highlightedyank
-set clipboard=unnamedplus
+set clipboard=unnamedplus,unnamed
 nnoremap yy "+yy
 vnoremap y "+y
 nnoremap p "+p
@@ -43,8 +43,6 @@ nmap <leader>p "+p
 nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
-nnoremap dd "+dd
-vnoremap d "+d
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -132,3 +130,4 @@ vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
 nnoremap <C-t> :NERDTreeFocus<CR>
 noremap ' "-
+set clipboard+=ideaput
