@@ -1,3 +1,8 @@
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+force_color_prompt=yes
+
 time_since_last_commit() {
   if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
     now=$(date +%s)
@@ -32,14 +37,14 @@ check_git() {
 
 exitstatus() {
   if [[ $? != 0 ]]; then
-    echo -n "%{$fg_bold[red]%} %{$reset_color%}"
+    echo -n "%{$fg_bold[red]%}窱 %{$reset_color%}"
   fi
 }
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 
 fishify() {
-  echo $(pwd | perl -pe '
+  echo $(echo "$1" | perl -pe '
    BEGIN {
       binmode STDIN,  ":encoding(UTF-8)";
       binmode STDOUT, ":encoding(UTF-8)";
@@ -49,42 +54,31 @@ fishify() {
 
 current_env() {
   if [[ -e "./package.json" ]]; then
-    echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
+    echo -n "%{$fg_bold[green]%}\uf898
+    %{$reset_color%} "
   fi
   if [[ -e "./Program.cs" ]]; then
     echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
   fi
   if [[ -e "./tsconfig.json" ]]; then
-    echo -n "%{$fg_bold[blue]%}\ue628%{$reset_color%} "
+    echo -n "%{$fg_bold[blue]%}\ufbe4%{$reset_color%} "
   fi
 }
 
 dir_name() {
   local URL="$(git config --get remote.origin.url)"
+  PATH_SHOW="$(fishify $(pwd))"
   if [[ "$URL" =~ ^git@.* ]]; then
-    D2=$(dirname "$PWD")
-    PATH_SHOW=$(basename "$D2")/$(basename "$PWD")
-    echo "$(git config --get remote.origin.url | cut -d ':' -f2) [$PATH_SHOW]"
+    echo "[$PATH_SHOW] $(git config --get remote.origin.url | cut -d ':' -f2 | sed 's/.git$//g')"
     return
   fi
-  fishify
+  echo "$PATH_SHOW"
 }
 
 PROMPT='
-%{$resetcolor%}$(exitstatus)%{$fg_bold[cyan]$(dir_name)%}%{$reset_color%} $(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}>_%{$resetcolor%} '
+%{$resetcolor%}$(exitstatus)%{$fg_bold[cyan]$(dir_name)%}%{$reset_color%}$(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
+%{$fg_bold[$CARETCOLOR]%}❯%{$resetcolor%} '
 
-function preexec() {
-    timer=${timer:-$SECONDS}
-}
-
-function precmd() {
-    if [ $timer ]; then
-        timer_show=$(($SECONDS - $timer))
-        timer_show=$(printf '%.*f\n' 3 $timer_show)
-        unset timer
-    fi
-}
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M") - ${timer_show}s%{$(echotc DO 1)%}%{$resetcolor%}'
 
 if [[ $USER == "root" ]]; then
@@ -110,7 +104,6 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 
 ########## CLI Utils ##########
-
 setopt append_history
 setopt auto_pushd
 setopt autocd
@@ -123,9 +116,14 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_reduce_blanks
 setopt hist_save_no_dups
+setopt numericglobsort
+setopt promptsubst
 setopt pushd_ignore_dups
 setopt pushd_minus
 setopt share_history
+setopt notify
+setopt magicequalsubst
+setopt hist_verify
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
@@ -160,3 +158,24 @@ ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
+
+######################## Enable Colors ######################## 
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip --color=auto'
+
+export LESS_TERMCAP_mb=$'\E[1;31m'
+export LESS_TERMCAP_md=$'\E[1;36m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;33m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[1;32m'
+export LESS_TERMCAP_ue=$'\E[0m'
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
