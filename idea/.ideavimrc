@@ -29,7 +29,8 @@ set matchit
 
 """ Yank + Clipboard
 set highlightedyank
-set clipboard=unnamedplus,unnamed
+set clipboard=unnamedplus,unnamed,ideaput
+set ideaput
 nnoremap yy "+yy
 vnoremap y "+y
 nnoremap p "+p
@@ -130,4 +131,3 @@ vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
 nnoremap <C-t> :NERDTreeFocus<CR>
 noremap ' "-
-set clipboard+=ideaput

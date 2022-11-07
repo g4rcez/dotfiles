@@ -48,3 +48,9 @@ npm i -g pnpm add-gitignore
 
 ## Python pip modules
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
+
+# Theme
+cd /tmp
+clone vinceliuice/Colloid-gtk-theme
+cd Colloid-gtk-theme
+./install.sh -t purple -c dark -s compact -l --tweaks black --tweaks rimless

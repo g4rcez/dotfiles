@@ -35,14 +35,18 @@ panel-id='timer'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='multitasking'
-window-state=(1106, 628, false)
+last-panel='background'
+window-state=(1395, 833, false)
 
 [org/gnome/deja-dup]
 backend='google'
 prompt-check='disabled'
 window-height=500
 window-width=700
+
+[org/gnome/desktop/a11y/applications]
+screen-keyboard-enabled=false
+screen-reader-enabled=true
 
 [org/gnome/desktop/app-folders]
 folder-children=['accessories', 'office', 'system-tools']
@@ -75,8 +79,9 @@ translate=true
 show-weekdate=true
 
 [org/gnome/desktop/input-sources]
-mru-sources=[('xkb', 'br'), ('xkb', 'us+alt-intl')]
+mru-sources=[('xkb', 'us+alt-intl'), ('xkb', 'br')]
 per-window=false
+show-all-sources=true
 sources=[('xkb', 'br'), ('xkb', 'us+alt-intl')]
 xkb-options=['caps:escape']
 
@@ -84,15 +89,15 @@ xkb-options=['caps:escape']
 clock-show-seconds=false
 clock-show-weekday=true
 color-scheme='prefer-dark'
-cursor-theme='capitaine-cursors'
+cursor-theme='WhiteSur-cursors'
 enable-animations=true
 font-antialiasing='rgba'
 font-hinting='full'
-gtk-theme='dracula'
-icon-theme='McMojave-circle-black-dark'
+gtk-theme='Colloid-Purple-Dark-Compact'
+icon-theme='McMojave-circle-dark'
 monospace-font-name='FiraCode Nerd Font 11'
 show-battery-percentage=true
-toolkit-accessibility=false
+toolkit-accessibility=true
 
 [org/gnome/desktop/notifications]
 application-children=['gnome-power-panel', 'google-chrome', 'gnome-network-panel', 'telegramdesktop', 'org-flameshot-flameshot', 'org-gnome-nautilus', 'org-gnome-dejadup', 'visual-studio-code', 'kitty', 'insomnia', 'org-gnome-settings', 'org-manjaro-pamac-manager', 'material-shell-papyelgringo', 'xdg-desktop-portal-gnome', 'org-gnome-extensions-desktop', 'jetbrains-datagrip', 'jetbrains-webstorm', 'jetbrains-toolbox', 'jetbrains-idea', 'appimagekit-8bb94e0e213509b6c70e5c97d1887b63-telegram-desktop', 'albert', 'org-gnome-tweaks', 'org-gnome-shell-extensions']
@@ -112,6 +117,10 @@ application-id='gnome-power-panel.desktop'
 
 [org/gnome/desktop/notifications/application/google-chrome]
 application-id='google-chrome.desktop'
+force-expanded=true
+
+[org/gnome/desktop/notifications/application/hyper]
+application-id='hyper.desktop'
 
 [org/gnome/desktop/notifications/application/insomnia]
 application-id='insomnia.desktop'
@@ -158,6 +167,12 @@ application-id='org.gnome.tweaks.desktop'
 [org/gnome/desktop/notifications/application/org-manjaro-pamac-manager]
 application-id='org.manjaro.pamac.manager.desktop'
 
+[org/gnome/desktop/notifications/application/screenkey]
+application-id='screenkey.desktop'
+
+[org/gnome/desktop/notifications/application/solaar]
+application-id='solaar.desktop'
+
 [org/gnome/desktop/notifications/application/telegramdesktop]
 application-id='telegramdesktop.desktop'
 
@@ -170,8 +185,15 @@ application-id='xdg-desktop-portal-gnome.desktop'
 [org/gnome/desktop/peripherals/keyboard]
 numlock-state=true
 
+[org/gnome/desktop/peripherals/mouse]
+accel-profile='adaptive'
+left-handed=false
+speed=0.26637554585152845
+
 [org/gnome/desktop/peripherals/touchpad]
+click-method='fingers'
 natural-scroll=false
+speed=0.17431192660550465
 two-finger-scrolling-enabled=true
 
 [org/gnome/desktop/privacy]
@@ -181,6 +203,7 @@ recent-files-max-age=-1
 
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
+lock-delay=uint32 30
 picture-options='stretched'
 picture-uri='file:///usr/share/backgrounds/wallpapers-2018/matrix-manjaro.jpg'
 primary-color='#ffffff'
@@ -200,16 +223,29 @@ theme-name='__custom'
 [org/gnome/desktop/wm/keybindings]
 activate-window-menu=@as []
 close=['<Shift><Alt>w']
-maximize=['<Super>backslash','<Super>j']
+maximize=['<Super>backslash', '<Super>j']
+move-to-workspace-10=['']
+move-to-workspace-5=['']
+move-to-workspace-6=['']
+move-to-workspace-7=['']
+move-to-workspace-8=['']
+move-to-workspace-9=['']
 switch-to-workspace-1=['<Super>1']
+switch-to-workspace-10=['']
 switch-to-workspace-2=['<Super>2']
 switch-to-workspace-3=['<Super>3']
 switch-to-workspace-4=['<Super>4']
+switch-to-workspace-5=['']
+switch-to-workspace-6=['']
+switch-to-workspace-7=['']
+switch-to-workspace-8=['']
+switch-to-workspace-9=['']
 
 [org/gnome/desktop/wm/preferences]
-button-layout='close,minimize,maximize:appmenu'
+button-layout='close,minimize,maximize:'
 resize-with-right-button=true
 theme='Dracula'
+visual-bell=true
 
 [org/gnome/evince/default]
 window-ratio=(1.3235294117647058, 0.92045454545454541)
@@ -237,7 +273,6 @@ window-width=600
 [org/gnome/gedit/plugins]
 active-plugins=['spell', 'openlinks', 'sort', 'modelines', 'docinfo', 'filebrowser']
 
-
 [org/gnome/gedit/preferences/ui]
 show-tabs-mode='auto'
 
@@ -262,6 +297,7 @@ active-extensions=['23hq', 'bookmarks', 'burn_disc', 'catalogs', 'change_date', 
 
 [org/gnome/mutter]
 center-new-windows=true
+dynamic-workspaces=true
 overlay-key='Super_L'
 workspaces-only-on-primary=true
 
@@ -277,7 +313,7 @@ search-filter-time-type='last_modified'
 search-view='list-view'
 
 [org/gnome/nautilus/window-state]
-initial-size=(896, 526)
+initial-size=(1298, 705)
 maximized=false
 
 [org/gnome/settings-daemon/plugins/color]
@@ -306,8 +342,8 @@ power-saver-profile-on-low-battery=false
 app-picker-layout=[{'org.gnome.Geary.desktop': <{'position': <0>}>, 'accessories': <{'position': <1>}>, 'org.manjaro.pamac.manager.desktop': <{'position': <2>}>, 'cmake-gui.desktop': <{'position': <3>}>, 'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Nautilus.desktop': <{'position': <5>}>, 'firefox.desktop': <{'position': <6>}>, 'org.gnome.Totem.desktop': <{'position': <7>}>, 'org.flameshot.Flameshot.desktop': <{'position': <8>}>, 'google-chrome.desktop': <{'position': <9>}>, 'simple-scan.desktop': <{'position': <10>}>, 'org.gnome.gThumb.desktop': <{'position': <11>}>, 'insomnia.desktop': <{'position': <12>}>, 'gnome-layouts.desktop': <{'position': <13>}>, 'org.gnome.Lollypop.desktop': <{'position': <14>}>, 'manjaro-documentation.desktop': <{'position': <15>}>, 'office': <{'position': <16>}>, 'system-tools': <{'position': <17>}>, 'telegramdesktop.desktop': <{'position': <18>}>, 'visual-studio-code.desktop': <{'position': <19>}>, 'webapp-manager.desktop': <{'position': <20>}>, 'jetbrains-toolbox.desktop': <{'position': <21>}>, 'jetbrains-datagrip.desktop': <{'position': <22>}>, 'jetbrains-webstorm.desktop': <{'position': <23>}>}, {'jetbrains-idea.desktop': <{'position': <0>}>}]
 command-history=['r']
 disable-user-extensions=false
-disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'dash-to-panel@jderose9.github.com', 'dash-to-dock@micxgx.gmail.com']
-enabled-extensions=['pamac-updates@manjaro.org', 'just-perfection-desktop@just-perfection', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'x11gestures@joseexposito.github.io', 'arcmenu@arcmenu.com', 'pop-shell@system76.com', 'gnome-ui-tune@itstime.tech', 'color-picker@tuberry', 'blur-my-shell@aunetx', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'unite@hardpixel.eu', 'appindicatorsupport@rgcjonas.gmail.com', 'gsconnect@andyholmes.github.io']
+disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com']
+enabled-extensions=['pamac-updates@manjaro.org', 'just-perfection-desktop@just-perfection', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'x11gestures@joseexposito.github.io', 'pop-shell@system76.com', 'gnome-ui-tune@itstime.tech', 'color-picker@tuberry', 'blur-my-shell@aunetx', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'unite@hardpixel.eu', 'gsconnect@andyholmes.github.io', 'appindicatorsupport@rgcjonas.gmail.com', 'arcmenu@arcmenu.com', 'lockkeys@vaina.lt', 'sound-output-device-chooser@kgshank.net']
 favorite-apps=@as []
 had-bluetooth-devices-setup=true
 welcome-dialog-last-shown-version='41.2'
@@ -315,25 +351,45 @@ welcome-dialog-last-shown-version='41.2'
 [org/gnome/shell/app-switcher]
 current-workspace-only=true
 
+[org/gnome/shell/extensions/appindicator]
+icon-size=13
+
 [org/gnome/shell/extensions/arcmenu]
+apps-show-extra-details=true
 arc-menu-icon=56
 available-placement=[true, false, false]
 button-padding=5
+category-icon-type='Full_Color'
 dash-to-panel-standalone=true
 distro-icon=0
 enable-menu-hotkey=false
+enable-standlone-runner-menu=false
+gnome-dash-show-applications=true
 menu-background-color='rgba(48,48,49,0.98)'
 menu-border-color='rgb(60,60,60)'
 menu-button-appearance='Icon'
 menu-button-icon='Distro_Icon'
 menu-foreground-color='rgb(223,223,223)'
+menu-hotkey='Super_L'
 menu-item-active-bg-color='rgb(25,98,163)'
 menu-item-active-fg-color='rgb(255,255,255)'
 menu-item-hover-bg-color='rgb(21,83,158)'
 menu-item-hover-fg-color='rgb(255,255,255)'
+menu-layout='GnomeOverview'
 menu-separator-color='rgba(255,255,255,0.1)'
+mint-pinned-app-list=['Google Chrome', 'google-chrome', 'google-chrome.desktop', 'Terminal', 'utilities-terminal', 'org.gnome.Terminal.desktop', 'Settings', 'emblem-system-symbolic', 'org.gnome.Settings.desktop', 'Software', '', 'org.manjaro.pamac.manager.desktop', 'Files', 'system-file-manager', 'org.gnome.Nautilus.desktop', 'Log Out', 'application-exit-symbolic', 'ArcMenu_LogOut', 'Lock', 'changes-prevent-symbolic', 'ArcMenu_Lock', 'Power Off', 'system-shutdown-symbolic', 'ArcMenu_PowerOff']
+multi-monitor=true
+override-menu-theme=true
 pinned-app-list=['Google Chrome', '', 'google-chrome.desktop', 'Files', '', 'org.gnome.Nautilus.desktop', 'Terminal', '', 'org.gnome.Terminal.desktop', 'ArcMenu Settings', 'ArcMenu_ArcMenuIcon', 'gnome-extensions prefs arcmenu@arcmenu.com']
+position-in-panel='Left'
 prefs-visible-page=0
+recently-installed-apps=['org.inkscape.Inkscape.desktop', 'virtualbox.desktop', 'gimp.desktop', 'com.github.GradienceTeam.Gradience.desktop', 'me.dusansimic.DynamicWallpaper.desktop']
+right-panel-width=500
+runner-menu-hotkey='Super_L'
+shortcut-icon-type='Full_Color'
+show-activities-button=false
+unity-pinned-app-list=['Home', 'ArcMenu_Home', 'ArcMenu_Home', 'Documents', 'ArcMenu_Documents', 'ArcMenu_Documents', 'Downloads', 'ArcMenu_Downloads', 'ArcMenu_Downloads', 'Software', '', 'org.manjaro.pamac.manager.desktop', 'Files', '', 'org.gnome.Nautilus.desktop', 'Log Out', 'application-exit-symbolic', 'ArcMenu_LogOut', 'Lock', 'changes-prevent-symbolic', 'ArcMenu_Lock', 'Power Off', 'system-shutdown-symbolic', 'ArcMenu_PowerOff']
+vert-separator=true
 
 [org/gnome/shell/extensions/bigsur-statusarea]
 activate-spacing=true
@@ -347,6 +403,9 @@ brightness=0.87
 noise-amount=0.31
 noise-lightness=0.83999999999999997
 sigma=153
+
+[org/gnome/shell/extensions/blur-my-shell/applications]
+blur-on-overview=true
 
 [org/gnome/shell/extensions/blur-my-shell/dash-to-dock]
 blur=true
@@ -371,13 +430,19 @@ notify-style=uint32 1
 
 [org/gnome/shell/extensions/dash-to-dock]
 animate-show-apps=true
+apply-custom-theme=true
 background-opacity=1.0
+custom-theme-shrink=true
 dash-max-icon-size=48
+dock-fixed=false
 dock-position='BOTTOM'
 height-fraction=1.0
+hot-keys=false
 isolate-workspaces=true
+multi-monitor=false
 preferred-monitor=-2
 preferred-monitor-by-connector='eDP-1'
+scroll-action='cycle-windows'
 
 [org/gnome/shell/extensions/dash-to-panel]
 animate-appicon-hover=false
@@ -388,6 +453,9 @@ appicon-margin=8
 appicon-padding=4
 available-monitors=[0]
 dot-position='BOTTOM'
+dot-style-focused='METRO'
+dot-style-unfocused='METRO'
+hide-overview-on-startup=true
 hotkeys-overlay-combo='TEMPORARILY'
 isolate-workspaces=true
 leftbox-padding=-1
@@ -416,9 +484,41 @@ trans-use-dynamic-opacity=false
 tray-padding=-1
 window-preview-title-position='TOP'
 
+[org/gnome/shell/extensions/gnome-ui-tune]
+increase-thumbnails-size='200%'
+
+[org/gnome/shell/extensions/gsconnect]
+devices=@as []
+id='d27d47ec-90dd-4e59-933c-61dfbc13799a'
+name='workstation'
+
+[org/gnome/shell/extensions/gsconnect/device/3d9a5d5f30fbd612]
+incoming-capabilities=['kdeconnect.battery', 'kdeconnect.battery.request', 'kdeconnect.bigscreen.stt', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report.request', 'kdeconnect.contacts.request_all_uids_timestamps', 'kdeconnect.contacts.request_vcards_by_uid', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.action', 'kdeconnect.notification.reply', 'kdeconnect.notification.request', 'kdeconnect.photo.request', 'kdeconnect.ping', 'kdeconnect.runcommand', 'kdeconnect.sftp.request', 'kdeconnect.share.request', 'kdeconnect.share.request.update', 'kdeconnect.sms.request', 'kdeconnect.sms.request_attachment', 'kdeconnect.sms.request_conversation', 'kdeconnect.sms.request_conversations', 'kdeconnect.systemvolume', 'kdeconnect.telephony.request', 'kdeconnect.telephony.request_mute']
+last-connection='lan://192.168.0.14:1716'
+name='MI 8 Lite'
+outgoing-capabilities=['kdeconnect.battery', 'kdeconnect.battery.request', 'kdeconnect.bigscreen.stt', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report', 'kdeconnect.contacts.response_uids_timestamps', 'kdeconnect.contacts.response_vcards', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.echo', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.request', 'kdeconnect.photo', 'kdeconnect.ping', 'kdeconnect.presenter', 'kdeconnect.runcommand.request', 'kdeconnect.sftp', 'kdeconnect.share.request', 'kdeconnect.sms.attachment_file', 'kdeconnect.sms.messages', 'kdeconnect.systemvolume.request', 'kdeconnect.telephony']
+supported-plugins=['battery', 'clipboard', 'connectivity_report', 'contacts', 'findmyphone', 'mousepad', 'mpris', 'notification', 'photo', 'ping', 'presenter', 'runcommand', 'sftp', 'share', 'sms', 'systemvolume', 'telephony']
+type='phone'
+
+[org/gnome/shell/extensions/gsconnect/device/9a50d64d-389e-421f-8c89-5bff52d9d728]
+incoming-capabilities=['kdeconnect.battery', 'kdeconnect.battery.request', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report', 'kdeconnect.contacts.response_uids_timestamps', 'kdeconnect.contacts.response_vcards', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.echo', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.request', 'kdeconnect.photo', 'kdeconnect.photo.request', 'kdeconnect.ping', 'kdeconnect.presenter', 'kdeconnect.runcommand', 'kdeconnect.runcommand.request', 'kdeconnect.sftp', 'kdeconnect.share.request', 'kdeconnect.sms.messages', 'kdeconnect.systemvolume.request', 'kdeconnect.telephony']
+last-connection='lan://192.168.31.50:1716'
+name='portable'
+outgoing-capabilities=['kdeconnect.battery', 'kdeconnect.battery.request', 'kdeconnect.clipboard', 'kdeconnect.clipboard.connect', 'kdeconnect.connectivity_report.request', 'kdeconnect.contacts.request_all_uids_timestamps', 'kdeconnect.contacts.request_vcards_by_uid', 'kdeconnect.findmyphone.request', 'kdeconnect.mousepad.echo', 'kdeconnect.mousepad.keyboardstate', 'kdeconnect.mousepad.request', 'kdeconnect.mpris', 'kdeconnect.mpris.request', 'kdeconnect.notification', 'kdeconnect.notification.action', 'kdeconnect.notification.reply', 'kdeconnect.notification.request', 'kdeconnect.photo', 'kdeconnect.photo.request', 'kdeconnect.ping', 'kdeconnect.runcommand', 'kdeconnect.runcommand.request', 'kdeconnect.sftp.request', 'kdeconnect.share.request', 'kdeconnect.sms.request', 'kdeconnect.sms.request_conversation', 'kdeconnect.sms.request_conversations', 'kdeconnect.systemvolume', 'kdeconnect.telephony.request', 'kdeconnect.telephony.request_mute']
+supported-plugins=['battery', 'clipboard', 'findmyphone', 'mousepad', 'mpris', 'notification', 'photo', 'ping', 'runcommand', 'share']
+type='laptop'
+
+[org/gnome/shell/extensions/gsconnect/preferences]
+window-maximized=false
+window-size=(640, 440)
+
 [org/gnome/shell/extensions/just-perfection]
 accessibility-menu=true
 activities-button=true
+activities-button-icon-monochrome=true
+alt-tab-icon-size=512
+alt-tab-small-icon-size=0
+alt-tab-window-preview-size=0
 animation=4
 app-menu=true
 app-menu-icon=true
@@ -427,6 +527,7 @@ background-menu=true
 calendar=true
 clock-menu=true
 clock-menu-position=0
+clock-menu-position-offset=0
 dash=true
 dash-icon-size=0
 double-super-to-appgrid=true
@@ -440,6 +541,8 @@ panel-arrow=true
 panel-corner-size=0
 panel-in-overview=true
 panel-notification-icon=true
+panel-size=29
+power-icon=true
 ripple-box=true
 search=true
 show-apps-button=true
@@ -454,12 +557,43 @@ workspace=true
 workspace-background-corner-size=0
 workspace-popup=true
 workspace-switcher-should-show=true
+workspace-switcher-size=0
 workspace-wrap-around=true
 workspaces-in-app-grid=true
 
+[org/gnome/shell/extensions/lockkeys]
+notification-preferences='osd'
+
+[org/gnome/shell/extensions/materialshell/theme]
+blur-background=true
+clock-horizontal=false
+focus-effect='border'
+horizontal-panel-position='top'
+panel-icon-color=false
+panel-icon-style='application'
+panel-opacity=108
+panel-size=38
+primary-color='#1c1c1c'
+vertical-panel-position='left'
+
+[org/gnome/shell/extensions/materialshell/tweaks]
+cycle-through-windows=true
+
 [org/gnome/shell/extensions/pop-shell]
+focus-down=['<Super>KP_Down', '<Super>j']
+focus-left=['<Super>KP_Left', '<Super>h']
+focus-right=['<Super>KP_Right']
+pop-monitor-left=['<Shift><Super>KP_Left', '<Shift><Super>h']
+pop-monitor-right=['<Shift><Super>KP_Right', '<Shift><Super>l']
+pop-workspace-down=['<Shift><Super>KP_Down', '<Shift><Super>j']
+pop-workspace-up=['<Shift><Super>KP_Up', '<Shift><Super>k']
 smart-gaps=true
 snap-to-grid=true
+
+[org/gnome/shell/extensions/sound-output-device-chooser]
+hide-menu-icons=true
+integrate-with-slider=true
+omit-device-origins=false
 
 [org/gnome/shell/extensions/unite]
 autofocus-windows=true
@@ -467,8 +601,10 @@ desktop-name-text='Desktop'
 enable-titlebar-actions=false
 extend-left-box=false
 greyscale-tray-icons=true
+hide-activities-button='never'
 hide-app-menu-icon=true
 hide-dropdown-arrows=true
+hide-window-titlebars='maximized'
 reduce-panel-spacing=true
 show-window-buttons='never'
 show-window-title='always'
@@ -476,19 +612,34 @@ window-buttons-placement='left'
 window-buttons-theme='osx-arc'
 
 [org/gnome/shell/extensions/user-theme]
-name='dracula'
+name='Colloid-Purple-Dark-Compact'
 
 [org/gnome/shell/keybindings]
 show-screenshot-ui=@as []
 switch-to-application-1=@as []
 switch-to-application-2=@as []
 switch-to-application-3=@as []
+toggle-overview=@as []
 
 [org/gnome/shell/world-clocks]
 locations=@av []
 
+[org/gnome/terminal/legacy]
+theme-variant='dark'
+
+[org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+bold-is-bright=true
+cursor-blink-mode='on'
+login-shell=true
+preserve-working-directory='always'
+scroll-on-output=false
+
 [org/gnome/tweaks]
 show-extensions-notice=false
+
+[org/gtk/gtk4/settings/color-chooser]
+custom-colors=[(0.82745099067687988, 0.85490196943283081, 0.89019608497619629, 1.0), (0.10980392247438431, 0.10980392247438431, 0.10980392247438431, 0.98000001907348633), (0.10980392247438431, 0.10980392247438431, 0.10980392247438431, 1.0), (0.24705882370471954, 0.31764706969261169, 0.70980393886566162, 1.0)]
+selected-color=(true, 1.0, 1.0, 1.0, 1.0)
 
 [org/gtk/gtk4/settings/file-chooser]
 date-format='regular'
@@ -503,6 +654,9 @@ sort-order='ascending'
 type-format='category'
 window-size=(1920, 1052)
 
+[org/gtk/settings/color-chooser]
+selected-color=(true, 0.14117647058823529, 0.12156862745098039, 0.19215686274509805, 1.0)
+
 [org/gtk/settings/file-chooser]
 date-format='regular'
 location-mode='path-bar'
@@ -514,7 +668,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(344, 82)
+window-position=(1105, 262)
 window-size=(1231, 902)
 
 [org/gtkhash]
@@ -524,6 +678,9 @@ view='file'
 window-height=340
 window-max=false
 window-width=500
+
+[org/gtkhash/plugin]
+hash-functions=['MD5', 'SHA1', 'SHA256', 'CRC32']
 
 [system/proxy]
 mode='none'

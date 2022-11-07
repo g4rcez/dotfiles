@@ -143,6 +143,10 @@ if [ -x "$(command -v kitty)" ]; then
   kitty + complete setup zsh | source /dev/stdin
 fi
 
+if [ -x "$(command -v lvim)" ]; then
+  alias vim="lvim"
+fi
+
 ######################### Setup tools #########################
 
 # Google cloud
