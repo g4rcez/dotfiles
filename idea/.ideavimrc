@@ -54,6 +54,7 @@ set commentary
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
+set so=5
 set nocompatible
 set expandtab
 set ignorecase
@@ -109,6 +110,7 @@ nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>f <Plug>(easymotion-f)
 nmap <leader>g <action>(Git.Menu)
+nmap <leader>o <action>(OptimizeImports)
 nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
 nmap <leader>s <Plug>(easymotion-s)
@@ -128,17 +130,22 @@ nmap <leader>a <action>(PreviousTab)
 nmap <leader>j <action>(NextTab)
 nmap <leader>l <action>(NextTab)
 nmap <leader>d <action>(NextTab)
+
+"""""""""""""""""""""""""""" Bookmarks """"""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap gb <Action>(ShowBookmarks)
+nmap gm <Action>(ToggleBookmark)
+
 """"""""""""""""""""""""""""Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
 nmap gu <action>(ShowUsages)
 nmap gU <action>(FindUsages)
-nmap gb <Action>(ShowBookmarks)
-nmap gm <Action>(ToggleBookmark)
 nmap [[ <action>(MethodUp)
 nmap ]] <action>(MethodDown)
 vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
 nnoremap <C-t> :NERDTreeFocus<CR>
+
+"" Don't yank
 noremap ' "-
 
 """"""""""""""""""""""""""""""""""""""""""""" Handler """""""""""""""""""""""""""""""""""""""

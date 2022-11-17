@@ -23,7 +23,6 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # Misc Stuff
 cp curlrc ~/.curlrc
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 curl https://get.volta.sh | bash
 
 # Symlinks
@@ -37,8 +36,8 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 
 # Manjaro install
-sudo pacman -S base-devel flameshot vim neovim playerctl go
-yay -S google-chrome k6 
+sudo pacman -S base-devel rofi flameshot vim neovim ocs-url docker playerctl go python-pip jq docker-compose screenkey python-pip yay
+yay -S insomnia lastpass-cli albert k6 visual-studio-code-bin google-chrome k6
 
 # Node installs
 volta install node

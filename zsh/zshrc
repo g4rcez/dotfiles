@@ -44,6 +44,7 @@ zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' rehash true
 
 ##################################### User configuration #####################################
+export GPG_TTY=$(tty)
 export ARCHFLAGS="-arch x86_64"
 export MANPATH="/usr/local/man:$MANPATH"
 
@@ -76,7 +77,7 @@ function clone() {
   git clone git@github.com:$1
 }
 
-function gtag() {
+function tag() {
   git tag $1 && git push origin $1
 }
 
@@ -128,7 +129,7 @@ alias gitree="git log --oneline --graph --decorate --all"
 alias push='git push -u'
 alias pull='git pull'
 alias tags='git tag | sort -V'
-alias tag='git tag'
+alias rebase='git rebase'
 alias checkout='git checkout'
 alias ghc="gh pr checkout"
 alias ghl="gh pr list"

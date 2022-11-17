@@ -27,17 +27,17 @@ time_since_last_commit() {
 check_git() {
   local URL="$(git config --get remote.origin.url)"
   if [[ "$(echo $URL | grep 'github')" != "" ]]; then
-    echo -n " \uf09b %{$fg_bold[white]%}%{$resetcolor%} "
+    echo -n " \uea84%{$fg_bold[white]%}%{$resetcolor%} "
   elif [[ "$(echo $URL | grep 'gitlab')" != "" ]]; then
-    echo -n " \uf296 %{$fg_bold[white]%}%{$resetcolor%} "
+    echo -n " \uf296%{$fg_bold[white]%}%{$resetcolor%} "
   elif [[ "$(echo $URL | grep 'bitbucket')" != "" ]]; then
-    echo -n " \uf171 %{$fg_bold[white]%}%{$resetcolor%} "
+    echo -n " \uf171%{$fg_bold[white]%}%{$resetcolor%} "
   fi
 }
 
 exitstatus() {
   if [[ $? != 0 ]]; then
-    echo -n "%{$fg_bold[red]%}窱 %{$reset_color%}"
+    echo -n "%{$fg_bold[red]%}✗%{$reset_color%}"
   fi
 }
 
@@ -54,20 +54,20 @@ fishify() {
 
 current_env() {
   if [[ -e "./package.json" ]]; then
-    echo -n "%{$fg_bold[green]%}\uf898
-    %{$reset_color%} "
+    export PATH="$PATH:./node_modules/.bin"
+    echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
   fi
   if [[ -e "./Program.cs" ]]; then
     echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
   fi
   if [[ -e "./tsconfig.json" ]]; then
-    echo -n "%{$fg_bold[blue]%}\ufbe4%{$reset_color%} "
+    echo -n "%{$fg_bold[cyan]%}\ufbe4%{$reset_color%} "
   fi
 }
 
 dir_name() {
   local URL="$(git config --get remote.origin.url)"
-  PATH_SHOW="$(fishify $(pwd))"
+  local PATH_SHOW="$(fishify $(pwd))"
   if [[ "$URL" =~ ^git@.* ]]; then
     echo "[$PATH_SHOW] $(git config --get remote.origin.url | cut -d ':' -f2 | sed 's/.git$//g')"
     return
@@ -88,8 +88,8 @@ else
 fi
 
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}\uf62b%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[green]%}✚ "
 ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}⚑ "
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖ "
@@ -178,4 +178,4 @@ export LESS_TERMCAP_us=$'\E[1;32m'
 export LESS_TERMCAP_ue=$'\E[0m'
 
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
