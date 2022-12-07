@@ -15,4 +15,4 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 bash $HOME/dotfiles/install.sh
 ```
 
-[!image](./shell.png)
+![my shell](./shell.png)
