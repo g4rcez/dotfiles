@@ -37,14 +37,14 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 
 # Manjaro install
-sudo pacman -S base-devel flameshot vim neovim
+sudo pacman -S base-devel flameshot vim neovim playerctl
 
 # Node installs
 volta install node
 volta pin node
 volta install yarn
 volta pin yarn
-npm i -g pnpm add-gitignore
+npm i -g pnpm add-gitignore neovim
 
 ## Python pip modules
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
@@ -53,4 +53,9 @@ pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel 
 cd /tmp
 clone vinceliuice/Colloid-gtk-theme
 cd Colloid-gtk-theme
-./install.sh -t purple -c dark -s compact -l --tweaks black --tweaks rimless
+./install.sh -c dark -s compact -l --tweaks black --tweaks rimless
+
+# Lunarvim
+LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
+

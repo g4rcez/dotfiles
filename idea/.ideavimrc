@@ -27,6 +27,9 @@ xmap <C-p> <plug>RemoveOccurrence
 "" matchit.vim
 set matchit
 
+"" vim-paragraph-motion
+set vim-paragraph-motion
+
 """ Yank + Clipboard
 set highlightedyank
 set clipboard=unnamedplus,unnamed,ideaput
@@ -44,6 +47,10 @@ nmap <leader>p "+p
 nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
+
+"" commentary
+set commentary
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -77,6 +84,7 @@ set tabstop=4
 set sneak
 set exchange
 set viminfo
+set copyindent
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "" -- Idea things
@@ -90,6 +98,7 @@ vnoremap < <gv
 vnoremap > >gv
 map Q gq
 map U <C-R>
+map 0 ^
 
 """"""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>j <action>(SurroundWithLiveTemplate)
@@ -131,3 +140,10 @@ vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
 nnoremap <C-t> :NERDTreeFocus<CR>
 noremap ' "-
+
+""""""""""""""""""""""""""""""""""""""""""""" Handler """""""""""""""""""""""""""""""""""""""
+sethandler <C-C> a:ide
+sethandler <C-V> a:ide
+sethandler <C-X> a:ide
+sethandler n:vim i:ide
+
