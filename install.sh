@@ -37,7 +37,8 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 
 # Manjaro install
-sudo pacman -S base-devel flameshot vim neovim playerctl
+sudo pacman -S base-devel flameshot vim neovim playerctl go
+yay -S google-chrome k6 
 
 # Node installs
 volta install node
@@ -59,3 +60,5 @@ cd Colloid-gtk-theme
 LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 
+# Go
+go install github.com/codesenberg/bombardier@latest

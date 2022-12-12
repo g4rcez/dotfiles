@@ -142,8 +142,7 @@ nnoremap <C-t> :NERDTreeFocus<CR>
 noremap ' "-
 
 """"""""""""""""""""""""""""""""""""""""""""" Handler """""""""""""""""""""""""""""""""""""""
-sethandler <C-C> a:ide
-sethandler <C-V> a:ide
-sethandler <C-X> a:ide
 sethandler n:vim i:ide
-
+sethandler <C-c> a:ide
+sethandler <C-v> a:ide
+sethandler <C-s> a:ide
