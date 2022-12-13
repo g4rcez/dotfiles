@@ -36,8 +36,8 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 
 # Manjaro install
-sudo pacman -S base-devel rofi flameshot vim neovim ocs-url docker playerctl go python-pip jq docker-compose screenkey python-pip yay
-yay -S insomnia lastpass-cli albert k6 visual-studio-code-bin google-chrome k6
+sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq docker-compose screenkey python-pip yay
+yay -S insomnia lastpass-cli albert k6 visual-studio-code-bin
 
 # Node installs
 volta install node
@@ -61,3 +61,4 @@ ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 
 # Go
 go install github.com/codesenberg/bombardier@latest
+ln -sf $HOME/dotfiles/dygma $HOME/Raise
