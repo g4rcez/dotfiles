@@ -47,6 +47,9 @@ zstyle ':completion:*' rehash true
 export GPG_TTY=$(tty)
 export ARCHFLAGS="-arch x86_64"
 export MANPATH="/usr/local/man:$MANPATH"
+export VOLTA_HOME="$HOME/.volta"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 
 export PATH="$HOME/.local/share:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
@@ -56,12 +59,10 @@ export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/dotfiles/bin"
 export PATH="$PATH:/snap/bin"
 export PATH="$PNPM_HOME:$PATH"
-export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH=$PATH:$HOME/go/bin
+export PATH=$HOME/.config/rofi/scripts:$PATH
+export PATH="$VOLTA_HOME/bin:$PATH"
 
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export VOLTA_HOME="$HOME/.volta"
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 if [ -x "$(command -v lvim)" ]; then
   export EDITOR="lvim"
 else

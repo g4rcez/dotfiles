@@ -36,7 +36,7 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 
 # Manjaro install
-sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq docker-compose screenkey python-pip yay
+sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq docker-compose screenkey python-pip yay rofi rofi-emoji rofi-calc
 yay -S insomnia lastpass-cli albert k6 visual-studio-code-bin
 
 # Node installs
@@ -62,3 +62,7 @@ ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 # Go
 go install github.com/codesenberg/bombardier@latest
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
+
+# rofi
+git clone --depth=1 https://github.com/adi1090x/rofi.git
+echo "PATH=$PATH:~/.config/rofi/scripts" >> ~/.profile
