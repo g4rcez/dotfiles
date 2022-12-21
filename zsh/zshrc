@@ -69,6 +69,7 @@ else
   export EDITOR="vim"
 fi
 
+
 ##################################### Functions #####################################
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -104,18 +105,9 @@ function node:scripts() {
 ######################### simple alias #########################
 alias cp='cp -v'
 alias df='df -h'
-alias documents="cd $HOME/Documents"
-alias Documents="cd $HOME/Documents"
-alias dotfiles="cd $HOME/dotfiles"
-alias downloads="cd $HOME/Downloads"
-alias Downloads="cd $HOME/Downloads"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
-alias work="cd $HOME/Workspace"
-alias Work="cd $HOME/Workspace"
-alias tools="cd $HOME/tools"
-alias Tools="cd $HOME/tools"
 alias wtf='pwd'
 
 ######################### Clipboard utils #########################
@@ -142,6 +134,22 @@ alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dang
 alias lastpass="lpass"
 alias bomberman="bombardier"
 
+######################### cd Shortcuts #########################
+alias dotfiles="$HOME/dotfiles"
+alias docs="$HOME/Documents"
+alias Documents="$HOME/Documents"
+alias downloads="$HOME/Downloads"
+alias Downloads="$HOME/Downloads"
+alias documents="cd $HOME/Documents"
+alias Documents="cd $HOME/Documents"
+alias dotfiles="cd $HOME/dotfiles"
+alias downloads="cd $HOME/Downloads"
+alias Downloads="cd $HOME/Downloads"
+alias work="cd $HOME/Workspace"
+alias Work="cd $HOME/Workspace"
+alias tools="cd $HOME/tools"
+alias Tools="cd $HOME/tools"
+
 if [ -x "$(command -v kitty)" ]; then
   alias icat="kitty +kitten icat"
   autoload -Uz compinit
@@ -166,6 +174,10 @@ fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 # Nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
