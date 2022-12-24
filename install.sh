@@ -34,6 +34,8 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 
 # Git
 git config --global core.excludesFile '~/.gitignore'
+git config --global init.defaultBranch main
+
 
 # Manjaro install
 sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq docker-compose screenkey python-pip yay rofi rofi-emoji rofi-calc

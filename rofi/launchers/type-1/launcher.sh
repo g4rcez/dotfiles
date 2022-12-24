@@ -17,6 +17,6 @@ theme='style-2'
 ## Run
 rofi \
     -show drun \
-    -theme ${dir}/${theme}.rasi
-    -modes "window,run,windowcd,drun,combi,keys,filebrowser,calc"
+    -theme ${dir}/${theme}.rasi \
+    -modes "window,run,drun,combi,keys,filebrowser,calc,windowcd" \
     -show-icons
