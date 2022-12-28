@@ -8,10 +8,6 @@
 # Matches are substitution rules: when you type the "trigger" string
 # it gets replaced by the "replace" string.
 matches:
-  # Simple text replacement
-  - trigger: ":espanso"
-    replace: "Hi there!"
-
   # NOTE: espanso uses YAML to define matches, so pay attention to the indentation!
 
   # But matches can also be dynamic:
@@ -34,4 +30,4 @@ matches:
         params:
           cmd: "echo 'Hello from your shell'"
 
-  # And much more! For more information, visit the docs: https://espanso.org/docs/
+# And much more! For more information, visit the docs: https://espanso.org/docs/

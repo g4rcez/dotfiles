@@ -42,11 +42,9 @@ sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq 
 yay -S insomnia albert k6 visual-studio-code-bin
 
 # Node installs
-volta install node
-volta pin node
-volta install yarn
-volta pin yarn
-npm i -g pnpm add-gitignore neovim
+volta install node@18.2.1
+volta install yarn@1.22.1
+npm i -g pnpm ts-node yarn add-gitignore neovim
 
 ## Python pip modules
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
@@ -55,4 +53,11 @@ pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel 
 LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 
+# KDE Session
+ln -sf $HOME/.config/plasma-org.kde.plasma.desktop-appletsrc $HOME/dotfiles/kde/plasma-org.kde.plasma.desktop-appletsrc
+ln -sf $HOME/.config/plasmashellrc $HOME/dotfiles/kde/plasmashellrc
+ln -sf $HOME/.config/kdeglobals $HOME/dotfiles/kde/kdeglobals
+ln -sf $HOME/.config/kglobalshortcutsrc $HOME/dotfiles/kde/kglobalshortcutsrc
+
+# My keyboard
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
