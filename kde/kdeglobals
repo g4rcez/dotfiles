@@ -38,10 +38,18 @@ ForegroundPositive=39,174,96
 ForegroundVisited=62,91,135
 
 [Colors:Complementary]
+BackgroundAlternate[$d]
+BackgroundNormal[$d]
 DecorationFocus=146,110,228
 DecorationHover=146,110,228
 ForegroundActive=146,110,228
+ForegroundInactive[$d]
 ForegroundLink=146,110,228
+ForegroundNegative[$d]
+ForegroundNeutral[$d]
+ForegroundNormal[$d]
+ForegroundPositive[$d]
+ForegroundVisited[$d]
 
 [Colors:Selection]
 BackgroundAlternate=107,83,167
@@ -110,10 +118,11 @@ ColorSchemeHash=9576ef87a0de1931c50aeb1831060260aa545ee6
 LastUsedCustomAccentColor=146,110,228
 
 [Icons]
-Theme=la-capitaine-icon-theme-0.3.2
+Theme=Mojave-CT-Black
 
 [KDE]
 LookAndFeelPackage=Aritim-Dark
+widgetStyle=Breeze
 
 [KFileDialog Settings]
 Allow Expansion=false

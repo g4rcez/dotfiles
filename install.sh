@@ -36,6 +36,8 @@ ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
 git config --global core.excludesFile '~/.gitignore'
 git config --global init.defaultBranch main
 
+# Kitty terminal
+ln -sf $HOME/dotfiles/kitty $HOME/.config/kitty
 
 # Manjaro install
 sudo pacman -S base-devel bat flameshot vim neovim ocs-url docker python-pip jq docker-compose screenkey python-pip yay
@@ -54,10 +56,15 @@ LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.
 ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 
 # KDE Session
-ln -sf $HOME/.config/plasma-org.kde.plasma.desktop-appletsrc $HOME/dotfiles/kde/plasma-org.kde.plasma.desktop-appletsrc
-ln -sf $HOME/.config/plasmashellrc $HOME/dotfiles/kde/plasmashellrc
-ln -sf $HOME/.config/kdeglobals $HOME/dotfiles/kde/kdeglobals
-ln -sf $HOME/.config/kglobalshortcutsrc $HOME/dotfiles/kde/kglobalshortcutsrc
+ln -sf $HOME/dotfiles/kde/plasma-org.kde.plasma.desktop-appletsrc $HOME/.config/plasma-org.kde.plasma.desktop-appletsrc 
+ln -sf $HOME/dotfiles/kde/plasmashellrc $HOME/.config/plasmashellrc
+ln -sf $HOME/dotfiles/kde/kdeglobals $HOME/.config/kdeglobals 
+ln -sf $HOME/dotfiles/kde/kglobalshortcutsrc $HOME/.config/kglobalshortcutsrc 
 
 # My keyboard
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
+
+mkdir -p $HOME/tools
+
+# Jetbrains
+wget "https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux" -O $HOME/tools

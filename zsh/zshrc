@@ -6,35 +6,12 @@ HIST_STAMPS="yyyy-mm-dd"
 ZSH_COMMAND_TIME_MSG="Execution time: %s sec"
 
 plugins=(
-  command-time
   dirhistory
   git
-  lpass
   z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
-
-zsh_command_time() {
-  if [ -n "$ZSH_COMMAND_TIME" ]; then
-    hours=$(($ZSH_COMMAND_TIME / 3600))
-    min=$(($ZSH_COMMAND_TIME / 60))
-    sec=$(($ZSH_COMMAND_TIME % 60))
-    if [ "$ZSH_COMMAND_TIME" -le 60 ]; then
-      timer_show="$fg[green]$ZSH_COMMAND_TIME s."
-    elif [ "$ZSH_COMMAND_TIME" -gt 60 ] && [ "$ZSH_COMMAND_TIME" -le 180 ]; then
-      timer_show="$fg[yellow]$min min. $sec s."
-    else
-      if [ "$hours" -gt 0 ]; then
-        min=$(($min % 60))
-        timer_show="$fg[red]$hours h. $min min. $sec s."
-      else
-        timer_show="$fg[red]$min min. $sec s."
-      fi
-    fi
-    printf "${ZSH_COMMAND_TIME_MSG}\n" "$timer_show"
-  fi
-}
 
 source $ZSH/oh-my-zsh.sh
 
@@ -63,6 +40,8 @@ export PATH="$PNPM_HOME:$PATH"
 export PATH=$PATH:$HOME/go/bin
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export PATH="$VOLTA_HOME/bin:$PATH"
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
 
 if [ -x "$(command -v lvim)" ]; then
   export EDITOR="lvim"
@@ -133,7 +112,7 @@ alias n="pnpm"
 alias dockerkill="docker kill $(docker ps -q)"
 alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
 alias bomberman="bombardier"
-alias cat="bat -p --pager cat"
+alias cat="bat -p --pager cat --theme OneHalfDark"
 alias ls="exa --icons -x --color=always"
 alias ll="ls -l"
 
@@ -183,3 +162,21 @@ export FZF_DEFAULT_OPTS=" \
 # Nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# dotnet autocomplete
+_dotnet_zsh_complete() 
+{
+  local completions=("$(dotnet complete "$words")")
+
+  # If the completion list is empty, just continue with filename selection
+  if [ -z "$completions" ]
+  then
+    _arguments '*::arguments: _normal'
+    return
+  fi
+
+  # This is not a variable assignment, don't remove spaces!
+  _values = "${(ps:\n:)completions}"
+}
+
+compdef _dotnet_zsh_complete dotnet

@@ -1,8 +1,11 @@
 [ActivityManager]
 _k_friendly_name=Activity Manager
 switch-to-activity-3af7f0b1-797a-48ea-b39c-be316966cf5e=none,none,Switch to activity "Default"
+switch-to-activity-f48fdd56-45bd-414f-ae59-d8bfc373b7d1=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
+Switch keyboard layout to English (US, alt. intl.)=none,none,Switch keyboard layout to English (US\\, alt. intl.)
+Switch keyboard layout to Portuguese (Brazil)=none,none,Switch keyboard layout to Portuguese (Brazil)
 Switch to Next Keyboard Layout=Meta+Alt+K,none,Switch to Next Keyboard Layout
 _k_friendly_name=Keyboard Layout Switcher
 
@@ -23,9 +26,10 @@ display=Display\tMeta+P,Display\tMeta+P,Switch Display
 
 [khotkeys]
 _k_friendly_name=Custom Shortcuts Service
-{5c630140-35ed-4481-8f72-4ab4a181ab62}=Print,none,Flameshot
+{36f8ee87-723c-4629-8f88-ae4368c08809}=Alt+Space,none,Albert
+{5f42a53d-e95e-425f-b9c4-0283898203b5}=Meta+Return,none,Kitty
+{621eefda-489b-4359-b154-f8744317b17e}=Print,none,Flameshot
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=none,none,Search
-{f615152e-a677-42a7-9479-7a68641f688b}=Meta+Return,none,Run Konsole
 
 [kmix]
 _k_friendly_name=Audio Volume
@@ -52,9 +56,10 @@ ExposeAll=Ctrl+F10\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All 
 ExposeClass=Ctrl+F7,Ctrl+F7,Toggle Present Windows (Window class)
 ExposeClassCurrentDesktop=none,none,Toggle Present Windows (Window class on current desktop)
 Increase Opacity=none,,Increase Opacity of Active Window by 5 %
-Invert Screen Colors=none,,Invert Screen Colours
+Invert Screen Colors=none,,Invert Screen Colors
 Kill Window=Meta+Ctrl+Esc,Meta+Ctrl+Esc,Kill Window
-MoveMouseToCenter=Meta+F6,Meta+F6,Move Mouse to Centre
+MinimizeAll=Meta+Shift+D,none,MinimizeAll
+MoveMouseToCenter=Meta+F6,Meta+F6,Move Mouse to Center
 MoveMouseToFocus=Meta+F5,Meta+F5,Move Mouse to Focus
 MoveZoomDown=none,none,Move Zoomed Area Downwards
 MoveZoomLeft=none,none,Move Zoomed Area to Left
@@ -105,7 +110,7 @@ Switch to Screen 4=none,,Switch to Screen 4
 Switch to Screen 5=none,,Switch to Screen 5
 Switch to Screen 6=none,,Switch to Screen 6
 Switch to Screen 7=none,,Switch to Screen 7
-Toggle Night Color=none,none,Toggle Night Colour
+Toggle Night Color=none,none,Toggle Night Color
 Toggle Window Raise/Lower=none,,Toggle Window Raise/Lower
 ToggleCurrentThumbnail=Meta+Ctrl+T,Meta+Ctrl+T,Toggle Thumbnail for Current Window
 Walk Through Desktop List=none,,Walk Through Desktop List
@@ -122,17 +127,17 @@ Walk Through Windows of Current Application Alternative=none,,Walk Through Windo
 Walk Through Windows of Current Application Alternative (Reverse)=none,,Walk Through Windows of Current Application Alternative (Reverse)
 Window Above Other Windows=none,,Keep Window Above Others
 Window Below Other Windows=none,,Keep Window Below Others
-Window Close=Alt+Shift+W,Alt+F4,Close Window
+Window Close=Alt+F4\tAlt+Shift+W,Alt+F4,Close Window
 Window Fullscreen=none,,Make Window Fullscreen
 Window Grow Horizontal=none,,Expand Window Horizontally
 Window Grow Vertical=none,,Expand Window Vertically
 Window Lower=none,,Lower Window
-Window Maximize=Meta+PgUp\tMeta+Space,Meta+PgUp,Maximise Window
-Window Maximize Horizontal=none,,Maximise Window Horizontally
-Window Maximize Vertical=none,,Maximise Window Vertically
-Window Minimize=Meta+PgDown,Meta+PgDown,Minimise Window
+Window Maximize=Meta+PgUp,Meta+PgUp,Maximize Window
+Window Maximize Horizontal=none,,Maximize Window Horizontally
+Window Maximize Vertical=none,,Maximize Window Vertically
+Window Minimize=Meta+PgDown,Meta+PgDown,Minimize Window
 Window Move=none,,Move Window
-Window Move Center=none,,Move Window to the Centre
+Window Move Center=none,,Move Window to the Center
 Window No Border=none,,Hide Window Border
 Window On All Desktops=none,,Keep Window on All Desktops
 Window One Desktop Down=Meta+Ctrl+Shift+Down,Meta+Ctrl+Shift+Down,Window One Desktop Down
@@ -196,11 +201,11 @@ view_zoom_out=Meta+-,Meta+-,Zoom Out
 
 [mediacontrol]
 _k_friendly_name=Media Controller
-mediavolumedown=,,Media volume down
-mediavolumeup=,,Media volume up
+mediavolumedown=none,none,Media volume down
+mediavolumeup=none,none,Media volume up
 nextmedia=Media Next,Media Next,Media playback next
 pausemedia=Media Pause,Media Pause,Pause media playback
-playmedia=,,Play media playback
+playmedia=none,none,Play media playback
 playpausemedia=Media Play,Media Play,Play/Pause media playback
 previousmedia=Media Previous,Media Previous,Media playback previous
 stopmedia=Media Stop,Media Stop,Stop media playback
@@ -216,7 +221,7 @@ _launch=Launch (1),Launch (1),KCalc
 [org.kde.krunner.desktop]
 RunClipboard=Alt+Shift+F2,Alt+Shift+F2,Run command on clipboard contents
 _k_friendly_name=KRunner
-_launch=Alt+Space\tAlt+F2\tSearch,Alt+Space\tAlt+F2\tSearch,KRunner
+_launch=Alt+F2\tSearch,Alt+Space\tAlt+F2\tSearch,KRunner
 
 [org.kde.plasma.emojier.desktop]
 _k_friendly_name=Emoji Selector
@@ -226,11 +231,11 @@ _launch=Meta+.,Meta+.,Emoji Selector
 ActiveWindowScreenShot=Meta+Print,Meta+Print,Capture Active Window
 CurrentMonitorScreenShot=none,none,Capture Current Monitor
 FullScreenScreenShot=Shift+Print,Shift+Print,Capture Entire Desktop
-OpenWithoutScreenshot=none,none,Launch Spectacle without capturing
+OpenWithoutScreenshot=none,none,Launch without taking a screenshot
 RectangularRegionScreenShot=Meta+Shift+Print,Meta+Shift+Print,Capture Rectangular Region
 WindowUnderCursorScreenShot=Meta+Ctrl+Print,Meta+Ctrl+Print,Capture Window Under Cursor
 _k_friendly_name=Spectacle
-_launch=,Print,Launch Spectacle
+_launch=none,Print,Spectacle
 
 [org_kde_powerdevil]
 Decrease Keyboard Brightness=Keyboard Brightness Down,Keyboard Brightness Down,Decrease Keyboard Brightness
@@ -258,6 +263,10 @@ activate task manager entry 7=Meta+7,Meta+7,Activate Task Manager Entry 7
 activate task manager entry 8=Meta+8,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=Meta+9,Meta+9,Activate Task Manager Entry 9
 activate widget 24=Alt+F1,none,Activate Application Dashboard Widget
+activate widget 27=none,none,Activate Application Launcher Widget
+activate widget 4=none,none,Activate Application Launcher Widget
+activate widget 75=none,none,Activate Better inline clock Widget
+activate widget 79=none,none,Activate Application Dashboard Widget
 clear-history=none,,Clear Clipboard History
 clipboard_action=Meta+Ctrl+X,Meta+Ctrl+X,Automatic Action Popup Menu
 cycle-panels=Meta+Alt+P,Meta+Alt+P,Move keyboard focus between panels
@@ -265,8 +274,8 @@ cycleNextAction=none,,Next History Item
 cyclePrevAction=none,,Previous History Item
 edit_clipboard=none,,Edit Contents…
 manage activities=Meta+Q,Meta+Q,Show Activity Switcher
-next activity=Meta+Tab,Meta+Tab,Walk through activities
-previous activity=Meta+Shift+Tab,Meta+Shift+Tab,Walk through activities (Reverse)
+next activity=Meta+Tab,none,Walk through activities
+previous activity=Meta+Shift+Tab,none,Walk through activities (Reverse)
 repeat_action=Meta+Ctrl+R,Meta+Ctrl+R,Manually Invoke Action on Current Clipboard
 show dashboard=Ctrl+F12,Ctrl+F12,Show Desktop
 show-barcode=none,,Show Barcode…
