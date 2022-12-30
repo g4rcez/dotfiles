@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Obsidian
+Exec=/home/garcez/tools/obsidian
+Comment=A second brain,\nfor you, forever.
+Terminal=false
+Icon=/home/garcez/dotfiles/desktop-entries/obsidian.png
+Type=Application

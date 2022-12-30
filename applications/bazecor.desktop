@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Dygma Bazecor
+Exec=/home/garcez/tools/bazecor
+Comment=Dygma keyboard
+Terminal=false
+Icon=/home/garcez/dotfiles/desktop-entries/bazecor.png
+Type=Application

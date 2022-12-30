@@ -2,13 +2,16 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="vandalvnl"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
-
-ZSH_COMMAND_TIME_MSG="Execution time: %s sec"
+CASE_SENSITIVE="false"
+HYPHEN_INSENSITIVE="true"
+ZSH_COMMAND_TIME_MSG="%s sec"
 
 plugins=(
   dirhistory
   git
+  command-time
   z
+  fzf-tab
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -17,8 +20,25 @@ source $ZSH/oh-my-zsh.sh
 
 autoload -Uz compinit
 compinit
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' rehash true
+zstyle ':completion:*' matcher-list '' \
+  'm:{a-z\-}={A-Z\_}' \
+  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+  'r:|?=** m:{a-z\-}={A-Z\_}'
+  # disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
 
 ##################################### User configuration #####################################
 export GPG_TTY=$(tty)
@@ -32,7 +52,6 @@ export PATH="$HOME/.local/share:$PATH"
 export PATH="$HOME/.local/share/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
-export PATH="$HOME/tools:$PATH"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/dotfiles/bin"
 export PATH="$PATH:/snap/bin"
@@ -40,6 +59,9 @@ export PATH="$PNPM_HOME:$PATH"
 export PATH=$PATH:$HOME/go/bin
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export PATH="$VOLTA_HOME/bin:$PATH"
+export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
+export PATH="$PATH:$HOME/tools"
+export PATH="$PATH:$HOME/dotfiles/scripts"
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
 
@@ -109,12 +131,14 @@ alias ghl="gh pr list"
 
 ######################### General stuff #########################
 alias n="pnpm"
+alias vim="lvim"
 alias dockerkill="docker kill $(docker ps -q)"
 alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
 alias bomberman="bombardier"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 alias ls="exa --icons -x --color=always"
 alias ll="ls -l"
+alias files="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 ######################### cd Shortcuts #########################
 alias dotfiles="$HOME/dotfiles"
@@ -147,17 +171,14 @@ fi
 if [ -f '$HOME/tools/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/path.zsh.inc'; fi
 if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/completion.zsh.inc'; fi
 
-# ls -> logo-ls
 if [ -x "$(command -v logo-ls)" ]; then
   alias ls="logo-ls -DUX"
 fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+export FZF_DEFAULT_OPTS=' --height 40% --layout=reverse --border --info=inline --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
+source $HOME/dotfiles/scripts/fzf-git
 
 # Nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
