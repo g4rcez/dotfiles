@@ -1,0 +1,101 @@
+format = """
+$username\
+$hostname\
+$directory\
+${custom.git_host}\
+$git_branch\
+$git_state\
+$git_status\
+$line_break\
+$character"""
+
+right_format = """
+$dotnet\
+$nodejs\
+$time\
+$cmd_duration\
+"""
+
+[directory]
+style = "bold green"
+truncation_length = 0
+fish_style_pwd_dir_length = 1
+
+[time]
+disabled = false
+time_format = "%R:%S - %d/%m/%Y"
+style = "$white"
+format = '[[  $time ](fg:#a0a9cb)]($style)'
+
+[character]
+success_symbol = "[❯](bold white)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[羽$duration]($style) "
+style = "yellow"
+min_time = 1_000
+show_notifications = true
+min_time_to_notify = 10_000
+
+[nodejs]
+format = '[$symbol($version )]($style)'
+detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
+detect_files = ['node_modules', '.yarn']
+symbol = ' '
+disabled = false
+
+[custom.git_host]
+command = """
+URL=$(command git ls-remote --get-url 2> /dev/null)
+if [[ "$URL" =~ "github" ]]; then
+    ICON=" "
+elif [[ "$URL" =~ "gitlab" ]]; then
+    ICON=" "
+elif [[ "$URL" =~ "bitbucket" ]];then
+    ICON=" "
+elif [[ "$URL" =~ "kernel" ]];then
+    ICON=" "
+elif [[ "$URL" =~ "archlinux" ]];then
+    ICON=" "
+elif [[ "$URL" =~ "gnu" ]];then
+    ICON=" "
+elif [[ "$URL" =~ "git" ]];then
+    ICON=" "
+else
+    ICON=" "
+    URL="localhost"
+fi
+for PATTERN in "https" "http" "git" "://" "@"; do
+    [[ "$URL" == "$PATTERN"* ]] && URL="${URL##$PATTERN}"
+done
+for PATTERN in "/" ".git"; do
+    [[ "$URL" == *"$PATTERN" ]] && URL="${URL%%$PATTERN}"
+done
+printf "%s%s" "$ICON" "$URL"
+"""
+directories = [".git"]
+when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
+shell = ["bash","--norc","--noprofile"]
+style = "white bold"
+format = "[$output]($style) "
