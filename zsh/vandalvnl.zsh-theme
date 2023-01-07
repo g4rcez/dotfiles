@@ -104,79 +104,40 @@ ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 
-########## CLI Utils ##########
-setopt append_history
-setopt auto_pushd
-setopt autocd
-setopt extended_glob
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_reduce_blanks
-setopt hist_save_no_dups
-setopt numericglobsort
-setopt promptsubst
-setopt pushd_ignore_dups
-setopt pushd_minus
-setopt share_history
-setopt notify
-setopt magicequalsubst
-setopt hist_verify
+source $HOME/dotfiles/zsh/zstyle.sh
+
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
 ZSH_HIGHLIGHT_PATTERNS+=("mv " "fg=yellow,bold")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[function]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow,bold"
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=magenta"
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
 ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=blue"
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=white"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=black"
 ZSH_HIGHLIGHT_STYLES[default]=none
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-ZSH_HIGHLIGHT_STYLES[path]="fg=yellow,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=yellow,underline"
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[function]="fg=cyan,bold"
+ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
+ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=yellow,underline"
+ZSH_HIGHLIGHT_STYLES[path]="fg=yellow,underline"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
+ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
 
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
-
-######################## Enable Colors ######################## 
-alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias diff='diff --color=auto'
-alias ip='ip --color=auto'
-
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;33m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-export LESS_TERMCAP_ue=$'\E[0m'
-
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'

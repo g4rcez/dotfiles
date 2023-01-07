@@ -83,7 +83,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "yaml",
 }
 
-lvim.builtin.treesitter.ignore_install = { "haskell" }
+lvim.builtin.treesitter.ignore_install = {}
 lvim.builtin.treesitter.highlight.enable = true
 
 -- generic LSP settings
@@ -164,7 +164,7 @@ lvim.builtin.treesitter.highlight.enable = true
 -- Additional Plugins
 lvim.plugins = {
   {
-    --       "folke/trouble.nvim",
+    "folke/trouble.nvim",
     "fladson/vim-kitty"
     --       cmd = "TroubleToggle",
   },

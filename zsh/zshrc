@@ -1,5 +1,6 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="vandalvnl"
+
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 CASE_SENSITIVE="false"
@@ -7,163 +8,17 @@ HYPHEN_INSENSITIVE="true"
 ZSH_COMMAND_TIME_MSG="%s sec"
 
 plugins=(
-  dirhistory
+  gh
   git
+  dirhistory
   command-time
-  z
-  fzf-tab
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
-
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion::complete:*' gain-privileges 1
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' matcher-list '' \
-  'm:{a-z\-}={A-Z\_}' \
-  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-  'r:|?=** m:{a-z\-}={A-Z\_}'
-  # disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
-
-##################################### User configuration #####################################
-export GPG_TTY=$(tty)
-export ARCHFLAGS="-arch x86_64"
-export MANPATH="/usr/local/man:$MANPATH"
-export VOLTA_HOME="$HOME/.volta"
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-
-export PATH="$HOME/.local/share:$PATH"
-export PATH="$HOME/.local/share/bin:$PATH"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/dotfiles/bin"
-export PATH="$PATH:/snap/bin"
-export PATH="$PNPM_HOME:$PATH"
-export PATH=$PATH:$HOME/go/bin
-export PATH=$HOME/.config/rofi/scripts:$PATH
-export PATH="$VOLTA_HOME/bin:$PATH"
-export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
-export PATH="$PATH:$HOME/tools"
-export PATH="$PATH:$HOME/dotfiles/scripts"
-export DOTNET_ROOT=$HOME/.dotnet
-export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
-
-if [ -x "$(command -v lvim)" ]; then
-  export EDITOR="lvim"
-else
-  export EDITOR="vim"
-fi
-
-
-##################################### Functions #####################################
-function memory() {
-  ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
-}
-
-function clone() {
-  git clone git@github.com:$1
-}
-
-function tag() {
-  git tag $1 && git push origin $1
-}
-
-function cdm() {
-  mkdir -p $1 && cd $1
-}
-
-function clonecd() {
-  git clone git@github.com:$1
-  cd $(echo $1 | cut -d '/' -f2-)
-}
-
-function sysinfo() {
-  ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
-}
-
-function node:scripts() {
-  cat $PWD/package.json | jq .scripts
-}
-
-##################################### Alias #####################################
-
-######################### simple alias #########################
-alias cp='cp -v'
-alias df='df -h'
-alias more='less'
-alias mv='mv -v'
-alias rm='rm -v'
-alias wtf='pwd'
-
-######################### Clipboard utils #########################
-alias pbcopy='xclip -sel clip'
-alias pbpaste='xclip -selection clipboard -o'
-
-######################### Git/Github CLI utils #########################
-alias add='git add'
-alias commit='git commit -m'
-alias gittree="git log --oneline --graph --decorate --all"
-alias gitree="git log --oneline --graph --decorate --all"
-alias push='git push -u'
-alias pull='git pull'
-alias tags='git tag | sort -V'
-alias rebase='git rebase'
-alias checkout='git checkout'
-alias ghc="gh pr checkout"
-alias ghl="gh pr list"
-
-######################### General stuff #########################
-alias n="pnpm"
-alias vim="lvim"
-alias dockerkill="docker kill $(docker ps -q)"
-alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
-alias bomberman="bombardier"
-alias cat="bat -p --pager cat --theme OneHalfDark"
-alias ls="exa --icons -x --color=always"
-alias ll="ls -l"
-alias files="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-
-######################### cd Shortcuts #########################
-alias dotfiles="$HOME/dotfiles"
-alias docs="$HOME/Documents"
-alias Documents="$HOME/Documents"
-alias downloads="$HOME/Downloads"
-alias Downloads="$HOME/Downloads"
-alias documents="cd $HOME/Documents"
-alias Documents="cd $HOME/Documents"
-alias dotfiles="cd $HOME/dotfiles"
-alias downloads="cd $HOME/Downloads"
-alias Downloads="cd $HOME/Downloads"
-alias tools="cd $HOME/tools"
-alias Tools="cd $HOME/tools"
-
-if [ -x "$(command -v kitty)" ]; then
-  alias icat="kitty +kitten icat"
-  autoload -Uz compinit
-  compinit
-  kitty + complete setup zsh | source /dev/stdin
-fi
-
-if [ -x "$(command -v lvim)" ]; then
-  alias vim="lvim"
-fi
+source $HOME/dotfiles/zsh/export.sh
+source $HOME/dotfiles/zsh/alias.sh
 
 ######################### Setup tools #########################
 
@@ -171,18 +26,9 @@ fi
 if [ -f '$HOME/tools/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/path.zsh.inc'; fi
 if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/completion.zsh.inc'; fi
 
-if [ -x "$(command -v logo-ls)" ]; then
-  alias ls="logo-ls -DUX"
-fi
-
-# fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS=' --height 40% --layout=reverse --border --info=inline --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
-source $HOME/dotfiles/scripts/fzf-git
-
 # Nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # dotnet autocomplete
 _dotnet_zsh_complete() 
@@ -201,3 +47,10 @@ _dotnet_zsh_complete()
 }
 
 compdef _dotnet_zsh_complete dotnet
+
+autoload -Uz compinit
+compinit
+
+# zoxide
+eval "$(zoxide init zsh)"
+
