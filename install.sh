@@ -3,10 +3,7 @@
 # ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
 # ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
 # ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
-# ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
-# ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
-# Dotfiles by: @vandalvnl
-git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
+# ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║ ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝ Dotfiles by: @vandalvnl git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
 cd $HOME/dotfiles
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
@@ -37,13 +34,12 @@ ln -sf $HOME/dotfiles/zsh/vandalvnl.zsh-theme $HOME/.oh-my-zsh/themes/vandalvnl.
 ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $HOME/dotfiles/global_gitignore $HOME/.gitignore
 ln -sf $HOME/dotfiles/vim/vimrc $HOME/.vimrc
+ln -sf $HOME/dotfiles/.config/wezterm/main.lua $HOME/.wezterm.lua
+ln -sf $HOME/dotfiles/.config/kitty $HOME/.config/kitty
 
 # Git
 git config --global core.excludesFile '~/.gitignore'
 git config --global init.defaultBranch main
-
-# Kitty terminal
-ln -sf $HOME/dotfiles/kitty $HOME/.config/kitty
 
 # Node installs
 volta install node@18.2.1
@@ -54,7 +50,8 @@ npm i -g pnpm ts-node yarn add-gitignore neovim
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 # Lunarvim
-LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
+LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
 ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
 
 # My keyboard

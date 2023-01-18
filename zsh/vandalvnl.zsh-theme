@@ -78,7 +78,7 @@ dir_name() {
 
 PROMPT='
 %{$resetcolor%}$(exitstatus)%{$fg_bold[blue]$(dir_name)%}%{$reset_color%}$(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}❯%{$resetcolor%} '
+%{$fg_bold[$CARETCOLOR]%}>%{$resetcolor%} '
 
 RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M")%{$(echotc DO 1)%}%{$resetcolor%}'
 
@@ -113,10 +113,10 @@ ZSH_HIGHLIGHT_PATTERNS+=("mv " "fg=yellow,bold")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[function]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=magenta"
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=green"
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
 ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
@@ -124,7 +124,7 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=white"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=black"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[default]=none
 ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
