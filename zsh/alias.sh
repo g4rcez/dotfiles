@@ -7,7 +7,6 @@ alias downloads="cd $HOME/Downloads"
 alias Downloads="cd $HOME/Downloads"
 alias tools="cd $HOME/tools"
 alias Tools="cd $HOME/tools"
-
 ######################### simple alias #########################
 alias cp='cp -v'
 alias df='df -h'
@@ -23,11 +22,9 @@ alias mv='mv -v'
 alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
-
 ######################### Clipboard utils #########################
 alias pbcopy='xclip -sel clip'
 alias pbpaste='xclip -selection clipboard -o'
-
 ######################### Git/Github CLI utils #########################
 alias add='git add'
 alias commit='git commit -m'
@@ -40,7 +37,6 @@ alias rebase='git rebase'
 alias checkout='git checkout'
 alias ghc="gh pr checkout"
 alias ghl="gh pr list"
-
 ######################### General stuff #########################
 alias n="pnpm"
 alias vim="lvim"
@@ -56,10 +52,13 @@ if [ -x "$(command -v kitty)" ]; then
   kitty + complete setup zsh | source /dev/stdin
 fi
 
+if [ -x "$(command -v wezterm)" ]; then
+  alias company="nohup wezterm connect company --workspace company > /dev/null 2>&1 &"
+fi
+
 if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
 fi
-
 
 if [ -x "$(command -v logo-ls)" ]; then
   alias ls="logo-ls -DUX"
@@ -69,7 +68,6 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS=' --height 40% --layout=reverse --border --info=inline --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
 source $HOME/dotfiles/scripts/fzf-git
-
 ##################################### Functions #####################################
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -92,35 +90,50 @@ function sysinfo() {
 }
 
 function node:scripts() {
-  cat $PWD/package.json | jq .scripts
+  cat "$PWD"/package.json | jq .scripts
 }
 
 function cpv() {
-    rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
+  rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
 }
 
 function git-graph() {
-    git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
-function ext ()
-{
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
+function extract() {
+  if [ -f "$FILE" ]; then
+    case $FILE in
+    *.tar.bz2) tar xjf "$FILE" ;;
+    *.tar.gz) tar xzf "$FILE" ;;
+    *.bz2) bunzip2 "$FILE" ;;
+    *.rar) unrar x "$FILE" ;;
+    *.gz) gunzip "$FILE" ;;
+    *.tar) tar xf "$FILE" ;;
+    *.tbz2) tar xjf "$FILE" ;;
+    *.tgz) tar xzf "$FILE" ;;
+    *.zip) unzip "$FILE" ;;
+    *.Z) uncompress "$FILE" ;;
+    *.7z) 7z x "$FILE" ;;
+    *) echo "'$FILE' cannot be extracted via ex()" ;;
     esac
   else
-    echo "'$1' is not a valid file"
+    echo "'$FILE' is not a valid file"
   fi
+}
+
+# dotnet autocomplete
+_dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+
+  # If the completion list is empty, just continue with filename selection
+  if [ -z "$completions" ]
+  then
+    _arguments '*::arguments: _normal'
+    return
+  fi
+
+  # This is not a variable assignment, don't remove spaces!
+  _values = "${(ps:\n:)completions}"
 }

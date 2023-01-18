@@ -15,6 +15,10 @@ let g:NERDTreeMapJumpParent='l'
 "" -- Surround
 set surround
 
+"""" argtextobj
+set argtextobj
+let g:argtextobj_pairs="(:),{:},<:>"
+
 "" -- Multiple cursors
 set multiple-cursors
 nmap <C-n> <plug>NextWholeOccurrence
@@ -26,6 +30,11 @@ xmap <C-p> <plug>RemoveOccurrence
 
 "" matchit.vim
 set matchit
+
+""" Horizontal movement
+set sneak
+set quickscope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 "" vim-paragraph-motion
 set vim-paragraph-motion
