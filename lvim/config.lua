@@ -28,21 +28,21 @@ lvim.leader = "space"
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
--- local _, actions = pcall(require, "telescope.actions")
--- lvim.builtin.telescope.defaults.mappings = {
---   -- for input mode
---   i = {
---     ["<C-j>"] = actions.move_selection_next,
---     ["<C-k>"] = actions.move_selection_previous,
---     ["<C-n>"] = actions.cycle_history_next,
---     ["<C-p>"] = actions.cycle_history_prev,
---   },
---   -- for normal mode
---   n = {
---     ["<C-j>"] = actions.move_selection_next,
---     ["<C-k>"] = actions.move_selection_previous,
---   },
--- }
+local _, actions = pcall(require, "telescope.actions")
+lvim.builtin.telescope.defaults.mappings = {
+  --   -- for input mode
+  i = {
+    ["<C-j>"] = actions.move_selection_next,
+    ["<C-k>"] = actions.move_selection_previous,
+    ["<C-n>"] = actions.cycle_history_next,
+    ["<C-p>"] = actions.cycle_history_prev,
+  },
+  --   -- for normal mode
+  n = {
+    ["<C-j>"] = actions.move_selection_next,
+    ["<C-k>"] = actions.move_selection_previous,
+  },
+}
 
 -- Change theme settings
 -- lvim.builtin.theme.options.dim_inactive = true
@@ -62,10 +62,11 @@ lvim.leader = "space"
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
+lvim.builtin.dap.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
-lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
+lvim.builtin.nvimtree.setup.view.side = "right"
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -165,8 +166,8 @@ lvim.builtin.treesitter.highlight.enable = true
 lvim.plugins = {
   {
     "folke/trouble.nvim",
-    "fladson/vim-kitty"
-    --       cmd = "TroubleToggle",
+    "fladson/vim-kitty",
+    "norcalli/nvim-colorizer.lua"
   },
 }
 
@@ -176,13 +177,13 @@ lvim.plugins = {
 --   -- enable wrap mode for json files only
 --   command = "setlocal wrap",
 -- })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "zsh",
+  callback = function()
+    -- let treesitter use bash highlight for zsh files as well
+    require("nvim-treesitter.highlight").attach(0, "bash")
+  end,
+})
 
 -- Custom
 vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
@@ -190,3 +191,54 @@ vim.opt.cmdheight = 1 -- more space in the neovim command line for displaying me
 vim.opt.showmode = true -- we don't need to see things like -- INSERT -- anymore
 vim.opt.termguicolors = true -- set term gui colors (most terminals support this)
 vim.opt.cursorline = true -- highlight the current line
+vim.opt.colorcolumn = "99999"
+vim.opt.title = true
+vim.opt.spell = false
+vim.opt.spelllang = "en"
+
+lvim.lsp.automatic_servers_installation = true
+lvim.lsp.templates_dir = join_paths(get_runtime_dir(), "after", "ftplugin")
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  { command = "black" },
+  {
+    command = "prettier",
+    args = { "--print-width", "150" },
+    filetypes = { "typescript", "typescriptreact", "javascript" },
+  },
+}
+
+local linters = require "lvim.lsp.null-ls.linters"
+linters.setup {
+  { command = "flake8" },
+  {
+    command = "shellcheck",
+    args = { "--severity", "warning" },
+  },
+  {
+    command = "codespell",
+    filetypes = { "javascript", "python" },
+  },
+}
+
+local code_actions = require "lvim.lsp.null-ls.code_actions"
+code_actions.setup {
+  {
+    command = "proselint"
+  },
+}
+
+-- colorize hex colors
+require 'colorizer'.setup({ '*'; }, {
+  RGB = true,
+  RRGGBB = true,
+  names = true,
+  RRGGBBAA = true,
+})
+
+-- nvim-tree
+require("nvim-tree").setup({
+  view = {
+    width = 50
+  }
+})
