@@ -36,8 +36,6 @@ setopt share_history
 setopt transient_rprompt
 
 # # Ztyle pattern
-# # :completion:<function>:<completer>:<command>:<argument>:<tag>
-
 # # Define completers
 zstyle ':completion:*' completer _extensions _complete _approximate
 

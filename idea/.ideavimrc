@@ -1,4 +1,3 @@
-"" Find more examples here: https://jb.gg/share-ideavimrc
 """"""""""""""""""""""""""""""""""" Plugins """"""""""""""""""""""""""""""""""""""
 "" --- easymotion
 set easymotion
@@ -124,9 +123,11 @@ nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
 nmap <leader>s <Plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
-nmap <leader>u <action>(FindUsages)
 nmap <leader>w <action>(SaveAll)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
+
+"" cursor back
+nmap <leader>u <action>(Back)
 
 "" Split
 nmap <leader>H <action>(SplitHorizontally)

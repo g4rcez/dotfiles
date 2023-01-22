@@ -23,9 +23,6 @@ git clone https://github.com/popstas/zsh-command-time.git ~/.oh-my-zsh/custom/pl
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
-# Misc Stuff
-cp curlrc ~/.curlrc
-
 curl https://get.volta.sh | bash
 
 # Symlinks
@@ -59,3 +56,6 @@ ln -sf $HOME/dotfiles/dygma $HOME/Raise
 
 # Tools dir
 mkdir -p $HOME/tools
+
+# Global variables for .profile
+export WEZTERM_HOME="$HOME/dotfiles/.config/wezterm"

@@ -60,29 +60,26 @@ if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
 fi
 
-if [ -x "$(command -v logo-ls)" ]; then
-  alias ls="logo-ls -DUX"
-fi
-
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 export FZF_DEFAULT_OPTS=' --height 40% --layout=reverse --border --info=inline --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
-source $HOME/dotfiles/scripts/fzf-git
+source "$HOME/dotfiles/scripts/fzf-git"
 ##################################### Functions #####################################
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
 }
 
 function clone() {
-  git clone git@github.com:$1
+  git clone "git@github.com:$1"
 }
 
 function tag() {
-  git tag $1 && git push origin $1
+  git tag "$1" && git push origin "$1"
 }
 
 function cdm() {
-  mkdir -p $1 && cd $1
+  mkdir -p "$1"
+  cd "$1"
 }
 
 function sysinfo() {
@@ -90,7 +87,7 @@ function sysinfo() {
 }
 
 function node:scripts() {
-  cat "$PWD"/package.json | jq .scripts
+  cat "$PWD/package.json" | jq .scripts
 }
 
 function cpv() {

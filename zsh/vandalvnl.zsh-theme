@@ -36,7 +36,7 @@ check_git() {
   fi
 }
 
-exitstatus() {
+function exitstatus() {
   if [[ $? != 0 ]]; then
     echo -n "%{$fg_bold[red]%}✗%{$reset_color%}"
   fi
@@ -44,7 +44,7 @@ exitstatus() {
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 
-fishify() {
+function fishify() {
   echo $(echo "$1" | perl -pe '
    BEGIN {
       binmode STDIN,  ":encoding(UTF-8)";
@@ -53,7 +53,7 @@ fishify() {
 ')
 }
 
-current_env() {
+function current_env() {
   if [[ -e "./package.json" ]]; then
     export PATH="$PATH:./node_modules/.bin"
     echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
@@ -66,7 +66,7 @@ current_env() {
   fi
 }
 
-dir_name() {
+function dir_name() {
   local URL="$(git config --get remote.origin.url)"
   local PATH_SHOW="$(fishify $(pwd))"
   if [[ "$URL" =~ ^git@.* ]]; then
@@ -104,7 +104,7 @@ ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
 
-source $HOME/dotfiles/zsh/zstyle.sh
+source "$HOME/dotfiles/zsh/zstyle.sh"
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)

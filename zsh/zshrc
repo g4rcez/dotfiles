@@ -6,6 +6,7 @@ HIST_STAMPS="yyyy-mm-dd"
 CASE_SENSITIVE="false"
 HYPHEN_INSENSITIVE="true"
 ZSH_COMMAND_TIME_MSG="%s sec"
+WEZTERM_HOME="$HOME/dotfiles/.config/wezterm"
 
 plugins=(
   gh
