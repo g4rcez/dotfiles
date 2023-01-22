@@ -1,7 +1,9 @@
 local wt = require("wezterm");
 local act = wt.action
+local WEZTERM_HOME = os.getenv("WEZTERM_HOME")
+
 -- load themes from this file
-local colors = wt.color.load_terminal_sexy_scheme("/home/garcez/dotfiles/.config/wezterm/theme.json")
+local colors = wt.color.load_terminal_sexy_scheme(WEZTERM_HOME .. "/theme.json")
 colors.cursor_bg = "#ffffff"
 colors.cursor_fg = "#ffffff"
 
@@ -10,17 +12,23 @@ wt.action { CloseCurrentTab = { confirm = true } }
 
 -- All my custom shortcuts
 local keys = {
+    -- Control tabs
     { key = "Tab", mods = "CTRL", action = wt.action { ActivateTabRelative = 1, }, },
-    { key = "Tab", mods = "CTRL|SHIFT", action = wt.action { ActivateTabRelative = -1, }, },
+    { key = "Tab", mods = "LEADER", action = wt.action { ActivateTabRelative = -1, }, },
     { key = "t", mods = "CTRL", action = wt.action { SpawnTab = "DefaultDomain", }, },
     { key = "t", mods = "ALT", action = wt.action { SpawnTab = "DefaultDomain", }, },
     -- split terminal overrides
-    { key = 'o', mods = 'ALT', action = wt.action.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
-    { key = 'p', mods = 'ALT', action = wt.action.SplitVertical { domain = 'CurrentPaneDomain' }, },
-    { key = 'h', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Left', },
-    { key = 'l', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Right', },
-    { key = 'k', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Up', },
-    { key = 'j', mods = 'CTRL|SHIFT', action = act.ActivatePaneDirection 'Down', },
+    { key = 'p', mods = 'ALT', action = wt.action.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
+    { key = 'o', mods = 'ALT', action = wt.action.SplitVertical { domain = 'CurrentPaneDomain' }, },
+    { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left', },
+    { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right', },
+    { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up', },
+    { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down', },
+    -- control panel size
+    { key = 'h', mods = 'ALT', action = act.AdjustPaneSize { 'Left', 5 }, },
+    { key = 'l', mods = 'ALT', action = act.AdjustPaneSize { 'Right', 5 }, },
+    { key = 'j', mods = 'ALT', action = act.AdjustPaneSize { 'Down', 5 }, },
+    { key = 'k', mods = 'ALT', action = act.AdjustPaneSize { 'Up', 5 }, },
     -- ALT to move between tabs
     { key = "1", mods = "ALT", action = wt.action { ActivateTab = 0 } },
     { key = "2", mods = "ALT", action = wt.action { ActivateTab = 1 } },
@@ -33,7 +41,7 @@ local keys = {
     { key = "9", mods = "ALT", action = wt.action { ActivateTab = 8 } },
     { key = "0", mods = "ALT", action = wt.action { ActivateTab = -1 } },
     -- launcher menu
-    { key = 'l', mods = 'ALT', action = wt.action.ShowLauncher },
+    { key = 'm', mods = 'ALT', action = wt.action.ShowLauncher },
     { key = 's', mods = 'ALT', action = wt.action.ShowLauncherArgs { flags = 'FUZZY|TABS' }, },
     -- clipboard
     { key = 'v', mods = 'ALT', action = wt.action.PasteFrom('Clipboard') },
@@ -66,21 +74,7 @@ local hyperLinkRules = {
     {
         regex = [[\b\w+://(?:[\d]{1,3}\.){3}[\d]{1,3}\S*\b]],
         format = '$0',
-    },
-    -- Make task numbers clickable
-    -- The first matched regex group is captured in $1.
-    {
-        regex = [[\b[tT](\d+)\b]],
-        format = 'https://example.com/tasks/?t=$1',
-    },
-    -- Make username/project paths clickable. This implies paths like the following are for GitHub.
-    -- ( "nvim-treesitter/nvim-treesitter" | wbthomason/packer.nvim | wez/wezterm | "wez/wezterm.git" )
-    -- As long as a full URL hyperlink regex exists above this it should not match a full URL to
-    -- GitHub or GitLab / BitBucket (i.e. https://gitlab.com/user/project.git is still a whole clickable URL)
-    {
-        regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
-        format = 'https://www.github.com/$1/$3',
-    },
+    }
 }
 
 local function launchItem(name)
@@ -105,7 +99,7 @@ return {
     check_for_updates_interval_seconds = 86400,
     colors = colors,
     cursor_blink_rate = 0,
-    default_cursor_style = "SteadyUnderline",
+    default_cursor_style = "BlinkingUnderline",
     default_gui_startup_args = { 'connect', 'unix' },
     enable_scroll_bar = true,
     enable_tab_bar = true,
@@ -113,7 +107,7 @@ return {
     harfbuzz_features = { 'calt=1', 'liga=1', 'clig=1' },
     hide_tab_bar_if_only_one_tab = true,
     hyperlink_rules = hyperLinkRules,
-    inactive_pane_hsb = { saturation = 0.5, brightness = 0.7, },
+    inactive_pane_hsb = { saturation = 0.2, brightness = 0.4, },
     initial_cols = 100,
     initial_rows = 60,
     keys = keys,
@@ -123,6 +117,8 @@ return {
     unix_domains = domains,
     use_fancy_tab_bar = false,
     window_background_opacity = 0.65,
-    window_decorations = "NONE",
+    window_decorations = "TITLE",
     window_padding = { left = 5, right = 0, top = 0, bottom = 5, },
+    font_alias = "Subpixel",
+    max_fps = 120
 }
