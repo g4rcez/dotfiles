@@ -1,12 +1,1 @@
-just-perfection-desktop@just-perfection
-user-theme@gnome-shell-extensions.gcampax.github.com
-gTile@vibou
-color-picker@tuberry
-arcmenu@arcmenu.com
-x11gestures@joseexposito.github.io
-appindicatorsupport@rgcjonas.gmail.com
-gnome-ui-tune@itstime.tech
-blur-my-shell@aunetx
-dash-to-dock@micxgx.gmail.com
-gsconnect@andyholmes.github.io
-pamac-updates@manjaro.org
+['pamac-updates@manjaro.org', 'legacyschemeautoswitcher@joshimukul29.gmail.com', 'x11gestures@joseexposito.github.io', 'arcmenu@arcmenu.com', 'color-picker@tuberry', 'gTile@vibou', 'gsconnect@andyholmes.github.io', 'openweather-extension@jenslody.de', 'trayIconsReloaded@selfmade.pl', 'appindicatorsupport@rgcjonas.gmail.com', 'gnome-ui-tune@itstime.tech', 'launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'unite@hardpixel.eu', 'just-perfection-desktop@just-perfection', 'blur-my-shell@aunetx']
