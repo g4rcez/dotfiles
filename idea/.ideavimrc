@@ -1,4 +1,4 @@
-""""""""""""""""""""""""""""""""""" Plugins """"""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""
 "" --- easymotion
 set easymotion
 let g:EasyMotion_do_mapping = 0
@@ -10,6 +10,7 @@ let mapleader=" "
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
 let g:NERDTreeMapJumpParent='l'
+nnoremap <C-t> :NERDTreeFocus<CR>
 
 "" -- Surround
 set surround
@@ -39,6 +40,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 set vim-paragraph-motion
 
 """ Yank + Clipboard
+"" Don't yank
+noremap ' "-
 set highlightedyank
 set clipboard=unnamedplus,unnamed,ideaput
 set ideaput
@@ -111,6 +114,7 @@ map 0 ^
 
 """"""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>j <action>(SurroundWithLiveTemplate)
+map <leader>1 <Action>(SelectInProjectView)
 nmap <leader>/ <action>(ShowErrorDescription)
 nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>Q <action>(ReopenClosedTab)
@@ -125,6 +129,9 @@ nmap <leader>s <Plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>w <action>(SaveAll)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
+nmap T <action>(ReopenClosedTab)
+nmap gc <Plug>Commentary
+
 
 "" cursor back
 nmap <leader>u <action>(Back)
@@ -153,13 +160,16 @@ nmap [[ <action>(MethodUp)
 nmap ]] <action>(MethodDown)
 vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
-nnoremap <C-t> :NERDTreeFocus<CR>
-
-"" Don't yank
-noremap ' "-
 
 """"""""""""""""""""""""""""""""""""""""""""" Handler """""""""""""""""""""""""""""""""""""""
 sethandler n:vim i:ide
 sethandler <C-c> a:ide
 sethandler <C-v> a:ide
 sethandler <C-s> a:ide
+
+""""""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
+nnoremap zx :action CollapseRegion<CR>
+nnoremap zo :action ExpandRegion<CR>
+
+""""""""""""""""""""""""""""""""""""""""
+map U <C-R>

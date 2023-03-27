@@ -12,7 +12,6 @@ plugins=(
   gh
   git
   dirhistory
-  command-time
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -20,6 +19,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 source $HOME/dotfiles/zsh/export.sh
 source $HOME/dotfiles/zsh/alias.sh
+if [ -f "~/.iterm2_shell_integration.zsh" ]; then source ~/.iterm2_shell_integration.zsh; fi
 
 ######################### Setup tools #########################
 
@@ -34,3 +34,7 @@ compinit
 
 # zoxide
 eval "$(zoxide init zsh)"
+
+# bitwarden
+eval "$(bw completion --shell zsh); compdef _bw bw;"
+

@@ -1,7 +1,12 @@
 local wt = require("wezterm");
 local act = wt.action
-local WEZTERM_HOME = os.getenv("WEZTERM_HOME")
-
+local tmp = os.getenv("WEZTERM_HOME")
+local WEZTERM_HOME = tmp
+print (tmp)
+print (os.getenv("HOME"))
+if tmp == "" or tmp == nil then
+  WEZTERM_HOME = os.getenv("HOME").."/dotfiles/.config/wezterm"
+end
 -- load themes from this file
 local colors = wt.color.load_terminal_sexy_scheme(WEZTERM_HOME .. "/theme.json")
 colors.cursor_bg = "#ffffff"
@@ -9,6 +14,20 @@ colors.cursor_fg = "#ffffff"
 
 -- Confirm on close, like kitty terminal
 wt.action { CloseCurrentTab = { confirm = true } }
+
+wt.on('format-window-title', function(tab, pane, tabs, panes, config)
+  local zoomed = ''
+  if tab.active_pane.is_zoomed then
+    zoomed = '[Z] '
+  end
+
+  local index = ''
+  if #tabs > 1 then
+    index = string.format('[%d/%d] ', tab.tab_index + 1, #tabs)
+  end
+
+  return zoomed .. index .. tab.active_pane.title
+end)
 
 -- All my custom shortcuts
 local keys = {
@@ -93,6 +112,9 @@ local launcher = {
 local domains = { { name = 'unix' }, { name = 'company' }, { name = 'side' } }
 
 return {
+   font = wt.font_with_fallback {
+      'FiraCode Nerd Font',
+    },
     alternate_buffer_wheel_scroll_speed = 1,
     audible_bell = "Disabled",
     check_for_updates = true,
@@ -116,8 +138,7 @@ return {
     tab_max_width = 50,
     unix_domains = domains,
     use_fancy_tab_bar = false,
-    window_background_opacity = 0.65,
-    window_decorations = "TITLE",
+    window_background_opacity = 1,
     window_padding = { left = 5, right = 0, top = 0, bottom = 5, },
     font_alias = "Subpixel",
     max_fps = 120

@@ -36,7 +36,7 @@ setopt share_history
 setopt transient_rprompt
 
 # # Ztyle pattern
-# # Define completers
+# Define completers
 zstyle ':completion:*' completer _extensions _complete _approximate
 
 # # Use cache for commands using cache

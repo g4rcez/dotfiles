@@ -1,18 +1,6 @@
-# espanso match file
-
-# For a complete introduction, visit the official docs at: https://espanso.org/docs/
-
-# You can use this file to define the base matches (aka snippets)
-# that will be available in every application when using espanso.
-
-# Matches are substitution rules: when you type the "trigger" string
-# it gets replaced by the "replace" string.
+search_shortcut: off
+toggle_key: OFF
 matches:
-  # NOTE: espanso uses YAML to define matches, so pay attention to the indentation!
-
-  # But matches can also be dynamic:
-
-  # Print the current date
   - trigger: ":date"
     replace: "{{mydate}}"
     vars:
@@ -20,14 +8,72 @@ matches:
         type: date
         params:
           format: "%m/%d/%Y"
-
-  # Print the output of a shell command
-  - trigger: ":shell"
-    replace: "{{output}}"
+  - trigger: ":time"
+    replace: "{{time}}"
     vars:
-      - name: output
-        type: shell
+      - name: time
+        type: date
         params:
-          cmd: "echo 'Hello from your shell'"
+          format: "%H:%M"
 
-# And much more! For more information, visit the docs: https://espanso.org/docs/
+  - triggers: [":block:", ":mb:"]
+    replace: |-
+      ```$|$
+      ```
+    force_clipboard: true
+
+  - triggers: [":code:", ":mc:"]
+    replace: |-
+      `$|$`
+    force_clipboard: true
+
+  - trigger: ":h1:"
+    replace: "#"
+
+  - trigger: ":h2:"
+    replace: "##"
+
+  - trigger: ":h3:"
+    replace: "###"
+
+  - trigger: ":h4:"
+    replace: "####"
+
+  - trigger: ":h5:"
+    replace: "#####"
+
+  - trigger: ":h6:"
+    replace: "######"
+
+  - trigger: ":bold:"
+    replace: "**$|$**"
+
+  - trigger: ":italic:"
+    replace: "*$|$*"
+
+  - trigger: ":strike:"
+    replace: "~~$|$~~"
+
+  - trigger: ":url:"
+    replace: "[$|$]()"
+
+  - triggers: [":image:", ":img:"]
+    replace: "![]($|$)"
+
+  - triggers: [":horizontal:", ":mh:"]
+    replace: "___"
+
+  - triggers: [":task:", ":mt:"]
+    replace: "- [ ] "
+
+  - triggers: [":taskdone:", ":mtd:"]
+    replace: "- [x] "
+
+  - triggers: [":collapse:", ":mcol:"]
+    replace: |-
+      <details>
+      <summary></summary>
+      
+      $|$
+      </details>
+    force_clipboard: true

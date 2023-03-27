@@ -28,7 +28,6 @@ alias pbpaste='xclip -selection clipboard -o'
 ######################### Git/Github CLI utils #########################
 alias add='git add'
 alias commit='git commit -m'
-alias gittree="git log --oneline --graph --decorate --all"
 alias gitree="git log --oneline --graph --decorate --all"
 alias push='git push -u'
 alias pull='git pull'
@@ -98,6 +97,9 @@ function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
+alias gittree=git-graph
+alias gitree=git-graph
+
 function extract() {
   if [ -f "$FILE" ]; then
     case $FILE in
@@ -134,3 +136,15 @@ _dotnet_zsh_complete()
   # This is not a variable assignment, don't remove spaces!
   _values = "${(ps:\n:)completions}"
 }
+
+listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
+}
+
+alias listen=listening

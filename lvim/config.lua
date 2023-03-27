@@ -12,8 +12,10 @@ an executable
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.colorscheme = "tokyonight-night"
+vim.opt.relativenumber = true
 -- to disable icons and use a minimalist setup, uncomment the following
--- lvim.use_icons = false
+lvim.use_icons = true
+lvim.builtin.bufferline.active = false
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -43,9 +45,6 @@ lvim.builtin.telescope.defaults.mappings = {
     ["<C-k>"] = actions.move_selection_previous,
   },
 }
-
--- Change theme settings
--- lvim.builtin.theme.options.dim_inactive = true
 
 -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }

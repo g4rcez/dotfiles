@@ -26,7 +26,7 @@ export PATH="$PATH:/snap/bin"
 export PATH="$PNPM_HOME:$PATH"
 export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
-export PATH="$PATH:$HOME/go/bin"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 if [ -x "$(command -v lvim)" ]; then
   export EDITOR="lvim"
