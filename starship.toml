@@ -1,4 +1,5 @@
 format = """
+$status\
 $username\
 $hostname\
 $directory\
@@ -6,24 +7,36 @@ ${custom.git_host}\
 $git_branch\
 $git_state\
 $git_status\
+${custom.since_last_commit}\
+$fill\ 
+$dotnet\
+$nodejs\
+$cmd_duration
 $line_break\
 $character"""
 
-right_format = """
-$dotnet\
-$nodejs\
-$time\
-$cmd_duration\
-"""
+[fill]
+symbol = " "
+
+[line_break]
+disabled = true
+
+[status]
+style = 'fg:blue'
+symbol = '⚠️ '
+success_symbol = ''
+format = '$symbol$status$signal_name($style) '
+map_symbol = true
+disabled = false
 
 [directory]
-style = "bold green"
+style = "bold bright-blue"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
 
 [time]
 disabled = false
-time_format = "%R:%S - %d/%m/%Y"
+time_format = "%R - %d/%m/%Y"
 style = "$white"
 format = '[[  $time ](fg:#a0a9cb)]($style)'
 
@@ -33,37 +46,71 @@ error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
 
 [git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
+format = '[$symbol$branch(:$remote_branch)]($style)'
+style = "bright-purple bold"
+symbol = ' '
 
 [git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
-style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
-stashed = "≡"
+format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
+style = "bright-red"
+ahead = '⇡${count}'
+behind = '⇣${count}'
+conflicted = ""
+deleted = ""
+diverged = '⇕⇡${ahead_count}⇣${behind_count} '
+modified = ""
+renamed = ""
+staged = ' [+$count](green) '
+stashed = " "
+untracked = " "
+up_to_date = '[✓](bold green) '
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "bright-black"
+cherry_pick = '[🍒](bold red)'
+
 
 [cmd_duration]
 format = "[羽$duration]($style) "
 style = "yellow"
 min_time = 1_000
-show_notifications = true
+show_notifications = false
 min_time_to_notify = 10_000
 
 [nodejs]
-format = '[$symbol($version )]($style)'
+format = '[$symbol($version)]($style)'
 detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
 detect_files = ['node_modules', '.yarn']
 symbol = ' '
 disabled = false
+
+[custom.since_last_commit]
+command = """
+if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
+now=$(date +%s)
+seconds_since_last_commit=$((now - last_commit))
+minutes=$((seconds_since_last_commit / 60))
+hours=$((seconds_since_last_commit / 3600))
+days=$((seconds_since_last_commit / 86400))
+sub_hours=$((hours % 24))
+sub_minutes=$((minutes % 60))
+if [ $hours -gt 24 ]; then
+    commit_age="${days}d"
+elif [ $minutes -gt 60 ]; then
+    commit_age="${sub_hours}h${sub_minutes}m"
+else
+    commit_age="${minutes}m"
+fi
+    color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
+    echo $commit_age
+fi
+"""
+directories = [".git"]
+when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
+shell = ["bash","--norc","--noprofile"]
+style = "yellow bold"
+format = "Last commit:[$output]($style) "
 
 [custom.git_host]
 command = """
@@ -83,7 +130,7 @@ elif [[ "$URL" =~ "gnu" ]];then
 elif [[ "$URL" =~ "git" ]];then
     ICON=" "
 else
-    ICON=" "
+    ICON="󰊠 "
     URL="localhost"
 fi
 for PATTERN in "https" "http" "git" "://" "@"; do

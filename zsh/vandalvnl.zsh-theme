@@ -1,92 +1,140 @@
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
+#!/bin/zsh
 
+color_prompt=yes
 force_color_prompt=yes
 
-time_since_last_commit() {
-  if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
-    now=$(date +%s)
-    seconds_since_last_commit=$((now - last_commit))
-    minutes=$((seconds_since_last_commit / 60))
-    hours=$((seconds_since_last_commit / 3600))
-    days=$((seconds_since_last_commit / 86400))
-    sub_hours=$((hours % 24))
-    sub_minutes=$((minutes % 60))
-    if [ $hours -gt 24 ]; then
-      commit_age="${days}d"
-    elif [ $minutes -gt 60 ]; then
-      commit_age="${sub_hours}h${sub_minutes}m"
-    else
-      commit_age="${minutes}m"
-    fi
-    color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
-    echo "%{$reset_color%} ${color}LastCommit: $commit_age%{$reset_color%}"
-  fi
-}
+# time_since_last_commit() {
+#   if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
+#     now=$(date +%s)
+#     seconds_since_last_commit=$((now - last_commit))
+#     minutes=$((seconds_since_last_commit / 60))
+#     hours=$((seconds_since_last_commit / 3600))
+#     days=$((seconds_since_last_commit / 86400))
+#     sub_hours=$((hours % 24))
+#     sub_minutes=$((minutes % 60))
+#     if [ $hours -gt 24 ]; then
+#       commit_age="${days}d"
+#     elif [ $minutes -gt 60 ]; then
+#       commit_age="${sub_hours}h${sub_minutes}m"
+#     else
+#       commit_age="${minutes}m"
+#     fi
+#     color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
+#     echo "%{$reset_color%} ${color}LastCommit: $commit_age%{$reset_color%}"
+#   fi
+# }
 
-check_git() {
-  local URL="$(git config --get remote.origin.url)"
-  if [[ "$(echo $URL | grep 'github')" != "" ]]; then
-    echo -n " \uea84%{$fg_bold[white]%}%{$resetcolor%} "
-  elif [[ "$(echo $URL | grep 'gitlab')" != "" ]]; then
-    echo -n " \uf296%{$fg_bold[white]%}%{$resetcolor%} "
-  elif [[ "$(echo $URL | grep 'bitbucket')" != "" ]]; then
-    echo -n " \uf171%{$fg_bold[white]%}%{$resetcolor%} "
-  fi
-}
+# local URL="$(git config --get remote.origin.url)"
 
-function exitstatus() {
-  if [[ $? != 0 ]]; then
-    echo -n "%{$fg_bold[red]%}✗%{$reset_color%}"
-  fi
-}
+# check_git() {
+#   if [[ URL == "" ]]; then
+#     echo -n ""
+#   elif if [[ "$(echo $URL | grep 'github')" != "" ]]; then
+#     echo -n " \uea84%{$fg_bold[white]%}%{$resetcolor%} "
+#   elif [[ "$(echo $URL | grep 'gitlab')" != "" ]]; then
+#     echo -n " \uf296%{$fg_bold[white]%}%{$resetcolor%} "
+#   elif [[ "$(echo $URL | grep 'bitbucket')" != "" ]]; then
+#     echo -n " \uf171%{$fg_bold[white]%}%{$resetcolor%} "
+#   fi
+# }
 
-ZSH_THEME_GIT_PROMPT_PREFIX=""
+# function exitstatus() {
+#   if [[ $? != 0 ]]; then
+#     echo -n "%{$fg_bold[red]%}✗%{$reset_color%}"
+#   fi
+# }
 
-function fishify() {
-  echo $(echo "$1" | perl -pe '
-   BEGIN {
-      binmode STDIN,  ":encoding(UTF-8)";
-      binmode STDOUT, ":encoding(UTF-8)";
-   }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
-')
-}
+# ZSH_THEME_GIT_PROMPT_PREFIX=""
 
-function current_env() {
-  if [[ -e "./package.json" ]]; then
-    export PATH="$PATH:./node_modules/.bin"
-    echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
-  fi
-  if [[ -e "./Program.cs" ]]; then
-    echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
-  fi
-  if [[ -e "./tsconfig.json" ]]; then
-    echo -n "%{$fg_bold[cyan]%}\ufbe4%{$reset_color%} "
-  fi
-}
+# function fishify() {
+#   echo $(echo "$1" | perl -pe '
+#    BEGIN {
+#       binmode STDIN,  ":encoding(UTF-8)";
+#       binmode STDOUT, ":encoding(UTF-8)";
+#    }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
+# ')
+# }
 
-function dir_name() {
-  local URL="$(git config --get remote.origin.url)"
-  local PATH_SHOW="$(fishify $(pwd))"
-  if [[ "$URL" =~ ^git@.* ]]; then
-    echo "[$PATH_SHOW] $(git config --get remote.origin.url | cut -d ':' -f2 | sed 's/.git$//g')"
-    return
-  fi
-  echo "$PATH_SHOW"
-}
+# function current_env() {
+#   if [[ -e "./package.json" ]]; then
+#     export PATH="$PATH:./node_modules/.bin"
+#     echo -n "%{$fg_bold[green]%}\uf898%{$reset_color%} "
+#   fi
+#   if [[ -e "./Program.cs" ]]; then
+#     echo -n "%{$fg_bold[cyan]%}\ue77f%{$reset_color%} "
+#   fi
+#   if [[ -e "./tsconfig.json" ]]; then
+#     echo -n "%{$fg_bold[cyan]%}\ufbe4%{$reset_color%} "
+#   fi
+# }
 
-PROMPT='
-%{$resetcolor%}$(exitstatus)%{$fg_bold[blue]$(dir_name)%}%{$reset_color%}$(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
-%{$fg_bold[$CARETCOLOR]%}>%{$resetcolor%} '
+# function dir_name() {
+#   local PATH_SHOW="$(fishify $(pwd))"
+#   if [[ "$URL" =~ ^git@.* ]]; then
+#     echo "[$PATH_SHOW] $(git config --get remote.origin.url | cut -d ':' -f2 | sed 's/.git$//g')"
+#     return
+#   fi
+#   echo "$PATH_SHOW"
+# }
 
-RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M")%{$(echotc DO 1)%}%{$resetcolor%}'
+# PROMPT='
+# %{$resetcolor%}$(exitstatus)%{$fg_bold[blue]$(dir_name)%}%{$reset_color%}$(check_git)$(git_prompt_info)%{$fg_bold[green]$(time_since_last_commit)%}%{$reset_color%}
+# %{$fg_bold[$CARETCOLOR]%}>%{$resetcolor%} '
 
-if [[ $USER == "root" ]]; then
-  CARETCOLOR="red"
-else
-  CARETCOLOR="white"
-fi
+# RPROMPT='%{$resetcolor%}%{$(echotc UP 1)%}$(current_env)$(date "+%Y-%m-%d %H:%M")%{$(echotc DO 1)%}%{$resetcolor%}'
+
+# if [[ $USER == "root" ]]; then
+#   CARETCOLOR="red"
+# else
+#   CARETCOLOR="white"
+# fi
+
+zmodload zsh/complist
+
+autoload -U compinit; compinit
+_comp_options+=(globdots)
+
+setopt aliases
+setopt append_history
+setopt auto_list            # Automatically list choices on ambiguous completion.
+setopt auto_pushd
+setopt autocd
+setopt automenu
+setopt autopushd pushdminus pushdsilent pushdtohome pushdignoredups
+setopt complete_in_word
+setopt correctall
+setopt extended_glob
+setopt extended_history
+setopt glob_complete      # Show autocompletion menu with globs
+setopt globdots
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt histignorealldups
+setopt histreduceblanks
+setopt magicequalsubst
+setopt menu_complete        # Automatically highlight first element of completion menu
+setopt notify
+setopt promptsubst
+setopt pushd_ignore_dups
+setopt rmstarsilent
+setopt share_history
+setopt transient_rprompt
+
+zstyle ':completion:*' complete true
+bindkey '^Xa' alias-expension
+zstyle ':completion:alias-expension:*' completer _expand_alias
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
+zstyle ':completion:*:processes' command 'ps -au$USER'
+zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=36=31"
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
@@ -103,8 +151,6 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[magenta]%}"
 ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[white]%}"
-
-source "$HOME/dotfiles/zsh/zstyle.sh"
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)

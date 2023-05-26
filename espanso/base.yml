@@ -1,5 +1,15 @@
-search_shortcut: off
-toggle_key: OFF
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+includes:
+  - "~/.shortcuts.yml"
+
 matches:
   - trigger: ":date"
     replace: "{{mydate}}"
@@ -16,13 +26,13 @@ matches:
         params:
           format: "%H:%M"
 
-  - triggers: [":block:", ":mb:"]
+  - triggers: [ ":block:", ":mb:" ]
     replace: |-
       ```$|$
       ```
     force_clipboard: true
 
-  - triggers: [":code:", ":mc:"]
+  - triggers: [ ":code:", ":mc:" ]
     replace: |-
       `$|$`
     force_clipboard: true
@@ -57,23 +67,46 @@ matches:
   - trigger: ":url:"
     replace: "[$|$]()"
 
-  - triggers: [":image:", ":img:"]
+  - triggers: [ ":image:", ":img:" ]
     replace: "![]($|$)"
 
-  - triggers: [":horizontal:", ":mh:"]
+  - triggers: [ ":horizontal:", ":mh:" ]
     replace: "___"
 
-  - triggers: [":task:", ":mt:"]
+  - triggers: [ ":task:", ":mt:" ]
     replace: "- [ ] "
 
-  - triggers: [":taskdone:", ":mtd:"]
+  - triggers: [ ":taskdone:", ":mtd:" ]
     replace: "- [x] "
 
-  - triggers: [":collapse:", ":mcol:"]
+  - triggers: [ ":collapse:", ":mcol:" ]
     replace: |-
       <details>
       <summary></summary>
-      
+
       $|$
       </details>
     force_clipboard: true
+  - trigger: ":lorem"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: random
+        params:
+          choices:
+            - "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua."
+            - "Curabitur blandit tempus ardua ridiculus sed magna."
+            - "Inmensae subtilitatis, obscuris et malesuada fames."
+            - "Paullum deliquit, ponderibus modulisque suis ratio utitur."
+            - "Pellentesque habitant morbi tristique senectus et netus."
+            - "A communi observantia non est recedendum."
+            - "Unam incolunt Belgae, aliam Aquitani, tertiam."
+            - "Magna pars studiorum, prodita quaerimus."
+            - "Gallia est omnis divisa in partes tres, quarum."
+            - "Phasellus laoreet lorem vel dolor tempus vehicula."
+            - "Cras mattis iudicium purus sit amet fermentum."
+            - "Nec dubitamus multa iter quae et nos invenerat."
+            - "Quo usque tandem abutere, Catilina, patientia nostra?"
+            - "Curabitur est gravida et libero vitae dictum."
+            - "Quisque ut dolor gravida, placerat libero vel, euismod."
+            - "Ullamco laboris nisi ut aliquid ex ea commodi consequat."

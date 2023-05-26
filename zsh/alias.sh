@@ -1,12 +1,5 @@
-######################### cd Shortcuts #########################
-alias docs="cd $HOME/Documents"
-alias documents="cd $HOME/Documents"
-alias Documents="cd $HOME/Documents"
-alias dotfiles="cd $HOME/dotfiles"
-alias downloads="cd $HOME/Downloads"
-alias Downloads="cd $HOME/Downloads"
-alias tools="cd $HOME/tools"
-alias Tools="cd $HOME/tools"
+#!/bin/bash
+
 ######################### simple alias #########################
 alias cp='cp -v'
 alias df='df -h'
@@ -23,8 +16,10 @@ alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
 ######################### Clipboard utils #########################
-alias pbcopy='xclip -sel clip'
-alias pbpaste='xclip -selection clipboard -o'
+if [[ "$(uname -o)" != "Darwin" ]]; then
+  alias pbcopy='xclip -sel clip'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
 ######################### Git/Github CLI utils #########################
 alias add='git add'
 alias commit='git commit -m'
@@ -36,24 +31,28 @@ alias rebase='git rebase'
 alias checkout='git checkout'
 alias ghc="gh pr checkout"
 alias ghl="gh pr list"
+alias wip="git add . && git commit -m 'wip: work in progress' && git push"
+alias gittree=git-graph
+alias gitree=git-graph
 ######################### General stuff #########################
 alias n="pnpm"
 alias vim="lvim"
-alias dockerkill="docker kill $(docker ps -q)"
-alias docker-prune-volumes="docker volume rm $(docker volume ls -q --filter dangling=true)"
-alias bomberman="bombardier"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 alias ll="ls -l"
 alias files="fzf --multi --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+command -v hd > /dev/null || alias hd="hexdump -C"
+# macOS has no `md5sum`, so use `md5` as a fallback
+command -v md5sum > /dev/null || alias md5sum="md5"
+# macOS has no `sha1sum`, so use `shasum` as a fallback
+command -v sha1sum > /dev/null || alias sha1sum="shasum"
 
-if [ -x "$(command -v kitty)" ]; then
-  alias icat="kitty +kitten icat"
-  kitty + complete setup zsh | source /dev/stdin
-fi
+function docker-prune-volumes () {
+  docker volume rm $(docker volume ls -q --filter dangling=true)
+}
+function dockerkill () {
+  docker kill $(docker ps -q)
+}
 
-if [ -x "$(command -v wezterm)" ]; then
-  alias company="nohup wezterm connect company --workspace company > /dev/null 2>&1 &"
-fi
 
 if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
@@ -81,10 +80,6 @@ function cdm() {
   cd "$1"
 }
 
-function sysinfo() {
-  ps -A --sort -rsz -o pid,comm,pmem,pcpu | awk "NR<=15"
-}
-
 function node:scripts() {
   cat "$PWD/package.json" | jq .scripts
 }
@@ -97,8 +92,6 @@ function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
-alias gittree=git-graph
-alias gitree=git-graph
 
 function extract() {
   if [ -f "$FILE" ]; then
@@ -137,7 +130,7 @@ _dotnet_zsh_complete()
   _values = "${(ps:\n:)completions}"
 }
 
-listening() {
+function listening() {
     if [ $# -eq 0 ]; then
         sudo lsof -iTCP -sTCP:LISTEN -n -P
     elif [ $# -eq 1 ]; then
@@ -148,3 +141,21 @@ listening() {
 }
 
 alias listen=listening
+
+function cdf() { # short for `cdfinder`
+	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+}
+
+# Determine size of a file or total size of a directory
+function fs() {
+	if du -b /dev/null >/dev/null 2>&1; then
+		local arg=-sbh
+	else
+		local arg=-sh
+	fi
+	if [[ -n "$@" ]]; then
+		du $arg -- "$@"
+	else
+		du $arg .[^.]* ./*
+	fi
+}

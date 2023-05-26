@@ -27,10 +27,10 @@ shift + alt - 4 : yabai -m window --space  4; yabai -m space --focus 4
 
 # Send focus to a specific space
 # Spaces:  Alt + [NUM]
-alt - 1 : yabai -m space --focus 1
-alt - 2 : yabai -m space --focus 2
-alt - 3 : yabai -m space --focus 3
-alt - 4 : yabai -m space --focus 4
+# alt - 1 : yabai -m space --focus 1
+# alt - 2 : yabai -m space --focus 2
+# alt - 3 : yabai -m space --focus 3
+# alt - 4 : yabai -m space --focus 4
 
 # "Swaps" with another Window, obtaining its size and position
 # Swap: Ctrl + Alt + [DIR]

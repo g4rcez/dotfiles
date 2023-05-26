@@ -13,7 +13,6 @@ export GPG_TTY=$(tty)
 export MANPATH="/usr/local/man:$MANPATH"
 export MANWIDTH=999
 export PNPM_HOME="$HOME/.local/share/pnpm"
-export TERMINAL="kitty"
 export VOLTA_HOME="$HOME/.volta"
 
 export PATH="$HOME/.local/share:$HOME/.local/bin:$HOME/.local/share/bin:$PATH"

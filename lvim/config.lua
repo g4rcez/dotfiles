@@ -186,16 +186,16 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Custom
 vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
-vim.opt.cmdheight = 1 -- more space in the neovim command line for displaying messages
-vim.opt.showmode = true -- we don't need to see things like -- INSERT -- anymore
-vim.opt.termguicolors = true -- set term gui colors (most terminals support this)
-vim.opt.cursorline = true -- highlight the current line
+vim.opt.cmdheight = 1             -- more space in the neovim command line for displaying messages
+vim.opt.showmode = true           -- we don't need to see things like -- INSERT -- anymore
+vim.opt.termguicolors = true      -- set term gui colors (most terminals support this)
+vim.opt.cursorline = true         -- highlight the current line
 vim.opt.colorcolumn = "99999"
 vim.opt.title = true
 vim.opt.spell = false
 vim.opt.spelllang = "en"
 
-lvim.lsp.automatic_servers_installation = true
+lvim.lsp.installer.setup.automatic_installation = true
 lvim.lsp.templates_dir = join_paths(get_runtime_dir(), "after", "ftplugin")
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
@@ -228,7 +228,7 @@ code_actions.setup {
 }
 
 -- colorize hex colors
-require 'colorizer'.setup({ '*'; }, {
+require 'colorizer'.setup({ '*', }, {
   RGB = true,
   RRGGBB = true,
   names = true,
