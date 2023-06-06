@@ -1,3 +1,6 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = true
+
 format = """
 $status\
 $username\
@@ -9,11 +12,16 @@ $git_state\
 $git_status\
 ${custom.since_last_commit}\
 $fill\ 
+$package\
 $dotnet\
 $nodejs\
 $cmd_duration
 $line_break\
 $character"""
+
+[package]
+disabled = false
+format = ' [$symbol$version]($style) '
 
 [fill]
 symbol = " "
@@ -35,10 +43,10 @@ truncation_length = 0
 fish_style_pwd_dir_length = 1
 
 [time]
-disabled = false
+disabled = true
 time_format = "%R - %d/%m/%Y"
 style = "$white"
-format = '[[  $time ](fg:#a0a9cb)]($style)'
+format = '[[  $time ](fg:#a0a9cb)]($style)'
 
 [character]
 success_symbol = "[❯](bold white)"
@@ -46,7 +54,7 @@ error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
 
 [git_branch]
-format = '[$symbol$branch(:$remote_branch)]($style)'
+format = '[$symbol$branch(:$remote_branch)]($style) '
 style = "bright-purple bold"
 symbol = ' '
 
@@ -72,7 +80,7 @@ cherry_pick = '[🍒](bold red)'
 
 
 [cmd_duration]
-format = "[羽$duration]($style) "
+format = "[ ⏰ $duration]($style) "
 style = "yellow"
 min_time = 1_000
 show_notifications = false
@@ -146,3 +154,4 @@ when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash","--norc","--noprofile"]
 style = "white bold"
 format = "[$output]($style) "
+
