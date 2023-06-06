@@ -1,0 +1,26 @@
+# Taps
+tap 'homebrew/cask'
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
+tap 'homebrew/bundle'
+
+# Install
+brew 'bat'
+brew 'coreutils'
+brew 'ffmpeg'
+brew 'gh'
+brew 'git'
+brew 'grep'
+brew 'httpie'
+brew 'jq'
+brew 'diff-so-fancy'
+brew 'gnu-sed'
+brew 'findutils'
+brew 'gnupg'
+brew 'diff-so-fancy'
+
+# Cask
+cask 'docker'
+cask 'fig'
+cask 'figma'
+#cask 'raycast'

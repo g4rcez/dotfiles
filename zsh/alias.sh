@@ -1,6 +1,6 @@
 #!/bin/bash
 
-######################### simple alias #########################
+######################### *nix alias #########################
 alias cp='cp -v'
 alias df='df -h'
 alias diff='diff --color=auto'
@@ -9,13 +9,32 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias ls="exa --icons -x --color=always"
+alias ls="exa --icons --color=always -bghHiS"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
-######################### Clipboard utils #########################
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec ${SHELL} -l"
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+################################### OSX ##########################################
+if [[ "$(uname -o)" == "Darwin" ]]; then
+  # macOS has no `md5sum`, so use `md5` as a fallback
+  command -v md5sum >/dev/null || alias md5sum="md5"
+
+  # macOS has no `sha1sum`, so use `shasum` as a fallback
+  command -v sha1sum >/dev/null || alias sha1sum="shasum"
+  command -v hd > /dev/null || alias hd="hexdump -C"
+  alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
+  source "$HOME/.iterm2_shell_integration.zsh"
+fi
+########################## CLIPBOARD ##########################################
 if [[ "$(uname -o)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
   alias pbpaste='xclip -selection clipboard -o'
@@ -40,11 +59,20 @@ alias vim="lvim"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 alias ll="ls -l"
 alias files="fzf --multi --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-command -v hd > /dev/null || alias hd="hexdump -C"
-# macOS has no `md5sum`, so use `md5` as a fallback
-command -v md5sum > /dev/null || alias md5sum="md5"
-# macOS has no `sha1sum`, so use `shasum` as a fallback
-command -v sha1sum > /dev/null || alias sha1sum="shasum"
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+######################################### Node ########################################
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY=~/.node_history;
+# Allow 32³ entries; the default is 1000.
+export NODE_REPL_HISTORY_SIZE='32768';
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE='sloppy';
+
 
 function docker-prune-volumes () {
   docker volume rm $(docker volume ls -q --filter dangling=true)
@@ -52,7 +80,6 @@ function docker-prune-volumes () {
 function dockerkill () {
   docker kill $(docker ps -q)
 }
-
 
 if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
@@ -159,3 +186,4 @@ function fs() {
 		du $arg .[^.]* ./*
 	fi
 }
+

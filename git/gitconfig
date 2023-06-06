@@ -1,0 +1,92 @@
+[apply]
+  	whitespace = fix
+
+[github]
+	user = g4rcez
+
+[init]
+	defaultBranch = main
+
+[branch]
+	sort = -committerdate
+
+[color]
+	ui = true
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[core]
+	excludesFile = ~/.gitignore
+	pager = diff-so-fancy | less --tabs=4 -RFX
+	ignorecase = false
+
+[pull]
+	rebase = true
+
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  s = status -s
+  shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+  alias = config --get-regexp alias
+  # Interactive rebase with the given number of latest commits.
+  reb = "!r() { git rebase -i HEAD~$1; }; r"
+  tag = "tag -s"
+  # Find commits by source code
+  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+  # Find commits by commit message
+  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+  # Remove branches that have already been merged with main.
+  # a.k.a. ‘delete merged’
+  bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  # List contributors with number of commits.
+  contributors = shortlog --summary --numbered
+
+[push]
+	autoSetupRemove = true
+
+[gist]
+  private = yes
+
+[log]
+	decorate = short
+
+[fetch]
+	prune = true
+	output = compact
+
+[user]
+	name = g4rcez
+	email = allan.f.garcez@gmail.com
+	signingkey = DCAD5CFB6F6D9B63
+
+[commit]
+	gpgsign = true
+
+[help]
+	# Automatically correct and execute mistyped commands.
+	autocorrect = 1
+
+[merge]
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
+[interactive]
+	diffFilter = diff-so-fancy --patch
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[diff-so-fancy]
+	markEmptyLines = false
+	rulerWidth = 120
