@@ -25,3 +25,13 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 
 # Enable Stealth Mode (Prevent others from discovering your Mac)
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
+
+# Set a really fast key repeat.
+defaults write NSGlobalDomain KeyRepeat -int 1
+
+# Set the Finder prefs for showing a few different volumes on the Desktop.
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
+# Disable the sound effects on boot
+sudo nvram SystemAudioVolume=" "

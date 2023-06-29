@@ -1,10 +1,15 @@
-""""""""""""""""""""""""""""""""""
+""""""" https://jb.gg/share-ideavimrc
+let mapleader=" "
+"" -- Idea things
+set ideajoin
+set ideamarks
+set idearefactormode=keep
+set ideastrictmode
+
 "" --- easymotion
 set easymotion
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
-
-let mapleader=" "
 
 "" -- Nerdtree
 set NERDTree
@@ -62,8 +67,6 @@ vmap <leader>P "+P
 "" commentary
 set commentary
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent
 set autoread
@@ -71,7 +74,6 @@ set copyindent
 set cursorcolumn
 set cursorline
 set encoding=utf-8
-set exchange
 set expandtab
 set hlsearch
 set ignorecase
@@ -100,11 +102,6 @@ set viminfo
 set visualbell
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"" -- Idea things
-set ideajoin
-set ideamarks
-set idearefactormode=keep
-set ideastrictmode
 
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 vnoremap < <gv
@@ -118,11 +115,9 @@ map gl $
 
 """"""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>j <action>(SurroundWithLiveTemplate)
-nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader>/ <action>(ShowErrorDescription)
+nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader><leader> <action>(ReformatCode)
-nmap <leader>Q <action>(ReopenClosedTab)
-nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>f <Plug>(easymotion-f)
 nmap <leader>g <action>(Git.Menu)
@@ -131,9 +126,10 @@ nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
 nmap <leader>s <Plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
-nmap <leader>w <action>(SaveAll)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
-nmap T <action>(ReopenClosedTab)
+nmap <leader>T <action>(ReopenClosedTab)
+nmap gt <action>(ReopenClosedTab)
+nmap <leader>P <action>(RecentProjectListGroup)
 
 "" cursor back
 nmap <leader>u <action>(Back)
@@ -166,18 +162,19 @@ nnoremap / :action Find<CR>
 """""""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
 nnoremap vv V
 "" surround plugin for
-nmap S ysiw
+nmap <leader>S ysiw
 """" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
 nnoremap <Tab> :action NextTab<CR>
 """" New files
 nnoremap <leader>nf :action NewFile<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""" Handler """""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""" Handlers """""""""""""""""""""""""""""""""""""""
 sethandler n:vim i:ide
 sethandler <C-c> a:ide
 sethandler <C-v> a:ide
 sethandler <C-s> a:ide
+sethandler <C-w> i:vim
 
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>

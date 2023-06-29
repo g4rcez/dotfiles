@@ -23,17 +23,7 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
-################################### OSX ##########################################
-if [[ "$(uname -o)" == "Darwin" ]]; then
-  # macOS has no `md5sum`, so use `md5` as a fallback
-  command -v md5sum >/dev/null || alias md5sum="md5"
 
-  # macOS has no `sha1sum`, so use `shasum` as a fallback
-  command -v sha1sum >/dev/null || alias sha1sum="shasum"
-  command -v hd > /dev/null || alias hd="hexdump -C"
-  alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
-  source "$HOME/.iterm2_shell_integration.zsh"
-fi
 ########################## CLIPBOARD ##########################################
 if [[ "$(uname -o)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
@@ -54,11 +44,9 @@ alias wip="git add . && git commit -m 'wip: work in progress' && git push"
 alias gittree=git-graph
 alias gitree=git-graph
 ######################### General stuff #########################
-alias n="pnpm"
 alias vim="lvim"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 alias ll="ls -l"
-alias files="fzf --multi --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -77,6 +65,7 @@ export NODE_REPL_MODE='sloppy';
 function docker-prune-volumes () {
   docker volume rm $(docker volume ls -q --filter dangling=true)
 }
+
 function dockerkill () {
   docker kill $(docker ps -q)
 }
@@ -85,10 +74,6 @@ if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
 fi
 
-# fzf
-[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
-export FZF_DEFAULT_OPTS=' --height 40% --layout=reverse --border --info=inline --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc  --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
-source "$HOME/dotfiles/scripts/fzf-git"
 ##################################### Functions #####################################
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
@@ -119,7 +104,6 @@ function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
-
 function extract() {
   if [ -f "$FILE" ]; then
     case $FILE in
@@ -145,15 +129,11 @@ function extract() {
 _dotnet_zsh_complete()
 {
   local completions=("$(dotnet complete "$words")")
-
-  # If the completion list is empty, just continue with filename selection
   if [ -z "$completions" ]
   then
     _arguments '*::arguments: _normal'
     return
   fi
-
-  # This is not a variable assignment, don't remove spaces!
   _values = "${(ps:\n:)completions}"
 }
 
@@ -187,3 +167,77 @@ function fs() {
 	fi
 }
 
+function secretuuid (){
+  echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
+}
+
+function n () {
+  local COMMAND=""
+  local SUBCOMMAND="$1"; shift;
+  local INSTALL_COMMAND=""
+  local PRE=""
+  if [[ -f "package-lock.json" ]]; then
+    COMMAND="npm";
+    RUN_ARGS=".scripts.$SUBCOMMAND"
+    if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run" fi
+    INSTALL_COMMAND="install";
+  fi
+  if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; INSTALL_COMMAND="add" fi
+  if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; INSTALL_COMMAND="add" fi
+  case $SUBCOMMAND in
+    "add") "$COMMAND" $INSTALL_COMMAND -E $@;;
+    "i") "$COMMAND" $INSTALL_COMMAND -E $@;;
+    "install") "$COMMAND" $INSTALL_COMMAND -E $@;;
+    *) $COMMAND $PRE $SUBCOMMAND $@;;
+  esac
+}
+alias ni="n add"
+
+################################### OSX Commands ##########################################
+if [[ "$(uname -o)" == "Darwin" ]]; then
+  # macOS has no `md5sum`, so use `md5` as a fallback
+  command -v md5sum >/dev/null || alias md5sum="md5"
+  # macOS has no `sha1sum`, so use `shasum` as a fallback
+  command -v sha1sum >/dev/null || alias sha1sum="shasum"
+  command -v hd > /dev/null || alias hd="hexdump -C"
+  command -v python > /dev/null || alias python="python3"
+  alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
+  function flush () {
+    sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+  }
+fi
+
+######################################## FZF ####################################################
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
+--height 60%
+--layout=reverse
+--border
+--preview '~/dotfiles/bin/lessfilter.sh {}'
+--info=inline
+--color=dark
+--color=fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe
+--color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef"
+export FZF_CTRL_T_OPTS="--no-height"
+alias files="fzf --multi --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+bindkey -s "^F" 'files^M'
+
+function st() {
+  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return }
+  local selected
+  selected=$(git -c color.status=always status --short |
+    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
+    cut -c4- | sed 's/.* -> //')
+    if [[ $selected ]]; then
+      for prog in $(echo $selected);
+      do $EDITOR $prog; done;
+  fi
+}
+
+function fzf-eval(){
+  echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
+}
+
+function fns() {
+  local script
+  script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && n $(echo "$script")
+}

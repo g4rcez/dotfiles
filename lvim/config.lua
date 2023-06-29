@@ -1,21 +1,10 @@
---[[
-lvim is the global options object
-
-Linters should be
-filled in as strings with either
-a global executable or a path to
-an executable
-]]
--- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
-
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.colorscheme = "tokyonight-night"
-vim.opt.relativenumber = true
--- to disable icons and use a minimalist setup, uncomment the following
 lvim.use_icons = true
 lvim.builtin.bufferline.active = false
+vim.opt.relativenumber = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -66,6 +55,9 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "right"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
+--
+-- autopairs
+lvim.builtin.autopairs.enable_moveright = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -89,21 +81,19 @@ lvim.builtin.treesitter.highlight.enable = true
 -- generic LSP settings
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
--- lvim.lsp.installer.setup.ensure_installed = {
---     "sumneko_lua",
---     "jsonls",
--- }
+lvim.lsp.installer.setup.ensure_installed = {
+  "jsonls",
+}
 -- -- change UI setting of `LspInstallInfo`
 -- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
 -- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
--- lvim.lsp.installer.setup.ui.border = "rounded"
 -- lvim.lsp.installer.setup.ui.keymaps = {
 --     uninstall_server = "d",
 --     toggle_server_expand = "o",
 -- }
 
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.installer.setup.automatic_installation = false
+lvim.lsp.installer.setup.automatic_installation = true
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -166,7 +156,8 @@ lvim.plugins = {
   {
     "folke/trouble.nvim",
     "fladson/vim-kitty",
-    "norcalli/nvim-colorizer.lua"
+    "norcalli/nvim-colorizer.lua",
+    "nvim-tree/nvim-web-devicons"
   },
 }
 
@@ -192,7 +183,7 @@ vim.opt.termguicolors = true      -- set term gui colors (most terminals support
 vim.opt.cursorline = true         -- highlight the current line
 vim.opt.colorcolumn = "99999"
 vim.opt.title = true
-vim.opt.spell = false
+vim.opt.spell = true
 vim.opt.spelllang = "en"
 
 lvim.lsp.installer.setup.automatic_installation = true
@@ -235,9 +226,16 @@ require 'colorizer'.setup({ '*', }, {
   RRGGBBAA = true,
 })
 
--- nvim-tree
+-- OR setup with some options
 require("nvim-tree").setup({
+  sort_by = "case_sensitive",
   view = {
-    width = 50
-  }
+    width = 30,
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
 })
