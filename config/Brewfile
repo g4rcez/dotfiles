@@ -17,6 +17,7 @@ brew 'diff-so-fancy'
 brew 'gnu-sed'
 brew 'findutils'
 brew 'gnupg'
+brew 'bottom'
 brew 'diff-so-fancy'
 
 # Cask

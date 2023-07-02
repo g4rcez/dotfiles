@@ -1,4 +1,28 @@
 #!/bin/bash
+######################### Git/Github CLI utils #########################
+alias add='git add'
+alias commit='git commit -m'
+alias gitree="git log --oneline --graph --decorate --all"
+alias push='git push -u'
+alias pull='git pull'
+alias tags='git tag | sort -V'
+alias rebase='git rebase'
+alias checkout='git checkout'
+alias ghc="gh pr checkout"
+alias ghl="gh pr list"
+alias wip="git add . && git commit -m 'wip: work in progress' && git push"
+alias gittree=git-graph
+alias gitree=git-graph
+function git-graph() {
+  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+}
+function clone() {
+  git clone "git@github.com:$1"
+}
+
+function tag() {
+  git tag "$1" && git push origin "$1"
+}
 
 ######################### *nix alias #########################
 alias cp='cp -v'
@@ -23,26 +47,25 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+alias bottom='btm'
+function memory() {
+  ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+}
+
+function cdm() {
+  mkdir -p "$1"
+  cd "$1"
+}
+
+function cpv() {
+  rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
+}
 
 ########################## CLIPBOARD ##########################################
 if [[ "$(uname -o)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
   alias pbpaste='xclip -selection clipboard -o'
 fi
-######################### Git/Github CLI utils #########################
-alias add='git add'
-alias commit='git commit -m'
-alias gitree="git log --oneline --graph --decorate --all"
-alias push='git push -u'
-alias pull='git pull'
-alias tags='git tag | sort -V'
-alias rebase='git rebase'
-alias checkout='git checkout'
-alias ghc="gh pr checkout"
-alias ghl="gh pr list"
-alias wip="git add . && git commit -m 'wip: work in progress' && git push"
-alias gittree=git-graph
-alias gitree=git-graph
 ######################### General stuff #########################
 alias vim="lvim"
 alias cat="bat -p --pager cat --theme OneHalfDark"
@@ -53,15 +76,7 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-######################################### Node ########################################
-# Enable persistent REPL history for `node`.
-export NODE_REPL_HISTORY=~/.node_history;
-# Allow 32³ entries; the default is 1000.
-export NODE_REPL_HISTORY_SIZE='32768';
-# Use sloppy mode by default, matching web browsers.
-export NODE_REPL_MODE='sloppy';
-
-
+######################################### Docker ########################################
 function docker-prune-volumes () {
   docker volume rm $(docker volume ls -q --filter dangling=true)
 }
@@ -75,34 +90,6 @@ if [ -x "$(command -v lvim)" ]; then
 fi
 
 ##################################### Functions #####################################
-function memory() {
-  ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
-}
-
-function clone() {
-  git clone "git@github.com:$1"
-}
-
-function tag() {
-  git tag "$1" && git push origin "$1"
-}
-
-function cdm() {
-  mkdir -p "$1"
-  cd "$1"
-}
-
-function node:scripts() {
-  cat "$PWD/package.json" | jq .scripts
-}
-
-function cpv() {
-  rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
-}
-
-function git-graph() {
-  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
-}
 
 function extract() {
   if [ -f "$FILE" ]; then
@@ -125,7 +112,7 @@ function extract() {
   fi
 }
 
-# dotnet autocomplete
+##################################### dotnet autocomplete ################################
 _dotnet_zsh_complete()
 {
   local completions=("$(dotnet complete "$words")")
@@ -171,6 +158,93 @@ function secretuuid (){
   echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
 }
 
+################################### OSX Commands ##########################################
+if [[ "$(uname -o)" == "Darwin" ]]; then
+  # macOS has no `md5sum`, so use `md5` as a fallback
+  command -v md5sum >/dev/null || alias md5sum="md5"
+  # macOS has no `sha1sum`, so use `shasum` as a fallback
+  command -v sha1sum >/dev/null || alias sha1sum="shasum"
+  command -v hd > /dev/null || alias hd="hexdump -C"
+  command -v python > /dev/null || alias python="python3"
+  alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
+  function flush () {
+    sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+  }
+fi
+
+######################################## FZF ####################################################
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
+-i
+--border
+--info=inline
+--layout=reverse
+--height 80%
+--color=dark
+--color header:italic
+--preview '~/dotfiles/bin/lessfilter.sh {}'
+--preview-window right,70%
+--bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
+--bind 'ctrl-/:toggle-preview'
+--color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672 "
+export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
+bindkey -s "^F" 'files^M'
+
+function st() {
+  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return }
+  local selected
+  selected=$(git -c color.status=always status --short |
+    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+    cut -c4- | sed 's/.* -> //')
+    if [[ $selected ]]; then
+      for prog in $(echo $selected);
+      do $EDITOR $prog; done;
+  fi
+}
+
+function gitignore () {
+  _gitignore $@ >> .gitignore
+}
+
+function fzf-eval(){
+  echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
+}
+
+function fns() {
+  local script
+  script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && n $(echo "$script")
+}
+
+function fzf-update () {
+  DIR="$(pwd)"
+  cd ~/.fzf && git pull && ./install
+  cd "$DIR"
+  exec $SHELL -l
+}
+
+function files(){
+  local file=$(fzf --multi --reverse);
+  if [[ $file ]]; then
+    for prog in $(echo $file);
+    do; $EDITOR $prog; done;
+  else
+    echo "cancelled fzf"
+  fi
+}
+
+################################ NODE ##################################
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY=~/.node_history;
+# Allow 32³ entries; the default is 1000.
+export NODE_REPL_HISTORY_SIZE='32768';
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE='sloppy';
+
+function node:scripts() {
+  cat "$PWD/package.json" | jq .scripts
+}
+
 function n () {
   local COMMAND=""
   local SUBCOMMAND="$1"; shift;
@@ -192,52 +266,3 @@ function n () {
   esac
 }
 alias ni="n add"
-
-################################### OSX Commands ##########################################
-if [[ "$(uname -o)" == "Darwin" ]]; then
-  # macOS has no `md5sum`, so use `md5` as a fallback
-  command -v md5sum >/dev/null || alias md5sum="md5"
-  # macOS has no `sha1sum`, so use `shasum` as a fallback
-  command -v sha1sum >/dev/null || alias sha1sum="shasum"
-  command -v hd > /dev/null || alias hd="hexdump -C"
-  command -v python > /dev/null || alias python="python3"
-  alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
-  function flush () {
-    sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
-  }
-fi
-
-######################################## FZF ####################################################
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
---height 60%
---layout=reverse
---border
---preview '~/dotfiles/bin/lessfilter.sh {}'
---info=inline
---color=dark
---color=fg:-1,bg:-1,hl:#c678dd,fg+:#ffffff,bg+:#4b5263,hl+:#d858fe
---color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef"
-export FZF_CTRL_T_OPTS="--no-height"
-alias files="fzf --multi --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-bindkey -s "^F" 'files^M'
-
-function st() {
-  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return }
-  local selected
-  selected=$(git -c color.status=always status --short |
-    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
-    cut -c4- | sed 's/.* -> //')
-    if [[ $selected ]]; then
-      for prog in $(echo $selected);
-      do $EDITOR $prog; done;
-  fi
-}
-
-function fzf-eval(){
-  echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
-}
-
-function fns() {
-  local script
-  script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && n $(echo "$script")
-}

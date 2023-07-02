@@ -8,6 +8,8 @@ set ideastrictmode
 
 "" --- easymotion
 set easymotion
+nmap <leader>s <Plug>(easymotion-s)
+nmap <leader>f <Plug>(easymotion-f)
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 
@@ -100,9 +102,8 @@ set title
 set ttyfast
 set viminfo
 set visualbell
+set whichwrap=b,s,<,>,h,l,[,]
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 vnoremap < <gv
 vnoremap > >gv
@@ -119,17 +120,18 @@ nmap <leader>/ <action>(ShowErrorDescription)
 nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>e <action>(GotoNextError)
-nmap <leader>f <Plug>(easymotion-f)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>o <action>(OptimizeImports)
+map <leader>b <Action>(ToggleLineBreakpoint)
 nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
-nmap <leader>s <Plug>(easymotion-s)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap <leader>T <action>(ReopenClosedTab)
-nmap gt <action>(ReopenClosedTab)
 nmap <leader>P <action>(RecentProjectListGroup)
+nmap gt <action>(ReopenClosedTab)
+map gp <Action>(FileStructurePopup)
+map go <Action>(Switcher)
 
 "" cursor back
 nmap <leader>u <action>(Back)

@@ -27,6 +27,7 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export python="/usr/bin/python3"
+export PATH="$HOME/.oh-my-zsh/custom/plugins/git-fuzzy/bin:$PATH"
 
 if [ -x "$(command -v lvim)" ]; then
   export EDITOR="lvim"

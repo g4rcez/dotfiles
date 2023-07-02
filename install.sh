@@ -16,7 +16,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/plugins
 git clone https://github.com/chrissicool/zsh-256color $ZSH_CUSTOM/zsh-256color
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/zsh-syntax-highlighting
-
+git clone https://github.com/bigH/git-fuzzy.git $ZSH_CUSTOM/git-fuzzy
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
