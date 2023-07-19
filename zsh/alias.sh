@@ -191,6 +191,10 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 bindkey -s "^F" 'files^M'
 
+bindkey "^[[Z" expand-or-complete
+bindkey "^I" expand-or-complete
+bindkey "^ " fzf-tab-complete
+
 function st() {
   git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return }
   local selected
@@ -248,21 +252,32 @@ function node:scripts() {
 function n () {
   local COMMAND=""
   local SUBCOMMAND="$1"; shift;
-  local INSTALL_COMMAND=""
+  local INSTALL_COMMAND="add"
   local PRE=""
+  local ARGUMENTS="-E"
   if [[ -f "package-lock.json" ]]; then
     COMMAND="npm";
     RUN_ARGS=".scripts.$SUBCOMMAND"
     if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run" fi
     INSTALL_COMMAND="install";
   fi
-  if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; INSTALL_COMMAND="add" fi
-  if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; INSTALL_COMMAND="add" fi
+  if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
+  if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
+  if [[ "$#" == "0" ]];then
+    ARGUMENTS=""
+  fi
   case $SUBCOMMAND in
-    "add") "$COMMAND" $INSTALL_COMMAND -E $@;;
-    "i") "$COMMAND" $INSTALL_COMMAND -E $@;;
-    "install") "$COMMAND" $INSTALL_COMMAND -E $@;;
+    "add") "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
+    "i") "$COMMAND" install $ARGUMENTS $@;;
+    "install") "$COMMAND" install $ARGUMENTS $@;;
     *) $COMMAND $PRE $SUBCOMMAND $@;;
   esac
 }
-alias ni="n add"
+
+function ni() {
+  if [[ "$#" == "0" ]]; then
+    n install
+  else
+    n add $@
+  fi
+}
