@@ -1,17 +1,17 @@
 -- general
-lvim.log.level = "warn"
-lvim.format_on_save = true
-lvim.colorscheme = "tokyonight-night"
-lvim.use_icons = true
 lvim.builtin.bufferline.active = false
+lvim.colorscheme = "tokyonight-night"
+lvim.format_on_save = true
+lvim.leader = "space"
+lvim.log.level = "warn"
+lvim.use_icons = true
 vim.opt.relativenumber = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader = "space"
--- add your own keymapping
--- vim.keys.normal_mode["<C-s>"] = ":w<cr>"
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.builtin.terminal.open_mapping = "<c-t>"
+lvim.keys.normal_mode["<C-e>"] = ":NeoTreeFloatToggle<cr>"
+lvim.keys.normal_mode["<C-p>"] = ":FzfLua files<cr>"
+lvim.transparent_window = true
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
@@ -36,7 +36,6 @@ lvim.builtin.telescope.defaults.mappings = {
 }
 
 -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 -- lvim.builtin.which_key.mappings["t"] = {
 --   name = "+Trouble",
 --   r = { "<cmd>Trouble lsp_references<cr>", "References" },
@@ -53,6 +52,7 @@ lvim.builtin.alpha.active = true
 lvim.builtin.dap.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
+lvim.builtin.nvimtree.active = false
 lvim.builtin.nvimtree.setup.view.side = "right"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 --
@@ -84,89 +84,65 @@ lvim.builtin.treesitter.highlight.enable = true
 lvim.lsp.installer.setup.ensure_installed = {
   "jsonls",
 }
--- -- change UI setting of `LspInstallInfo`
--- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
--- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
--- lvim.lsp.installer.setup.ui.keymaps = {
---     uninstall_server = "d",
---     toggle_server_expand = "o",
--- }
-
+--
 -- ---@usage disable automatic installation of servers
 lvim.lsp.installer.setup.automatic_installation = true
 
--- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
--- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
--- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
--- local opts = {} -- check the lspconfig documentation for a list of all possible options
--- require("lvim.lsp.manager").setup("pyright", opts)
-
--- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
--- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
--- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
---   return server ~= "emmet_ls"
--- end, lvim.lsp.automatic_configuration.skipped_servers)
-
--- -- you can set a custom on_attach function that will be used for all the language servers
--- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
--- lvim.lsp.on_attach_callback = function(client, bufnr)
---   local function buf_set_option(...)
---     vim.api.nvim_buf_set_option(bufnr, ...)
---   end
---   --Enable completion triggered by <c-x><c-o>
---   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
--- end
-
--- -- set a formatter, this will override the language server formatting capabilities (if it exists)
--- local formatters = require "lvim.lsp.null-ls.formatters"
--- formatters.setup {
---   { command = "black", filetypes = { "python" } },
---   { command = "isort", filetypes = { "python" } },
---   {
---     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "prettier",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--print-with", "100" },
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "typescript", "typescriptreact" },
---   },
--- }
-
--- -- set additional linters
--- local linters = require "lvim.lsp.null-ls.linters"
--- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
---   },
--- }
 
 -- Additional Plugins
 lvim.plugins = {
   {
+    "farmergreg/vim-lastplace",
+    "ibhagwan/fzf-lua",
     "folke/trouble.nvim",
     "fladson/vim-kitty",
     "norcalli/nvim-colorizer.lua",
-    "nvim-tree/nvim-web-devicons"
-  },
+    "nvim-tree/nvim-web-devicons",
+    "nacro90/numb.nvim",
+    "MunifTanjim/nui.nvim",
+    {
+      "nvim-neo-tree/neo-tree.nvim",
+      branch = "v2.x",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "MunifTanjim/nui.nvim",
+      },
+      config = function()
+        require("neo-tree").setup({
+          close_if_last_window = true,
+          window = {
+            width = 30,
+          },
+          buffers = {
+            follow_current_file = true,
+          },
+          filesystem = {
+            follow_current_file = true,
+            filtered_items = {
+              hide_dotfiles = false,
+              hide_gitignored = false,
+              hide_by_name = {
+                "node_modules"
+              },
+              never_show = {
+                ".DS_Store",
+                "thumbs.db"
+              },
+            },
+          },
+        })
+      end
+    },
+  }
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- vim.api.nvim_create_autocmd("BufEnter", {
---   pattern = { "*.json", "*.jsonc" },
---   -- enable wrap mode for json files only
---   command = "setlocal wrap",
--- })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = { "*.json", "*.jsonc" },
+  --   -- enable wrap mode for json files only
+  command = "setlocal wrap",
+})
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "zsh",
   callback = function()
@@ -207,7 +183,7 @@ linters.setup {
   },
   {
     command = "codespell",
-    filetypes = { "javascript", "python" },
+    filetypes = { "*" },
   },
 }
 
@@ -226,16 +202,10 @@ require 'colorizer'.setup({ '*', }, {
   RRGGBBAA = true,
 })
 
--- OR setup with some options
-require("nvim-tree").setup({
-  sort_by = "case_sensitive",
-  view = {
-    width = 30,
-  },
-  renderer = {
-    group_empty = true,
-  },
-  filters = {
-    dotfiles = true,
-  },
+require('numb').setup({
+  show_numbers = true,         -- Enable 'number' for the window while peeking
+  show_cursorline = true,      -- Enable 'cursorline' for the window while peeking
+  hide_relativenumbers = true, -- Enable turning off 'relativenumber' for the window while peeking
+  number_only = false,         -- Peek only when the command is only a number instead of when it starts with a number
+  centered_peeking = true,     -- Peeked line will be centered relative to window
 })

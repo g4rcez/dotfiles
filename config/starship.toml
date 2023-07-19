@@ -11,7 +11,7 @@ $git_branch\
 $git_state\
 $git_status\
 ${custom.since_last_commit}\
-$fill\ 
+$fill\
 $package\
 $dotnet\
 $nodejs\
@@ -46,7 +46,7 @@ fish_style_pwd_dir_length = 1
 disabled = true
 time_format = "%R - %d/%m/%Y"
 style = "$white"
-format = '[[  $time ](fg:#a0a9cb)]($style)'
+format = '[[ $time ](fg:#a0a9cb)]($style)'
 
 [character]
 success_symbol = "[❯](bold white)"
@@ -77,7 +77,6 @@ up_to_date = '[✓](bold green) '
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "bright-black"
 cherry_pick = '[🍒](bold red)'
-
 
 [cmd_duration]
 format = "[ ⏰ $duration]($style) "

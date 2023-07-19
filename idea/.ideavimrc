@@ -1,4 +1,4 @@
-""""""" https://jb.gg/share-ideavimrc
+""""" https://jb.gg/share-ideavimrc
 let mapleader=" "
 "" -- Idea things
 set ideajoin
@@ -129,7 +129,7 @@ nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>P <action>(RecentProjectListGroup)
-nmap gt <action>(ReopenClosedTab)
+nmap gt <action>(Run)
 map gp <Action>(FileStructurePopup)
 map go <Action>(Switcher)
 

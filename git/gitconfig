@@ -72,13 +72,16 @@
 [merge]
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+
 [interactive]
 	diffFilter = diff-so-fancy --patch
+
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+
 [color "diff"]
 	meta = 11
 	frag = magenta bold
@@ -87,6 +90,8 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
 [diff-so-fancy]
 	markEmptyLines = false
 	rulerWidth = 120
+
