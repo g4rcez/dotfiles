@@ -13,6 +13,7 @@ alias ghl="gh pr list"
 alias wip="git add . && git commit -m 'wip: work in progress' && git push"
 alias gittree=git-graph
 alias gitree=git-graph
+
 function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
@@ -48,6 +49,7 @@ alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
 alias bottom='btm'
+
 function memory() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
 }
@@ -154,11 +156,12 @@ function fs() {
 	fi
 }
 
-function secretuuid (){
+function secretuuid() {
   echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
 }
 
 ################################### OSX Commands ##########################################
+
 if [[ "$(uname -o)" == "Darwin" ]]; then
   # macOS has no `md5sum`, so use `md5` as a fallback
   command -v md5sum >/dev/null || alias md5sum="md5"
@@ -216,8 +219,10 @@ function fzf-eval(){
 }
 
 function fns() {
-  local script
-  script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && n $(echo "$script")
+  if [[ -f package.json ]]; then
+  local CONTENT="$(jq -r '.scripts' package.json)"
+  local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo '$CONTENT'") && n $(echo "$script")
+  fi
 }
 
 function fzf-update () {

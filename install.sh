@@ -32,6 +32,7 @@ ln -sf $HOME/dotfiles/config/wezterm/main.lua $HOME/.wezterm.lua
 ln -sf $HOME/dotfiles/config/kitty $HOME/.config/kitty
 ln -sf $HOME/dotfiles/git/gitconfig $HOME/.gitconfig
 ln -sf $HOME/dotfiles/config/starship.toml $HOME/.config/starship.toml
+
 # My keyboard
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
 

@@ -1,8 +1,6 @@
 #!/bin/zsh
-
 color_prompt=yes
 force_color_prompt=yes
-
 zmodload zsh/complist
 autoload -U compinit; compinit
 _comp_options+=(globdots)
@@ -38,8 +36,7 @@ setopt rmstarsilent
 setopt share_history
 setopt transient_rprompt
 
-bindkey '^Xa' alias-expension
-
+export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 zstyle ':completion:*' complete true
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -55,6 +52,11 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
+zstyle ':completion:complete:*:options' sort false
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+zstyle ':fzf-tab:complete:brew-(install|uninstall|search|info):*-argument-rest' fzf-preview 'brew info $word'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
@@ -107,6 +109,7 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
 
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
+bindkey '^Xa' alias-expension
 
 # time_since_last_commit() {
 #   if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
