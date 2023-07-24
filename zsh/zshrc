@@ -14,6 +14,7 @@ HYPHEN_INSENSITIVE="true"
 
 plugins=(
   docker
+  vi-mode
   forgit
   fzf
   fzf-tab
@@ -51,6 +52,7 @@ autoload -Uz compinit
 compinit
 
 # vi-mode
+VI_MODE_SET_CURSOR=true
 VI_MODE_CURSOR_NORMAL=2
 VI_MODE_CURSOR_VISUAL=6
 VI_MODE_CURSOR_INSERT=6

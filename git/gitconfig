@@ -43,6 +43,8 @@
   bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
   # List contributors with number of commits.
   contributors = shortlog --summary --numbered
+	log = forgit::log
+	logs = forgit::log
 
 [push]
 	autoSetupRemove = true
@@ -95,3 +97,5 @@
 	markEmptyLines = false
 	rulerWidth = 120
 
+[gpg]
+	program = /usr/local/bin/gpg

@@ -19,6 +19,8 @@ brew 'findutils'
 brew 'gnupg'
 brew 'bottom'
 brew 'diff-so-fancy'
+brew 'fzf'
+brew 'fd'
 
 # Cask
 cask 'docker'

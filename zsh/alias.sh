@@ -13,6 +13,7 @@ alias ghl="gh pr list"
 alias wip="git add . && git commit -m 'wip: work in progress' && git push"
 alias gittree=git-graph
 alias gitree=git-graph
+alias logs="forgit::log"
 
 function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
@@ -64,7 +65,7 @@ function cpv() {
 }
 
 ########################## CLIPBOARD ##########################################
-if [[ "$(uname -o)" != "Darwin" ]]; then
+if [[ "$(uname)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
   alias pbpaste='xclip -selection clipboard -o'
 fi
@@ -162,7 +163,7 @@ function secretuuid() {
 
 ################################### OSX Commands ##########################################
 
-if [[ "$(uname -o)" == "Darwin" ]]; then
+if [[ "$(uname)" == "Darwin" ]]; then
   # macOS has no `md5sum`, so use `md5` as a fallback
   command -v md5sum >/dev/null || alias md5sum="md5"
   # macOS has no `sha1sum`, so use `shasum` as a fallback
