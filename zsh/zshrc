@@ -14,7 +14,6 @@ HYPHEN_INSENSITIVE="true"
 
 plugins=(
   docker
-  vi-mode
   forgit
   fzf
   fzf-tab
@@ -51,10 +50,10 @@ eval "$(starship init zsh)"
 autoload -Uz compinit
 compinit
 
-# vi-mode
-VI_MODE_SET_CURSOR=true
-VI_MODE_CURSOR_NORMAL=2
-VI_MODE_CURSOR_VISUAL=6
-VI_MODE_CURSOR_INSERT=6
-VI_MODE_CURSOR_OPPEND=0
-
+####################### TMUX ##########################
+# auto into tmux session
+if [[ -n "\$PS1" ]] && [[ -z "\$TMUX" ]] && [[ -n "\$SSH_CONNECTION" ]]; then
+  tmux attach-session -t remote || tmux new-session -s remote
+fi
+eval 
+AMPLI_AC_ZSH_SETUP_PATH=/Users/garcez/Library/Caches/@amplitude/ampli/autocomplete/zsh_setup && test -f $AMPLI_AC_ZSH_SETUP_PATH && source $AMPLI_AC_ZSH_SETUP_PATH; # ampli autocomplete setup

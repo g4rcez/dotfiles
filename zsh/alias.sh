@@ -15,6 +15,10 @@ alias gittree=git-graph
 alias gitree=git-graph
 alias logs="forgit::log"
 
+function gitignore() {
+  forgit::ignore >> .gitignore
+}
+
 function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
@@ -95,6 +99,7 @@ fi
 ##################################### Functions #####################################
 
 function extract() {
+  FILE="$1"
   if [ -f "$FILE" ]; then
     case $FILE in
     *.tar.bz2) tar xjf "$FILE" ;;
@@ -211,10 +216,6 @@ function st() {
   fi
 }
 
-function gitignore () {
-  _gitignore $@ >> .gitignore
-}
-
 function fzf-eval(){
   echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
@@ -237,7 +238,7 @@ function files(){
   local file=$(fzf --multi --reverse);
   if [[ $file ]]; then
     for prog in $(echo $file);
-    do; $EDITOR $prog; done;
+    do $EDITOR $prog; done;
   else
     echo "cancelled fzf"
   fi
@@ -264,7 +265,7 @@ function n () {
   if [[ -f "package-lock.json" ]]; then
     COMMAND="npm";
     RUN_ARGS=".scripts.$SUBCOMMAND"
-    if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run" fi
+    if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run"; fi
     INSTALL_COMMAND="install";
   fi
   if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
@@ -282,8 +283,9 @@ function n () {
 
 function ni() {
   if [[ "$#" == "0" ]]; then
-    n install
+    n install;
   else
-    n add $@
+    n add $@;
   fi
 }
+

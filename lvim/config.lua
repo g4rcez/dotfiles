@@ -113,6 +113,7 @@ lvim.plugins = {
           close_if_last_window = true,
           window = {
             width = 30,
+            position = "right"
           },
           buffers = {
             follow_current_file = true,
@@ -143,6 +144,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   --   -- enable wrap mode for json files only
   command = "setlocal wrap",
 })
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "zsh",
   callback = function()

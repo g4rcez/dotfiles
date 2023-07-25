@@ -18,6 +18,8 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/zsh-autos
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/zsh-syntax-highlighting
 git clone https://github.com/bigH/git-fuzzy.git $ZSH_CUSTOM/git-fuzzy
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/fzf-tab
+git clone https://github.com/wfxr/forgit $ZSH_CUSTOM/forgit
 ~/.fzf/install
 
 curl https://get.volta.sh | bash
