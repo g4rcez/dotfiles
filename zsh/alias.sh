@@ -45,6 +45,8 @@ alias mv='mv -v'
 alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
+alias ll="ls -l"
+alias cat="bat -p --pager cat --theme OneHalfDark"
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
@@ -74,14 +76,13 @@ if [[ "$(uname)" != "Darwin" ]]; then
   alias pbpaste='xclip -selection clipboard -o'
 fi
 ######################### General stuff #########################
-alias vim="lvim"
-alias cat="bat -p --pager cat --theme OneHalfDark"
-alias ll="ls -l"
-
-# IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+if [ -x "$(command -v lvim)" ]; then
+  alias vim="lvim"
+fi
 
 ######################################### Docker ########################################
 function docker-prune-volumes () {
@@ -91,13 +92,7 @@ function docker-prune-volumes () {
 function dockerkill () {
   docker kill $(docker ps -q)
 }
-
-if [ -x "$(command -v lvim)" ]; then
-  alias vim="lvim"
-fi
-
 ##################################### Functions #####################################
-
 function extract() {
   FILE="$1"
   if [ -f "$FILE" ]; then
@@ -118,18 +113,6 @@ function extract() {
   else
     echo "'$FILE' is not a valid file"
   fi
-}
-
-##################################### dotnet autocomplete ################################
-_dotnet_zsh_complete()
-{
-  local completions=("$(dotnet complete "$words")")
-  if [ -z "$completions" ]
-  then
-    _arguments '*::arguments: _normal'
-    return
-  fi
-  _values = "${(ps:\n:)completions}"
 }
 
 function listening() {
@@ -183,13 +166,12 @@ fi
 
 ######################################## FZF ####################################################
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 -i
 --border
 --info=inline
 --layout=reverse
---height 80%
+--height 90%
 --color=dark
 --color header:italic
 --preview '~/dotfiles/bin/lessfilter.sh {}'
@@ -198,14 +180,15 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --bind 'ctrl-/:toggle-preview'
 --color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672 "
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bindkey -s "^F" 'files^M'
 
-bindkey "^[[Z" expand-or-complete
-bindkey "^I" expand-or-complete
-bindkey "^ " fzf-tab-complete
+bindkey "^[[Z" expand-or-complete;
+bindkey "^I" expand-or-complete;
+bindkey "^ " fzf-tab-complete;
 
 function st() {
-  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return }
+  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
   local selected
   selected=$(git -c color.status=always status --short |
     fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
@@ -256,7 +239,7 @@ function node:scripts() {
   cat "$PWD/package.json" | jq .scripts
 }
 
-function n () {
+function n() {
   local COMMAND=""
   local SUBCOMMAND="$1"; shift;
   local INSTALL_COMMAND="add"
@@ -285,7 +268,19 @@ function ni() {
   if [[ "$#" == "0" ]]; then
     n install;
   else
-    n add $@;
+    n -E add $@;
   fi
+}
+
+##################################### dotnet autocomplete ################################
+function _dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+  if [ -z "$completions" ]
+  then
+    _arguments '*::arguments: _normal'
+    return
+  fi
+  _values = "${(ps:\n:)completions}"
 }
 

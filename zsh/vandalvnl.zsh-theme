@@ -37,6 +37,7 @@ setopt share_history
 setopt transient_rprompt
 
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
+zstyle ':fzf-tab:*' fzf-min-height '100'
 zstyle ':completion:*' complete true
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -55,8 +56,9 @@ zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
 zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
-zstyle ':fzf-tab:complete:brew-(install|uninstall|search|info):*-argument-rest' fzf-preview 'brew info $word'
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:brew (install|uninstall|search|info):*-argument-rest' fzf-preview 'brew info $word'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 -l --color=always $realpath'
+zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-preview 'echo ${(P)word}'
 
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
