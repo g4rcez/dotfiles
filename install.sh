@@ -42,17 +42,17 @@ ln -sf $HOME/dotfiles/dygma $HOME/Raise
 mkdir -p $HOME/tools
 
 # Git
-git config --global core.excludesFile '~/.gitignore'
+git config --global core.excludesFile "$HOME/.gitignore"
 git config --global init.defaultBranch main
 
 # Node installs
 volta install node@18.2.1
 volta install yarn@1.22.1
-npm i -g pnpm ts-node yarn add-gitignore neovim
+npm i -g pnpm ts-node yarn neovim
 
 ## Python pip modules
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 # Lunarvim
 LV_BRANCH='release-1.3/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)
-ln -sf $HOME/dotfiles/lvim/config.lua $HOME/.config/lvim/config.lua
+ln -sf "$HOME/dotfiles/lvim/config.lua" "$HOME/.config/lvim/config.lua"

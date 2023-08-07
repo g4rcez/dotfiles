@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 TRAPWINCH() {
   zle && { zle reset-prompt; zle -R }
@@ -14,6 +14,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 HYPHEN_INSENSITIVE="true"
+ZELLIJ_AUTO_ATTACH=true
+ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
+NODE_ENV="development"
 
 plugins=(
   docker
@@ -36,11 +40,11 @@ if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.fzf/shell/key-bindings.zsh ] && source ~/.fzf/shell/key-bindings.zsh
 
-source $ZSH/oh-my-zsh.sh
-source $HOME/dotfiles/zsh/export.sh
-source $HOME/dotfiles/zsh/alias.sh
-source $HOME/.iterm2_shell_integration.zsh;
-source $HOME/.config/broot/launcher/bash/br
+source "$ZSH/oh-my-zsh.sh";
+source "$HOME/dotfiles/zsh/export.sh";
+source "$HOME/dotfiles/zsh/alias.sh";
+source "$HOME/.iterm2_shell_integration.zsh";
+source "$HOME/.config/broot/launcher/bash/br";
 
 ######################### Setup tools #########################
 compdef _dotnet_zsh_complete dotnet

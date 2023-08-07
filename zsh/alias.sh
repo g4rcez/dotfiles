@@ -22,6 +22,7 @@ function gitignore() {
 function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
+
 function clone() {
   git clone "git@github.com:$1"
 }
@@ -39,13 +40,14 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias ls="exa --icons --color=always -bghHiS"
+alias ls="exa --icons --git --color=always -bghHiS"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
 alias ll="ls -l"
+alias ccat="cat"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
@@ -83,6 +85,10 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 if [ -x "$(command -v lvim)" ]; then
   alias vim="lvim"
 fi
+
+function fvim() {
+  vim "$(fzf)"
+}
 
 ######################################### Docker ########################################
 function docker-prune-volumes () {
@@ -129,6 +135,10 @@ alias listen=listening
 
 function cdf() { # short for `cdfinder`
 	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+}
+
+function zshrc() {
+  vim "$HOME/dotfiles/zsh/zshrc"
 }
 
 # Determine size of a file or total size of a directory
@@ -181,11 +191,6 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672 "
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-bindkey -s "^F" 'files^M'
-
-bindkey "^[[Z" expand-or-complete;
-bindkey "^I" expand-or-complete;
-bindkey "^ " fzf-tab-complete;
 
 function st() {
   git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
@@ -227,7 +232,13 @@ function files(){
   fi
 }
 
+bindkey -s "^F" 'files^M'
+bindkey "^[[Z" expand-or-complete;
+bindkey "^I" expand-or-complete;
+bindkey "^ " fzf-tab-complete;
+
 ################################ NODE ##################################
+
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
 # Allow 32³ entries; the default is 1000.
@@ -260,7 +271,7 @@ function n() {
     "add") "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
     "i") "$COMMAND" install $ARGUMENTS $@;;
     "install") "$COMMAND" install $ARGUMENTS $@;;
-    *) $COMMAND $PRE $SUBCOMMAND $@;;
+    *) $COMMAND $PRE $SUBCOMMAND "$@";;
   esac
 }
 
@@ -268,9 +279,38 @@ function ni() {
   if [[ "$#" == "0" ]]; then
     n install;
   else
-    n -E add $@;
+    n add -E "$@";
   fi
 }
+
+################################ tmux ##################################################
+alias tsource="tmux source $HOME/.tmux.conf"
+
+function unbindall() {
+  for table in prefix root copy-mode copy-mode-vi; do
+      tmux unbind -a -T "$table"
+  done
+}
+
+################################ zellij ##################################################
+
+function zj() {
+  ZJ_SESSIONS=$(zellij list-sessions)
+  NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
+  if [ "${NO_SESSIONS}" -ge 2 ]; then
+      zellij attach \
+      "$(echo "${ZJ_SESSIONS}" | fzf)"
+  else
+     zellij attach -c localhost
+  fi
+}
+
+function zinit() { zellij attach -c "${1-localhost}"; }
+function zr() { zellij run --name "$*" -- zsh -ic "$*";}
+function run() { zellij run --name "$*" -- zsh -ic "$*";}
+function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*";}
+function ze() { zellij edit "$*";}
+function zef() { zellij edit --floating "$*";}
 
 ##################################### dotnet autocomplete ################################
 function _dotnet_zsh_complete()

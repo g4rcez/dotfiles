@@ -6,13 +6,6 @@ set ideamarks
 set idearefactormode=keep
 set ideastrictmode
 
-"" --- easymotion
-set easymotion
-nmap <leader>s <Plug>(easymotion-s)
-nmap <leader>f <Plug>(easymotion-f)
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-
 "" -- Nerdtree
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
@@ -115,23 +108,25 @@ map gh ^
 map gl $
 
 """"""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
+map <leader>b <Action>(ToggleLineBreakpoint)
 map <leader>j <action>(SurroundWithLiveTemplate)
+map go <Action>(Switcher)
+map gp <Action>(FileStructurePopup)
 nmap <leader>/ <action>(ShowErrorDescription)
 nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader><leader> <action>(ReformatCode)
+nmap <leader>P <action>(RecentProjectListGroup)
+nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>o <action>(OptimizeImports)
-map <leader>b <Action>(ToggleLineBreakpoint)
 nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
+nmap <leader>ss <action>(StringManipulation.Group.Main)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
-nmap <leader>T <action>(ReopenClosedTab)
-nmap <leader>P <action>(RecentProjectListGroup)
+nmap ; :
 nmap gt <action>(Run)
-map gp <Action>(FileStructurePopup)
-map go <Action>(Switcher)
 
 "" cursor back
 nmap <leader>u <action>(Back)
@@ -152,7 +147,7 @@ nmap <leader>d <action>(NextTab)
 nmap gb <Action>(ShowBookmarks)
 nmap gm <Action>(ToggleBookmark)
 
-""""""""""""""""""""""""""""Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""" Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
 nmap gu <action>(ShowUsages)
 nmap gU <action>(FindUsages)

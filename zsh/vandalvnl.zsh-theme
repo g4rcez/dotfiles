@@ -37,6 +37,8 @@ setopt share_history
 setopt transient_rprompt
 
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 7
 zstyle ':fzf-tab:*' fzf-min-height '100'
 zstyle ':completion:*' complete true
 zstyle ':completion:*' group-name ''
