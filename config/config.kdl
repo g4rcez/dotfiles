@@ -3,12 +3,12 @@ keybinds clear-defaults=true {
         bind "Alt c" { Copy; }
         bind "Alt p" { SwitchToMode "Pane"; }
         bind "Alt r" { SwitchToMode "Resize"; }
-        bind "Alt x" { SwitchToMode "Session"; }
         bind "Alt t" { SwitchToMode "Tab"; }
-        bind "Alt q" { SwitchToMode "Session"; }
         bind "Alt n" { NewPane; SwitchToMode "Normal"; }
         bind "Alt s" { NextSwapLayout; SwitchToMode "Normal"; }
         bind "Ctrl u" { ToggleTab; }
+        bind "Alt q" { Detach; }
+        bind "Alt x" { Detach; }
     }
 
     locked {

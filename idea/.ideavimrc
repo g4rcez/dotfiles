@@ -6,6 +6,10 @@ set ideamarks
 set idearefactormode=keep
 set ideastrictmode
 
+"" easymotion
+set easymotion
+nmap <leader>fg <action>(AceWordStartAction)
+
 "" -- Nerdtree
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
@@ -30,11 +34,6 @@ xmap <C-p> <plug>RemoveOccurrence
 
 "" matchit.vim
 set matchit
-
-""" Horizontal movement - https://plugins.jetbrains.com/plugin/19417-ideavim-quickscope
-set sneak
-set quickscope
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 "" vim-paragraph-motion
 set vim-paragraph-motion
@@ -61,7 +60,6 @@ vmap <leader>P "+P
 
 "" commentary
 set commentary
-
 """"""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent
 set autoread
@@ -158,8 +156,6 @@ nnoremap / :action Find<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
 nnoremap vv V
-"" surround plugin for
-nmap <leader>S ysiw
 """" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
 nnoremap <Tab> :action NextTab<CR>
@@ -176,3 +172,10 @@ sethandler <C-w> i:vim
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
+
+""""""""""""""""""""""""""""""""""""" Fuzzy """"""""""""""""""""""""""""""""
+nmap <leader>ff <action>(FindInPath)
+nmap <leader>fr <action>(ReplaceInPath)
+nmap <leader>fo <action>(GotoFile)
+nmap <leader>fs <action>(GotoSymbol)
+nmap <leader>fd <action>(ShowIntentionActions)

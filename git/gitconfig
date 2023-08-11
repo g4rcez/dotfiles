@@ -48,6 +48,7 @@
 
 [push]
 	autoSetupRemove = true
+	autoSetupRemote = true
 
 [gist]
   private = yes
