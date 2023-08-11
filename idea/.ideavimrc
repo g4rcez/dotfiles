@@ -8,7 +8,6 @@ set ideastrictmode
 
 "" easymotion
 set easymotion
-nmap <leader>fg <action>(AceWordStartAction)
 
 "" -- Nerdtree
 set NERDTree
@@ -112,12 +111,10 @@ map go <Action>(Switcher)
 map gp <Action>(FileStructurePopup)
 nmap <leader>/ <action>(ShowErrorDescription)
 nmap <leader>1 <Action>(SelectInProjectView)
-nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>P <action>(RecentProjectListGroup)
 nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
-nmap <leader>o <action>(OptimizeImports)
 nmap <leader>q <action>(CloseEditor)
 nmap <leader>r <action>(RenameElement)
 nmap <leader>ss <action>(StringManipulation.Group.Main)
@@ -173,9 +170,14 @@ sethandler <C-w> i:vim
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
 
-""""""""""""""""""""""""""""""""""""" Fuzzy """"""""""""""""""""""""""""""""
-nmap <leader>ff <action>(FindInPath)
-nmap <leader>fr <action>(ReplaceInPath)
-nmap <leader>fo <action>(GotoFile)
-nmap <leader>fs <action>(GotoSymbol)
+""""""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
+nmap <leader><leader> <action>(ReformatCode)
+
 nmap <leader>fd <action>(ShowIntentionActions)
+nmap <leader>ff <action>(FindInPath)
+nmap <leader>fg <action>(AceWordStartAction)
+nmap <leader>fi <action>(OptimizeImports)
+nmap <leader>fm <action>(ReformatCode)
+nmap <leader>fo <action>(GotoFile)
+nmap <leader>fr <action>(ReplaceInPath)
+nmap <leader>fs <action>(GotoSymbol)
