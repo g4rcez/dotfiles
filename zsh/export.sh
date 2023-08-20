@@ -29,9 +29,9 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export python="/usr/bin/python3"
 export PATH="$HOME/.oh-my-zsh/custom/plugins/git-fuzzy/bin:$PATH"
 
-if [ -x "$(command -v lvim)" ]; then
-  export EDITOR="lvim"
-  export MANPAGER='lvim +Man!'
+if [ -x "$(command -v nvim)" ]; then
+  export EDITOR="nvim"
+  export MANPAGER='nvim +Man!'
 else
   export EDITOR="vim"
 fi

@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# zoxide
+eval "$(zoxide init zsh)"
+
 TRAPWINCH() {
   zle && { zle reset-prompt; zle -R }
 }
@@ -20,7 +23,10 @@ ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
 NODE_ENV="development"
 
 plugins=(
+  gh
   docker
+  dotnet
+  dotenv
   forgit
   fzf
   fzf-tab
@@ -45,13 +51,7 @@ source "$HOME/dotfiles/zsh/export.sh";
 source "$HOME/dotfiles/zsh/alias.sh";
 source "$HOME/.iterm2_shell_integration.zsh";
 source "$HOME/.config/broot/launcher/bash/br";
-
 ######################### Setup tools #########################
-compdef _dotnet_zsh_complete dotnet
-
-# zoxide
-eval "$(zoxide init zsh)"
-
 # starship
 eval "$(starship init zsh)"
 
@@ -61,3 +61,4 @@ compinit
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+

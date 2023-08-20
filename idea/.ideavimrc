@@ -1,3 +1,4 @@
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 """"" https://jb.gg/share-ideavimrc
 let mapleader=" "
 "" -- Idea things
@@ -59,7 +60,7 @@ vmap <leader>P "+P
 
 "" commentary
 set commentary
-""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent
 set autoread
 set copyindent
@@ -93,8 +94,7 @@ set ttyfast
 set viminfo
 set visualbell
 set whichwrap=b,s,<,>,h,l,[,]
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 vnoremap < <gv
 vnoremap > >gv
 map Q gq
@@ -104,20 +104,27 @@ map 0 ^
 map gh ^
 map gl $
 
-""""""""""""""""""""""""""""Leader Maps """"""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>b <Action>(ToggleLineBreakpoint)
+"""" String manipulation plugin
+"" Visual mode
+vnoremap <leader>ss <action>(StringManipulation.Group.Main)
+"" Normal mode
+nmap <leader>ss <action>(StringManipulation.Group.Main)
+
+"" Surround with emmet notation
 map <leader>j <action>(SurroundWithLiveTemplate)
+
+nmap <leader>/ <action>(ShowErrorDescription)
+"""""""""""""""""""""""""""""""""""""""""""""" File Operations """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 map go <Action>(Switcher)
 map gp <Action>(FileStructurePopup)
-nmap <leader>/ <action>(ShowErrorDescription)
+
 nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader>P <action>(RecentProjectListGroup)
 nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>q <action>(CloseEditor)
-nmap <leader>r <action>(RenameElement)
-nmap <leader>ss <action>(StringManipulation.Group.Main)
 nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap ; :
@@ -170,14 +177,17 @@ sethandler <C-w> i:vim
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
 
-""""""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
-nmap <leader><leader> <action>(ReformatCode)
-
-nmap <leader>fd <action>(ShowIntentionActions)
-nmap <leader>ff <action>(FindInPath)
-nmap <leader>fg <action>(AceWordStartAction)
-nmap <leader>fi <action>(OptimizeImports)
+""""""""""""""""""""""""""""""""""""" Refactor Tools """"""""""""""""""""""""""""""""
 nmap <leader>fm <action>(ReformatCode)
-nmap <leader>fo <action>(GotoFile)
+nmap <leader>r <action>(RenameElement)
+nmap <leader>fi <action>(OptimizeImports)
+""" Breakpoint
+map <leader>bb <Action>(ToggleLineBreakpoint)
+
+""""""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
+nmap <leader>fd <action>(ShowIntentionActions)
+nmap <leader>fa <action>(FindInPath)
+nmap <leader>ff <action>(GotoFile)
 nmap <leader>fr <action>(ReplaceInPath)
 nmap <leader>fs <action>(GotoSymbol)
+nmap <leader>fg <action>(AceDeclarationAction)

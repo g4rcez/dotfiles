@@ -1,0 +1,18 @@
+layout {
+    pane split_direction="vertical" { // first logical container
+        // all these panes will be laid out vertically next to each other
+        pane
+        pane split_direction="horizontal" { // second logical container
+            // all these panes will be laid out horizontally next to each other
+            pane command="nnn" {
+                args "install"
+            }
+            pane command="nnn" {
+                args "json-server"
+            }
+            pane command="nnn" {
+                args "dev"
+            }
+        }
+    }
+}

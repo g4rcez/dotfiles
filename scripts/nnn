@@ -1,0 +1,26 @@
+#!/bin/bash
+
+COMMAND=""
+SUBCOMMAND="$1"; shift;
+INSTALL_COMMAND="add"
+PRE=""
+ARGUMENTS="-E"
+if [[ -f "package-lock.json" ]]; then
+  COMMAND="npm";
+  RUN_ARGS=".scripts.$SUBCOMMAND"
+  if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run"; fi
+  INSTALL_COMMAND="install";
+fi
+if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
+if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
+if [[ "$#" == "0" ]];then
+  ARGUMENTS=""
+fi
+case $SUBCOMMAND in
+  "add") "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
+  "i") "$COMMAND" install $ARGUMENTS $@;;
+  "install") "$COMMAND" install $ARGUMENTS $@;;
+  *) $COMMAND $PRE $SUBCOMMAND "$@";;
+esac
+
+

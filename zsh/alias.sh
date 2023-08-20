@@ -49,6 +49,7 @@ alias wtf='pwd'
 alias ll="ls -l"
 alias ccat="cat"
 alias cat="bat -p --pager cat --theme OneHalfDark"
+alias dotfiles="cd $HOME/dotfiles"
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
@@ -85,10 +86,6 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 if [ -x "$(command -v nvim)" ]; then
   alias vim="nvim"
 fi
-
-function fvim() {
-  vim "$(fzf)"
-}
 
 ######################################### Docker ########################################
 function docker-prune-volumes () {
@@ -189,8 +186,17 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --bind 'ctrl-/:toggle-preview'
 --color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672 "
+
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+function fcd () {
+  cd $(find . -type d -print | fzf)
+}
+
+function fvim() {
+  vim "$(fzf)"
+}
 
 function st() {
   git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
@@ -223,7 +229,7 @@ function fzf-update () {
 }
 
 function files(){
-  local file=$(fzf --multi --reverse);
+  local file="$(fzf --multi --reverse)"
   if [[ $file ]]; then
     for prog in $(echo $file);
     do $EDITOR $prog; done;
@@ -293,7 +299,6 @@ function unbindall() {
 }
 
 ################################ zellij ##################################################
-
 function zj() {
   ZJ_SESSIONS=$(zellij list-sessions)
   NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
@@ -305,22 +310,15 @@ function zj() {
   fi
 }
 
-function zinit() { zellij attach -c "${1-localhost}"; }
+function zinit() {
+  local directory="${1-localhost}";
+  z "$directory";
+  zellij attach -c "$directory";
+}
 function zr() { zellij run --name "$*" -- zsh -ic "$*";}
 function run() { zellij run --name "$*" -- zsh -ic "$*";}
 function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*";}
 function ze() { zellij edit "$*";}
 function zef() { zellij edit --floating "$*";}
-
-##################################### dotnet autocomplete ################################
-function _dotnet_zsh_complete()
-{
-  local completions=("$(dotnet complete "$words")")
-  if [ -z "$completions" ]
-  then
-    _arguments '*::arguments: _normal'
-    return
-  fi
-  _values = "${(ps:\n:)completions}"
-}
+function zweb() { zellij --layout "$HOME/dotfiles/config/zlayouts/web.kdl"; }
 

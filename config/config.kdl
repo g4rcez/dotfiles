@@ -4,11 +4,18 @@ keybinds clear-defaults=true {
         bind "Alt p" { SwitchToMode "Pane"; }
         bind "Alt r" { SwitchToMode "Resize"; }
         bind "Alt t" { SwitchToMode "Tab"; }
+        bind "Alt f" { SwitchToMode "Search"; }
         bind "Alt n" { NewPane; SwitchToMode "Normal"; }
         bind "Alt s" { NextSwapLayout; SwitchToMode "Normal"; }
         bind "Ctrl u" { ToggleTab; }
         bind "Alt q" { Detach; }
         bind "Alt x" { Detach; }
+        bind "Alt Up" { ToggleFocusFullscreen; }
+        bind "Alt y" {
+          LaunchOrFocusPlugin "file:~/.config/zellij/plugins/room.wasm" {
+            floating true
+          }
+        }
     }
 
     locked {
@@ -16,6 +23,7 @@ keybinds clear-defaults=true {
     }
 
     resize {
+        bind "Alt f" { ToggleFocusFullscreen; }
         bind "Ctrl n" { SwitchToMode "Normal"; }
         bind "h" "Left" { Resize "Increase Left"; }
         bind "j" "Down" { Resize "Increase Down"; }
@@ -30,6 +38,7 @@ keybinds clear-defaults=true {
     }
 
     pane {
+        bind "Alt f" { ToggleFocusFullscreen; }
         bind "Ctrl p" { SwitchToMode "Normal"; }
         bind "c" { SwitchToMode "RenamePane"; PaneNameInput 0;}
         bind "d" { NewPane "Down"; SwitchToMode "Normal"; }
@@ -155,7 +164,6 @@ keybinds clear-defaults=true {
         bind "Ctrl g" { SwitchToMode "Locked"; }
         bind "Ctrl q" { SwitchToMode "Session"; }
         bind "Alt n" { NewPane; }
-        bind "Alt f" { ToggleFocusFullscreen; }
         bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
         bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
         bind "Alt j" "Alt Down" { MoveFocus "Down"; }
@@ -200,12 +208,8 @@ keybinds clear-defaults=true {
 }
 
 scroll_buffer_size 100000
-copy_on_select false
-simplified_ui true
 rounded_corners true
 pane_frames false
-default_layout "compact"
-mouse_mode true
 
 ui {
     pane_frames {
@@ -215,11 +219,11 @@ ui {
 
 themes {
   gruv {
-    fg "#eeeeee"
-    bg "#141418"
+    fg "#111"
+    bg "#242412"
     black "#000000"
     red "#7f1d1d"
-    green "#3730a3"
+    green "#1e293b"
     yellow "#713f12"
     blue "#1e3a8a"
     magenta "#581c87"
