@@ -1,4 +1,20 @@
 #!/bin/bash
+######################### dot directory ################################
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+alias -- -='cd -'
+alias 1='cd -1'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
 ######################### Git/Github CLI utils #########################
 alias add='git add'
 alias commit='git commit -m'
@@ -130,26 +146,22 @@ function listening() {
 
 alias listen=listening
 
-function cdf() { # short for `cdfinder`
-	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
-}
-
 function zshrc() {
   vim "$HOME/dotfiles/zsh/zshrc"
 }
 
 # Determine size of a file or total size of a directory
 function fs() {
-	if du -b /dev/null >/dev/null 2>&1; then
-		local arg=-sbh
-	else
-		local arg=-sh
-	fi
-	if [[ -n "$@" ]]; then
-		du $arg -- "$@"
-	else
-		du $arg .[^.]* ./*
-	fi
+    if du -b /dev/null >/dev/null 2>&1; then
+        local arg=-sbh
+    else
+        local arg=-sh
+    fi
+    if [[ -n "$@" ]]; then
+        du $arg -- "$@"
+    else
+        du $arg .[^.]* ./*
+    fi
 }
 
 function secretuuid() {
@@ -172,7 +184,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 fi
 
 ######################################## FZF ####################################################
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix"
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 -i
 --border
@@ -186,9 +198,16 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --bind 'ctrl-/:toggle-preview'
 --color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#A6E22E,pointer:#A6E22E,marker:#F92672,fg+:#F8F8F2,prompt:#F92672,hl+:#F92672 "
-
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+
 
 function fcd () {
   cd $(find . -type d -print | fzf)
@@ -197,21 +216,17 @@ function fcd () {
 function fvim() {
   vim "$(fzf)"
 }
-
-function st() {
-  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
-  local selected
-  selected=$(git -c color.status=always status --short |
-    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
-    cut -c4- | sed 's/.* -> //')
-    if [[ $selected ]]; then
-      for prog in $(echo $selected);
-      do $EDITOR $prog; done;
-  fi
-}
-
 function fzf-eval(){
   echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
+}
+
+function view() {
+  fd --type f --strip-cwd-prefix | fzf
+}
+
+function cdf () {
+  DIR="$(fd --type directory --hidden --exclude .git | fzf)"
+  cd "$PWD/$DIR"
 }
 
 function fns() {
@@ -238,10 +253,23 @@ function files(){
   fi
 }
 
-bindkey -s "^F" 'files^M'
-bindkey "^[[Z" expand-or-complete;
+function st() {
+  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
+  local selected
+  selected=$(git -c color.status=always status --short |
+    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+    cut -c4- | sed 's/.* -> //')
+    if [[ $selected ]]; then
+      for prog in $(echo $selected);
+      do $EDITOR $prog; done;
+  fi
+}
+
 bindkey "^I" expand-or-complete;
-bindkey "^ " fzf-tab-complete;
+bindkey "^[[Z" expand-or-complete;
+bindkey -s "^F" 'files^M'
+bindkey -s "^G" 'cdf^M'
+
 
 ################################ NODE ##################################
 
@@ -312,7 +340,9 @@ function zj() {
 
 function zinit() {
   local directory="${1-localhost}";
-  z "$directory";
+  if [[ "$1" != "" ]]; then
+    z "$directory";
+  fi
   zellij attach -c "$directory";
 }
 function zr() { zellij run --name "$*" -- zsh -ic "$*";}
@@ -321,4 +351,3 @@ function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*";}
 function ze() { zellij edit "$*";}
 function zef() { zellij edit --floating "$*";}
 function zweb() { zellij --layout "$HOME/dotfiles/config/zlayouts/web.kdl"; }
-

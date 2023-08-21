@@ -1,33 +1,33 @@
 [apply]
-  	whitespace = fix
+    whitespace = fix
 
 [github]
-	user = g4rcez
+    user = g4rcez
 
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [branch]
-	sort = -committerdate
+    sort = -committerdate
 
 [color]
-	ui = true
+    ui = true
 
 [color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan
+    added = yellow
+    changed = green
+    untracked = cyan
 
 [core]
-	excludesFile = ~/.gitignore
-	pager = diff-so-fancy | less --tabs=4 -RFX
-	ignorecase = false
+    excludesFile = ~/.gitignore
+    pager = diff-so-fancy | less --tabs=4 -RFX
+    ignorecase = false
 
 [pull]
-	rebase = true
+    rebase = true
 
 [alias]
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   s = status -s
   shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
   alias = config --get-regexp alias
@@ -43,60 +43,58 @@
   bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
   # List contributors with number of commits.
   contributors = shortlog --summary --numbered
-	log = forgit::log
-	logs = forgit::log
 
 [push]
-	autoSetupRemove = true
-	autoSetupRemote = true
+    autoSetupRemove = true
+    autoSetupRemote = true
 
 [gist]
   private = yes
 
 [log]
-	decorate = short
+    decorate = short
 
 [fetch]
-	prune = true
-	output = compact
+    prune = true
+    output = compact
 
 [user]
-	name = g4rcez
-	email = allan.f.garcez@gmail.com
-	signingkey = DCAD5CFB6F6D9B63
+    name = g4rcez
+    email = allan.f.garcez@gmail.com
+    signingkey = DCAD5CFB6F6D9B63
 
 [commit]
-	gpgsign = true
+    gpgsign = true
 
 [help]
-	# Automatically correct and execute mistyped commands.
-	autocorrect = 1
+    # Automatically correct and execute mistyped commands.
+    autocorrect = 1
 
 [merge]
-	# Include summaries of merged commits in newly created merge commit messages
-	log = true
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
 
 [interactive]
-	diffFilter = diff-so-fancy --patch
+    diffFilter = diff-so-fancy --patch
 
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
 
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	func = 146 bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
 
 [diff-so-fancy]
-	markEmptyLines = false
-	rulerWidth = 120
+    markEmptyLines = false
+    rulerWidth = 120
 
 [gpg]
-	program = /usr/local/bin/gpg
+    program = /usr/local/bin/gpg

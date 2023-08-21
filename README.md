@@ -14,10 +14,11 @@ Hi. This is my dotfiles project. Here you will find all my configs to create an 
 
 - [fzf](https://github.com/junegunn/fzf)
 - [lunarvim](https://www.lunarvim.org/)
-- [oh-my-zsh](https://ohmyz.sh/)
 - [starship.rs](https://starship.rs)
 - [bat](https://github.com/sharkdp/bat)
 - [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
+- [zplug](https://github.com/zplug/zplug)
+- [zellij](https://zellij.dev/)
 
 # Useful softwares
 
@@ -33,8 +34,6 @@ First, check the requirements:
 
 - zsh > v4
 - git > v2
-
-If this ok, you can install the `oh-my-zsh` and download the dotfiles
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

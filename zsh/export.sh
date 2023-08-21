@@ -5,11 +5,12 @@ export LESS_TERMCAP_so=$'\E[01;33m'
 export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[1;32m'
 export LESS_TERMCAP_ue=$'\E[0m'
+export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 
 export ARCHFLAGS="-arch x86_64"
 export BROWSER="google-chrome"
-export DOTNET_ROOT=$HOME/.dotnet
-export GPG_TTY=$(tty)
+export DOTNET_ROOT="$HOME/.dotnet"
+export GPG_TTY="$(tty)"
 export MANPATH="/usr/local/man:$MANPATH"
 export MANWIDTH=999
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -27,7 +28,6 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export python="/usr/bin/python3"
-export PATH="$HOME/.oh-my-zsh/custom/plugins/git-fuzzy/bin:$PATH"
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
