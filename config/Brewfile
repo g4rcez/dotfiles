@@ -24,6 +24,4 @@ brew 'fd'
 
 # Cask
 cask 'docker'
-cask 'fig'
-cask 'figma'
 #cask 'raycast'

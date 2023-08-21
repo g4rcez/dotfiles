@@ -36,11 +36,10 @@ First, check the requirements:
 - git > v2
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
 git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
 cd $HOME/dotfiles
 bash install.sh
+zsh
 ```
 
 # My Keyboard
