@@ -11,6 +11,8 @@ HYPHEN_INSENSITIVE="true"
 ZELLIJ_AUTO_ATTACH=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
+DOTFILES="$HOME/dotfiles"
+
 # zoxide
 eval "$(zoxide init zsh)"
 
@@ -33,26 +35,43 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.fzf/shell/key-bindings.zsh ] && source ~/.fzf/shell/key-bindings.zsh
 
-########################################### zap-zsh ###########################################
-[ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
-plug "wfxr/forgit"
-plug "zap-zsh/supercharge"
-plug "zap-zsh/zap-prompt"
-plug "zsh-users/zsh-autosuggestions"
-plug "zsh-users/zsh-completions"
-plug "zsh-users/zsh-history-substring-search"
-plug "zsh-users/zsh-syntax-highlighting"
-plug "zap-zsh/supercharge"
-plug "hlissner/zsh-autopair"
+# ########################################### zap-zsh ###########################################
+SNAP_DIR="$HOME/.znap"
+zstyle ':znap:*' repos-dir "$SNAP_DIR"
+[[ -r "$SNAP_DIR" ]] || git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$SNAP_DIR"
+source "$SNAP_DIR/znap.zsh";
+
+local -a plugins=(
+    MichaelAquilina/zsh-you-should-use
+    hlissner/zsh-autopair
+    marlonrichert/zcolors               # Colors for completions and Git
+    marlonrichert/zsh-edit              # Better keyboard shortcuts
+    marzocchi/zsh-notify
+    wfxr/forgit
+    zsh-users/zsh-autosuggestions       # Inline suggestions
+    zsh-users/zsh-completions
+    zsh-users/zsh-syntax-highlighting   # Command-line syntax highlighting
+)
+znap clone $plugins
+
+local p=
+for p in $plugins; do
+  znap source $p
+done
+
+znap eval zcolors "zcolors ${(q)LS_COLORS}"
+znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+znap eval starship 'starship init zsh'
+znap prompt
 
 ###################################### config ######################################
-source "$HOME/.iterm2_shell_integration.zsh";
-source "$HOME/.config/broot/launcher/bash/br";
-source "$HOME/dotfiles/zsh/export.sh";
-source "$HOME/dotfiles/zsh/git.sh";
-source "$HOME/dotfiles/zsh/alias.sh";
-source "$HOME/dotfiles/zsh/zstyle.sh";
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
-# starship
-eval "$(starship init zsh)"
+local -a sources=(
+  "$HOME/.config/broot/launcher/bash/br"
+  "$DOTFILES/zsh/export.sh"
+  "$DOTFILES/zsh/git.sh"
+  "$DOTFILES/zsh/alias.sh"
+  "$DOTFILES/zsh/zstyle.sh"
+)
+for fileSource in $sources;do
+  source $fileSource;
+done

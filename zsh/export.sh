@@ -35,3 +35,8 @@ if [ -x "$(command -v nvim)" ]; then
 else
   export EDITOR="vim"
 fi
+
+
+############################################# Plugins Config ########################################################
+export YSU_MESSAGE_POSITION="after"
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)

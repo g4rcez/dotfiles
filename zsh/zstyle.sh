@@ -1,11 +1,20 @@
 #!/bin/zsh
-
 WORDCHARS=''
 zmodload -i zsh/complist
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
 # use brace
 setopt brace_ccl
+# Max number of entries to keep in history file.
+SAVEHIST=$(( 100 * 1000 ))      # Use multiplication for readability.
+# Max number of history entries to keep in memory.
+HISTSIZE=$(( 1.2 * SAVEHIST ))  # Zsh recommended value
+# Use modern file-locking mechanisms, for better safety & performance.
+setopt HIST_FCNTL_LOCK
+# Keep only the most recent copy of each duplicate entry in history.
+setopt HIST_IGNORE_ALL_DUPS
+# Auto-sync history between concurrent sessions.
+setopt SHARE_HISTORY
 setopt aliases
 setopt always_to_end
 setopt append_history
@@ -39,6 +48,7 @@ setopt rmstarsilent
 setopt share_history
 # should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 zstyle ':completion:*:*:*:*:*' menu select
 
 # case insensitive (all), partial-word and substring completion
@@ -76,9 +86,6 @@ if [[ ${COMPLETION_WAITING_DOTS:-false} != false ]]; then
   bindkey -M vicmd "^I" expand-or-complete-with-dots
 fi
 
-autoload -U +X bashcompinit && bashcompinit
-zmodload zsh/complist
-autoload -U compinit; compinit
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
@@ -99,9 +106,24 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
+
+############################## zsh-notify ##############################################
+zstyle ':notify:*' always-notify-on-failure no
+zstyle ':notify:*' command-complete-timeout 5
+zstyle ':notify:*' error-title "Command failed (in #{time_elapsed} seconds)"
+zstyle ':notify:*' error-title "Command failed"
+zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
+zstyle ':notify:*' success-title "Command finished"
+zstyle ':notify:*' enable-on-ssh yes
+
+##################################### znap ###########################################
+zstyle ':znap:*:*' git-maintenance off
+
+############################## key Bind #################################
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
 bindkey '^Xa' alias-expension
+
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
@@ -135,6 +157,11 @@ ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
+
+autoload -U +X bashcompinit && bashcompinit
+zmodload zsh/complist
+autoload -U compinit
+compinit
 
 #ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 #ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
