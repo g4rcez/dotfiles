@@ -14,16 +14,16 @@
     ui = true
 
 [color "status"]
-    added = 10 normal
-    changed = 11 normal
-    untracked = normal dim
-    branch = 6 normal
-    updated = 10 normal
-    localbranch = 6 normal
-    header = normal
-    remotebranch = 5 normal
-    nobranch = 1 normal italic
-    unmerged = 9 normal
+	added = 10 normal
+	changed = 11 normal
+	untracked = normal dim
+	branch = 6 normal
+	updated = 10 normal
+	localbranch = 6 normal
+	header = normal
+	remotebranch = 5 normal
+	nobranch = 1 normal italic
+	unmerged = 9 normal
 
 [core]
     excludesFile = ~/.gitignore
@@ -91,27 +91,27 @@
     newHighlight = green bold 22
 
 [color "diff"]
-    meta = normal italic
-    frag = normal dim
-    func = 10 normal dim
-    commit = 3 normal
-    old = 1 normal
-    new = 10 normal
-    whitespace = normal 9
-    newMoved = 11 normal
-    oldMovedAlternativeDimmed = 4 normal dim
-    oldMovedAlternative = 4 normal
-    contextBold = normal bold
-    newBold = 10 normal bold
-    context = normal
-    oldMoved = 3 normal
-    oldBold = 1 normal bold
-    newMovedDimmed = 11 normal dim
-    newDimmed = 10 normal dim
-    newMovedAlternative = 12 normal
-    newMovedAlternativeDimmed = 12 normal dim
-    oldMovedDimmed = 3 normal dim
-    oldDimmed = 1 normal dim
+	meta = normal italic
+	frag = normal dim
+	func = 10 normal dim
+	commit = 3 normal
+	old = 1 normal
+	new = 10 normal
+	whitespace = normal 9
+	newMoved = 11 normal
+	oldMovedAlternativeDimmed = 4 normal dim
+	oldMovedAlternative = 4 normal
+	contextBold = normal bold
+	newBold = 10 normal bold
+	context = normal
+	oldMoved = 3 normal
+	oldBold = 1 normal bold
+	newMovedDimmed = 11 normal dim
+	newDimmed = 10 normal dim
+	newMovedAlternative = 12 normal
+	newMovedAlternativeDimmed = 12 normal dim
+	oldMovedDimmed = 3 normal dim
+	oldDimmed = 1 normal dim
 
 [diff-so-fancy]
     markEmptyLines = false
@@ -120,27 +120,27 @@
 [gpg]
     program = /usr/local/bin/gpg
 [color "branch"]
-    plain = 6 normal
-    remote = 5 normal
-    current = 6 normal reverse
-    local = 6 normal
-    upstream = 5 normal
+	plain = 6 normal
+	remote = 5 normal
+	current = 6 normal reverse
+	local = 6 normal
+	upstream = 5 normal
 [color "remote"]
-    hint = normal dim
-    success = 2 normal
-    error = 1 normal
-    warning = 3 normal
+	hint = normal dim
+	success = 2 normal
+	error = 1 normal
+	warning = 3 normal
 [color "interactive"]
-    header = normal dim bold
-    prompt = 15 4
-    help = normal dim
-    error = 1 normal italic
+	header = normal dim bold
+	prompt = 15 4
+	help = normal dim
+	error = 1 normal italic
 [color "decorate"]
-    branch = 6 normal
-    tag = 3 normal
-    remotebranch = 5 normal
-    stash = normal dim
-    grafted = 1 normal italic
-    HEAD = 6 normal italic
+	branch = 6 normal
+	tag = 3 normal
+	remotebranch = 5 normal
+	stash = normal dim
+	grafted = 1 normal italic
+	HEAD = 6 normal italic
 [diff]
-    colorMoved = zebra
+	colorMoved = zebra

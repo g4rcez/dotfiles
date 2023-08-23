@@ -12,6 +12,7 @@ ZELLIJ_AUTO_ATTACH=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
 DOTFILES="$HOME/dotfiles"
+COMPLETIONS="$DOTFILES/zsh/completions"
 
 # zoxide
 eval "$(zoxide init zsh)"
@@ -42,16 +43,17 @@ zstyle ':znap:*' repos-dir "$SNAP_DIR"
 source "$SNAP_DIR/znap.zsh";
 
 local -a plugins=(
+    zsh-users/zsh-completions
     MichaelAquilina/zsh-you-should-use
-    hlissner/zsh-autopair
+    marzocchi/zsh-notify
     marlonrichert/zcolors               # Colors for completions and Git
     marlonrichert/zsh-edit              # Better keyboard shortcuts
-    marzocchi/zsh-notify
     wfxr/forgit
-    zsh-users/zsh-autosuggestions       # Inline suggestions
-    zsh-users/zsh-completions
+    hlissner/zsh-autopair
     zsh-users/zsh-syntax-highlighting   # Command-line syntax highlighting
+    zsh-users/zsh-autosuggestions       # Inline suggestions
 )
+
 znap clone $plugins
 
 local p=
@@ -63,15 +65,24 @@ znap eval zcolors "zcolors ${(q)LS_COLORS}"
 znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 znap eval starship 'starship init zsh'
 znap prompt
-
 ###################################### config ######################################
+
+zmodload zsh/complist
+autoload -U +X bashcompinit && bashcompinit
+autoload -U compinit
+compinit
+
 local -a sources=(
-  "$HOME/.config/broot/launcher/bash/br"
-  "$DOTFILES/zsh/export.sh"
-  "$DOTFILES/zsh/git.sh"
-  "$DOTFILES/zsh/alias.sh"
-  "$DOTFILES/zsh/zstyle.sh"
+  # Completions
+  $COMPLETIONS/yarn
+  # Source files
+  $HOME/.config/broot/launcher/bash/br
+  $DOTFILES/zsh/export.sh
+  $DOTFILES/zsh/git.sh
+  $DOTFILES/zsh/alias.sh
+  $DOTFILES/zsh/zstyle.sh
 )
+
 for fileSource in $sources;do
   source $fileSource;
 done

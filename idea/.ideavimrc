@@ -61,6 +61,9 @@ vmap <leader>P "+P
 "" commentary
 set commentary
 """""""""""""""""""""""""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""""""
+set undodir=~/.ideavim_tmp/undodir
+set undofile
+set ruler
 set autoindent
 set autoread
 set copyindent
@@ -79,6 +82,7 @@ set nrformats
 set number relativenumber
 set ruler
 set shiftwidth=4
+set cmdheight=1
 set showcmd
 set showmode
 set si
@@ -125,7 +129,6 @@ nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>q <action>(CloseEditor)
-nmap <leader>t <action>(ActivateTerminalToolWindow)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap ; :
 nmap gt <action>(Run)
@@ -134,8 +137,8 @@ nmap gt <action>(Run)
 nmap <leader>u <action>(Back)
 
 "" Split
-nmap <leader>H <action>(SplitHorizontally)
-nmap <leader>V <action>(SplitVertically)
+nmap <leader>- <action>(SplitHorizontally)
+nmap <leader>\ <action>(SplitVertically)
 
 "" Move Tabs
 nmap <leader>k <action>(PreviousTab)
@@ -148,6 +151,7 @@ nmap <leader>d <action>(NextTab)
 """""""""""""""""""""""""""" Bookmarks """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap gb <Action>(ShowBookmarks)
 nmap gm <Action>(ToggleBookmark)
+nmap <leader>ma <Action>(ToggleBookmark)
 
 """""""""""""""""""""""""""" Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
@@ -160,6 +164,7 @@ nnoremap / :action Find<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
 nnoremap vv V
+nnoremap J mzJ`z
 """" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
 nnoremap <Tab> :action NextTab<CR>
@@ -167,19 +172,14 @@ nnoremap <Tab> :action NextTab<CR>
 nnoremap <leader>nf :action NewFile<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""" Handlers """""""""""""""""""""""""""""""""""""""
-sethandler n:vim i:ide
-sethandler <C-c> a:ide
-sethandler <C-v> a:ide
-sethandler <C-s> a:ide
-sethandler <C-w> i:vim
-
+sethandler n:vim i:vim
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
 
 """"""""""""""""""""""""""""""""""""" Refactor Tools """"""""""""""""""""""""""""""""
 nmap <leader>fm <action>(ReformatCode)
-nmap <leader>r <action>(RenameElement)
+nmap <leader>ra <action>(RenameElement)
 nmap <leader>fi <action>(OptimizeImports)
 """ Breakpoint
 map <leader>bb <Action>(ToggleLineBreakpoint)
@@ -191,3 +191,10 @@ nmap <leader>ff <action>(GotoFile)
 nmap <leader>fr <action>(ReplaceInPath)
 nmap <leader>fs <action>(GotoSymbol)
 nmap <leader>fg <action>(AceDeclarationAction)
+
+"""""""""""""""""""""""""" WhichKey """""""""""""""""""""""""""""""
+let g:WhichKey_ShowVimActions = "true"
+set which-key
+" disable the timeout option
+set notimeout
+set timeoutlen=3000

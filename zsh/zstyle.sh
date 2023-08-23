@@ -1,6 +1,6 @@
 #!/bin/zsh
 WORDCHARS=''
-zmodload -i zsh/complist
+#zmodload -i zsh/complist
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
 # use brace
@@ -40,7 +40,6 @@ setopt hist_save_no_dups
 setopt histignorealldups
 setopt histreduceblanks
 setopt magicequalsubst
-setopt menu_complete        # Automatically highlight first element of completion menu
 setopt notify
 setopt promptsubst
 setopt pushd_ignore_dups
@@ -106,24 +105,20 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
-
 ############################## zsh-notify ##############################################
 zstyle ':notify:*' always-notify-on-failure no
-zstyle ':notify:*' command-complete-timeout 5
+zstyle ':notify:*' command-complete-timeout 10
 zstyle ':notify:*' error-title "Command failed (in #{time_elapsed} seconds)"
 zstyle ':notify:*' error-title "Command failed"
 zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
 zstyle ':notify:*' success-title "Command finished"
 zstyle ':notify:*' enable-on-ssh yes
-
 ##################################### znap ###########################################
 zstyle ':znap:*:*' git-maintenance off
-
 ############################## key Bind #################################
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
 bindkey '^Xa' alias-expension
-
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
@@ -157,11 +152,6 @@ ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-
-autoload -U +X bashcompinit && bashcompinit
-zmodload zsh/complist
-autoload -U compinit
-compinit
 
 #ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 #ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}?%{$reset_color%}"
