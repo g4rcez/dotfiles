@@ -341,12 +341,12 @@ require('telescope').setup({
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
 local builtin = require('telescope.builtin')
+vim.keymap.del("n", '<leader>f');
+vim.keymap.del("n", '<space>f');
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.del("n", '<leader>f');
-vim.keymap.del("n", '<space>f');
 
 lvim.builtin.telescope.defaults.mappings = {
   --   -- for input mode

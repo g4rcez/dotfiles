@@ -1,5 +1,4 @@
 #!/bin/bash
-
 COMMAND=""
 SUBCOMMAND="$1"; shift;
 INSTALL_COMMAND="add"

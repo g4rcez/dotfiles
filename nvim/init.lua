@@ -5,6 +5,7 @@ opt.autoindent = true;
 opt.tabstop = 4
 opt.softtabstop = 4
 opt.relativenumber = true
+opt.cmdheight = 0
 
 autocmd("VimResized", {
   pattern = "*",

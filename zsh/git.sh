@@ -1,10 +1,6 @@
 autoload -Uz is-at-least
 git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
-#
-# Functions
-#
-
 function current_branch() {
   git_current_branch
 }
@@ -12,7 +8,7 @@ function current_branch() {
 # Pretty log messages
 function _git_log_prettily(){
   if ! [ -z $1 ]; then
-    git log --pretty=$1
+    git log --pretty="$1"
   fi
 }
 compdef _git _git_log_prettily=git-log
@@ -20,6 +16,7 @@ compdef _git _git_log_prettily=git-log
 function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
+
 # Check if main exists and use instead of master
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
@@ -45,18 +42,48 @@ function git_develop_branch() {
   done
   echo develop
 }
-
-#
-# Aliases
-# (sorted alphabetically)
-#
+#################################################### Aliases ###########################################################
+alias add='git add'
+alias checkout='git checkout'
+alias commit='git commit -m'
 alias gcb='git checkout -b'
+alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
 alias gcm='git checkout $(git_main_branch)'
-alias gcd='git checkout $(git_develop_branch)'
 alias gco='git checkout'
 alias gd='git diff'
-alias gtv='git tag | sort -V'
+alias ghc='gh pr checkout'
+alias ghl='gh pr list'
+alias gitree='git log --oneline --graph --decorate --all'
+alias gitree='git-graph'
+alias gittree='git-graph'
 alias gst='git status'
+alias gtv='git tag | sort -V'
+alias logs='forgit::log'
+alias pull='git pull'
+alias push='git push -u'
+alias rebase='git rebase'
+alias tags='git tag | sort -V'
+alias wip='git add . && git commit -m "wip: work in progress" && git push'
+
+function pullb() {
+  git pull origin "$(git branch --show-current)"
+}
+
+function gitignore() {
+  forgit::ignore >> .gitignore
+}
+
+function git-graph() {
+  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+}
+
+function clone() {
+  git clone "git@github.com:$1"
+}
+
+function tag() {
+  git tag "$1" && git push origin "$1"
+}
 
 unset git_version

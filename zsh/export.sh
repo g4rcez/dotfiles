@@ -19,15 +19,13 @@ export VOLTA_HOME="$HOME/.volta"
 export PATH="$HOME/.local/share:$HOME/.local/bin:$HOME/.local/share/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
+export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
 export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 export PATH="$PATH:$HOME/dotfiles/scripts"
 export PATH="$PATH:$HOME/tools"
 export PATH="$PATH:/snap/bin"
 export PATH="$PNPM_HOME:$PATH"
 export PATH="$VOLTA_HOME/bin:$PATH"
-export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export python="/usr/bin/python3"
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
@@ -35,7 +33,6 @@ if [ -x "$(command -v nvim)" ]; then
 else
   export EDITOR="vim"
 fi
-
-############################################# Plugins Config ########################################################
+############################################## Plugins Config ##########################################################
 export YSU_MESSAGE_POSITION="after"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)

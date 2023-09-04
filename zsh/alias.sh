@@ -1,10 +1,9 @@
 #!/bin/bash
-######################### dot directory ################################
+################################################ dot directory #########################################################
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
-
 alias -- -='cd -'
 alias 1='cd -1'
 alias 2='cd -2'
@@ -15,39 +14,7 @@ alias 6='cd -6'
 alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
-######################### Git/Github CLI utils #########################
-alias add='git add'
-alias commit='git commit -m'
-alias gitree="git log --oneline --graph --decorate --all"
-alias push='git push -u'
-alias pull='git pull'
-alias tags='git tag | sort -V'
-alias rebase='git rebase'
-alias checkout='git checkout'
-alias ghc="gh pr checkout"
-alias ghl="gh pr list"
-alias wip="git add . && git commit -m 'wip: work in progress' && git push"
-alias gittree=git-graph
-alias gitree=git-graph
-alias logs="forgit::log"
-
-function gitignore() {
-  forgit::ignore >> .gitignore
-}
-
-function git-graph() {
-  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
-}
-
-function clone() {
-  git clone "git@github.com:$1"
-}
-
-function tag() {
-  git tag "$1" && git push origin "$1"
-}
-
-######################### *nix alias #########################
+####################################################### *nix alias #####################################################
 alias cp='cp -v'
 alias df='df -h'
 alias diff='diff --color=auto'
@@ -88,13 +55,12 @@ function cdm() {
 function cpv() {
   rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
 }
-
-########################## CLIPBOARD ##########################################
+################################################## CLIPBOARD ###########################################################
 if [[ "$(uname)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
   alias pbpaste='xclip -selection clipboard -o'
 fi
-######################### General stuff #########################
+################################################# General stuff ########################################################
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
@@ -102,14 +68,13 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 if [ -x "$(command -v nvim)" ]; then
   alias vim="nvim"
 fi
-
 ######################################### Docker ########################################
 function docker-prune-volumes () {
-  docker volume rm $(docker volume ls -q --filter dangling=true)
+  docker volume rm "$(docker volume ls -q --filter dangling=true)"
 }
 
 function dockerkill () {
-  docker kill $(docker ps -q)
+  docker kill "$(docker ps -q)"
 }
 ##################################### Functions #####################################
 function extract() {
@@ -138,7 +103,7 @@ function listening() {
     if [ $# -eq 0 ]; then
         sudo lsof -iTCP -sTCP:LISTEN -n -P
     elif [ $# -eq 1 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color "$1"
     else
         echo "Usage: listening [pattern]"
     fi
@@ -167,8 +132,7 @@ function fs() {
 function secretuuid() {
   echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
 }
-
-################################### OSX Commands ##########################################
+################################################## OSX Commands ########################################################
 
 if [[ "$(uname)" == "Darwin" ]]; then
   # macOS has no `md5sum`, so use `md5` as a fallback
@@ -176,14 +140,13 @@ if [[ "$(uname)" == "Darwin" ]]; then
   # macOS has no `sha1sum`, so use `shasum` as a fallback
   command -v sha1sum >/dev/null || alias sha1sum="shasum"
   command -v hd > /dev/null || alias hd="hexdump -C"
-  command -v python > /dev/null || alias python="python3"
   alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
   function flush () {
     sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
   }
 fi
 
-######################################## FZF ####################################################
+####################################################### FZF ############################################################
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix"
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 -i
@@ -202,20 +165,20 @@ export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --heig
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 export FZF_CTRL_R_OPTS="
-  --preview 'echo {}' --preview-window up:3:hidden:wrap
-  --bind 'ctrl-/:toggle-preview'
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-  --color header:italic
-  --header 'Press CTRL-Y to copy command into clipboard'"
+--preview 'echo {}' --preview-window up:3:hidden:wrap
+--bind 'ctrl-/:toggle-preview'
+--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+--color header:italic
+--header 'Press CTRL-Y to copy command into clipboard'"
 
-
-function fcd () {
-  cd $(find . -type d -print | fzf)
+function fcd() {
+  cd "$(find . -type d -print | fzf)"
 }
 
 function fvim() {
   vim "$(fzf)"
 }
+
 function fzf-eval(){
   echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
@@ -245,9 +208,8 @@ function fzf-update () {
 
 function files(){
   local file="$(fzf --multi --reverse)"
-  if [[ $file ]]; then
-    for prog in $(echo $file);
-    do $EDITOR $prog; done;
+  if [[ "$file" ]]; then
+    for prog in $(echo $file); do $EDITOR "$prog"; done;
   else
     echo "cancelled fzf"
   fi
@@ -267,12 +229,7 @@ function st() {
 
 bindkey "^I" expand-or-complete;
 bindkey "^[[Z" expand-or-complete;
-bindkey -s "^F" 'files^M'
-bindkey -s "^G" 'cdf^M'
-
-
-################################ NODE ##################################
-
+################################################ NODE ##################################################################
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
 # Allow 32³ entries; the default is 1000.
@@ -285,28 +242,7 @@ function node:scripts() {
 }
 
 function n() {
-  local COMMAND=""
-  local SUBCOMMAND="$1"; shift;
-  local INSTALL_COMMAND="add"
-  local PRE=""
-  local ARGUMENTS="-E"
-  if [[ -f "package-lock.json" ]]; then
-    COMMAND="npm";
-    RUN_ARGS=".scripts.$SUBCOMMAND"
-    if [[ "$(jq "$RUN_ARGS" package.json)" != "" ]]; then PRE="run"; fi
-    INSTALL_COMMAND="install";
-  fi
-  if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
-  if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
-  if [[ "$#" == "0" ]];then
-    ARGUMENTS=""
-  fi
-  case $SUBCOMMAND in
-    "add") "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
-    "i") "$COMMAND" install $ARGUMENTS $@;;
-    "install") "$COMMAND" install $ARGUMENTS $@;;
-    *) $COMMAND $PRE $SUBCOMMAND "$@";;
-  esac
+  bash "$HOME/dotfiles/scripts/nnn" $*
 }
 
 function ni() {
@@ -316,7 +252,6 @@ function ni() {
     n add -E "$@";
   fi
 }
-
 ################################ tmux ##################################################
 alias tsource="tmux source $HOME/.tmux.conf"
 
@@ -325,29 +260,27 @@ function unbindall() {
       tmux unbind -a -T "$table"
   done
 }
-
 ################################ zellij ##################################################
-function zj() {
-  ZJ_SESSIONS=$(zellij list-sessions)
-  NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
-  if [ "${NO_SESSIONS}" -ge 2 ]; then
-      zellij attach \
-      "$(echo "${ZJ_SESSIONS}" | fzf)"
-  else
-     zellij attach -c localhost
-  fi
-}
-
-function zinit() {
-  local directory="${1-localhost}";
-  if [[ "$1" != "" ]]; then
-    z "$directory";
-  fi
-  zellij attach -c "$directory";
-}
 function zr() { zellij run --name "$*" -- zsh -ic "$*";}
 function run() { zellij run --name "$*" -- zsh -ic "$*";}
 function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*";}
 function ze() { zellij edit "$*";}
 function zef() { zellij edit --floating "$*";}
 function zweb() { zellij --layout "$HOME/dotfiles/config/zlayouts/web.kdl"; }
+function zj() {
+  ZJ_SESSIONS=$(zellij list-sessions)
+  NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
+  if [ "${NO_SESSIONS}" -ge 2 ]; then
+      zellij attach "$(echo "${ZJ_SESSIONS}" | fzf)"
+  else
+     zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
+  fi
+}
+
+function zinit() {
+  local directory="${1-localhost}";
+  if [[ "$1" != "" || "$1" != "$ZELLIJ_DEFAULT_SESSION" ]]; then
+    z "$directory";
+  fi
+  zellij attach -c "$directory";
+}

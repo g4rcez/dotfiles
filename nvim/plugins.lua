@@ -2,6 +2,7 @@ local overrides = require("custom.configs.overrides")
 
 ---@type NvPluginSpec[]
 local plugins = {
+  "rescript-lang/vim-rescript",
   "farmergreg/vim-lastplace",
   -- zero config plugins
   "folke/trouble.nvim",

@@ -1,30 +1,25 @@
-#
 # ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
 # ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
 # ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
 # ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
 # ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
 # ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
-# Dotfiles by: @g4rcez
-
 mkdir -p $HOME/.tmp
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1;
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew bundle --file $HOME/dotfiles/config/Brewfile
-
 curl https://get.volta.sh | bash
-# Node installs
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew bundle --file "$HOME/dotfiles/config/Brewfile"
+~/.fzf/install
+############################################# Node installs ############################################################
 volta install node@18.2.1
 volta install yarn@1.22.1
 npm i -g pnpm ts-node yarn neovim
 
-## Python pip modules
+############################################ Python modules ############################################################
 pip install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
-## NvChad
-git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
 
-# Symlinks
+############################################ Symlinks ##################################################################
 ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
 ln -sf $HOME/dotfiles/config/fd/.fdignore $HOME/.fdignore
 ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
@@ -36,13 +31,8 @@ ln -sf $HOME/dotfiles/git/gitconfig $HOME/.gitconfig
 ln -sf $HOME/dotfiles/config/starship.toml $HOME/.config/starship.toml
 ln -sf $HOME/dotfiles/nvim/ $HOME/.config/nvim/
 ln -sf $HOME/dotfiles/nvim/ $HOME/.config/nvim/lua/custom
-
-# My keyboard
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
-
-# Tools dir
+############################################### My keyboard ############################################################
 mkdir -p $HOME/tools
-
-# Git
 git config --global core.excludesFile "$HOME/.gitignore"
 git config --global init.defaultBranch main

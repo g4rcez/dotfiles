@@ -1,29 +1,31 @@
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 """"" https://jb.gg/share-ideavimrc
 let mapleader=" "
-"" -- Idea things
+""""""""""""""""""""""""""""""""""""""""""""" Handlers """""""""""""""""""""""""""""""""""""""
+sethandler n:vim i:vim
+"""""""""""""""""""""""""""""""""""""""" Idea things """"""""""""""""""""""""""""""""""""""""
 set ideajoin
 set ideamarks
 set idearefactormode=keep
 set ideastrictmode
 
-"" easymotion
+"""""""""""""""""""""""""""""""""""""""" easymotion """"""""""""""""""""""""""""""""""""""""
 set easymotion
 
-"" -- Nerdtree
+"""""""""""""""""""""""""""""""""""""""" Nerdtree """"""""""""""""""""""""""""""""""""""""
 set NERDTree
 let g:NERDTreeMapActivateNode='l'
 let g:NERDTreeMapJumpParent='l'
 nnoremap <C-t> :NERDTreeFocus<CR>
 
-"" -- Surround
+"""""""""""""""""""""""""""""""""""""""" surround """"""""""""""""""""""""""""""""""""""""
 set surround
 
-"""" argtextobj
+"""""""""""""""""""""""""""""""""""""""" argtextobj """"""""""""""""""""""""""""""""""""""""
 set argtextobj
 let g:argtextobj_pairs="(:),{:},<:>"
 
-"" -- Multiple cursors
+"""""""""""""""""""""""""""""""""""""""" multiple cursors """"""""""""""""""""""""""""""""""""""""
 set multiple-cursors
 nmap <C-n> <plug>NextWholeOccurrence
 xmap <C-n> <plug>NextWholeOccurrence
@@ -38,12 +40,12 @@ set matchit
 "" vim-paragraph-motion
 set vim-paragraph-motion
 
-""" Yank + Clipboard
+"""""""""""""""""""""""""""""""""""""""" Yank """"""""""""""""""""""""""""""""""""""""
+set clipboard=unnamedplus,unnamed,ideaput
+set highlightedyank
+set ideaput
 "" Don't yank
 noremap ' "-
-set highlightedyank
-set clipboard=unnamedplus,unnamed,ideaput
-set ideaput
 nnoremap yy "+yy
 vnoremap y "+y
 nnoremap p "+p
@@ -58,7 +60,7 @@ nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
 
-"" commentary
+"""""""""""""""""""""""""""""""""""""""""""""""""""" Commentary """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set commentary
 """""""""""""""""""""""""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set undodir=~/.ideavim_tmp/undodir
@@ -82,7 +84,7 @@ set nrformats
 set number relativenumber
 set ruler
 set shiftwidth=4
-set cmdheight=1
+set cmdheight=2
 set showcmd
 set showmode
 set si
@@ -104,25 +106,17 @@ vnoremap > >gv
 map Q gq
 map U <C-R>
 map 0 ^
-"""" ^$ The symbol is too hard to press
 map gh ^
 map gl $
 
 """" String manipulation plugin
-"" Visual mode
 vnoremap <leader>ss <action>(StringManipulation.Group.Main)
-"" Normal mode
 nmap <leader>ss <action>(StringManipulation.Group.Main)
-
-"" Surround with emmet notation
 map <leader>j <action>(SurroundWithLiveTemplate)
-
 nmap <leader>/ <action>(ShowErrorDescription)
 """""""""""""""""""""""""""""""""""""""""""""" File Operations """""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 map go <Action>(Switcher)
 map gp <Action>(FileStructurePopup)
-
 nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader>P <action>(RecentProjectListGroup)
 nmap <leader>T <action>(ReopenClosedTab)
@@ -130,8 +124,8 @@ nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>q <action>(CloseEditor)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
-nmap ; :
 nmap gt <action>(Run)
+nmap ; :
 
 "" cursor back
 nmap <leader>u <action>(Back)
@@ -171,8 +165,6 @@ nnoremap <Tab> :action NextTab<CR>
 """" New files
 nnoremap <leader>nf :action NewFile<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""" Handlers """""""""""""""""""""""""""""""""""""""
-sethandler n:vim i:vim
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>

@@ -17,11 +17,11 @@
 	added = 10 normal
 	changed = 11 normal
 	untracked = normal dim
-	branch = 6 normal
+	branch = 5 normal
 	updated = 10 normal
-	localbranch = 6 normal
+	localbranch = 5 normal
 	header = normal
-	remotebranch = 5 normal
+	remotebranch = 2 normal
 	nobranch = 1 normal italic
 	unmerged = 9 normal
 
@@ -93,7 +93,7 @@
 [color "diff"]
 	meta = normal italic
 	frag = normal dim
-	func = 10 normal dim
+	func = 1 normal dim
 	commit = 3 normal
 	old = 1 normal
 	new = 10 normal
@@ -120,11 +120,11 @@
 [gpg]
     program = /usr/local/bin/gpg
 [color "branch"]
-	plain = 6 normal
-	remote = 5 normal
-	current = 6 normal reverse
-	local = 6 normal
-	upstream = 5 normal
+	plain = 5 normal
+	remote = 2 normal
+	current = 5 normal reverse
+	local = 5 normal
+	upstream = 2 normal
 [color "remote"]
 	hint = normal dim
 	success = 2 normal
@@ -136,11 +136,11 @@
 	help = normal dim
 	error = 1 normal italic
 [color "decorate"]
-	branch = 6 normal
+	branch = 5 normal
 	tag = 3 normal
-	remotebranch = 5 normal
+	remotebranch = 2 normal
 	stash = normal dim
 	grafted = 1 normal italic
-	HEAD = 6 normal italic
+	HEAD = 5 normal italic
 [diff]
 	colorMoved = zebra

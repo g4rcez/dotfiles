@@ -6,6 +6,9 @@ local highlights = require("custom.highlights")
 
 M.ui = {
   theme = "onedark",
+  cheatsheet = {
+    theme = "grid"
+  },
   cmp = {
     style = "atom_colored",
     icons = true,

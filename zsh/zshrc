@@ -1,25 +1,23 @@
-# #!/bin/zsh
+#!/bin/zsh
 ##################################### Mandatory Config ##############################
-bindkey -e
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 CASE_SENSITIVE="false"
+COMPLETIONS="$DOTFILES/zsh/completions"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+DOTFILES="$HOME/dotfiles"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 HYPHEN_INSENSITIVE="true"
 ZELLIJ_AUTO_ATTACH=true
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
-DOTFILES="$HOME/dotfiles"
-COMPLETIONS="$DOTFILES/zsh/completions"
+ZELLIJ_DEFAULT_SESSION="localhost"
+source $HOME/.oh-my-zsh/oh-my-zsh.sh
+source "$DOTFILES/scripts/fzf-git"
 
 # zoxide
 eval "$(zoxide init zsh)"
-
-TRAPWINCH() {
-  zle && { zle reset-prompt; zle -R }
-}
 ###################################### CLIs ######################################
 # Haskell
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
@@ -35,8 +33,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # Fzf imports
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.fzf/shell/key-bindings.zsh ] && source ~/.fzf/shell/key-bindings.zsh
-
-# ########################################### zap-zsh ###########################################
+############################################ zap-zsh ###########################################
 SNAP_DIR="$HOME/.znap"
 zstyle ':znap:*' repos-dir "$SNAP_DIR"
 [[ -r "$SNAP_DIR" ]] || git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$SNAP_DIR"
@@ -47,7 +44,6 @@ local -a plugins=(
     MichaelAquilina/zsh-you-should-use
     marzocchi/zsh-notify
     marlonrichert/zcolors               # Colors for completions and Git
-    marlonrichert/zsh-edit              # Better keyboard shortcuts
     wfxr/forgit
     hlissner/zsh-autopair
     zsh-users/zsh-syntax-highlighting   # Command-line syntax highlighting
@@ -55,18 +51,12 @@ local -a plugins=(
 )
 
 znap clone $plugins
-
-local p=
-for p in $plugins; do
-  znap source $p
-done
-
+for plugin in $plugins; do znap source $plugin; done
 znap eval zcolors "zcolors ${(q)LS_COLORS}"
 znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 znap eval starship 'starship init zsh'
 znap prompt
 ###################################### config ######################################
-
 zmodload zsh/complist
 autoload -U +X bashcompinit && bashcompinit
 autoload -U compinit
@@ -75,6 +65,7 @@ compinit
 local -a sources=(
   # Completions
   $COMPLETIONS/yarn
+  $COMPLETIONS/zellij
   # Source files
   $HOME/.config/broot/launcher/bash/br
   $DOTFILES/zsh/export.sh
@@ -83,6 +74,9 @@ local -a sources=(
   $DOTFILES/zsh/zstyle.sh
 )
 
-for fileSource in $sources;do
-  source $fileSource;
-done
+for fileSource in $sources; do [ -f "$fileSource" ] && source "$fileSource"; done
+
+################################################################ autostart zellij ################################################################
+if [[ -z "$ZELLIJ" ]]; then
+  zellij attach -c $ZELLIJ_DEFAULT_SESSION
+fi
