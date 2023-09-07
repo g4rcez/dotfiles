@@ -1,6 +1,12 @@
+lvim.leader = "space"
+-- Remove default keybindgs
+lvim.keys.normal_mode["<Space>f"] = ":Telescope live_grep"
+lvim.keys.normal_mode["<leader>f"] = ":Telescope live_grep"
+lvim.keys.normal_mode["<space>f"] = ":Telescope live_grep"
+
 -- Vim bindings
 vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
-vim.opt.cmdheight = 1             -- more space in the neovim command line for displaying messages
+vim.opt.cmdheight = 0             -- more space in the neovim command line for displaying messages
 vim.opt.colorcolumn = "99999"
 vim.opt.cursorline = true         -- highlight the current line
 vim.opt.relativenumber = true
@@ -11,8 +17,6 @@ vim.opt.termguicolors = true -- set term gui colors (most terminals support this
 vim.opt.title = true
 
 -- general
-lvim.builtin.alpha.active = true
-lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.autopairs.enable_moveright = true
 lvim.builtin.bufferline.active = false
 lvim.builtin.dap.active = true
@@ -22,23 +26,9 @@ lvim.builtin.nvimtree.setup.view.side = "right"
 lvim.builtin.terminal.active = true
 lvim.colorscheme = "onedark"
 lvim.format_on_save = true
-lvim.leader = "space"
 lvim.log.level = "warn"
-lvim.transparent_window = true
+lvim.transparent_window = false
 lvim.use_icons = true
-
--- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.builtin.terminal.open_mapping = "<C-t>"
-lvim.keys.normal_mode["<C-e>"] = ":NeoTreeFloatToggle<cr>"
-lvim.keys.normal_mode["<C-n>"] = ":FzfLua files<cr>"
-lvim.keys.normal_mode["<C-p>"] = ":FzfLua files<cr>"
-lvim.keys.normal_mode["<leader>f"] = false
-lvim.keys.normal_mode["<space>f"] = false
-lvim.keys.normal_mode["<space>f"] = nil
-lvim.lsp.buffer_mappings.normal_mode['<leader>f'] = nil
-lvim.lsp.buffer_mappings.normal_mode['<space>f'] = nil
-lvim.lsp.buffer_mappings.normal_mode['<space>f'] = false
-lvim.lsp.buffer_mappings.normal_mode['<leader>f'] = false
 lvim.builtin.nvimtree.active = true
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
@@ -69,9 +59,9 @@ lvim.builtin.treesitter.ensure_installed = {
   "yaml",
 }
 
--- -- make sure server will always be installed even if the server is in skipped_servers list
+-- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = { "jsonls" }
--- ---@usage disable automatic installation of servers
+-- @usage disable automatic installation of servers
 lvim.lsp.installer.setup.automatic_installation = true
 
 -- Additional Plugins
@@ -96,51 +86,9 @@ lvim.plugins = {
       'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
     },
     {
-      'EthanJWright/vs-tasks.nvim',
-      requires = {
-        'nvim-lua/popup.nvim',
-        'nvim-lua/plenary.nvim',
-        'nvim-telescope/telescope.nvim'
-      },
-      config = function()
-        require("vstask").setup({
-          cache_json_conf = true,  -- don't read the json conf every time a task is ran
-          cache_strategy = "last", -- can be "most" or "last" (most used / last used)
-          config_dir = ".vscode",  -- directory to look for tasks.json and launch.json
-          use_harpoon = true,      -- use harpoon to auto cache terminals
-          telescope_keys = {       -- change the telescope bindings used to launch tasks
-            vertical = '<C-v>',
-            split = '<C-p>',
-            tab = '<C-t>',
-            current = '<CR>',
-          },
-          autodetect = { -- auto load scripts
-            npm = "on"
-          },
-          terminal = 'toggleterm',
-          term_opts = {
-            vertical = {
-              direction = "vertical",
-              size = "80"
-            },
-            horizontal = {
-              direction = "horizontal",
-              size = "10"
-            },
-            current = {
-              direction = "float",
-            },
-            tab = {
-              direction = 'tab',
-            }
-          }
-        })
-      end
-    },
-    {
       'windwp/nvim-autopairs',
       event = "InsertEnter",
-      opts = {} -- this is equalent to setup({}) function
+      opts = {}
     },
     {
       "folke/noice.nvim",
@@ -301,7 +249,7 @@ local code_actions = require("lvim.lsp.null-ls.code_actions")
 code_actions.setup { { command = "proselint" } }
 
 -- colorize hex colors
-require 'colorizer'.setup({ '*', }, { RGB = true, RRGGBB = true, names = true, RRGGBBAA = true })
+require('colorizer').setup({ '*', }, { RGB = true, RRGGBB = true, names = true, RRGGBBAA = true })
 
 require('numb').setup({
   show_numbers = true,         -- Enable 'number' for the window while peeking
@@ -317,48 +265,38 @@ lvim.autocommands = {
     {
       pattern = "*",
       callback = function()
-        -- change `Normal` to the group you want to change
-        -- and `#ffffff` to the color you want
-        -- see `:h nvim_set_hl` for more options
-        vim.api.nvim_set_hl(0, "Normal", { bg = "#ffffff", underline = false, bold = true })
+        vim.api.nvim_set_hl(0, "Normal", { bg = "#292C34", underline = false, bold = true })
       end,
     },
   },
 }
 
-require('telescope').setup({
-  extensions = {
-    fzf = {
-      fuzzy = true,                    -- false will only do exact matching
-      override_generic_sorter = false, -- override the generic sorter
-      override_file_sorter = false,    -- override the file sorter
-      case_mode = "ignore_case",       -- or "ignore_case" or "respect_case"
-    }
-  }
-})
-
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
-local builtin = require('telescope.builtin')
-vim.keymap.del("n", '<leader>f');
-vim.keymap.del("n", '<space>f');
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-
 lvim.builtin.telescope.defaults.mappings = {
-  --   -- for input mode
+  -- for input mode
   i = {
     ["<C-j>"] = actions.move_selection_next,
     ["<C-k>"] = actions.move_selection_previous,
     ["<C-n>"] = actions.cycle_history_next,
     ["<C-p>"] = actions.cycle_history_prev,
   },
-  --   -- for normal mode
+  -- for normal mode
   n = {
     ["<C-j>"] = actions.move_selection_next,
     ["<C-k>"] = actions.move_selection_previous,
   },
 }
+
+-- keymappings [view all the defaults by pressing <leader>Lk]
+local keymap = vim.api.nvim_set_keymap
+local default_opts = { noremap = true, silent = true }
+lvim.builtin.terminal.open_mapping = "<C-t>"
+lvim.keys.normal_mode["<C-e>"] = ":NeoTreeFloatToggle<cr>"
+lvim.keys.normal_mode["<C-n>"] = ":FzfLua files<cr>"
+lvim.keys.normal_mode["<C-p>"] = ":FzfLua files<cr>"
+lvim.builtin.telescope.defaults.mappings = nil
+keymap("n", "<leader>f", ":Telescope live_grep", default_opts)
+keymap("n", "<Space>f", ":Telescope live_grep", default_opts)
+keymap("n", "<space>f", ":Telescope live_grep", default_opts)

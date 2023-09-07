@@ -10,29 +10,23 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 HYPHEN_INSENSITIVE="true"
 ZELLIJ_AUTO_ATTACH=true
+ZELLIJ_DEFAULT_SESSION="localhost"
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
-ZELLIJ_DEFAULT_SESSION="localhost"
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
-source "$DOTFILES/scripts/fzf-git"
-
-# zoxide
 eval "$(zoxide init zsh)"
-###################################### CLIs ######################################
-# Haskell
-[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
-
-# Google cloud
-if [ -f '$HOME/tools/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/path.zsh.inc'; fi
-if [ -f '$HOME/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/tools/google-cloud-sdk/completion.zsh.inc'; fi
-
-# JVM - Java/Kotlin
+############################################ CLIs ##########################################
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# Fzf imports
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f ~/.fzf/shell/key-bindings.zsh ] && source ~/.fzf/shell/key-bindings.zsh
+SOURCES=(
+  "$HOME/.oh-my-zsh/oh-my-zsh.sh"
+  "$DOTFILES/bin/fzf-git"
+  "$HOME/.ghcup/env"
+  "$HOME/tools/google-cloud-sdk/path.zsh.inc"
+  "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
+  "$HOME/.fzf.zsh"
+  "$HOME/.fzf/shell/key-bindings.zsh"
+  "$SDKMAN_DIR/bin/sdkman-init.sh"
+)
+for SOURCE in $SOURCES; do [[ -f "$SOURCE" ]] && source "$SOURCE"; done
 ############################################ zap-zsh ###########################################
 SNAP_DIR="$HOME/.znap"
 zstyle ':znap:*' repos-dir "$SNAP_DIR"
@@ -56,17 +50,15 @@ znap eval zcolors "zcolors ${(q)LS_COLORS}"
 znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 znap eval starship 'starship init zsh'
 znap prompt
-###################################### config ######################################
+############################################# config ###################################################################
 zmodload zsh/complist
 autoload -U +X bashcompinit && bashcompinit
 autoload -U compinit
 compinit
 
 local -a sources=(
-  # Completions
   $COMPLETIONS/yarn
   $COMPLETIONS/zellij
-  # Source files
   $HOME/.config/broot/launcher/bash/br
   $DOTFILES/zsh/export.sh
   $DOTFILES/zsh/git.sh
@@ -75,8 +67,7 @@ local -a sources=(
 )
 
 for fileSource in $sources; do [ -f "$fileSource" ] && source "$fileSource"; done
-
-################################################################ autostart zellij ################################################################
+#################################################### autostart zellij ##################################################
 if [[ -z "$ZELLIJ" ]]; then
   zellij attach -c $ZELLIJ_DEFAULT_SESSION
 fi

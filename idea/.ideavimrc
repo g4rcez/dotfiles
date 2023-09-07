@@ -1,30 +1,24 @@
-"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
-""""" https://jb.gg/share-ideavimrc
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t -- https://jb.gg/share-ideavimrc
 let mapleader=" "
-""""""""""""""""""""""""""""""""""""""""""""" Handlers """""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""" WhichKey """""""""""""""""""""""""""""""
+let g:WhichKey_ShowVimActions = "true"
+set notimeout
+set timeoutlen=5000
+set which-key
+""""""""""""""""""""""""""""""""""""""""""" Idea things """""""""""""""""""""""""""""""""""""
 sethandler n:vim i:vim
-"""""""""""""""""""""""""""""""""""""""" Idea things """"""""""""""""""""""""""""""""""""""""
+let g:NERDTreeMapActivateNode='l'
+let g:NERDTreeMapJumpParent='l'
 set ideajoin
 set ideamarks
 set idearefactormode=keep
 set ideastrictmode
-
-"""""""""""""""""""""""""""""""""""""""" easymotion """"""""""""""""""""""""""""""""""""""""
-set easymotion
-
-"""""""""""""""""""""""""""""""""""""""" Nerdtree """"""""""""""""""""""""""""""""""""""""
 set NERDTree
-let g:NERDTreeMapActivateNode='l'
-let g:NERDTreeMapJumpParent='l'
 nnoremap <C-t> :NERDTreeFocus<CR>
-
-"""""""""""""""""""""""""""""""""""""""" surround """"""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""" surround """"""""""""""""""""""""""""""""""""""""
 set surround
-
-"""""""""""""""""""""""""""""""""""""""" argtextobj """"""""""""""""""""""""""""""""""""""""
 set argtextobj
 let g:argtextobj_pairs="(:),{:},<:>"
-
 """""""""""""""""""""""""""""""""""""""" multiple cursors """"""""""""""""""""""""""""""""""""""""
 set multiple-cursors
 nmap <C-n> <plug>NextWholeOccurrence
@@ -33,18 +27,14 @@ nmap g<C-n> <plug>NextOccurrence
 xmap g<C-n> <plug>NextOccurrence
 xmap <C-x> <plug>SkipOccurrence
 xmap <C-p> <plug>RemoveOccurrence
-
-"" matchit.vim
+"""""""""""""""""""""""""""""""""""""""" matchit.vim """"""""""""""""""""""""""""""""""""""""
+let g:highlightedyank_highlight_color = "rgba(145,126,234,80)"
 set matchit
-
-"" vim-paragraph-motion
 set vim-paragraph-motion
-
-"""""""""""""""""""""""""""""""""""""""" Yank """"""""""""""""""""""""""""""""""""""""
 set clipboard=unnamedplus,unnamed,ideaput
 set highlightedyank
 set ideaput
-"" Don't yank
+"""""""""""""""""""""""""""""""""""""""" Don't yank """"""""""""""""""""""""""""""""""""""""
 noremap ' "-
 nnoremap yy "+yy
 vnoremap y "+y
@@ -59,15 +49,16 @@ nmap <leader>p "+p
 nmap <leader>P "+P
 vmap <leader>p "+p
 vmap <leader>P "+P
-
 """""""""""""""""""""""""""""""""""""""""""""""""""" Commentary """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set commentary
+nmap gb <Action>(ShowBookmarks)
+nmap gm <Action>(ToggleBookmark)
+nmap <leader>ma <Action>(ToggleBookmark)
 """""""""""""""""""""""""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""""""
-set undodir=~/.ideavim_tmp/undodir
-set undofile
-set ruler
 set autoindent
 set autoread
+set cmdheight=0
+set conceallevel=0
 set copyindent
 set cursorcolumn
 set cursorline
@@ -79,14 +70,15 @@ set incsearch
 set laststatus=2
 set magic
 set matchpairs
+set mouse=a
 set nocompatible
 set nrformats
 set number relativenumber
-set ruler
+set numberwidth=4
+set ruler=false
 set shiftwidth=4
-set cmdheight=2
 set showcmd
-set showmode
+set showmode=false
 set si
 set signcolumn=yes
 set smartcase
@@ -97,85 +89,76 @@ set spell
 set tabstop=4
 set title
 set ttyfast
+set undodir=~/.ideavim_tmp/undodir
+set undofile
+set updatetime=100
 set viminfo
 set visualbell
 set whichwrap=b,s,<,>,h,l,[,]
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vnoremap < <gv
-vnoremap > >gv
+"""""""""""""""""""""""""""""""""""""""""""""" File Operations """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map 0 ^
 map Q gq
 map U <C-R>
-map 0 ^
 map gh ^
 map gl $
-
-"""" String manipulation plugin
-vnoremap <leader>ss <action>(StringManipulation.Group.Main)
-nmap <leader>ss <action>(StringManipulation.Group.Main)
-map <leader>j <action>(SurroundWithLiveTemplate)
-nmap <leader>/ <action>(ShowErrorDescription)
-"""""""""""""""""""""""""""""""""""""""""""""" File Operations """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map go <Action>(Switcher)
 map gp <Action>(FileStructurePopup)
+nmap ; :
 nmap <leader>1 <Action>(SelectInProjectView)
 nmap <leader>P <action>(RecentProjectListGroup)
 nmap <leader>T <action>(ReopenClosedTab)
 nmap <leader>e <action>(GotoNextError)
 nmap <leader>g <action>(Git.Menu)
 nmap <leader>q <action>(CloseEditor)
+nmap <leader>u <action>(Back)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap gt <action>(Run)
-nmap ; :
-
-"" cursor back
-nmap <leader>u <action>(Back)
-
-"" Split
-nmap <leader>- <action>(SplitHorizontally)
-nmap <leader>\ <action>(SplitVertically)
-
-"" Move Tabs
-nmap <leader>k <action>(PreviousTab)
-nmap <leader>h <action>(PreviousTab)
-nmap <leader>a <action>(PreviousTab)
-nmap <leader>j <action>(NextTab)
-nmap <leader>l <action>(NextTab)
-nmap <leader>d <action>(NextTab)
-
-"""""""""""""""""""""""""""" Bookmarks """"""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap gb <Action>(ShowBookmarks)
-nmap gm <Action>(ToggleBookmark)
-nmap <leader>ma <Action>(ToggleBookmark)
-
+vnoremap < <gv
+vnoremap > >gv
+"""" String manipulation plugin
+map <leader>sm <action>(StringManipulation.Group.Main)
+map <leader>j <action>(SurroundWithLiveTemplate)
+nmap <leader>/ <action>(ShowErrorDescription)
 """""""""""""""""""""""""""" Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
+nmap <Enter> o<Esc>
 nmap gu <action>(ShowUsages)
 nmap gU <action>(FindUsages)
 nmap [[ <action>(MethodUp)
 nmap ]] <action>(MethodDown)
 vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
 nnoremap vv V
 nnoremap J mzJ`z
 """" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
 nnoremap <Tab> :action NextTab<CR>
+"" Split
+nmap <leader>- <action>(SplitHorizontally)
+nmap <leader>\ <action>(SplitVertically)
+"" Move Tabs
+nmap <leader>a <action>(PreviousTab)
+nmap <leader>d <action>(NextTab)
+nmap <leader>h <action>(PreviousTab)
+nmap <leader>j <action>(NextTab)
+nmap <leader>k <action>(PreviousTab)
+nmap <leader>l <action>(NextTab)
+nmap <leader>tt :tabo<CR>
+vnoremap <leader>ss :sort u<CR>
 """" New files
 nnoremap <leader>nf :action NewFile<CR>
-
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
-
-""""""""""""""""""""""""""""""""""""" Refactor Tools """"""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""" Refactor Tools """"""""""""""""""""""""""""""""
 nmap <leader>fm <action>(ReformatCode)
+nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>ra <action>(RenameElement)
 nmap <leader>fi <action>(OptimizeImports)
+nmap gi <action>(FileStructurePopup)
 """ Breakpoint
 map <leader>bb <Action>(ToggleLineBreakpoint)
-
 """"""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
 nmap <leader>fd <action>(ShowIntentionActions)
 nmap <leader>fa <action>(FindInPath)
@@ -183,10 +166,4 @@ nmap <leader>ff <action>(GotoFile)
 nmap <leader>fr <action>(ReplaceInPath)
 nmap <leader>fs <action>(GotoSymbol)
 nmap <leader>fg <action>(AceDeclarationAction)
-
-"""""""""""""""""""""""""" WhichKey """""""""""""""""""""""""""""""
-let g:WhichKey_ShowVimActions = "true"
-set which-key
-" disable the timeout option
-set notimeout
-set timeoutlen=3000
+set easymotion

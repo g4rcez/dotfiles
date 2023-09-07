@@ -1,5 +1,8 @@
 keybinds clear-defaults=true {
     unbind "Ctrl g"
+    unbind "Ctrl p"
+    unbind "Ctrl n"
+    unbind "Ctrl f"
     normal {
         bind "Alt Up" { ToggleFocusFullscreen; }
         bind "Alt c" { Copy; }
@@ -197,37 +200,12 @@ keybinds clear-defaults=true {
         bind "Enter" "Esc" { SwitchToMode "Normal"; }
     }
 
-    shared_except "pane" "locked" {
-        bind "Ctrl p" { SwitchToMode "Pane"; }
-    }
-
-    shared_except "resize" "locked" {
-        bind "Ctrl n" { SwitchToMode "Resize"; }
-    }
-
-    shared_except "scroll" "locked" {
-        bind "Ctrl s" { SwitchToMode "Scroll"; }
-    }
-
-    shared_except "session" "locked" {
-        bind "Ctrl o" { SwitchToMode "Session"; }
-    }
-
-    shared_except "tab" "locked" {
-        bind "Ctrl t" { SwitchToMode "Tab"; }
-    }
-
-    shared_except "move" "locked" {
-        bind "Ctrl h" { SwitchToMode "Move"; }
-    }
-
     shared_except "tmux" "locked" {
         bind "Ctrl b" { SwitchToMode "Tmux"; }
     }
 }
 
 simplified_ui true
-copy_command "pbcopy"
 default_layout "compact"
 scroll_buffer_size 100000
 rounded_corners true

@@ -12,6 +12,3 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
-
---
--- lspconfig.pyright.setup { blabla}
