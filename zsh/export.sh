@@ -1,3 +1,4 @@
+#!/bin/bash
 export LESS_TERMCAP_mb=$'\E[1;31m'
 export LESS_TERMCAP_md=$'\E[1;36m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -15,6 +16,7 @@ export MANPATH="/usr/local/man:$MANPATH"
 export MANWIDTH=999
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export VOLTA_HOME="$HOME/.volta"
+export NODE_ENV="development"
 
 export PATH="$HOME/.local/share:$HOME/.local/bin:$HOME/.local/share/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
@@ -27,9 +29,10 @@ export PATH="$PATH:/snap/bin"
 export PATH="$PNPM_HOME:$PATH"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-if [ -x "$(command -v nvim)" ]; then
-  export EDITOR="nvim"
-  export MANPAGER='nvim +Man!'
+if [ -x "$(command -v lvim)" ]; then
+  export EDITOR="lvim"
+  export MANPAGER="lvim +Man!"
+  export PAGER="lvim"
 else
   export EDITOR="vim"
 fi

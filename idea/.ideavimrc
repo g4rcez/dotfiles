@@ -18,15 +18,22 @@ nnoremap <C-t> :NERDTreeFocus<CR>
 """""""""""""""""""""""""""""""""""""""""""" surround """"""""""""""""""""""""""""""""""""""""
 set surround
 set argtextobj
+set textobj-entire
 let g:argtextobj_pairs="(:),{:},<:>"
 """""""""""""""""""""""""""""""""""""""" multiple cursors """"""""""""""""""""""""""""""""""""""""
+set easymotion
+let g:EasyMotion_do_mapping = 0
+nmap <leader>fg <action>(AceDeclarationAction)
 set multiple-cursors
+nmap <C-j> <Action>(EditorCloneCaretBelow)
+nmap <C-k> <Action>(EditorCloneCaretAbove)
 nmap <C-n> <plug>NextWholeOccurrence
-xmap <C-n> <plug>NextWholeOccurrence
+nmap <C-n> <plug>NextWholeOccurrence
 nmap g<C-n> <plug>NextOccurrence
-xmap g<C-n> <plug>NextOccurrence
-xmap <C-x> <plug>SkipOccurrence
+xmap <C-n> <plug>NextWholeOccurrence
 xmap <C-p> <plug>RemoveOccurrence
+xmap <C-x> <plug>SkipOccurrence
+xmap g<C-n> <plug>NextOccurrence
 """""""""""""""""""""""""""""""""""""""" matchit.vim """"""""""""""""""""""""""""""""""""""""
 let g:highlightedyank_highlight_color = "rgba(145,126,234,80)"
 set matchit
@@ -35,6 +42,11 @@ set clipboard=unnamedplus,unnamed,ideaput
 set highlightedyank
 set ideaput
 """""""""""""""""""""""""""""""""""""""" Don't yank """"""""""""""""""""""""""""""""""""""""
+vmap <leader>y <action>(EditorCopy)
+nmap <leader>y <action>(EditorCopy)
+vmap <leader>p <action>(EditorPaste)
+nmap <leader>p <action>(EditorPaste)
+"" don't yank buffer
 noremap ' "-
 nnoremap yy "+yy
 vnoremap y "+y
@@ -42,12 +54,8 @@ nnoremap p "+p
 vnoremap p "+p
 nnoremap P "+P
 vnoremap P "+P
-vmap <leader>y "+y
 vmap <leader>d "+d
-nmap <leader>y "+yy
-nmap <leader>p "+p
 nmap <leader>P "+P
-vmap <leader>p "+p
 vmap <leader>P "+P
 """""""""""""""""""""""""""""""""""""""""""""""""""" Commentary """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set commentary
@@ -113,11 +121,13 @@ nmap <leader>q <action>(CloseEditor)
 nmap <leader>u <action>(Back)
 nmap <leader>z <action>(ToggleDistractionFreeMode)
 nmap gt <action>(Run)
+nmap gr <action>(RunClass)
+nmap gz <action>(EditorToggleUseSoftWraps)
 vnoremap < <gv
 vnoremap > >gv
 """" String manipulation plugin
-map <leader>sm <action>(StringManipulation.Group.Main)
 map <leader>j <action>(SurroundWithLiveTemplate)
+map <leader>sm <action>(StringManipulation.Group.Main)
 nmap <leader>/ <action>(ShowErrorDescription)
 """""""""""""""""""""""""""" Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <S-Enter> O<Esc>
@@ -131,6 +141,8 @@ nnoremap / :action Find<CR>
 """"""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
 nnoremap vv V
 nnoremap J mzJ`z
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
 """" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
 nnoremap <Tab> :action NextTab<CR>
@@ -140,14 +152,10 @@ nmap <leader>\ <action>(SplitVertically)
 "" Move Tabs
 nmap <leader>a <action>(PreviousTab)
 nmap <leader>d <action>(NextTab)
-nmap <leader>h <action>(PreviousTab)
-nmap <leader>j <action>(NextTab)
 nmap <leader>k <action>(PreviousTab)
 nmap <leader>l <action>(NextTab)
 nmap <leader>tt :tabo<CR>
 vnoremap <leader>ss :sort u<CR>
-"""" New files
-nnoremap <leader>nf :action NewFile<CR>
 """"""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
 nnoremap zo :action ExpandRegion<CR>
@@ -157,13 +165,14 @@ nmap <leader><leader> <action>(ReformatCode)
 nmap <leader>ra <action>(RenameElement)
 nmap <leader>fi <action>(OptimizeImports)
 nmap gi <action>(FileStructurePopup)
+nmap <leader>rf <action>(RenameFile)
+nnoremap <leader>nf :action NewFile<CR>
 """ Breakpoint
 map <leader>bb <Action>(ToggleLineBreakpoint)
 """"""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
 nmap <leader>fd <action>(ShowIntentionActions)
 nmap <leader>fa <action>(FindInPath)
 nmap <leader>ff <action>(GotoFile)
+nmap <leader>fb <action>(TextSearchAction)
 nmap <leader>fr <action>(ReplaceInPath)
 nmap <leader>fs <action>(GotoSymbol)
-nmap <leader>fg <action>(AceDeclarationAction)
-set easymotion

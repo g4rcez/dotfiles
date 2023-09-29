@@ -1,7 +1,6 @@
 #!/bin/zsh
+eval "$(zoxide init zsh)"
 ##################################### Mandatory Config ##############################
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 CASE_SENSITIVE="false"
 COMPLETIONS="$DOTFILES/zsh/completions"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -10,10 +9,9 @@ ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 HYPHEN_INSENSITIVE="true"
 ZELLIJ_AUTO_ATTACH=true
-ZELLIJ_DEFAULT_SESSION="localhost"
+ZELLIJ_DEFAULT_SESSION="main"
 ZSH_TMUX_AUTOSTART=true
-ZSH_TMUX_DEFAULT_SESSION_NAME=localhost
-eval "$(zoxide init zsh)"
+ZSH_TMUX_DEFAULT_SESSION_NAME="main"
 ############################################ CLIs ##########################################
 export SDKMAN_DIR="$HOME/.sdkman"
 SOURCES=(
@@ -46,8 +44,7 @@ local -a plugins=(
 
 znap clone $plugins
 for plugin in $plugins; do znap source $plugin; done
-znap eval zcolors "zcolors ${(q)LS_COLORS}"
-znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
+znap eval iterm2 "curl -fsSL https://iterm2.com/shell_integration/zsh"
 znap eval starship 'starship init zsh'
 znap prompt
 ############################################# config ###################################################################
@@ -68,6 +65,11 @@ local -a sources=(
 
 for fileSource in $sources; do [ -f "$fileSource" ] && source "$fileSource"; done
 #################################################### autostart zellij ##################################################
-if [[ -z "$ZELLIJ" ]]; then
-  zellij attach -c $ZELLIJ_DEFAULT_SESSION
+if [[ -z "$ZELLIJ" && "$USE_ZELLIJ" == "true" ]]; then
+  zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
 fi
+
+# bun completions
+BUN_DIR="$HOME/.bun/_bun"; [ -s "$BUN_DIR" ] && source "$BUN_DIR";
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

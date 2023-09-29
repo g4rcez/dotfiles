@@ -218,12 +218,13 @@ function files(){
 function st() {
   git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
   local selected
-  selected=$(git -c color.status=always status --short |
-    fzf --no-height "$@" --border -m --ansi --nth 2..,.. --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+  selected=$(git -c color.status=always status --short |\
+    fzf --no-height "$@" --border -m --ansi --nth 2..,.. \
+    --preview '(if [ -d {-1} ];then exa -l --icons {-1}; else git diff --color=always -- {-1} | sed 1,4d; cat {-1}; fi)' |\
     cut -c4- | sed 's/.* -> //')
-    if [[ $selected ]]; then
-      for prog in $(echo $selected);
-      do $EDITOR $prog; done;
+  if [[ $selected ]]; then
+    for prog in $(echo $selected);
+    do $EDITOR $prog; done;
   fi
 }
 
@@ -283,4 +284,16 @@ function zinit() {
     z "$directory";
   fi
   zellij attach -c "$directory";
+}
+
+codi() {
+  local syntax="${1:-python}"
+  shift
+  vim -c \
+    "let g:startify_disable_at_vimenter = 1 |\
+    set bt=nofile ls=0 noru nonu nornu |\
+    hi ColorColumn ctermbg=NONE |\
+    hi VertSplit ctermbg=NONE |\
+    hi NonText ctermfg=0 |\
+    Codi $syntax" "$@"
 }
