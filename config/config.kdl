@@ -317,10 +317,9 @@ keybinds clear-defaults=true {
 }
 
 copy_on_select true
-default_layout "compact"
 mirror_session false
 pane_frames false
-rounded_corners true
+rounded_corners false
 scroll_buffer_size 100000
 simplified_ui true
 
@@ -332,17 +331,17 @@ ui {
 
 themes {
   gruv {
-    fg "#111"
-    bg "#242412"
-    black "#000000"
-    red "#7f1d1d"
-    green "#1e293b"
-    yellow "#713f12"
-    blue "#1e3a8a"
-    magenta "#581c87"
-    cyan "#164e63"
-    white "#eeeeee"
-    orange "#7c2d12"
+    bg "#ddd"
+    fg "#0a0a0a"
+    red "#f38ba8"
+    green "#1e1b4b"
+    blue "#89b4fa"
+    yellow "#f9e2af"
+    magenta "#f5c2e7"
+    orange "#fab387"
+    cyan "#89dceb"
+    black "#0a0a0a"
+    white "#0a0a0a"
   }
 }
 
