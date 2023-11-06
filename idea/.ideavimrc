@@ -1,72 +1,35 @@
-"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t -- https://jb.gg/share-ideavimrc
+"" Map IDE actions to IdeaVim -- https://jb.gg/abva4t -- https://jb.gg/share-ideavimrc
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" vim scripts
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! Invert(calledFromVisual)
+  let antonyms = ['true', 'false', 'after', 'before', 'start', 'end', 'left', 'right', 'first', 'last',
+                 \'True', 'False', 'After', 'Before', 'Start', 'End', 'Left', 'Right', 'First', 'Last']
+  if a:calledFromVisual
+    normal gv"wy
+  else
+    normal "wyiw
+  endif
+  let wordUnderCaret = @w
+  let eraseWord = a:calledFromVisual ? 'gvc' : 'ciw'
+  let count = 0
+  while (count < len(antonyms))
+    if (antonyms[count] ==# wordUnderCaret)
+      let antonym = (count % 2 ==? 0) ? antonyms[count + 1] : antonyms[count - 1]
+      execute 'normal ' .. eraseWord .. antonym
+      break
+    endif
+    let count += 1
+  endwhile
+endfunction
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" vim config
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=" "
-""""""""""""""""""""""""""""""""""""""""""""" WhichKey """""""""""""""""""""""""""""""
-let g:WhichKey_ShowVimActions = "true"
-set notimeout
-set timeoutlen=5000
-set which-key
-""""""""""""""""""""""""""""""""""""""""""" Idea things """""""""""""""""""""""""""""""""""""
-sethandler n:vim i:vim
-let g:NERDTreeMapActivateNode='l'
-let g:NERDTreeMapJumpParent='l'
-set ideajoin
-set ideamarks
-set idearefactormode=keep
-set ideastrictmode
-set NERDTree
-nnoremap <C-t> :NERDTreeFocus<CR>
-"""""""""""""""""""""""""""""""""""""""""""" surround """"""""""""""""""""""""""""""""""""""""
-set surround
-set argtextobj
-set textobj-entire
-let g:argtextobj_pairs="(:),{:},<:>"
-"""""""""""""""""""""""""""""""""""""""" multiple cursors """"""""""""""""""""""""""""""""""""""""
-set easymotion
-let g:EasyMotion_do_mapping = 0
-nmap <leader>fg <action>(AceDeclarationAction)
-set multiple-cursors
-nmap <C-j> <Action>(EditorCloneCaretBelow)
-nmap <C-k> <Action>(EditorCloneCaretAbove)
-nmap <C-n> <plug>NextWholeOccurrence
-nmap <C-n> <plug>NextWholeOccurrence
-nmap g<C-n> <plug>NextOccurrence
-xmap <C-n> <plug>NextWholeOccurrence
-xmap <C-p> <plug>RemoveOccurrence
-xmap <C-x> <plug>SkipOccurrence
-xmap g<C-n> <plug>NextOccurrence
-"""""""""""""""""""""""""""""""""""""""" matchit.vim """"""""""""""""""""""""""""""""""""""""
-let g:highlightedyank_highlight_color = "rgba(145,126,234,80)"
-set matchit
-set vim-paragraph-motion
-set clipboard=unnamedplus,unnamed,ideaput
-set highlightedyank
-set ideaput
-"""""""""""""""""""""""""""""""""""""""" Don't yank """"""""""""""""""""""""""""""""""""""""
-vmap <leader>y <action>(EditorCopy)
-nmap <leader>y <action>(EditorCopy)
-vmap <leader>p <action>(EditorPaste)
-nmap <leader>p <action>(EditorPaste)
-"" don't yank buffer
-noremap ' "-
-nnoremap yy "+yy
-vnoremap y "+y
-nnoremap p "+p
-vnoremap p "+p
-nnoremap P "+P
-vnoremap P "+P
-vmap <leader>d "+d
-nmap <leader>P "+P
-vmap <leader>P "+P
-"""""""""""""""""""""""""""""""""""""""""""""""""""" Commentary """"""""""""""""""""""""""""""""""""""""""""""""""""""""
-set commentary
-nmap gb <Action>(ShowBookmarks)
-nmap gm <Action>(ToggleBookmark)
-nmap <leader>ma <Action>(ToggleBookmark)
-"""""""""""""""""""""""""""""""""""""""""""""""""""" Vim config """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent
 set autoread
 set cmdheight=0
-set conceallevel=0
+set conceallevel=1
 set copyindent
 set cursorcolumn
 set cursorline
@@ -82,11 +45,12 @@ set mouse=a
 set nocompatible
 set nrformats
 set number relativenumber
-set numberwidth=4
-set ruler=false
-set shiftwidth=4
+set numberwidth=2
+set ruler=true
+set shiftwidth=2
 set showcmd
 set showmode=false
+set showmode=true
 set si
 set signcolumn=yes
 set smartcase
@@ -94,7 +58,7 @@ set smartindent
 set smarttab
 set so=5
 set spell
-set tabstop=4
+set tabstop=2
 set title
 set ttyfast
 set undodir=~/.ideavim_tmp/undodir
@@ -102,77 +66,241 @@ set undofile
 set updatetime=100
 set viminfo
 set visualbell
-set whichwrap=b,s,<,>,h,l,[,]
-"""""""""""""""""""""""""""""""""""""""""""""" File Operations """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" idea things
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+sethandler n:vim i:vim
+let g:NERDTreeMapActivateNode='l'
+let g:NERDTreeMapJumpParent='l'
+nnoremap <C-t> :NERDTreeFocus<CR>
+set clipboard=unnamedplus,unnamed,ideaput
+set ideaput
+set ideajoin
+set ideamarks
+set idearefactormode=keep
+set ideastrictmode
+set NERDTree
+set commentary
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" WhichKey
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:WhichKeyDesc_leader = "<leader> Leader key"
+let g:WhichKey_CommandColor = "#987DD2"
+let g:WhichKey_FontSize = 14
+let g:WhichKey_PrefixColor = "#8AA9F9"
+let g:WhichKey_ShowVimActions = "true"
+let g:WhichKey_SortOrder = "by_key_prefix_first"
+set notimeout
+set timeoutlen=5000
+set which-key
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" surround
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set surround
+set argtextobj
+set textobj-entire
+let g:argtextobj_pairs="(:),{:},<:>"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" multiple-cursors
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set easymotion
+let g:EasyMotion_do_mapping = 0
+nmap <leader>fg <action>(AceDeclarationAction)
+let g:WhichKeyDesc_ace_jump = "<leader>fg Easy motion plugin"
+set multiple-cursors
+nmap <C-j> <Action>(EditorCloneCaretBelow)
+nmap <C-k> <Action>(EditorCloneCaretAbove)
+nmap <C-n> <plug>NextWholeOccurrence
+nmap <C-n> <plug>NextWholeOccurrence
+nmap g<C-n> <plug>NextOccurrence
+xmap <C-n> <plug>NextWholeOccurrence
+xmap <C-p> <plug>RemoveOccurrence
+xmap <C-x> <plug>SkipOccurrence
+xmap g<C-n> <plug>NextOccurrence
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" yanks
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:highlightedyank_highlight_color = "rgba(216,174,234,40)"
+set highlightedyank
+set matchit
+set vim-paragraph-motion
+vmap <leader>y <action>(EditorCopy)
+nmap <leader>y <action>(EditorCopy)
+vmap <leader>p <action>(EditorPaste)
+nmap <leader>p <action>(EditorPaste)
+"" don't yank buffer
+noremap ' "-
+noremap X "_x
+nnoremap yy "+yy
+vnoremap y "+y
+nnoremap p "+p
+vnoremap p "+p
+nnoremap P "+P
+noremap P "+P
+vmap <leader>d "+d
+nmap <leader>P "+P
+vmap <leader>P "+P
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" bookmarks
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap gbb <Action>(ShowBookmarks)
+let g:WhichKeyDesc_bookmarks = "gb Show bookmarks"
+nmap gbn <Action>(GotoNextBookmark)
+let g:WhichKeyDesc_bookmarks = "gbn Goto next bookmark"
+nmap gbp <Action>(GotoPreviousBookmark)
+let g:WhichKeyDesc_bookmarks = "gbp Goto previous bookmark"
+nmap gm <Action>(ToggleBookmark)
+let g:WhichKeyDesc_toggle_bookmarks = "gm Toggle bookmark"
+nmap <leader>ma <Action>(ToggleBookmark)
+let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>ma Toggle bookmark"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" file operations
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map 0 ^
 map Q gq
 map U <C-R>
 map gh ^
 map gl $
 map go <Action>(Switcher)
+let g:WhichKeyDesc_switcher = "go Switcher"
 map gp <Action>(FileStructurePopup)
+let g:WhichKeyDesc_file_structure = "gp File structure popup"
 nmap ; :
 nmap <leader>1 <Action>(SelectInProjectView)
+let g:WhichKeyDesc_show_this = "<leader>1 Show current file in NERDTree"
 nmap <leader>P <action>(RecentProjectListGroup)
+let g:WhichKeyDesc_recent_projects = "<leader>P Open recent projects"
 nmap <leader>T <action>(ReopenClosedTab)
+let g:WhichKeyDesc_reopen_tab = "<leader>T Reopen closed tab"
 nmap <leader>e <action>(GotoNextError)
+let g:WhichKeyDesc_goto_next_error = "<leader>e Goto next error"
 nmap <leader>g <action>(Git.Menu)
+let g:WhichKeyDesc_git_menu = "<leader>g Open git menu"
 nmap <leader>q <action>(CloseEditor)
+let g:WhichKeyDesc_close_editor = "<leader>q Close editor"
 nmap <leader>u <action>(Back)
+let g:WhichKeyDesc_back = "<leader>u Back"
 nmap <leader>z <action>(ToggleDistractionFreeMode)
+let g:WhichKeyDesc_zen_mode = "<leader>z Zen mode"
 nmap gt <action>(Run)
+let g:WhichKeyDesc_run = "gt Run current file"
 nmap gr <action>(RunClass)
+let g:WhichKeyDesc_run_class = "gr Run current entity"
 nmap gz <action>(EditorToggleUseSoftWraps)
+let g:WhichKeyDesc_wrap_lines = "gz Soft wrap"
 vnoremap < <gv
 vnoremap > >gv
-"""" String manipulation plugin
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" string manipulation
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>j <action>(SurroundWithLiveTemplate)
+let g:WhichKeyDesc_surround = "<leader>j Surround with emmet"
 map <leader>sm <action>(StringManipulation.Group.Main)
+let g:WhichKeyDesc_manipulate_string = "<leader>sm Manipulate string plugin"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" life quality
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>/ <action>(ShowErrorDescription)
-"""""""""""""""""""""""""""" Other keymaps """"""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <S-Enter> O<Esc>
-nmap <Enter> o<Esc>
+let g:WhichKeyDesc_show_error_description = "<leader>/ Show error description"
 nmap gu <action>(ShowUsages)
 nmap gU <action>(FindUsages)
 nmap [[ <action>(MethodUp)
 nmap ]] <action>(MethodDown)
 vnoremap / :action Find<CR>
 nnoremap / :action Find<CR>
-""""""""""""""""""""""""""""""""""""""""""" Life quality """"""""""""""""""""""""""""""""""""""""""""""""
+map U <C-R>
 nnoremap vv V
+let g:WhichKeyDesc_select_all_line = "vv Select entire line (V)"
 nnoremap J mzJ`z
+let g:WhichKeyDesc_join_line = "J Join with bellow line"
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
-"""" Tabs
+vnoremap <leader>ss :sort u<CR>
+let g:WhichKeyDesc_sort_unique = "<leader>ss Sort unique lines"
+"" Invert with vim scripts
+nnoremap ! :call Invert(0)<CR>
+vnoremap ! :<C-u>call Invert(1)<CR>
+"" Numbers
+nnoremap - <C-x>
+let g:WhichKeyDesc_decrease = "- Decrease number"
+nnoremap + <C-a>
+let g:WhichKeyDesc_increase = "+ Increase number"
+"" Tabs
 nnoremap <S-Tab> :action PreviousTab<CR>
+let g:WhichKeyDesc_previous_tab_tab = "<S-Tab> Previous tab"
 nnoremap <Tab> :action NextTab<CR>
+let g:WhichKeyDesc_next_tab_tab = "<Tab> Next tab"
 "" Split
 nmap <leader>- <action>(SplitHorizontally)
+let g:WhichKeyDesc_split_horizontally = "<leader>- Split horizontally"
 nmap <leader>\ <action>(SplitVertically)
+let g:WhichKeyDesc_split_vertically = "<leader>\ Split vertically"
 "" Move Tabs
 nmap <leader>a <action>(PreviousTab)
+let g:WhichKeyDesc_previous_tab_leader_left = "<leader>a Previous tab"
 nmap <leader>d <action>(NextTab)
+let g:WhichKeyDesc_next_tab_leader_right = "<leader>d Next tab"
 nmap <leader>k <action>(PreviousTab)
+let g:WhichKeyDesc_previous_tab_leader = "<leader>k Previous tab"
 nmap <leader>l <action>(NextTab)
+let g:WhichKeyDesc_next_tab_leader = "<leader>l Next tab"
+nmap <leader>h <action>(PreviousTab)
+let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
 nmap <leader>tt :tabo<CR>
-vnoremap <leader>ss :sort u<CR>
-""""""""""""""""""""""""""""""""""""""""""""" Folding """""""""""""""""""""""""""""""""""""""
+let g:WhichKeyDesc_tabo = "<leader>tt Close all except current"
+vnoremap <leader>ds :'<,'>g/^$/d<CR>
+let g:WhichKeyDesc_removeEmptyLines = "<leader>ds Remove empty lines from selection"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" folding
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap zx :action CollapseRegion<CR>
+let g:WhichKeyDesc_collapse_region = "zx Collapse region"
 nnoremap zo :action ExpandRegion<CR>
-"""""""""""""""""""""""""""""""""""""""""" Refactor Tools """"""""""""""""""""""""""""""""
+let g:WhichKeyDesc_expand_region = "zx Expand region"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" refactor tools
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>mt <action>(Markdown.GenerateTableOfContents)
+let g:WhichKeyDesc_generate_table_of_content = "<leader>mt Generate Table of Contents(Markdown)"
 nmap <leader>fm <action>(ReformatCode)
+let g:WhichKeyDesc_reformat_code = "<leader>fm Reformat Code"
+nmap <leader>ft <action>(ActivateTerminalToolWindow)
+let g:WhichKeyDesc_open_terminal = "<leader>ft Open Terminal"
 nmap <leader><leader> <action>(ReformatCode)
+let g:WhichKeyDesc_reformat_code = "<leader><leader> Reformat Code"
 nmap <leader>ra <action>(RenameElement)
+let g:WhichKeyDesc_rename_element = "<leader>ra Rename Element"
 nmap <leader>fi <action>(OptimizeImports)
+let g:WhichKeyDesc_optimize_imports = "<leader>fi Optimize Imports"
 nmap gi <action>(FileStructurePopup)
+let g:WhichKeyDesc_file_structure_popup = "<leader>gi File Structure Popup"
 nmap <leader>rf <action>(RenameFile)
+let g:WhichKeyDesc_rename_file = "<leader>rf Rename File"
 nnoremap <leader>nf :action NewFile<CR>
-""" Breakpoint
+let g:WhichKeyDesc_new_file = "<leader>nf New File"
+nnoremap <leader>mv <action>(Move)
+let g:WhichKeyDesc_move_file = "<leader>mv Move file"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" debug
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>bb <Action>(ToggleLineBreakpoint)
-""""""""""""""""""""""""""""""""""""" Leader+f? """"""""""""""""""""""""""""""""
+let g:WhichKeyDesc_Breakpoint = "<leader>bb Toggle Line Breakpoint"
+map <A-up> <action>(MoveLineUp)
+let g:WhichKeyDesc_move_line_up = "<A-up> Move line up"
+map <A-down> <action>(MoveLineDown)
+let g:WhichKeyDesc_move_line_down = "<A-down> Move line down"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" search tools
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>fd <action>(ShowIntentionActions)
-nmap <leader>fa <action>(FindInPath)
-nmap <leader>ff <action>(GotoFile)
-nmap <leader>fb <action>(TextSearchAction)
-nmap <leader>fr <action>(ReplaceInPath)
-nmap <leader>fs <action>(GotoSymbol)
+let g:WhichKeyDesc_show_actions = "<leader>fd Show Actions"
+nmap <leader>sa <action>(FindInPath)
+let g:WhichKeyDesc_find_in_path = "<leader>sa Find in path"
+nmap <leader>sf <action>(GotoFile)
+let g:WhichKeyDesc_goto_file = "<leader>sf Goto file"
+nmap <leader>sb <action>(TextSearchAction)
+let g:WhichKeyDesc_text_search_action = "<leader>sb Text search action"
+nmap <leader>sr <action>(ReplaceInPath)
+let g:WhichKeyDesc_replace_in_path = "<leader>sr Replace in path"
+nmap <leader>gs <action>(GotoSymbol)
+let g:WhichKeyDesc_goto_symbol = "<leader>gr Goto symbol"

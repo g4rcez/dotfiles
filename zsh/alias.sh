@@ -65,15 +65,15 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-if [ -x "$(command -v lvim)" ]; then
-  alias vim="lvim"
+if [ -x "$(command -v nvim)" ]; then
+  alias vim="nvim"
 fi
 ######################################### Docker ########################################
-function docker-prune-volumes () {
+function docker-prune-volumes() {
   docker volume rm "$(docker volume ls -q --filter dangling=true)"
 }
 
-function dockerkill () {
+function dockerkill() {
   docker kill "$(docker ps -q)"
 }
 ##################################### Functions #####################################
@@ -100,13 +100,13 @@ function extract() {
 }
 
 function listening() {
-    if [ $# -eq 0 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P
-    elif [ $# -eq 1 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color "$1"
-    else
-        echo "Usage: listening [pattern]"
-    fi
+  if [ $# -eq 0 ]; then
+    sudo lsof -iTCP -sTCP:LISTEN -n -P
+  elif [ $# -eq 1 ]; then
+    sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color "$1"
+  else
+    echo "Usage: listening [pattern]"
+  fi
 }
 
 alias listen=listening
@@ -117,16 +117,16 @@ function zshrc() {
 
 # Determine size of a file or total size of a directory
 function fs() {
-    if du -b /dev/null >/dev/null 2>&1; then
-        local arg=-sbh
-    else
-        local arg=-sh
-    fi
-    if [[ -n "$@" ]]; then
-        du $arg -- "$@"
-    else
-        du $arg .[^.]* ./*
-    fi
+  if du -b /dev/null >/dev/null 2>&1; then
+    local arg=-sbh
+  else
+    local arg=-sh
+  fi
+  if [[ -n "$@" ]]; then
+    du $arg -- "$@"
+  else
+    du $arg .[^.]* ./*
+  fi
 }
 
 function secretuuid() {
@@ -139,10 +139,11 @@ if [[ "$(uname)" == "Darwin" ]]; then
   command -v md5sum >/dev/null || alias md5sum="md5"
   # macOS has no `sha1sum`, so use `shasum` as a fallback
   command -v sha1sum >/dev/null || alias sha1sum="shasum"
-  command -v hd > /dev/null || alias hd="hexdump -C"
+  command -v hd >/dev/null || alias hd="hexdump -C"
   alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
-  function flush () {
-    sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+  function flush() {
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
   }
 fi
 
@@ -179,7 +180,7 @@ function fvim() {
   vim "$(fzf)"
 }
 
-function fzf-eval(){
+function fzf-eval() {
   echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
 }
 
@@ -187,56 +188,55 @@ function view() {
   fd --type f --strip-cwd-prefix | fzf
 }
 
-function cdf () {
+function cdf() {
   DIR="$(fd --type directory --hidden --exclude .git | fzf)"
   cd "$PWD/$DIR"
 }
 
 function fns() {
   if [[ -f package.json ]]; then
-  local CONTENT="$(jq -r '.scripts' package.json)"
-  local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo '$CONTENT'") && n $(echo "$script")
+    local CONTENT="$(jq -r '.scripts' package.json)"
+    local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo '$CONTENT'") && n $(echo "$script")
   fi
 }
 
-function fzf-update () {
+function fzf-update() {
   DIR="$(pwd)"
   cd ~/.fzf && git pull && ./install
   cd "$DIR"
   exec $SHELL -l
 }
 
-function files(){
+function files() {
   local file="$(fzf --multi --reverse)"
   if [[ "$file" ]]; then
-    for prog in $(echo $file); do $EDITOR "$prog"; done;
+    for prog in $(echo $file); do $EDITOR "$prog"; done
   else
     echo "cancelled fzf"
   fi
 }
 
 function st() {
-  git rev-parse --git-dir > /dev/null 2>&1 || { echo "You are not in a git repository" && return; }
+  git rev-parse --git-dir >/dev/null 2>&1 || { echo "You are not in a git repository" && return; }
   local selected
-  selected=$(git -c color.status=always status --short |\
+  selected=$(git -c color.status=always status --short |
     fzf --no-height "$@" --border -m --ansi --nth 2..,.. \
-    --preview '(if [ -d {-1} ];then exa -l --icons {-1}; else git diff --color=always -- {-1} | sed 1,4d; cat {-1}; fi)' |\
+      --preview '(if [ -d {-1} ];then exa -l --icons {-1}; else git diff --color=always -- {-1} | sed 1,4d; cat {-1}; fi)' |
     cut -c4- | sed 's/.* -> //')
   if [[ $selected ]]; then
-    for prog in $(echo $selected);
-    do $EDITOR $prog; done;
+    for prog in $(echo $selected); do $EDITOR $prog; done
   fi
 }
 
-bindkey "^I" expand-or-complete;
-bindkey "^[[Z" expand-or-complete;
+bindkey "^I" expand-or-complete
+bindkey "^[[Z" expand-or-complete
 ################################################ NODE ##################################################################
 # Enable persistent REPL history for `node`.
-export NODE_REPL_HISTORY=~/.node_history;
+export NODE_REPL_HISTORY=~/.node_history
 # Allow 32³ entries; the default is 1000.
-export NODE_REPL_HISTORY_SIZE='32768';
+export NODE_REPL_HISTORY_SIZE='32768'
 # Use sloppy mode by default, matching web browsers.
-export NODE_REPL_MODE='sloppy';
+export NODE_REPL_MODE='sloppy'
 
 function node:scripts() {
   cat "$PWD/package.json" | jq .scripts
@@ -248,9 +248,9 @@ function n() {
 
 function ni() {
   if [[ "$#" == "0" ]]; then
-    n install;
+    n install
   else
-    n add -E "$@";
+    n add -E "$@"
   fi
 }
 ################################ tmux ##################################################
@@ -258,32 +258,32 @@ alias tsource="tmux source $HOME/.tmux.conf"
 
 function unbindall() {
   for table in prefix root copy-mode copy-mode-vi; do
-      tmux unbind -a -T "$table"
+    tmux unbind -a -T "$table"
   done
 }
 ################################ zellij ##################################################
-function zr() { zellij run --name "$*" -- zsh -ic "$*";}
-function run() { zellij run --name "$*" -- zsh -ic "$*";}
-function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*";}
-function ze() { zellij edit "$*";}
-function zef() { zellij edit --floating "$*";}
+function zr() { zellij run --name "$*" -- zsh -ic "$*"; }
+function run() { zellij run --name "$*" -- zsh -ic "$*"; }
+function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*"; }
+function ze() { zellij edit "$*"; }
+function zef() { zellij edit --floating "$*"; }
 function zweb() { zellij --layout "$HOME/dotfiles/config/zlayouts/web.kdl"; }
 function zj() {
   ZJ_SESSIONS=$(zellij list-sessions)
   NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
   if [ "${NO_SESSIONS}" -ge 2 ]; then
-      zellij attach "$(echo "${ZJ_SESSIONS}" | fzf)"
+    zellij attach "$(echo "${ZJ_SESSIONS}" | fzf)"
   else
-     zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
+    zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
   fi
 }
 
 function zinit() {
-  local directory="${1-localhost}";
+  local directory="${1-localhost}"
   if [[ "$1" != "" || "$1" != "$ZELLIJ_DEFAULT_SESSION" ]]; then
-    z "$directory";
+    z "$directory"
   fi
-  zellij attach -c "$directory";
+  zellij attach -c "$directory"
 }
 
 codi() {

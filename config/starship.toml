@@ -49,8 +49,8 @@ style = "$white"
 format = '[[ $time ](fg:#a0a9cb)]($style)'
 
 [character]
-success_symbol = "[❯](bold white)"
-error_symbol = "[❯](red)"
+success_symbol = "[>_](bold white)"
+error_symbol = "[>_](red)"
 vimcmd_symbol = "[❮](green)"
 
 [git_branch]
@@ -79,8 +79,10 @@ style = "bright-black"
 cherry_pick = '[🍒](bold red)'
 
 [git_metrics]
-added_style = 'bold blue'
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = false
+added_style = 'bold green'
+deleted_style = 'bold red'
+format = '[+$added]($added_style)|[-$deleted]($deleted_style) '
 
 [cmd_duration]
 format = "[ ⏰ $duration]($style) "

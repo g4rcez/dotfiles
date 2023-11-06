@@ -14,25 +14,32 @@ export DOTNET_ROOT="$HOME/.dotnet"
 export GPG_TTY="$(tty)"
 export MANPATH="/usr/local/man:$MANPATH"
 export MANWIDTH=999
+
+############################################## Node ##########################################################
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export VOLTA_HOME="$HOME/.volta"
-export NODE_ENV="development"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$PNPM_HOME:$PATH"
+export PATH="$VOLTA_HOME/bin:$PATH"
+export PATH="$PATH:$HOME/.local/share/JetBrains/scripts"
+# bun completions
+BUN_DIR="$HOME/.bun/_bun"
+[ -s "$BUN_DIR" ] && source "$BUN_DIR"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH="$HOME/.local/share:$HOME/.local/bin:$HOME/.local/share/bin:$PATH"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$HOME/tools/google-cloud-sdk/bin:$PATH"
 export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
 export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 export PATH="$PATH:$HOME/dotfiles/bin"
 export PATH="$PATH:$HOME/tools"
 export PATH="$PATH:/snap/bin"
-export PATH="$PNPM_HOME:$PATH"
-export PATH="$VOLTA_HOME/bin:$PATH"
 
-if [ -x "$(command -v lvim)" ]; then
-  export EDITOR="lvim"
-  export MANPAGER="lvim +Man!"
-  export PAGER="lvim"
+if [ -x "$(command -v nvim)" ]; then
+  export EDITOR="nvim"
+  export MANPAGER="nvim +Man!"
+  export PAGER="nvim"
 else
   export EDITOR="vim"
 fi

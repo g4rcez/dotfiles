@@ -56,7 +56,7 @@ compinit
 local -a sources=(
   $COMPLETIONS/yarn
   $COMPLETIONS/zellij
-  $HOME/.config/broot/launcher/bash/br
+  $COMPLETIONS/docker
   $DOTFILES/zsh/export.sh
   $DOTFILES/zsh/git.sh
   $DOTFILES/zsh/alias.sh
@@ -69,7 +69,3 @@ if [[ -z "$ZELLIJ" && "$USE_ZELLIJ" == "true" ]]; then
   zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
 fi
 
-# bun completions
-BUN_DIR="$HOME/.bun/_bun"; [ -s "$BUN_DIR" ] && source "$BUN_DIR";
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"

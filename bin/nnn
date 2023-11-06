@@ -16,10 +16,8 @@ if [[ "$#" == "0" ]];then
   ARGUMENTS=""
 fi
 case $SUBCOMMAND in
-  "add") "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
-  "i") "$COMMAND" install $ARGUMENTS $@;;
-  "install") "$COMMAND" install $ARGUMENTS $@;;
+  "add") NODE_ENV=development "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@;;
+  "i") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@;;
+  "install") NODE_ENV=development "$COMMAND" install $ARGUMENTS $@;;
   *) $COMMAND $PRE $SUBCOMMAND "$@";;
 esac
-
-
