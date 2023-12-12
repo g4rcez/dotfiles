@@ -1,5 +1,3 @@
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
 defaults write -g ApplePressAndHoldEnabled -bool false
 ln -sf $HOME/dotfiles/espanso "$HOME/Library/Application\ Support/espanso/match/base.yml"
 

@@ -1,3 +1,5 @@
+#############################################################################################################################
+## Functions
 autoload -Uz is-at-least
 git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
@@ -17,7 +19,7 @@ function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
 }
 
-# Check if main exists and use instead of master
+# Check if main exists and use instead of main
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
@@ -27,7 +29,7 @@ function git_main_branch() {
       return
     fi
   done
-  echo master
+  echo main
 }
 
 # Check for develop and similarly named branches
@@ -42,10 +44,59 @@ function git_develop_branch() {
   done
   echo develop
 }
-#################################################### Aliases ###########################################################
+
+function pullb() {
+  git pull origin "$(git branch --show-current)"
+}
+
+function gitignore() {
+  forgit::ignore >> .gitignore
+}
+
+function git-graph() {
+  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+}
+
+# Clone only with pathname of repository
+function clone() {
+  git clone "git@github.com:$1"
+}
+
+# Create and push a tag
+function tag() {
+  git tag "$1" && git push origin "$1"
+}
+
+# rebase your current branch with the $1 branch
+function rebasewith() {
+  local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+  local BRANCH="$1"
+  git switch "$BRANCH"
+  git pull origin "$BRANCH"
+  git switch "$CURRENT_BRANCH"
+  git rebase "$BRANCH"
+}
+
+function squash() {
+  git rebase -i "HEAD~${1}"
+}
+
+# squash branch commits based in N commits of current pull request
+function squashbranch() {
+  COMMITS=$(gh pr view --json commits | jq '.commits|length' | tr -d "\n")
+  echo "Rebase $COMMITS behind...Press ENTER to continue"
+  read
+  squash "$COMMITS"
+}
+
+unset git_version
+
+#############################################################################################################################
+## alias
+alias pushf="git push --force-with-lease"
 alias add='git add'
 alias checkout='git checkout'
-alias commit='git commit -m'
+alias commit='git commit -S -m'
 alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
@@ -64,26 +115,5 @@ alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
-alias wip='git add . && git commit -m "wip: work in progress" && git push'
+alias wip='git add . && git commit -S -m "wip: work in progress" && git push'
 
-function pullb() {
-  git pull origin "$(git branch --show-current)"
-}
-
-function gitignore() {
-  forgit::ignore >> .gitignore
-}
-
-function git-graph() {
-  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
-}
-
-function clone() {
-  git clone "git@github.com:$1"
-}
-
-function tag() {
-  git tag "$1" && git push origin "$1"
-}
-
-unset git_version

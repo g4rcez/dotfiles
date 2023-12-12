@@ -5,7 +5,7 @@
     user = g4rcez
 
 [init]
-    defaultBranch = main
+	defaultBranch = main
 
 [branch]
     sort = -committerdate
@@ -26,7 +26,7 @@
 	unmerged = 9 normal
 
 [core]
-    excludesFile = ~/.gitignore
+	excludesFile = ~/.gitignore
     pager = diff-so-fancy | less --tabs=4 -RFX
     ignorecase = false
 
@@ -66,12 +66,12 @@
     output = compact
 
 [user]
-    name = g4rcez
-    email = allan.f.garcez@gmail.com
-    signingkey = DCAD5CFB6F6D9B63
+	name = g4rcez
+	email = allan.f.garcez@gmail.com
+	signingkey = 54F46BAA2465C272
 
 [commit]
-    gpgsign = true
+	gpgsign = true
 
 [help]
     # Automatically correct and execute mistyped commands.
@@ -144,3 +144,5 @@
 	HEAD = 5 normal italic
 [diff]
 	colorMoved = zebra
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers

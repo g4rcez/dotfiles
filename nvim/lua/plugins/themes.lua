@@ -1,12 +1,18 @@
 return {
-  "nyoom-engineering/nyoom.nvim",
-  "nyoom-engineering/oxocarbon.nvim",
-  "joshdick/onedark.vim",
-  { "rose-pine/neovim", name = "rose-pine" },
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "onedark",
+    {
+        "folke/tokyonight.nvim",
+        opts = {
+            transparent = false,
+            styles = {
+                sidebars = "transparent",
+                floats = "transparent",
+            },
+        },
     },
-  },
+    {
+        "LazyVim/LazyVim",
+        opts = {
+            colorscheme = "tokyonight-night",
+        },
+    },
 }

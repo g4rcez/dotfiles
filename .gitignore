@@ -1,4 +1,3 @@
-
 .idea
 shortcuts.yml
 ### OMG
@@ -32,3 +31,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+nvim/lazy-lock.json
+nvim/README.md
+nvim/LICENSE

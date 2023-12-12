@@ -14,7 +14,6 @@ $fill\
 $package\
 $dotnet\
 $nodejs\
-$time\
 $cmd_duration
 $line_break\
 $character"""
@@ -38,6 +37,7 @@ map_symbol = true
 disabled = false
 
 [directory]
+format = '[\[$path\]]($style)[$read_only]($read_only_style) '
 style = "bold bright-blue"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
