@@ -68,6 +68,11 @@ done
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
+if [[ -x "$(command -v zellij)" ]];
+then
+    eval "$(zellij setup --generate-completion zsh | grep "^function")"
+fi;
+
 if [[ -z "$ZELLIJ" ]]; then
     if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
         zinit localhost

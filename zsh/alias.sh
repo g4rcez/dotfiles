@@ -15,7 +15,6 @@ alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
 alias ll="ls -l"
-alias ccat="cat"
 alias cat="bat -p --pager cat --theme OneHalfDark"
 alias dotfiles="cd $HOME/dotfiles"
 # Intuitive map function
@@ -122,6 +121,13 @@ function ni() {
     n add -E "$@"
   fi
 }
+
+function types() {
+  LIBS=$(for a in $@; do echo "@types/$a"; done)
+  LIBS=$(echo "$LIBS" | tr '\n' ' ')
+  ni -D $LIBS
+}
+
 ################################ zellij ##################################################
 function zedit() { zellij edit --floating "$*"; }
 
@@ -146,7 +152,7 @@ function zj() {
 
 function zinit() {
   local SESSION_NAME="${1-localhost}"
-  zellij --layout "$HOME/dotfiles/config/zellij/status.kdl" attach -c "$SESSION_NAME"
+  zellij --session "$SESSION_NAME" attach -c "$SESSION_NAME"
 }
 
 ##################################### Functions #####################################

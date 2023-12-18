@@ -50,7 +50,7 @@ function pullb() {
 }
 
 function gitignore() {
-  forgit::ignore >> .gitignore
+  forgit::ignore >> ".gitignore"
 }
 
 function git-graph() {
@@ -103,8 +103,6 @@ alias gcf='git config --list'
 alias gcm='git checkout $(git_main_branch)'
 alias gco='git checkout'
 alias gd='git diff'
-alias ghc='gh pr checkout'
-alias ghl='gh pr list'
 alias gitree='git log --oneline --graph --decorate --all'
 alias gitree='git-graph'
 alias gittree='git-graph'
@@ -116,4 +114,13 @@ alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
 alias wip='git add . && git commit -S -m "wip: work in progress" && git push'
+
+#############################################################################################################################
+## github-cli
+alias ghc='gh pr checkout'
+alias ghl='gh pr list'
+alias prs='gh pr list'
+alias pullrequest='gh pr create'
+alias pullrequest='gh pr create'
+alias gdash="gh dash"
 
