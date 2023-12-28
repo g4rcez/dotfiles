@@ -12,20 +12,20 @@ set -xe
 mkdir -p $HOME/tools $HOME/.tmp
 ########################################################################################################################
 ##### fzf
-if [[ -f "$(command -v fzf)" ]];then
-    echo "fzf installed"
+if [[ -f "$(command -v fzf)" ]]; then
+  echo "fzf installed"
 else
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
 fi
 
 ########################################################################################################################
 ##### brew
-if [[ -f "$(command -v brew)" ]];then
-    echo "brew installed"
+if [[ -f "$(command -v brew)" ]]; then
+  echo "brew installed"
 else
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    /bin/bash $HOME/dotfiles/setup/brew.sh
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash $HOME/dotfiles/setup/brew.sh
 fi
 
 ########################################################################################################################
@@ -62,3 +62,9 @@ ln -sf $HOME/dotfiles/git/gitconfig $HOME/.gitconfig
 ln -sf $HOME/dotfiles/git/global_gitignore $HOME/.gitignore
 git config --global core.excludesFile "$HOME/.gitignore"
 git config --global init.defaultBranch main
+
+#########################################################################################################################
+###### misc
+
+## atuin history
+bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)

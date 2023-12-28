@@ -1,5 +1,6 @@
 #!/bin/bash
 ####################################################### *nix alias #####################################################
+alias j="z"
 alias cp='cp -v'
 alias df='df -h'
 alias diff='diff --color=auto'
@@ -8,7 +9,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias ls="eza --hyperlink --icons --git --color=always -bghHiS"
+alias ls="lsd --git"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
@@ -38,7 +39,6 @@ function cdm() {
 function cpv() {
   rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
 }
-
 ################################ vim ##################################################
 if [ -x "$(command -v nvim)" ]; then
   alias vim="nvim"
@@ -63,7 +63,6 @@ function codi() {
     hi NonText ctermfg=0 |\
     Codi $syntax" "$@"
 }
-
 ################################################## clipboard ###########################################################
 if [[ "$(uname)" != "Darwin" ]]; then
   alias pbcopy='xclip -sel clip'
@@ -83,6 +82,10 @@ function dockerkill() {
   docker kill "$(docker ps -q)"
 }
 
+function fdocker() {
+  docker ps -a | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $1 }' | xargs -r docker rm
+}
+
 ################################################## OSX Commands ########################################################
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -92,10 +95,12 @@ if [[ "$(uname)" == "Darwin" ]]; then
   command -v sha1sum >/dev/null || alias sha1sum="shasum"
   command -v hd >/dev/null || alias hd="hexdump -C"
   alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
+
   function flush() {
     sudo dscacheutil -flushcache
     sudo killall -HUP mDNSResponder
   }
+
 fi
 
 ################################################ NODE ##################################################################
@@ -207,4 +212,16 @@ function fs() {
 
 function secretuuid() {
   echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
+}
+
+############################################################################333
+## atuin
+export ATUIN_NOBIND="true"
+
+############################################################################333
+## update-all
+
+function updateAll() {
+  brew upgrade
+  fzf-update
 }

@@ -5,7 +5,7 @@ Hi. This is my dotfiles project. Here you will find all my configs to create an 
 # Know the dotfiles
 
 | File                                                                          | Purpose                                         |
-|-------------------------------------------------------------------------------|-------------------------------------------------|
+| ----------------------------------------------------------------------------- | ----------------------------------------------- |
 | [zsh/zshrc](https://github.com/g4rcez/dotfiles/blob/master/zsh/zshrc)         | Entrypoint of all my ZShell configs             |
 | [git/gitconfig](https://github.com/g4rcez/dotfiles/blob/master/git/gitconfig) | Gitconfig settings. Alias, core, diff style     |
 | [starship.toml](https://github.com/g4rcez/dotfiles/blob/master/starship.toml) | Configure of [starship.rs](https://starship.rs) |
@@ -13,12 +13,12 @@ Hi. This is my dotfiles project. Here you will find all my configs to create an 
 # Useful CLI
 
 - [fzf](https://github.com/junegunn/fzf)
-- [lunarvim](https://www.lunarvim.org/)
+- [lazyvim](https://lazyvim.org/)
 - [starship.rs](https://starship.rs)
 - [bat](https://github.com/sharkdp/bat)
 - [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
-- [zplug](https://github.com/zplug/zplug)
 - [zellij](https://zellij.dev/)
+- [lsd](https://github.com/lsd-rs/lsd)
 
 # Useful softwares
 

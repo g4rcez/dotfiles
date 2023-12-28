@@ -1,145 +1,129 @@
-local wt = require("wezterm");
-local act = wt.action
-local tmp = os.getenv("WEZTERM_HOME")
-local WEZTERM_HOME = tmp
-print (tmp)
-print (os.getenv("HOME"))
-if tmp == "" or tmp == nil then
-  WEZTERM_HOME = os.getenv("HOME").."/dotfiles/.config/wezterm"
-end
--- load themes from this file
-local colors = wt.color.load_terminal_sexy_scheme(WEZTERM_HOME .. "/theme.json")
-colors.cursor_bg = "#ffffff"
-colors.cursor_fg = "#ffffff"
-
--- Confirm on close, like kitty terminal
-wt.action { CloseCurrentTab = { confirm = true } }
-
-wt.on('format-window-title', function(tab, pane, tabs, panes, config)
-  local zoomed = ''
-  if tab.active_pane.is_zoomed then
-    zoomed = '[Z] '
-  end
-
-  local index = ''
-  if #tabs > 1 then
-    index = string.format('[%d/%d] ', tab.tab_index + 1, #tabs)
-  end
-
-  return zoomed .. index .. tab.active_pane.title
-end)
-
--- All my custom shortcuts
-local keys = {
-    -- Control tabs
-    { key = "Tab", mods = "CTRL", action = wt.action { ActivateTabRelative = 1, }, },
-    { key = "Tab", mods = "LEADER", action = wt.action { ActivateTabRelative = -1, }, },
-    { key = "t", mods = "CTRL", action = wt.action { SpawnTab = "DefaultDomain", }, },
-    { key = "t", mods = "ALT", action = wt.action { SpawnTab = "DefaultDomain", }, },
-    -- split terminal overrides
-    { key = 'p', mods = 'ALT', action = wt.action.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
-    { key = 'o', mods = 'ALT', action = wt.action.SplitVertical { domain = 'CurrentPaneDomain' }, },
-    { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left', },
-    { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right', },
-    { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up', },
-    { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down', },
-    -- control panel size
-    { key = 'h', mods = 'ALT', action = act.AdjustPaneSize { 'Left', 5 }, },
-    { key = 'l', mods = 'ALT', action = act.AdjustPaneSize { 'Right', 5 }, },
-    { key = 'j', mods = 'ALT', action = act.AdjustPaneSize { 'Down', 5 }, },
-    { key = 'k', mods = 'ALT', action = act.AdjustPaneSize { 'Up', 5 }, },
-    -- ALT to move between tabs
-    { key = "1", mods = "ALT", action = wt.action { ActivateTab = 0 } },
-    { key = "2", mods = "ALT", action = wt.action { ActivateTab = 1 } },
-    { key = "3", mods = "ALT", action = wt.action { ActivateTab = 2 } },
-    { key = "4", mods = "ALT", action = wt.action { ActivateTab = 3 } },
-    { key = "5", mods = "ALT", action = wt.action { ActivateTab = 4 } },
-    { key = "6", mods = "ALT", action = wt.action { ActivateTab = 5 } },
-    { key = "7", mods = "ALT", action = wt.action { ActivateTab = 6 } },
-    { key = "8", mods = "ALT", action = wt.action { ActivateTab = 7 } },
-    { key = "9", mods = "ALT", action = wt.action { ActivateTab = 8 } },
-    { key = "0", mods = "ALT", action = wt.action { ActivateTab = -1 } },
-    -- launcher menu
-    { key = 'm', mods = 'ALT', action = wt.action.ShowLauncher },
-    { key = 's', mods = 'ALT', action = wt.action.ShowLauncherArgs { flags = 'FUZZY|TABS' }, },
-    -- clipboard
-    { key = 'v', mods = 'ALT', action = wt.action.PasteFrom('Clipboard') },
-    { key = 'c', mods = 'ALT', action = wt.action.CopyTo('Clipboard') },
-    { key = 'n', mods = 'ALT', action = wt.action.ToggleFullScreen, },
-}
-
-local hyperLinkRules = {
-    -- Linkify things that look like URLs and the host has a TLD name.
-    -- Compiled-in default. Used if you don't specify any hyperlink_rules.
-    {
-        regex = '\\b\\w+://[\\w.-]+\\.[a-z]{2,15}\\S*\\b',
-        format = '$0',
-    },
-    -- linkify email addresses
-    -- Compiled-in default. Used if you don't specify any hyperlink_rules.
-    {
-        regex = [[\b\w+@[\w-]+(\.[\w-]+)+\b]],
-        format = 'mailto:$0',
-    },
-    -- file:// URI
-    -- Compiled-in default. Used if you don't specify any hyperlink_rules.
-    {
-        regex = [[\bfile://\S*\b]],
-        format = '$0',
-    },
-    -- Linkify things that look like URLs with numeric addresses as hosts.
-    -- E.g. http://127.0.0.1:8000 for a local development server,
-    -- or http://192.168.1.1 for the web interface of many routers.
-    {
-        regex = [[\b\w+://(?:[\d]{1,3}\.){3}[\d]{1,3}\S*\b]],
-        format = '$0',
-    }
-}
-
-local function launchItem(name)
-    return {
-        label = 'Workspace [' .. name .. ']',
-        args = { 'nohup', 'wezterm', 'connect', 'company', '--workspace', name, '>', '/dev/null', '2>&1', '&' },
-    }
+-- Pull in the wezterm API
+local wezterm = require("wezterm")
+-- This table will hold the configuration.
+local config = {}
+-- In newer versions of wezterm, use the config_builder which will
+-- help provide clearer error messages
+if wezterm.config_builder then
+  config = wezterm.config_builder()
 end
 
-local launcher = {
-    launchItem("unix"),
-    launchItem("company"),
-    launchItem("projects"),
+-- This is where you actually apply your config choices
+
+-- Background, window and tabs
+config.use_fancy_tab_bar = true
+config.show_tabs_in_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
+config.enable_tab_bar = true
+config.window_background_opacity = 0.95
+config.macos_window_background_blur = 70
+config.window_decorations = "RESIZE"
+config.enable_scroll_bar = true
+config.max_fps = 60
+
+-- Font config
+config.font = wezterm.font({
+  family = "JetBrains Mono",
+  italic = false,
+  weight = "Regular",
+  harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+})
+config.harfbuzz_features = { "calt=1", "clig=1", "liga=1" }
+config.font_size = 16
+config.font_rules = {
+  {
+    intensity = "Bold",
+    italic = false,
+    font = wezterm.font("JetBrains Mono", { weight = "Bold" }),
+  },
 }
 
-local domains = { { name = 'unix' }, { name = 'company' }, { name = 'side' } }
+-- Hyperlinks
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, {
+  regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
+  format = "https://www.github.com/$1/$3",
+})
 
-return {
-   font = wt.font_with_fallback {
-      'FiraCode Nerd Font',
-    },
-    alternate_buffer_wheel_scroll_speed = 1,
-    audible_bell = "Disabled",
-    check_for_updates = true,
-    check_for_updates_interval_seconds = 86400,
-    colors = colors,
-    cursor_blink_rate = 0,
-    default_cursor_style = "BlinkingUnderline",
-    default_gui_startup_args = { 'connect', 'unix' },
-    enable_scroll_bar = true,
-    enable_tab_bar = true,
-    font_size = 12,
-    harfbuzz_features = { 'calt=1', 'liga=1', 'clig=1' },
-    hide_tab_bar_if_only_one_tab = true,
-    hyperlink_rules = hyperLinkRules,
-    inactive_pane_hsb = { saturation = 0.2, brightness = 0.4, },
-    initial_cols = 100,
-    initial_rows = 60,
-    keys = keys,
-    launch_menu = launcher,
-    selection_word_boundary = " \t\n[]\"'`(),.;:",
-    tab_max_width = 50,
-    unix_domains = domains,
-    use_fancy_tab_bar = false,
-    window_background_opacity = 1,
-    window_padding = { left = 5, right = 0, top = 0, bottom = 5, },
-    font_alias = "Subpixel",
-    max_fps = 120
+-- Actions
+wezterm.action({ CloseCurrentTab = { confirm = true } })
+
+-- Theme
+config.colors = {
+  -- The default text color
+  foreground = "#eee",
+  -- The default background color
+  background = "#18181b",
+
+  -- Overrides the cell background color when the current cell is occupied by the
+  -- cursor and the cursor style is set to Block
+  cursor_bg = "#fff",
+  -- Overrides the text color when the current cell is occupied by the cursor
+  cursor_fg = "#000",
+  -- Specifies the border color of the cursor when the cursor style is set to Block,
+  -- or the color of the vertical or horizontal bar when the cursor style is set to
+  -- Bar or Underline.
+  cursor_border = "#fff",
+
+  -- the foreground color of selected text
+  selection_fg = "black",
+  -- the background color of selected text
+  selection_bg = "#fffacd",
+
+  -- The color of the scrollbar "thumb"; the portion that represents the current viewport
+  scrollbar_thumb = "#222222",
+
+  -- The color of the split lines between panes
+  split = "#444444",
+
+  ansi = {
+    "#0a0a0a",
+    "#4ade80",
+    "#16a34a",
+    "#fcd34d",
+    "#2563eb",
+    "#9333ea",
+    "#0ea5e9",
+    "#a3a3a3",
+  },
+  brights = {
+    "#475569",
+    "#ef4444",
+    "#4ade80",
+    "#fde047",
+    "#3b82f6",
+    "#fb7185",
+    "aqua",
+    "#eee",
+  },
+
+  -- Arbitrary colors of the palette in the range from 16 to 255
+  indexed = { [136] = "#af8700" },
+
+  -- Since: 20220319-142410-0fcdea07
+  -- When the IME, a dead key or a leader key are being processed and are effectively
+  -- holding input pending the result of input composition, change the cursor
+  -- to this color to give a visual cue about the compose state.
+  compose_cursor = "orange",
+
+  -- Colors for copy_mode and quick_select
+  -- available since: 20220807-113146-c2fee766
+  -- In copy_mode, the color of the active text is:
+  -- 1. copy_mode_active_highlight_* if additional text was selected using the mouse
+  -- 2. selection_* otherwise
+  copy_mode_active_highlight_bg = { Color = "#000000" },
+  -- use `AnsiColor` to specify one of the ansi color palette values
+  -- (index 0-15) using one of the names "Black", "Maroon", "Green",
+  --  "Olive", "Navy", "Purple", "Teal", "Silver", "Grey", "Red", "Lime",
+  -- "Yellow", "Blue", "Fuchsia", "Aqua" or "White".
+  copy_mode_active_highlight_fg = { AnsiColor = "Black" },
+  copy_mode_inactive_highlight_bg = { Color = "#52ad70" },
+  copy_mode_inactive_highlight_fg = { AnsiColor = "White" },
+
+  quick_select_label_bg = { Color = "peru" },
+  quick_select_label_fg = { Color = "#ffffff" },
+  quick_select_match_bg = { AnsiColor = "Navy" },
+  quick_select_match_fg = { Color = "#ffffff" },
 }
+
+return config

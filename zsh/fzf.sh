@@ -1,3 +1,12 @@
+_fzf_comprun() {
+  local command=$1
+  shift
+  case "$command" in
+    cd)           fzf "$@" --preview 'tree -C {} | head -200' ;;
+    *)            fzf "$@" --preview '~/dotfiles/bin/lessfilter.sh {}' ;;
+  esac
+}
+
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -8,14 +17,15 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --border
 --info=inline
 --layout=reverse
---height 90%
+--height 95%
 --color=dark
---color header:italic
 --preview '~/dotfiles/bin/lessfilter.sh {}'
---preview-window right,70%
+--preview-window right,75%
 --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --bind 'ctrl-/:toggle-preview'
---color=bg+:#293739,bg:#1B1D1E,border:#808080,spinner:#E6DB74,hl:#7E8E91,fg:#F8F8F2,header:#7E8E91,info:#f59e0b,pointer:#f59e0b,marker:#6366f1,fg+:#F8F8F2,prompt:#6366f1,hl+:#6366f1 "
+--color fg:#D8DEE9,bg:#1a1e24,hl:#A3BE8C,fg+:#D8DEE9,bg+:#3a455b,hl+:#A3BE8C
+--color pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#232428,prompt:#81A1C1,marker:#EBCB8B
+"
 
 export FZF_CTRL_R_OPTS="
 --preview 'echo {}' --preview-window up:3:hidden:wrap
@@ -69,12 +79,32 @@ function st() {
   local selected
   selected=$(git -c color.status=always status --short |
     fzf --no-height "$@" --border -m --ansi --nth 2..,.. \
-      --preview '(if [ -d {-1} ];then eza -l --icons {-1}; else git diff --color=always -- {-1} | sed 1,4d; cat {-1}; fi)' |
+      --preview '(if [ -d {-1} ];then lsd -l {-1}; else git diff --color=always -- {-1} | sed 1,4d; cat {-1}; fi)' |
     cut -c4- | sed 's/.* -> //')
   if [[ $selected ]]; then
     for prog in $(echo $selected); do $EDITOR $prog; done
   fi
 }
 
+zz() {
+  zoxide query -i
+}
+
 bindkey "^I" expand-or-complete
 bindkey "^[[Z" expand-or-complete
+
+export FZF_COMPLETION_TRIGGER=''
+bindkey '^ ' fzf-completion
+bindkey '^I' $fzf_default_completion
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --ansi"
+FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -printf '%P\n' 2>/dev/null"
+FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -type d -printf '%P\n' 2>/dev/null"
+
+_fzf_compgen_path() {
+    bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null
+}
+
+_fzf_compgen_dir() {
+    bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
+}
+

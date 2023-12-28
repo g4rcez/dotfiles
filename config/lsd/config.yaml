@@ -1,0 +1,14 @@
+classic: false
+date: date
+dereference: true
+hyperlink: always
+indicators: false
+size: short
+total-size: false
+color:
+  when: always
+  theme: custom
+icons:
+  when: always
+  theme: fancy
+  separator: " "

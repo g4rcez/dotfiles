@@ -20,6 +20,7 @@ $character"""
 
 [package]
 disabled = false
+display_private = true
 format = ' [$symbol$version]($style) '
 
 [fill]
@@ -55,7 +56,7 @@ vimcmd_symbol = "[❮](green)"
 
 [git_branch]
 format = '[$symbol$branch(:$remote_branch)]($style) '
-style = "bright-purple bold"
+style = "bright-white bold"
 symbol = ' '
 
 [git_status]
@@ -81,15 +82,17 @@ cherry_pick = '[🍒](bold red)'
 [git_metrics]
 disabled = false
 added_style = 'bold green'
-deleted_style = 'bold red'
+deleted_style = 'bold bright-yellow'
 format = '[+$added]($added_style)|[-$deleted]($deleted_style) '
+only_nonzero_diffs = true
 
 [cmd_duration]
 format = "[ ⏰ $duration]($style) "
+disabled = false
 style = "yellow"
-min_time = 1_000
 show_notifications = false
-min_time_to_notify = 10_000
+min_time = 10_000
+min_time_to_notify = 1000
 
 [nodejs]
 format = '[$symbol($version)]($style)'

@@ -5,7 +5,7 @@ category=${mime%%/*}
 kind=${mime##*/}
 
 if [ -d "$1" ]; then
-  eza --git -hl --color=always --icons "$1" --tree
+  lsd --git -hl --color=always --tree
 elif [ "$category" = "image" ]; then
   echo "$PWD/$1"
   exiftool "$1"

@@ -70,22 +70,6 @@ zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
-if [[ ${COMPLETION_WAITING_DOTS:-false} != false ]]; then
-  expand-or-complete-with-dots() {
-    # use $COMPLETION_WAITING_DOTS either as toggle or as the sequence to show
-    [[ $COMPLETION_WAITING_DOTS = true ]] && COMPLETION_WAITING_DOTS="%F{red}…%f"
-    # turn off line wrapping and print prompt-expanded "dot" sequence
-    printf '\e[?7l%s\e[?7h' "${(%)COMPLETION_WAITING_DOTS}"
-    zle expand-or-complete
-    zle redisplay
-  }
-  zle -N expand-or-complete-with-dots
-  # Set the function as the default tab completion widget
-  bindkey -M emacs "^I" expand-or-complete-with-dots
-  bindkey -M viins "^I" expand-or-complete-with-dots
-  bindkey -M vicmd "^I" expand-or-complete-with-dots
-fi
-
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
@@ -106,16 +90,6 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
-############################## zsh-notify ##############################################
-zstyle ':notify:*' always-notify-on-failure no
-zstyle ':notify:*' command-complete-timeout 20
-zstyle ':notify:*' error-title "Command failed (in #{time_elapsed} seconds)"
-zstyle ':notify:*' error-title "Command failed"
-zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
-zstyle ':notify:*' success-title "Command finished"
-zstyle ':notify:*' enable-on-ssh yes
-##################################### znap ###########################################
-zstyle ':znap:*:*' git-maintenance off
 ############################## key Bind #################################
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
@@ -153,4 +127,3 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=magenta"
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-

@@ -29,7 +29,7 @@ function git_main_branch() {
       return
     fi
   done
-  echo main
+  echo master
 }
 
 # Check for develop and similarly named branches

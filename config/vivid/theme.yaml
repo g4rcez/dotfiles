@@ -1,0 +1,142 @@
+colors:
+  background_color: "282c34"
+  white: "ccc"
+  red: "e06c75"
+  green: "98c379"
+  yellow: "e5c07b"
+  blue: "61afef"
+  orange: "fdba74"
+  pink: "ff6ac1"
+  cyan: "56b6c2"
+  black: "000000"
+  gray: "999999"
+  darkgray: "666666"
+  darkergray: "333333"
+
+core:
+  normal_text: {}
+  regular_file: {}
+  reset_to_normal: {}
+  directory:
+    foreground: "93c5fd"
+  symlink:
+    foreground: pink
+  multi_hard_link: {}
+  fifo:
+    foreground: black
+    background: blue
+
+  socket:
+    foreground: black
+    background: pink
+
+  door:
+    foreground: black
+    background: pink
+
+  block_device:
+    foreground: cyan
+    background: darkergray
+
+  character_device:
+    foreground: pink
+    background: darkergray
+
+  broken_symlink:
+    foreground: black
+    background: red
+
+  missing_symlink_target:
+    foreground: black
+    background: red
+
+  setuid: {}
+
+  setgid: {}
+
+  file_with_capability: {}
+
+  sticky_other_writable: {}
+
+  other_writable: {}
+
+  sticky: {}
+
+  executable_file:
+    foreground: red
+    font-style: bold
+
+text:
+  special:
+    foreground: orange
+
+  todo:
+    font-style: bold
+
+  licenses:
+    foreground: gray
+
+  configuration:
+    generic:
+      foreground: orange
+    dockerfile:
+      foreground: blue
+    nix:
+      foreground: white
+    qt:
+      foreground: white
+    system:
+      foreground: white
+    metadata:
+      foreground: orange
+    desktop:
+      foreground: orange
+    bibtex:
+      foreground: white
+
+  other:
+    foreground: yellow
+
+markup:
+  foreground: yellow
+
+programming:
+  source:
+    foreground: green
+    typescript:
+      foreground: "4476C0"
+    json:
+      foreground: "E5D565"
+    javascript:
+      foreground: "E5D565"
+    tailwindcss:
+      foreground: "62BAF3"
+
+  tooling:
+    foreground: green
+    vcs:
+      other:
+        foreground: green
+      hg:
+        foreground: green
+      git:
+        foreground: white
+    continuous-integration:
+      foreground: green
+
+media:
+  foreground: pink
+
+office:
+  foreground: cyan
+
+archives:
+  foreground: cyan
+  font-style: underline
+
+executable:
+  foreground: green
+  font-style: bold
+
+unimportant:
+  foreground: darkgray
