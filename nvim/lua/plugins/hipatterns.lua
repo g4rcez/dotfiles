@@ -12,9 +12,7 @@ return {
                 -- compact: only the color will be highlighted
                 style = "full",
             },
-            highlighters = {
-                hex_color = hi.gen_highlighter.hex_color({ priority = 2000 }),
-            },
+            highlighters = { hex_color = hi.gen_highlighter.hex_color({ priority = 2000 }), }
         }
     end,
     config = function(_, opts)

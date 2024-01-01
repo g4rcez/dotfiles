@@ -1,14 +1,9 @@
--- Pull in the wezterm API
-local wezterm = require("wezterm")
--- This table will hold the configuration.
-local config = {}
--- In newer versions of wezterm, use the config_builder which will
--- help provide clearer error messages
+local wezterm = require("wezterm");
+local config = {};
+
 if wezterm.config_builder then
   config = wezterm.config_builder()
 end
-
--- This is where you actually apply your config choices
 
 -- Background, window and tabs
 config.use_fancy_tab_bar = true
@@ -20,21 +15,16 @@ config.macos_window_background_blur = 70
 config.window_decorations = "RESIZE"
 config.enable_scroll_bar = true
 config.max_fps = 60
+config.front_end = "OpenGL"
 
 -- Font config
-config.font = wezterm.font({
-  family = "JetBrains Mono",
-  italic = false,
-  weight = "Regular",
-  harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
-})
-config.harfbuzz_features = { "calt=1", "clig=1", "liga=1" }
 config.font_size = 16
+config.font = wezterm.font("JetBrainsMono Nerd Font", { italic = false, weight = "Regular" })
 config.font_rules = {
   {
     intensity = "Bold",
     italic = false,
-    font = wezterm.font("JetBrains Mono", { weight = "Bold" }),
+    font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Bold" }, "JetBrainsMono Nerd Font"),
   },
 }
 

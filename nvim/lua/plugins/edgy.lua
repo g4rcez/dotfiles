@@ -3,7 +3,7 @@ return {
         "folke/edgy.nvim",
         event = "VeryLazy",
         init = function()
-            vim.opt.laststatus = 5
+            vim.opt.laststatus = 10
             vim.opt.splitkeep = "screen"
         end,
         opts = {
