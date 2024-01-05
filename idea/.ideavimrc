@@ -117,6 +117,7 @@ nmap <leader>p <action>(EditorPaste)
 
 "" don't yank buffer
 noremap ' "-
+noremap <bs> "-
 noremap X "_x
 nnoremap yy "+yy
 vnoremap y "+y

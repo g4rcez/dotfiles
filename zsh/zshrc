@@ -51,7 +51,9 @@ local -a PATH_EXPORTS=(
 PATH_RESULT="$PATH"
 
 for path in $PATH_EXPORTS; do
-  PATH_RESULT="$PATH_RESULT:$path"
+  if [[ -d "$path" ]]; then
+    PATH_RESULT="$PATH_RESULT:$path"
+  fi
 done
 
 export PATH="$PATH_RESULT"
@@ -63,22 +65,22 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 ENABLE_CORRECTION="true"
 HIST_STAMPS="yyyy-mm-dd"
 HYPHEN_INSENSITIVE="true"
-ZELLIJ_AUTO_EXIT=false
 ZELLIJ_AUTO_ATTACH=true
+ZELLIJ_AUTO_EXIT=false
 ZELLIJ_DEFAULT_SESSION="localhost"
 
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 
 local -a PLUGINS=(
-    zsh-users/zsh-completions
-    MichaelAquilina/zsh-you-should-use
-    MichaelAquilina/zsh-auto-notify
-    marlonrichert/zcolors
     wfxr/forgit
-    hlissner/zsh-autopair
+    zsh-users/zsh-completions
     zsh-users/zsh-syntax-highlighting
     zsh-users/zsh-autosuggestions
+    zsh-users/zsh-history-substring-search
+    MichaelAquilina/zsh-you-should-use
+    MichaelAquilina/zsh-auto-notify
+    hlissner/zsh-autopair
 )
 
 plugins=(git docker npm yarn auto-notify fzf fzf-tab)
