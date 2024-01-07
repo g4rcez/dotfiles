@@ -2,8 +2,9 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 --
-vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = "set nopaste" })
+local api = vim.api
 
+vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = "set nopaste" })
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "json", "jsonc", "markdown" },
     callback = function()
@@ -81,7 +82,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- highlight yanked region, see `:h lua-highlight`
-local yank_group = api.nvim_create_augroup("highlight_yank", { clear = true })
+local yank_group = vim.api.nvim_create_augroup("highlight_yank", { clear = true })
 api.nvim_create_autocmd({ "TextYankPost" }, {
   pattern = "*",
   group = yank_group,

@@ -32,6 +32,7 @@ fi
 
 local -a PATH_EXPORTS=(
  /usr/local/bin
+ $HOME/.cargo/env
  $HOME/.local/bin
  $HOME/.local/share
  $HOME/.local/share/bin

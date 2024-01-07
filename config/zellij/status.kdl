@@ -1,44 +1,22 @@
 layout {
-  pane split_direction="vertical" {
-    pane
-  }
-
-  pane size=1 borderless=true {
-    plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
-      border_enabled "false"
-      border_char "-"
-      border_position "bottom"
-
-      format_left  "#[fg=#aaaaaa,bg=#121212]{mode} [{session}] - {tabs}"
-      format_right "#[fg=#aaaaaa,bg=#121212]{datetime}"
-      format_space "#[fg=#aaaaaa,bg=#121212]"
-
-      hide_frame_for_single_pane "false"
-
-      tab_normal   "{index}:{name}  "
-      tab_active   "#[bg=#121212,fg=10,bold,italic] {name} "
-
-
-      datetime          " {format} "
-      datetime_format   "%H:%M %d-%b-%y"
-
-      datetime_timezone "America/Sao_Paulo"
-
-      // modes
-      mode_enter_search "#[bg=blue] {name} "
-      mode_locked "#[bg=red] {name} "
-      mode_move "#[bg=blue] {name} "
-      mode_normal "#[bg=blue] {name} "
-      mode_pane "#[bg=magenta] {name} "
-      mode_prompt "#[bg=blue] {name} "
-      mode_rename_pane "#[bg=#166634] {name} "
-      mode_rename_tab "#[bg=#166634] {name} "
-      mode_resize "#[bg=#166534] {name} "
-      mode_scroll "#[bg=blue] {name} "
-      mode_search "#[bg=blue] {name} "
-      mode_session "#[bg=blue] {name} "
-      mode_tab "#[bg=#166534] {name} "
-      mode_tmux "#[bg=#ffc387] {name} "
+    pane split_direction="vertical" {
+        pane
     }
-  }
+
+    pane size=1 borderless=true {
+        plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+            format_left  "{mode} | #[fg=#eee,bg=#17171A][{session}]  {tabs}"
+            format_right "#[fg=#eee,bg=#17171A]{datetime}"
+            format_space "#[bg=#17171A]"
+
+            hide_frame_for_single_pane "true"
+
+            tab_normal   "{name}  "
+            tab_active   "#[fg=#fff,bg=#1e1b4b,bold,italic]{name}* "
+
+            datetime          " {format} "
+            datetime_format   "%H:%M %d-%b-%y"
+            datetime_timezone "America/Sao_Paulo"
+        }
+    }
 }

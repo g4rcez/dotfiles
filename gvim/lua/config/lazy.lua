@@ -17,8 +17,8 @@ require("lazy").setup({
             "LazyVim/LazyVim",
             import = "lazyvim.plugins",
             opts = {
-                colorscheme = "catppuccin-macchiato",
                 transparent = true,
+                colorscheme = "carbonfox",
             },
         },
         { "rcarriga/nvim-notify", enabled = false },

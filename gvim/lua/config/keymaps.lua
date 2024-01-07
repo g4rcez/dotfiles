@@ -17,20 +17,21 @@ local map = {
     normal = function(lhs, rhs, opts)
         configureKey("n", lhs, rhs, opts)
     end,
+    insert = function(lhs, rhs, opts)
+        configureKey("i", lhs, rhs, opts)
+    end,
+    cmd = function(lhs, rhs, opts)
+        configureKey("c", lhs, rhs, opts)
+    end,
 }
-
-
 
 ----------------------------------------------------------------------------------------------------
 -- Utils
 ----------------------------------------------------------------------------------------------------
 -- Go to beginning of command in command-line mode
-keymap.set("c", "<C-A>", "<HOME>", {desc = "Go to HOME in command"})
-
-
-----------------------------------------------------------------------------------------------------
--- Utils
-----------------------------------------------------------------------------------------------------
+map.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
+map.insert("<C-A>", "<HOME>")
+map.insert("<C-E>", "<END>")
 map.normal("+", "<C-a>", { desc = "Increment" })
 map.normal("-", "<C-x>", { desc = "Decrement" })
 map.normal("0", "^", { desc = "Goto first non-whitespace" })
@@ -78,8 +79,6 @@ map.normal("<leader>rbf", function()
     refactoring.refactor("Extract Block To File")
 end)
 -- Extract block supports only normal mode
-vim.keymap.set(
-	{"n", "x"},
-	"<leader>rr",
-	function() require('telescope').extensions.refactoring.refactors() end
-)
+vim.keymap.set({ "n", "x" }, "<leader>rr", function()
+    require("telescope").extensions.refactoring.refactors()
+end)

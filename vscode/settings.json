@@ -1,0 +1,91 @@
+{
+  "files.autoSave": "afterDelay",
+  "editor.fontSize": 16,
+  "editor.fontFamily": "JetBrainsMonoNL Nerd Font",
+  "workbench.sideBar.location": "right",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Carbonfox",
+  "editor.scrollBeyondLastLine": false,
+  "editor.defaultColorDecorators": true,
+  "editor.definitionLinkOpensInPeek": true,
+  "editor.linkedEditing": true,
+  "editor.renderLineHighlightOnlyWhenFocus": true,
+  "editor.smoothScrolling": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.stickyTabStops": true,
+  "cSpell.language": "en,pt,pt_BR",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "material-icon-theme.files.associations": {
+    "*.view.tsx": "razor",
+    "*.client.tsx": "robots",
+    "*.api.ts": "http",
+    "*.mocks.ts": "mocha",
+    "*.mocks.tsx": "mocha",
+    "links.ts": "http",
+    "types.ts": "typescript-def",
+    "*.types.ts": "typescript-def",
+    "*.step.tsx": "sublime"
+  },
+  "material-icon-theme.folders.associations": {
+    "notification": "messages",
+    "http-client": "functions",
+    "dom": "views"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "nxConsole.showNodeVersionOnStartup": false,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.accessibilitySupport": "off",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // Remove left-side icons
+  "workbench.activityBar.location": "side",
+  // Remove bottom status bar
+  "workbench.statusBar.visible": true,
+  // Remove position indicator in the editor's scrollbar
+  "editor.hideCursorInOverviewRuler": true,
+  // Remove minimap
+  "editor.minimap.enabled": true,
+  // Remove the line number gutter
+  "editor.glyphMargin": true,
+  // Remove code-block folding icon
+  "editor.folding": false,
+  // Move tabs to be in a single line with window controls
+  "window.titleBarStyle": "native",
+  "apc.electron": {
+    "titleBarStyle": "hiddenInset",
+    "trafficLightPosition": {
+      "x": 11,
+      "y": 10
+    }
+  },
+  "apc.header": { "height": 28 },
+  // Remove unnecessary controls from primary bar and tabs list
+  "apc.stylesheet": {
+    ".title-label > h2": "display: none", // Remove primary side bar title
+    ".title-actions": "display: none", // Remove primary side bar action icons
+    ".editor-actions": "display: none", // Remove editor action icons
+    ".nosidebar .inline-tabs-placeholder": "width: 75px" // Align tabs to not overlap window controls when primary bar is hidden
+  },
+  "workbench.settings.useSplitJSON": true,
+  "superfile.json": null
+}

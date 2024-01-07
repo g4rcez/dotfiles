@@ -63,6 +63,11 @@ keybinds clear-defaults=true {
     bind "Alt s" { NextSwapLayout ; SwitchToMode "Normal"; }
     bind "Alt T" { SwitchToMode "Tab"; }
     bind "Alt t" { SwitchToMode "Tab"; NewTab ; SwitchToMode "Normal"; }
+    bind "Alt W" { ToggleFloatingPanes; }
+    bind "Ctrl 1" { GoToTab 1; }
+    bind "Ctrl 2" { GoToTab 2; }
+    bind "Ctrl 3" { GoToTab 3; }
+    bind "Ctrl 4" { GoToTab 4; }
 
     bind "Alt w" {
       LaunchOrFocusPlugin "zellij:session-manager" {
@@ -81,26 +86,31 @@ keybinds clear-defaults=true {
 
     bind "Alt F" {
       LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij_forgot.wasm" {
-        "Dump screen" "Alt D"
-        "Fullscreen pane" "Alt Up"
-        "Go to next tab" "Alt ]"
-        "Go to previous tab" "Alt ["
-        "Move pane down" "Alt J"
-        "Move pane left" "Alt H"
-        "Move pane right" "Alt L"
-        "Move pane up" "Alt K"
-        "New pane" "Alt n"
-        "New tab" "Alt t"
-        "Open session in vim" "Alt V"
-        "Pane down" "Alt -"
-        "Pane mode" "Alt P"
-        "Pane right" "Alt \\"
-        "Rename tab" "Alt T"
-        "Resize mode" "Alt r"
-        "Session mode" "Alt o"
-        "Switch layout" "Alt s"
-        "Switch to scroll" "Alt q"
-        "Tab mode" "Alt T"
+        "NewPane Right" "Alt \\"
+        "NewPane Down" "Alt -"
+        "MovePane Left" "Alt H"
+        "MovePane Down" "Alt J"
+        "MovePane Up" "Alt K"
+        "MovePane Right" "Alt L"
+        "DumpScreen" "Alt D"
+        "GoToNextTab" "Alt ]"
+        "GoToPreviousTab" "Alt ["
+        "ToggleFocusFullscreen" "Alt Up"
+        "EditScrollback" "Alt V"
+        "NewPane & SwitchToMode & Normal" "Alt n"
+        "SwitchToMode & RenameTab" "Alt T"
+        "SwitchToMode & Session" "Alt o"
+        "SwitchToMode & Pane" "Alt P"
+        "SwitchToMode & Scroll" "Alt q"
+        "SwitchToMode & Resize" "Alt r"
+        "NextSwapLayout & SwitchToMode & Normal" "Alt s"
+        "SwitchToMode Tab" "Alt T"
+        "SwitchToMode Tab & NewTab & SwitchToMode Normal" "Alt t"
+        "ToggleFloatingPanes" "Alt W"
+        "GoToTab 1" "Ctrl 1"
+        "GoToTab 2" "Ctrl 2"
+        "GoToTab 3" "Ctrl 3"
+        "GoToTab 4" "Ctrl 4"
         floating true
       }
     }

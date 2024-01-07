@@ -145,19 +145,21 @@ function zkill() {
   zellij delete-all-sessions
 }
 
+ZLAYOUT="$HOME/dotfiles/config/zellij/status.kdl "
+
 function zj() {
   ZJ_SESSIONS=$(zellij list-sessions)
   NO_SESSIONS=$(echo "${ZJ_SESSIONS}" | wc -l)
   if [ "${NO_SESSIONS}" -ge 2 ]; then
-    zellij attach "$(echo "${ZJ_SESSIONS}" | fzf)"
+    zellij --layout "$ZLAYOUT" attach "$(echo "${ZJ_SESSIONS}" | fzf)"
   else
-    zellij attach -c "$ZELLIJ_DEFAULT_SESSION"
+    zellij --layout "$ZLAYOUT" attach -c "$ZELLIJ_DEFAULT_SESSION"
   fi
 }
 
 function zinit() {
   local SESSION_NAME="${1-localhost}"
-  zellij --session "$SESSION_NAME" attach -c "$SESSION_NAME"
+  zellij --layout "$ZLAYOUT" --session "$SESSION_NAME" attach -c "$SESSION_NAME"
 }
 
 ##################################### Functions #####################################
