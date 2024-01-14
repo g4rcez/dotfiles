@@ -3,8 +3,7 @@
   "editor.fontSize": 16,
   "editor.fontFamily": "JetBrainsMonoNL Nerd Font",
   "workbench.sideBar.location": "right",
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.colorTheme": "Carbonfox",
+  "workbench.iconTheme": "vscode-icons",
   "editor.scrollBeyondLastLine": false,
   "editor.defaultColorDecorators": true,
   "editor.definitionLinkOpensInPeek": true,
@@ -14,12 +13,8 @@
   "editor.stickyScroll.enabled": true,
   "editor.stickyTabStops": true,
   "cSpell.language": "en,pt,pt_BR",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
-  },
+  "files.associations": { "*.css": "tailwindcss" },
+  "extensions.experimental.affinity": { "asvetliakov.vscode-neovim": 1 },
   "material-icon-theme.files.associations": {
     "*.view.tsx": "razor",
     "*.client.tsx": "robots",
@@ -36,56 +31,41 @@
     "http-client": "functions",
     "dom": "views"
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "tailwindCSS.emmetCompletions": true,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "nxConsole.showNodeVersionOnStartup": false,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "editor.accessibilitySupport": "off",
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
+  "apc.activityBar": { "hideSettings": false, "size": 52 },
+  "apc.statusBar": {
+    "position": "editor-bottom",
+    "height": 20,
+    "fontSize": 12
   },
-  // Remove left-side icons
-  "workbench.activityBar.location": "side",
-  // Remove bottom status bar
   "workbench.statusBar.visible": true,
-  // Remove position indicator in the editor's scrollbar
   "editor.hideCursorInOverviewRuler": true,
-  // Remove minimap
-  "editor.minimap.enabled": true,
-  // Remove the line number gutter
-  "editor.glyphMargin": true,
-  // Remove code-block folding icon
+  "editor.glyphMargin": false,
   "editor.folding": false,
-  // Move tabs to be in a single line with window controls
   "window.titleBarStyle": "native",
   "apc.electron": {
     "titleBarStyle": "hiddenInset",
-    "trafficLightPosition": {
-      "x": 11,
-      "y": 10
-    }
+    "backgroundMaterial": "acrylic",
+    "backgroundColor": "transparent",
+    "vibrancy": "fullscreen-ui",
+    "transparent": true,
+    "frame": false,
+    "visualEffectState": "active"
   },
-  "apc.header": { "height": 28 },
-  // Remove unnecessary controls from primary bar and tabs list
-  "apc.stylesheet": {
-    ".title-label > h2": "display: none", // Remove primary side bar title
-    ".title-actions": "display: none", // Remove primary side bar action icons
-    ".editor-actions": "display: none", // Remove editor action icons
-    ".nosidebar .inline-tabs-placeholder": "width: 75px" // Align tabs to not overlap window controls when primary bar is hidden
-  },
-  "workbench.settings.useSplitJSON": true,
-  "superfile.json": null
+  "apc.header": { "height": 32 },
+  "workbench.colorTheme": "Kanagawa Wave",
+  "vsicons.presets.angular": true,
+  "vsicons.presets.jsOfficial": true,
+  "vsicons.presets.tsOfficial": true,
+  "vsicons.presets.jsonOfficial": true,
+  "vsicons.presets.nestjs": true
 }

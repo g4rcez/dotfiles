@@ -345,8 +345,8 @@ nmap <leader>mj <action>(AceDeclarationAction)
 let g:WhichKeyDesc_ace_jump = "<leader>mj Easy motion plugin"
 
 set multiple-cursors
-nmap <C-j> <Action>(EditorCloneCaretBelow)
-nmap <C-k> <Action>(EditorCloneCaretAbove)
+vnoremap <C-j> <Action>(EditorCloneCaretBelow)
+vnoremap <C-k> <Action>(EditorCloneCaretAbove)
 nmap <C-n> <plug>NextWholeOccurrence
 nmap <C-n> <plug>NextWholeOccurrence
 nmap g<C-n> <plug>NextOccurrence
@@ -373,6 +373,10 @@ let g:WhichKeyDesc_next_tab_tab = "<Tab> Next tab"
 
 nmap <leader>, <action>(EditorTabsGroup)
 let g:WhichKeyDesc_editor_tabs_group = "<leader>, Editor tabs"
+
+"" Telescope like for move in menu hover
+nmap <C-j> <Action>(EditorDown)
+nmap <C-k> <Action>(EditorUp)
 
 "" Split
 nmap <leader>\ <action>(SplitVertically)

@@ -3,6 +3,7 @@ name:
   .docker: 
   .emacs.d: 
   .gradle: 
+  .husky: 󰛢
   .idea: 
   .npmrc: 
   .pipelines: 󱁢
@@ -10,7 +11,9 @@ name:
   .yarn: 
   .yarnrc: 
   Dockerfile: 
+  Raise: 󰌓
   a.out: 
+  assets: 
   coverage: 
   dist: 󰷌
   docker: 
@@ -19,48 +22,54 @@ name:
   example: 
   examples: 
   git: 
+  gnome: 
   http: 󰖟
-  .husky: 󰛢
   i3: 
   idea: 
+  iterm2: 
   k8s: 󱃾
   kde: 
+  lua: 
   migrations: 󰥞
   mocks: 󰠥
   pg: 
+  setup: 󱁛
   src: 
   tailwind.config.js: 󱏿
   tailwind.config.ts: 󱏿
-  test: 󰤑
-  tests: 󰤑
+  test: 󰙨
+  tests: 󰙨
+  tools: 
   tsconfig.json: 󰛦
+  vscode: 󰘐
   yarnrc: 
+  zsh: 
 extension:
-  tailwind.config.js: 󱏿
-  tailwind.config.ts: 󱏿
+  .npmrc: 
+  colorscheme: 
+  config.js: 
+  config.ts: 
+  editorconfig: 
   go: 
   hs: 
-  rs: 🦀
-  js: 
-  ts: 󰛦
-  md: 󰽛
-  json: 󰘦
-  .npmrc: 
-  config.ts: 
-  config.js: 
-  editorconfig: 
-  colorscheme: 
   itermcolors: 
-  yml: 󰺥
+  js: 
+  json: 󰘦
+  md: 󰽛
+  rs: 🦀
+  tailwind.config.js: 󱏿
+  tailwind.config.ts: 󱏿
+  ts: 󰛦
   yaml: 󰺥
+  yml: 󰺥
 filetype:
+  device-block: 󰜫
+  device-char: 
   dir: 
+  executable: 
   file: 
   pipe: 📩
   socket: 󰆨
-  executable: 
+  special: 
   symlink-dir: 
   symlink-file: 
-  device-char: 
-  device-block: 󰜫
-  special: 

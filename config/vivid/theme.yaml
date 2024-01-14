@@ -111,6 +111,8 @@ programming:
       foreground: "E5D565"
     tailwindcss:
       foreground: "62BAF3"
+    lua:
+      foreground: "4141B9"
 
   tooling:
     foreground: green

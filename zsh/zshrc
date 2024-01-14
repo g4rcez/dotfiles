@@ -21,6 +21,10 @@ export YSU_MESSAGE_POSITION="after"
 export ZELLIJ_CONFIG_FILE="$DOTFILES/config/config.kdl"
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_TMUX_AUTOSTAR="true"
+ZSH_TMUX_FIXTERM="true"
+ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
+ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
@@ -29,6 +33,15 @@ if [ -x "$(command -v nvim)" ]; then
 else
   export EDITOR="vim"
 fi
+
+##############################################################################################################
+## zsh-snap + plugins
+SNAP_DIR="$ZSH/custom/plugins"
+[[ -r $SNAP_DIR ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
+source $SNAP_DIR
+zstyle ':znap:*' repos-dir $SNAP_DIR
 
 local -a PATH_EXPORTS=(
  /usr/local/bin
@@ -101,16 +114,15 @@ done
 local -a SOURCE=(
   "$HOME/.fzf.zsh"
   "$ZSH/oh-my-zsh.sh"
+  "$DOTFILES/zsh/fzf.sh"
+  "$HOME/.fzf/shell/key-bindings.zsh"
   "$HOME/.ghcup/env"
   "$HOME/.bun/_bun"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
-  "$HOME/.fzf/shell/key-bindings.zsh"
   "$DOTFILES/zsh/git.sh"
-  "$DOTFILES/bin/fzf-git"
   "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/zstyle.sh"
-  "$DOTFILES/zsh/fzf.sh"
 )
 
 for config in $SOURCE; do
@@ -122,12 +134,19 @@ done
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 eval "$(atuin init zsh)"
+eval "$(wezterm shell-completion --shell zsh)"
 bindkey '^r' _atuin_search_widget
 
 if [[ -z "$ZELLIJ" ]]; then
     if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
         zinit "$ZELLIJ_DEFAULT_SESSION"
-    else
-        echo;
     fi
 fi
+
+# pnpm
+export PNPM_HOME="/Users/allangarcez/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

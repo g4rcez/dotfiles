@@ -1,4 +1,5 @@
-auto_layout false
+auto_layout true
+mouse_mode true
 copy_on_select true
 default_layout "default"
 mirror_session false
@@ -164,6 +165,11 @@ keybinds clear-defaults=true {
     bind "j" "Down" { MovePane "Down"; }
     bind "k" "Up" { MovePane "Up"; }
     bind "l" "Right" { MovePane "Right"; }
+  }
+
+  renametab {
+    bind "Esc" { SwitchToMode "Normal"; }
+    bind "Enter" { SwitchToMode "Normal"; }
   }
 
   tab clear-defaults=true {

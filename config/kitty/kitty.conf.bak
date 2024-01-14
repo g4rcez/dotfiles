@@ -71,12 +71,11 @@ close_on_child_death no
 clipboard_control write-clipboard write-primary
 term xterm-kitty
 map alt+r load_config_file
-map ctrl+shift+r kitten hints --type path --program -
 
 # Includes
 include open-actions.conf
 
 # BEGIN_KITTY_THEME
-# One Dark
+# Brogrammer
 include current-theme.conf
 # END_KITTY_THEME
