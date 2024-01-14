@@ -1,10 +1,9 @@
 local M = {
     "ChristianChiarulli/nvcode-color-schemes.vim",
+    "ChristianChiarulli/onedark.nvim",
     "EdenEast/nightfox.nvim",
     "LunarVim/primer.nvim",
     "craftzdog/solarized-osaka.nvim",
-    "dracula/vim",
-    "navarasu/onedark.nvim",
     "rebelot/kanagawa.nvim",
     "rmehri01/onenord.nvim",
     "sainnhe/edge",

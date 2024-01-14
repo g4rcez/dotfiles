@@ -45,7 +45,7 @@ if [ -x "$(command -v nvim)" ]; then
 fi
 
 function zshrc() {
-  vim "$HOME/dotfiles/zsh/zshrc"
+  nvim "$HOME/dotfiles/zsh/zshrc"
 }
 
 function fvim() {
@@ -224,6 +224,7 @@ export ATUIN_NOBIND="true"
 ## update-all
 
 function updateAll() {
-  brew upgrade
-  fzf-update
+  znap pull;
+  brew upgrade;
+  fzf-update;
 }

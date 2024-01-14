@@ -19,12 +19,15 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export VOLTA_HOME="$HOME/.volta"
 export YSU_MESSAGE_POSITION="after"
 export ZELLIJ_CONFIG_FILE="$DOTFILES/config/config.kdl"
-export ZSH="$HOME/.oh-my-zsh"
+export PLUGINS_DIR="$HOME/.zsh/plugins"
+export SNAP_DIR="$PLUGINS_DIR/znap"
+export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_TMUX_AUTOSTAR="true"
 ZSH_TMUX_FIXTERM="true"
 ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
 ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
@@ -33,15 +36,6 @@ if [ -x "$(command -v nvim)" ]; then
 else
   export EDITOR="vim"
 fi
-
-##############################################################################################################
-## zsh-snap + plugins
-SNAP_DIR="$ZSH/custom/plugins"
-[[ -r $SNAP_DIR ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
-source $SNAP_DIR
-zstyle ':znap:*' repos-dir $SNAP_DIR
 
 local -a PATH_EXPORTS=(
  /usr/local/bin
@@ -73,6 +67,45 @@ done
 export PATH="$PATH_RESULT"
 
 ##############################################################################################################
+## zsh-snap + plugins
+[[ -r "$SNAP_DIR/znap.zsh" ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git $SNAP_DIR
+source $SNAP_DIR/znap.zsh
+zstyle ':znap:*' repos-dir $PLUGINS_DIR
+zstyle ':znap:*:<glob pattern>' git-maintenance off
+
+local -a PLUGINS=(
+    MichaelAquilina/zsh-auto-notify
+    MichaelAquilina/zsh-you-should-use
+    ohmyzsh/ohmyzsh
+    wfxr/forgit
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-completions
+    zsh-users/zsh-history-substring-search
+    zsh-users/zsh-syntax-highlighting
+)
+
+znap fpath _kubectl 'kubectl completion  zsh'
+znap fpath _rustup  'rustup  completions zsh'
+znap fpath _cargo   'rustup  completions zsh cargo'
+znap fpath _wezterm 'wezterm shell-completion --shell zsh'
+znap fpath _zellij 'zellij setup --generate-completion zsh'
+znap fpath _pnpm 'source $HOME/.config/tabtab/zsh/__tabtab.zsh'
+
+for plugin in $PLUGINS; do
+  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+    znap source $plugin || echo "failed -> $plugin"
+  else
+    znap clone $plugin
+  fi
+done
+
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode}
+znap eval starship 'starship init zsh --print-full-init'
+znap prompt
+
+##############################################################################################################
 ## variable config
 CASE_SENSITIVE="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -86,34 +119,8 @@ ZELLIJ_DEFAULT_SESSION="localhost"
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 
-local -a PLUGINS=(
-    wfxr/forgit
-    zsh-users/zsh-completions
-    zsh-users/zsh-syntax-highlighting
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-history-substring-search
-    MichaelAquilina/zsh-you-should-use
-    MichaelAquilina/zsh-auto-notify
-    hlissner/zsh-autopair
-)
-
-plugins=(git docker npm yarn auto-notify fzf fzf-tab)
-
-for plugin in $PLUGINS; do
-  ALIAS_PLUGIN="$(echo -n $plugin | cut -d '/' -f2)"
-  if [[ "$ALIAS_PLUGIN" != "zsh-auto-notify" ]]; then
-    plugins+=("$ALIAS_PLUGIN")
-  fi
-  if [[ -d "$HOME/.oh-my-zsh/custom/plugins/$ALIAS_PLUGIN" ]]; then
-  else
-    echo "Downloading $plugin - $ALIAS_PLUGIN"
-    git clone "https://github.com/$plugin" $HOME/.oh-my-zsh/custom/plugins/$ALIAS_PLUGIN;
-  fi
-done
-
 local -a SOURCE=(
   "$HOME/.fzf.zsh"
-  "$ZSH/oh-my-zsh.sh"
   "$DOTFILES/zsh/fzf.sh"
   "$HOME/.fzf/shell/key-bindings.zsh"
   "$HOME/.ghcup/env"
@@ -131,22 +138,13 @@ for config in $SOURCE; do
     fi
 done
 
+
 eval "$(zoxide init zsh)"
-eval "$(starship init zsh)"
 eval "$(atuin init zsh)"
-eval "$(wezterm shell-completion --shell zsh)"
 bindkey '^r' _atuin_search_widget
 
 if [[ -z "$ZELLIJ" ]]; then
-    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-        zinit "$ZELLIJ_DEFAULT_SESSION"
-    fi
+  if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+    zinit "$ZELLIJ_DEFAULT_SESSION"
+  fi
 fi
-
-# pnpm
-export PNPM_HOME="/Users/allangarcez/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
