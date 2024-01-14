@@ -17,7 +17,7 @@ matches:
       - name: mydate
         type: date
         params:
-          format: "%m/%d/%Y"
+          format: "%d/%m/%Y"
   - trigger: ":time"
     replace: "{{time}}"
     vars:
