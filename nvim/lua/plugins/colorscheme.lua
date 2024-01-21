@@ -3,15 +3,10 @@ local M = {
     "ChristianChiarulli/onedark.nvim",
     "EdenEast/nightfox.nvim",
     "LunarVim/primer.nvim",
-    "craftzdog/solarized-osaka.nvim",
     "rebelot/kanagawa.nvim",
-    "rmehri01/onenord.nvim",
-    "sainnhe/edge",
-    "sainnhe/sonokai",
     "tiagovla/tokyodark.nvim",
     { "LunarVim/darkplus.nvim", lazy = false, priority = 1000 },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-    { "rose-pine/neovim", name = "rose-pine" },
 }
 
 return M
