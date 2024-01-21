@@ -7,24 +7,26 @@ _fzf_comprun() {
   esac
 }
 
-export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix"
+export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -type d -printf '%P\n' 2>/dev/null"
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -printf '%P\n' 2>/dev/null"
+export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
+--ansi
 -i
 --border
 --info=inline
 --layout=reverse
 --height 95%
---color=dark
 --preview '~/dotfiles/bin/lessfilter.sh {}'
 --preview-window right,75%
 --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --bind 'ctrl-/:toggle-preview'
---color fg:#D8DEE9,bg:#1a1e24,hl:#A3BE8C,fg+:#D8DEE9,bg+:#3a455b,hl+:#A3BE8C
---color pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#232428,prompt:#81A1C1,marker:#EBCB8B
+--color=dark
+--color=fg:-1,bg:-1,hl:#f472b6,fg+:#eeeeee,bg+:#111827,hl+:#4f46e5
+--color=info:#98c379,prompt:#3b82f6,pointer:#ef4444,marker:#f59e0b,spinner:#0ea5e9,header:#0ea5e9
 "
 
 export FZF_CTRL_R_OPTS="
@@ -96,9 +98,6 @@ bindkey "^[[Z" expand-or-complete
 export FZF_COMPLETION_TRIGGER=''
 bindkey '^ ' fzf-completion
 bindkey '^I' $fzf_default_completion
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --ansi"
-FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -printf '%P\n' 2>/dev/null"
-FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -type d -printf '%P\n' 2>/dev/null"
 
 _fzf_compgen_path() {
     bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null

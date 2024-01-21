@@ -34,7 +34,7 @@
     rebase = true
 
 [alias]
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   s = status -s
   shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
   alias = config --get-regexp alias
@@ -146,3 +146,4 @@
 	colorMoved = zebra
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
+

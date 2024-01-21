@@ -12,7 +12,7 @@ mkdir -p $HOME/tools $HOME/.tmp;
 
 function checkcommand () {
   if [[ -f "$(command -v $1)" ]]; then
-    echo "fzf installed"
+    echo "[$1] already installed..."
   else
     $2
   fi
@@ -57,12 +57,13 @@ ln -sf $HOME/dotfiles/config/starship.toml $HOME/.config/starship.toml
 ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
 ln -sf $HOME/dotfiles/dygma $HOME/Raise
+ln -sf $HOME/dotfiles/config/tmux $HOME/.config/tmux
 
 ########################################################################################################################
 ##### gitconfig
 ln -sf $HOME/dotfiles/git/gitconfig $HOME/.gitconfig
 ln -sf $HOME/dotfiles/git/global_gitignore $HOME/.gitignore
-git config --global core.excludesFile "$HOME/.gitignore"
+git config --global core.excludesFile "~/.gitignore"
 git config --global init.defaultBranch main
 
 #########################################################################################################################

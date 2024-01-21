@@ -1,0 +1,11 @@
+layout {
+    floating_panes {
+        pane {
+            command "forgit"
+            x 1
+            y "10%"
+            width "60%"
+            height "50%"
+        }
+    }
+}

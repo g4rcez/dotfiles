@@ -121,6 +121,5 @@ alias ghc='gh pr checkout'
 alias ghl='gh pr list'
 alias prs='gh pr list'
 alias pullrequest='gh pr create'
-alias pullrequest='gh pr create'
 alias gdash="gh dash"
 

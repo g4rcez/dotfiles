@@ -62,10 +62,11 @@
     "visualEffectState": "active"
   },
   "apc.header": { "height": 32 },
-  "workbench.colorTheme": "Kanagawa Wave",
+  "workbench.colorTheme": "Dark Brabo",
   "vsicons.presets.angular": true,
   "vsicons.presets.jsOfficial": true,
   "vsicons.presets.tsOfficial": true,
   "vsicons.presets.jsonOfficial": true,
-  "vsicons.presets.nestjs": true
+  "vsicons.presets.nestjs": true,
+  "editor.minimap.enabled": false
 }

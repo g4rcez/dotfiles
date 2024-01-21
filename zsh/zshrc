@@ -1,33 +1,46 @@
 ##############################################################################################################
 ## exports
+export LC_COLLATE=C
+export MANWIDTH=9999
 export ARCHFLAGS="-arch x86_64"
+export BROWSER="google-chrome"
+export GPG_TTY="$(tty)"
+export LANG="en_US.UTF-8"
+export MANPATH="/usr/local/man:$MANPATH"
+export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
+export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
+export DOTFILES="$HOME/dotfiles"
+export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
+export PLUGINS_DIR="$HOME/.zsh/plugins"
+export SNAP_DIR="$PLUGINS_DIR/znap"
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
 export AUTO_NOTIFY_EXPIRE_TIME=5000
 export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc")
 export AUTO_NOTIFY_THRESHOLD=10000
 export AUTO_NOTIFY_TITLE="%command - Finished"
-export BROWSER="google-chrome"
 export BUN_INSTALL="$HOME/.bun"
-export DOTFILES="$HOME/dotfiles"
-export GPG_TTY="$(tty)"
-export LANG="en_US.UTF-8"
-export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
-export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
-export MANPATH="/usr/local/man:$MANPATH"
-export MANWIDTH=999
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export VOLTA_HOME="$HOME/.volta"
 export YSU_MESSAGE_POSITION="after"
 export ZELLIJ_CONFIG_FILE="$DOTFILES/config/config.kdl"
-export PLUGINS_DIR="$HOME/.zsh/plugins"
-export SNAP_DIR="$PLUGINS_DIR/znap"
-export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_TMUX_AUTOSTAR="true"
-ZSH_TMUX_FIXTERM="true"
-ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
-ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
+export ZSH_TMUX_AUTOSTART="true"
+export ZSH_TMUX_FIXTERM="true"
+export ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
+export ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
+export TMUX_FZF_PREVIEW="1"
+export TMUX_FZF_OPTIONS="-p -w 80% -h 60% -m"
+export TMUX_FZF_WINDOW_FILTER='-Nwf"#{==:#{session_name},www}"'
+export ATUIN_NOBIND="true"
+CASE_SENSITIVE="false"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+ENABLE_CORRECTION="true"
+HIST_STAMPS="yyyy-mm-dd"
+HYPHEN_INSENSITIVE="true"
+ZELLIJ_AUTO_ATTACH=true
+ZELLIJ_AUTO_EXIT=false
+ZELLIJ_DEFAULT_SESSION="localhost"
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
@@ -37,6 +50,8 @@ else
   export EDITOR="vim"
 fi
 
+##############################################################################################################
+## sources
 local -a PATH_EXPORTS=(
  /usr/local/bin
  $HOME/.cargo/env
@@ -73,7 +88,7 @@ export PATH="$PATH_RESULT"
         https://github.com/marlonrichert/zsh-snap.git $SNAP_DIR
 source $SNAP_DIR/znap.zsh
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
-zstyle ':znap:*:<glob pattern>' git-maintenance off
+zstyle ':znap:*:*' git-maintenance off
 
 local -a PLUGINS=(
     MichaelAquilina/zsh-auto-notify
@@ -90,8 +105,8 @@ znap fpath _kubectl 'kubectl completion  zsh'
 znap fpath _rustup  'rustup  completions zsh'
 znap fpath _cargo   'rustup  completions zsh cargo'
 znap fpath _wezterm 'wezterm shell-completion --shell zsh'
-znap fpath _zellij 'zellij setup --generate-completion zsh'
-znap fpath _pnpm 'source $HOME/.config/tabtab/zsh/__tabtab.zsh'
+znap fpath _zellij  'zellij setup --generate-completion zsh'
+znap fpath _pnpm    'source $HOME/.config/tabtab/zsh/__tabtab.zsh'
 
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
@@ -101,21 +116,12 @@ for plugin in $PLUGINS; do
   fi
 done
 
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode,tmux}
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 
 ##############################################################################################################
-## variable config
-CASE_SENSITIVE="false"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-ENABLE_CORRECTION="true"
-HIST_STAMPS="yyyy-mm-dd"
-HYPHEN_INSENSITIVE="true"
-ZELLIJ_AUTO_ATTACH=true
-ZELLIJ_AUTO_EXIT=false
-ZELLIJ_DEFAULT_SESSION="localhost"
-
+## source files
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 
@@ -129,6 +135,7 @@ local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
   "$DOTFILES/zsh/git.sh"
   "$DOTFILES/zsh/alias.sh"
+  "$DOTFILES/zsh/zellij.sh"
   "$DOTFILES/zsh/zstyle.sh"
 )
 
@@ -138,13 +145,15 @@ for config in $SOURCE; do
     fi
 done
 
-
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 bindkey '^r' _atuin_search_widget
 
-if [[ -z "$ZELLIJ" ]]; then
-  if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-    zinit "$ZELLIJ_DEFAULT_SESSION"
-  fi
-fi
+autoload -U add-zsh-hook
+function _postcd() {
+  dotenv ".env"
+  dotenv ".env.local"
+  dotenv "./src/.env"
+}
+add-zsh-hook chpwd _postcd && _postcd
+
