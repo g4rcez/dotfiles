@@ -18,14 +18,12 @@ function M.config()
       expose_as_code_action = "all",
       -- tsserver_plugins = {},
       tsserver_max_memory = "auto",
-      -- complete_function_calls = true,
+      complete_function_calls = true,
       include_completions_with_insert_text = true,
       -- code_lens = "all",
       -- disable_member_code_lens = true,
-
       -- described below
       -- tsserver_format_options = {},
-
       tsserver_file_preferences = {
         includeInlayParameterNameHints = "all", -- "none" | "literals" | "all";
         includeInlayParameterNameHintsWhenArgumentMatchesName = true,

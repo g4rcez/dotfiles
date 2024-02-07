@@ -7,14 +7,12 @@ local M = {
 }
 
 M.servers = {
-    "astro",
     "bashls",
     "cssls",
     "html",
     "jsonls",
     "lua_ls",
     "marksman",
-    "pyright",
     "tailwindcss",
     "tsserver",
     "yamlls",

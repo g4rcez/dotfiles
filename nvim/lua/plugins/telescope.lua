@@ -5,7 +5,7 @@ local telescope = require("telescope")
 local fb_actions = telescope.extensions.file_browser.actions
 local l = telescope.load_extension
 
-local W = 130
+local W = 200
 
 local insertMapping = {
     ["<C-f>"] = actions.results_scrolling_down,
@@ -291,6 +291,7 @@ return {
             l("harpoon")
             l("media_files")
             l("refactoring")
+            l("noice")
         end,
     },
 }
