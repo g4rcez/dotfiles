@@ -1,4 +1,4 @@
-"" Map IDE actions to IdeaVim -- https://jb.gg/abva4t -- https://jb.gg/share-ideavimrc
+" Map IDE actions to IdeaVim -- https://jb.gg/abva4t -- https://jb.gg/share-ideavimrc
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" vim scripts
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -272,6 +272,7 @@ let g:WhichKeyDesc_expand_region = "zx Expand region"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap gi <action>(FileStructurePopup)
 let g:WhichKeyDesc_file_structure_popup = "gi File Structure Popup"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" debug - prefix d(debug)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -294,6 +295,12 @@ let g:WhichKeyDesc_optimize_imports = "<leader>co Optimize Imports"
 nmap <leader>cr <action>(RenameElement)
 let g:WhichKeyDesc_rename_element = "<leader>cr Rename Element"
 
+""" asc sort
+vnoremap <leader>cs :'<,'>sort<cr>
+let g:WhichKeyDesc_sort_asc = "<leader>cs Sort Asc"
+""" desc sort
+vnoremap <leader>cr :'<,'>!tail -r<cr>
+let g:WhichKeyDesc_sort_reverse = "<leader>cr Sort Desc"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" file/find tools - prefix file(file/find)

@@ -35,4 +35,5 @@ nvim/lazy-lock.json
 nvim/README.md
 nvim/LICENSE
 /zsh/*.zwc
+/bin/*.zwc
 

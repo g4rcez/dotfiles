@@ -110,3 +110,12 @@ matches:
             - "Curabitur est gravida et libero vitae dictum."
             - "Quisque ut dolor gravida, placerat libero vel, euismod."
             - "Ullamco laboris nisi ut aliquid ex ea commodi consequat."
+  - trigger: ":uuid"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          shell: bash
+          cmd: "/Users/allangarcez/.volta/bin/node -e \"console.log(require('crypto').randomUUID())\""
+

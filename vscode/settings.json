@@ -61,12 +61,21 @@
     "frame": false,
     "visualEffectState": "active"
   },
-  "apc.header": { "height": 32 },
-  "workbench.colorTheme": "Dark Brabo",
+  "apc.header": { "height": 28 },
+  "workbench.colorTheme": "Carbonfox",
   "vsicons.presets.angular": true,
   "vsicons.presets.jsOfficial": true,
   "vsicons.presets.tsOfficial": true,
   "vsicons.presets.jsonOfficial": true,
   "vsicons.presets.nestjs": true,
-  "editor.minimap.enabled": false
+  "editor.minimap.enabled": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "explorer.compactFolders": false,
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "editor.lineNumbers": "relative",
+  "search.showLineNumbers": true,
+  "outline.showNumbers": true,
+  "vscode-neovim.revealCursorScrollLine": true,
+  "vscode-neovim.normalSelectionDebounceTime": 100
 }
