@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILE="/tmp/fzf-gitcli"
+gh pr list --json 'body,number,id,title' > $FILE
+
+if [[ "$(jq length $FILE)" == 0 ]]; then
+  echo "No pull requests available"
+  exit 0
+fi
+
+jq -c '.[] | .title' "$FILE"\
+  | fzf --ansi --info inline\
+  --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' /tmp/fzf-gitcli | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
+  --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' /tmp/fzf-gitcli | xargs -n 1 gh pr checkout)"

@@ -190,7 +190,7 @@ function fs() {
 function dotenv() {
   if [[ -f "$1" ]];then
     set -o allexport; source "$1"; set +o allexport
-    echo ".env loaded: $1"
+    # echo ".env loaded: $1"
   fi
 }
 

@@ -15,19 +15,38 @@ export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --heig
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --ansi
--i
---border
---info=inline
---layout=reverse
---height 95%
---preview '~/dotfiles/bin/lessfilter.sh {}'
---preview-window right,75%
---bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --bind 'ctrl-/:toggle-preview'
+--bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
+--border
 --color=dark
 --color=fg:-1,bg:-1,hl:#f472b6,fg+:#eeeeee,bg+:#111827,hl+:#4f46e5
 --color=info:#98c379,prompt:#3b82f6,pointer:#ef4444,marker:#f59e0b,spinner:#0ea5e9,header:#0ea5e9
+--height 95%
+--info=inline
+--layout=reverse
+--preview '~/dotfiles/bin/lessfilter.sh {}'
+--preview-window right,75%
+-i
 "
+
+_fzf_git_fzf() {
+  fzf-tmux \
+    --ansi \
+    --bind 'ctrl-/:toggle-preview' \
+    --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)' \
+    --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' \
+    --color='fg:-1,bg:-1,hl:#f472b6,fg+:#eeeeee,bg+:#111827,hl+:#4f46e5' \
+    --color='info:#98c379,prompt:#3b82f6,pointer:#ef4444,marker:#f59e0b,spinner:#0ea5e9,header:#0ea5e9' \
+    --color=dark \
+    --height '95%' \
+    --info=inline \
+    --layout=reverse --multi --height=60% --min-height=30 \
+    --preview '~/dotfiles/bin/lessfilter.sh {}' \
+    --preview-window 'right,75%' \
+    -i \
+    -p80%,80% \
+    "$@"
+}
 
 export FZF_CTRL_R_OPTS="
 --preview 'echo {}' --preview-window up:3:hidden:wrap

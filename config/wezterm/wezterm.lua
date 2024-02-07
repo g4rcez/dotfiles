@@ -139,7 +139,7 @@ config.show_tabs_in_tab_bar = false
 config.use_fancy_tab_bar = true
 config.window_background_opacity = 0.95
 config.window_decorations = "RESIZE"
-config.cursor_blink_rate = 1000
+config.cursor_blink_rate = 500
 config.default_cursor_style = "BlinkingBlock"
 
 -- Font config
@@ -160,10 +160,17 @@ table.insert(config.hyperlink_rules, {
   format = "https://www.github.com/$1/$3",
 })
 table.insert(config.hyperlink_rules, { regex = "[^\\s]+\\.rs:\\d+:\\d+", format = "$EDITOR:$0" })
-
--- Actions
-wezterm.action({ CloseCurrentTab = { confirm = false } })
-
+config.mouse_bindings =
+  {
+    -- Ctrl-click will open the link under the mouse cursor
+    {
+      event = { Up = { streak = 1, button = "Left" } },
+      mods = "CTRL",
+      action = wezterm.action.OpenLinkAtMouseCursor,
+    },
+  },
+  -- Actions
+  wezterm.action({ CloseCurrentTab = { confirm = false } })
 
 -- https://wezfurlong.org/wezterm/faq.html#multiple-characters-being-renderedcombined-as-one-character
 config.harfbuzz_features = { "calt=0" }
@@ -176,45 +183,45 @@ config.window_padding = {
 }
 
 config.colors = {
-  foreground = '#eee',
-  background = '#171717',
-  cursor_bg = '#fff',
-  cursor_fg = 'black',
-  cursor_border = '#fff',
-  selection_fg = 'black',
-  selection_bg = '#fffacd',
-  scrollbar_thumb = '#222222',
-  split = '#444444',
+  foreground = "#eee",
+  background = "#171717",
+  cursor_bg = "#fff",
+  cursor_fg = "black",
+  cursor_border = "#fff",
+  selection_fg = "black",
+  selection_bg = "#fffacd",
+  scrollbar_thumb = "#222222",
+  split = "#444444",
   ansi = {
-    '#191919',
-    '#b91c1c',
-    '#34d399',
-    '#10b981',
-    '#1d4ed8',
-    '#a855f7',
-    '#0ea5e9',
-    '#eee',
+    "#191919",
+    "#b91c1c",
+    "#34d399",
+    "#10b981",
+    "#1d4ed8",
+    "#a855f7",
+    "#0ea5e9",
+    "#eee",
   },
   brights = {
-    'grey',
-    '#ef4444',
-    '#22c55e',
-    '#fbbf24',
-    '#2563eb',
-    '#d946ef',
-    '#22d3ee',
-    'white',
+    "grey",
+    "#ef4444",
+    "#22c55e",
+    "#fbbf24",
+    "#2563eb",
+    "#d946ef",
+    "#22d3ee",
+    "white",
   },
-  indexed = { [136] = '#af8700' },
-  compose_cursor = 'orange',
-  copy_mode_active_highlight_bg = { Color = '#000000' },
-  copy_mode_active_highlight_fg = { AnsiColor = 'Black' },
-  copy_mode_inactive_highlight_bg = { Color = '#52ad70' },
-  copy_mode_inactive_highlight_fg = { AnsiColor = 'White' },
-  quick_select_label_bg = { Color = 'peru' },
-  quick_select_label_fg = { Color = '#ffffff' },
-  quick_select_match_bg = { AnsiColor = 'Navy' },
-  quick_select_match_fg = { Color = '#ffffff' },
+  indexed = { [136] = "#af8700" },
+  compose_cursor = "orange",
+  copy_mode_active_highlight_bg = { Color = "#000000" },
+  copy_mode_active_highlight_fg = { AnsiColor = "Black" },
+  copy_mode_inactive_highlight_bg = { Color = "#52ad70" },
+  copy_mode_inactive_highlight_fg = { AnsiColor = "White" },
+  quick_select_label_bg = { Color = "peru" },
+  quick_select_label_fg = { Color = "#ffffff" },
+  quick_select_match_bg = { AnsiColor = "Navy" },
+  quick_select_match_fg = { Color = "#ffffff" },
 }
 
 return config

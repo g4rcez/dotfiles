@@ -101,7 +101,6 @@ alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
 alias gcm='git checkout $(git_main_branch)'
-alias gco='git checkout'
 alias gd='git diff'
 alias gitree='git log --oneline --graph --decorate --all'
 alias gitree='git-graph'
@@ -123,3 +122,9 @@ alias prs='gh pr list'
 alias pullrequest='gh pr create'
 alias gdash="gh dash"
 
+#############################################################################################################################
+## fzf git
+unalias gco
+function gco() {
+  _fzf_git_each_ref --no-multi | xargs git checkout
+}

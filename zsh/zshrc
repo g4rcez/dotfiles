@@ -1,7 +1,7 @@
 ##############################################################################################################
 ## exports
 export LC_COLLATE=C
-export MANWIDTH=9999
+export MANWIDTH=999
 export ARCHFLAGS="-arch x86_64"
 export BROWSER="google-chrome"
 export GPG_TTY="$(tty)"
@@ -33,14 +33,15 @@ export TMUX_FZF_PREVIEW="1"
 export TMUX_FZF_OPTIONS="-p -w 80% -h 60% -m"
 export TMUX_FZF_WINDOW_FILTER='-Nwf"#{==:#{session_name},www}"'
 export ATUIN_NOBIND="true"
-CASE_SENSITIVE="false"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-ENABLE_CORRECTION="true"
-HIST_STAMPS="yyyy-mm-dd"
-HYPHEN_INSENSITIVE="true"
-ZELLIJ_AUTO_ATTACH=true
-ZELLIJ_AUTO_EXIT=false
-ZELLIJ_DEFAULT_SESSION="localhost"
+export CASE_SENSITIVE="false"
+export DISABLE_UNTRACKED_FILES_DIRTY="true"
+export ENABLE_CORRECTION="true"
+export HIST_STAMPS="yyyy-mm-dd"
+export HYPHEN_INSENSITIVE="true"
+export ZELLIJ_AUTO_ATTACH=true
+export ZELLIJ_AUTO_EXIT=false
+export ZELLIJ_DEFAULT_SESSION="localhost"
+export KEYTIMEOUT=1000
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
@@ -53,22 +54,24 @@ fi
 ##############################################################################################################
 ## sources
 local -a PATH_EXPORTS=(
- /usr/local/bin
- $HOME/.cargo/env
- $HOME/.local/bin
- $HOME/.local/share
- $HOME/.local/share/bin
- $HOME/.yarn/bin
- $HOME/.dotnet
- $HOME/.dotnet/tools
- $HOME/tools
- $HOME/tools/google-cloud-sdk/bin
- $VOLTA_HOME/bin
- $HOME/.local/share/JetBrains/scripts
- $HOME/.local/share/JetBrains/Toolbox/scripts
- $HOME/.config/yarn/global/node_modules/.bin
- $HOME/dotfiles/bin
- $BUN_INSTALL/bin
+  /usr/local/bin
+  $HOME/.cargo/env
+  $HOME/.local/bin
+  $HOME/.local/share
+  $HOME/.local/share/bin
+  $HOME/.yarn/bin
+  $HOME/.dotnet
+  $HOME/.dotnet/tools
+  $HOME/tools
+  $HOME/tools/google-cloud-sdk/bin
+  $VOLTA_HOME/bin
+  $HOME/.local/share/JetBrains/scripts
+  $HOME/.local/share/JetBrains/Toolbox/scripts
+  $HOME/.config/yarn/global/node_modules/.bin
+  $HOME/dotfiles/bin
+  $BUN_INSTALL/bin
+  /usr/local/opt/libpq/bin
+  /opt/homebrew/opt/libpq/bin
 )
 
 PATH_RESULT="$PATH"
@@ -93,8 +96,8 @@ zstyle ':znap:*:*' git-maintenance off
 local -a PLUGINS=(
     MichaelAquilina/zsh-auto-notify
     MichaelAquilina/zsh-you-should-use
-    ohmyzsh/ohmyzsh
     wfxr/forgit
+    hlissner/zsh-autopair
     zsh-users/zsh-autosuggestions
     zsh-users/zsh-completions
     zsh-users/zsh-history-substring-search
@@ -104,8 +107,8 @@ local -a PLUGINS=(
 znap fpath _kubectl 'kubectl completion  zsh'
 znap fpath _rustup  'rustup  completions zsh'
 znap fpath _cargo   'rustup  completions zsh cargo'
+znap fpath _volta   'volta  completions zsh'
 znap fpath _wezterm 'wezterm shell-completion --shell zsh'
-znap fpath _zellij  'zellij setup --generate-completion zsh'
 znap fpath _pnpm    'source $HOME/.config/tabtab/zsh/__tabtab.zsh'
 
 for plugin in $PLUGINS; do
@@ -116,7 +119,8 @@ for plugin in $PLUGINS; do
   fi
 done
 
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode,tmux}
+znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode}
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 
@@ -127,6 +131,7 @@ zstyle ':omz:update' frequency 1
 
 local -a SOURCE=(
   "$HOME/.fzf.zsh"
+  "$DOTFILES/bin/fzf-git"
   "$DOTFILES/zsh/fzf.sh"
   "$HOME/.fzf/shell/key-bindings.zsh"
   "$HOME/.ghcup/env"
@@ -137,6 +142,7 @@ local -a SOURCE=(
   "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/zellij.sh"
   "$DOTFILES/zsh/zstyle.sh"
+  "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
 )
 
 for config in $SOURCE; do

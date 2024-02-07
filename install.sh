@@ -9,6 +9,7 @@
 ########################################################################################################################
 set -xe
 mkdir -p $HOME/tools $HOME/.tmp;
+DIR="$HOME/dotfiles"
 
 function checkcommand () {
   if [[ -f "$(command -v $1)" ]]; then
@@ -17,6 +18,7 @@ function checkcommand () {
     $2
   fi
 }
+
 ########################################################################################################################
 ##### fzf
 function installfzf() {
@@ -45,24 +47,24 @@ checkcommand "volta" installvolta
 pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 ########################################################################################################################
-##### lazyvim
-ln -sf $HOME/dotfiles/nvim/ $HOME/.config/nvim/
+##### nvim
+ln -sf $DIR/nvim/ $HOME/.config/nvim/
 
 ########################################################################################################################
 ##### symlinks
-# ln -sf $HOME/dotfiles/config/kitty $HOME/.config/kitty
-ln -sf $HOME/dotfiles/config/wezterm/wezterm.lua $HOME/.wezterm.lua
-ln -sf $HOME/dotfiles/config/fd/.fdignore $HOME/.fdignore
-ln -sf $HOME/dotfiles/config/starship.toml $HOME/.config/starship.toml
-ln -sf $HOME/dotfiles/idea/.ideavimrc $HOME/.ideavimrc
-ln -sf $HOME/dotfiles/zsh/zshrc $HOME/.zshrc
-ln -sf $HOME/dotfiles/dygma $HOME/Raise
-ln -sf $HOME/dotfiles/config/tmux $HOME/.config/tmux
+ln -sf $DIR/config/wezterm/wezterm.lua $HOME/.wezterm.lua
+ln -sf $DIR/config/fd/.fdignore $HOME/.fdignore
+ln -sf $DIR/config/starship.toml $HOME/.config/starship.toml
+ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
+ln -sf $DIR/zsh/zshrc $HOME/.zshrc
+ln -sf $DIR/config/tmux $HOME/.config/tmux
+ln -sf $DIR/espanso/match/base.yml "(espanso path config)/match/base.yml"
+ln -sf $DIR/dygma $HOME/Raise
 
 ########################################################################################################################
 ##### gitconfig
-ln -sf $HOME/dotfiles/git/gitconfig $HOME/.gitconfig
-ln -sf $HOME/dotfiles/git/global_gitignore $HOME/.gitignore
+ln -sf $DIR/git/gitconfig $HOME/.gitconfig
+ln -sf $DIR/git/global_gitignore $HOME/.gitignore
 git config --global core.excludesFile "~/.gitignore"
 git config --global init.defaultBranch main
 
