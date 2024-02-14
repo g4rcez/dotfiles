@@ -5,11 +5,11 @@ local telescope = require("telescope")
 local fb_actions = telescope.extensions.file_browser.actions
 local l = telescope.load_extension
 
-local W = 200
+local W = 150
 
 local insertMapping = {
     ["<C-f>"] = actions.results_scrolling_down,
-    ["<C-h>"] = actions.which_key, -- keys from pressing <C-h>
+    ["<C-h>"] = actions.which_key,
     ["<C-j>"] = actions.move_selection_next,
     ["<C-k>"] = actions.move_selection_previous,
     ["<CR>"] = actions.select_default,
@@ -35,10 +35,8 @@ local mappings = { n = { ["q"] = actions.close }, i = insertMapping }
 
 return {
     {
-        "nvim-telescope/telescope-frecency.nvim",
-        config = function()
-            l("frecency")
-        end,
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
     },
     {
         "prochri/telescope-all-recent.nvim",
@@ -49,13 +47,12 @@ return {
     {
         "nvim-telescope/telescope.nvim",
         dependencies = {
-            "nvim-telescope/telescope-file-browser.nvim",
-            "nvim-telescope/telescope-frecency.nvim",
             "FeiyouG/commander.nvim",
-            "MunifTanjim/nui.nvim",
-            "barrett-ruth/telescope-http.nvim",
-            "axkirillov/easypick.nvim",
             "LukasPietzschmann/telescope-tabs",
+            "MunifTanjim/nui.nvim",
+            "axkirillov/easypick.nvim",
+            "barrett-ruth/telescope-http.nvim",
+            "nvim-telescope/telescope-file-browser.nvim",
             { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable("make") == 1, build = "make" },
         },
         keys = {
@@ -84,7 +81,7 @@ return {
                         previewer = true,
                         initial_mode = "insert",
                         hijack_netrw = true,
-                        sorting_strategy = "ascending", -- display results top->bottom
+                        sorting_strategy = "ascending",
                         path_display = { "truncate" },
                         layout_strategy = "horizontal",
                         layout_config = {

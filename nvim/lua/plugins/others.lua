@@ -1,9 +1,16 @@
 return {
-    "LukasPietzschmann/telescope-tabs",
     "folke/twilight.nvim",
-    "nvim-telescope/telescope-file-browser.nvim",
+    "LukasPietzschmann/telescope-tabs",
     "rest-nvim/rest.nvim",
-    { "pwntester/octo.nvim", opts = {}, cmd = "Octo" },
+    {
+        "filipdutescu/renamer.nvim",
+        dependencies = { { "nvim-lua/plenary.nvim" } },
+    },
+
+    {
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+    },
     {
         "roobert/tailwindcss-colorizer-cmp.nvim",
         config = function()

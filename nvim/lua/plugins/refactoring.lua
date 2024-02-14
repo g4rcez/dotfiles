@@ -1,12 +1,14 @@
 local M = {
-    "ThePrimeagen/refactoring.nvim",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-treesitter/nvim-treesitter",
+    {
+        "ThePrimeagen/refactoring.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require("refactoring").setup()
+        end,
     },
-    config = function()
-        require("refactoring").setup()
-    end,
 }
 
 return M
