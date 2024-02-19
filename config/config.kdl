@@ -65,10 +65,8 @@ keybinds clear-defaults=true {
     bind "Alt T" { SwitchToMode "Tab"; }
     bind "Alt t" { SwitchToMode "Tab"; NewTab ; SwitchToMode "Normal"; }
     bind "Alt W" { ToggleFloatingPanes; }
-    bind "Ctrl 1" { GoToTab 1; }
-    bind "Ctrl 2" { GoToTab 2; }
-    bind "Ctrl 3" { GoToTab 3; }
-    bind "Ctrl 4" { GoToTab 4; }
+    bind "F12" { GoToNextTab; }
+    bind "F10" { GoToPreviousTab; }
 
     bind "Alt w" {
       LaunchOrFocusPlugin "zellij:session-manager" {

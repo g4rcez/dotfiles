@@ -1,9 +1,12 @@
+vim.opt.background = "dark"
+
 local M = {
     "EdenEast/nightfox.nvim",
     "rebelot/kanagawa.nvim",
     "tiagovla/tokyodark.nvim",
     "Mofiqul/vscode.nvim",
-    { "LazyVim/LazyVim", opts = { colorscheme = "vscode" } },
+    "nyoom-engineering/oxocarbon.nvim",
+    { "LazyVim/LazyVim", opts = { colorscheme = "oxocarbon" } },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 }
 

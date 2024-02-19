@@ -21,6 +21,7 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.lang.json" },
         { import = "lazyvim.plugins.extras.lang.markdown" },
         { import = "lazyvim.plugins.extras.lang.tailwind" },
+        { import = "lazyvim.plugins.extras.editor.symbols-outline" },
         { import = "lazyvim.plugins.extras.lang.typescript" },
         { import = "lazyvim.plugins.extras.test.core" },
         { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
@@ -28,7 +29,7 @@ require("lazy").setup({
         { import = "plugins" },
     },
     defaults = { lazy = true, version = "*" },
-    install = { colorscheme = { "tokyonight" } },
+    install = { colorscheme = { "tokyonight", "catppuccin" } },
     checker = { enabled = true, notify = false },
     performance = {
         rtp = {

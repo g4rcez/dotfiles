@@ -1,105 +1,267 @@
-local function merge(t1, t2)
-    for k, v in pairs(t2) do
-        if (type(v) == "table") and (type(t1[k] or false) == "table") then
-            merge(t1[k], t2[k])
-        else
-            t1[k] = v
-        end
-    end
-    return t1
-end
--- gray
-vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
--- blue
-vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", { bg = "NONE", fg = "#569CD6" })
-vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { link = "CmpIntemAbbrMatch" })
--- light blue
-vim.api.nvim_set_hl(0, "CmpItemKindVariable", { bg = "NONE", fg = "#9CDCFE" })
-vim.api.nvim_set_hl(0, "CmpItemKindInterface", { link = "CmpItemKindVariable" })
-vim.api.nvim_set_hl(0, "CmpItemKindText", { link = "CmpItemKindVariable" })
--- pink
-vim.api.nvim_set_hl(0, "CmpItemKindFunction", { bg = "NONE", fg = "#C586C0" })
-vim.api.nvim_set_hl(0, "CmpItemKindMethod", { link = "CmpItemKindFunction" })
--- front
-vim.api.nvim_set_hl(0, "CmpItemKindKeyword", { bg = "NONE", fg = "#D4D4D4" })
-vim.api.nvim_set_hl(0, "CmpItemKindProperty", { link = "CmpItemKindKeyword" })
-vim.api.nvim_set_hl(0, "CmpItemKindUnit", { link = "CmpItemKindKeyword" })
-return {
+local M = {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
     dependencies = {
-        "epwalsh/obsidian.nvim",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-calc",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
-        "onsails/lspkind.nvim",
-        "saadparwaiz1/cmp_luasnip",
+        { "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
+        { "hrsh7th/cmp-emoji", event = "InsertEnter" },
+        { "hrsh7th/cmp-buffer", event = "InsertEnter" },
+        { "hrsh7th/cmp-path", event = "InsertEnter" },
+        { "hrsh7th/cmp-cmdline", event = "InsertEnter" },
+        { "saadparwaiz1/cmp_luasnip", event = "InsertEnter" },
+        { "L3MON4D3/LuaSnip", event = "InsertEnter", dependencies = { "rafamadriz/friendly-snippets" } },
+        { "hrsh7th/cmp-nvim-lua" },
+        { "roobert/tailwindcss-colorizer-cmp.nvim" },
     },
-    opts = function()
-        vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-        local cmp = require("cmp")
-        local defaults = require("cmp.config.default")()
-        return {
-            sorting = defaults.sorting,
-            completion = { completeopt = "menu,menuone,noinsert" },
-            experimental = { ghost_text = { hl_group = "CmpGhostText" } },
-            window = {
-                completion = merge(cmp.config.window.bordered(), {
-                    winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-                    col_offset = 0,
-                    side_padding = 0,
-                }),
-                documentation = cmp.config.window.bordered(),
-            },
-            snippet = {
-                expand = function(args)
-                    require("luasnip").lsp_expand(args.body)
-                end,
-            },
-            mapping = cmp.mapping.preset.insert({
-                ["<C-j>"] = cmp.mapping.select_next_item(),
-                ["<C-k>"] = cmp.mapping.select_prev_item(),
-                ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-                ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-                ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<C-e>"] = cmp.mapping.abort(),
-                ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                ["<Tab>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                ["<S-CR>"] = cmp.mapping.confirm({
-                    behavior = cmp.ConfirmBehavior.Replace,
-                    select = true,
-                }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                ["<C-CR>"] = function(fallback)
-                    cmp.abort()
-                    fallback()
-                end,
-            }),
-            sources = cmp.config.sources({
-                { name = "calc" },
-                { name = "luasnip" },
-                { name = "nvim_lsp" },
-                { name = "vsnip" },
-                { name = "path" },
-            }, { { name = "buffer" } }),
-            formatting = {
-                format = function(_, item)
-                    local icons = require("lazyvim.config").icons.kinds
-                    local tailwind = require("tailwindcss-colorizer-cmp").formatter
-                    if icons[item.kind] then
-                        item.kind = icons[item.kind] .. item.kind
-                    end
-                    return tailwind(_, item)
-                end,
-            },
-        }
-    end,
-    config = function(_, opts)
-        for _, source in ipairs(opts.sources) do
-            source.group_index = source.group_index or 1
-        end
-        require("cmp").setup(opts)
-    end,
+    event = "InsertEnter",
 }
+
+function M.config()
+    require("tailwindcss-colorizer-cmp").setup({ color_square_width = 2 })
+    vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+    vim.api.nvim_set_hl(0, "CmpItemKindTabnine", { fg = "#CA42F0" })
+    vim.api.nvim_set_hl(0, "CmpItemKindCrate", { fg = "#F64D00" })
+    vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
+    local cmp = require("cmp")
+    local luasnip = require("luasnip")
+    require("luasnip/loaders/from_vscode").lazy_load()
+    require("luasnip").filetype_extend("typescriptreact", { "html" })
+    local check_backspace = function()
+        local col = vim.fn.col(".") - 1
+        return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+    end
+
+    local icons = require("config/icons")
+    local types = require("cmp.types")
+
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                luasnip.lsp_expand(args.body) -- For `luasnip` users.
+            end,
+        },
+        mapping = cmp.mapping.preset.insert({
+            ["<C-k>"] = cmp.mapping(
+                cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
+                { "i", "c" }
+            ),
+            ["<C-j>"] = cmp.mapping(
+                cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
+                { "i", "c" }
+            ),
+            ["<C-p>"] = cmp.mapping(
+                cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
+                { "i", "c" }
+            ),
+            ["<C-n>"] = cmp.mapping(
+                cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
+                { "i", "c" }
+            ),
+            ["<C-h>"] = function()
+                if cmp.visible_docs() then
+                    cmp.close_docs()
+                else
+                    cmp.open_docs()
+                end
+            end,
+            ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+            ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+            ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+            ["<C-e>"] = cmp.mapping({
+                i = cmp.mapping.abort(),
+                c = cmp.mapping.close(),
+            }),
+            -- Accept currently selected item. If none selected, `select` first item.
+            -- Set `select` to `false` to only confirm explicitly selected items.
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+            ["<S-Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                elseif luasnip.jumpable(-1) then
+                    luasnip.jump(-1)
+                else
+                    fallback()
+                end
+            end, { "i", "s" }),
+        }),
+        formatting = {
+            fields = { "kind", "abbr", "menu" },
+            format = function(entry, vim_item)
+                vim_item.kind = icons.kind[vim_item.kind]
+                vim_item.menu = ({
+                    nvim_lsp = "",
+                    nvim_lua = "",
+                    luasnip = "",
+                    buffer = "",
+                    path = "",
+                    emoji = "",
+                })[entry.source.name]
+
+                if vim.tbl_contains({ "nvim_lsp" }, entry.source.name) then
+                    local duplicates = {
+                        buffer = 1,
+                        path = 1,
+                        nvim_lsp = 0,
+                        luasnip = 1,
+                    }
+
+                    local duplicates_default = 0
+
+                    vim_item.dup = duplicates[entry.source.name] or duplicates_default
+                end
+
+                if vim.tbl_contains({ "nvim_lsp" }, entry.source.name) then
+                    local words = {}
+                    for word in string.gmatch(vim_item.word, "[^-]+") do
+                        table.insert(words, word)
+                    end
+
+                    local color_name, color_number
+                    if
+                        words[2] == "x"
+                        or words[2] == "y"
+                        or words[2] == "t"
+                        or words[2] == "b"
+                        or words[2] == "l"
+                        or words[2] == "r"
+                    then
+                        color_name = words[3]
+                        color_number = words[4]
+                    else
+                        color_name = words[2]
+                        color_number = words[3]
+                    end
+
+                    if color_name == "white" or color_name == "black" then
+                        local color
+                        if color_name == "white" then
+                            color = "ffffff"
+                        else
+                            color = "000000"
+                        end
+
+                        local hl_group = "lsp_documentColor_mf_" .. color
+                        -- vim.api.nvim_set_hl(0, hl_group, { fg = "#" .. color, bg = "#" .. color })
+                        vim.api.nvim_set_hl(0, hl_group, { fg = "#" .. color, bg = "NONE" })
+                        vim_item.kind_hl_group = hl_group
+
+                        -- make the color square 2 chars wide
+                        vim_item.kind = string.rep("▣", 1)
+
+                        return vim_item
+                    elseif #words < 3 or #words > 4 then
+                        -- doesn't look like this is a tailwind css color
+                        return vim_item
+                    end
+
+                    if not color_name or not color_number then
+                        return vim_item
+                    end
+
+                    local color_index = tonumber(color_number)
+                    local tailwindcss_colors = require("tailwindcss-colorizer-cmp.colors").TailwindcssColors
+
+                    if not tailwindcss_colors[color_name] then
+                        return vim_item
+                    end
+
+                    if not tailwindcss_colors[color_name][color_index] then
+                        return vim_item
+                    end
+
+                    local color = tailwindcss_colors[color_name][color_index]
+
+                    local hl_group = "lsp_documentColor_mf_" .. color
+                    -- vim.api.nvim_set_hl(0, hl_group, { fg = "#" .. color, bg = "#" .. color })
+                    vim.api.nvim_set_hl(0, hl_group, { fg = "#" .. color, bg = "NONE" })
+
+                    vim_item.kind_hl_group = hl_group
+
+                    -- make the color square 2 chars wide
+                    vim_item.kind = string.rep("▣", 1)
+
+                    -- return vim_item
+                end
+
+                if entry.source.name == "copilot" then
+                    vim_item.kind = icons.git.Octoface
+                    vim_item.kind_hl_group = "CmpItemKindCopilot"
+                end
+
+                if entry.source.name == "cmp_tabnine" then
+                    vim_item.kind = icons.misc.Robot
+                    vim_item.kind_hl_group = "CmpItemKindTabnine"
+                end
+
+                if entry.source.name == "crates" then
+                    vim_item.kind = icons.misc.Package
+                    vim_item.kind_hl_group = "CmpItemKindCrate"
+                end
+
+                if entry.source.name == "lab.quick_data" then
+                    vim_item.kind = icons.misc.CircuitBoard
+                    vim_item.kind_hl_group = "CmpItemKindConstant"
+                end
+
+                if entry.source.name == "emoji" then
+                    vim_item.kind = icons.misc.Smiley
+                    vim_item.kind_hl_group = "CmpItemKindEmoji"
+                end
+
+                return vim_item
+            end,
+        },
+        sources = {
+            {
+                name = "nvim_lsp",
+                entry_filter = function(entry, ctx)
+                    local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
+                    if kind == "Snippet" and ctx.prev_context.filetype == "java" then
+                        return false
+                    end
+                    if ctx.prev_context.filetype == "markdown" then
+                        return true
+                    end
+                    if kind == "Text" then
+                        return false
+                    end
+                    return true
+                end,
+            },
+            { name = "luasnip" },
+            { name = "cmp_tabnine" },
+            { name = "nvim_lua" },
+            { name = "buffer" },
+            { name = "path" },
+            { name = "calc" },
+            { name = "emoji" },
+            { name = "treesitter" },
+            { name = "tmux" },
+        },
+        confirm_opts = {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = false,
+        },
+        view = {
+            docs = { auto_open = true },
+            entries = { name = "custom", selection_order = "top_down" },
+        },
+        window = {
+            completion = {
+                border = "rounded",
+                winhighlight = "Normal:Pmenu,CursorLine:PmenuSel,FloatBorder:FloatBorder,Search:None",
+                col_offset = -3,
+                side_padding = 1,
+                scrollbar = false,
+                scrolloff = 8,
+            },
+            documentation = {
+                border = "rounded",
+                winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,Search:None",
+            },
+        },
+        experimental = { ghost_text = true },
+    })
+    pcall(function() end)
+end
+
+return M

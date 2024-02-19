@@ -3,11 +3,6 @@ return {
     "LukasPietzschmann/telescope-tabs",
     "rest-nvim/rest.nvim",
     {
-        "filipdutescu/renamer.nvim",
-        dependencies = { { "nvim-lua/plenary.nvim" } },
-    },
-
-    {
         "nvim-telescope/telescope-file-browser.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
     },
@@ -15,8 +10,9 @@ return {
         "roobert/tailwindcss-colorizer-cmp.nvim",
         config = function()
             require("tailwindcss-colorizer-cmp").setup({
-                color_square_width = 2,
+                color_square_width = 4,
             })
         end,
     },
+    { "nvim-pack/nvim-spectre", dependencies = { "nvim-lua/plenary.nvim" } },
 }

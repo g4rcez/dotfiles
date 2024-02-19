@@ -162,7 +162,6 @@ function listening() {
   fi
 }
 
-
 function updateAll() {
   znap pull;
   brew upgrade;

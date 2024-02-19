@@ -1,9 +1,9 @@
 {
   "files.autoSave": "afterDelay",
-  "editor.fontSize": 16,
-  "editor.fontFamily": "JetBrainsMonoNL Nerd Font",
+  "editor.fontSize": 17,
+  "editor.fontFamily": "JetBrainsMono Nerd Font",
   "workbench.sideBar.location": "right",
-  "workbench.iconTheme": "vscode-icons",
+  "workbench.iconTheme": "a-file-icon-vscode",
   "editor.scrollBeyondLastLine": false,
   "editor.defaultColorDecorators": true,
   "editor.definitionLinkOpensInPeek": true,
@@ -12,7 +12,7 @@
   "editor.smoothScrolling": true,
   "editor.stickyScroll.enabled": true,
   "editor.stickyTabStops": true,
-  "cSpell.language": "en,pt,pt_BR",
+  "cSpell.language": "en,pt,pt-BR,en-GB,en-US",
   "files.associations": { "*.css": "tailwindcss" },
   "extensions.experimental.affinity": { "asvetliakov.vscode-neovim": 1 },
   "material-icon-theme.files.associations": {
@@ -41,27 +41,8 @@
   "editor.accessibilitySupport": "off",
   "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
-  "apc.activityBar": { "hideSettings": false, "size": 52 },
-  "apc.statusBar": {
-    "position": "editor-bottom",
-    "height": 20,
-    "fontSize": 12
-  },
   "workbench.statusBar.visible": true,
   "editor.hideCursorInOverviewRuler": true,
-  "editor.glyphMargin": false,
-  "editor.folding": false,
-  "window.titleBarStyle": "native",
-  "apc.electron": {
-    "titleBarStyle": "hiddenInset",
-    "backgroundMaterial": "acrylic",
-    "backgroundColor": "transparent",
-    "vibrancy": "fullscreen-ui",
-    "transparent": true,
-    "frame": false,
-    "visualEffectState": "active"
-  },
-  "apc.header": { "height": 28 },
   "workbench.colorTheme": "Carbonfox",
   "vsicons.presets.angular": true,
   "vsicons.presets.jsOfficial": true,
@@ -77,5 +58,29 @@
   "search.showLineNumbers": true,
   "outline.showNumbers": true,
   "vscode-neovim.revealCursorScrollLine": true,
-  "vscode-neovim.normalSelectionDebounceTime": 100
+  "vscode-neovim.normalSelectionDebounceTime": 100,
+  "editor.fontLigatures": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "apc.menubar.compact": true,
+  "window.titleBarStyle": "native",
+  "window.customTitleBarVisibility": "never",
+  "apc.header": { "height": 36 },
+  "apc.stylesheet": {
+    ".title-label > h2": "display: none", // Remove primary side bar title
+    ".title-actions": "display: none", // Remove primary side bar action icons
+    ".editor-actions": "display: none", // Remove editor action icons
+    ".nosidebar .inline-tabs-placeholder": "width: 75px" // Align tabs to not overlap window controls when primary bar is hidden
+  },
+  "apc.electron": {
+    "vibrancy": "ultra-dark",
+    "backgroundMaterial": "acrylic",
+    "visualEffectState": "followWindow",
+    "frame": false,
+    "titleBarStyle": "hiddenInset",
+    "trafficLightPosition": {
+      "x": 7,
+      "y": 5
+    }
+  },
+  "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
 }

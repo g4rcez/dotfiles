@@ -247,19 +247,15 @@ return {
                 diagnostics = {
                     theme = "ivy",
                     initial_mode = "normal",
-                    layout_config = {
-                        preview_cutoff = 9999,
-                    },
+                    layout_config = { preview_cutoff = 9999 }
                 },
             }
             opts.extensions = {
                 file_browser = {
-                    theme = "dropdown",
+                    theme = "ivy",
                     hijack_netrw = true,
                     mappings = {
-                        -- your custom insert mode mappings
                         ["n"] = {
-                            -- your custom normal mode mappings
                             ["N"] = fb_actions.create,
                             ["h"] = fb_actions.goto_parent_dir,
                             ["/"] = function()

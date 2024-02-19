@@ -15,6 +15,9 @@ name:
   a.out: 
   assets: 
   coverage: 
+  containers: 󰡨
+  database: 
+  db: 
   dist: 󰷌
   docker: 
   dockerfile: 

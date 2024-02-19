@@ -261,11 +261,11 @@ let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
 "" folding - prefix z(???)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_jetbrains_prefix = "<leader>z +Folding"
-nnoremap zx :action CollapseRegion<CR>
-let g:WhichKeyDesc_collapse_region = "zx Collapse region"
+nnoremap zx :action ExpandCollapseToggleAction<CR>
+let g:WhichKeyDesc_collapse_toggle_regionZX = "zx Collapse toggle region"
 
-nnoremap zo :action ExpandRegion<CR>
-let g:WhichKeyDesc_expand_region = "zx Expand region"
+nnoremap zo :action ExpandCollapseToggleAction<CR>
+let g:WhichKeyDesc_collapse_toggle_regionZO = "zx Collapse toggle region"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" refactor tools

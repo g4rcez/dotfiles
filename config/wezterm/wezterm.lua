@@ -1,22 +1,17 @@
 local wezterm = require("wezterm")
 local os = require("os")
 local HOME = os.getenv("HOME")
+local config = wezterm.config_builder()
 
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
-
-function withHome(p)
+local function withHome(p)
   return HOME .. p
 end
 
-local config = {
-  set_environment_variables = {
-    PATH = withHome("/.cargo/bin:") .. withHome("/dotfiles/bin:") .. "/opt/homebrew/bin:" .. os.getenv("PATH"),
-  },
+config.set_environment_variables = {
+  PATH = withHome("/.cargo/bin:") .. withHome("/dotfiles/bin:") .. "/opt/homebrew/bin:" .. os.getenv("PATH"),
 }
 
-function extract_filename(uri)
+local function extract_filename(uri)
   local start, match_end = uri:find("$EDITOR:")
   if start == 1 then
     return uri:sub(match_end + 1)
@@ -24,7 +19,7 @@ function extract_filename(uri)
   return nil
 end
 
-function editable(filename)
+local function editable(filename)
   local extension = filename:match("%.([^.:/\\]+):%d+:%d+$")
   if extension then
     wezterm.log_info(string.format("extension is [%s]", extension))
@@ -44,15 +39,15 @@ function editable(filename)
   return false
 end
 
-function extension(filename)
+local function extension(filename)
   return filename:match("%.([^.:/\\]+):%d+:%d+$")
 end
 
-function basename(s)
+local function basename(s)
   return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
-function open_with_hx(window, pane, url)
+local function open_with_hx(window, pane, url)
   local name = extract_filename(url)
   wezterm.log_info("name: " .. url)
   if name and editable(name) then
@@ -141,9 +136,11 @@ config.window_background_opacity = 0.95
 config.window_decorations = "RESIZE"
 config.cursor_blink_rate = 500
 config.default_cursor_style = "BlinkingBlock"
+-- config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "Oxocarbon Dark"
 
 -- Font config
-config.font_size = 17
+config.font_size = 18
 config.font = wezterm.font("JetBrainsMono Nerd Font", { italic = false, weight = "Regular" })
 config.font_rules = {
   {
@@ -169,59 +166,11 @@ config.mouse_bindings =
       action = wezterm.action.OpenLinkAtMouseCursor,
     },
   },
-  -- Actions
   wezterm.action({ CloseCurrentTab = { confirm = false } })
 
 -- https://wezfurlong.org/wezterm/faq.html#multiple-characters-being-renderedcombined-as-one-character
 config.harfbuzz_features = { "calt=0" }
 
-config.window_padding = {
-  top = 1,
-  bottom = 1,
-  left = 15,
-  right = 15,
-}
-
-config.colors = {
-  foreground = "#eee",
-  background = "#171717",
-  cursor_bg = "#fff",
-  cursor_fg = "black",
-  cursor_border = "#fff",
-  selection_fg = "black",
-  selection_bg = "#fffacd",
-  scrollbar_thumb = "#222222",
-  split = "#444444",
-  ansi = {
-    "#191919",
-    "#b91c1c",
-    "#34d399",
-    "#10b981",
-    "#1d4ed8",
-    "#a855f7",
-    "#0ea5e9",
-    "#eee",
-  },
-  brights = {
-    "grey",
-    "#ef4444",
-    "#22c55e",
-    "#fbbf24",
-    "#2563eb",
-    "#d946ef",
-    "#22d3ee",
-    "white",
-  },
-  indexed = { [136] = "#af8700" },
-  compose_cursor = "orange",
-  copy_mode_active_highlight_bg = { Color = "#000000" },
-  copy_mode_active_highlight_fg = { AnsiColor = "Black" },
-  copy_mode_inactive_highlight_bg = { Color = "#52ad70" },
-  copy_mode_inactive_highlight_fg = { AnsiColor = "White" },
-  quick_select_label_bg = { Color = "peru" },
-  quick_select_label_fg = { Color = "#ffffff" },
-  quick_select_match_bg = { AnsiColor = "Navy" },
-  quick_select_match_fg = { Color = "#ffffff" },
-}
+config.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
 
 return config

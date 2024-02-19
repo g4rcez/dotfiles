@@ -12,7 +12,7 @@ return {
             config = function()
                 require("window-picker").setup({
                     filter_rules = {
-                        include_current_win = false,
+                        include_current_win = true,
                         autoselect_one = true,
                         -- filter using buffer options
                         bo = {
@@ -34,7 +34,7 @@ return {
         vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
         require("neo-tree").setup({
-            close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
+            close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
             popup_border_style = "rounded",
             enable_git_status = true,
             enable_diagnostics = true,
@@ -46,7 +46,7 @@ return {
                 container = { enable_character_fade = true },
                 indent = {
                     indent_size = 4,
-                    padding = 2, -- extra padding on left hand side
+                    padding = 4, -- extra padding on left hand side
                     -- indent guides
                     with_markers = true,
                     indent_marker = "│",

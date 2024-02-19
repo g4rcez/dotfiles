@@ -56,7 +56,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 vim.api.nvim_create_autocmd({ "FileType" }, {
     pattern = { "json", "jsonc" },
     callback = function()
-        vim.wo.spell = false
         vim.wo.conceallevel = 0
     end,
 })

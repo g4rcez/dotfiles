@@ -45,6 +45,19 @@ map.normal("J", "mzJ`z", { desc = "Join lines" })
 map.normal("vv", "V", { desc = "Select line" })
 map.visual("<leader>ss", ":sort<CR>", { desc = "Sort lines" })
 map.visual("<leader>sr", ":!tail -r<CR>", { desc = "Reverse sort lines" })
+map.normal("<leader>cr", ":IncRename ", { desc = "Rename" })
+map.normal("<leader>SS", '<cmd>lua require("spectre").toggle()<CR>', {
+    desc = "Toggle Spectre",
+})
+map.normal("<leader>Sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+    desc = "Search current word",
+})
+map.visual("<leader>Sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+    desc = "Search current word",
+})
+map.normal("<leader>Sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+    desc = "Search on current file",
+})
 ----------------------------------------------------------------------------------------------------
 -- Buffers
 ----------------------------------------------------------------------------------------------------
@@ -107,3 +120,14 @@ else
         require("telescope").extensions.refactoring.refactors()
     end)
 end
+
+----------------------------------------------------------------------------------------------------
+-- Obsidian
+----------------------------------------------------------------------------------------------------
+vim.keymap.set("n", "gf", function()
+  if require("obsidian").util.cursor_on_markdown_link() then
+    return "<cmd>ObsidianFollowLink<CR>"
+  else
+    return "gf"
+  end
+end, { noremap = false, expr = true })
