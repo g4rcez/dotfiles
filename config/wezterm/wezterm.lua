@@ -124,29 +124,32 @@ wezterm.on("open-uri", function(window, pane, uri)
 end)
 
 -- Background, window and tabs
+config.color_scheme = "Oxocarbon Dark"
+config.cursor_blink_rate = 0
+config.default_cursor_style = "BlinkingBlock"
 config.enable_scroll_bar = false
-config.enable_tab_bar = true
+config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = true
 config.macos_window_background_blur = 70
 config.max_fps = 120
 config.scrollback_lines = 1000000
 config.show_tabs_in_tab_bar = false
-config.use_fancy_tab_bar = true
-config.window_background_opacity = 0.95
+config.use_fancy_tab_bar = false
+config.window_background_opacity = 0.9
 config.window_decorations = "RESIZE"
-config.cursor_blink_rate = 500
-config.default_cursor_style = "BlinkingBlock"
--- config.color_scheme = "Catppuccin Mocha"
-config.color_scheme = "Oxocarbon Dark"
 
 -- Font config
 config.font_size = 18
-config.font = wezterm.font("JetBrainsMono Nerd Font", { italic = false, weight = "Regular" })
+config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Regular" })
 config.font_rules = {
   {
     intensity = "Bold",
     italic = false,
     font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Bold" }, "JetBrainsMono Nerd Font"),
+  },
+  {
+    italic = true,
+    font = wezterm.font("JetBrainsMono Nerd Font", { italic = true }, "JetBrainsMono Nerd Font"),
   },
 }
 
@@ -165,8 +168,7 @@ config.mouse_bindings =
       mods = "CTRL",
       action = wezterm.action.OpenLinkAtMouseCursor,
     },
-  },
-  wezterm.action({ CloseCurrentTab = { confirm = false } })
+  }, wezterm.action({ CloseCurrentTab = { confirm = false } })
 
 -- https://wezfurlong.org/wezterm/faq.html#multiple-characters-being-renderedcombined-as-one-character
 config.harfbuzz_features = { "calt=0" }

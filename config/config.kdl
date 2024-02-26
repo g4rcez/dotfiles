@@ -1,7 +1,7 @@
 auto_layout true
 mouse_mode true
 copy_on_select true
-default_layout "default"
+default_layout "compact"
 mirror_session false
 pane_frames false
 pane_viewport_serialization 100000
@@ -10,7 +10,7 @@ rounded_corners true
 scroll_buffer_size 10000000
 session_serialization true
 session_serialization true
-simplified_ui false
+simplified_ui true
 styled_underlines true
 
 ui { pane_frames { rounded_corners false; }; }
@@ -43,6 +43,15 @@ themes {
 theme "custom"
 
 keybinds clear-defaults=true {
+  shared_except "locked" {
+    bind "Alt y" {
+        LaunchOrFocusPlugin "file:~/.config/zellij/plugins/room.wasm" {
+            floating true
+            ignore_case true
+        }
+      }
+  }
+
   normal {
     bind "Alt \\" { NewPane "Right"; }
     bind "Alt -" { NewPane "Down"; }
@@ -76,12 +85,6 @@ keybinds clear-defaults=true {
       SwitchToMode "Normal"
     }
 
-    bind "Alt y" {
-      LaunchOrFocusPlugin "file:~/.config/zellij/plugins/room.wasm" {
-        floating true
-        ignore_case true
-      }
-    }
 
     bind "Alt F" {
       LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij_forgot.wasm" {

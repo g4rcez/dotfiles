@@ -83,4 +83,5 @@
     }
   },
   "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
+  "explorer.confirmDelete": false,
 }

@@ -1,5 +1,6 @@
 ##############################################################################################################
 ## exports
+export DOTFILES="$HOME/dotfiles"
 export LC_COLLATE=C
 export MANWIDTH=999
 export ARCHFLAGS="-arch x86_64"
@@ -9,7 +10,6 @@ export LANG="en_US.UTF-8"
 export MANPATH="/usr/local/man:$MANPATH"
 export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
-export DOTFILES="$HOME/dotfiles"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export PLUGINS_DIR="$HOME/.zsh/plugins"
 export SNAP_DIR="$PLUGINS_DIR/znap"
@@ -156,12 +156,14 @@ eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 bindkey '^r' _atuin_search_widget
 
-autoload -U add-zsh-hook
 function _postcd() {
   dotenv ".env"
   dotenv ".env.local"
   dotenv "./src/.env"
 }
-add-zsh-hook chpwd _postcd && _postcd
+_postcd
 
 zellij-start
+
+chpwd_functions+=(_postcd)
+

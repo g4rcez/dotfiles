@@ -50,6 +50,7 @@ layout {
         format_left "{session} | {mode} | {tabs}"
         format_right "{datetime}"
         hide_frame_for_single_pane "true"
+        border_position "top"
 
         mode_normal        "#[fg=#eeeeee,bold]{name}"
         mode_locked        "#[fg=#fb4934,bold]{name}"

@@ -16,7 +16,8 @@
 # You can also specify the key variant, such as LEFT_CTRL, RIGHT_SHIFT, etc...
 # toggle_key: ALT
 # You can also disable the toggle key completely with
-# toggle_key: OFF
+toggle_key: OFF
+search_shortcut: off
 
 # --- Injection Backend
 
