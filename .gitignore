@@ -39,3 +39,4 @@ Temporary Items
 nvim/lazy-lock.json
 nvim/README.md
 nvim/LICENSE
+./lvim/session
