@@ -119,7 +119,7 @@ alias wip='git add . && git commit -S -m "wip: work in progress" && git push'
 alias ghc='gh pr checkout'
 alias ghl='gh pr list'
 alias prs='bash $DOTFILES/bin/gh-fzf'
-alias pullrequest='gh pr create'
+alias newpr='gh pr create'
 alias gdash="gh dash"
 
 #############################################################################################################################

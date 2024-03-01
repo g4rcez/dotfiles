@@ -42,7 +42,6 @@ export ZELLIJ_AUTO_ATTACH=true
 export ZELLIJ_AUTO_EXIT=false
 export ZELLIJ_DEFAULT_SESSION="localhost"
 export KEYTIMEOUT=1000
-export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
