@@ -7,7 +7,12 @@ local M = {
         { "hrsh7th/cmp-path", event = "InsertEnter" },
         { "hrsh7th/cmp-cmdline", event = "InsertEnter" },
         { "saadparwaiz1/cmp_luasnip", event = "InsertEnter" },
-        { "L3MON4D3/LuaSnip", event = "InsertEnter", dependencies = { "rafamadriz/friendly-snippets" } },
+        {
+            "L3MON4D3/LuaSnip",
+            event = "InsertEnter",
+            dependencies = { "rafamadriz/friendly-snippets" },
+            build = "make install_jsregexp",
+        },
         { "hrsh7th/cmp-nvim-lua" },
         { "roobert/tailwindcss-colorizer-cmp.nvim" },
     },
@@ -22,16 +27,10 @@ function M.config()
     vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
     local cmp = require("cmp")
     local luasnip = require("luasnip")
+    luasnip.filetype_extend("typescriptreact", { "html" })
     require("luasnip/loaders/from_vscode").lazy_load()
-    require("luasnip").filetype_extend("typescriptreact", { "html" })
-    local check_backspace = function()
-        local col = vim.fn.col(".") - 1
-        return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
-    end
-
     local icons = require("config/icons")
     local types = require("cmp.types")
-
     cmp.setup({
         snippet = {
             expand = function(args)
@@ -228,14 +227,12 @@ function M.config()
                 end,
             },
             { name = "luasnip" },
-            { name = "cmp_tabnine" },
             { name = "nvim_lua" },
             { name = "buffer" },
             { name = "path" },
             { name = "calc" },
             { name = "emoji" },
             { name = "treesitter" },
-            { name = "tmux" },
         },
         confirm_opts = {
             behavior = cmp.ConfirmBehavior.Replace,
@@ -259,7 +256,7 @@ function M.config()
                 winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,Search:None",
             },
         },
-        experimental = { ghost_text = true },
+        experimental = { ghost_text = false },
     })
     pcall(function() end)
 end

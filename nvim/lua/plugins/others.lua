@@ -15,4 +15,11 @@ return {
         end,
     },
     { "nvim-pack/nvim-spectre", dependencies = { "nvim-lua/plenary.nvim" } },
+    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+    {
+        "L3MON4D3/LuaSnip",
+        event = "InsertEnter",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        build = "make install_jsregexp",
+    },
 }

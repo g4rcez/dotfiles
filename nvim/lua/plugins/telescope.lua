@@ -5,8 +5,6 @@ local telescope = require("telescope")
 local fb_actions = telescope.extensions.file_browser.actions
 local l = telescope.load_extension
 
-local W = 150
-
 local insertMapping = {
     ["<C-f>"] = actions.results_scrolling_down,
     ["<C-h>"] = actions.which_key,
@@ -86,7 +84,7 @@ return {
                         layout_strategy = "horizontal",
                         layout_config = {
                             height = 100,
-                            width = W,
+                            width = 150,
                             prompt_position = "top",
                         },
                     })
@@ -119,15 +117,15 @@ return {
                         mirror = false,
                         preview_width = 0.6,
                         size = {
-                            width = "95%",
-                            height = "70%",
+                            width = "70%",
+                            height = "80%",
                         },
                     },
                     vertical = {
                         mirror = false,
                         size = {
-                            width = "90%",
-                            height = "70%",
+                            width = "70%",
+                            height = "80%",
                         },
                     },
                 },

@@ -160,31 +160,16 @@ local icons = {
 local M = {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-        {
-            "folke/neodev.nvim",
-        },
-    },
+    dependencies = { { "folke/neodev.nvim" } },
     opts = {
-        inlay_hints = {
-            enabled = true,
-        },
+        inlay_hints = { enabled = true },
         servers = {
-            ansiblels = {},
             bashls = {},
             clangd = {},
-            -- denols = {},
             cssls = {},
             dockerls = {},
             html = {},
-            tailwindcss = {
-                -- exclude a filetype from the default_config
-                filetypes_exclude = { "markdown" },
-                -- add additional filetypes to the default_config
-                filetypes_include = {},
-                -- to fully override the default_config, change the below
-                -- filetypes = {}
-            },
+            tailwindcss = { filetypes_exclude = { "markdown" }, filetypes_include = {} },
             tsserver = {
                 keys = {
                     {
