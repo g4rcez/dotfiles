@@ -55,8 +55,7 @@ return {
         },
         keys = {
             { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-            { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-            { "<leader>sl", "<cmd>Telescope lazy<cr>", desc = "Find lazy plugins" },
+            -- { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
             { "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "Find buffer" },
             { "<leader>fC", "<cmd>Telescope commands<cr>", desc = "Commander" },
             {

@@ -283,8 +283,8 @@ let g:WhichKeyDesc_Breakpoint = "<leader>db Toggle Line Breakpoint"
 "" code tools - prefix c(code)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
-nmap <leader><leader> <action>(ReformatCode)
-let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> Reformat Code"
+nmap <leader><leader> <action>(SearchEverywhere)
+let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> SearchEverywhere"
 
 nmap <leader>cf <action>(ReformatCode)
 let g:WhichKeyDesc_reformat_code = "<leader>cf Reformat Code"
@@ -350,6 +350,11 @@ let g:EasyMotion_do_mapping = 0
 
 nmap <leader>mj <action>(AceDeclarationAction)
 let g:WhichKeyDesc_ace_jump = "<leader>mj Easy motion plugin"
+
+" Press `f` to activate Target Mode
+map f <Action>(AceDeclarationAction)
+" Press `F` to activate Target Mode
+map F <Action>(AceDeclarationAction)
 
 set multiple-cursors
 vnoremap <C-j> <Action>(EditorCloneCaretBelow)

@@ -76,13 +76,8 @@ map.normal("gR", function()
     require("trouble").toggle("lsp_references")
 end, { desc = "Trouble references" })
 
-map.normal("<leader>xn", function()
-    require("trouble").next({ skip_groups = true, jump = true })
-end, { desc = "Go to next error" })
-
-map.normal("<leader>xN", function()
-    require("trouble").previous({ skip_groups = true, jump = true })
-end, { desc = "Go to previous error" })
+map.normal("<leader>xp", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
+map.normal("<leader>xn", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
 
 ----------------------------------------------------------------------------------------------------
 -- Refactoring
@@ -125,9 +120,9 @@ end
 -- Obsidian
 ----------------------------------------------------------------------------------------------------
 vim.keymap.set("n", "gf", function()
-  if require("obsidian").util.cursor_on_markdown_link() then
-    return "<cmd>ObsidianFollowLink<CR>"
-  else
-    return "gf"
-  end
+    if require("obsidian").util.cursor_on_markdown_link() then
+        return "<cmd>ObsidianFollowLink<CR>"
+    else
+        return "gf"
+    end
 end, { noremap = false, expr = true })

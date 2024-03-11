@@ -3,8 +3,11 @@
 -- Add any additional options here
 --
 
-local opt = vim.opt;
-local o = vim.o;
+local opt = vim.opt
+local o = vim.o
+
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 o.spelllang = "en_us"
 o.spell = true
@@ -15,5 +18,7 @@ opt.title = true
 opt.titlelen = 0
 opt.smartcase = true
 opt.smartindent = true
-opt.conceallevel = 0
+opt.conceallevel = 1
 opt.cmdheight = 0
+opt.breakindent = true
+

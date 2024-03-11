@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = { "json", "jsonc", "markdown" },
     callback = function()
         vim.wo.spell = true
-        vim.wo.conceallevel = 0
+        vim.wo.conceallevel = 1
     end,
 })
 

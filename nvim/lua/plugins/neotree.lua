@@ -8,7 +8,6 @@ return {
         "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
         {
             "s1n7ax/nvim-window-picker",
-            version = "2.*",
             config = function()
                 require("window-picker").setup({
                     filter_rules = {
@@ -97,19 +96,17 @@ return {
                 },
                 type = {
                     enabled = true,
-                    required_width = 122, -- min width of window required to show this column
+                    required_width = 128, -- min width of window required to show this column
                 },
                 last_modified = {
                     enabled = true,
-                    required_width = 88, -- min width of window required to show this column
+                    required_width = 128, -- min width of window required to show this column
                 },
                 created = {
                     enabled = true,
-                    required_width = 110, -- min width of window required to show this column
+                    required_width = 128, -- min width of window required to show this column
                 },
-                symlink_target = {
-                    enabled = false,
-                },
+                symlink_target = { enabled = false },
             },
             -- A list of functions, each representing a global custom command
             -- that will be available in all sources (if not overridden in `opts[source_name].commands`)

@@ -127,3 +127,4 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=magenta"
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
 ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
+

@@ -1,5 +1,6 @@
 return {
-    "folke/twilight.nvim",
+    { "folke/twilight.nvim", opts = {}, lazy = false },
+    { "folke/zen-mode.nvim", opts = {}, lazy = false },
     "LukasPietzschmann/telescope-tabs",
     "rest-nvim/rest.nvim",
     {

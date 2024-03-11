@@ -94,39 +94,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     sudo dscacheutil -flushcache
     sudo killall -HUP mDNSResponder
   }
-
 fi
-
-############################################################################
-## node
-# Enable persistent REPL history for `node`.
-export NODE_REPL_HISTORY=~/.node_history
-# Allow 32³ entries; the default is 1000.
-export NODE_REPL_HISTORY_SIZE='32768'
-# Use sloppy mode by default, matching web browsers.
-export NODE_REPL_MODE='sloppy'
-
-function node:scripts() {
-  jq .scripts "$PWD/package.json"
-}
-
-function n() {
-  bash "$HOME/dotfiles/bin/nnn" $@
-}
-
-function ni() {
-  if [[ "$#" == "0" ]]; then
-    n install
-  else
-    n add -E "$@"
-  fi
-}
-
-function types() {
-  LIBS=$(for a in "$@"; do echo "@types/$a"; done)
-  LIBS=$(echo "$LIBS" | tr '\n' ' ')
-  ni -D $LIBS
-}
 
 ############################################################################
 ## functions
@@ -189,7 +157,6 @@ function fs() {
 function dotenv() {
   if [[ -f "$1" ]];then
     set -o allexport; source "$1"; set +o allexport
-    # echo ".env loaded: $1"
   fi
 }
 
@@ -205,6 +172,4 @@ function cdm() {
 function cpv() {
   rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
 }
-
-alias listen=listening
 

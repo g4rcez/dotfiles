@@ -1,5 +1,10 @@
 vim.opt.background = "dark"
 vim.opt.termguicolors = true
+vim.g.sonokai_style = "andromeda"
+vim.g.edge_style = "aura"
+vim.g.edge_style = "neon"
+vim.g.edge_better_performance = 1
+vim.g.sonokai_better_performance = 1
 
 local lunarVimColorScheme = {
     "LunarVim/darkplus.nvim",
@@ -7,13 +12,7 @@ local lunarVimColorScheme = {
     priority = 1000, -- make sure to load this before all the other start plugins
 }
 
-vim.g.sonokai_style = 'andromeda'
-vim.g.edge_style = 'aura'
-vim.g.edge_style = 'neon'
-vim.g.edge_better_performance = 1
-vim.g.sonokai_better_performance = 1
-
-local M = {
+return {
     "EdenEast/nightfox.nvim",
     "rebelot/kanagawa.nvim",
     "sainnhe/edge",
@@ -21,8 +20,6 @@ local M = {
     "tiagovla/tokyodark.nvim",
     "tiagovla/tokyodark.nvim",
     lunarVimColorScheme,
-    { "LazyVim/LazyVim", opts = { colorscheme = "carbonfox" } },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+    { "LazyVim/LazyVim", opts = { colorscheme = "tokyonight-night" } },
 }
-
-return M

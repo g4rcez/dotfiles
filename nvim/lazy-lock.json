@@ -102,5 +102,6 @@
   "vim-repeat": { "branch": "master", "commit": "8106e142dfdc278ff3eaaadd7b362ad7949d4357" },
   "vim-startuptime": { "branch": "master", "commit": "97a88e688482a09c3c4b777d07b509b328a5ec29" },
   "which-key.nvim": { "branch": "main", "commit": "ce741eb559c924d72e3a67d2189ad3771a231414" },
-  "yanky.nvim": { "branch": "main", "commit": "9268018e92d02650a94e39dd5f5903c542f7ea11" }
+  "yanky.nvim": { "branch": "main", "commit": "9268018e92d02650a94e39dd5f5903c542f7ea11" },
+  "zen-mode.nvim": { "branch": "main", "commit": "cb73b8bd0ef9d765b942db09dc762c603a89ae44" }
 }

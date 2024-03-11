@@ -1,18 +1,18 @@
 ##############################################################################################################
 ## exports
 export DOTFILES="$HOME/dotfiles"
+export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
+export PLUGINS_DIR="$HOME/.zsh/plugins"
+export SNAP_DIR="$PLUGINS_DIR/znap"
+export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
+export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
+export MANPATH="/usr/local/man:$MANPATH"
 export LC_COLLATE=C
 export MANWIDTH=999
 export ARCHFLAGS="-arch x86_64"
 export BROWSER="google-chrome"
 export GPG_TTY="$(tty)"
 export LANG="en_US.UTF-8"
-export MANPATH="/usr/local/man:$MANPATH"
-export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
-export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
-export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
-export PLUGINS_DIR="$HOME/.zsh/plugins"
-export SNAP_DIR="$PLUGINS_DIR/znap"
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
 export AUTO_NOTIFY_EXPIRE_TIME=5000
 export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc")
@@ -45,10 +45,8 @@ export KEYTIMEOUT=1000
 
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
-  export MANPAGER="nvim +Man!"
   export PAGER="nvim"
-else
-  export EDITOR="vim"
+  export MANPAGER="nvim +Man!"
 fi
 
 ##############################################################################################################
@@ -73,15 +71,10 @@ local -a PATH_EXPORTS=(
   /usr/local/opt/libpq/bin
   /opt/homebrew/opt/libpq/bin
 )
-
 PATH_RESULT="$PATH"
-
 for path in $PATH_EXPORTS; do
-  if [[ -d "$path" ]]; then
-    PATH_RESULT="$PATH_RESULT:$path"
-  fi
+  if [[ -d "$path" ]]; then PATH_RESULT="$PATH_RESULT:$path" fi
 done
-
 export PATH="$PATH_RESULT"
 
 ##############################################################################################################
@@ -120,35 +113,33 @@ for plugin in $PLUGINS; do
 done
 
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode,tmux}
 znap eval starship 'starship init zsh --print-full-init'
 znap prompt
-
-##############################################################################################################
-## source files
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 
+##############################################################################################################
+## source files
+
 local -a SOURCE=(
   "$HOME/.fzf.zsh"
+  "$HOME/.fzf/shell/key-bindings.zsh"
   "$DOTFILES/bin/fzf-git"
   "$DOTFILES/zsh/fzf.sh"
-  "$HOME/.fzf/shell/key-bindings.zsh"
   "$HOME/.ghcup/env"
   "$HOME/.bun/_bun"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
   "$DOTFILES/zsh/git.sh"
   "$DOTFILES/zsh/alias.sh"
+  "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
   "$DOTFILES/zsh/zstyle.sh"
   "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
 )
-
 for config in $SOURCE; do
-    if [[ -f "$config" ]]; then
-        source "$config";
-    fi
+  if [[ -f "$config" ]]; then source "$config"; fi
 done
 
 eval "$(zoxide init zsh)"
@@ -161,8 +152,12 @@ function _postcd() {
   dotenv "./src/.env"
 }
 _postcd
-
-zellij-start
-
 chpwd_functions+=(_postcd)
+
+tmux-which-key() { tmux show-wk-menu-root ; }
+zle -N tmux-which-key
+bindkey "^;" tmux-which-key
+
+# zellij-start
+
 
