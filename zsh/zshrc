@@ -26,7 +26,7 @@ export ZELLIJ_CONFIG_FILE="$DOTFILES/config/config.kdl"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export ZSH_TMUX_AUTOSTART="true"
 export ZSH_TMUX_FIXTERM="true"
-export ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
+export ZSH_TMUX_CONFIG="$DOTFILES/config/tmux/tmux.conf"
 export ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
 export TMUX_FZF_PREVIEW="1"
@@ -153,11 +153,3 @@ function _postcd() {
 }
 _postcd
 chpwd_functions+=(_postcd)
-
-tmux-which-key() { tmux show-wk-menu-root ; }
-zle -N tmux-which-key
-bindkey "^;" tmux-which-key
-
-# zellij-start
-
-

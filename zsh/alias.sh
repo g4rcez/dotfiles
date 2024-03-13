@@ -39,13 +39,13 @@ function zshrc() {
 }
 
 function fvim() {
-  vim "$(fzf)"
+  nvim "$(fzf)"
 }
 
 function codi() {
   local syntax="${1:-python}"
   shift
-  vim -c \
+  nvim -c \
     "let g:startify_disable_at_vimenter = 1 |\
     set bt=nofile ls=0 noru nonu nornu |\
     hi ColorColumn ctermbg=NONE |\

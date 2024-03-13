@@ -1,13 +1,13 @@
 local wezterm = require("wezterm")
 local os = require("os")
 local HOME = os.getenv("HOME")
-local config = wezterm.config_builder()
+local M = wezterm.config_builder()
 
 local function withHome(p)
   return HOME .. p
 end
 
-config.set_environment_variables = {
+M.set_environment_variables = {
   PATH = withHome("/.cargo/bin:") .. withHome("/dotfiles/bin:") .. "/opt/homebrew/bin:" .. os.getenv("PATH"),
 }
 
@@ -79,7 +79,7 @@ local function open_with_hx(window, pane, url)
   end
 end
 
-config.keys = {
+M.keys = {
   {
     key = "s",
     mods = "CMD|SHIFT",
@@ -124,43 +124,36 @@ wezterm.on("open-uri", function(window, pane, uri)
 end)
 
 -- Background, window and tabs
-config.color_scheme = "Oxocarbon Dark"
-config.cursor_blink_rate = 0
-config.default_cursor_style = "BlinkingBlock"
-config.enable_scroll_bar = false
-config.enable_tab_bar = false
-config.hide_tab_bar_if_only_one_tab = true
-config.macos_window_background_blur = 70
-config.max_fps = 120
-config.scrollback_lines = 1000000
-config.show_tabs_in_tab_bar = false
-config.use_fancy_tab_bar = false
-config.window_background_opacity = 0.9
-config.window_decorations = "RESIZE"
+M.color_scheme = "Oxocarbon Dark"
+M.cursor_blink_rate = 0
+M.default_cursor_style = "BlinkingBlock"
+M.enable_scroll_bar = false
+M.enable_tab_bar = false
+M.hide_tab_bar_if_only_one_tab = true
+M.macos_window_background_blur = 70
+M.max_fps = 120
+M.scrollback_lines = 1000000
+M.show_tabs_in_tab_bar = false
+M.use_fancy_tab_bar = false
+M.window_background_opacity = 0.9
+M.window_decorations = "RESIZE"
 
 -- Font config
-config.font_size = 18
-config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Regular" })
-config.font_rules = {
-  {
-    intensity = "Bold",
-    italic = false,
-    font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Bold" }, "JetBrainsMono Nerd Font"),
-  },
-  {
-    italic = true,
-    font = wezterm.font("JetBrainsMono Nerd Font", { italic = true }, "JetBrainsMono Nerd Font"),
-  },
-}
+M.font_size = 18
+M.freetype_load_target = "Light"
+M.font = wezterm.font({
+  family = "JetBrainsMono Nerd Font",
+  harfbuzz_features = { "calt=1", "clig=1", "liga=1" },
+})
 
 -- Hyperlinks
-config.hyperlink_rules = wezterm.default_hyperlink_rules()
-table.insert(config.hyperlink_rules, {
+M.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(M.hyperlink_rules, {
   regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
   format = "https://www.github.com/$1/$3",
 })
-table.insert(config.hyperlink_rules, { regex = "[^\\s]+\\.rs:\\d+:\\d+", format = "$EDITOR:$0" })
-config.mouse_bindings =
+table.insert(M.hyperlink_rules, { regex = "[^\\s]+\\.rs:\\d+:\\d+", format = "$EDITOR:$0" })
+M.mouse_bindings =
   {
     -- Ctrl-click will open the link under the mouse cursor
     {
@@ -171,8 +164,8 @@ config.mouse_bindings =
   }, wezterm.action({ CloseCurrentTab = { confirm = false } })
 
 -- https://wezfurlong.org/wezterm/faq.html#multiple-characters-being-renderedcombined-as-one-character
-config.harfbuzz_features = { "calt=0" }
+M.harfbuzz_features = { "calt=0" }
 
-config.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
+M.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
 
-return config
+return M

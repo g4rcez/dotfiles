@@ -18,7 +18,6 @@ return {
     "sainnhe/edge",
     "sainnhe/sonokai",
     "tiagovla/tokyodark.nvim",
-    "tiagovla/tokyodark.nvim",
     lunarVimColorScheme,
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
     { "LazyVim/LazyVim", opts = { colorscheme = "tokyonight-night" } },
