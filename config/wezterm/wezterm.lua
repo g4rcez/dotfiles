@@ -23,19 +23,11 @@ local function editable(filename)
   local extension = filename:match("%.([^.:/\\]+):%d+:%d+$")
   if extension then
     wezterm.log_info(string.format("extension is [%s]", extension))
-    local text_extensions = {
-      md = true,
-      c = true,
-      go = true,
-      scm = true,
-      rkt = true,
-      rs = true,
-    }
+    local text_extensions = { md = true, c = true, go = true, scm = true, rkt = true, rs = true }
     if text_extensions[extension] then
       return true
     end
   end
-
   return false
 end
 
@@ -140,7 +132,6 @@ M.window_decorations = "RESIZE"
 
 -- Font config
 M.font_size = 18
-M.freetype_load_target = "Light"
 M.font = wezterm.font({
   family = "JetBrainsMono Nerd Font",
   harfbuzz_features = { "calt=1", "clig=1", "liga=1" },
@@ -153,19 +144,18 @@ table.insert(M.hyperlink_rules, {
   format = "https://www.github.com/$1/$3",
 })
 table.insert(M.hyperlink_rules, { regex = "[^\\s]+\\.rs:\\d+:\\d+", format = "$EDITOR:$0" })
-M.mouse_bindings =
+
+M.mouse_bindings = {
+  -- Ctrl-click will open the link under the mouse cursor
   {
-    -- Ctrl-click will open the link under the mouse cursor
-    {
-      event = { Up = { streak = 1, button = "Left" } },
-      mods = "CTRL",
-      action = wezterm.action.OpenLinkAtMouseCursor,
-    },
-  }, wezterm.action({ CloseCurrentTab = { confirm = false } })
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = "CTRL",
+    action = wezterm.action.OpenLinkAtMouseCursor,
+  },
+}
 
--- https://wezfurlong.org/wezterm/faq.html#multiple-characters-being-renderedcombined-as-one-character
-M.harfbuzz_features = { "calt=0" }
-
+wezterm.action({ CloseCurrentTab = { confirm = true } })
 M.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
 
 return M
+

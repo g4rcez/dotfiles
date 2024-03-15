@@ -14,6 +14,7 @@ function _git_log_prettily(){
   fi
 }
 compdef _git _git_log_prettily=git-log
+
 # Warn if the current branch is a WIP
 function work_in_progress() {
   command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
@@ -113,18 +114,20 @@ alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
 alias wip='git add . && git commit -S -m "wip: work in progress" && git push'
-
 #############################################################################################################################
 ## github-cli
 alias ghc='gh pr checkout'
 alias ghl='gh pr list'
-alias prs='bash $DOTFILES/bin/gh-fzf'
 alias newpr='gh pr create'
 alias gdash="gh dash"
-
 #############################################################################################################################
-## fzf git
+## fzf git/github
 unalias gco
 function gco() {
   _fzf_git_each_ref --no-multi | xargs git checkout
 }
+
+function prs() {
+  bash "$DOTFILES/bin/gh-fzf"
+}
+
