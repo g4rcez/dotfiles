@@ -1,8 +1,9 @@
 return {
-    { "folke/twilight.nvim", opts = {}, lazy = false },
-    { "folke/zen-mode.nvim", opts = {}, lazy = false },
     "LukasPietzschmann/telescope-tabs",
     "rest-nvim/rest.nvim",
+    { "ixru/nvim-markdown", lazy = false },
+    { "folke/twilight.nvim", opts = {}, lazy = false },
+    { "folke/zen-mode.nvim", opts = {}, lazy = false },
     {
         "nvim-telescope/telescope-file-browser.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },

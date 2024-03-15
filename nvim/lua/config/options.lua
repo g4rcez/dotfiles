@@ -8,10 +8,12 @@ local o = vim.o
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.g.have_nerd_font = true
 
 o.spelllang = "en_us"
 o.spell = true
 o.spelloptions = "camel"
+o.spellsuggest = "best,9"
 
 opt.spelllang = { "en", "pt_br" }
 opt.title = true
@@ -21,4 +23,3 @@ opt.smartindent = true
 opt.conceallevel = 1
 opt.cmdheight = 0
 opt.breakindent = true
-

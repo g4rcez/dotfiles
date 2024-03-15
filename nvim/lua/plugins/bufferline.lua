@@ -3,15 +3,11 @@ return {
     version = "*",
     dependencies = "nvim-tree/nvim-web-devicons",
     opts = function(_, opts)
-        local options = {
-            numbers = "ordinal",
-            separator_style = "slant",
-            always_show_bufferline = true,
-        }
-        opts.options = {
-            opts.options,
-            options,
-        }
+        opts.options.always_show_bufferline = true
+        opts.options.numbers = "ordinal"
+        opts.options.separator_style = "slant"
+        opts.options.show_buffer_close_icons = true
+        opts.options.show_buffer_icons = true
         return opts
     end,
 }

@@ -42,12 +42,11 @@ function M.config()
         sync_install = true,
         highlight = {
             enable = true,
-            -- disable = { "markdown" },
             additional_vim_regex_highlighting = true,
         },
         auto_install = true,
         modules = {},
-        indent = { enable = true, disable = { "yaml" } },
+        indent = { enable = true },
         autopairs = { enable = true },
         textobjects = {
             select = {

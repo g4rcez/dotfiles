@@ -93,7 +93,10 @@ return {
         },
         opts = {
             defaults = {
+                winblend = 0,
+                border = {},
                 borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+                set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
                 buffer_previewer_maker = previewers.buffer_previewer_maker,
                 color_devicons = true,
                 file_previewer = previewers.vim_buffer_cat.new,
@@ -106,17 +109,16 @@ return {
                 path_display = { "truncate" },
                 qflist_previewer = previewers.vim_buffer_qflist.new,
                 selection_strategy = "reset",
-                set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
                 use_less = true,
                 layout_config = {
                     height = 70,
-                    width = W,
+                    width = 120,
                     prompt_position = "top",
                     horizontal = {
                         mirror = false,
                         preview_width = 0.6,
                         size = {
-                            width = "70%",
+                            width = "90%",
                             height = "80%",
                         },
                     },
@@ -176,7 +178,7 @@ return {
                     -- For more configuration options check 'nvim_open_win()'
                     terminal_opts = {
                         relative = "editor",
-                        style = "minimal",
+                        style = "bordered",
                         border = "rounded",
                         title = "Telescope lazy",
                         title_pos = "center",
@@ -205,11 +207,7 @@ return {
                             filepath, -- Terminal image viewer command
                         }, { on_stdout = send_output, stdout_buffered = true, pty = true })
                     else
-                        require("telescope.previewers.utils").set_preview_message(
-                            bufnr,
-                            opts.winid,
-                            "Binary cannot be previewed"
-                        )
+                        require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
                     end
                 end,
             },
@@ -244,7 +242,7 @@ return {
                 diagnostics = {
                     theme = "ivy",
                     initial_mode = "normal",
-                    layout_config = { preview_cutoff = 9999 }
+                    layout_config = { preview_cutoff = 9999 },
                 },
             }
             opts.extensions = {
@@ -259,12 +257,12 @@ return {
                                 vim.cmd("startinsert")
                             end,
                             ["<C-u>"] = function(prompt_bufnr)
-                                for i = 1, 10 do
+                                for _ = 1, 10 do
                                     actions.move_selection_previous(prompt_bufnr)
                                 end
                             end,
                             ["<C-d>"] = function(prompt_bufnr)
-                                for i = 1, 10 do
+                                for _ = 1, 10 do
                                     actions.move_selection_next(prompt_bufnr)
                                 end
                             end,
