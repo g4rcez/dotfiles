@@ -16,4 +16,6 @@ elif [ "$category" = "text" ]; then
   bat --theme OneHalfDark --color=always "$1"
 elif [ "$category" = "application/pdf" ]; then
   bat --theme OneHalfDark --color=always "$1"
+else
+  bat --theme OneHalfDark --color=always "$1"
 fi

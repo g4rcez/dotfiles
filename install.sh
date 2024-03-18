@@ -8,10 +8,10 @@
 # ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ########################################################################################################################
 set -xe
-mkdir -p $HOME/tools $HOME/.tmp;
+mkdir -p $HOME/tools $HOME/.tmp
 DIR="$HOME/dotfiles"
 
-function checkcommand () {
+function checkcommand() {
   if [[ -f "$(command -v $1)" ]]; then
     echo "[$1] already installed..."
   else
@@ -58,7 +58,7 @@ ln -sf $DIR/config/starship.toml $HOME/.config/starship.toml
 ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $DIR/zsh/zshrc $HOME/.zshrc
 ln -sf $DIR/config/tmux $HOME/.config/tmux
-ln -sf $DIR/espanso/match/base.yml "(espanso path config)/match/base.yml"
+ln -sf $DIR/espanso/match/base.yml "$(espanso path config)/match/base.yml"
 ln -sf $DIR/dygma $HOME/Raise
 
 ########################################################################################################################
@@ -76,4 +76,3 @@ function installatuin() {
   bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 }
 checkcommand "atuin" installatuin
-

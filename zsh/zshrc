@@ -4,6 +4,7 @@ export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
 export SNAP_DIR="$PLUGINS_DIR/znap"
+export BROWSER="google-chrome"
 
 export ATUIN_NOBIND="true"
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
@@ -11,7 +12,6 @@ export AUTO_NOTIFY_EXPIRE_TIME=5000
 export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc")
 export AUTO_NOTIFY_THRESHOLD=10000
 export AUTO_NOTIFY_TITLE="%command - Finished"
-export BROWSER="google-chrome"
 export BUN_INSTALL="$HOME/.bun"
 export CASE_SENSITIVE="false"
 export DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -24,8 +24,8 @@ export LANG="en_US.UTF-8"
 export LC_COLLATE=C
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
-export MANPATH="/usr/local/man:$MANPATH"
 export MANWIDTH=999
+export MANPATH="/usr/local/man:$MANPATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export VOLTA_HOME="$HOME/.volta"
 export YSU_MESSAGE_POSITION="after"
@@ -100,6 +100,7 @@ znap fpath _cargo   "rustup completions zsh cargo"
 znap fpath _volta   "volta completions zsh"
 znap fpath _wezterm "wezterm shell-completion --shell zsh"
 znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
@@ -110,7 +111,7 @@ for plugin in $PLUGINS; do
 done
 
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,vscode,tmux}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,tmux}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 zstyle ':omz:update' mode auto

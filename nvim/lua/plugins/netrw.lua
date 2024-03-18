@@ -3,12 +3,8 @@ local M = { "prichrd/netrw.nvim", lazy = false }
 function M.config()
     vim.cmd([[autocmd FileType netrw nmap <buffer> a %]])
     require("netrw").setup({
-        icons = {
-            symlink = " ",
-            directory = " ",
-            file = " ",
-        },
         use_devicons = true,
+        icons = { symlink = " ", directory = " ", file = " " },
         mappings = {
             ["l"] = function(payload)
                 vim.cmd("edit " .. payload.dir .. "/" .. payload.node)

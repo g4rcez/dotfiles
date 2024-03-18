@@ -1,5 +1,5 @@
 user: blue
-group: cyan
+group: green
 permission:
   read: white
   write: dark_yellow

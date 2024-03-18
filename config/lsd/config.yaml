@@ -4,7 +4,7 @@ dereference: true
 hyperlink: always
 indicators: false
 size: short
-total-size: false
+total-size: true
 color:
   when: always
   theme: custom

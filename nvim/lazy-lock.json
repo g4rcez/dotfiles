@@ -1,8 +1,9 @@
 {
   "LazyVim": { "branch": "main", "commit": "0107a1079be7fb92f7d5b7e2c40818f47cf425d9" },
   "LuaSnip": { "branch": "master", "commit": "8ae1dedd988eb56441b7858bd1e8554dfadaa46d" },
-  "NeoComposer.nvim": { "branch": "main", "commit": "b06e8e88e289947937f241f76e86f7c46f4a5805" },
   "SchemaStore.nvim": { "branch": "main", "commit": "4d798fd5b692c8fce77268aba8f6f926b0c9f835" },
+  "astrotheme": { "branch": "main", "commit": "6119b6b08fe4945f512671c82a5a19471c85bf1e" },
+  "astroui": { "branch": "main", "commit": "d51b2e815164a371ce2dea2b46facdf971f8d5d1" },
   "auto-save.nvim": { "branch": "main", "commit": "979b6c82f60cfa80f4cf437d77446d0ded0addf0" },
   "bufferline.nvim": { "branch": "main", "commit": "64e2c5def50dfd6b6f14d96a45fa3d815a4a1eef" },
   "catppuccin": { "branch": "main", "commit": "5e36ca599f4aa41bdd87fbf2c5aae4397ac55074" },

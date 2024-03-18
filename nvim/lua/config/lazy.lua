@@ -18,7 +18,6 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.coding.yanky" },
         { import = "lazyvim.plugins.extras.editor.harpoon2" },
         { import = "lazyvim.plugins.extras.editor.navic" },
-        { import = "lazyvim.plugins.extras.editor.symbols-outline" },
         { import = "lazyvim.plugins.extras.formatting.prettier" },
         { import = "lazyvim.plugins.extras.lang.docker" },
         { import = "lazyvim.plugins.extras.lang.java" },
@@ -27,8 +26,9 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.lang.tailwind" },
         { import = "lazyvim.plugins.extras.lang.typescript" },
         { import = "lazyvim.plugins.extras.lang.yaml" },
-        { import = "lazyvim.plugins.extras.test.core" },
         { import = "lazyvim.plugins.extras.lazyrc" },
+        { import = "lazyvim.plugins.extras.lazyrc" },
+        { import = "lazyvim.plugins.extras.test.core" },
         { import = "lazyvim.plugins.extras.util.gitui" },
         { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
         { import = "lazyvim.plugins.extras.vscode" },
@@ -39,14 +39,7 @@ require("lazy").setup({
     checker = { enabled = true, notify = false },
     performance = {
         rtp = {
-            -- disable some rtp plugins
-            disabled_plugins = {
-                "gzip",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-            },
+            disabled_plugins = { "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" },
         },
     },
 })

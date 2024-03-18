@@ -2,8 +2,8 @@ _fzf_comprun() {
   local command=$1
   shift
   case "$command" in
-    cd)           fzf "$@" --preview 'tree -C {} | head -200' ;;
-    *)            fzf "$@" --preview '~/dotfiles/bin/lessfilter.sh {}' ;;
+  cd) fzf "$@" --preview 'tree -C {} | head -200' ;;
+  *) fzf "$@" --preview '~/dotfiles/bin/lessfilter.sh {}' ;;
   esac
 }
 
@@ -40,11 +40,12 @@ _fzf_git_fzf() {
     --color=dark \
     --height '95%' \
     --info=inline \
-    --layout=reverse --multi --height=60% --min-height=30 \
+    -l "90%" \
+    --layout=reverse --multi --height=90% --min-height=30 \
     --preview '~/dotfiles/bin/lessfilter.sh {}' \
     --preview-window 'right,75%' \
     -i \
-    -p80%,80% \
+    -p90%,90% \
     "$@"
 }
 
@@ -119,10 +120,9 @@ bindkey '^ ' fzf-completion
 bindkey '^I' $fzf_default_completion
 
 _fzf_compgen_path() {
-    bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null
+  bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null
 }
 
 _fzf_compgen_dir() {
-    bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
+  bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
 }
-

@@ -173,3 +173,6 @@ function cpv() {
   rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
 }
 
+function anon() {
+  ZSH_AUTOSUGGEST_STRATEGY=()
+}

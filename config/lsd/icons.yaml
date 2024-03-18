@@ -42,6 +42,8 @@ name:
   tailwind.config.ts: 󱏿
   test: 󰙨
   tests: 󰙨
+  e2e: 󰙨
+  dotfiles: 
   tools: 
   tsconfig.json: 󰛦
   vscode: 󰘐

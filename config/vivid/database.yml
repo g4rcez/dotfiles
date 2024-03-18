@@ -181,7 +181,7 @@ programming:
     rust: [.rs]
     sass: [.sass]
     scala: [.scala, .sbt]
-    shell: [.sh, .bash, .bashrc, .bash_profile, .zsh, .fish]
+    shell: [.sh, .bash, .bashrc, .bash_profile, .zsh, .fish, .zshrc]
     sql: [.sql]
     swift: [.swift]
     tablegen: [.td]
@@ -190,6 +190,8 @@ programming:
       [
         tailwind.config.ts,
         tailwind.config.js,
+        tailwind.config.mjs,
+        tailwind.config.mts,
         .tailwind.config.js,
         .tailwind.config.ts,
       ]

@@ -131,3 +131,6 @@ function prs() {
   bash "$DOTFILES/bin/gh-fzf"
 }
 
+function killbranches () {
+  git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
+}

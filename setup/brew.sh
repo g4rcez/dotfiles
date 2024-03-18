@@ -10,5 +10,3 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   brew install koekeishiya/formulae/skhd
   skhd --start-service
 fi
-
-
