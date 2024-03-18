@@ -78,6 +78,10 @@ end, { desc = "Trouble references" })
 
 map.normal("<leader>xp", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
 map.normal("<leader>xn", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
+map.normal("<leader>su", "<cmd>Telescope undo<cr>", { desc = "Telescope Undo History" })
+map.normal("<leader>cR", function()
+    require("ssr").open()
+end)
 
 ----------------------------------------------------------------------------------------------------
 -- Refactoring

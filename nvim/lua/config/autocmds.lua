@@ -13,14 +13,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Disable autoformat for lua files
-vim.api.nvim_create_autocmd({ "FileType" }, {
-    pattern = { "*" },
-    callback = function()
-        vim.b.autoformat = false
-    end,
-})
-
 -- show cursor line only in active window
 vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
     callback = function()
@@ -93,7 +85,7 @@ api.nvim_create_autocmd({ "CursorMoved" }, {
 api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
   group = yank_group,
-  callback = function(ev)
+  callback = function()
     if vim.v.event.operator == 'y' then
       vim.fn.setpos('.', vim.g.current_cursor_pos)
     end

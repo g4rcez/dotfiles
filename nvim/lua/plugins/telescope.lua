@@ -46,8 +46,10 @@ return {
         "nvim-telescope/telescope.nvim",
         dependencies = {
             "FeiyouG/commander.nvim",
+            "debugloop/telescope-undo.nvim",
             "LukasPietzschmann/telescope-tabs",
             "MunifTanjim/nui.nvim",
+            "nvim-telescope/telescope-frecency.nvim",
             "axkirillov/easypick.nvim",
             "barrett-ruth/telescope-http.nvim",
             "nvim-telescope/telescope-file-browser.nvim",
@@ -143,17 +145,9 @@ return {
             },
             extensions_list = { "themes", "terms" },
             extensions = {
-                frecency = {
-                    show_scores = true,
-                    max_timestamps = 10000,
-                },
-                file_browser = {
-                    mappings = {
-                        i = {
-                            ["<C-n>"] = fb_actions.create,
-                        },
-                    },
-                },
+                undo = {},
+                frecency = { show_scores = true, max_timestamps = 10000 },
+                file_browser = { mappings = { i = { ["<C-n>"] = fb_actions.create } } },
                 http = { open_url = "open %s" },
                 fzf = {
                     fuzzy = true,
@@ -280,6 +274,7 @@ return {
             l("media_files")
             l("refactoring")
             l("noice")
+            l("undo")
         end,
     },
 }
