@@ -21,17 +21,17 @@ function createCatppuccin()
                 mocha = {
                     rosewater = "#ffc0b9",
                     flamingo = "#f5aba3",
-                    pink = "#f592d6",
-                    mauve = "#c0afff",
+                    pink = "#ec4899",
+                    mauve = "#818cf8",
                     red = "#ea746c",
                     maroon = "#ff8595",
                     peach = "#fa9a6d",
-                    yellow = "#ffe081",
-                    green = "#99d783",
-                    teal = "#47deb4",
-                    sky = "#00d5ed",
+                    yellow = "#eab308",
+                    green = "#10b981",
+                    teal = "#14b8a6",
+                    sky = "#0ea5e9",
                     sapphire = "#00dfce",
-                    blue = "#00baee",
+                    blue = "#3b82f6",
                     lavender = "#abbff3",
                     base = "#202020",
                     mantle = "#212121",
@@ -40,7 +40,6 @@ function createCatppuccin()
             },
             highlight_overrides = {
                 all = {
-                    -- dims the text so that the hits are more visible
                     TelescopeBorder = { bg = telescope_results, fg = telescope_results },
                     TelescopePromptBorder = { bg = telescope_prompt, fg = telescope_prompt },
                     TelescopePromptCounter = { fg = telescope_text },
@@ -95,7 +94,7 @@ function createAstro()
                 palette = "astrodark",
                 background = { light = "astrolight", dark = "astrodark" },
                 style = {
-                    transparent = false,
+                    transparent = true,
                     inactive = true,
                     float = true,
                     neotree = true,
@@ -107,9 +106,7 @@ function createAstro()
                 termguicolors = true,
                 terminal_color = true,
                 plugin_default = true,
-                plugins = {
-                    ["bufferline.nvim"] = true,
-                },
+                plugins = { ["bufferline.nvim"] = true },
             })
         end,
     }
@@ -124,7 +121,7 @@ local M = {
     "EdenEast/nightfox.nvim",
     "rebelot/kanagawa.nvim",
     { "LunarVim/darkplus.nvim", priority = 1000 },
-    { "LazyVim/LazyVim", opts = { colorscheme = "astrodark" } },
+    { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
 }
 
 return M

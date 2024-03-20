@@ -116,7 +116,7 @@ wezterm.on("open-uri", function(window, pane, uri)
 end)
 
 -- Background, window and tabs
-M.color_scheme = "Oxocarbon Dark"
+M.color_scheme = "Oxocarbon"
 M.cursor_blink_rate = 0
 M.default_cursor_style = "BlinkingBlock"
 M.enable_scroll_bar = false
@@ -136,6 +136,33 @@ M.font = wezterm.font({
   family = "JetBrainsMono Nerd Font",
   harfbuzz_features = { "calt=1", "clig=1", "liga=1" },
 })
+M.font_rules = {
+  {
+    intensity = "Bold",
+    italic = false,
+    font = wezterm.font("JetBrainsMono Nerd Font", {}),
+  },
+  {
+    intensity = "Bold",
+    italic = true,
+    font = wezterm.font({ family = "JetBrainsMono Nerd Font", italic = true }),
+  },
+  {
+    intensity = "Normal",
+    italic = true,
+    font = wezterm.font({ family = "JetBrainsMono Nerd Font", weight = "DemiLight", italic = true }),
+  },
+  {
+    intensity = "Half",
+    italic = true,
+    font = wezterm.font({ family = "JetBrainsMono Nerd Font", weight = "Light", italic = true }),
+  },
+  {
+    intensity = "Half",
+    italic = false,
+    font = wezterm.font({ family = "JetBrainsMono Nerd Font", weight = "Light" }),
+  },
+}
 
 -- Hyperlinks
 M.hyperlink_rules = wezterm.default_hyperlink_rules()
@@ -154,8 +181,7 @@ M.mouse_bindings = {
   },
 }
 
-wezterm.action({ CloseCurrentTab = { confirm = true } })
-M.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
+wezterm.action({ CloseCurrentTab = { confirm = false } })
+M.window_padding = { top = 1, bottom = 1, left = 10, right = 10 }
 
 return M
-
