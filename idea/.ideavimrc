@@ -302,6 +302,10 @@ let g:WhichKeyDesc_sort_asc = "<leader>cs Sort Asc"
 vnoremap <leader>cr :'<,'>!tail -r<cr>
 let g:WhichKeyDesc_sort_reverse = "<leader>cr Sort Desc"
 
+""" find usage
+map gr <Action>(FindUsages)
+let g:WhichKeyDesc_find_usages = "<leader>gr Find usages"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" file/find tools - prefix file(file/find)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -346,15 +350,10 @@ map <A-down> <action>(MoveLineDown)
 let g:WhichKeyDesc_move_line_down = "<A-down> Move line down"
 
 set easymotion
-let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_do_mapping = 1
 
 nmap <leader>mj <action>(AceDeclarationAction)
 let g:WhichKeyDesc_ace_jump = "<leader>mj Easy motion plugin"
-
-" Press `f` to activate Target Mode
-map f <Action>(AceDeclarationAction)
-" Press `F` to activate Target Mode
-map F <Action>(AceDeclarationAction)
 
 set multiple-cursors
 vnoremap <C-j> <Action>(EditorCloneCaretBelow)

@@ -10,6 +10,7 @@
 set -xe
 mkdir -p $HOME/tools $HOME/.tmp
 DIR="$HOME/dotfiles"
+DOT_CONFIG="$DIR/config"
 
 function checkcommand() {
   if [[ -f "$(command -v $1)" ]]; then
@@ -23,20 +24,12 @@ function checkcommand() {
 pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 ########################################################################################################################
-##### nvim
+##### core installs
 ln -sf $DIR/nvim/ $HOME/.config/nvim/
-
-########################################################################################################################
-##### symlinks
-DOT_CONFIG="$DIR/config"
-ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
-ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
-ln -sf $DOT_CONFIG/starship.toml $HOME/.config/starship.toml
+ln -sf $DIR/zsh/zshrc $HOME/.zshrc
 ln -sf $DOT_CONFIG/tmux $HOME/.config/tmux
 ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
-ln -sf $DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DIR/espanso/match/base.yml "$(espanso path config)/match/base.yml"
-ln -sf $DIR/dygma $HOME/Raise
+ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
 
 ########################################################################################################################
 ##### gitconfig
@@ -76,3 +69,10 @@ function installatuin() {
   bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 }
 checkcommand "atuin" installatuin
+#
+########################################################################################################################
+##### other links
+ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
+ln -sf $DOT_CONFIG/starship.toml $HOME/.config/starship.toml
+ln -sf $DIR/espanso/match/base.yml "$(espanso path config)/match/base.yml"
+ln -sf $DIR/dygma $HOME/Raise

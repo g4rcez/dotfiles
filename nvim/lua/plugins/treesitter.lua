@@ -31,10 +31,14 @@ local M = {
 }
 
 function M.config()
-    local wk = require("which-key")
-    wk.register({
-        ["<leader>Ti"] = { "<cmd>TSConfigInfo<CR>", "Info" },
-    })
+    if vim.g.vscode then
+        print("Don't load which-key")
+    else
+        local wk = require("which-key")
+        wk.register({
+            ["<leader>Ti"] = { "<cmd>TSConfigInfo<CR>", "Info" },
+        })
+    end
 
     require("nvim-treesitter.configs").setup({
         ensure_installed = ensure_installed,

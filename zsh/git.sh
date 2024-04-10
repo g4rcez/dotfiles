@@ -113,7 +113,6 @@ alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
-alias wip='git add . && git commit -S -m "wip: work in progress" && git push'
 #############################################################################################################################
 ## github-cli
 alias ghc='gh pr checkout'
@@ -134,3 +133,11 @@ function prs() {
 function killbranches () {
   git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
 }
+
+function wip() {
+  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
+  git add -A .
+  git commit --no-verify -S -m "wip: checkpoint at $NOW"
+  git push
+}
+
