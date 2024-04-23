@@ -1,10 +1,10 @@
 classic: false
 date: date
-dereference: true
+dereference: false
 hyperlink: always
 indicators: false
 size: short
-total-size: true
+total-size: false
 color:
   when: always
   theme: custom

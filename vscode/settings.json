@@ -67,5 +67,8 @@
   "workbench.settings.editor": "json",
   "workbench.settings.useSplitJSON": true,
   "workbench.sideBar.location": "right",
-  "workbench.statusBar.visible": true
+  "workbench.statusBar.visible": true,
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }

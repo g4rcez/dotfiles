@@ -24,6 +24,7 @@ Hi. This is my dotfiles project. Here you will find all my configs to create an 
 
 - [espanso](https://espanso.org/)
 - [karabiner](https://karabiner-elements.pqrs.org/index.html) - replace CapsLock to Esc
+- [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner)
 - [raycast](https://www.raycast.com/)
 
 ![my shell](./assets/shell.png)

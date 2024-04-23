@@ -1,4 +1,20 @@
 ##############################################################################################################
+## utility functions
+function checkcommand() {
+  if [[ -f "$(command -v $1)" ]]; then
+  else
+    $2
+  fi
+}
+
+
+function _postcd() {
+  dotenv ".env"
+  dotenv ".env.local"
+  dotenv "./src/.env"
+}
+
+##############################################################################################################
 ## exports
 export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
@@ -21,6 +37,7 @@ export HIST_STAMPS="yyyy-mm-dd"
 export HYPHEN_INSENSITIVE="true"
 export KEYTIMEOUT=1000
 export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 export LC_COLLATE=C
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
@@ -97,8 +114,10 @@ znap fpath _kubectl "kubectl completion zsh"
 znap fpath _rustup  "rustup completions zsh"
 znap fpath _cargo   "rustup completions zsh cargo"
 znap fpath _volta   "volta completions zsh"
-znap fpath _wezterm "wezterm shell-completion --shell zsh"
 znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
+znap fpath _typeid "typeid completion zsh"
+# znap fpath _wezterm "wezterm shell-completion --shell zsh"
+
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 for plugin in $PLUGINS; do
@@ -142,11 +161,6 @@ eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 bindkey '^r' _atuin_search_widget
 
-function _postcd() {
-  dotenv ".env"
-  dotenv ".env.local"
-  dotenv "./src/.env"
-}
 _postcd
 chpwd_functions+=(_postcd)
 

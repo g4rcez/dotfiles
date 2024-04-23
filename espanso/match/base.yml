@@ -1,16 +1,14 @@
-# espanso match file
-
-# For a complete introduction, visit the official docs at: https://espanso.org/docs/
-
-# You can use this file to define the base matches (aka snippets)
-# that will be available in every application when using espanso.
-
-# Matches are substitution rules: when you type the "trigger" string
-# it gets replaced by the "replace" string.
 includes:
   - "~/.shortcuts.yml"
 
 matches:
+  - trigger: ":isodate"
+    replace: "{{time}}"
+    vars:
+      - name: time
+        type: date
+        params:
+          format: "%Y-%m-%dT%H:%M:%S"
   - trigger: ":date"
     replace: "{{mydate}}"
     vars:
@@ -26,16 +24,16 @@ matches:
         params:
           format: "%H:%M"
 
-  - triggers: [ ":block:", ":mb:" ]
+  - triggers: [":block:", ":mb:"]
+    force_clipboard: true
     replace: |-
       ```$|$
       ```
-    force_clipboard: true
 
-  - triggers: [ ":code:", ":mc:" ]
+  - triggers: [":code:", ":mc:"]
+    force_clipboard: true
     replace: |-
       `$|$`
-    force_clipboard: true
 
   - trigger: ":h1:"
     replace: "#"
@@ -67,26 +65,30 @@ matches:
   - trigger: ":url:"
     replace: "[$|$]()"
 
-  - triggers: [ ":image:", ":img:" ]
+  - triggers: [":link:"]
+    replace: "[]($|$)"
+
+  - triggers: [":image:", ":img:"]
     replace: "![]($|$)"
 
-  - triggers: [ ":horizontal:", ":mh:" ]
+  - triggers: [":horizontal:", ":mh:"]
     replace: "___"
 
-  - triggers: [ ":task:", ":mt:" ]
+  - triggers: [":task:", ":mt:"]
     replace: "- [ ] "
 
-  - triggers: [ ":taskdone:", ":mtd:" ]
+  - triggers: [":taskdone:", ":mtd:"]
     replace: "- [x] "
 
-  - triggers: [ ":collapse:", ":mcol:" ]
+  - triggers: [":collapse:", ":mcol:"]
+    force_clipboard: true
     replace: |-
       <details>
       <summary></summary>
 
       $|$
       </details>
-    force_clipboard: true
+
   - trigger: ":lorem"
     replace: "{{output}}"
     vars:
@@ -110,6 +112,7 @@ matches:
             - "Curabitur est gravida et libero vitae dictum."
             - "Quisque ut dolor gravida, placerat libero vel, euismod."
             - "Ullamco laboris nisi ut aliquid ex ea commodi consequat."
+
   - trigger: ":uuid"
     replace: "{{output}}"
     vars:
@@ -117,5 +120,38 @@ matches:
         type: shell
         params:
           shell: bash
-          cmd: "/Users/allangarcez/.volta/bin/node -e \"console.log(require('crypto').randomUUID())\""
+          cmd: '~/.volta/bin/node -e "console.log(require(''crypto'').randomUUID())"'
+
+  - trigger: ":cpf"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          shell: bash
+          cmd: "~/.volta/bin/node ~/dotfiles/bin/cpf"
+
+  - trigger: ":cnpj"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          shell: bash
+          cmd: "~/.volta/bin/node ~/dotfiles/bin/cnpj"
+
+  - trigger: ":cep"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: random
+        params:
+          choices:
+            - "04538-133"
+            - "04543-907"
+            - "21530-014"
+            - "22740-300"
+            - "28957-632"
+            - "30260-070"
+            - "70040-010"
 

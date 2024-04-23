@@ -130,10 +130,17 @@ function listening() {
   fi
 }
 
+function yabaiUpdate() {
+  yabai --uninstall-service
+  brew upgrade yabai
+  yabai --start-service
+}
+
 function updateAll() {
-  znap pull;
-  brew upgrade;
-  fzf-update;
+  znap pull
+  brew upgrade
+  fzf-update
+  yabaiUpdate
 }
 
 function secretuuid() {
@@ -155,8 +162,10 @@ function fs() {
 }
 
 function dotenv() {
-  if [[ -f "$1" ]];then
-    set -o allexport; source "$1"; set +o allexport
+  if [[ -f "$1" ]]; then
+    set -o allexport
+    source "$1"
+    set +o allexport
   fi
 }
 
@@ -166,7 +175,7 @@ function memory() {
 
 function cdm() {
   mkdir -p "$1"
-  cd "$1" || return;
+  cd "$1" || return
 }
 
 function cpv() {
