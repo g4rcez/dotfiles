@@ -1,6 +1,13 @@
 import fs from "fs";
 import { KarabinerRules } from "./types";
-import { createHyperSubLayers, app, open, rectangle } from "./utils";
+import {
+  createHyperSubLayers,
+  app,
+  open,
+  rectangle,
+  chrome,
+  appInstance,
+} from "./utils";
 
 const rules: KarabinerRules[] = [
   {
@@ -27,8 +34,8 @@ const rules: KarabinerRules[] = [
       c: app("Notion Calendar"),
       f: app("Finder"),
       g: app("Google Chrome"),
-      return_or_enter: app("iTerm"),
-      t: app("iTerm"),
+      return_or_enter: appInstance("iTerm"),
+      t: appInstance("iTerm"),
       s: app("Spotify"),
       v: app("Visual Studio Code"),
       w: app("WebStorm"),
@@ -131,6 +138,8 @@ const rules: KarabinerRules[] = [
       i: { to: [{ key_code: "page_up" }] },
     },
     c: {
+      l: chrome("Default"),
+      w: chrome("Profile 1"),
       p: { to: [{ key_code: "play_or_pause" }] },
       n: { to: [{ key_code: "fastforward" }] },
       b: { to: [{ key_code: "rewind" }] },

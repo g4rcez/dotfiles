@@ -141,10 +141,22 @@ function generateSubLayerVariableName(key: KeyCode) {
 /**
  * Shortcut for "open" shell command
  */
-export function open(what: string): LayerCommand {
+export function open(what: string, params: string = ""): LayerCommand {
   return {
-    to: [{ shell_command: `open ${what}` }],
+    to: [{ shell_command: `open ${params} ${what}` }],
     description: `Open ${what}`,
+  };
+}
+
+// open -a 'Google Chrome.app' -n --args --profile-directory='Profile 1'
+export function chrome(profile: string): LayerCommand {
+  return {
+    to: [
+      {
+        shell_command: `open -a 'Google Chrome.app' -n --args --profile-directory='${profile}'`,
+      },
+    ],
+    description: `Open GoogleChrome ${profile}`,
   };
 }
 
@@ -162,9 +174,10 @@ export function rectangle(name: string): LayerCommand {
   };
 }
 
-/**
- * Shortcut for "Open an app" command (of which there are a bunch)
- */
 export function app(name: string): LayerCommand {
   return open(`-a '${name}.app'`);
+}
+
+export function appInstance(name: string): LayerCommand {
+  return open(`-n -a '${name}.app'`);
 }

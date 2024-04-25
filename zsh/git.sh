@@ -97,7 +97,7 @@ unset git_version
 alias pushf="git push --force-with-lease"
 alias add='git add'
 alias checkout='git checkout'
-alias commit='git commit -S -m'
+alias commit='git commit -S'
 alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
@@ -117,7 +117,6 @@ alias tags='git tag | sort -V'
 ## github-cli
 alias ghc='gh pr checkout'
 alias ghl='gh pr list'
-alias newpr='gh pr create'
 alias gdash="gh dash"
 #############################################################################################################################
 ## fzf git/github
@@ -134,9 +133,22 @@ function killbranches () {
   git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
 }
 
+function createpr() {
+  BRANCH_TARGET=$(git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g'| grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}")
+  gh pr create --base "$BRANCH_TARGET" -a "@me" $*
+}
+
+function newpr() {
+  createpr ""
+}
+
+function draft() {
+  createpr --draft
+}
+
 function wip() {
-  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
   git add -A .
+  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
   git commit --no-verify -S -m "wip: checkpoint at $NOW"
   git push
 }

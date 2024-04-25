@@ -82,7 +82,7 @@ function fns() {
 
 function fzf-update() {
   DIR="$(pwd)"
-  cd ~/.fzf && git pull && ./install
+  cd ~/.fzf && git pull && ./install --no-bash --no-zsh --no-fish --no-key-bindings --no-completion --no-update-rc
   cd "$DIR"
   exec $SHELL -l
 }

@@ -9,6 +9,7 @@ matches:
         type: date
         params:
           format: "%Y-%m-%dT%H:%M:%S"
+
   - trigger: ":date"
     replace: "{{mydate}}"
     vars:
@@ -16,6 +17,7 @@ matches:
         type: date
         params:
           format: "%d/%m/%Y"
+
   - trigger: ":time"
     replace: "{{time}}"
     vars:
