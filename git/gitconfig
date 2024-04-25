@@ -54,6 +54,7 @@
 [push]
     autoSetupRemove = true
     autoSetupRemote = true
+	autoSetupRemote = true
 
 [gist]
   private = yes
@@ -72,10 +73,11 @@
 
 [commit]
 	gpgsign = true
+	template = /Users/allangarcez/dotfiles/git/gitmessage
 
 [help]
     # Automatically correct and execute mistyped commands.
-    autocorrect = 1
+	autocorrect = prompt
 
 [merge]
     # Include summaries of merged commits in newly created merge commit messages
