@@ -2,7 +2,7 @@ const random = (n) => Math.round(Math.random() * n);
 
 const mod = (base, div) => Math.round(base - Math.floor(base / div) * div);
 
-function cnpj() {
+const cnpj = () => {
   var n = 9;
   var n1 = random(n);
   var n2 = random(n);
