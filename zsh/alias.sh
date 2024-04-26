@@ -131,17 +131,10 @@ function listening() {
   fi
 }
 
-function yabaiUpdate() {
-  yabai --uninstall-service
-  brew upgrade yabai
-  yabai --start-service
-}
-
 function updateAll() {
   znap pull
   brew upgrade
   fzf-update
-  yabaiUpdate
 }
 
 function secretuuid() {
