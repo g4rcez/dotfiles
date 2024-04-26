@@ -1,3 +1,5 @@
+#!/bin/env node
+
 const random = (n) => Math.round(Math.random() * n);
 
 const mod = (base, div) => Math.round(base - Math.floor(base / div) * div);

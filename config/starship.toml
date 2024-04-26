@@ -39,7 +39,7 @@ disabled = false
 
 [directory]
 format = '[\[$path\]]($style)[$read_only]($read_only_style) '
-style = "bold bright-blue"
+style = "bright-blue"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
 
@@ -50,13 +50,13 @@ style = "$white"
 format = '[[ $time ](fg:#a0a9cb)]($style)'
 
 [character]
-success_symbol = "[>_](bold white)"
+success_symbol = "[>_](white)"
 error_symbol = "[>_](red)"
 vimcmd_symbol = "[❮](green)"
 
 [git_branch]
 format = '[$symbol$branch(:$remote_branch)]($style) '
-style = "bright-white bold"
+style = "white"
 symbol = ' '
 
 [git_status]
@@ -72,17 +72,17 @@ renamed = ""
 staged = ' [+$count](green) '
 stashed = " "
 untracked = " "
-up_to_date = '[✓](bold green) '
+up_to_date = '[✓](green) '
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "bright-black"
-cherry_pick = '[🍒](bold red)'
+cherry_pick = '[🍒](red)'
 
 [git_metrics]
 disabled = false
-added_style = 'bold green'
-deleted_style = 'bold bright-yellow'
+added_style = 'green'
+deleted_style = 'bright-yellow'
 format = '[+$added]($added_style)|[-$deleted]($deleted_style) '
 only_nonzero_diffs = true
 
@@ -125,7 +125,7 @@ fi
 directories = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash","--norc","--noprofile"]
-style = "yellow bold"
+style = "yellow"
 format = " [$output]($style) "
 
 [custom.git_host]
@@ -161,6 +161,6 @@ printf "%s%s" "$ICON" "$PRETTY_URL"
 directories = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash","--norc","--noprofile"]
-style = "white bold"
+style = "white"
 format = "[$output]($style) "
 
