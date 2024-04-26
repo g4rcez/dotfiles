@@ -39,7 +39,7 @@ First, check the requirements:
 ```bash
 git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
 cd $HOME/dotfiles
-bash install.sh
+bash install
 zsh
 ```
 

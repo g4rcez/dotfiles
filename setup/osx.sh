@@ -1,5 +1,6 @@
+#ln -sf $HOME/dotfiles/espanso "$HOME/Library/Application\ Support/espanso/match/base.yml"
+# "Disable press-and-hold for keys in favor of key repeat"
 defaults write -g ApplePressAndHoldEnabled -bool false
-ln -sf $HOME/dotfiles/espanso "$HOME/Library/Application\ Support/espanso/match/base.yml"
 
 # Show the ~/Library folder.
 chflags nohidden ~/Library
@@ -30,6 +31,18 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 # Set the Finder prefs for showing a few different volumes on the Desktop.
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
+# "Set a shorter Delay until key repeat"
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# "Enable tap to click (Trackpad)"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+
+# "Enable Safari’s debug menu"
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+
+# "Show Status bar in Finder"
+defaults write com.apple.finder ShowStatusBar -bool true
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "

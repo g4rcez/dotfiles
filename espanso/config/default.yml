@@ -18,6 +18,7 @@
 # You can also disable the toggle key completely with
 toggle_key: OFF
 search_shortcut: off
+auto_restart: true
 
 # --- Injection Backend
 

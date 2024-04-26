@@ -1,37 +1,91 @@
-[apply]
-    whitespace = fix
+[commit]
+	gpgsign = true
+	template = ~/dotfiles/git/gitmessage
 
 [github]
-    user = g4rcez
+  user = g4rcez
+
+[user]
+	name = g4rcez
+	email = allan.f.garcez@gmail.com
+	signingkey = 54F46BAA2465C272
+
+[core]
+  pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
+  excludesFile = ~/dotfiles/git/global_gitignore
+  ignoreCase = false
+
+[apply]
+  whitespace = fix
+
+[grep]
+  lineNumber = true
 
 [init]
 	defaultBranch = main
 
 [branch]
-    sort = -committerdate
+  sort = -committerdate
 
 [color]
-    ui = true
-
-[color "status"]
-	added = 10 normal
-	changed = 11 normal
-	untracked = normal dim
-	branch = 5 normal
-	updated = 10 normal
-	localbranch = 5 normal
-	header = normal
-	remotebranch = 2 normal
-	nobranch = 1 normal italic
-	unmerged = 9 normal
-
-[core]
-	excludesFile = ~/.gitignore
-    pager = diff-so-fancy | less --tabs=4 -RFX
-	ignoreCase = false
+  ui = true
 
 [pull]
     rebase = true
+
+[rebase]
+	autoStash = true
+
+[gist]
+  private = yes
+
+[log]
+  decorate = short
+
+[fetch]
+  prune = true
+  output = compact
+
+[help]
+    # Automatically correct and execute mistyped commands.
+	autocorrect = prompt
+
+[merge]
+  log = true
+  conflictstyle = diff3
+
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+
+[delta]
+  dark = true
+  features = decorations
+  hyperlinks = true
+  hyperlinks-file-link-format = "vscode://file/{path}:{line}"
+  line-numbers = true
+  navigate = true
+  side-by-side = true
+  true-color = always
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  file-style = omit
+  hunk-header-style = file line-number syntax
+
+[gpg]
+    program = /usr/local/bin/gpg
+
+[diff]
+	colorMoved = default
+	tool = delta
+
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
+
+[push]
+  autoSetupRemove = true
 
 [alias]
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
@@ -51,101 +105,34 @@
   # List contributors with number of commits.
   contributors = shortlog --summary --numbered
 
-[push]
-    autoSetupRemove = true
-    autoSetupRemote = true
-	autoSetupRemote = true
-
-[gist]
-  private = yes
-
-[log]
-    decorate = short
-
-[fetch]
-    prune = true
-    output = compact
-
-[user]
-	name = g4rcez
-	email = allan.f.garcez@gmail.com
-	signingkey = 54F46BAA2465C272
-
-[commit]
-	gpgsign = true
-	template = /Users/allangarcez/dotfiles/git/gitmessage
-
-[help]
-    # Automatically correct and execute mistyped commands.
-	autocorrect = prompt
-
-[merge]
-    # Include summaries of merged commits in newly created merge commit messages
-    log = true
-
-[interactive]
-    diffFilter = diff-so-fancy --patch
-
-[color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red bold 52
-    newNormal = green bold
-    newHighlight = green bold 22
-
-[color "diff"]
-	meta = normal italic
-	frag = normal dim
-	func = 1 normal dim
-	commit = 3 normal
-	old = 1 normal
-	new = 10 normal
-	whitespace = normal 9
-	newMoved = 11 normal
-	oldMovedAlternativeDimmed = 4 normal dim
-	oldMovedAlternative = 4 normal
-	contextBold = normal bold
-	newBold = 10 normal bold
-	context = normal
-	oldMoved = 3 normal
-	oldBold = 1 normal bold
-	newMovedDimmed = 11 normal dim
-	newDimmed = 10 normal dim
-	newMovedAlternative = 12 normal
-	newMovedAlternativeDimmed = 12 normal dim
-	oldMovedDimmed = 3 normal dim
-	oldDimmed = 1 normal dim
-
-[diff-so-fancy]
-    markEmptyLines = false
-    rulerWidth = 120
-
-[gpg]
-    program = /usr/local/bin/gpg
-[color "branch"]
-	plain = 5 normal
-	remote = 2 normal
-	current = 5 normal reverse
-	local = 5 normal
-	upstream = 2 normal
-[color "remote"]
-	hint = normal dim
-	success = 2 normal
-	error = 1 normal
-	warning = 3 normal
-[color "interactive"]
-	header = normal dim bold
-	prompt = 15 4
-	help = normal dim
-	error = 1 normal italic
-[color "decorate"]
-	branch = 5 normal
-	tag = 3 normal
-	remotebranch = 2 normal
-	stash = normal dim
-	grafted = 1 normal italic
-	HEAD = 5 normal italic
-[diff]
-	colorMoved = zebra
-[gpg "ssh"]
-	allowedSignersFile = ~/.ssh/allowed_signers
-
+[delta "catppuccin-mocha"]
+	blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
+	commit-decoration-style = "box ul"
+	dark = true
+	file-decoration-style = "#cdd6f4"
+	file-style = "#cdd6f4"
+	hunk-header-decoration-style = "box ul"
+	hunk-header-file-style = "bold"
+	hunk-header-line-number-style = "bold #a6adc8"
+	hunk-header-style = "file line-number syntax"
+	line-numbers = true
+	line-numbers-left-style = "#6c7086"
+	line-numbers-minus-style = "bold #f38ba8"
+	line-numbers-plus-style = "bold #a6e3a1"
+	line-numbers-right-style = "#6c7086"
+	line-numbers-zero-style = "#6c7086"
+	# 25% red 75% base
+	minus-emph-style = "bold syntax #53394c"
+	# 10% red 90% base
+	minus-style = "syntax #35293b"
+	# 25% green 75% base
+	plus-emph-style = "bold syntax #40504b"
+	# 10% green 90% base
+	plus-style = "syntax #2c333a"
+	map-styles = \
+		bold purple => syntax "#494060", \
+		bold blue => syntax "#394361", \
+		bold cyan => syntax "#384d5e", \
+		bold yellow => syntax "#544f4e"
+	# Should match the name of the bat theme
+	syntax-theme = "Catppuccin Mocha"

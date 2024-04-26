@@ -68,6 +68,7 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 
 ############################################################################
 ## docker
+alias docker-compose="docker compose"
 function docker-prune-volumes() {
   docker volume rm "$(docker volume ls -q --filter dangling=true)"
 }

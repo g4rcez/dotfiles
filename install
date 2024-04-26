@@ -34,9 +34,6 @@ ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
 ########################################################################################################################
 ##### gitconfig
 ln -sf $DIR/git/gitconfig $HOME/.gitconfig
-ln -sf $DIR/git/global_gitignore $HOME/.gitignore
-git config --global core.excludesFile "~/.gitignore"
-git config --global init.defaultBranch main
 
 ########################################################################################################################
 ##### fzf
@@ -69,7 +66,11 @@ function installatuin() {
   bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 }
 checkcommand "atuin" installatuin
-#
+
+if [[ -f "$(command -v $1)" ]]; then
+  make
+fi
+
 ########################################################################################################################
 ##### other links
 ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore

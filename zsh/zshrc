@@ -56,10 +56,15 @@ export ZSH_TMUX_CONFIG="$DOTFILES/config/tmux/tmux.conf"
 export ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
 export ZSH_TMUX_FIXTERM="true"
 
+export BAT_PAGER="less"
+export DELTA_PAGER="less -R"
+export EDITOR="nvim"
+export MANPAGER=""
+export PAGER=""
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
-  export PAGER="nvim"
   export MANPAGER="nvim +Man!"
+  export PAGER="nvim"
 fi
 
 ##############################################################################################################

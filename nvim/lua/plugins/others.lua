@@ -1,4 +1,5 @@
 return {
+    "sindrets/diffview.nvim",
     "LukasPietzschmann/telescope-tabs",
     "rest-nvim/rest.nvim",
     { "ixru/nvim-markdown", lazy = false },
