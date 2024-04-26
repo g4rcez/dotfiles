@@ -181,3 +181,38 @@ export function app(name: string): LayerCommand {
 export function appInstance(name: string): LayerCommand {
   return open(`-n -a '${name}.app'`);
 }
+
+export const doubleTap = (from: KeyCode, to: To[]): KarabinerRules => {
+  const varname = `${from} pressed`;
+  return {
+    description: `Double tap for ${from} using hyper key`,
+    manipulators: [
+      {
+        type: "basic",
+        from: { key_code: from, modifiers: { optional: ["any"] } },
+        to,
+        to_after_key_up: [{ set_variable: { name: varname, value: 0 } }],
+        conditions: [
+          { type: "variable_if", name: "hyper", value: 1 },
+          { type: "variable_if", name: varname, value: 1 },
+        ],
+      },
+      {
+        type: "basic",
+        parameters: { "basic.to_delayed_action_delay_milliseconds": 250 },
+        from: {
+          key_code: from,
+          modifiers: { optional: ["any"] },
+        },
+        conditions: [{ type: "variable_if", name: "hyper", value: 1 }],
+        to: [{ set_variable: { name: varname, value: 1 } }],
+        to_delayed_action: {
+          to_if_invoked: [
+            { set_variable: { name: varname, value: 0 } },
+            { key_code: from },
+          ],
+        },
+      },
+    ],
+  };
+};

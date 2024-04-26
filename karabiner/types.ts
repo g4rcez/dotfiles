@@ -1,9 +1,9 @@
-export interface KarabinerRules {
+export type KarabinerRules = {
   description?: string;
   manipulators?: Manipulator[];
-}
+};
 
-export interface Manipulator {
+export type Manipulator = {
   description?: string;
   type: "basic";
   from: From;
@@ -12,11 +12,18 @@ export interface Manipulator {
   to_if_alone?: To[];
   parameters?: Parameters;
   conditions?: Conditions[];
-}
+  to_delayed_action?: {
+    to_if_invoked: [
+      { set_variable: { name: string; value: number } },
+      { key_code: KeyCode }
+    ];
+  };
+};
 
-export interface Parameters {
-  "basic.simultaneous_threshold_milliseconds"?: number;
-}
+export type Parameters = Partial<{
+  "basic.simultaneous_threshold_milliseconds": number;
+  "basic.to_delayed_action_delay_milliseconds": number;
+}>;
 
 type Conditions =
   | FrontMostApplicationCondition
@@ -43,7 +50,7 @@ type DeviceCondition = {
   description?: string;
 };
 
-interface Identifiers {
+type Identifiers = {
   vendor_id?: number;
   product_id?: number;
   location_id?: number;
@@ -51,7 +58,7 @@ interface Identifiers {
   is_pointing_device?: boolean;
   is_touch_bar?: boolean;
   is_built_in_keyboard?: boolean;
-}
+};
 
 type KeybaordTypeCondition = {
   type: "keyboard_type_if" | "keyboard_type_unless";
@@ -65,11 +72,11 @@ type InputSourceCondition = {
   description?: string;
 };
 
-interface InputSource {
+type InputSource = {
   language?: string;
   input_source_id?: string;
   input_mode_id?: string;
-}
+};
 
 type VaribaleCondition = {
   type: "variable_if" | "variable_unless";
@@ -84,30 +91,30 @@ type EventChangedCondition = {
   description?: string;
 };
 
-export interface SimultaneousFrom {
+export type SimultaneousFrom = {
   key_code: KeyCode;
-}
+};
 
-export interface SimultaneousOptions {
+export type SimultaneousOptions = {
   key_down_order?: "insensitive" | "strict" | "strict_inverse";
   detect_key_down_uninterruptedly?: boolean;
-}
+};
 
-export interface From {
+export type From = {
   key_code?: KeyCode;
   simultaneous?: SimultaneousFrom[];
   simultaneous_options?: SimultaneousOptions;
   modifiers?: Modifiers;
-}
+};
 
-export interface Modifiers {
+export type Modifiers = {
   optional?: string[];
   mandatory?: string[];
-}
+};
 
-export interface To {
+export type To = {
   key_code?: KeyCode;
-  modifiers?: string[];
+  modifiers?: KeyCode[];
   shell_command?: string;
   set_variable?: {
     name: string;
@@ -121,7 +128,7 @@ export interface To {
    * @see: {@link https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to/software_function/iokit_power_management_sleep_system/}
    */
   software_function?: SoftwareFunction;
-}
+};
 
 export interface MouseKey {
   y?: number;

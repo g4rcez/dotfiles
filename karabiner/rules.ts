@@ -7,6 +7,7 @@ import {
   rectangle,
   chrome,
   appInstance,
+  doubleTap,
 } from "./utils";
 
 const rules: KarabinerRules[] = [
@@ -23,13 +24,8 @@ const rules: KarabinerRules[] = [
       },
     ],
   },
+  doubleTap("g", [{ key_code: "caps_lock" }]),
   ...createHyperSubLayers({
-    b: {
-      c: open("https://color-hex.com/"),
-      g: open("https://github.com"),
-      r: open("https://reddit.com"),
-      t: open("https://twitter.com"),
-    },
     o: {
       c: app("Notion Calendar"),
       f: app("Finder"),
@@ -40,7 +36,6 @@ const rules: KarabinerRules[] = [
       v: app("Visual Studio Code"),
       w: app("WebStorm"),
     },
-    // w = "Window" via rectangle.app
     w: {
       semicolon: {
         description: "Window: Hide",
@@ -66,43 +61,6 @@ const rules: KarabinerRules[] = [
         description: "Window: Next Tab",
         to: [{ key_code: "tab", modifiers: ["right_control"] }],
       },
-      n: {
-        description: "Window: Next Window",
-        to: [
-          {
-            key_code: "grave_accent_and_tilde",
-            modifiers: ["right_command"],
-          },
-        ],
-      },
-      b: {
-        description: "Window: Back",
-        to: [
-          {
-            key_code: "open_bracket",
-            modifiers: ["right_command"],
-          },
-        ],
-      },
-      // Note: No literal connection. Both f and n are already taken.
-      m: {
-        description: "Window: Forward",
-        to: [
-          {
-            key_code: "close_bracket",
-            modifiers: ["right_command"],
-          },
-        ],
-      },
-      d: {
-        description: "Window: Next display",
-        to: [
-          {
-            key_code: "right_arrow",
-            modifiers: ["right_control", "right_option", "right_command"],
-          },
-        ],
-      },
     },
     s: {
       d: open(`raycast://extensions/yakitrak/do-not-disturb/toggle`),
@@ -124,19 +82,6 @@ const rules: KarabinerRules[] = [
       semicolon: { to: [{ key_code: "fastforward" }] },
       u: { to: [{ key_code: "volume_increment" }] },
     },
-    v: {
-      h: { to: [{ key_code: "left_arrow" }] },
-      j: { to: [{ key_code: "down_arrow" }] },
-      k: { to: [{ key_code: "up_arrow" }] },
-      l: { to: [{ key_code: "right_arrow" }] },
-      m: { to: [{ key_code: "f", modifiers: ["right_control"] }] },
-      s: { to: [{ key_code: "j", modifiers: ["right_control"] }] },
-      d: {
-        to: [{ key_code: "d", modifiers: ["right_shift", "right_command"] }],
-      },
-      u: { to: [{ key_code: "page_down" }] },
-      i: { to: [{ key_code: "page_up" }] },
-    },
     c: {
       l: chrome("Default"),
       w: chrome("Profile 1"),
@@ -154,6 +99,12 @@ const rules: KarabinerRules[] = [
       ),
       p: open("raycast://extensions/thomas/color-picker/pick-color"),
     },
+    h: { to: [{ key_code: "left_arrow" }] },
+    l: { to: [{ key_code: "right_arrow" }] },
+    k: { to: [{ key_code: "up_arrow" }] },
+    j: { to: [{ key_code: "down_arrow" }] },
+    0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }] },
+    4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }] },
   }),
 ];
 
@@ -161,11 +112,24 @@ fs.writeFileSync(
   "karabiner.json",
   JSON.stringify(
     {
-      global: { show_in_menu_bar: true },
+      global: {
+        ask_for_confirmation_before_quitting: true,
+        check_for_updates_on_startup: true,
+        show_in_menu_bar: true,
+        show_profile_name_in_menu_bar: false,
+        unsafe_ui: false,
+      },
       profiles: [
         {
           name: "Default",
           complex_modifications: {
+            parameters: {
+              "basic.simultaneous_threshold_milliseconds": 50,
+              "basic.to_delayed_action_delay_milliseconds": 250,
+              "basic.to_if_alone_timeout_milliseconds": 250,
+              "basic.to_if_held_down_threshold_milliseconds": 250,
+              "mouse_motion_to_scroll.speed": 100,
+            },
             rules,
           },
         },
