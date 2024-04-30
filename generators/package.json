@@ -1,0 +1,20 @@
+{
+    "name": "karabiner",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Max Stoiber <contact@mxstbr.com>",
+    "license": "MIT",
+    "scripts": {
+        "espanso:compile": "tsx ./src/index.ts espanso",
+        "espanso:watch": "tsx --watch ./src/index.ts karabiner",
+        "karabiner:compile": "tsx ./src/index.ts karabiner",
+        "karabiner:watch": "tsx --watch ./src/index.ts karabiner"
+    },
+    "dependencies": {
+        "@types/node": "20.12.7",
+        "nodemon": "3.1.0",
+        "prettier": "3.2.5",
+        "tsx": "4.7.3",
+        "yaml": "2.4.2"
+    }
+}
