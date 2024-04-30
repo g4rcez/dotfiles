@@ -108,10 +108,6 @@ function st() {
   fi
 }
 
-zz() {
-  zoxide query -i
-}
-
 bindkey "^I" expand-or-complete
 bindkey "^[[Z" expand-or-complete
 

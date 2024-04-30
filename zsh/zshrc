@@ -7,7 +7,6 @@ function checkcommand() {
   fi
 }
 
-
 function _postcd() {
   dotenv ".env"
   dotenv ".env.local"
@@ -163,9 +162,6 @@ for config in $SOURCE; do
 done
 
 eval "$(zoxide init zsh)"
-eval "$(atuin init zsh)"
-bindkey '^r' _atuin_search_widget
-
 _postcd
 chpwd_functions+=(_postcd)
 

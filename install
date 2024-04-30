@@ -66,14 +66,9 @@ function installatuin() {
   bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
 }
 checkcommand "atuin" installatuin
-
-if [[ -f "$(command -v $1)" ]]; then
-  make
-fi
-
 ########################################################################################################################
 ##### other links
 ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
 ln -sf $DOT_CONFIG/starship.toml $HOME/.config/starship.toml
-ln -sf $DIR/espanso/match/base.yml "$(espanso path config)/match/base.yml"
 ln -sf $DIR/dygma $HOME/Raise
+make
