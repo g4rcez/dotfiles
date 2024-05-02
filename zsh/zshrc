@@ -46,7 +46,6 @@ export VOLTA_HOME="$HOME/.volta"
 export YSU_MESSAGE_POSITION="after"
 export ZELLIJ_AUTO_ATTACH=true
 export ZELLIJ_AUTO_EXIT=false
-export ZELLIJ_CONFIG_FILE="$DOTFILES/config/config.kdl"
 export ZELLIJ_DEFAULT_SESSION="localhost"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
@@ -74,19 +73,20 @@ local -a PATH_EXPORTS=(
   $HOME/.local/bin
   $HOME/.local/share
   $HOME/.local/share/bin
+  $VOLTA_HOME/bin
+  $PNPM_HOME
   $HOME/.yarn/bin
   $HOME/.dotnet
   $HOME/.dotnet/tools
   $HOME/tools
   $HOME/tools/google-cloud-sdk/bin
-  $VOLTA_HOME/bin
   $HOME/.local/share/JetBrains/scripts
   $HOME/.local/share/JetBrains/Toolbox/scripts
   $HOME/.config/yarn/global/node_modules/.bin
-  $HOME/dotfiles/bin
   $BUN_INSTALL/bin
   /usr/local/opt/libpq/bin
   /opt/homebrew/opt/libpq/bin
+  $HOME/dotfiles/bin
 )
 PATH_RESULT="$PATH"
 for path in $PATH_EXPORTS; do
@@ -133,7 +133,7 @@ for plugin in $PLUGINS; do
 done
 
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,tmux}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 zstyle ':omz:update' mode auto
@@ -162,6 +162,8 @@ for config in $SOURCE; do
 done
 
 eval "$(zoxide init zsh)"
+zellij-start
 _postcd
 chpwd_functions+=(_postcd)
+chpwd_functions+=(_zellij_tab_name_update)
 

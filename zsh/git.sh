@@ -46,6 +46,69 @@ function git_develop_branch() {
   echo develop
 }
 
+unset git_version
+
+#############################################################################################################################
+## alias
+alias pushf="git push --force-with-lease"
+alias add='git add'
+alias checkout='git checkout'
+alias commit='git commit -S'
+alias gcb='git checkout -b'
+alias gcd='git checkout $(git_develop_branch)'
+alias gcf='git config --list'
+alias gcm='git checkout $(git_main_branch)'
+alias gd='git diff'
+alias gitree='git log --oneline --graph --decorate --all'
+alias gitree='git-graph'
+alias gittree='git-graph'
+alias gst='git status'
+alias gtv='git tag | sort -V'
+alias logs='forgit::log'
+alias pull='git pull'
+alias push='git push -u'
+alias rebase='git rebase'
+alias tags='git tag | sort -V'
+#############################################################################################################################
+## github-cli
+alias ghc='gh pr checkout'
+alias ghl='gh pr list'
+alias gdash="gh dash"
+#############################################################################################################################
+## fzf git/github
+unalias gco
+function gco() {
+  _fzf_git_each_ref --no-multi | xargs git checkout
+}
+
+function prs() {
+  bash "$DOTFILES/bin/gh-fzf"
+}
+
+function killbranches() {
+  git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
+}
+
+function createpr() {
+  BRANCH_TARGET=$(git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g'| grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}")
+  gh pr create --base "$BRANCH_TARGET" -a "@me" $*
+}
+
+function newpr() {
+  createpr ""
+}
+
+function draft() {
+  createpr --draft
+}
+
+function wip() {
+  git add -A .
+  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
+  git commit --no-verify -S -m "wip: checkpoint at $NOW"
+  git push
+}
+
 function pullb() {
   git pull origin "$(git branch --show-current)"
 }
@@ -88,68 +151,5 @@ function squashbranch() {
   echo "Rebase $COMMITS behind...Press ENTER to continue"
   read
   squash "$COMMITS"
-}
-
-unset git_version
-
-#############################################################################################################################
-## alias
-alias pushf="git push --force-with-lease"
-alias add='git add'
-alias checkout='git checkout'
-alias commit='git commit -S'
-alias gcb='git checkout -b'
-alias gcd='git checkout $(git_develop_branch)'
-alias gcf='git config --list'
-alias gcm='git checkout $(git_main_branch)'
-alias gd='git diff'
-alias gitree='git log --oneline --graph --decorate --all'
-alias gitree='git-graph'
-alias gittree='git-graph'
-alias gst='git status'
-alias gtv='git tag | sort -V'
-alias logs='forgit::log'
-alias pull='git pull'
-alias push='git push -u'
-alias rebase='git rebase'
-alias tags='git tag | sort -V'
-#############################################################################################################################
-## github-cli
-alias ghc='gh pr checkout'
-alias ghl='gh pr list'
-alias gdash="gh dash"
-#############################################################################################################################
-## fzf git/github
-unalias gco
-function gco() {
-  _fzf_git_each_ref --no-multi | xargs git checkout
-}
-
-function prs() {
-  bash "$DOTFILES/bin/gh-fzf"
-}
-
-function killbranches () {
-  git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
-}
-
-function createpr() {
-  BRANCH_TARGET=$(git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g'| grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}")
-  gh pr create --base "$BRANCH_TARGET" -a "@me" $*
-}
-
-function newpr() {
-  createpr ""
-}
-
-function draft() {
-  createpr --draft
-}
-
-function wip() {
-  git add -A .
-  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
-  git commit --no-verify -S -m "wip: checkpoint at $NOW"
-  git push
 }
 
