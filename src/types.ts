@@ -539,20 +539,31 @@ export type RectangleActions =
     | "next-space"
     | "prev-space";
 
-export type EspansoType = "date" | "choice" | "clipboard" | "echo" | "shell" | "random";
+export type EspansoType =
+    | "date"
+    | "choice"
+    | "clipboard"
+    | "echo"
+    | "shell"
+    | "random";
 
-export type EspansoShell = "Powershell" | "bash" | "sh"
+export type EspansoShell = "Powershell" | "bash" | "sh";
 
-export type EspansoTrigger = `:${string}` | Array<`:${string}`>;
+export type EspansoCommander = ";";
+
+export type EspansoTrigger =
+    | `${EspansoCommander}${string}`
+    | Array<`${EspansoCommander}${string}`>;
 
 export type EspansoVarReplacer = {
-    trigger: EspansoTrigger;
+    trigger?: EspansoTrigger;
+    regex?: string;
     replace: `{{${string}}}` | string;
     vars?: [
         {
             name: string;
             type: EspansoType;
-            params: Partial<{
+            params?: Partial<{
                 shell: EspansoShell;
                 cmd: string | string[];
                 format: string;

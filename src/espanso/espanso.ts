@@ -4,7 +4,11 @@ import yaml from "yaml";
 import { $, trim } from "../utils";
 import { createEspansoConfig } from "./espanso.config";
 
-const espansoConfigDefaults = { toggle_key: "OFF", search_shortcut: "off", auto_restart: true };
+const espansoConfigDefaults = {
+    toggle_key: "OFF",
+    search_shortcut: "off",
+    auto_restart: true,
+};
 
 export const espanso = async () => {
     const result = await $("espanso path config");
@@ -16,10 +20,14 @@ export const espanso = async () => {
     const defaultYml = path.join(espansoPath, "config", "default.yml");
     await fs.mkdir(espansoPath, { recursive: true });
     await fs.mkdir(matches, { recursive: true });
-    await fs.mkdir(config, { recursive: true });
     await fs.writeFile(baseYml, createEspansoConfig(), "utf-8");
-    await fs.writeFile(defaultYml, yaml.stringify(espansoConfigDefaults), "utf-8");
+    await fs.mkdir(config, { recursive: true });
+    await fs.writeFile(
+        defaultYml,
+        yaml.stringify(espansoConfigDefaults),
+        "utf-8",
+    );
     console.log("Espanso was configured");
     const created = [matches, config, baseYml, defaultYml];
-    created.forEach(x => console.log(`\t - Created: "${x}"`));
+    created.forEach((x) => console.log(`\t - Created: "${x}"`));
 };

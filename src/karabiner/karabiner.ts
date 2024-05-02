@@ -5,7 +5,6 @@ import { karabinerConfig } from "./karabiner.config";
 
 export const karabiner = () => {
     const configFile = dotfile("karabiner", "karabiner.json");
-
     fs.writeFileSync(
         configFile,
         JSON.stringify(

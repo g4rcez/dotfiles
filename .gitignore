@@ -40,3 +40,4 @@ nvim/lazy-lock.json
 nvim/README.md
 nvim/LICENSE
 ./lvim/session
+./tmp

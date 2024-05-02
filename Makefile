@@ -1,4 +1,3 @@
-keys:
-	cd generators
-	npm run karabiner:compile --prefix ./generators
-	npm run espanso:compile --prefix ./generators
+compile:
+	npm run karabiner:compile
+	npm run espanso:compile
