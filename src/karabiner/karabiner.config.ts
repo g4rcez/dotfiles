@@ -63,6 +63,7 @@ const modKeys = createHyperSubLayers({
         ),
         n: open("raycast://extensions/notion/notion/create-database-page"),
         p: open("raycast://extensions/thomas/color-picker/pick-color"),
+        s: open("raycast://extensions/mattisssa/spotify-player/yourLibrary"),
     },
     h: { to: [{ key_code: "left_arrow" }] },
     l: { to: [{ key_code: "right_arrow" }] },
