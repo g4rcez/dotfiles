@@ -10,17 +10,18 @@ export type Manipulator = {
     to?: To[];
     to_after_key_up?: To[];
     to_if_alone?: To[];
+    to_if_held_down?: To[];
     parameters?: Parameters;
     conditions?: Conditions[];
     to_delayed_action?: {
-        to_if_invoked: [
-            { set_variable: { name: string; value: number } },
-            { key_code: KeyCode },
-        ];
+        to_delayed_action?: { to_if_canceled?: To[] }
+        to_if_invoked?: To[];
     };
 };
 
 export type Parameters = Partial<{
+    "basic.to_if_alone_threshold_milliseconds": number;
+    "basic.to_if_held_down_threshold_milliseconds": number;
     "basic.simultaneous_threshold_milliseconds": number;
     "basic.to_delayed_action_delay_milliseconds": number;
 }>;
@@ -113,6 +114,8 @@ export type Modifiers = {
 };
 
 export type To = {
+    halt?: boolean;
+    set_notification_message?: { "id": string; "text": string; },
     key_code?: KeyCode;
     modifiers?: KeyCode[];
     shell_command?: string;

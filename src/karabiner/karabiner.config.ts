@@ -1,18 +1,39 @@
 import { KarabinerRules } from "../types";
-import {
-    app,
-    chrome,
-    createHyperSubLayers,
-    doubleTap,
-    open,
-    rectangle,
-} from "../utils";
+import { app, appInstance, chrome, createHyperSubLayers, open, rectangle } from "../utils";
+import { createLeaderLayers } from "./leader-layers";
 
 const modKeys = createHyperSubLayers({
+    h: { to: [{ key_code: "left_arrow" }] },
+    l: { to: [{ key_code: "right_arrow" }] },
+    k: { to: [{ key_code: "up_arrow" }] },
+    j: { to: [{ key_code: "down_arrow" }] },
+    0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }] },
+    4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }] },
     s: {
         hyphen: { to: [{ key_code: "volume_decrement" }] },
         equal_sign: { to: [{ key_code: "volume_increment" }] },
         p: { to: [{ key_code: "play_or_pause" }] },
+    },
+});
+
+/*
+    # To do
+    ## Mouse movement using karabiner
+    https://ke-complex-modifications.pqrs.org/json/mouse_full_emulation_with_right_command_super_fast.json
+    ## Clipboard
+    https://github.com/Vonng/Capslock/blob/master/mac_v3/capslock.json#L5416
+*/
+
+const withLeaderKeys = createLeaderLayers({
+    r: {
+        c: open("raycast://extensions/raycast/raycast/confetti"),
+        d: open(`raycast://extensions/yakitrak/do-not-disturb/toggle`),
+        e: open(
+            "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+        ),
+        n: open("raycast://extensions/notion/notion/create-database-page"),
+        p: open("raycast://extensions/thomas/color-picker/pick-color"),
+        s: open("raycast://extensions/mattisssa/spotify-player/yourLibrary"),
     },
     o: {
         c: app("Notion Calendar"),
@@ -55,50 +76,12 @@ const modKeys = createHyperSubLayers({
         o: rectangle("maximize"),
         return_or_enter: rectangle("maximize"),
     },
-    r: {
-        c: open("raycast://extensions/raycast/raycast/confetti"),
-        d: open(`raycast://extensions/yakitrak/do-not-disturb/toggle`),
-        e: open(
-            "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
-        ),
-        n: open("raycast://extensions/notion/notion/create-database-page"),
-        p: open("raycast://extensions/thomas/color-picker/pick-color"),
-        s: open("raycast://extensions/mattisssa/spotify-player/yourLibrary"),
+    return_or_enter: {
+        backslash: rectangle("right-half"),
+        return_or_enter: appInstance("iTerm"),
     },
-    h: { to: [{ key_code: "left_arrow" }] },
-    l: { to: [{ key_code: "right_arrow" }] },
-    k: { to: [{ key_code: "up_arrow" }] },
-    j: { to: [{ key_code: "down_arrow" }] },
-    0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }] },
-    4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }] },
 });
 
-const doubleTapLayer = [
-    doubleTap(
-        "v",
-        [
-            { key_code: "left_arrow", modifiers: ["left_command"] },
-            {
-                key_code: "right_arrow",
-                modifiers: ["left_command", "left_shift"],
-            },
-        ],
-        modKeys.hyper,
-    ),
-    doubleTap(
-        "return_or_enter",
-        open("raycast://extensions/ron-myers/iterm/new-iterm-window"),
-        modKeys.hyper,
-    ),
-];
-
-/*
-    # Mouse movement using karabiner
-    https://ke-complex-modifications.pqrs.org/json/mouse_full_emulation_with_right_command_super_fast.json
-
-    # Clipboard
-    https://github.com/Vonng/Capslock/blob/master/mac_v3/capslock.json#L5416
-*/
 export const karabinerConfig: KarabinerRules[] = [
     {
         description: "Hyper Key (⌃⌥⇧⌘)",
@@ -107,17 +90,12 @@ export const karabinerConfig: KarabinerRules[] = [
                 description: "Caps Lock -> Hyper Key",
                 type: "basic",
                 to_if_alone: [{ key_code: "escape" }],
-                from: {
-                    key_code: "caps_lock",
-                    modifiers: { optional: ["any"] },
-                },
+                from: { key_code: "caps_lock", modifiers: { optional: ["any"] } },
                 to: [{ set_variable: { name: "hyper", value: 1 } }],
-                to_after_key_up: [
-                    { set_variable: { name: "hyper", value: 0 } },
-                ],
+                to_after_key_up: [{ set_variable: { name: "hyper", value: 0 } }],
             },
         ],
     },
     ...modKeys.layers,
-    ...doubleTapLayer,
+    ...withLeaderKeys,
 ];
