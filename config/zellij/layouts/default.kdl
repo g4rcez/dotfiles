@@ -1,5 +1,6 @@
 layout {
-    pane size=1 borderless=true {
+    pane size=1 {
+        borderless true
         plugin location="file:~/dotfiles/config/zellij/plugins/zjstatus.wasm" {
             command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
             command_git_branch_format      "#[fg=blue] {stdout} "
@@ -36,5 +37,8 @@ layout {
             tab_sync_indicator       "  "
         }
     }
-    pane
+    pane {
+        borderless true
+        focus true
+    }
 }
