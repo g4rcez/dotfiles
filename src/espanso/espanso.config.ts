@@ -14,6 +14,9 @@ const simpleTriggers = [
         `${node} ${_}/bin/password $ESPANSO_N`,
         "pass\\((?P<N>.*)\\)",
     ),
+    triggers.$("cellphone", `${node} ${_}/bin/phone cellphone`),
+    triggers.$("telephone", `${node} ${_}/bin/phone telephone`),
+    triggers.$("email", `${node} ${_}/bin/email`),
 ];
 
 const shellTriggers = [

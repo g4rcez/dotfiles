@@ -384,6 +384,30 @@
               {
                 "to": [
                   {
+                    "shell_command": "osascript /Users/allangarcez/dotfiles/bin/notifications"
+                  }
+                ],
+                "description": "Kill all notifications",
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
                     "key_code": "volume_decrement"
                   }
                 ],
@@ -453,6 +477,94 @@
             ]
           },
           {
+            "description": "disable single - leader r",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_r",
+                "from": {
+                  "key_code": "r",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader r",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_r",
+                "from": {
+                  "key_code": "r",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "leader r",
             "manipulators": [
               {
@@ -476,12 +588,27 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"Leader key r active\" with title \"Keyboard\" subtitle \"leader r\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: r Raycast layer\" with title \"Leader r activated\"'"
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: r Raycast layer"
+                    }
                   }
                 ],
                 "type": "basic"
@@ -495,7 +622,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -510,9 +637,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + c - Open raycast://extensions/raycast/raycast/confetti",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/raycast/confetti"
                   }
                 ],
                 "type": "basic"
@@ -526,7 +672,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -541,9 +687,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + d - Open raycast://extensions/yakitrak/do-not-disturb/toggle",
+                "from": {
+                  "key_code": "d"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/yakitrak/do-not-disturb/toggle"
                   }
                 ],
                 "type": "basic"
@@ -557,7 +722,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -572,9 +737,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + e - Open raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+                "from": {
+                  "key_code": "e"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
                   }
                 ],
                 "type": "basic"
@@ -588,7 +772,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -603,9 +787,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + n - Open raycast://extensions/notion/notion/create-database-page",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/notion/notion/create-database-page"
                   }
                 ],
                 "type": "basic"
@@ -619,7 +822,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -634,9 +837,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + p - Open raycast://extensions/thomas/color-picker/pick-color",
+                "from": {
+                  "key_code": "p"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/thomas/color-picker/pick-color"
                   }
                 ],
                 "type": "basic"
@@ -650,7 +872,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_r",
+                    "name": "VIM_MODE_r_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -665,8 +887,115 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_r",
+                      "name": "VIM_MODE_r_SINGLE",
                       "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + s - Open raycast://extensions/mattisssa/spotify-player/yourLibrary",
+                "from": {
+                  "key_code": "s"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/mattisssa/spotify-player/yourLibrary"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader o",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_o",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader o",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_o",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
                     }
                   }
                 ],
@@ -698,12 +1027,27 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"Leader key o active\" with title \"Keyboard\" subtitle \"leader o\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: o Open programs\" with title \"Leader o activated\"'"
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: o Open programs"
+                    }
                   }
                 ],
                 "type": "basic"
@@ -717,7 +1061,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -732,9 +1076,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + c - Open -a 'Notion Calendar.app'",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Notion Calendar.app'"
                   }
                 ],
                 "type": "basic"
@@ -748,7 +1111,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -763,9 +1126,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + f - Open -a 'Finder.app'",
+                "from": {
+                  "key_code": "f"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Finder.app'"
                   }
                 ],
                 "type": "basic"
@@ -779,7 +1161,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -794,9 +1176,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + g - Open -a 'Google Chrome.app'",
+                "from": {
+                  "key_code": "g"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Google Chrome.app'"
                   }
                 ],
                 "type": "basic"
@@ -810,7 +1211,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -825,9 +1226,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + return_or_enter - Open -a 'iTerm.app'",
+                "from": {
+                  "key_code": "return_or_enter"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'iTerm.app'"
                   }
                 ],
                 "type": "basic"
@@ -841,7 +1261,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -856,9 +1276,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + t - Open -a 'iTerm.app'",
+                "from": {
+                  "key_code": "t"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'iTerm.app'"
                   }
                 ],
                 "type": "basic"
@@ -872,7 +1311,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -887,9 +1326,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + s - Open -a 'Spotify.app'",
+                "from": {
+                  "key_code": "s"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Spotify.app'"
                   }
                 ],
                 "type": "basic"
@@ -903,7 +1361,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -918,9 +1376,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + v - Open -a 'Visual Studio Code.app'",
+                "from": {
+                  "key_code": "v"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Visual Studio Code.app'"
                   }
                 ],
                 "type": "basic"
@@ -934,7 +1411,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_o",
+                    "name": "VIM_MODE_o_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -949,8 +1426,115 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_o",
+                      "name": "VIM_MODE_o_SINGLE",
                       "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + w - Open -a 'WebStorm.app'",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'WebStorm.app'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader b",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_b",
+                "from": {
+                  "key_code": "b",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_b_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader b",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_b",
+                "from": {
+                  "key_code": "b",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_b_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
                     }
                   }
                 ],
@@ -982,12 +1566,27 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_b",
+                      "name": "VIM_MODE_b_SINGLE",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"Leader key b active\" with title \"Keyboard\" subtitle \"leader b\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: b Google chrome profiler/controls\" with title \"Leader b activated\"'"
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_b_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: b Google chrome profiler/controls"
+                    }
                   }
                 ],
                 "type": "basic"
@@ -1001,7 +1600,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_b",
+                    "name": "VIM_MODE_b_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1016,9 +1615,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_b",
+                      "name": "VIM_MODE_b_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + w - Open GoogleChrome Profile 1",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
                   }
                 ],
                 "type": "basic"
@@ -1032,7 +1650,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_b",
+                    "name": "VIM_MODE_b_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1047,9 +1665,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_b",
+                      "name": "VIM_MODE_b_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + return_or_enter - Open GoogleChrome Default",
+                "from": {
+                  "key_code": "return_or_enter"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"
@@ -1063,7 +1700,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_b",
+                    "name": "VIM_MODE_b_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1082,9 +1719,32 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_b",
+                      "name": "VIM_MODE_b_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + h - Window: Previous Tab",
+                "from": {
+                  "key_code": "h"
+                },
+                "to": [
+                  {
+                    "key_code": "tab",
+                    "modifiers": [
+                      "right_control",
+                      "right_shift"
+                    ]
                   }
                 ],
                 "type": "basic"
@@ -1098,7 +1758,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_b",
+                    "name": "VIM_MODE_b_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1116,8 +1776,118 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_b",
+                      "name": "VIM_MODE_b_SINGLE",
                       "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + l - Window: Next Tab",
+                "from": {
+                  "key_code": "l"
+                },
+                "to": [
+                  {
+                    "key_code": "tab",
+                    "modifiers": [
+                      "right_control"
+                    ]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader w",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_w",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader w",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_w",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
                     }
                   }
                 ],
@@ -1149,12 +1919,27 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"Leader key w active\" with title \"Keyboard\" subtitle \"leader w\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: w Rectangle actions\" with title \"Leader w activated\"'"
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: w Rectangle actions"
+                    }
                   }
                 ],
                 "type": "basic"
@@ -1168,7 +1953,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1183,9 +1968,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + equal_sign - Window: larger",
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=larger"
                   }
                 ],
                 "type": "basic"
@@ -1199,7 +2003,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1214,9 +2018,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + hyphen - Window: smaller",
+                "from": {
+                  "key_code": "hyphen"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=smaller"
                   }
                 ],
                 "type": "basic"
@@ -1230,7 +2053,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1245,9 +2068,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + c - Window: center",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
                   }
                 ],
                 "type": "basic"
@@ -1261,7 +2103,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1276,9 +2118,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + e - Window: first-two-thirds",
+                "from": {
+                  "key_code": "e"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
                   }
                 ],
                 "type": "basic"
@@ -1292,7 +2153,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1307,9 +2168,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + r - Window: last-two-thirds",
+                "from": {
+                  "key_code": "r"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=last-two-thirds"
                   }
                 ],
                 "type": "basic"
@@ -1323,7 +2203,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1338,9 +2218,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + d - Window: first-third",
+                "from": {
+                  "key_code": "d"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
                   }
                 ],
                 "type": "basic"
@@ -1354,7 +2253,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1369,9 +2268,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + k - Window: top-half",
+                "from": {
+                  "key_code": "k"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=top-half"
                   }
                 ],
                 "type": "basic"
@@ -1385,7 +2303,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1400,9 +2318,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + j - Window: bottom-half",
+                "from": {
+                  "key_code": "j"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-half"
                   }
                 ],
                 "type": "basic"
@@ -1416,7 +2353,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1431,9 +2368,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + h - Window: left-half",
+                "from": {
+                  "key_code": "h"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=left-half"
                   }
                 ],
                 "type": "basic"
@@ -1447,7 +2403,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1462,9 +2418,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + l - Window: right-half",
+                "from": {
+                  "key_code": "l"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
                   }
                 ],
                 "type": "basic"
@@ -1478,7 +2453,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1493,9 +2468,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + o - Window: maximize",
+                "from": {
+                  "key_code": "o"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
                   }
                 ],
                 "type": "basic"
@@ -1509,7 +2503,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_w",
+                    "name": "VIM_MODE_w_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1524,8 +2518,115 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_w",
+                      "name": "VIM_MODE_w_SINGLE",
                       "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + return_or_enter - Window: maximize",
+                "from": {
+                  "key_code": "return_or_enter"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader return_or_enter",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_return_or_enter",
+                "from": {
+                  "key_code": "return_or_enter",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_return_or_enter_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader return_or_enter",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_return_or_enter",
+                "from": {
+                  "key_code": "return_or_enter",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_return_or_enter_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
                     }
                   }
                 ],
@@ -1557,12 +2658,27 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_return_or_enter",
+                      "name": "VIM_MODE_return_or_enter_SINGLE",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"Leader key return_or_enter active\" with title \"Keyboard\" subtitle \"leader return_or_enter\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: return_or_enter Tmux leader\" with title \"Leader return_or_enter activated\"'"
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_return_or_enter_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: return_or_enter Tmux leader"
+                    }
                   }
                 ],
                 "type": "basic"
@@ -1576,7 +2692,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_return_or_enter",
+                    "name": "VIM_MODE_return_or_enter_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1591,9 +2707,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_return_or_enter",
+                      "name": "VIM_MODE_return_or_enter_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + return_or_enter + backslash - Window: right-half",
+                "from": {
+                  "key_code": "backslash"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
                   }
                 ],
                 "type": "basic"
@@ -1607,7 +2742,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_return_or_enter",
+                    "name": "VIM_MODE_return_or_enter_SINGLE",
                     "value": "on"
                   }
                 ],
@@ -1622,9 +2757,28 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_return_or_enter",
+                      "name": "VIM_MODE_return_or_enter_SINGLE",
                       "value": "off"
                     }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + return_or_enter + return_or_enter - Open -n -a 'iTerm.app'",
+                "from": {
+                  "key_code": "return_or_enter"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -n -a 'iTerm.app'"
                   }
                 ],
                 "type": "basic"

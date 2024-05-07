@@ -1,5 +1,14 @@
-import { KarabinerRules } from "../types";
-import { app, appInstance, chrome, createHyperSubLayers, open, rectangle } from "../utils";
+import { KarabinerRule } from "../types";
+import {
+    app,
+    appInstance,
+    chrome,
+    createHyperSubLayers,
+    dotfile,
+    open,
+    rectangle,
+    shell,
+} from "../utils";
 import { createLeaderLayers } from "./leader-layers";
 
 const modKeys = createHyperSubLayers({
@@ -10,6 +19,10 @@ const modKeys = createHyperSubLayers({
     0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }] },
     4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }] },
     s: {
+        n: shell(
+            `osascript ${dotfile("bin", "notifications")}`,
+            "Kill all notifications",
+        ),
         hyphen: { to: [{ key_code: "volume_decrement" }] },
         equal_sign: { to: [{ key_code: "volume_increment" }] },
         p: { to: [{ key_code: "play_or_pause" }] },
@@ -26,6 +39,7 @@ const modKeys = createHyperSubLayers({
 
 const withLeaderKeys = createLeaderLayers({
     r: {
+        description: "Raycast layer",
         c: open("raycast://extensions/raycast/raycast/confetti"),
         d: open(`raycast://extensions/yakitrak/do-not-disturb/toggle`),
         e: open(
@@ -36,6 +50,7 @@ const withLeaderKeys = createLeaderLayers({
         s: open("raycast://extensions/mattisssa/spotify-player/yourLibrary"),
     },
     o: {
+        description: "Open programs",
         c: app("Notion Calendar"),
         f: app("Finder"),
         g: app("Google Chrome"),
@@ -46,6 +61,7 @@ const withLeaderKeys = createLeaderLayers({
         w: app("WebStorm"),
     },
     b: {
+        description: "Google chrome profiler/controls",
         w: chrome("Profile 1"),
         return_or_enter: chrome("Default"),
         h: {
@@ -63,6 +79,7 @@ const withLeaderKeys = createLeaderLayers({
         },
     },
     w: {
+        description: "Rectangle actions",
         equal_sign: rectangle("larger"),
         hyphen: rectangle("smaller"),
         c: rectangle("center"),
@@ -77,25 +94,28 @@ const withLeaderKeys = createLeaderLayers({
         return_or_enter: rectangle("maximize"),
     },
     return_or_enter: {
+        description: "Tmux leader",
         backslash: rectangle("right-half"),
         return_or_enter: appInstance("iTerm"),
     },
 });
 
-export const karabinerConfig: KarabinerRules[] = [
-    {
-        description: "Hyper Key (⌃⌥⇧⌘)",
-        manipulators: [
-            {
-                description: "Caps Lock -> Hyper Key",
-                type: "basic",
-                to_if_alone: [{ key_code: "escape" }],
-                from: { key_code: "caps_lock", modifiers: { optional: ["any"] } },
-                to: [{ set_variable: { name: "hyper", value: 1 } }],
-                to_after_key_up: [{ set_variable: { name: "hyper", value: 0 } }],
-            },
-        ],
-    },
+const hyperKey: KarabinerRule = {
+    description: "Hyper Key (⌃⌥⇧⌘)",
+    manipulators: [
+        {
+            description: "Caps Lock -> Hyper Key",
+            type: "basic",
+            to_if_alone: [{ key_code: "escape" }],
+            from: { key_code: "caps_lock", modifiers: { optional: ["any"] } },
+            to: [{ set_variable: { name: "hyper", value: 1 } }],
+            to_after_key_up: [{ set_variable: { name: "hyper", value: 0 } }],
+        },
+    ],
+} as const;
+
+export const karabinerConfig: KarabinerRule[] = [
+    hyperKey,
     ...modKeys.layers,
     ...withLeaderKeys,
 ];

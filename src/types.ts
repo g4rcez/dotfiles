@@ -1,4 +1,4 @@
-export type KarabinerRules = {
+export type KarabinerRule = {
     description?: string;
     manipulators?: Manipulator[];
 };
