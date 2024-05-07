@@ -114,13 +114,14 @@ local -a PLUGINS=(
     zsh-users/zsh-syntax-highlighting
 )
 
-znap fpath _kubectl "kubectl completion zsh"
-znap fpath _rustup  "rustup completions zsh"
+## fpath - terminal autocomplete
 znap fpath _cargo   "rustup completions zsh cargo"
-znap fpath _volta   "volta completions zsh"
+znap fpath _kubectl "kubectl completion zsh"
 znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
-znap fpath _typeid "typeid completion zsh"
-# znap fpath _wezterm "wezterm shell-completion --shell zsh"
+znap fpath _rustup  "rustup completions zsh"
+znap fpath _typeid  "typeid completion zsh"
+znap fpath _volta   "volta completions zsh"
+znap fpath _zellij  "zellij setup --generate-completion zsh;echo"
 
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
@@ -132,12 +133,12 @@ for plugin in $PLUGINS; do
   fi
 done
 
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
 znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 1
 
 ##############################################################################################################
 ## source files

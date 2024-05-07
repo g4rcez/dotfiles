@@ -62,6 +62,7 @@ keybinds clear-defaults=true {
     }
     normal {
         bind "Alt q" { SwitchToMode "Tmux"; }
+        bind "Ctrl p" { SwitchToMode "Tmux"; }
         bind "Alt p" { SwitchToMode "Pane"; }
         bind "Alt r" { SwitchToMode "Resize"; }
         bind "Alt h" { SwitchToMode "Move"; }
@@ -69,6 +70,7 @@ keybinds clear-defaults=true {
         bind "Alt s" { SwitchToMode "Search"; }
         bind "Alt o" { SwitchToMode "Session"; }
         bind "Alt f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "Ctrl f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "Ctrl t" { NewTab; }
         bind "Alt ;" { EditScrollback; }
         bind "Alt [" {
