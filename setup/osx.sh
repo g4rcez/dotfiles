@@ -24,7 +24,7 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 # Enable Stealth Mode (Prevent others from discovering your Mac)
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 
-# Set a really fast key repeat.
+# Set a really fast key repeat
 defaults write NSGlobalDomain KeyRepeat -int 1
 
 # Set the Finder prefs for showing a few different volumes on the Desktop.
@@ -45,3 +45,14 @@ defaults write com.apple.finder ShowStatusBar -bool true
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
+
+# https://github.com/rxhanson/Rectangle/blob/main/TerminalCommands.md#cycle-thirds-on-repeated-center-half-commands
+defaults write com.knollsoft.Rectangle centerHalfCycles -int 1
+
+# https://github.com/rxhanson/Rectangle/blob/main/TerminalCommands.md#almost-maximize
+defaults write com.knollsoft.Rectangle almostMaximizeHeight -float 0.95
+defaults write com.knollsoft.Rectangle almostMaximizeWidth -float 0.95
+
+# If the font quality on non-retina display looks bad then set
+defaults write -g CGFontRenderingFontSmoothingDisabled -bool YES
+

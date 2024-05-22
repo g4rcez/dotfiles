@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SESSION_NAME=$(zellij list-sessions -s | fzf \
+    --reverse --no-sort --info inline \
+    --prompt 'Kill a session: ' \
+    --preview 'zellij list-sessions | grep {}')
+
+zellij kill-session $SESSION_NAME
+

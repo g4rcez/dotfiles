@@ -26,13 +26,14 @@ function zj() {
 
 function zinit() {
     local SESSION_NAME="${1-localhost}"
-    zellij --layout "$ZLAYOUT" --session "$SESSION_NAME" attach -c "$SESSION_NAME"
+    local CURRENT_WORK_DIR="${2-$HOME}"
+    zellij --layout "$ZLAYOUT" attach "$SESSION_NAME" -c options --default-cwd "$CURRENT_WORK_DIR"
 }
 
 function zellij-start() {
     if [[ -z "$ZELLIJ" ]]; then
         if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-            zinit "$ZELLIJ_DEFAULT_SESSION"
+            zinit "$ZELLIJ_DEFAULT_SESSION" "$HOME/dotfiles"
         fi
     fi
 }
@@ -56,12 +57,30 @@ function _zellij_tab_name_update() {
     fi
 }
 
-function zr() { zellij run --name "$*" -- zsh -ic "$*"; }
-function zrf() { zellij run --name "$*" --floating -- zsh -ic "$*"; }
-function zri() { zellij run --name "$*" --in-place -- zsh -ic "$*"; }
-function ze() { zellij edit "$*"; }
-function zef() { zellij edit --floating "$*"; }
-function zei() { zellij edit --in-place "$*"; }
+function zr() {
+    zellij run --name "$*" -- zsh -ic "$*"
+}
+
+function zrf() {
+    zellij run --name "$*" --floating -- zsh -ic "$*"
+}
+
+function zri() {
+    zellij run --name "$*" --in-place -- zsh -ic "$*"
+}
+
+function ze() {
+    zellij edit "$*"
+}
+
+function zef() {
+    zellij edit --floating "$*"
+}
+
+function zei() {
+    zellij edit --in-place "$*"
+}
+
 function zpipe() {
     if [ -z "$1" ]; then
         zellij pipe

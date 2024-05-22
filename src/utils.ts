@@ -170,7 +170,7 @@ export const chrome = (profile: string): LayerCommand => ({
     description: `Open GoogleChrome ${profile}`,
     to: [
         {
-            shell_command: `open -a 'Google Chrome.app' --args --profile-directory='${profile}'`,
+            shell_command: `open -n -a 'Google Chrome.app' --args --profile-directory='${profile}'`,
         },
     ],
 });

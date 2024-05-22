@@ -11,7 +11,6 @@ export const imports = (paths: string[]) => ({ imports: paths });
 export const _ = "~/dotfiles";
 
 export const node = "env node";
-// export const node = "~/.volta/bin/node";
 
 const commander = (s: string) => `;${s}` as const;
 

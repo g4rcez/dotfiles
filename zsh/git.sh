@@ -98,7 +98,8 @@ function wip() {
 }
 
 function pullb() {
-  git pull origin "$(git branch --show-current)"
+    git fetch;
+    git pull --rebase origin "$(git branch --show-current)";
 }
 
 function prs() {

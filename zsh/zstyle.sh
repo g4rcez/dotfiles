@@ -5,26 +5,23 @@ zmodload -i zsh/complist
 unsetopt menu_complete
 unsetopt flowcontrol
 # use brace
-setopt brace_ccl
 # Max number of entries to keep in history file.
 SAVEHIST=$(( 100 * 1000 ))      # Use multiplication for readability.
 # Max number of history entries to keep in memory.
 HISTSIZE=$(( 1.2 * SAVEHIST ))  # Zsh recommended value
-# Use modern file-locking mechanisms, for better safety & performance.
 setopt HIST_FCNTL_LOCK
-# Keep only the most recent copy of each duplicate entry in history.
 setopt HIST_IGNORE_ALL_DUPS
-# Auto-sync history between concurrent sessions.
 setopt SHARE_HISTORY
 setopt aliases
-setopt always_to_end
+# setopt always_to_end
 setopt append_history
 setopt auto_list
-setopt auto_menu         # show completion menu on successive tab press
+# setopt auto_menu         # show completion menu on successive tab press
 setopt auto_pushd
 setopt autocd
-setopt automenu
-setopt autopushd pushdminus pushdsilent pushdtohome pushdignoredups
+# setopt automenu
+setopt autopushd 
+setopt brace_ccl
 setopt complete_in_word
 setopt correctall
 setopt extended_glob
@@ -44,31 +41,27 @@ setopt magicequalsubst
 setopt notify
 setopt promptsubst
 setopt pushd_ignore_dups
+setopt pushdignoredups
+setopt pushdminus 
+setopt pushdsilent 
+setopt pushdtohome 
 setopt rmstarsilent
 setopt share_history
+
+# zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 # should this be in keybindings?
 bindkey -M menuselect '^o' accept-and-infer-next-history
 bindkey -M menuselect '^[[Z' reverse-menu-complete
-zstyle ':completion:*:*:*:*:*' menu select
-
-# case insensitive (all), partial-word and substring completion
+zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
-
-# Complete . and .. special directories
+zstyle ':completion:*:*:cp:*' file-sort size
 zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
-
-# disable named-directories autocompletion
-zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
-
-# Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
-
-# ... unless we really want to.
-zstyle '*' single-ignored show
 
 color_prompt=yes
 force_color_prompt=yes

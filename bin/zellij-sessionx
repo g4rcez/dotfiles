@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+source $HOME/dotfiles/zsh/zellij.sh
+if [ "$(command -v zellij)" = "" ]; then
+    echo "Zellij is not installed"
+    exit 1
+fi
+
+if [ "$(command -v zoxide)" = "" ]; then
+    echo "Zoxide is not installed"
+    exit 1
+fi
+
+transform_home_path() {
+    HOME_SED_SAFE=$?
+    if [ $HOME_SED_SAFE -eq 0 ]; then
+        echo "$1" | sed -e "s|^~/|$HOME/|"
+    else
+        echo "$1"
+    fi
+}
+
+function basename2() {
+    D2=$(dirname "$1")
+    DIRNAME2=$(basename "$D2")/$(basename "$1")
+    echo "$DIRNAME2"
+}
+
+function testingEnv() {
+    echo "ls $1"
+}
+
+fzf_window() {
+    fzf --reverse --no-sort \
+        --border "rounded" --info \
+        inline --prompt "Session > " \
+        --header "Select session" --preview "bash ~/dotfiles/bin/zellij-sessionx-preview {}"
+}
+
+function getProjectsFromDocuments() {
+    fd -p -t directory -a -d 2 "./Documents" ~/Documents |
+        sed "s@$HOME/Documents/@[d] @g" |
+        grep -e '.*/.*/' |
+        sed 's/\/$//g'
+}
+
+select_project() {
+    PROJECT=$({
+        zellij list-sessions -s | awk '{ print "[s] " $1 }'
+        getProjectsFromDocuments
+    } | fzf_window)
+    if [ "${PROJECT:0:3}" == "[d]" ]; then
+        SANITIZE=$(echo $PROJECT | sed 's/\[d] //g')
+        echo "$HOME/Documents/$SANITIZE"
+    fi
+    if [ "${PROJECT:0:3}" == "[s]" ]; then
+        echo "$(echo $PROJECT | sed 's/\[s] //g')"
+    fi
+    exit
+}
+
+is_selected_session() {
+    if [ -n "$(echo "$1" | grep "^([0-9]*)\\\t\[Session\]")" ]; then
+        echo 1
+    fi
+}
+
+get_sanitized_selected() {
+    echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
+}
+
+get_session_name() {
+    project_dir=$1
+    directory=$(basename "$project_dir")
+    session_name=$(echo "$directory" | tr ' .:' '_')
+    echo "$session_name"
+}
+
+selected=$(select_project)
+echo "SELECTED $selected"
+if [ -z "$selected" ]; then
+    exit 0
+fi
+
+is_session=$(is_selected_session "$selected")
+selected_name=$(get_sanitized_selected "$selected")
+session_name=$(get_session_name "$(transform_home_path "$selected_name")")
+session=$(zellij list-sessions | grep "$session_name")
+
+if [[ -n "$ZELLIJ" ]]; then
+    zellij pipe --plugin file:~/dotfiles/config/zellij/plugins/zellij-switch.wasm -- "$session_name::$selected_name"
+else
+    if [[ -n "$is_session" ]]; then
+        zellij attach $selected_name -c
+    else
+        cd $selected
+        zinit $session_name "$PWD"
+    fi
+fi

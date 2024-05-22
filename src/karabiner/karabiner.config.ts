@@ -1,4 +1,5 @@
 import { KarabinerRule } from "../types";
+import { createLeaderLayers } from "./leader-layers";
 import {
     app,
     appInstance,
@@ -9,7 +10,6 @@ import {
     rectangle,
     shell,
 } from "../utils";
-import { createLeaderLayers } from "./leader-layers";
 
 const modKeys = createHyperSubLayers({
     h: { to: [{ key_code: "left_arrow" }] },
@@ -54,8 +54,8 @@ const withLeaderKeys = createLeaderLayers({
         c: app("Notion Calendar"),
         f: app("Finder"),
         g: app("Google Chrome"),
-        return_or_enter: app("iTerm"),
-        t: app("iTerm"),
+        return_or_enter: app("Wezterm"),
+        t: app("Wezterm"),
         s: app("Spotify"),
         v: app("Visual Studio Code"),
         w: app("WebStorm"),
@@ -96,7 +96,7 @@ const withLeaderKeys = createLeaderLayers({
     return_or_enter: {
         description: "Tmux leader",
         backslash: rectangle("right-half"),
-        return_or_enter: appInstance("iTerm"),
+        return_or_enter: appInstance("Wezterm"),
     },
 });
 
@@ -114,8 +114,7 @@ const hyperKey: KarabinerRule = {
     ],
 } as const;
 
-export const karabinerConfig: KarabinerRule[] = [
-    hyperKey,
-    ...modKeys.layers,
-    ...withLeaderKeys,
-];
+export const karabinerConfig: KarabinerRule[] = [hyperKey].concat(
+    modKeys.layers,
+    withLeaderKeys,
+);

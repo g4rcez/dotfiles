@@ -1,27 +1,10 @@
 ##############################################################################################################
-## utility functions
-function checkcommand() {
-  if [[ -f "$(command -v $1)" ]]; then
-  else
-    $2
-  fi
-}
-
-function _postcd() {
-  dotenv ".env"
-  dotenv ".env.local"
-  dotenv "./src/.env"
-}
-
-##############################################################################################################
 ## exports
 export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
 export SNAP_DIR="$PLUGINS_DIR/znap"
 export BROWSER="google-chrome"
-
-export ATUIN_NOBIND="true"
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
 export AUTO_NOTIFY_EXPIRE_TIME=5000
 export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc")
@@ -53,7 +36,6 @@ export ZSH_TMUX_AUTOSTART="true"
 export ZSH_TMUX_CONFIG="$DOTFILES/config/tmux/tmux.conf"
 export ZSH_TMUX_DEFAULT_SESSION_NAME="localhost"
 export ZSH_TMUX_FIXTERM="true"
-
 export BAT_PAGER="less"
 export DELTA_PAGER="less -R"
 export EDITOR="nvim"
@@ -67,6 +49,7 @@ fi
 
 ##############################################################################################################
 ## sources
+source $HOME/dotfiles/zsh/utils.sh
 local -a PATH_EXPORTS=(
   /usr/local/bin
   $HOME/.cargo/env
@@ -115,13 +98,15 @@ local -a PLUGINS=(
 )
 
 ## fpath - terminal autocomplete
+znap fpath _npm     "npm completion"
+znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
 znap fpath _cargo   "rustup completions zsh cargo"
 znap fpath _kubectl "kubectl completion zsh"
-znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
 znap fpath _rustup  "rustup completions zsh"
 znap fpath _typeid  "typeid completion zsh"
 znap fpath _volta   "volta completions zsh"
 znap fpath _zellij  "zellij setup --generate-completion zsh;echo"
+znap fpath _n       "source $HOME/dotfiles/bin/node-completion.sh"
 
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
@@ -167,4 +152,5 @@ zellij-start
 _postcd
 chpwd_functions+=(_postcd)
 chpwd_functions+=(_zellij_tab_name_update)
+
 

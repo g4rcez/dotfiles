@@ -1,0 +1,15 @@
+#!/bin/env bash
+
+if [[ "${1:0:3}" == "[d]" ]]; then
+    SANITIZE=$(echo $1 | sed 's/\[d] //g')
+    DIRLS="$HOME/Documents/$SANITIZE"
+    echo "$DIRLS"
+    echo
+    lsd --git "$DIRLS"
+fi
+
+if [[ "${1:0:3}" == "[s]" ]]; then
+    SANITIZE=$(echo $1 | sed 's/\[s] //g')
+    DIRLS="$SANITIZE"
+    echo "Session: $DIRLS"
+fi
