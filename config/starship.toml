@@ -43,12 +43,6 @@ style = "bright-blue"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
 
-[time]
-disabled = false
-time_format = "%d/%m/%Y %R"
-style = "$white"
-format = '[[ $time ](fg:#a0a9cb)]($style)'
-
 [character]
 success_symbol = "[>_](white)"
 error_symbol = "[>_](red)"

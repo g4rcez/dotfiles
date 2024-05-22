@@ -10,13 +10,11 @@ if not vim.loop.fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
-
 require("lazy").setup({
     spec = {
         { "LazyVim/LazyVim", import = "lazyvim.plugins" },
         { "rcarriga/nvim-notify", enabled = false },
         { import = "lazyvim.plugins.extras.coding.yanky" },
-        { import = "lazyvim.plugins.extras.editor.harpoon2" },
         { import = "lazyvim.plugins.extras.editor.navic" },
         { import = "lazyvim.plugins.extras.formatting.prettier" },
         { import = "lazyvim.plugins.extras.lang.docker" },
@@ -27,8 +25,6 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.lang.typescript" },
         { import = "lazyvim.plugins.extras.lang.yaml" },
         { import = "lazyvim.plugins.extras.lazyrc" },
-        { import = "lazyvim.plugins.extras.lazyrc" },
-        { import = "lazyvim.plugins.extras.test.core" },
         { import = "lazyvim.plugins.extras.util.gitui" },
         { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
         { import = "lazyvim.plugins.extras.vscode" },

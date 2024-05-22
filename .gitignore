@@ -41,3 +41,4 @@ nvim/README.md
 nvim/LICENSE
 ./lvim/session
 ./tmp
+*.wasm

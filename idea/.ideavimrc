@@ -192,6 +192,9 @@ let g:WhichKeyDesc_zen_mode = "<leader>zen Zen mode"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_jetbrains_prefix = "<leader>j +Jetbrains"
 
+nmap <leader>ja <action>(ShowIntentionActions)
+let g:WhichKeyDesc_show_intentions = "<leader>ja ShowIntentionActions"
+
 nmap <leader>jr <action>(Run)
 let g:WhichKeyDesc_run = "<leader>jr Run current file"
 
@@ -395,3 +398,7 @@ let g:WhichKeyDesc_split_vertically = "<leader>\ Split horizontally"
 
 nmap <leader>- <action>(SplitHorizontally)
 let g:WhichKeyDesc_split_horizontally = "<leader>- Split vertically"
+
+"" Save in normal mode
+nmap <C-s> :w<CR>
+

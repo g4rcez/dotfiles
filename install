@@ -10,24 +10,18 @@
 set -xe
 mkdir -p $HOME/tools $HOME/.tmp
 DIR="$HOME/dotfiles"
+CONFIG_DIR="$HOME/.config"
 DOT_CONFIG="$DIR/config"
-
-function checkcommand() {
-    if [[ -f "$(command -v $1)" ]]; then
-        echo "[$1] already installed..."
-    else
-        $2
-    fi
-}
+source $HOME/dotfiles/zsh/utils.sh
 ########################################################################################################################
 ##### python modules
 pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 ########################################################################################################################
 ##### core installs
-ln -sf $DIR/nvim/ $HOME/.config/nvim/
+ln -sf $DIR/nvim/ $CONFIG_DIR/nvim/
 ln -sf $DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DOT_CONFIG/tmux $HOME/.config/tmux
+ln -sf $DOT_CONFIG/tmux $CONFIG_DIR/tmux
 ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
 
@@ -61,6 +55,7 @@ checkcommand "volta" installvolta
 ########################################################################################################################
 ##### other links
 ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
-ln -sf $DOT_CONFIG/starship.toml $HOME/.config/starship.toml
+ln -sf $DOT_CONFIG/starship.toml $CONFIG_DIR/starship.toml
 ln -sf $DIR/dygma $HOME/Raise
+ln -sf $DIR/config/alacritty/ $CONFIG_DIR
 make

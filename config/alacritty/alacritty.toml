@@ -1,0 +1,58 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+opacity = 0.9
+padding.x = 10
+padding.y = 2
+decorations = "Buttonless"
+decorations_theme_variant = "Dark"
+blur = true
+resize_increments = true
+option_as_alt = "Both"
+
+[font]
+bold.family = "JetBrainsMono Nerd Font Mono"
+bold_italic.family = "JetBrainsMono Nerd Font Mono"
+italic.family = "JetBrainsMono Nerd Font Mono"
+normal.family = "JetBrainsMono Nerd Font Mono"
+size = 17.5
+
+[cursor]
+blink_interval = 500
+style.blinking = "Always"
+
+[selection]
+save_to_clipboard = true
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.primary]
+background = "#161616"
+foreground = "#ffffff"
+
+[colors.search.matches]
+foreground = "CellBackground"
+background = "#ee5396"
+
+[colors.normal]
+black = "#262626"
+magenta = "#ff7eb6"
+green = "#42be65"
+yellow = "#ffe97b"
+blue = "#33b1ff"
+red = "#ee5396"
+cyan = "#3ddbd9"
+white = "#dde1e6"
+
+[colors.bright]
+black = "#393939"
+magenta = "#ff7eb6"
+green = "#42be65"
+yellow = "#ffe97b"
+blue = "#33b1ff"
+red = "#ee5396"
+cyan = "#3ddbd9"
+white = "#ffffff"
+

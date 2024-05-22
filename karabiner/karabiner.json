@@ -1205,7 +1205,7 @@
             ]
           },
           {
-            "description": "leader + o + return_or_enter - Open -a 'iTerm.app'",
+            "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
             "manipulators": [
               {
                 "conditions": [
@@ -1215,13 +1215,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + o + return_or_enter - Open -a 'iTerm.app'",
+                "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -a 'iTerm.app'"
+                    "shell_command": "open  -a 'Wezterm.app'"
                   },
                   {
                     "halt": true,
@@ -1241,13 +1241,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + o + return_or_enter - Open -a 'iTerm.app'",
+                "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -a 'iTerm.app'"
+                    "shell_command": "open  -a 'Wezterm.app'"
                   }
                 ],
                 "type": "basic"
@@ -1255,7 +1255,7 @@
             ]
           },
           {
-            "description": "leader + o + t - Open -a 'iTerm.app'",
+            "description": "leader + o + t - Open -a 'Wezterm.app'",
             "manipulators": [
               {
                 "conditions": [
@@ -1265,13 +1265,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + o + t - Open -a 'iTerm.app'",
+                "description": "leader + o + t - Open -a 'Wezterm.app'",
                 "from": {
                   "key_code": "t"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -a 'iTerm.app'"
+                    "shell_command": "open  -a 'Wezterm.app'"
                   },
                   {
                     "halt": true,
@@ -1291,13 +1291,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + o + t - Open -a 'iTerm.app'",
+                "description": "leader + o + t - Open -a 'Wezterm.app'",
                 "from": {
                   "key_code": "t"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -a 'iTerm.app'"
+                    "shell_command": "open  -a 'Wezterm.app'"
                   }
                 ],
                 "type": "basic"
@@ -1610,7 +1610,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
                   },
                   {
                     "halt": true,
@@ -1636,7 +1636,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
                   }
                 ],
                 "type": "basic"
@@ -1660,7 +1660,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
                   },
                   {
                     "halt": true,
@@ -1686,7 +1686,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"
@@ -2736,7 +2736,7 @@
             ]
           },
           {
-            "description": "leader + return_or_enter + return_or_enter - Open -n -a 'iTerm.app'",
+            "description": "leader + return_or_enter + return_or_enter - Open -n -a 'Wezterm.app'",
             "manipulators": [
               {
                 "conditions": [
@@ -2746,13 +2746,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + return_or_enter + return_or_enter - Open -n -a 'iTerm.app'",
+                "description": "leader + return_or_enter + return_or_enter - Open -n -a 'Wezterm.app'",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -n -a 'iTerm.app'"
+                    "shell_command": "open  -n -a 'Wezterm.app'"
                   },
                   {
                     "halt": true,
@@ -2772,13 +2772,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + return_or_enter + return_or_enter - Open -n -a 'iTerm.app'",
+                "description": "leader + return_or_enter + return_or_enter - Open -n -a 'Wezterm.app'",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open  -n -a 'iTerm.app'"
+                    "shell_command": "open  -n -a 'Wezterm.app'"
                   }
                 ],
                 "type": "basic"
