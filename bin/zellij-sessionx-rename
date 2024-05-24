@@ -1,0 +1,24 @@
+#!/bin/env bash
+
+source $HOME/dotfiles/zsh/utils.sh
+
+DIR="${2}"
+CMD="$(echo "$1" | cut -d ' ' -f1)"
+OUTPUT="${2}"
+
+HAS_GIT=$(git -C "$DIR" rev-parse --is-inside-work-tree 2>/dev/null)
+# echo "_[$1]_{$HAS_GIT}_($DIR)"
+
+if [[ "$CMD" == "nvim" || "$CMD" == "vim" ]]; then
+    OUTPUT="nvim $(basename $DIR)"
+elif [[ "$CMD" == "n" || "$CMD" == "n" ]]; then
+    OUTPUT="n ${echo $1 | cut -d  ' ' -f2}"
+elif [[ "$HAS_GIT" == "true" ]]; then
+    OUTPUT="$(git -C "$DIR" config --get remote.origin.url | cut -d ':' -f2- | sed ' s/\.git$//g')"
+elif [[ $DIR == $HOME ]]; then
+    OUTPUT="~"
+else
+    current_dir=${OUTPUT##*/}
+fi
+
+command nohup zellij action rename-tab "$OUTPUT" >/dev/null 2>&1

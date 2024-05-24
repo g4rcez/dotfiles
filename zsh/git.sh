@@ -58,7 +58,6 @@ unset git_version
 alias pushf="git push --force-with-lease"
 alias add='git add'
 alias checkout='git checkout'
-alias commit='git commit -S'
 alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
@@ -152,6 +151,14 @@ function gitignore() {
 
 function git-graph() {
   git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+}
+
+function commit () {
+    if [[ "$1" == "" ]]; then
+        git commit -S
+    else
+        git commit -S -m "$1"
+    fi
 }
 
 #############################################################################################################################

@@ -50,26 +50,27 @@ fi
 ##############################################################################################################
 ## sources
 source $HOME/dotfiles/zsh/utils.sh
+
 local -a PATH_EXPORTS=(
-  /usr/local/bin
-  $HOME/.cargo/env
-  $HOME/.local/bin
-  $HOME/.local/share
-  $HOME/.local/share/bin
-  $VOLTA_HOME/bin
-  $PNPM_HOME
-  $HOME/.yarn/bin
-  $HOME/.dotnet
-  $HOME/.dotnet/tools
-  $HOME/tools
-  $HOME/tools/google-cloud-sdk/bin
-  $HOME/.local/share/JetBrains/scripts
-  $HOME/.local/share/JetBrains/Toolbox/scripts
-  $HOME/.config/yarn/global/node_modules/.bin
-  $BUN_INSTALL/bin
-  /usr/local/opt/libpq/bin
-  /opt/homebrew/opt/libpq/bin
-  $HOME/dotfiles/bin
+  "/usr/local/bin"
+  "$HOME/.cargo/env"
+  "$HOME/.local/bin"
+  "$HOME/.local/share"
+  "$HOME/.local/share/bin"
+  "$VOLTA_HOME/bin"
+  "$PNPM_HOME"
+  "$HOME/.yarn/bin"
+  "$HOME/.dotnet"
+  "$HOME/.dotnet/tools"
+  "$HOME/tools"
+  "$HOME/tools/google-cloud-sdk/bin"
+  "$HOME/.local/share/JetBrains/scripts"
+  "$HOME/.local/share/JetBrains/Toolbox/scripts"
+  "$HOME/.config/yarn/global/node_modules/.bin"
+  "$BUN_INSTALL/bin"
+  "/usr/local/opt/libpq/bin"
+  "/opt/homebrew/opt/libpq/bin"
+  "$HOME/dotfiles/bin"
 )
 PATH_RESULT="$PATH"
 for path in $PATH_EXPORTS; do
@@ -87,14 +88,14 @@ zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 
 local -a PLUGINS=(
-    MichaelAquilina/zsh-auto-notify
-    MichaelAquilina/zsh-you-should-use
-    wfxr/forgit
-    hlissner/zsh-autopair
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-completions
-    zsh-users/zsh-history-substring-search
-    zsh-users/zsh-syntax-highlighting
+    "MichaelAquilina/zsh-auto-notify"
+    "MichaelAquilina/zsh-you-should-use"
+    "wfxr/forgit"
+    "hlissner/zsh-autopair"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "zsh-users/zsh-history-substring-search"
+    "zsh-users/zsh-syntax-highlighting"
 )
 
 ## fpath - terminal autocomplete
@@ -143,14 +144,20 @@ local -a SOURCE=(
   "$DOTFILES/zsh/zstyle.sh"
   "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
 )
+eval "$(zoxide init zsh)"
+
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-eval "$(zoxide init zsh)"
-zellij-start
+_zellij_tab_name_update "zsh" "$PWD"
+
+preexec () {
+    bash "$DOTFILES/bin/zellij-sessionx-rename" "$1" "$(pwd)"
+}
+
 _postcd
 chpwd_functions+=(_postcd)
 chpwd_functions+=(_zellij_tab_name_update)
-
+zellij-start
 
