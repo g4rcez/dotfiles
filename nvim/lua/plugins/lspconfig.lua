@@ -11,6 +11,7 @@ return {
       end,
     },
     opts = {
+      autoformat = false,
       servers = {
         tsserver = {},
         bashls = {},

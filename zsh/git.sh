@@ -43,12 +43,12 @@ function git_develop_branch() {
     echo develop
 }
 
-function countCommits() {
-    gh pr view --json commits | jq '.commits|length' | tr -d "\n"
-}
-
 function getBranchFzf() {
     git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g'| grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
+}
+
+function countCommits() {
+    gh pr view --json commits | jq '.commits|length' | tr -d "\n"
 }
 
 unset git_version
@@ -140,11 +140,6 @@ function switch() {
     git switch "$BRANCH_TARGET";
 }
 
-function createpr() {
-    BRANCH_TARGET=$(test -z "$1" && echo $(getBranchFzf) || echo "$1")
-    gh pr create --base "$BRANCH_TARGET" -a "@me" ${@:2}
-}
-
 function gitignore() {
   forgit::ignore >> ".gitignore"
 }
@@ -161,8 +156,17 @@ function commit () {
     fi
 }
 
+function lastcommit() {
+    echo $(git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1)
+}
+
 #############################################################################################################################
 ## github functions
+function createpr() {
+    BRANCH_TARGET=$(test -z "$1" && echo $(getBranchFzf) || echo "$1")
+    gh pr create --base "$BRANCH_TARGET" -a "@me" ${@:2}
+}
+
 function newpr() {
     createpr "$1"
 }

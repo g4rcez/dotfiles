@@ -1,5 +1,6 @@
 {
     "version": "1.0.0",
+    "private": true,
     "name": "dotfiles",
     "main": "index.js",
     "author": "Allan Garcez <allan.f.garcez@gmail.com>",

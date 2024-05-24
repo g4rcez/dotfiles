@@ -13,6 +13,7 @@ setopt HIST_FCNTL_LOCK
 setopt HIST_IGNORE_ALL_DUPS
 setopt SHARE_HISTORY
 setopt aliases
+setopt prompt_subst
 # setopt always_to_end
 setopt append_history
 setopt auto_list

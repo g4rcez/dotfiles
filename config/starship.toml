@@ -1,9 +1,12 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
+palette = 'tailwind'
 format = """
 $status\
 ${custom.git_host}\
+${custom.pwd_init}\
 $directory\
+${custom.pwd_end}\
 $git_branch\
 $git_commit\
 $git_metrics\
@@ -15,9 +18,15 @@ $package\
 $dotnet\
 $nodejs\
 $cmd_duration
-${custom.zellij}\
 $line_break\
 $character"""
+
+[palettes.tailwind]
+fg = "#f8fafc"
+red = "#ef4444"
+blue = "#38bdf8"
+green = "#10b981"
+yellow = "#facc15"
 
 [package]
 disabled = false
@@ -40,12 +49,22 @@ disabled = false
 
 [directory]
 format = '[\[$path\]]($style)[$read_only]($read_only_style) '
-style = "bright-blue"
+style = "blue"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
+home_symbol = "~"
+
+[custom.pwd_init]
+command = "echo $PWD"
+when = true
+format = "\u001b\\]8;;[file:$output]()\u001b\\\\"
+
+[custom.pwd_end]
+format = "\u001b\\]8;;\u001b\\\\"
+when = true
 
 [character]
-success_symbol = "[>_](white)"
+success_symbol = "[>_](fg)"
 error_symbol = "[>_](red)"
 vimcmd_symbol = "[❮](green)"
 
@@ -56,7 +75,7 @@ symbol = ' '
 
 [git_status]
 format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
-style = "bright-red"
+style = "red"
 ahead = '⇡${count}'
 behind = '⇣${count}'
 conflicted = ""
@@ -71,13 +90,13 @@ up_to_date = '[✓](green) '
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "bright-black"
+style = "fg"
 cherry_pick = '[🍒](red)'
 
 [git_metrics]
 disabled = false
 added_style = 'green'
-deleted_style = 'bright-yellow'
+deleted_style = 'yellow'
 format = '[+$added]($added_style)|[-$deleted]($deleted_style) '
 only_nonzero_diffs = true
 
@@ -97,6 +116,7 @@ symbol = ' '
 disabled = false
 
 [custom.since_last_commit]
+description = "Show time since last commit"
 directories = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--norc", "--noprofile"]
@@ -123,15 +143,8 @@ fi
 fi
 """
 
-[custom.zellij]
-directories = ["."]
-when = true
-shell = ["bash", "--norc", "--noprofile"]
-style = "yellow"
-format = "$output"
-command = "bash $HOME/dotfiles/bin/starship-zellij"
-
 [custom.git_host]
+description = "Show icon of git host platform"
 directories = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--norc", "--noprofile"]

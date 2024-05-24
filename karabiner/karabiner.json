@@ -2497,6 +2497,56 @@
             ]
           },
           {
+            "description": "leader + w + i - Window: maximize-height",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + i - Window: maximize-height",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + i - Window: maximize-height",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "leader + w + return_or_enter - Window: maximize",
             "manipulators": [
               {

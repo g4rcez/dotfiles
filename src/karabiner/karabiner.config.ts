@@ -91,6 +91,7 @@ const withLeaderKeys = createLeaderLayers({
         h: rectangle("left-half"),
         l: rectangle("right-half"),
         o: rectangle("maximize"),
+        i: rectangle("maximize-height"),
         return_or_enter: rectangle("maximize"),
     },
     return_or_enter: {
