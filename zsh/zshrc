@@ -128,6 +128,7 @@ znap prompt
 
 ##############################################################################################################
 ## source files
+eval "$(zoxide init zsh)"
 local -a SOURCE=(
   "$HOME/.fzf.zsh"
   "$HOME/.fzf/shell/key-bindings.zsh"
@@ -144,16 +145,17 @@ local -a SOURCE=(
   "$DOTFILES/zsh/zstyle.sh"
   "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
 )
-eval "$(zoxide init zsh)"
 
+##############################################################################################################
+## zsh hooks
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-_zellij_tab_name_update "zsh" "$PWD"
+_zellij_tab_name_update "" "$PWD"
 
 preexec () {
-    bash "$DOTFILES/bin/zellij-sessionx-rename" "$1" "$(pwd)"
+    bash "$DOTFILES/bin/zellij-sessionx-rename" "$2" "$(pwd)"
 }
 
 _postcd

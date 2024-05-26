@@ -63,13 +63,13 @@ keybinds clear-defaults=true {
         bind "Tab" { ToggleTab; }
         bind "k" {
             SwitchToMode "Normal";
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "95%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx-kill" {
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx-kill" {
                 close_on_exit true
             }
         }
         bind "s" "p" {
             SwitchToMode "Normal";
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "95%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
                 close_on_exit true
             }
         }

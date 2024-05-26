@@ -58,4 +58,6 @@ ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
 ln -sf $DOT_CONFIG/starship.toml $CONFIG_DIR/starship.toml
 ln -sf $DIR/dygma $HOME/Raise
 ln -sf $DIR/config/alacritty/ $CONFIG_DIR
+ln -sf $HOME/dotfiles/config/yazi $CONFIG_DIR
+ln -sf $HOME/dotfiles/config/lazygit $HOME/.config
 make

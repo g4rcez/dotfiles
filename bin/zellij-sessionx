@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 source $HOME/dotfiles/zsh/zellij.sh
+source $HOME/dotfiles/zsh/utils.sh
+
 if [ "$(command -v zellij)" = "" ]; then
     echo "Zellij is not installed"
     exit 1
@@ -31,10 +33,14 @@ function testingEnv() {
 }
 
 fzf_window() {
-    fzf --reverse --no-sort \
-        --border "rounded" --info \
-        inline --prompt "Session > " \
-        --header "Select session" --preview "bash ~/dotfiles/bin/zellij-sessionx-preview {}"
+    fzf $FZF_COLORS --cycle --border-label "zellij-sessionx - ctrl+d: delete session" --reverse --no-sort \
+        --border "sharp" \
+        --info inline \
+        --height 100% \
+        --prompt "Session > " \
+        --preview "bash ~/dotfiles/bin/zellij-sessionx-preview {}" \
+        --header "ctrl+d: Delete session"
+    --preview-window right,70% --bind "ctrl-d:execute-silent(zellij d --force {2..})+abort"
 }
 
 function getProjectsFromDocuments() {

@@ -9,74 +9,46 @@ unsetopt flowcontrol
 SAVEHIST=$(( 100 * 1000 ))      # Use multiplication for readability.
 # Max number of history entries to keep in memory.
 HISTSIZE=$(( 1.2 * SAVEHIST ))  # Zsh recommended value
-setopt HIST_FCNTL_LOCK
-setopt HIST_IGNORE_ALL_DUPS
-setopt SHARE_HISTORY
-setopt aliases
-setopt prompt_subst
-# setopt always_to_end
-setopt append_history
-setopt auto_list
-# setopt auto_menu         # show completion menu on successive tab press
-setopt auto_pushd
-setopt autocd
-# setopt automenu
-setopt autopushd 
-setopt brace_ccl
-setopt complete_in_word
-setopt correctall
-setopt extended_glob
-setopt extended_history
-setopt glob_complete      # Show autocompletion menu with globs
-setopt globdots
-setopt hist_expire_dups_first
-setopt hist_find_no_dups
-setopt hist_ignore_all_dups
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_reduce_blanks
-setopt hist_save_no_dups
-setopt histignorealldups
-setopt histreduceblanks
-setopt magicequalsubst
-setopt notify
-setopt promptsubst
-setopt pushd_ignore_dups
-setopt pushdignoredups
-setopt pushdminus 
-setopt pushdsilent 
-setopt pushdtohome 
-setopt rmstarsilent
-setopt share_history
+# Reference: https://zsh.sourceforge.io/Doc/Release/Options.html
+setopt PROMPT_SUBST
+setopt MENU_COMPLETE        # Automatically highlight first element of completion menu
+setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
+setopt COMPLETE_IN_WORD
+setopt HIST_SAVE_NO_DUPS
 
+############################## key Bind #################################
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line
 # zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 # should this be in keybindings?
+bindkey '^Xa' alias-expension
 bindkey -M menuselect '^o' accept-and-infer-next-history
 bindkey -M menuselect '^[[Z' reverse-menu-complete
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*:*:cp:*' file-sort size
-zstyle ':completion:*' special-dirs true
-zstyle ':completion:*' completer _extensions _complete _approximate
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
-zstyle ':completion:*' use-cache yes
-zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
-
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
 
+############################## zstyle #################################
+zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
 zstyle ':completion:*' complete true
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' file-sort access
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
-zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' use-compctl true
 zstyle ':completion:*' verbose true
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
 zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
+zstyle ':completion:*:*:cp:*' file-sort size
 zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=36=31"
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*:git-checkout:*' sort false
@@ -84,41 +56,5 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
-############################## key Bind #################################
-bindkey '^[OH' beginning-of-line
-bindkey '^[OF' end-of-line
-bindkey '^Xa' alias-expension
 
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("mv " "fg=yellow,bold")
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
-ZSH_HIGHLIGHT_STYLES[alias]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=white"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[default]=none
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[function]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
-ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[path]="fg=yellow,underline"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=yellow,underline"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=cyan,bold"
-ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=green"
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-
+source $DOTFILES/zsh/syntax-highlighting.zsh

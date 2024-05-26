@@ -13,15 +13,18 @@ name:
     Dockerfile: 
     Raise: 󰌓
     a.out: 
+    alacritty: 
     assets: 
-    coverage: 
     containers: 󰡨
+    coverage: 
     database: 
     db: 
     dist: 󰷌
     docker: 
     dockerfile: 
     docs: 󰈙
+    dotfiles: 
+    e2e: 󰙨
     example: 
     examples: 
     git: 
@@ -30,26 +33,33 @@ name:
     i3: 
     idea: 
     iterm2: 
-    alacritty: 
+    iterm: 
     k8s: 󱃾
     kde: 
     lua: 
     migrations: 󰥞
     mocks: 󰠥
     pg: 
+    raycast: 󱓟
     setup: 󱁛
     src: 
+    stylus: 
     tailwind.config.js: 󱏿
     tailwind.config.ts: 󱏿
     test: 󰙨
     tests: 󰙨
-    e2e: 󰙨
-    dotfiles: 
+    tmux: 
     tools: 
     tsconfig.json: 󰛦
     vscode: 󰘐
+    wezterm: 
     yarnrc: 
+    yazi: 
+    zellij: 
     zsh: 
+    karabiner: 󰌌
+    dygma: 󰌌
+    espanso: 󰌌
 extension:
     .npmrc: 
     colorscheme: 
@@ -65,6 +75,7 @@ extension:
     rs: 🦀
     tailwind.config.js: 󱏿
     tailwind.config.ts: 󱏿
+    toml: 
     ts: 󰛦
     yaml: 󰺥
     yml: 󰺥

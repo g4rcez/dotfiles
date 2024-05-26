@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
-palette = 'tailwind'
+palette = "tailwind"
 format = """
 $status\
 ${custom.git_host}\
@@ -13,31 +13,26 @@ $git_metrics\
 $git_status\
 ${custom.since_last_commit}\
 $git_state\
-$fill\
 $package\
 $dotnet\
 $nodejs\
-$cmd_duration
+$cmd_duration\
 $line_break\
-$character"""
+$character\
+"""
 
 [palettes.tailwind]
 fg = "#f8fafc"
-red = "#ef4444"
-blue = "#38bdf8"
-green = "#10b981"
-yellow = "#facc15"
 
 [package]
 disabled = false
 display_private = true
 format = ' [$symbol$version]($style) '
+symbol = " "
 
 [fill]
-symbol = " "
-
-[line_break]
-disabled = true
+symbol = "_"
+disabled = false
 
 [status]
 style = 'fg:blue'

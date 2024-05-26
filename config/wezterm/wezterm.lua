@@ -1,10 +1,11 @@
 local wezterm = require("wezterm")
+local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
 local M = wezterm.config_builder()
 
 -- Background, window and tabs
 M.adjust_window_size_when_changing_font_size = false
 M.animation_fps = 120
-M.color_scheme = "Oxocarbon"
+M.color_scheme = "Catppuccin Mocha"
 M.cursor_blink_ease_out = "EaseInOut"
 M.cursor_blink_rate = 0
 M.default_cursor_style = "SteadyBlock"
@@ -18,6 +19,12 @@ M.show_tabs_in_tab_bar = false
 M.use_fancy_tab_bar = false
 M.window_background_opacity = 0.8
 M.window_decorations = "RESIZE"
+M.audible_bell = "Disabled"
+
+theme.background = "#12121B"
+
+M.color_schemes = { ["OLEDppuccin"] = theme }
+M.color_scheme = "OLEDppuccin"
 
 -- Font config
 M.font_size = 17
