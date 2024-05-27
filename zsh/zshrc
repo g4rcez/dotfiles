@@ -41,6 +41,7 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER=""
 export PAGER=""
+BAT_THEME="Catppuccin Mocha"
 if [ -x "$(command -v nvim)" ]; then
   export EDITOR="nvim"
   export MANPAGER="nvim +Man!"

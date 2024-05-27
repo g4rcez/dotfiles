@@ -60,4 +60,5 @@ ln -sf $DIR/dygma $HOME/Raise
 ln -sf $DIR/config/alacritty/ $CONFIG_DIR
 ln -sf $HOME/dotfiles/config/yazi $CONFIG_DIR
 ln -sf $HOME/dotfiles/config/lazygit $HOME/.config
+ln -sf $HOME/dotfiles/config/bat $HOME/.config
 make

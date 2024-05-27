@@ -16,7 +16,7 @@ alias rm='rm -v'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
 alias ll="ls -l"
-alias cat="bat -p --pager cat --theme OneHalfDark"
+alias cat="bat -p --pager cat"
 alias dotfiles="cd $HOME/dotfiles"
 alias secrets="ripsecrets"
 # Intuitive map function
