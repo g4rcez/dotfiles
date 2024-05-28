@@ -9,19 +9,20 @@
 ########################################################################################################################
 set -xe
 mkdir -p $HOME/tools $HOME/.tmp
+mkdir -p $HOME/.config
 DIR="$HOME/dotfiles"
 CONFIG_DIR="$HOME/.config"
 DOT_CONFIG="$DIR/config"
 source $HOME/dotfiles/zsh/utils.sh
 ########################################################################################################################
 ##### python modules
-pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
+# pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 ########################################################################################################################
 ##### core installs
-ln -sf $DIR/nvim/ $CONFIG_DIR/nvim/
+ln -sf $DIR/nvim $CONFIG_DIR/
 ln -sf $DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DOT_CONFIG/tmux $CONFIG_DIR/tmux
+ln -sf $DOT_CONFIG/tmux $CONFIG_DIR
 ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
 
@@ -30,19 +31,26 @@ ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
 ln -sf $DIR/git/gitconfig $HOME/.gitconfig
 
 ########################################################################################################################
-##### fzf
-function installfzf() {
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+##### brew
+function installbrew() {
+    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    bash $HOME/dotfiles/setup/brew.sh
 }
-checkcommand "fzf" installfzf
-########################################################################################################################
+checkcommand "brew" installbrew
 ##### brew
 function installbrew() {
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     bash $HOME/dotfiles/setup/brew.sh
 }
 checkcommand "brew" installbrew
+
+########################################################################################################################
+##### fzf
+function installfzf() {
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+}
+checkcommand "fzf" installfzf
 ########################################################################################################################
 ##### node config
 function installvolta() {
@@ -56,7 +64,7 @@ checkcommand "volta" installvolta
 ##### other links
 ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
 ln -sf $DOT_CONFIG/starship.toml $CONFIG_DIR/starship.toml
-ln -sf $DIR/dygma $HOME/Raise
+ln -sf $DIR/Raise $HOME/
 ln -sf $DIR/config/alacritty/ $CONFIG_DIR
 ln -sf $HOME/dotfiles/config/yazi $CONFIG_DIR
 ln -sf $HOME/dotfiles/config/lazygit $HOME/.config
