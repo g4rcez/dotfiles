@@ -6,6 +6,7 @@ typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("mv " "fg=yellow,bold")
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf " "fg=red,bold")
+ZSH_HIGHLIGHT_PATTERNS+=("sudo *" "fg=magenta,bold")
 ZSH_HIGHLIGHT_STYLES[alias]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
@@ -91,9 +92,9 @@ ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#cdd6f4'
 ## No category relevant in spec
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#e64553'
 ZSH_HIGHLIGHT_STYLES[path]='fg=#cdd6f4,underline'
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#f38ba8,underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#cdd6f4,underline'
 ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4,underline'
-ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#cdd6f4,underline'
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=#cdd6f4'
 ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#cba6f7'
 #ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'

@@ -13,7 +13,7 @@ if [ "$(command -v zoxide)" = "" ]; then
     exit 1
 fi
 
-transform_home_path() {
+function homename() {
     HOME_SED_SAFE=$?
     if [ $HOME_SED_SAFE -eq 0 ]; then
         echo "$1" | sed -e "s|^~/|$HOME/|"
@@ -22,39 +22,26 @@ transform_home_path() {
     fi
 }
 
-function basename2() {
-    D2=$(dirname "$1")
-    DIRNAME2=$(basename "$D2")/$(basename "$1")
-    echo "$DIRNAME2"
-}
-
-function testingEnv() {
-    echo "ls $1"
-}
-
-fzf_window() {
-    fzf $FZF_COLORS --cycle --border-label "zellij-sessionx - ctrl+d: delete session" --reverse --no-sort \
+function fzf_window() {
+    fzf --cycle --border-label "zellij-sessionx - ctrl+d: delete session" --reverse --no-sort \
         --border "sharp" \
         --info inline \
         --height 100% \
+        --color=dark --color='bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8' \
+        --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc' --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8' \
         --prompt "Session > " \
         --preview "bash ~/dotfiles/bin/zellij-sessionx-preview {}" \
-        --header "ctrl+d: Delete session"
-    --preview-window right,70% --bind "ctrl-d:execute-silent(zellij d --force {2..})+abort"
+        --header "ctrl+d: Delete session" \
+        --preview-window right,70% --bind "ctrl-d:execute-silent(zellij d --force {2..})+abort"
 }
 
-function getProjectsFromDocuments() {
-    fd -p -t directory -a -d 2 "./Documents" ~/Documents |
-        sed "s@$HOME/Documents/@[d] @g" |
-        grep -e '.*/.*/' |
-        sed 's/\/$//g'
+function getProjects() {
+    zellij list-sessions -s | awk '{ print "[s] " $1 }'
+    fd -p -t directory -a -d 2 "./Documents" ~/Documents | sed "s@$HOME/Documents/@[d] @g" | grep -e '.*/.*/' | sed 's/\/$//g'
 }
 
-select_project() {
-    PROJECT=$({
-        zellij list-sessions -s | awk '{ print "[s] " $1 }'
-        getProjectsFromDocuments
-    } | fzf_window)
+function selectProject() {
+    PROJECT=$(getProjects | fzf_window)
     if [ "${PROJECT:0:3}" == "[d]" ]; then
         SANITIZE=$(echo $PROJECT | sed 's/\[d] //g')
         echo "$HOME/Documents/$SANITIZE"
@@ -65,41 +52,41 @@ select_project() {
     exit
 }
 
-is_selected_session() {
+isSelected() {
     if [ -n "$(echo "$1" | grep "^([0-9]*)\\\t\[Session\]")" ]; then
         echo 1
     fi
 }
 
-get_sanitized_selected() {
+sanitizeName() {
     echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
 }
 
-get_session_name() {
+getSessionName() {
     project_dir=$1
     directory=$(basename "$project_dir")
     session_name=$(echo "$directory" | tr ' .:' '_')
     echo "$session_name"
 }
 
-selected=$(select_project)
+selected=$(selectProject)
 echo "SELECTED $selected"
 if [ -z "$selected" ]; then
     exit 0
 fi
 
-is_session=$(is_selected_session "$selected")
-selected_name=$(get_sanitized_selected "$selected")
-session_name=$(get_session_name "$(transform_home_path "$selected_name")")
+is_session=$(isSelected "$selected")
+selected_name=$(sanitizeName "$selected")
+session_name=$(getSessionName "$(homename "$selected_name")")
 session=$(zellij list-sessions | grep "$session_name")
 
 if [[ -n "$ZELLIJ" ]]; then
     zellij pipe --plugin file:~/dotfiles/config/zellij/plugins/zellij-switch.wasm -- "$session_name::$selected_name"
 else
     if [[ -n "$is_session" ]]; then
-        zellij attach $selected_name -c
+        zellij attach "$selected_name" -c
     else
-        cd $selected
-        zinit $session_name "$PWD"
+        cd "$selected"
+        zinit "$session_name" "$PWD"
     fi
 fi

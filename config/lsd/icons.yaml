@@ -15,6 +15,7 @@ name:
     a.out: 
     alacritty: 
     assets: 
+    bin: 
     containers: 󰡨
     coverage: 
     database: 
@@ -24,7 +25,9 @@ name:
     dockerfile: 
     docs: 󰈙
     dotfiles: 
+    dygma: 󰌌
     e2e: 󰙨
+    espanso: 󰌌
     example: 
     examples: 
     git: 
@@ -35,6 +38,7 @@ name:
     iterm2: 
     iterm: 
     k8s: 󱃾
+    karabiner: 󰌌
     kde: 
     lua: 
     migrations: 󰥞
@@ -57,9 +61,6 @@ name:
     yazi: 
     zellij: 
     zsh: 
-    karabiner: 󰌌
-    dygma: 󰌌
-    espanso: 󰌌
 extension:
     .npmrc: 
     colorscheme: 
