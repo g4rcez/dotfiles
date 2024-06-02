@@ -8,6 +8,7 @@ local g = vim.g
 g.mapleader = " "
 g.maplocalleader = " "
 g.have_nerd_font = true
+g.autoformat = true
 opt.title = true
 opt.titlelen = 0
 opt.smartcase = true
