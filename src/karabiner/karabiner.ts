@@ -1,9 +1,22 @@
 import fs from "node:fs";
 import { dotfile } from "../utils";
 import { devices } from "./devices";
-import { karabinerConfig } from "./karabiner.config";
+import { config, whichKey } from "./karabiner.config";
 
 export const karabiner = () => {
+    const whichKeyMap = dotfile(
+        "raycast",
+        "extensions",
+        "dev-toolbelt",
+        "src",
+        "whichkey.json",
+    );
+    console.log(`The whichkey map "${whichKeyMap}" was created`);
+    fs.writeFileSync(
+        whichKeyMap,
+        JSON.stringify(whichKey, null, 4),
+        "utf-8",
+    );
     const configFile = dotfile("karabiner", "karabiner.json");
     fs.writeFileSync(
         configFile,
@@ -22,7 +35,7 @@ export const karabiner = () => {
                         // You must change this devices for your own
                         devices,
                         complex_modifications: {
-                            rules: karabinerConfig,
+                            rules: config,
                             parameters: {
                                 "basic.simultaneous_threshold_milliseconds": 50,
                                 "basic.to_delayed_action_delay_milliseconds": 250,

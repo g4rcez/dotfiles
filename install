@@ -14,20 +14,14 @@ DIR="$HOME/dotfiles"
 CONFIG_DIR="$HOME/.config"
 DOT_CONFIG="$DIR/config"
 source $HOME/dotfiles/zsh/utils.sh
-########################################################################################################################
-##### python modules
-# pip3 install --user colour docker numpy pint inflect matplotlib fuzzywuzzy wheel meme
 
 ########################################################################################################################
 ##### core installs
 ln -sf $DIR/nvim $CONFIG_DIR/
 ln -sf $DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DOT_CONFIG/tmux $CONFIG_DIR
+ln -sf $DIR/tmux $CONFIG_DIR
 ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
-ln -sf $DOT_CONFIG/wezterm/wezterm.lua $HOME/.wezterm.lua
-
-########################################################################################################################
-##### gitconfig
+ln -sf $DIR/wezterm/wezterm.lua $HOME/.wezterm.lua
 ln -sf $DIR/git/gitconfig $HOME/.gitconfig
 
 ########################################################################################################################
@@ -37,13 +31,6 @@ function installbrew() {
     bash $HOME/dotfiles/setup/brew.sh
 }
 checkcommand "brew" installbrew
-##### brew
-function installbrew() {
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    bash $HOME/dotfiles/setup/brew.sh
-}
-checkcommand "brew" installbrew
-
 ########################################################################################################################
 ##### fzf
 function installfzf() {
@@ -55,15 +42,16 @@ checkcommand "fzf" installfzf
 ##### node config
 function installvolta() {
     curl https://get.volta.sh | bash
-    volta install node@latest
+    volta install node@lts
+    volta pin node@lts
     volta install yarn@1.22.22
     npm i -g pnpm ts-node yarn neovim
 }
 checkcommand "volta" installvolta
 ########################################################################################################################
 ##### other links
-ln -sf $DOT_CONFIG/fd/.fdignore $HOME/.fdignore
-ln -sf $DOT_CONFIG/starship.toml $CONFIG_DIR/starship.toml
+ln -sf $DIR/fd/.fdignore $HOME/.fdignore
+ln -sf $DIR/starship.toml $CONFIG_DIR/starship.toml
 ln -sf $DIR/Raise $HOME/
 ln -sf $DIR/config/alacritty/ $CONFIG_DIR
 ln -sf $HOME/dotfiles/config/yazi $CONFIG_DIR

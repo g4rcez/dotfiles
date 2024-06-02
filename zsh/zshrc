@@ -1,5 +1,6 @@
 ##############################################################################################################
 ## exports
+export TERM="xterm-256color"
 export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
@@ -123,7 +124,7 @@ done
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,prompt_info_functions,termsupport,vcs_info}
-znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew}
+znap source ohmyzsh/ohmyzsh plugins/{git,npm,yarn,fzf,brew,aws}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 

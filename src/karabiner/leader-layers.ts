@@ -1,5 +1,12 @@
 import { KarabinerRule, KeyCode, To } from "../types";
-import { LayerCommand, karabinerNotify, notify, vim } from "../utils";
+import {
+    LayerCommand,
+    WhichKey,
+    karabinerNotify,
+    notify,
+    replaceWhichKeys,
+    vim,
+} from "../utils";
 
 type VimMotion = { to: To[]; description?: string } | LayerCommand;
 
@@ -10,8 +17,11 @@ type Config = Partial<
     >
 >;
 
-export const createLeaderLayers = (config: Config): KarabinerRule[] => {
+export const createLeaderLayers = (
+    config: Config,
+): { layers: KarabinerRule[]; whichKey: WhichKey[] } => {
     const entries = Object.entries(config);
+    const whichKey: WhichKey[] = [];
     const allLayers = entries.reduce(
         (acc, [key, { description: leaderDescription = "", ...motions }]) => {
             const modal = `leader: ${key} ${leaderDescription}` as const;
@@ -35,6 +45,31 @@ export const createLeaderLayers = (config: Config): KarabinerRule[] => {
                             vim.on(key, true),
                             karabinerNotify(`Hold ${modal}`),
                         ],
+                        type: "basic",
+                    },
+                ],
+            };
+            const escDisableSingle: KarabinerRule = {
+                description: `esc disable single - leader ${key}`,
+                manipulators: [
+                    {
+                        description: `esc_disable_single_leader_key_${key}`,
+                        conditions: [
+                            {
+                                type: "variable_if",
+                                name: vim.name(key, false),
+                                value: vim.value.on,
+                            },
+                            { type: "variable_if", name: "hyper", value: 0 },
+                        ],
+                        from: {
+                            key_code: "escape",
+                            modifiers: {
+                                optional: ["any"],
+                                mandatory: ["any"],
+                            },
+                        },
+                        to: [vim.off(key, false)],
                         type: "basic",
                     },
                 ],
@@ -86,6 +121,10 @@ export const createLeaderLayers = (config: Config): KarabinerRule[] => {
             const ownMotions = Object.entries(motions).map(
                 ([subKey, subMotion]): KarabinerRule => {
                     const description = `leader + ${key} + ${subKey} - ${subMotion.description}`;
+                    whichKey.push({
+                        key: `<Leader>${replaceWhichKeys(key as KeyCode)}${replaceWhichKeys(subKey as KeyCode)}`,
+                        description: subMotion.description,
+                    });
                     return {
                         description,
                         manipulators: [
@@ -119,9 +158,16 @@ export const createLeaderLayers = (config: Config): KarabinerRule[] => {
                     };
                 },
             );
-            return [...acc, singleDisable, holdDisable, leader, ...ownMotions];
+            return [
+                ...acc,
+                singleDisable,
+                escDisableSingle,
+                holdDisable,
+                leader,
+                ...ownMotions,
+            ];
         },
         [],
     );
-    return allLayers;
+    return { layers: allLayers, whichKey };
 };

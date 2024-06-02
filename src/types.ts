@@ -14,7 +14,7 @@ export type Manipulator = {
     parameters?: Parameters;
     conditions?: Conditions[];
     to_delayed_action?: {
-        to_delayed_action?: { to_if_canceled?: To[] }
+        to_delayed_action?: { to_if_canceled?: To[] };
         to_if_invoked?: To[];
     };
 };
@@ -35,7 +35,10 @@ type Conditions =
     | EventChangedCondition;
 
 type FrontMostApplicationCondition = {
-    type: "frontmost_application_if" | "frontmost_application_unless";
+    type:
+        | "frontmost_application_if"
+        | "frontmost_application_unless"
+        | "frontmost_application_if";
     bundle_identifiers?: string[];
     file_paths?: string[];
     description?: string;
@@ -115,7 +118,7 @@ export type Modifiers = {
 
 export type To = {
     halt?: boolean;
-    set_notification_message?: { "id": string; "text": string; },
+    set_notification_message?: { id: string; text: string };
     key_code?: KeyCode;
     modifiers?: KeyCode[];
     shell_command?: string;

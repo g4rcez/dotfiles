@@ -1,11 +1,9 @@
 {
   "extras": [
-    "lazyvim.plugins.extras.editor.dial",
-    "lazyvim.plugins.extras.lang.toml",
-    "lazyvim.plugins.extras.util.mini-hipatterns"
+
   ],
   "news": {
     "NEWS.md": "4964"
   },
-  "version": 4
+  "version": 6
 }

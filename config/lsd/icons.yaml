@@ -15,6 +15,7 @@ name:
     a.out: 
     alacritty: 
     assets: 
+    bat: 󰭟
     bin: 
     containers: 󰡨
     coverage: 
@@ -26,7 +27,6 @@ name:
     docs: 󰈙
     dotfiles: 
     dygma: 󰌌
-    raise: 󰌌
     e2e: 󰙨
     espanso: 󰌌
     example: 
@@ -45,6 +45,8 @@ name:
     migrations: 󰥞
     mocks: 󰠥
     pg: 
+    plugins: 󱔜
+    raise: 󰌌
     raycast: 󱓟
     setup: 󱁛
     src: 
@@ -61,6 +63,7 @@ name:
     yarnrc: 
     yazi: 
     zellij: 
+    zlayouts: 
     zsh: 
 extension:
     .npmrc: 

@@ -46,6 +46,7 @@ export const createHyperSubLayer = (
     subLayer: KeyCode,
     commands: HyperKeySublayer,
     variables: string[],
+    addWhichKey: (item: WhichKey) => void,
 ): Manipulator[] => {
     const subLayerName = createSubLayerName(subLayer);
     const cmds = keys(commands);
@@ -76,16 +77,17 @@ export const createHyperSubLayer = (
             ],
         },
         ...cmds.map((cmd): Manipulator => {
-            const spread = commands[cmd] as any;
+            const spread = commands[cmd];
+            addWhichKey({
+                key: `Hyper + ${subLayer} + ${cmd}`,
+                description: spread.description,
+            });
             return {
                 ...spread,
                 type: "basic" as const,
                 from: {
                     key_code: cmd,
-                    modifiers: {
-                        optional: ["any"],
-                        modifiers: isUpper(cmd) ? ["shift"] : undefined,
-                    },
+                    modifiers: { optional: ["any"] },
                 },
                 conditions: [
                     { type: "variable_if", name: subLayerName, value: 1 },
@@ -109,45 +111,57 @@ const hasTo = (str: object | string): str is LayerCommand => {
     return false;
 };
 
+export type WhichKey = { key: string; description: string };
+
 export const createHyperSubLayers = (
     modKeys: SubLayers,
-): { layers: KarabinerRule[]; hyper: string[] } => {
-    const allSubLayerVariables = (
-        Object.keys(modKeys) as (keyof typeof modKeys)[]
-    ).map((sublayer_key) => createSubLayerName(sublayer_key));
+): { layers: KarabinerRule[]; hyper: string[]; whichKey: WhichKey[] } => {
+    const allSubLayerVariables = keys(modKeys).map(createSubLayerName);
+    const whichKeyMap: WhichKey[] = [];
     const modSubLayers: KarabinerRule[] = Object.entries(modKeys).map(
-        ([key, value]) =>
-            hasTo(value)
-                ? {
-                      description: `Hyper Key + ${key}`,
-                      manipulators: [
-                          {
-                              ...value,
-                              type: "basic" as const,
-                              from: {
-                                  key_code: key as KeyCode,
-                                  modifiers: { optional: ["any"] },
-                              },
-                              conditions: (value.conditions as any) ?? [
-                                  {
-                                      type: "variable_if",
-                                      name: "hyper",
-                                      value: 1,
-                                  },
-                              ],
-                          },
-                      ],
-                  }
-                : {
-                      description: `Hyper Key sublayer '${key}'`,
-                      manipulators: createHyperSubLayer(
-                          key as KeyCode,
-                          value as HyperKeySublayer,
-                          allSubLayerVariables,
-                      ),
-                  },
+        ([key, value]) => {
+            if (hasTo(value)) {
+                whichKeyMap.push({
+                    key: `Hyper + ${key}`,
+                    description: value.description || `Hyper Key + ${key}`,
+                });
+                return {
+                    description: `Hyper Key + ${key}`,
+                    manipulators: [
+                        {
+                            ...value,
+                            type: "basic" as const,
+                            from: {
+                                key_code: key as KeyCode,
+                                modifiers: { optional: ["any"] },
+                            },
+                            conditions: (value.conditions as any) ?? [
+                                {
+                                    type: "variable_if",
+                                    name: "hyper",
+                                    value: 1,
+                                },
+                            ],
+                        },
+                    ],
+                };
+            }
+            return {
+                description: `Hyper Key sublayer '${key}'`,
+                manipulators: createHyperSubLayer(
+                    key as KeyCode,
+                    value as HyperKeySublayer,
+                    allSubLayerVariables,
+                    (item) => whichKeyMap.push(item),
+                ),
+            };
+        },
     );
-    return { layers: modSubLayers, hyper: Object.keys(modKeys) };
+    return {
+        layers: modSubLayers,
+        hyper: Object.keys(modKeys),
+        whichKey: whichKeyMap,
+    };
 };
 
 const createSubLayerName = (key: KeyCode) => `hyper_sublayer_${key}`;
@@ -157,17 +171,24 @@ export const shell = (cmd: string, what: string = ""): LayerCommand => ({
     description: what,
 });
 
-export const open = (what: string, params: string = ""): LayerCommand => ({
+export const open = (
+    what: string,
+    params: string = "",
+    description: string = "",
+): LayerCommand => ({
     to: [{ shell_command: `open ${params} ${what}` }],
-    description: `Open ${what}`,
+    description: description || `Open ${what}`,
 });
 
 export const notify = (message: string, title: string) => ({
     shell_command: `osascript -e 'display notification "${message}" with title "${title}"'`,
 });
 
-export const chrome = (profile: string): LayerCommand => ({
-    description: `Open GoogleChrome ${profile}`,
+export const chrome = (
+    profile: string,
+    description?: string,
+): LayerCommand => ({
+    description: description || `Open GoogleChrome ${profile}`,
     to: [
         {
             shell_command: `open -n -a 'Google Chrome.app' --args --profile-directory='${profile}'`,
@@ -195,8 +216,8 @@ export const appInstance = (name: string): LayerCommand =>
 
 export const vim = {
     value: { on: "on", off: "off" },
-    name: (leader: string, hold: boolean) =>
-        `VIM_MODE_${leader}_${hold ? "HOLD" : "SINGLE"}`,
+    name: <H extends boolean>(leader: string, hold: H) =>
+        `VIM_MODE_${leader}_${hold ? "HOLD" : "SINGLE"}` as const,
     on: (leader: string, hold: boolean) => ({
         halt: true,
         set_variable: {
@@ -216,3 +237,12 @@ export const vim = {
 export const karabinerNotify = (text: string = "") => ({
     set_notification_message: { id: "dev.garcez.vim_mode", text },
 });
+
+export const replaceWhichKeys = (str: KeyCode) => {
+    str = str.trim() as KeyCode;
+    if (str === "return" || str === "return_or_enter") return "ENTER";
+    if (str === "equal_sign") return "=";
+    if (str === "hyphen") return "-";
+    if (str === "backslash") return "\\";
+    return str;
+};
