@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { KarabinerRule } from "../types";
 import { createLeaderLayers } from "./leader-layers";
 import {
@@ -30,6 +29,24 @@ const modKeys = createHyperSubLayers({
         to: [{ key_code: "right_arrow", modifiers: ["left_command"] }],
         description: "Go to end of line",
     },
+    s: {
+        n: shell(
+            `osascript ${dotfile("bin", "notifications")}`,
+            "Clear all notifications",
+        ),
+        hyphen: {
+            to: [{ key_code: "volume_decrement" }],
+            description: "Decrease volume",
+        },
+        equal_sign: {
+            to: [{ key_code: "volume_increment" }],
+            description: "Increase volume",
+        },
+        p: {
+            to: [{ key_code: "play_or_pause" }],
+            description: "Toggle play or pause",
+        },
+    },
 });
 
 /*
@@ -46,29 +63,12 @@ const withLeaderKeys = createLeaderLayers({
         backslash: rectangle("right-half"),
         return_or_enter: appInstance("Wezterm"),
     },
-    s: {
-        n: shell(
-            `osascript ${dotfile("bin", "notifications")}`,
-            "Kill all notifications",
-        ),
-        hyphen: {
-            to: [{ key_code: "volume_decrement" }],
-            description: "Decrease volume",
-        },
-        equal_sign: {
-            to: [{ key_code: "volume_increment" }],
-            description: "Increase volume",
-        },
-        p: {
-            to: [{ key_code: "play_or_pause" }],
-            description: "Toggle play or pause",
-        },
-    },
     n: {
+        description: "Notion layer",
         n: open(
             "raycast://extensions/HenriChabrand/notion/create-database-page?launchContext=%7B%22defaults%22%3A%7B%22database%22%3A%228f300386-4489-4bd2-a787-8ba1b6fc9c59%22%2C%22property%3A%3Astatus%3A%3ATiQl%22%3A%2218f563fd-783b-4f3a-9403-235a3a1f804c%22%7D%2C%22visiblePropIds%22%3A%5B%22title%22%2C%22x%255ET%255E%22%2C%22rPKH%22%2C%22TiQl%22%2C%22%253FlMM%22%5D%7D",
             "",
-            "Create read it later item",
+            "Notion read it later",
         ),
     },
     r: {
@@ -107,6 +107,11 @@ const withLeaderKeys = createLeaderLayers({
             "raycast://extensions/mattisssa/spotify-player/yourLibrary",
             "",
             "My spotify library",
+        ),
+        o: open(
+            "raycast://extensions/huzef44/screenocr/recognize-text",
+            "",
+            "OCR screen area",
         ),
     },
     o: {

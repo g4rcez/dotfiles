@@ -13,20 +13,20 @@ layout {
 
             hide_frame_for_single_pane "false"
             mode_default_to_mode "normal"
-            mode_enter_search  "#[bg=#89B4FA,fg=#181825] {name} "
+            mode_enter_search  "#[bg=#89b4fa,fg=#181825] {name} "
             mode_locked        "#[bg=#991b1b,fg=#181825] {name} "
             mode_move          "#[bg=#155e75,fg=#181825] {name} "
-            mode_normal        "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_normal        "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_pane          "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_prompt        "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_rename_pane   "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_rename_tab    "#[bg=#89B4FA,fg=#181825] {name} "
+            mode_normal        "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_normal        "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_pane          "#[bg=#c2410c,fg=#181825] {name} "
+            mode_prompt        "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_rename_pane   "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_rename_tab    "#[bg=#89b4fa,fg=#181825] {name} "
             mode_resize        "#[bg=#065f46,fg=#181825] {name} "
-            mode_scroll        "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_search        "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_session       "#[bg=#89B4FA,fg=#181825] {name} "
-            mode_tab           "#[bg=#89B4FA,fg=#181825] {name} "
+            mode_scroll        "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_search        "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_session       "#[bg=#89b4fa,fg=#181825] {name} "
+            mode_tab           "#[bg=#89b4fa,fg=#181825] {name} "
             mode_tmux          "#[bg=#ffc387,fg=#181825] {name} "
 
             tab_active               "#[fg=#9399B2,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
@@ -35,10 +35,9 @@ layout {
             tab_normal               "#[fg=#6C7086,bg=#181825] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
             tab_sync_indicator       "  "
 
-            format_left  "{session} {mode}#[fg=#89B4FA,bg=#181825,bold] #[bg=#181825] {tabs}"
+            format_left  "{mode}#[fg=#89B4FA,bg=#181825,bold] {session} #[bg=#181825] {tabs}"
             format_right "#[fg=#89B4FA,bg=#181825]{command_git_branch}::{datetime}"
             format_space "#[bg=#181825]"
-
         }
     }
     pane {

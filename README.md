@@ -10,6 +10,7 @@ Hi. This is my dotfiles project. Here you will find all my configurations to cre
 | [git/gitconfig](https://github.com/g4rcez/dotfiles/blob/master/git/gitconfig)                           | Gitconfig settings. Alias, core, diff style                                                                      |
 | [starship.toml](https://github.com/g4rcez/dotfiles/blob/master/config/starship.toml)                    | Configure of [starship.rs](https://starship.rs)                                                                  |
 | [karabiner.config.ts](https://github.com/g4rcez/dotfiles/blob/master/src/karabiner/karabiner.config.ts) | Typescript bindings to configure Karabiner - Inspired by [mxstbr/karabiner](https://github.com/mxstbr/karabiner) |
+| [espanso.config.ts](https://github.com/g4rcez/dotfiles/blob/master/src/espanso/espanso.config.ts)       | Typescript bindings to configure espanso mappers                                                                 |
 
 # CLI softwares
 

@@ -349,6 +349,177 @@
             ]
           },
           {
+            "description": "Hyper Key sublayer 's'",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer s",
+                "type": "basic",
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_s",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_s",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_0",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_4",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_h",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_l",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_k",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "osascript /Users/allangarcez/dotfiles/bin/notifications"
+                  }
+                ],
+                "description": "Clear all notifications",
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "key_code": "volume_decrement"
+                  }
+                ],
+                "description": "Decrease volume",
+                "type": "basic",
+                "from": {
+                  "key_code": "hyphen",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "key_code": "volume_increment"
+                  }
+                ],
+                "description": "Increase volume",
+                "type": "basic",
+                "from": {
+                  "key_code": "equal_sign",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "key_code": "play_or_pause"
+                  }
+                ],
+                "description": "Toggle play or pause",
+                "type": "basic",
+                "from": {
+                  "key_code": "p",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "disable single - leader return_or_enter",
             "manipulators": [
               {
@@ -629,386 +800,6 @@
             ]
           },
           {
-            "description": "disable single - leader s",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_single_leader_key_s",
-                "from": {
-                  "key_code": "s",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "esc disable single - leader s",
-            "manipulators": [
-              {
-                "description": "esc_disable_single_leader_key_s",
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 0
-                  }
-                ],
-                "from": {
-                  "key_code": "escape",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ],
-                    "mandatory": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "disable holder - leader s",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_HOLD",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_leader_key_s",
-                "from": {
-                  "key_code": "s",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_HOLD",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader s",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "leader_key_s",
-                "from": {
-                  "key_code": "s",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to_if_alone": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "shell_command": "osascript -e 'display notification \"leader: s \" with title \"Leader s activated\"'"
-                  }
-                ],
-                "to_if_held_down": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_HOLD",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": "Hold leader: s "
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + s + n - Kill all notifications",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + n - Kill all notifications",
-                "from": {
-                  "key_code": "n"
-                },
-                "to": [
-                  {
-                    "shell_command": "osascript /Users/allangarcez/dotfiles/bin/notifications"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + n - Kill all notifications",
-                "from": {
-                  "key_code": "n"
-                },
-                "to": [
-                  {
-                    "shell_command": "osascript /Users/allangarcez/dotfiles/bin/notifications"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + s + hyphen - Decrease volume",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + hyphen - Decrease volume",
-                "from": {
-                  "key_code": "hyphen"
-                },
-                "to": [
-                  {
-                    "key_code": "volume_decrement"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + hyphen - Decrease volume",
-                "from": {
-                  "key_code": "hyphen"
-                },
-                "to": [
-                  {
-                    "key_code": "volume_decrement"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + s + equal_sign - Increase volume",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + equal_sign - Increase volume",
-                "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "key_code": "volume_increment"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + equal_sign - Increase volume",
-                "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "key_code": "volume_increment"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + s + p - Toggle play or pause",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + p - Toggle play or pause",
-                "from": {
-                  "key_code": "p"
-                },
-                "to": [
-                  {
-                    "key_code": "play_or_pause"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_s_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_s_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + s + p - Toggle play or pause",
-                "from": {
-                  "key_code": "p"
-                },
-                "to": [
-                  {
-                    "key_code": "play_or_pause"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
             "description": "disable single - leader n",
             "manipulators": [
               {
@@ -1166,7 +957,7 @@
                     }
                   },
                   {
-                    "shell_command": "osascript -e 'display notification \"leader: n \" with title \"Leader n activated\"'"
+                    "shell_command": "osascript -e 'display notification \"leader: n Notion layer\" with title \"Leader n activated\"'"
                   }
                 ],
                 "to_if_held_down": [
@@ -1180,7 +971,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Hold leader: n "
+                      "text": "Hold leader: n Notion layer"
                     }
                   }
                 ],
@@ -1189,7 +980,7 @@
             ]
           },
           {
-            "description": "leader + n + n - Create read it later item",
+            "description": "leader + n + n - Notion read it later",
             "manipulators": [
               {
                 "conditions": [
@@ -1199,7 +990,7 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + n + n - Create read it later item",
+                "description": "leader + n + n - Notion read it later",
                 "from": {
                   "key_code": "n"
                 },
@@ -1225,7 +1016,7 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + n + n - Create read it later item",
+                "description": "leader + n + n - Notion read it later",
                 "from": {
                   "key_code": "n"
                 },
@@ -1762,6 +1553,56 @@
                 "to": [
                   {
                     "shell_command": "open  raycast://extensions/mattisssa/spotify-player/yourLibrary"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + r + o - OCR screen area",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + o - OCR screen area",
+                "from": {
+                  "key_code": "o"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/huzef44/screenocr/recognize-text"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + o - OCR screen area",
+                "from": {
+                  "key_code": "o"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/huzef44/screenocr/recognize-text"
                   }
                 ],
                 "type": "basic"

@@ -23,6 +23,32 @@ $character\
 
 [palettes.tailwind]
 fg = "#f8fafc"
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
 
 [package]
 disabled = false
@@ -44,7 +70,7 @@ disabled = false
 
 [directory]
 format = '[\[$path\]]($style)[$read_only]($read_only_style) '
-style = "blue"
+style = "bold sapphire"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
 home_symbol = "~"
@@ -59,8 +85,8 @@ format = "\u001b\\]8;;\u001b\\\\"
 when = true
 
 [character]
-success_symbol = "[>_](fg)"
-error_symbol = "[>_](red)"
+success_symbol = "[[>_](fg)](fg)"
+error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
 
 [git_branch]
