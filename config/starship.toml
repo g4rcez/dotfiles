@@ -4,9 +4,7 @@ palette = "tailwind"
 format = """
 $status\
 ${custom.git_host}\
-${custom.pwd_init}\
 $directory\
-${custom.pwd_end}\
 $git_branch\
 $git_commit\
 $git_metrics\
@@ -74,15 +72,6 @@ style = "bold sapphire"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
 home_symbol = "~"
-
-[custom.pwd_init]
-command = "echo $PWD"
-when = true
-format = "\u001b\\]8;;[file:$output]()\u001b\\\\"
-
-[custom.pwd_end]
-format = "\u001b\\]8;;\u001b\\\\"
-when = true
 
 [character]
 success_symbol = "[[>_](fg)](fg)"

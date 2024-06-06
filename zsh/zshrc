@@ -1,6 +1,5 @@
 ##############################################################################################################
 ## exports
-export TERM="xterm-256color"
 export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
