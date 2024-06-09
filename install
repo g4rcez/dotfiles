@@ -10,27 +10,30 @@
 set -xe
 mkdir -p $HOME/tools $HOME/.tmp
 mkdir -p $HOME/.config
-DIR="$HOME/dotfiles"
-CONFIG_DIR="$HOME/.config"
-DOT_CONFIG="$DIR/config"
+DOTFILES_DIR="$HOME/dotfiles"
+HOME_CONFIG_DIR="$HOME/.config"
+DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 source $HOME/dotfiles/zsh/utils.sh
 
 ########################################################################################################################
 ##### core installs
-ln -sf $DIR/nvim $CONFIG_DIR/
-ln -sf $DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DIR/tmux $CONFIG_DIR
-ln -sf $DIR/idea/.ideavimrc $HOME/.ideavimrc
-ln -sf $DIR/wezterm/wezterm.lua $HOME/.wezterm.lua
-ln -sf $DIR/git/gitconfig $HOME/.gitconfig
+ln -sf $DOTFILES_DIR/nvim $HOME_CONFIG_DIR/
+ln -sf $DOTFILES_DIR/zsh/zshrc $HOME/.zshrc
+ln -sf $DOTFILES_DIR/tmux $HOME_CONFIG_DIR
+ln -sf $DOTFILES_DIR/idea/.ideavimrc $HOME/.ideavimrc
+ln -sf $DOTFILES_DIR/wezterm $HOME_CONFIG_DIR
+ln -sf $DOTFILES_DIR/git/gitconfig $HOME/.gitconfig
 
 ########################################################################################################################
 ##### brew
 function installbrew() {
     NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    bash $HOME/dotfiles/setup/brew.sh
 }
 checkcommand "brew" installbrew
+if [[ -f "$(command -v $1)" ]]; then
+    bash $HOME/dotfiles/setup/brew.sh
+fi
+
 ########################################################################################################################
 ##### fzf
 function installfzf() {
@@ -38,6 +41,12 @@ function installfzf() {
     ~/.fzf/install
 }
 checkcommand "fzf" installfzf
+########################################################################################################################
+##### starship
+function installStarship() {
+    curl -sS https://starship.rs/install.sh | sh
+}
+checkcommand "fzf" installStarship
 ########################################################################################################################
 ##### node config
 function installvolta() {
@@ -50,11 +59,11 @@ function installvolta() {
 checkcommand "volta" installvolta
 ########################################################################################################################
 ##### other links
-ln -sf $DIR/fd/.fdignore $HOME/.fdignore
-ln -sf $DIR/starship.toml $CONFIG_DIR/starship.toml
-ln -sf $DIR/Raise $HOME/
-ln -sf $DIR/config/alacritty/ $CONFIG_DIR
-ln -sf $HOME/dotfiles/config/yazi $CONFIG_DIR
-ln -sf $HOME/dotfiles/config/lazygit $HOME/.config
-ln -sf $HOME/dotfiles/config/bat $HOME/.config
+ln -sf $DOTFILES_DIR/fd/.fdignore $HOME/.fdignore
+ln -sf $DOTFILES_DIR/starship.toml $HOME_CONFIG_DIR/starship.toml
+ln -sf $DOTFILES_DIR/Raise $HOME/
+ln -sf $DOTFILES_DIR/config/alacritty/ $HOME_CONFIG_DIR
+ln -sf $DOTFILES_DIR/config/yazi $HOME_CONFIG_DIR
+ln -sf $DOTFILES_DIR/config/lazygit $HOME_CONFIG_DIR
+ln -sf $DOTFILES_DIR/config/bat $HOME_CONFIG_DIR
 make
