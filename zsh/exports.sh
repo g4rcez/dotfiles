@@ -1,5 +1,6 @@
 #####################################################################################
 ## Important exports
+export LISTMAX=10000
 export DOTFILES="$HOME/dotfiles"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
@@ -36,7 +37,7 @@ export ZSH_TMUX_FIXTERM="true"
 ## Auto notify plugin
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
 export AUTO_NOTIFY_EXPIRE_TIME=5000
-export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc")
+export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc", "zellij")
 export AUTO_NOTIFY_THRESHOLD=10000
 export AUTO_NOTIFY_TITLE="%command - Finished"
 
@@ -47,7 +48,7 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER=""
 export PAGER=""
-BAT_THEME="Catppuccin Mocha"
+export BAT_THEME="Catppuccin Mocha"
 if [ -x "$(command -v nvim)" ]; then
     export EDITOR="nvim"
     export MANPAGER="nvim +Man!"
@@ -58,7 +59,7 @@ fi
 ## other utils stuff
 export BUN_INSTALL="$HOME/.bun"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
-export LS_COLORS="$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)"
 export PNPM_HOME="$HOME/.local/share/pnpm"
-export VOLTA_HOME="$HOME/.volta"
 export YSU_MESSAGE_POSITION="after"
+export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
+source "$DOTFILES/zsh/ls.sh"

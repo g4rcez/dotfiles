@@ -9,7 +9,6 @@ local -a PATH_EXPORTS=(
   "$HOME/.local/bin"
   "$HOME/.local/share"
   "$HOME/.local/share/bin"
-  "$VOLTA_HOME/bin"
   "$PNPM_HOME"
   "$HOME/.yarn/bin"
   "$HOME/.dotnet"
@@ -24,6 +23,7 @@ local -a PATH_EXPORTS=(
   "/opt/homebrew/opt/libpq/bin"
   "$HOME/dotfiles/bin"
 )
+
 PATH_RESULT="$PATH"
 for path in $PATH_EXPORTS; do
   if [[ -d "$path" ]]; then PATH_RESULT="$PATH_RESULT:$path" fi
@@ -50,17 +50,6 @@ local -a PLUGINS=(
     "zsh-users/zsh-syntax-highlighting"
 )
 
-## fpath - terminal autocomplete
-znap fpath _npm     "npm completion"
-znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
-znap fpath _cargo   "rustup completions zsh cargo"
-znap fpath _kubectl "kubectl completion zsh"
-znap fpath _rustup  "rustup completions zsh"
-znap fpath _typeid  "typeid completion zsh"
-znap fpath _volta   "volta completions zsh"
-znap fpath _zellij  "zellij setup --generate-completion zsh;echo"
-znap fpath _n       "source $HOME/dotfiles/bin/node-completion.sh"
-
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 for plugin in $PLUGINS; do
@@ -79,9 +68,24 @@ znap eval starship "starship init zsh --print-full-init"
 znap prompt
 
 ##############################################################################################################
+## fpath hooks
+znap fpath _npm     "npm completion"
+znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
+znap fpath _cargo   "rustup completions zsh cargo"
+znap fpath _kubectl "kubectl completion zsh"
+znap fpath _rustup  "rustup completions zsh"
+znap fpath _typeid  "typeid completion zsh"
+znap fpath _zellij  "zellij setup --generate-completion zsh;echo"
+znap fpath _n       "source $HOME/dotfiles/bin/node-completion.sh"
+znap fpath _mise    "mise completion zsh"
+
+##############################################################################################################
 ## source files
 eval "$(zoxide init zsh)"
+eval "$(~/.local/bin/mise activate zsh)"
 local -a SOURCE=(
+  "$DOTFILES/zsh/zstyle.sh"
+  "$DOTFILES/zsh/history.sh"
   "$HOME/.fzf.zsh"
   "$HOME/.fzf/shell/key-bindings.zsh"
   "$DOTFILES/bin/fzf-git"
@@ -91,18 +95,16 @@ local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
   "$DOTFILES/zsh/git.sh"
-  "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
-  "$DOTFILES/zsh/zstyle.sh"
   "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
+  "$DOTFILES/zsh/alias.sh"
 )
-
-##############################################################################################################
-## zsh hooks
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
+##############################################################################################################
+## zsh hooks
 
 _zellij_tab_name_update "" "$PWD"
 

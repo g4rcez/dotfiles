@@ -10,7 +10,8 @@ export const imports = (paths: string[]) => ({ imports: paths });
 
 export const _ = "~/dotfiles";
 
-export const node = "env node";
+// export const node = "$(mise where node)/bin/node";
+export const node = "env bun";
 
 const commander = (s: string) => `;${s}` as const;
 

@@ -131,9 +131,16 @@ function listening() {
     fi
 }
 
+function vivid-update() {
+    echo "export LS_COLORS='$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)'" >$DOTFILES/zsh/ls.sh
+    echo "Vivid updated"
+}
+
 function updateAll() {
     znap pull
     brew upgrade
+    nodeUpdatePackages
+    vivid-update
     fzf-update
 }
 

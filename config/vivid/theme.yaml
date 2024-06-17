@@ -1,53 +1,78 @@
 colors:
-    background_color: "282c34"
-    white: "eeeeee"
-    red: "fca5a5"
-    green: "98c379"
-    yellow: "e5c07b"
-    blue: "61afef"
-    orange: "fdba74"
-    pink: "ff6ac1"
-    cyan: "56b6c2"
-    black: "000000"
-    gray: "999999"
-    darkgray: "666666"
-    darkergray: "333333"
+    rosewater: "f5e0dc"
+    flamingo: "f2cdcd"
+    pink: "f5c2e7"
+    mauve: "cba6f7"
+    red: "f38ba8"
+    maroon: "eba0ac"
+    peach: "fab387"
+    yellow: "f9e2af"
+    green: "a6e3a1"
+    teal: "94e2d5"
+    sky: "89dceb"
+    sapphire: "74c7ec"
+    cyan: "74c7ec"
+    blue: "89b4fa"
+    lavender: "b4befe"
+    orange: "fab387"
+    dark-gray: "1e1e2e"
+    darkgray: "1e1e2e"
+    gray: "cdd6f4"
+    white: "ffffff"
+
+    text: "cdd6f4"
+    subtext1: "bac2de"
+    subtext0: "a6adc8"
+    overlay2: "9399b2"
+    overlay1: "7f849c"
+    overlay0: "6c7086"
+    surface2: "585b70"
+    surface1: "45475a"
+    surface0: "313244"
+
+    base: "1e1e2e"
+    mantle: "181825"
+    crust: "11111b"
 
 core:
     normal_text: {}
     regular_file: {}
     reset_to_normal: {}
+
     directory:
-        foreground: "93c5fd"
+        foreground: blue
+
     symlink:
         foreground: pink
+
     multi_hard_link: {}
+
     fifo:
-        foreground: black
+        foreground: crust
         background: blue
 
     socket:
-        foreground: black
+        foreground: crust
         background: pink
 
     door:
-        foreground: black
+        foreground: crust
         background: pink
 
     block_device:
-        foreground: cyan
-        background: darkergray
+        foreground: sapphire
+        background: surface0
 
     character_device:
         foreground: pink
-        background: darkergray
+        background: surface0
 
     broken_symlink:
-        foreground: black
+        foreground: crust
         background: red
 
     missing_symlink_target:
-        foreground: black
+        foreground: crust
         background: red
 
     setuid: {}
@@ -79,6 +104,8 @@ text:
     configuration:
         generic:
             foreground: orange
+        dockercompose:
+            foreground: sapphire
         dockerfile:
             foreground: blue
         nix:
@@ -93,7 +120,6 @@ text:
             foreground: orange
         bibtex:
             foreground: white
-
     other:
         foreground: yellow
 
@@ -112,6 +138,10 @@ programming:
         tailwindcss:
             foreground: "62BAF3"
         lua:
+            foreground: "4141B9"
+        yaml:
+            foreground: "4141B9"
+        yml:
             foreground: "4141B9"
 
     tooling:

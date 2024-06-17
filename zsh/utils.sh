@@ -39,3 +39,10 @@ function _zellij_tab_name_update() {
         bash "$DOTFILES/bin/zellij-sessionx-rename" "" "$(pwd)"
     fi
 }
+
+function forEach() {
+    ARRAY=$(echo "$1" | tr ' ' '\n')
+    for item in $ARRAY; do
+        "$2" $item
+    done
+}

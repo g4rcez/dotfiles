@@ -35,7 +35,7 @@ require("lazy").setup({
         { import = "lazyvim.plugins.extras.vscode" },
         { import = "plugins" },
     },
-    defaults = { lazy = false, version = false },
+    defaults = { lazy = true, version = false },
     install = { colorscheme = { "tokyonight", "catppuccin" } },
     checker = { enabled = true },
     performance = {

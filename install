@@ -30,7 +30,7 @@ function installbrew() {
     NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 checkcommand "brew" installbrew
-if [[ -f "$(command -v $1)" ]]; then
+if [[ -f "$(command -v brew)" ]]; then
     bash $HOME/dotfiles/setup/brew.sh
 fi
 
@@ -48,22 +48,23 @@ function installStarship() {
 }
 checkcommand "fzf" installStarship
 ########################################################################################################################
-##### node config
-function installvolta() {
-    curl https://get.volta.sh | bash
-    volta install node@lts
-    volta pin node@lts
-    volta install yarn@1.22.22
-    npm i -g pnpm ts-node yarn neovim
+##### mise config
+function installmise() {
+    curl https://mise.run | sh
+    ~/.local/bin/mise activate
+    ~/.local/bin/mise use -g usage
+    ~/.local/bin/mise use -g node
+    ~/.local/bin/mise doctor
 }
-checkcommand "volta" installvolta
+checkcommand "mise" installmise
 ########################################################################################################################
 ##### other links
+ln -sf $DOTFILES_CONFIG_DIR/starship.toml $HOME_CONFIG_DIR
 ln -sf $DOTFILES_DIR/fd/.fdignore $HOME/.fdignore
-ln -sf $DOTFILES_DIR/starship.toml $HOME_CONFIG_DIR/starship.toml
 ln -sf $DOTFILES_DIR/Raise $HOME/
-ln -sf $DOTFILES_DIR/config/alacritty/ $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/config/yazi $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/config/lazygit $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/config/bat $HOME_CONFIG_DIR
+ln -sf $DOTFILES_CONFIG_DIR/alacritty/ $HOME_CONFIG_DIR
+ln -sf $DOTFILES_CONFIG_DIR/yazi $HOME_CONFIG_DIR
+ln -sf $DOTFILES_CONFIG_DIR/lazygit $HOME_CONFIG_DIR
+ln -sf $DOTFILES_CONFIG_DIR/bat $HOME_CONFIG_DIR
+ln -sf $PWD/config/mise $HOME/.config
 make
