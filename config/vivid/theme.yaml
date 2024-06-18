@@ -107,7 +107,7 @@ text:
         dockercompose:
             foreground: sapphire
         dockerfile:
-            foreground: blue
+            foreground: sapphire
         nix:
             foreground: white
         qt:

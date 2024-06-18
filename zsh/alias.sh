@@ -133,15 +133,15 @@ function listening() {
 
 function vivid-update() {
     echo "export LS_COLORS='$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)'" >$DOTFILES/zsh/ls.sh
-    echo "Vivid updated"
+    echo "🚀 Vivid updated...New LS_COLORS are enabled"
 }
 
 function updateAll() {
     znap pull
-    brew upgrade
-    nodeUpdatePackages
     vivid-update
+    nodeUpdatePackages
     fzf-update
+    brew upgrade
 }
 
 function secretuuid() {

@@ -69,15 +69,17 @@ znap prompt
 
 ##############################################################################################################
 ## fpath hooks
-znap fpath _npm     "npm completion"
-znap fpath _pnpm    "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
-znap fpath _cargo   "rustup completions zsh cargo"
-znap fpath _kubectl "kubectl completion zsh"
-znap fpath _rustup  "rustup completions zsh"
-znap fpath _typeid  "typeid completion zsh"
-znap fpath _zellij  "zellij setup --generate-completion zsh;echo"
-znap fpath _n       "source $HOME/dotfiles/bin/node-completion.sh"
-znap fpath _mise    "mise completion zsh"
+znap fpath _npm      "npm completion"
+znap fpath _pnpm     "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
+znap fpath _cargo    "rustup completions zsh cargo"
+znap fpath _kubectl  "kubectl completion zsh"
+znap fpath _rustup   "rustup completions zsh"
+znap fpath _typeid   "typeid completion zsh"
+znap fpath _zellij   "zellij setup --generate-completion zsh;echo"
+znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
+znap fpath _mise     "mise completion zsh"
+znap fpath _gitleaks "gitleaks completion zsh"
+znap fpath _trivy    "trivy completion zsh"
 
 ##############################################################################################################
 ## source files
@@ -117,3 +119,4 @@ chpwd_functions+=(_postcd)
 chpwd_functions+=(_zellij_tab_name_update)
 zellij-start
 
+if [ -f "/Users/allangarcez/.config/fabric/fabric-bootstrap.inc" ]; then . "/Users/allangarcez/.config/fabric/fabric-bootstrap.inc"; fi

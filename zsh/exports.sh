@@ -46,7 +46,7 @@ export AUTO_NOTIFY_TITLE="%command - Finished"
 export BAT_PAGER="less"
 export DELTA_PAGER="less -R"
 export EDITOR="nvim"
-export MANPAGER=""
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=""
 export BAT_THEME="Catppuccin Mocha"
 if [ -x "$(command -v nvim)" ]; then
