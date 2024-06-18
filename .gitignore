@@ -12,7 +12,6 @@ passwords.txt
 # Icon must end with two \r
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -42,3 +41,4 @@ nvim/LICENSE
 ./lvim/session
 ./tmp
 *.wasm
+*.zwc

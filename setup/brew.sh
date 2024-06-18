@@ -1,9 +1,10 @@
 brew install \
-    bat coreutils git-delta espanso lsd wezterm alacritty \
-    fd ffmpeg findutils gh git gnu-sed gnupg grep ipython \
+    bat coreutils git-delta espanso lsd wezterm \
+    fd ffmpeg findutils gh git gnupg grep ipython \
     jq obsidian orbstack ripgrep rust starship telegram \
-    visual-studio-code zoxide starship nvim vivid tokei
+    visual-studio-code zoxide starship nvim vivid tokei \
+    gitleaks
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
-    brew install --cask karabiner-elements alt-tab
+    brew install --cask karabiner-elements alt-tab gnu-sed
 fi
