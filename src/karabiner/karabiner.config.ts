@@ -1,4 +1,4 @@
-import { KarabinerRule } from "../types";
+import { KarabinerRule, Conditions, Manipulator } from "../types";
 import { createLeaderLayers } from "./leader-layers";
 import {
     app,
@@ -6,9 +6,11 @@ import {
     chrome,
     createHyperSubLayers,
     dotfile,
+    karabinerNotify,
     open,
     rectangle,
     shell,
+    vim,
 } from "../utils";
 
 const modKeys = createHyperSubLayers({
@@ -16,6 +18,11 @@ const modKeys = createHyperSubLayers({
         "raycast://extensions/g4rcez/dev-toolbelt/whichkey",
         "",
         "Which key Karabiner + Raycast",
+    ),
+    tab: open(
+        "raycast://extensions/raycast/navigation/switch-windows",
+        "",
+        "Switch windows with raycast",
     ),
     h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
     l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
@@ -163,9 +170,38 @@ const withLeaderKeys = createLeaderLayers({
     },
 });
 
+const createLeaderDisable = (key: string, hold: boolean): Manipulator => ({
+    description: `Caps Lock -> Hyper Key(${key}_single)`,
+    type: "basic",
+    to_if_alone: [{ key_code: "escape" }],
+    from: {
+        key_code: "caps_lock",
+        modifiers: { optional: ["any"] },
+    },
+    to: [{ set_variable: { name: "hyper", value: 1 } }],
+    to_after_key_up: [
+        vim.off(key, hold),
+        { set_variable: { name: "hyper", value: 0 } },
+        karabinerNotify(),
+    ],
+    conditions: [
+        {
+            type: "variable_if",
+            name: vim.off(key, hold).set_variable.name,
+            value: "on",
+        },
+    ],
+});
+
+const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [
+    createLeaderDisable(key, false),
+    createLeaderDisable(key, true),
+]);
+
 const hyperKey: KarabinerRule = {
     description: "Hyper Key (⌃⌥⇧⌘)",
     manipulators: [
+        ...disableLeaderKeys,
         {
             description: "Caps Lock -> Hyper Key",
             type: "basic",
@@ -177,9 +213,10 @@ const hyperKey: KarabinerRule = {
     ],
 } as const;
 
-export const config: KarabinerRule[] = [hyperKey].concat(
-    modKeys.layers,
-    withLeaderKeys.layers,
-);
+export const config: KarabinerRule[] = [
+    hyperKey,
+    ...modKeys.layers,
+    ...withLeaderKeys.layers,
+];
 
 export const whichKey = modKeys.whichKey.concat(withLeaderKeys.whichKey);

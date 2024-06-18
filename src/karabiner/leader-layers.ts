@@ -17,14 +17,20 @@ type Config = Partial<
     >
 >;
 
-export const createLeaderLayers = (
-    config: Config,
-): { layers: KarabinerRule[]; whichKey: WhichKey[] } => {
+type WhichMods = {
+    layers: KarabinerRule[];
+    whichKey: WhichKey[];
+    keys: string[];
+};
+
+export const createLeaderLayers = (config: Config): WhichMods => {
     const entries = Object.entries(config);
     const whichKey: WhichKey[] = [];
+    const keys: string[] = [];
     const allLayers = entries.reduce(
         (acc, [key, { description: leaderDescription = "", ...motions }]) => {
             const modal = `leader: ${key} ${leaderDescription}` as const;
+            keys.push(key);
             const leader: KarabinerRule = {
                 description: `leader ${key}`,
                 manipulators: [
@@ -169,5 +175,5 @@ export const createLeaderLayers = (
         },
         [],
     );
-    return { layers: allLayers, whichKey };
+    return { layers: allLayers, whichKey, keys: Array.from(new Set(keys)) };
 };

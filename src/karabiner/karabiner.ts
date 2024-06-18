@@ -4,19 +4,15 @@ import { devices } from "./devices";
 import { config, whichKey } from "./karabiner.config";
 
 export const karabiner = () => {
-    const whichKeyMap = dotfile(
+    const wkPath = dotfile(
         "raycast",
         "extensions",
         "dev-toolbelt",
         "src",
         "whichkey.json",
     );
-    console.log(`The whichkey map "${whichKeyMap}" was created`);
-    fs.writeFileSync(
-        whichKeyMap,
-        JSON.stringify(whichKey, null, 4),
-        "utf-8",
-    );
+    console.log(`The whichkey map "${wkPath}" was created`);
+    fs.writeFileSync(wkPath, JSON.stringify(whichKey, null, 4), "utf-8");
     const configFile = dotfile("karabiner", "karabiner.json");
     fs.writeFileSync(
         configFile,

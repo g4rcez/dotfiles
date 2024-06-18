@@ -26,7 +26,7 @@ export type Parameters = Partial<{
     "basic.to_delayed_action_delay_milliseconds": number;
 }>;
 
-type Conditions =
+export type Conditions =
     | FrontMostApplicationCondition
     | DeviceCondition
     | KeybaordTypeCondition

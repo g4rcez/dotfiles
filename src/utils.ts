@@ -1,9 +1,9 @@
-import { Condition } from "karabiner.ts";
 import { exec } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import {
+    Conditions,
     KarabinerRule,
     KeyCode,
     Manipulator,
@@ -27,7 +27,7 @@ const keys: <T>(t: T) => Array<keyof T> = Object.keys;
 
 export type LayerCommand = {
     to?: To[];
-    conditions?: Condition[];
+    conditions?: Conditions[];
     description?: string;
     to_after_key_up?: To[];
     parameters?: Parameters;
