@@ -6,6 +6,7 @@ import {
     chrome,
     createHyperSubLayers,
     dotfile,
+    execMultipleTo,
     karabinerNotify,
     open,
     rectangle,
@@ -54,6 +55,13 @@ const modKeys = createHyperSubLayers({
             description: "Toggle play or pause",
         },
     },
+    left_command: {
+        "1": open(
+            "raycast://extensions/raycast/navigation/switch-windows",
+            "",
+            "Switch windows with raycast",
+        ),
+    },
 });
 
 /*
@@ -80,6 +88,11 @@ const withLeaderKeys = createLeaderLayers({
     },
     r: {
         description: "Raycast layer",
+        m: open(
+            "raycast://extensions/raycast/navigation/search-menu-items",
+            "",
+            "Search menu of current app",
+        ),
         b: open(
             "raycast://extensions/jomifepe/bitwarden/search",
             "",
@@ -121,21 +134,15 @@ const withLeaderKeys = createLeaderLayers({
             "OCR screen area",
         ),
     },
-    o: {
-        description: "Open programs",
-        c: app("Notion Calendar"),
-        f: app("Finder"),
-        g: app("Google Chrome"),
-        return_or_enter: app("Wezterm"),
-        t: app("Wezterm"),
-        s: app("Spotify"),
-        v: app("Visual Studio Code"),
-        w: app("WebStorm"),
-    },
     b: {
         description: "Google chrome profiler/controls",
         w: chrome("Profile 1", "Chrome: Open work profile"),
         return_or_enter: chrome("Default", "Chrome: Open personal profile"),
+        s: open(
+            "raycast://extensions/Codely/google-chrome/search-tab",
+            "",
+            "Search tabs",
+        ),
         h: {
             description: "Window: Previous Tab",
             to: [
@@ -166,7 +173,10 @@ const withLeaderKeys = createLeaderLayers({
         o: rectangle("maximize"),
         r: rectangle("last-two-thirds"),
         f: rectangle("maximize"),
-        return_or_enter: rectangle("maximize"),
+        return_or_enter: execMultipleTo("Center in screen", [
+            rectangle("right-half"),
+            rectangle("center"),
+        ]),
     },
 });
 

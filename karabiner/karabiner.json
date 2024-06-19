@@ -423,112 +423,6 @@
                 ]
               },
               {
-                "description": "Caps Lock -> Hyper Key(o_single)",
-                "type": "basic",
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ]
-              },
-              {
-                "description": "Caps Lock -> Hyper Key(o_single)",
-                "type": "basic",
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_HOLD",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ]
-              },
-              {
                 "description": "Caps Lock -> Hyper Key(b_single)",
                 "type": "basic",
                 "to_if_alone": [
@@ -1086,6 +980,11 @@
                   },
                   {
                     "type": "variable_if",
+                    "name": "hyper_sublayer_left_command",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
                     "name": "hyper",
                     "value": 1
                   }
@@ -1183,6 +1082,115 @@
                   {
                     "type": "variable_if",
                     "name": "hyper_sublayer_s",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key sublayer 'left_command'",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer left_command",
+                "type": "basic",
+                "from": {
+                  "key_code": "left_command",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_left_command",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_left_command",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_0",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_4",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_tab",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_h",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_l",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_k",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/navigation/switch-windows"
+                  }
+                ],
+                "description": "Switch windows with raycast",
+                "type": "basic",
+                "from": {
+                  "key_code": "1",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_left_command",
                     "value": 1
                   }
                 ]
@@ -1880,6 +1888,56 @@
             ]
           },
           {
+            "description": "leader + r + m - Search menu of current app",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + m - Search menu of current app",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/navigation/search-menu-items"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + m - Search menu of current app",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/navigation/search-menu-items"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "leader + r + b - Bitwarden search",
             "manipulators": [
               {
@@ -2280,586 +2338,6 @@
             ]
           },
           {
-            "description": "disable single - leader o",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_single_leader_key_o",
-                "from": {
-                  "key_code": "o",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "esc disable single - leader o",
-            "manipulators": [
-              {
-                "description": "esc_disable_single_leader_key_o",
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 0
-                  }
-                ],
-                "from": {
-                  "key_code": "escape",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ],
-                    "mandatory": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "disable holder - leader o",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_leader_key_o",
-                "from": {
-                  "key_code": "o",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_HOLD",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader o",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "leader_key_o",
-                "from": {
-                  "key_code": "o",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to_if_alone": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "shell_command": "osascript -e 'display notification \"leader: o Open programs\" with title \"Leader o activated\"'"
-                  }
-                ],
-                "to_if_held_down": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_HOLD",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": "Hold leader: o Open programs"
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + c - Open -a 'Notion Calendar.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + c - Open -a 'Notion Calendar.app'",
-                "from": {
-                  "key_code": "c"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Notion Calendar.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + c - Open -a 'Notion Calendar.app'",
-                "from": {
-                  "key_code": "c"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Notion Calendar.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + f - Open -a 'Finder.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + f - Open -a 'Finder.app'",
-                "from": {
-                  "key_code": "f"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Finder.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + f - Open -a 'Finder.app'",
-                "from": {
-                  "key_code": "f"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Finder.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + g - Open -a 'Google Chrome.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + g - Open -a 'Google Chrome.app'",
-                "from": {
-                  "key_code": "g"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Google Chrome.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + g - Open -a 'Google Chrome.app'",
-                "from": {
-                  "key_code": "g"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Google Chrome.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
-                "from": {
-                  "key_code": "return_or_enter"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Wezterm.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + return_or_enter - Open -a 'Wezterm.app'",
-                "from": {
-                  "key_code": "return_or_enter"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Wezterm.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + t - Open -a 'Wezterm.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + t - Open -a 'Wezterm.app'",
-                "from": {
-                  "key_code": "t"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Wezterm.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + t - Open -a 'Wezterm.app'",
-                "from": {
-                  "key_code": "t"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Wezterm.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + s - Open -a 'Spotify.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + s - Open -a 'Spotify.app'",
-                "from": {
-                  "key_code": "s"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Spotify.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + s - Open -a 'Spotify.app'",
-                "from": {
-                  "key_code": "s"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Spotify.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + v - Open -a 'Visual Studio Code.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + v - Open -a 'Visual Studio Code.app'",
-                "from": {
-                  "key_code": "v"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Visual Studio Code.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + v - Open -a 'Visual Studio Code.app'",
-                "from": {
-                  "key_code": "v"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'Visual Studio Code.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + o + w - Open -a 'WebStorm.app'",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + w - Open -a 'WebStorm.app'",
-                "from": {
-                  "key_code": "w"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'WebStorm.app'"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_o_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + o + w - Open -a 'WebStorm.app'",
-                "from": {
-                  "key_code": "w"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  -a 'WebStorm.app'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
             "description": "disable single - leader b",
             "manipulators": [
               {
@@ -3133,6 +2611,56 @@
                 "to": [
                   {
                     "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + b + s - Search tabs",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + s - Search tabs",
+                "from": {
+                  "key_code": "s"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/Codely/google-chrome/search-tab"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_b_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_b_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + b + s - Search tabs",
+                "from": {
+                  "key_code": "s"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/Codely/google-chrome/search-tab"
                   }
                 ],
                 "type": "basic"
@@ -4134,7 +3662,7 @@
             ]
           },
           {
-            "description": "leader + w + return_or_enter - Window: maximize",
+            "description": "leader + w + return_or_enter - Center in screen",
             "manipulators": [
               {
                 "conditions": [
@@ -4144,13 +3672,16 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + return_or_enter - Center in screen",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
+                  },
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
                   },
                   {
                     "halt": true,
@@ -4170,13 +3701,16 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + return_or_enter - Center in screen",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
+                  },
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
                   }
                 ],
                 "type": "basic"

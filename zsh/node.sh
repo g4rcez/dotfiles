@@ -27,7 +27,7 @@ function types() {
     ni -D $LIBS
 }
 
-function nu() {
+function niu() {
     LIBS=$(for a in "$@"; do echo "$a@latest"; done)
     LIBS=$(echo "$LIBS" | tr '\n' ' ')
     ni $LIBS

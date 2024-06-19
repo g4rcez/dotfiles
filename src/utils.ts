@@ -180,6 +180,14 @@ export const open = (
     description: description || `Open ${what}`,
 });
 
+export const execMultipleTo = (
+    description: string,
+    commands: LayerCommand[],
+): LayerCommand => ({
+    to: commands.flatMap((x) => x.to!),
+    description: description,
+});
+
 export const notify = (message: string, title: string) => ({
     shell_command: `osascript -e 'display notification "${message}" with title "${title}"'`,
 });

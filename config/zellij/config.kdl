@@ -1,3 +1,17 @@
+mirror_session false
+styled_underlines true
+simplified_ui true
+pane_frames false
+auto_layout true
+session_serialization true
+serialize_pane_viewport true
+mouse_mode true
+scrollback_lines_to_serialize 10000
+default_layout "compact"
+scroll_buffer_size 10000
+scrollback_editor "nvim"
+theme "mytheme"
+
 plugins {
     tab-bar location="zellij:tab-bar"
     status-bar location="zellij:status-bar"
@@ -27,20 +41,6 @@ themes {
         white "#d0d0d0"
     }
 }
-
-theme "mytheme"
-mirror_session false
-styled_underlines true
-simplified_ui true
-pane_frames false
-auto_layout true
-session_serialization true
-serialize_pane_viewport true
-mouse_mode true
-scrollback_lines_to_serialize 10000
-default_layout "compact"
-scroll_buffer_size 10000
-scrollback_editor "nvim"
 
 keybinds clear-defaults=true {
     tmux {
@@ -74,6 +74,7 @@ keybinds clear-defaults=true {
             }
         }
     }
+
     normal {
         bind "Alt q" { SwitchToMode "Tmux"; }
         bind "Ctrl p" { SwitchToMode "Tmux"; }
@@ -82,7 +83,6 @@ keybinds clear-defaults=true {
         bind "Alt h" { SwitchToMode "Move"; }
         bind "Alt t" { SwitchToMode "Tab"; }
         bind "Alt s" { SwitchToMode "Search"; }
-        bind "Alt o" { SwitchToMode "Session"; }
         bind "Alt f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "Alt g" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
         bind "Ctrl f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
@@ -126,6 +126,7 @@ keybinds clear-defaults=true {
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
+        bind "Alt r" { SwitchToMode "Normal"; }
         bind "h" "Left" { Resize "Increase Left"; }
         bind "j" "Down" { Resize "Increase Down"; }
         bind "k" "Up" { Resize "Increase Up"; }
@@ -144,7 +145,7 @@ keybinds clear-defaults=true {
         bind "k" "Up" { MoveFocus "Up"; }
         bind "n" { NewPane; SwitchToMode "Normal"; }
         bind "\\" { NewPane; SwitchToMode "Normal"; }
-        bind "Ctrl p" { SwitchToMode "Normal"; }
+        bind "Alt p" { SwitchToMode "Normal"; }
         bind "p" { SwitchFocus; }
         bind "x" { CloseFocus; SwitchToMode "Normal"; }
         bind "f" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
@@ -164,6 +165,7 @@ keybinds clear-defaults=true {
     }
     tab {
         bind "Ctrl t" { SwitchToMode "Normal"; }
+        bind "Alt t" { SwitchToMode "Normal"; }
         bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "h" "Left" "Up" "k" { GoToPreviousTab; }
         bind "l" "Right" "Down" "j" { GoToNextTab; }
