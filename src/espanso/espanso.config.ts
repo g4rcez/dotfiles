@@ -8,7 +8,7 @@ const simpleTriggers = [
     triggers.i("youtube", "https://www.youtube.com/@allangarcez"),
     triggers.i("blog", "https://garcez.dev"),
     triggers.i("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
-    triggers.c("mdlink", "link", "[$|$]({{link}})"),
+    triggers.c("mdl", "link", "[$|$]({{link}})"),
     triggers.$(
         "pass",
         `${node} ${_}/bin/password $ESPANSO_N`,

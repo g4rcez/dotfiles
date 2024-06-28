@@ -14,7 +14,6 @@
     "dependencies": {
         "@faker-js/faker": "8.4.1",
         "@types/node": "20.12.7",
-        "karabiner.ts": "1.27.0",
         "nodemon": "3.1.0",
         "prettier": "3.2.5",
         "tsx": "4.7.3",

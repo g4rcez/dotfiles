@@ -3,7 +3,7 @@ brew install \
     fd ffmpeg findutils gh git gnupg grep ipython \
     jq obsidian orbstack ripgrep rust starship telegram \
     visual-studio-code zoxide starship nvim vivid tokei \
-    gitleaks
+    gitleaks docker docker-compose colima
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     brew install --cask karabiner-elements alt-tab gnu-sed

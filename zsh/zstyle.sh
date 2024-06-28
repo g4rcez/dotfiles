@@ -5,7 +5,6 @@ zmodload -i zsh/complist
 unsetopt menu_complete
 unsetopt flowcontrol
 unsetopt FLOW_CONTROL
-# use brace
 
 ############################## setops #################################
 # Reference: https://zsh.sourceforge.io/Doc/Release/Options.html
@@ -25,7 +24,6 @@ setopt CORRECT
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
 # zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
-# should this be in keybindings?
 bindkey '^Xa' alias-expension
 bindkey -M menuselect '^o' accept-and-infer-next-history
 bindkey -M menuselect '^[[Z' reverse-menu-complete
@@ -52,9 +50,7 @@ zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm
 zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
 zstyle ':completion:*:*:cp:*' file-sort size
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
 zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
-zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*:options' auto-description '%d'

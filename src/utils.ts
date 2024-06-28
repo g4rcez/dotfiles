@@ -192,14 +192,15 @@ export const notify = (message: string, title: string) => ({
     shell_command: `osascript -e 'display notification "${message}" with title "${title}"'`,
 });
 
-export const chrome = (
-    profile: string,
+const BROWSER = "Microsoft Edge";
+export const browser = (
+    profile: "Profile 1" | "Default",
     description?: string,
 ): LayerCommand => ({
-    description: description || `Open GoogleChrome ${profile}`,
+    description: description || `Open ${BROWSER} ${profile}`,
     to: [
         {
-            shell_command: `open -n -a 'Google Chrome.app' --args --profile-directory='${profile}'`,
+            shell_command: `open -n -a '${BROWSER}.app' --args --profile-directory='${profile}'`,
         },
     ],
 });

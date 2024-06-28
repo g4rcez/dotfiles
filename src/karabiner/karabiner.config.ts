@@ -3,7 +3,7 @@ import { createLeaderLayers } from "./leader-layers";
 import {
     app,
     appInstance,
-    chrome,
+    browser,
     createHyperSubLayers,
     dotfile,
     execMultipleTo,
@@ -54,13 +54,6 @@ const modKeys = createHyperSubLayers({
             to: [{ key_code: "play_or_pause" }],
             description: "Toggle play or pause",
         },
-    },
-    left_command: {
-        "1": open(
-            "raycast://extensions/raycast/navigation/switch-windows",
-            "",
-            "Switch windows with raycast",
-        ),
     },
 });
 
@@ -136,8 +129,8 @@ const withLeaderKeys = createLeaderLayers({
     },
     b: {
         description: "Google chrome profiler/controls",
-        w: chrome("Profile 1", "Chrome: Open work profile"),
-        return_or_enter: chrome("Default", "Chrome: Open personal profile"),
+        w: browser("Profile 1", "Chrome: Open work profile"),
+        return_or_enter: browser("Default", "Chrome: Open personal profile"),
         s: open(
             "raycast://extensions/Codely/google-chrome/search-tab",
             "",
@@ -173,10 +166,7 @@ const withLeaderKeys = createLeaderLayers({
         o: rectangle("maximize"),
         r: rectangle("last-two-thirds"),
         f: rectangle("maximize"),
-        return_or_enter: execMultipleTo("Center in screen", [
-            rectangle("right-half"),
-            rectangle("center"),
-        ]),
+        return_or_enter: rectangle("maximize"),
     },
 });
 

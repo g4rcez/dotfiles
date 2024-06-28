@@ -980,11 +980,6 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_left_command",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
                     "name": "hyper",
                     "value": 1
                   }
@@ -1082,115 +1077,6 @@
                   {
                     "type": "variable_if",
                     "name": "hyper_sublayer_s",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key sublayer 'left_command'",
-            "manipulators": [
-              {
-                "description": "Toggle Hyper sublayer left_command",
-                "type": "basic",
-                "from": {
-                  "key_code": "left_command",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to_after_key_up": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_sublayer_left_command",
-                      "value": 0
-                    }
-                  }
-                ],
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_sublayer_left_command",
-                      "value": 1
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_0",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_4",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_slash",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_tab",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_h",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_l",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_k",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_j",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/raycast/navigation/switch-windows"
-                  }
-                ],
-                "description": "Switch windows with raycast",
-                "type": "basic",
-                "from": {
-                  "key_code": "1",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_left_command",
                     "value": 1
                   }
                 ]
@@ -2534,7 +2420,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Profile 1'"
                   },
                   {
                     "halt": true,
@@ -2560,7 +2446,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Profile 1'"
                   }
                 ],
                 "type": "basic"
@@ -2584,7 +2470,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
                   },
                   {
                     "halt": true,
@@ -2610,7 +2496,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"
@@ -3662,7 +3548,7 @@
             ]
           },
           {
-            "description": "leader + w + return_or_enter - Center in screen",
+            "description": "leader + w + return_or_enter - Window: maximize",
             "manipulators": [
               {
                 "conditions": [
@@ -3672,16 +3558,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Center in screen",
+                "description": "leader + w + return_or_enter - Window: maximize",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
-                  },
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
                   },
                   {
                     "halt": true,
@@ -3701,16 +3584,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Center in screen",
+                "description": "leader + w + return_or_enter - Window: maximize",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
-                  },
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
                   }
                 ],
                 "type": "basic"

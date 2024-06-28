@@ -164,6 +164,9 @@ let g:WhichKeyDesc_switcher = "go Switcher"
 map gp <Action>(FileStructurePopup)
 let g:WhichKeyDesc_file_structure = "gp File structure popup"
 
+nmap <leader>k <Action>(ShowHoverInfo)
+let g:WhichKeyDesc_Show_Hover_info = "<leader>k Show hover info"
+
 nmap ; :
 nmap <leader>1 <Action>(SelectInProjectView)
 let g:WhichKeyDesc_show_this = "<leader>1 Show current file in NERDTree"

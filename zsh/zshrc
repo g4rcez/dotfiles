@@ -1,5 +1,7 @@
 ##############################################################################################################
 ## exports
+export UID=$(id -u)
+export GID=$(id -g)
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
