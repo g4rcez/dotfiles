@@ -52,11 +52,6 @@
   "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
   "vscode-neovim.normalSelectionDebounceTime": 100,
   "vscode-neovim.revealCursorScrollLine": true,
-  "vsicons.presets.angular": true,
-  "vsicons.presets.jsOfficial": true,
-  "vsicons.presets.jsonOfficial": true,
-  "vsicons.presets.nestjs": true,
-  "vsicons.presets.tsOfficial": true,
   "window.commandCenter": false,
   "window.customTitleBarVisibility": "never",
   "window.titleBarStyle": "native",
@@ -70,5 +65,16 @@
   "workbench.statusBar.visible": true,
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
-  }
+  },
+  "git.openRepositoryInParentFolders": "never",
+  "tailwindCSS.hovers": true,
+  "tailwindCSS.suggestions": true,
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list",
+    "cva",
+    "container"
+  ]
 }

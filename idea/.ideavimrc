@@ -3,8 +3,7 @@
 "" vim scripts
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! Invert(calledFromVisual)
-  let antonyms = ['true', 'false', 'after', 'before', 'start', 'end', 'left', 'right', 'first', 'last',
-                 \'True', 'False', 'After', 'Before', 'Start', 'End', 'Left', 'Right', 'First', 'Last']
+  let antonyms = ['true', 'false', 'after', 'before', 'start', 'end', 'left', 'right', 'first', 'last', 'True', 'False', 'After', 'Before', 'Start', 'End', 'Left', 'Right', 'First', 'Last', 'function', 'const']
   if a:calledFromVisual
     normal gv"wy
   else
@@ -66,6 +65,7 @@ set undofile
 set updatetime=100
 set viminfo
 set visualbell
+set ideavimsupport=+singleline,dialog
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" idea things
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -130,7 +130,7 @@ nmap <leader>P "+P
 vmap <leader>P "+P
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" bookmarks - prefix b(bookmark)
+"" bookmark|buffer - prefix b(bookmark|buffer)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_bookmark_prefix = "<leader>m +Bookmark"
 nmap <leader>bm <Action>(ToggleBookmark)
@@ -145,6 +145,19 @@ let g:WhichKeyDesc_bookmarks = "<leader>bp Goto previous bookmark"
 nmap <leader>bn <Action>(GotoNextBookmark)
 let g:WhichKeyDesc_bookmarks = "<leader>bn Goto next bookmark"
 
+nmap <C-l> <action>(NextTab)
+nmap <leader>l <action>(NextTab)
+let g:WhichKeyDesc_next_tab_leader = "<leader>l Next tab"
+
+nmap <C-h> <action>(PreviousTab)
+nmap <leader>h <action>(PreviousTab)
+let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
+
+nmap <leader>bl <Action>(NextSplitter)
+let g:WhichKeyDesc_next_splitter = "<leader>bl next splitter"
+
+nmap <leader>bh <Action>(PrevSplitter)
+let g:WhichKeyDesc_previous_splitter = "<leader>bh prev splitter"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" file operations
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -252,17 +265,6 @@ let g:WhichKeyDesc_select_all_line = "vv Select entire line (V)"
 nnoremap J mzJ`z
 let g:WhichKeyDesc_join_line = "J Join with bellow line"
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" folding - prefix z(???)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <C-l> <action>(NextTab)
-nmap <leader>l <action>(NextTab)
-let g:WhichKeyDesc_next_tab_leader = "<leader>l Next tab"
-
-nmap <C-h> <action>(PreviousTab)
-nmap <leader>h <action>(PreviousTab)
-let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" folding - prefix z(???)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -404,4 +406,15 @@ let g:WhichKeyDesc_split_horizontally = "<leader>- Split vertically"
 
 "" Save in normal mode
 nmap <C-s> :w<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" errors - prefix [
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap ]n :action GotoNextError<cr>
+nnoremap ]p :action GotoPreviousError<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" handlers - prefix t(tests/tabs)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+sethandler <C-p> n-v:vim i:ide
 

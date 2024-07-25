@@ -59,6 +59,11 @@ function installmise() {
 checkcommand "mise" installmise
 ########################################################################################################################
 ##### other links
+function setupBat() {
+    mkdir -p "$(bat --config-dir)/syntaxes"
+    cd "$(bat --config-dir)/syntaxes"
+    git clone https://github.com/tellnobody1/sublime-purescript-syntax
+}
 ln -sf $DOTFILES_CONFIG_DIR/starship.toml $HOME_CONFIG_DIR
 ln -sf $DOTFILES_DIR/fd/.fdignore $HOME/.fdignore
 ln -sf $DOTFILES_DIR/Raise $HOME/
@@ -66,5 +71,6 @@ ln -sf $DOTFILES_CONFIG_DIR/alacritty/ $HOME_CONFIG_DIR
 ln -sf $DOTFILES_CONFIG_DIR/yazi $HOME_CONFIG_DIR
 ln -sf $DOTFILES_CONFIG_DIR/lazygit $HOME_CONFIG_DIR
 ln -sf $DOTFILES_CONFIG_DIR/bat $HOME_CONFIG_DIR
+setupBat
 ln -sf $PWD/config/mise $HOME/.config
 make

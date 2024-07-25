@@ -37,7 +37,7 @@ export ZSH_TMUX_FIXTERM="true"
 ## Auto notify plugin
 export AUTO_NOTIFY_BODY="Completed in %elapseds - Exit code %exit_code"
 export AUTO_NOTIFY_EXPIRE_TIME=5000
-export AUTO_NOTIFY_IGNORE=("vim", "ssh", "st", "fzf", "nvim", "mvim", "neovim", "zshrc", "zellij")
+export AUTO_NOTIFY_IGNORE=("vim" "ssh" "st" "fzf" "nvim" "mvim" "neovim" "zshrc" "zellij")
 export AUTO_NOTIFY_THRESHOLD=10000
 export AUTO_NOTIFY_TITLE="%command - Finished"
 
@@ -48,7 +48,6 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=""
-export BAT_THEME="Catppuccin Mocha"
 if [ -x "$(command -v nvim)" ]; then
     export EDITOR="nvim"
     export MANPAGER="nvim +Man!"

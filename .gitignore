@@ -42,3 +42,4 @@ nvim/LICENSE
 ./tmp
 *.wasm
 *.zwc
+./config/bat/syntaxes/

@@ -115,12 +115,13 @@ function tag() {
 
 # rebase your current branch with the $1 branch
 function rebasewith() {
+    git fetch
     local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-    local BRANCH="$1"
-    git switch "$BRANCH"
-    git pull origin "$BRANCH"
+    local TARGET_BRANCH="$1"
+    git switch "$TARGET_BRANCH"
+    git pull origin "$TARGET_BRANCH"
     git switch "$CURRENT_BRANCH"
-    git rebase "$BRANCH"
+    git rebase "$TARGET_BRANCH"
 }
 
 function squash() {
