@@ -1,10 +1,10 @@
 {
+    "name": "dotfiles",
     "version": "1.0.0",
     "private": true,
-    "name": "dotfiles",
-    "main": "index.js",
-    "author": "Allan Garcez <allan.f.garcez@gmail.com>",
+    "main": "./src/index.ts",
     "license": "MIT",
+    "author": "Allan Garcez <allan.f.garcez@gmail.com>",
     "scripts": {
         "espanso:compile": "tsx ./src/index.ts espanso",
         "espanso:watch": "tsx --watch ./src/index.ts karabiner",
@@ -13,14 +13,10 @@
     },
     "dependencies": {
         "@faker-js/faker": "8.4.1",
-        "@types/node": "20.12.7",
-        "nodemon": "3.1.0",
-        "prettier": "3.2.5",
-        "tsx": "4.7.3",
-        "yaml": "2.4.2"
-    },
-    "volta": {
-        "node": "20.13.1",
-        "npm": "10.8.0"
+        "@types/node": "20.14.12",
+        "nodemon": "3.1.4",
+        "prettier": "3.3.3",
+        "tsx": "4.16.2",
+        "yaml": "2.5.0"
     }
 }

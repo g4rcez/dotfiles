@@ -10,6 +10,8 @@ vim.g.have_nerd_font = true
 -- [[ Setting options ]]
 local opt = vim.opt
 
+opt.modelines = 0
+opt.showmatch = true
 opt.autowrite = true
 opt.breakindent = true
 opt.clipboard = 'unnamedplus'
@@ -29,8 +31,8 @@ opt.number = true -- Print line number
 opt.pumblend = 10 -- Popup blend
 opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = true
+opt.scrolloff = 10
 opt.scrolloff = 4 -- Lines of context
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
@@ -50,8 +52,9 @@ opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 
 -- Minimal number of screen lines to keep above and below the cursor.
-opt.scrolloff = 10
 vim.o.foldcolumn = '1' -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+

@@ -36,7 +36,6 @@ end
 return {
   check = function()
     vim.health.start 'kickstart.nvim'
-
     vim.health.info [[NOTE: Not every warning is a 'must-fix' in `:checkhealth`
 
   Fix only warnings for plugins and languages you intend to use.

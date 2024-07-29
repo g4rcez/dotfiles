@@ -29,7 +29,7 @@ layout {
             mode_tab           "#[bg=#89b4fa,fg=#181825] {name} "
             mode_tmux          "#[bg=#ffc387,fg=#181825] {name} "
 
-            tab_active               "#[fg=#9399B2,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+            tab_active               "#[fg=#ffc387,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
             tab_floating_indicator   "󰉈 "
             tab_fullscreen_indicator "□ "
             tab_normal               "#[fg=#6C7086,bg=#181825] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"

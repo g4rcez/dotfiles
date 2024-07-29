@@ -45,8 +45,6 @@ return {
     { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable("make") == 1, build = "make" },
   },
   keys = {
-    { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-    { "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "Find buffer" },
     { "<leader>fC", "<cmd>Telescope commands<cr>", desc = "Commander" },
     {
       ";s",

@@ -2,9 +2,33 @@ local wezterm = require("wezterm")
 local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
 local M = wezterm.config_builder()
 
+wezterm.on("user-var-changed", function(window, pane, name, value)
+    local overrides = window:get_config_overrides() or {}
+    if name == "ZEN_MODE" then
+        local incremental = value:find("+")
+        local number_value = tonumber(value)
+        if incremental ~= nil then
+            while number_value > 0 do
+                window:perform_action(wezterm.action.IncreaseFontSize, pane)
+                number_value = number_value - 1
+            end
+            overrides.enable_tab_bar = false
+        elseif number_value < 0 then
+            window:perform_action(wezterm.action.ResetFontSize, pane)
+            overrides.font_size = nil
+            overrides.enable_tab_bar = true
+        else
+            overrides.font_size = number_value
+            overrides.enable_tab_bar = false
+        end
+    end
+    window:set_config_overrides(overrides)
+end)
+
 -- Background, window and tabs
 M.adjust_window_size_when_changing_font_size = false
 M.animation_fps = 120
+M.audible_bell = "Disabled"
 M.color_scheme = "Catppuccin Mocha"
 M.cursor_blink_ease_out = "EaseInOut"
 M.cursor_blink_rate = 0
@@ -19,7 +43,6 @@ M.show_tabs_in_tab_bar = false
 M.use_fancy_tab_bar = false
 M.window_background_opacity = 0.8
 M.window_decorations = "RESIZE"
-M.audible_bell = "Disabled"
 
 theme.background = "#12121B"
 
@@ -27,8 +50,10 @@ M.color_schemes = { ["OLEDppuccin"] = theme }
 M.color_scheme = "OLEDppuccin"
 
 -- Font config
-M.font_size = 17
-M.font = wezterm.font({ family = "JetBrainsMono Nerd Font", harfbuzz_features = { "calt=1", "clig=1", "liga=1" } })
+M.font_size = 18
+M.line_height = 1.175
+M.font =
+    wezterm.font({ family = "JetBrainsMono Nerd Font Propo", harfbuzz_features = { "calt=1", "clig=1", "liga=1" } })
 M.font_rules = {
     {
         intensity = "Bold",
