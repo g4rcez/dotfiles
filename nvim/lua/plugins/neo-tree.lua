@@ -8,7 +8,7 @@ return {
     },
     cmd = 'Neotree',
     keys = {
-        { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal' },
+        { '\\', '<cmd>Neotree reveal<CR>', desc = 'NeoTree reveal' },
     },
     opts = {
         popup_border_style = "rounded",

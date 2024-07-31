@@ -99,6 +99,10 @@ M.mouse_bindings = {
 }
 
 wezterm.action({ CloseCurrentTab = { confirm = false } })
-M.window_padding = { top = 1, bottom = 1, left = 15, right = 15 }
-
+M.window_padding = { top = 1, bottom = 1, left = 20, right = 20 }
+M.disable_default_key_bindings = false
+M.keys = {
+    { key = "t", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
+    { key = "f", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
+}
 return M

@@ -2,13 +2,13 @@ return {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     dependencies = {
-        'debugloop/telescope-undo.nvim',
-        'nvim-lua/plenary.nvim',
-        'nvim-telescope/telescope-file-browser.nvim',
-        'ibhagwan/fzf-lua',
+        { 'debugloop/telescope-undo.nvim' },
+        { 'ibhagwan/fzf-lua' },
+        { 'nvim-lua/plenary.nvim' },
+        { 'nvim-telescope/telescope-file-browser.nvim' },
         { 'nvim-telescope/telescope-fzf-native.nvim', enabled = vim.fn.executable 'make' == 1, build = 'make' },
         { 'nvim-telescope/telescope-ui-select.nvim' },
-        { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+        { 'nvim-tree/nvim-web-devicons', enabled = true },
     },
     config = function()
         local telescope = require 'telescope'
@@ -41,6 +41,7 @@ return {
         telescope.setup {
             defaults = {
                 border = {},
+                use_less = false,
                 mappings = mappings,
                 borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
                 buffer_previewer_maker = previewers.buffer_previewer_maker,
@@ -52,6 +53,11 @@ return {
                 set_env = { ['COLORTERM'] = 'truecolor' },
                 sorting_strategy = 'ascending',
                 pickers = {
+                    buffers = { show_all_buffers = true },
+                    git_status = {
+                        theme = 'ivy',
+                        git_icons = { added = '+', changed = '~', copied = '', deleted = '-', renamed = '>', unmerged = '^', untracked = '?' },
+                    },
                     find_files = {
                         find_command = {
                             'rg',
@@ -62,6 +68,10 @@ return {
                             "'!.git'",
                             '--iglob',
                             "'!pnpm-lock.yaml'",
+                            '--iglob',
+                            "'yarn.lock'",
+                            '--iglob',
+                            "'package-lock.json'",
                             '--hidden',
                             '--line-number',
                             '--column',
@@ -84,13 +94,13 @@ return {
             },
             extensions = { ['ui-select'] = { require('telescope.themes').get_dropdown() } },
         }
-
         pcall(telescope.load_extension, 'fzf')
         pcall(telescope.load_extension, 'file_browser')
         pcall(telescope.load_extension 'aerial')
         pcall(telescope.load_extension, 'ui-select')
 
         local builtin = require 'telescope.builtin'
+
         vim.keymap.set('n', '<leader><leader>', builtin.find_files, { desc = '[ ] Find files' })
         vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = '[f]ind recent files ("." for repeat)' })
         vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[f]ind [b]uffers' })
@@ -108,19 +118,18 @@ return {
         vim.keymap.set('n', '<leader>/', function()
             -- You can pass additional configuration to Telescope to change the theme, layout, etc.
             builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-                winblend = 10,
                 previewer = false,
             })
         end, { desc = '[/] Fuzzily search in current buffer' })
 
-        vim.keymap.set('n', '<leader>s/', function()
+        vim.keymap.set('n', '<leader>f/', function()
             builtin.live_grep {
                 grep_open_files = true,
                 prompt_title = 'Live Grep in Open Files',
             }
         end, { desc = '[S]earch [/] in Open Files' })
 
-        vim.keymap.set('n', '<leader>sn', function()
+        vim.keymap.set('n', '<leader>fn', function()
             builtin.find_files { cwd = vim.fn.stdpath 'config' }
         end, { desc = '[S]earch [N]eovim files' })
 
@@ -130,7 +139,6 @@ return {
                 hidden = true,
                 grouped = true,
                 previewer = true,
-                layout_config = { height = 40 },
             }
         end, { desc = 'Telescope file browser' })
     end,

@@ -39,12 +39,6 @@ if vim.g.vscode then
 else
     return require('lazy').setup {
         lazy = true,
-        'tpope/vim-sleuth',
-        {
-            'Wansmer/treesj',
-            keys = { { 'J', '<cmd>TSJToggle<cr>', desc = 'Join Toggle' } },
-            opts = { use_default_keymaps = false, max_join_length = 150 },
-        },
         require 'plugins.aerial',
         require 'plugins.autopairs',
         require 'plugins.barbar',
@@ -54,7 +48,7 @@ else
         require 'plugins.dial',
         require 'plugins.fold',
         require 'plugins.folke-plugins',
-        require 'plugins.git',
+        require 'plugins.gitsigns',
         require 'plugins.harpoon',
         require 'plugins.illuminate',
         require 'plugins.indent_line',
@@ -66,6 +60,7 @@ else
         require 'plugins.neo-tree',
         require 'plugins.noice',
         require 'plugins.oil',
+        require 'plugins.others',
         require 'plugins.telescope',
         require 'plugins.textcase',
         require 'plugins.themes',

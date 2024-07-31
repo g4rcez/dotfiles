@@ -1,18 +1,35 @@
-local function border(hl_name)
-    return {
-        { '╭', hl_name },
-        { '─', hl_name },
-        { '╮', hl_name },
-        { '│', hl_name },
-        { '╯', hl_name },
-        { '─', hl_name },
-        { '╰', hl_name },
-        { '│', hl_name },
-    }
-end
+local cmp_kinds = {
+    calc = '󰃬',
+    Class = ' ',
+    Color = '󰏘',
+    Constant = ' ',
+    Constructor = '',
+    Enum = ' ',
+    EnumMember = '',
+    Event = '',
+    Field = ' ',
+    File = '',
+    Folder = ' ',
+    Function = '󰊕',
+    Interface = ' ',
+    Keyword = ' ',
+    Method = '󰆧',
+    Module = '',
+    Operator = ' ',
+    Property = '󰜢',
+    Reference = ' ',
+    Snippet = '',
+    Struct = ' ',
+    Text = '',
+    TypeParameter = ' ',
+    Unit = '',
+    Value = ' ',
+    Variable = ' ',
+}
 
 return {
     {
+
         'roobert/tailwindcss-colorizer-cmp.nvim',
         config = function()
             require('tailwindcss-colorizer-cmp').setup {
@@ -24,6 +41,7 @@ return {
         'hrsh7th/nvim-cmp',
         event = 'InsertEnter',
         dependencies = {
+            "luckasRanarison/tailwind-tools.nvim",
             'f3fora/cmp-spell',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-calc',
@@ -40,10 +58,56 @@ return {
             -- See `:help cmp`
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
-            local lspkind = require 'lspkind'
             luasnip.config.setup {}
+
+            -- cmp-vscode-like
+            vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
+            vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
+            vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { fg = '#7E8294', bg = 'NONE', strikethrough = true })
+            vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { fg = '#82AAFF', bg = 'NONE', bold = true })
+            vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { fg = '#82AAFF', bg = 'NONE', bold = true })
+            vim.api.nvim_set_hl(0, 'CmpItemMenu', { fg = '#C792EA', bg = 'NONE', italic = true })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindField', { fg = '#B5585F' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { fg = '#B5585F' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindEvent', { fg = '#B5585F' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindText', { fg = '#9FBD73' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindEnum', { fg = '#9FBD73' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { fg = '#9FBD73' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindConstant', { fg = '#D4BB6C' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindConstructor', { fg = '#D4BB6C' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindReference', { fg = '#D4BB6C' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { fg = '#A377BF' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindStruct', { fg = '#A377BF' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindClass', { fg = '#A377BF' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindModule', { fg = '#A377BF' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindOperator', { fg = '#A377BF' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { fg = '#7E8294' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindFile', { fg = '#7E8294' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { fg = '#D4A959' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', { fg = '#D4A959' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindFolder', { fg = '#D4A959' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { fg = '#6C8ED4' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindValue', { fg = '#6C8ED4' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindEnumMember', { fg = '#6C8ED4' })
+
+            vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { fg = '#58B5A8' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindColor', { fg = '#58B5A8' })
+            vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', { fg = '#58B5A8' })
             cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
             cmp.setup {
+                view = { entries = 'bordered' },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -54,45 +118,54 @@ return {
                     completion = cmp.config.window.bordered {
                         col_offset = -3,
                         side_padding = 0,
-                        winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+                        winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:Visual,Search:None',
                     },
-                    documentation = {
-                        border = border 'CmpDocBorder',
-                        winhighlight = 'Normal:CmpDoc',
-                    },
+                    documentation = cmp.config.window.bordered { winhighlight = 'Normal:Normal,FloatBorder:LspBorderBG,CursorLine:PmenuSel,Search:None' },
+                },
+                sources = {
+                    { name = 'calc' },
+                    { name = 'nvim_lsp', max_item_count = 20, group_index = 1 },
+                    { name = 'nvim_lsp_signature_help', group_index = 1 },
+                    { name = 'buffer', keyword_length = 2, max_item_count = 5, group_index = 2 },
+                    { name = 'path', group_index = 2 },
+                    { name = 'spell', keyword_length = 4 },
+                    { name = 'cody' },
+                    { name = 'lazydev', group_index = 0 },
+                    { name = 'luasnip', max_item_count = 5, group_index = 1 },
+                    { name = 'nvim_lua', group_index = 1 },
+                    { name = 'emoji' },
                 },
                 formatting = {
                     fields = { 'kind', 'abbr', 'menu' },
+                    expandable_indicator = true,
                     format = function(entry, vim_item)
-                        local kind = lspkind.cmp_format {
+                        local _, lspkind = pcall(require, 'lspkind')
+                        local devicons = require 'nvim-web-devicons'
+                        local fmt = lspkind.cmp_format {
+                            maxwidth = 70,
                             mode = 'symbol_text',
-                            maxwidth = 50,
-                        }(entry, vim_item)
-                        local strings = vim.split(kind.kind, '%s', { trimempty = true })
-                        kind.kind = ' ' .. strings[1] .. ' '
-                        kind.menu = '    (' .. strings[2] .. ')'
-                        return kind
+                            symbol_map = cmp_kinds,
+                            show_labelDetails = true,
+                            before = require("tailwind-tools.cmp").lspkind_format
+                        }
+                        local icon, hl_group = devicons.get_icon(entry:get_completion_item().label)
+                        vim_item.kind_hl_group = hl_group or vim_item.kind_hl_group
+                        local option = fmt(entry, vim_item)
+                        local strings = vim.split(option.kind, '%s', { trimempty = true })
+                        option.kind = ('' or '') .. ' ' .. (icon or strings[1] or '') .. ''
+                        option.menu = '(' .. (option.menu or strings[2] or vim_item.menu) .. ')'
+                        if entry.source.name == 'calc' then
+                            option.kind = cmp_kinds.calc
+                            option.menu = '(' .. (strings[2] or '') .. ')'
+                        end
+                        return option
                     end,
                 },
-                -- For an understanding of why these mappings were
-                -- chosen, you will need to read `:help ins-completion`
-                --
-                -- No, but seriously. Please read `:help ins-completion`, it is really good!
-                sources = {
-                    { name = 'nvim_lsp' },
-                    { name = 'nvim_lua' },
-                    { name = 'path' },
-                    { name = 'buffer' },
-                    { name = 'calc' },
-                    { name = 'cody' },
-                    { name = 'emoji' },
-                    { name = 'luasnip' },
-                    { name = 'lazydev', group_index = 0 },
-                    { name = 'spell', keyword_length = 4 },
-                },
                 mapping = cmp.mapping.preset.insert {
+                    ['<C-j>'] = cmp.mapping.select_next_item(),
                     ['<C-n>'] = cmp.mapping.select_next_item(),
                     ['<C-p>'] = cmp.mapping.select_prev_item(),
+                    ['<C-k>'] = cmp.mapping.select_prev_item(),
                     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
                     ['<C-f>'] = cmp.mapping.scroll_docs(4),
                     ['<C-a>'] = cmp.mapping.confirm { select = true },
