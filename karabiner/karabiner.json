@@ -2420,7 +2420,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
                   },
                   {
                     "halt": true,
@@ -2446,7 +2446,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
                   }
                 ],
                 "type": "basic"
@@ -2470,7 +2470,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
                   },
                   {
                     "halt": true,
@@ -2496,7 +2496,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"

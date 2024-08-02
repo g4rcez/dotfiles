@@ -192,7 +192,7 @@ export const notify = (message: string, title: string) => ({
     shell_command: `osascript -e 'display notification "${message}" with title "${title}"'`,
 });
 
-const BROWSER = "Microsoft Edge";
+const BROWSER = "Google Chrome";
 export const browser = (
     profile: "Profile 1" | "Default",
     description?: string,
