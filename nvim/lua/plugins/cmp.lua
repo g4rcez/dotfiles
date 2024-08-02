@@ -41,7 +41,7 @@ return {
         'hrsh7th/nvim-cmp',
         event = 'InsertEnter',
         dependencies = {
-            "luckasRanarison/tailwind-tools.nvim",
+            'luckasRanarison/tailwind-tools.nvim',
             'f3fora/cmp-spell',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-calc',
@@ -59,7 +59,6 @@ return {
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
             luasnip.config.setup {}
-
             -- cmp-vscode-like
             vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
             vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
@@ -108,6 +107,7 @@ return {
             cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
             cmp.setup {
                 view = { entries = 'bordered' },
+                experimental = { ghost_text = true },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -124,7 +124,24 @@ return {
                 },
                 sources = {
                     { name = 'calc' },
-                    { name = 'nvim_lsp', max_item_count = 20, group_index = 1 },
+                    {
+                        name = 'nvim_lsp',
+                        max_item_count = 20,
+                        group_index = 1,
+                        entry_filter = function(entry, ctx)
+                            local kind = require('cmp.types.lsp').CompletionItemKind[entry:get_kind()]
+                            if kind == 'Snippet' and ctx.prev_context.filetype == 'java' then
+                                return false
+                            end
+                            if ctx.prev_context.filetype == 'markdown' then
+                                return true
+                            end
+                            if kind == 'Text' then
+                                return false
+                            end
+                            return true
+                        end,
+                    },
                     { name = 'nvim_lsp_signature_help', group_index = 1 },
                     { name = 'buffer', keyword_length = 2, max_item_count = 5, group_index = 2 },
                     { name = 'path', group_index = 2 },
@@ -146,7 +163,7 @@ return {
                             mode = 'symbol_text',
                             symbol_map = cmp_kinds,
                             show_labelDetails = true,
-                            before = require("tailwind-tools.cmp").lspkind_format
+                            before = require('tailwind-tools.cmp').lspkind_format,
                         }
                         local icon, hl_group = devicons.get_icon(entry:get_completion_item().label)
                         vim_item.kind_hl_group = hl_group or vim_item.kind_hl_group

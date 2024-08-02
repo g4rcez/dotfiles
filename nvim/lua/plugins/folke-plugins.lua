@@ -1,6 +1,7 @@
 return {
     { 'folke/neoconf.nvim' },
     { 'folke/twilight.nvim', opts = {} },
+    { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = true } },
     {
         'folke/persistence.nvim',
         event = 'BufReadPre',
@@ -32,7 +33,6 @@ return {
         name = 'render-markdown',
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
     },
-    { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = true } },
     {
         'folke/zen-mode.nvim',
         opts = {

@@ -120,4 +120,4 @@ _postcd
 chpwd_functions+=(_postcd)
 chpwd_functions+=(_zellij_tab_name_update)
 zellij-start
-
+#

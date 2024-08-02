@@ -1,0 +1,30 @@
+local wezterm = require("wezterm")
+local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
+local Config = {}
+
+-- Background, window and tabs
+Config.window_padding = { top = 1, bottom = 1, left = 10, right = 5 }
+Config.adjust_window_size_when_changing_font_size = false
+Config.animation_fps = 120
+Config.audible_bell = "Disabled"
+Config.color_scheme = "Catppuccin Mocha"
+Config.cursor_blink_ease_out = "EaseInOut"
+Config.cursor_blink_rate = 0
+Config.default_cursor_style = "SteadyBlock"
+Config.enable_scroll_bar = false
+Config.enable_tab_bar = false
+Config.hide_tab_bar_if_only_one_tab = true
+Config.macos_window_background_blur = 120
+Config.max_fps = 120
+Config.scrollback_lines = 1000000
+Config.show_tabs_in_tab_bar = false
+Config.use_fancy_tab_bar = false
+Config.window_background_opacity = 0.8
+Config.window_decorations = "RESIZE"
+
+theme.background = "#12121B"
+
+Config.color_schemes = { ["OLEDppuccin"] = theme }
+Config.color_scheme = "OLEDppuccin"
+
+return Config

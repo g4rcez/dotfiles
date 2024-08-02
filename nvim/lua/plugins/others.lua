@@ -1,5 +1,6 @@
 return {
     { 'tpope/vim-sleuth' },
+    { 'metakirby5/codi.vim' },
     {
         {
             'Wansmer/treesj',

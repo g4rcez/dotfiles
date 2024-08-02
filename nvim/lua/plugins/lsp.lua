@@ -33,34 +33,33 @@ local vtslsServer = {
     },
 }
 
-local tailwindcssServer = function(util)
-    return {
-        settings = {
-            tailwindCSS = {
-                classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'container', 'bodyClassName', 'titleClassName' },
-                lint = {
-                    cssConflict = 'error',
-                    invalidApply = 'error',
-                    invalidConfigPath = 'error',
-                    invalidScreen = 'error',
-                    invalidTailwindDirective = 'error',
-                    invalidVariant = 'error',
-                    recommendedVariantOrder = 'error',
-                },
-                validate = true,
+local tailwindcssServer = {
+    settings = {
+        tailwindCSS = {
+            classAttributes = { 'class', 'className', 'class:list', 'classList', 'ngClass', 'container', 'bodyClassName', 'titleClassName' },
+            lint = {
+                cssConflict = 'error',
+                invalidApply = 'error',
+                invalidConfigPath = 'error',
+                invalidScreen = 'error',
+                invalidTailwindDirective = 'error',
+                invalidVariant = 'error',
+                recommendedVariantOrder = 'error',
             },
+            validate = true,
         },
-    }
-end
+    },
+}
+
 return {
     { lazy = false, 'chrisgrieser/nvim-puppeteer' },
     { 'numToStr/Comment.nvim', opts = {} },
-    {
-        'nvimdev/lspsaga.nvim',
-        config = function()
-            require('lspsaga').setup {}
-        end,
-    },
+    -- {
+    --     'nvimdev/lspsaga.nvim',
+    --     config = function()
+    --         require('lspsaga').setup {}
+    --     end,
+    -- },
     {
         'olrtg/nvim-emmet',
         config = function()
@@ -208,7 +207,7 @@ return {
                 bashls = {},
                 eslint = {},
                 tsserver = { enabled = false },
-                tailwindcss = tailwindcssServer(lsp.util),
+                tailwindcss = tailwindcssServer,
                 yamlls = { settings = { yaml = { schemaStore = { enable = false, url = '' }, schemas = require('schemastore').yaml.schemas() } } },
                 jsonls = { settings = { json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } } } },
                 lua_ls = { settings = { Lua = { completion = { callSnippet = 'Replace' } } } },

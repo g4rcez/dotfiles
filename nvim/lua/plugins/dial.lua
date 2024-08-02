@@ -66,11 +66,6 @@ function M.config()
     vim.api.nvim_set_keymap('n', '-', map.dec_normal 'mygroup', { noremap = true })
     vim.api.nvim_set_keymap('v', '+', map.inc_normal 'visual', { noremap = true })
     vim.api.nvim_set_keymap('v', '-', map.dec_normal 'visual', { noremap = true })
-
-    vim.cmd [[
-  " enable only for specific FileType
-  autocmd FileType typescript,javascript lua vim.api.nvim_buf_set_keymap(0, "n", "<C-a>", require("dial.map").inc_normal("typescript"), {noremap = true})
-]]
 end
 
 return M

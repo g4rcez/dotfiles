@@ -43,7 +43,7 @@ function fvim() {
 }
 
 function codi() {
-    local syntax="${1:-python}"
+    local syntax="${1:-typescript}"
     shift
     nvim -c \
         "let g:startify_disable_at_vimenter = 1 |\

@@ -1,3 +1,5 @@
+local layoutConfig = { mirror = false, preview_width = 0.65, size = { width = 0.9, height = 0.9 } }
+
 return {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -38,12 +40,12 @@ return {
             ['<esc>'] = actions.close,
         }
         local mappings = { n = { ['q'] = actions.close }, i = insertMapping }
+
         telescope.setup {
             defaults = {
                 border = {},
                 use_less = false,
                 mappings = mappings,
-                borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
                 buffer_previewer_maker = previewers.buffer_previewer_maker,
                 layout_strategy = 'horizontal',
                 color_devicons = true,
@@ -80,19 +82,23 @@ return {
                         },
                     },
                 },
-                layout_config = {
-                    height = 0.9,
-                    width = 0.9,
-                    prompt_position = 'top',
-                    horizontal = {
-                        mirror = false,
-                        preview_width = 0.65,
-                        size = { width = 0.9, height = 0.9 },
-                    },
-                    vertical = { mirror = false, size = { width = 0.9, height = 0.9 } },
+                layout_config = { height = 0.9, width = 0.9, prompt_position = 'top', horizontal = layoutConfig, vertical = layoutConfig },
+                windblend = 20,
+                borderchars = {
+                    prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' },
+                    results = { ' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' },
+                    preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' },
                 },
             },
-            extensions = { ['ui-select'] = { require('telescope.themes').get_dropdown() } },
+            extensions = {
+                ['ui-select'] = { require('telescope.themes').get_dropdown() },
+                fzf = {
+                    fuzzy = true,
+                    case_mode = 'smart_case',
+                    override_file_sorter = true,
+                    override_generic_sorter = true,
+                },
+            },
         }
         pcall(telescope.load_extension, 'fzf')
         pcall(telescope.load_extension, 'file_browser')
@@ -114,11 +120,10 @@ return {
         vim.keymap.set('n', '<leader>ft', builtin.treesitter, { desc = '[f]ind with [t]reesitter' })
         vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[f]ind current [w]ord' })
 
-        -- Slightly advanced example of overriding default behavior and theme
         vim.keymap.set('n', '<leader>/', function()
-            -- You can pass additional configuration to Telescope to change the theme, layout, etc.
             builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
                 previewer = false,
+                layout_config = { height = 0.9, width = 0.9, prompt_position = 'top', horizontal = layoutConfig, vertical = layoutConfig },
             })
         end, { desc = '[/] Fuzzily search in current buffer' })
 

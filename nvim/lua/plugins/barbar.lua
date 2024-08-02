@@ -7,7 +7,7 @@ return {
         end,
         opts = {
             animation = false,
-            highlight_alternate = true,
+            highlight_alternate = false,
             maximum_padding = 2,
             minimum_padding = 2,
             maximum_length = 32,
@@ -16,8 +16,8 @@ return {
                 preset = 'slanted',
                 buffer_index = true,
                 buffer_number = false,
-                filetype = { custom_colors = false, enabled = true },
                 separator_at_end = true,
+                filetype = { custom_colors = false, enabled = true },
             },
         },
     },

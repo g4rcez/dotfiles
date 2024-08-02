@@ -74,3 +74,4 @@ ln -sf $DOTFILES_CONFIG_DIR/bat $HOME_CONFIG_DIR
 setupBat
 ln -sf $PWD/config/mise $HOME/.config
 make
+
