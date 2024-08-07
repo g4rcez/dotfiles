@@ -33,7 +33,7 @@ local commonKeymaps = function()
     key.insert('<C-E>', '<END>', { desc = 'Go to end in insert' })
     key.insert('<C-s>', '<Esc>:w<CR>a', { desc = 'Save' })
     key.insert('<C-z>', '<Esc>ua', { desc = 'Go to end in insert' })
-    key.normal('#', '*zz', { desc = 'Center previous pattern' })
+    key.normal('#', '#zz', { desc = 'Center previous pattern' })
     key.normal('*', '*zz', { desc = 'Center next pattern' })
     key.normal('+', '<C-a>', { desc = 'Increment' })
     key.normal('-', '<C-x>', { desc = 'Decrement' })
@@ -76,6 +76,8 @@ local function buffersAndBookmarks()
             })
             :find()
     end
+
+    -- harpoon
     key.normal('<leader>br', function()
         harpoon:list():remove()
     end, { desc = 'Remove harpoon hook' })
@@ -86,7 +88,13 @@ local function buffersAndBookmarks()
         telescopeHarpoon(harpoon:list())
     end, { desc = 'Open harpoon window' })
 
-    -- barbar + bookmarks
+    -- bookmarks
+    vim.keymap.set({ 'n', 'v' }, '<leader>mm', '<cmd>BookmarksMark<cr>', { desc = 'Mark current line into active BookmarkList.' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>mo', '<cmd>BookmarksGoto<cr>', { desc = 'Go to bookmark at current active BookmarkList' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>ma', '<cmd>BookmarksCommands<cr>', { desc = 'Find and trigger a bookmark command.' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>mg', '<cmd>BookmarksGotoRecent<cr>', { desc = 'Go to latest visited/created Bookmark' })
+
+    -- barbar + buffers
     key.normal('<C-h>', '<Cmd>BufferPrevious<CR>', opts)
     key.normal('<C-l>', '<Cmd>BufferNext<CR>', opts)
     key.normal('<leader>bd', '<cmd>bdelete<cr>', { desc = 'Delete current buffer' })
@@ -153,42 +161,42 @@ end
 if vim.g.vscode then
     commonKeymaps()
     vscodeKeymaps()
-else
-    table.insert(M, {
-        'folke/which-key.nvim',
-        event = 'VimEnter',
-        config = function()
-            local wh = require 'which-key'
-            local i = require('nvim-web-devicons').get_icon
-            addKeymaps()
-            wh.setup {
-                preset = 'modern',
-                win = { border = 'rounded' },
-                plugins = {
-                    marks = true,
-                    registers = true,
-                    spelling = { enabled = true, suggestions = 20 },
-                },
-            }
-            -- Set highlight on search, but clear on pressing <Esc> in normal mode
-            wh.add({
-                { '<leader>b', group = '[b]uffers', icon = i 'tmux' },
-                { '<leader>c', group = '[c]ode', icon = i 'gcode' },
-                { '<leader>d', group = '[d]ebug', icon = i 'debug' },
-                { '<leader>r', group = '[r]ename' },
-                { '<leader>R', group = '[R]equest HTTP' },
-                { '<leader>s', group = '[s]ession', icon = i 'nix' },
-                { '<leader>f', group = '[f]ind', icon = i 'desktop' },
-                { '<leader>w', group = '[w]orkspace', icon = i 'workspace' },
-                { '<leader>t', group = '[t]oggle' },
-                { '<leader>x', group = '[x]trouble/errors' },
-                { '<leader>h', group = 'git [h]unk', mode = { 'n', 'v' }, icon = i 'git' },
-            }, {
-                { '<leader>cr', vim.lsp.buf.rename, desc = 'Rename variable', icon = i 'gcode' },
-                { '<leader>cd', vim.diagnostic.setloclist, desc = 'Quickfix list', icon = i 'linux' },
-            })
-        end,
-    })
+    return M
 end
-
+table.insert(M, {
+    'folke/which-key.nvim',
+    event = 'VimEnter',
+    config = function()
+        local wh = require 'which-key'
+        local icon = require('nvim-web-devicons').get_icon
+        addKeymaps()
+        wh.setup {
+            preset = 'helix',
+            win = { border = 'rounded' },
+            plugins = {
+                marks = true,
+                registers = true,
+                spelling = { enabled = true, suggestions = 20 },
+            },
+        }
+        -- Set highlight on search, but clear on pressing <Esc> in normal mode
+        wh.add({
+            { '<leader>b', group = '[b]uffers', icon = icon 'tmux' },
+            { '<leader>c', group = '[c]ode', icon = icon 'gcode' },
+            { '<leader>d', group = '[d]ebug', icon = icon 'debug' },
+            { '<leader>r', group = '[r]ename' },
+            { '<leader>m', group = '[m]ark' },
+            { '<leader>R', group = '[R]equest HTTP' },
+            { '<leader>s', group = '[s]ession', icon = icon 'nix' },
+            { '<leader>f', group = '[f]ind', icon = icon 'desktop' },
+            { '<leader>w', group = '[w]orkspace', icon = icon 'workspace' },
+            { '<leader>t', group = '[t]oggle' },
+            { '<leader>x', group = '[x]trouble/errors' },
+            { '<leader>h', group = 'git [h]unk', mode = { 'n', 'v' }, icon = icon 'git' },
+        }, {
+            { '<leader>cr', vim.lsp.buf.rename, desc = 'Rename variable', icon = icon 'gcode' },
+            { '<leader>cd', vim.diagnostic.setloclist, desc = 'Quickfix list', icon = icon 'linux' },
+        })
+    end,
+})
 return M

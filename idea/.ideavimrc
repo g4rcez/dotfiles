@@ -130,37 +130,40 @@ nmap <leader>P "+P
 vmap <leader>P "+P
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" bookmark|buffer - prefix b(bookmark|buffer)
+"" life quality / operations
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:WhichKeyDesc_bookmark_prefix = "<leader>m +Bookmark"
-nmap <leader>bm <Action>(ToggleBookmark)
-let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>ma Toggle bookmark"
+nmap gu <action>(ShowUsages)
+nmap gU <action>(FindUsages)
+nmap [[ <action>(MethodUp)
+nmap ]] <action>(MethodDown)
+vnoremap / :action Find<CR>
+nnoremap / :action Find<CR>
+map U <C-R>
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
 
-nmap <leader>bs <Action>(ShowBookmarks)
-let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>bs Show bookmarks"
+"" Invert with vim scripts
+nnoremap ! :call Invert(0)<CR>
+vnoremap ! :<C-u>call Invert(1)<CR>
 
-nmap <leader>bp <Action>(GotoPreviousBookmark)
-let g:WhichKeyDesc_bookmarks = "<leader>bp Goto previous bookmark"
+"" Numbers
+nnoremap - <C-x>
+let g:WhichKeyDesc_decrease = "- Decrease number"
 
-nmap <leader>bn <Action>(GotoNextBookmark)
-let g:WhichKeyDesc_bookmarks = "<leader>bn Goto next bookmark"
+nnoremap + <C-a>
+let g:WhichKeyDesc_increase = "+ Increase number"
 
-nmap <C-l> <action>(NextTab)
-nmap <leader>l <action>(NextTab)
-let g:WhichKeyDesc_next_tab_leader = "<leader>l Next tab"
+vnoremap <leader>ds :'<,'>g/^$/d<CR>
+let g:WhichKeyDesc_removeEmptyLines = "<leader>ds Remove empty lines from selection"
 
-nmap <C-h> <action>(PreviousTab)
-nmap <leader>h <action>(PreviousTab)
-let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
+nmap <leader>/ <action>(ShowErrorDescription)
+let g:WhichKeyDesc_show_error_description = "<leader>/ Show error description"
 
-nmap <leader>bl <Action>(NextSplitter)
-let g:WhichKeyDesc_next_splitter = "<leader>bl next splitter"
+nnoremap vv V
+let g:WhichKeyDesc_select_all_line = "vv Select entire line (V)"
 
-nmap <leader>bh <Action>(PrevSplitter)
-let g:WhichKeyDesc_previous_splitter = "<leader>bh prev splitter"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" file operations
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap J mzJ`z
+let g:WhichKeyDesc_join_line = "J Join with bellow line"
 map gh 0
 map 0 ^
 map Q gq
@@ -170,6 +173,13 @@ vnoremap < <gv
 vnoremap > >gv
 nmap < <<
 nmap > >>
+nmap # #zz
+nmap * *zz
+nmap ; :
+
+imap <C-a> <action>(EditorLineStart)
+imap <C-e> <action>(EditorLineEnd)
+imap <C-z> <action>($Undo)
 
 map go <Action>(Switcher)
 let g:WhichKeyDesc_switcher = "go Switcher"
@@ -187,8 +197,12 @@ nmap <leader>P <action>(RecentProjectListGroup)
 
 let g:WhichKeyDesc_recent_projects = "<leader>P Open recent projects"
 
+nmap [d <action>(GotoPreviousError)
+let g:WhichKeyDesc_goto_prev_error = "[d Goto prev error"
 
+nmap ]d <action>(GotoNextError)
 nmap <leader>x <action>(GotoNextError)
+let g:WhichKeyDesc_goto_next_error = "]d Goto next error"
 let g:WhichKeyDesc_goto_next_error = "<leader>x Goto next error"
 
 nmap <leader>git <action>(Git.Menu)
@@ -230,42 +244,6 @@ nmap <leader>jt <action>(Markdown.GenerateTableOfContents)
 let g:WhichKeyDesc_generate_table_of_content = "<leader>jt Generate Table of Contents(Markdown)"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" life quality
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap gu <action>(ShowUsages)
-nmap gU <action>(FindUsages)
-nmap [[ <action>(MethodUp)
-nmap ]] <action>(MethodDown)
-vnoremap / :action Find<CR>
-nnoremap / :action Find<CR>
-map U <C-R>
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
-
-"" Invert with vim scripts
-nnoremap ! :call Invert(0)<CR>
-vnoremap ! :<C-u>call Invert(1)<CR>
-
-"" Numbers
-nnoremap - <C-x>
-let g:WhichKeyDesc_decrease = "- Decrease number"
-
-nnoremap + <C-a>
-let g:WhichKeyDesc_increase = "+ Increase number"
-
-vnoremap <leader>ds :'<,'>g/^$/d<CR>
-let g:WhichKeyDesc_removeEmptyLines = "<leader>ds Remove empty lines from selection"
-
-nmap <leader>/ <action>(ShowErrorDescription)
-let g:WhichKeyDesc_show_error_description = "<leader>/ Show error description"
-
-nnoremap vv V
-let g:WhichKeyDesc_select_all_line = "vv Select entire line (V)"
-
-nnoremap J mzJ`z
-let g:WhichKeyDesc_join_line = "J Join with bellow line"
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" folding - prefix z(???)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_jetbrains_prefix = "<leader>z +Folding"
@@ -293,6 +271,9 @@ let g:WhichKeyDesc_Breakpoint = "<leader>db Toggle Line Breakpoint"
 let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
 nmap <leader><leader> <action>(SearchEverywhere)
 let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> SearchEverywhere"
+
+nmap <leader>ca <action>(CodeEditorViewGroup)
+let g:WhichKeyDesc_reformat_code = "<leader>ca CodeEditorViewGroup"
 
 nmap <leader>cf <action>(ReformatCode)
 let g:WhichKeyDesc_reformat_code = "<leader>cf Reformat Code"
@@ -375,27 +356,59 @@ xmap <C-x> <plug>SkipOccurrence
 xmap g<C-n> <plug>NextOccurrence
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" tests/tabs - prefix t(tests/tabs)
+"" errors - prefix [
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap ]n :action GotoNextError<cr>
+nnoremap ]p :action GotoPreviousError<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" handlers
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+sethandler <C-p> n-v:vim i:ide
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" bookmark|buffer|tabs - prefix (t|b)(bookmark|buffer)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:WhichKeyDesc_bookmark_prefix = "<leader>m +Bookmark"
+nmap <leader>ba <Action>(ToggleBookmark)
+nmap <leader>bm <Action>(ToggleBookmark)
+nmap <leader>br <Action>(ToggleBookmark)
+nmap <leader>mm <Action>(ToggleBookmark)
+let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>ma Toggle bookmark"
+
+nmap <Tab><Tab> <Action>(ShowBookmarks)
+nmap <leader>bs <Action>(ShowBookmarks)
+let g:WhichKeyDesc_toggle_bookmarks_leader = "<tab><tab> Show bookmarks"
+let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>bs Show bookmarks"
+
+nmap <leader>bp <Action>(GotoPreviousBookmark)
+let g:WhichKeyDesc_bookmarks = "<leader>bp Goto previous bookmark"
+
+nmap <leader>bn <Action>(GotoNextBookmark)
+let g:WhichKeyDesc_bookmarks = "<leader>bn Goto next bookmark"
+
+nmap <C-l> <action>(NextTab)
+nmap <leader>l <action>(NextTab)
+let g:WhichKeyDesc_next_tab_leader = "<leader>l Next tab"
+
+nmap <C-h> <action>(PreviousTab)
+nmap <leader>h <action>(PreviousTab)
+let g:WhichKeyDesc_previous_tab_leader = "<leader>h Previous tab"
+
+nmap <leader>bl <Action>(NextSplitter)
+let g:WhichKeyDesc_next_splitter = "<leader>bl next splitter"
+
+nmap <leader>bh <Action>(PrevSplitter)
+let g:WhichKeyDesc_previous_splitter = "<leader>bh prev splitter"
+
 nmap <leader>tt :tabo<CR>
+let g:WhichKeyDesc_tabo = "<leader>tt Close all except current"
+nmap <leader>bo :tabo<CR>
+nmap <leader>qo :tabo<CR>
 let g:WhichKeyDesc_tabo = "<leader>tt Close all except current"
 
 nmap <leader>tr <action>(ReopenClosedTab)
 let g:WhichKeyDesc_reopen_tab = "<leader>tr Reopen closed tab"
-
-"" Tabs
-nnoremap <S-Tab> :action PreviousTab<CR>
-let g:WhichKeyDesc_previous_tab_tab = "<S-Tab> Previous tab"
-
-nnoremap <Tab> :action NextTab<CR>
-let g:WhichKeyDesc_next_tab_tab = "<Tab> Next tab"
-
-nmap <leader>, <action>(EditorTabsGroup)
-let g:WhichKeyDesc_editor_tabs_group = "<leader>, Editor tabs"
-
-"" Telescope like for move in menu hover
-nmap <C-j> <Action>(EditorDown)
-nmap <C-k> <Action>(EditorUp)
 
 "" Split
 nmap <leader>\ <action>(SplitVertically)
@@ -406,15 +419,3 @@ let g:WhichKeyDesc_split_horizontally = "<leader>- Split vertically"
 
 "" Save in normal mode
 nmap <C-s> :w<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" errors - prefix [
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap ]n :action GotoNextError<cr>
-nnoremap ]p :action GotoPreviousError<cr>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" handlers - prefix t(tests/tabs)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-sethandler <C-p> n-v:vim i:ide
-

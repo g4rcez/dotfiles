@@ -54,12 +54,6 @@ local tailwindcssServer = {
 return {
     { lazy = false, 'chrisgrieser/nvim-puppeteer' },
     { 'numToStr/Comment.nvim', opts = {} },
-    -- {
-    --     'nvimdev/lspsaga.nvim',
-    --     config = function()
-    --         require('lspsaga').setup {}
-    --     end,
-    -- },
     {
         'olrtg/nvim-emmet',
         config = function()
@@ -192,11 +186,12 @@ return {
             --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
             --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
             local lsp = require 'lspconfig'
+            local lsp_flags = { allow_incremental_sync = true, debounce_text_changes = 150 }
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
             capabilities.textDocument.completion.completionItem.snippetSupport = true
-            capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
-            local language_servers = require('lspconfig').util.available_servers() -- or list servers manually like {'gopls', 'clangd'}
+            capabilities.textDocument.foldingRange = { dynamicRegistration = true, lineFoldingOnly = true }
+            local language_servers = lsp.util.available_servers()
             for _, ls in ipairs(language_servers) do
                 lsp[ls].setup { capabilities = capabilities }
             end
@@ -208,10 +203,11 @@ return {
                 eslint = {},
                 tsserver = { enabled = false },
                 tailwindcss = tailwindcssServer,
-                yamlls = { settings = { yaml = { schemaStore = { enable = false, url = '' }, schemas = require('schemastore').yaml.schemas() } } },
+                yamlls = { settings = { yaml = { schemaStore = { enable = true, url = '' }, schemas = require('schemastore').yaml.schemas() } } },
                 jsonls = { settings = { json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } } } },
                 lua_ls = { settings = { Lua = { completion = { callSnippet = 'Replace' } } } },
                 vtsls = vtslsServer,
+                emmet_language_server = {},
             }
             require('mason').setup()
             -- You can add other tools here that you want Mason to install
@@ -228,6 +224,7 @@ return {
                     end,
                 },
             }
+            lsp.emmet_language_server.setup { capabilities = capabilities, flags = lsp_flags }
         end,
     },
 }

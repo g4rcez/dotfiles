@@ -16,4 +16,14 @@ return {
             },
         },
     },
+    {
+        'LintaoAmons/bookmarks.nvim',
+        dependencies = {
+            { 'nvim-telescope/telescope.nvim' },
+            { 'stevearc/dressing.nvim' },
+        },
+        opts = {
+            json_db_path = vim.fs.normalize(vim.fn.stdpath 'config' .. '/bookmarks.db.json'),
+        },
+    },
 }

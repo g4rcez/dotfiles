@@ -1,5 +1,4 @@
 return {
-    'windwp/nvim-ts-autotag',
     {
         'mistweaverco/kulala.nvim',
         ft = 'http',
