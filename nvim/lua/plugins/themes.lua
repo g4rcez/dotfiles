@@ -1,6 +1,36 @@
 return {
     'nvim-tree/nvim-web-devicons',
-    'NvChad/nvim-colorizer.lua',
+    {
+        'brenoprata10/nvim-highlight-colors',
+        config = function()
+            require('nvim-highlight-colors').setup {
+                ---@usage 'background'|'foreground'|'virtual'
+                render = 'background',
+                virtual_symbol = '■',
+                virtual_symbol_prefix = '',
+                virtual_symbol_suffix = ' ',
+                virtual_symbol_position = 'inline',
+                enable_hex = true,
+                enable_short_hex = true,
+                enable_rgb = true,
+                enable_hsl = true,
+                enable_var_usage = true,
+                enable_named_colors = true,
+                enable_tailwind = false,
+                exclude_filetypes = {},
+                exclude_buftypes = {},
+            }
+        end,
+    },
+    {
+        'mawkler/modicator.nvim',
+        init = function()
+            vim.o.cursorline = true
+            vim.o.number = true
+            vim.o.termguicolors = true
+        end,
+        opts = {},
+    },
     {
         'NvChad/nvim-colorizer.lua',
         lazy = false,
@@ -164,12 +194,12 @@ return {
             }
             -- Set menu
             dashboard.section.buttons.val = {
-                dashboard.button('b', '  > Back Session', [[<cmd> lua require("persistence").load() <cr>]]),
-                dashboard.button('e', '  > New file', ':ene <BAR> startinsert <CR>'),
-                dashboard.button('f', '  > Find file', ':cd $PWD | Telescope find_files<CR>'),
-                dashboard.button('q', '  > Quit NVIM', ':qa<CR>'),
-                dashboard.button('r', '  > Recent', ':Telescope oldfiles<CR>'),
-                dashboard.button('s', '  > Settings', ':e $MYVIMRC | :cd %:p:h<CR>'),
+                dashboard.button('b', '  => Back Session', [[<cmd> lua require("persistence").load() <cr>]]),
+                dashboard.button('e', '  => New file', ':ene <BAR> startinsert <CR>'),
+                dashboard.button('f', '  => Find file', ':cd $PWD | Telescope find_files<CR>'),
+                dashboard.button('q', '  => Quit NVIM', ':qa<CR>'),
+                dashboard.button('r', '  => Recent', ':Telescope oldfiles<CR>'),
+                dashboard.button('s', '  => Settings', ':e $MYVIMRC | :cd %:p:h<CR>'),
             }
             alpha.setup(dashboard.opts)
         end,

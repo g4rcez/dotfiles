@@ -101,13 +101,17 @@ local function buffersAndBookmarks()
     key.normal('<leader>bs', '<Cmd>BufferOrderByDirectory<CR>', { desc = 'Sort buffers by dir' })
     key.normal('<leader>bo', '<cmd>BufferCloseAllButCurrent<cr>', { desc = 'Close all except current' })
     key.normal('<leader>q', '<cmd>bdelete<cr>', { desc = 'Delete current buffer' })
-    key.normal('<leader>qo', '<cmd>BufferCloseAllButCurrent<cr>', { desc = 'Close all except current' })
-    key.normal('<leader>qq', '<cmd>bdelete<cr>', { desc = 'Delete current buffer' })
 end
 
 local function codeKeymap()
     key.normal('<leader>cd', vim.diagnostic.setloclist, { desc = 'Quickfix list' })
     key.normal('<leader>cr', vim.lsp.buf.rename, { desc = 'Rename variable' })
+    key.normal('g1', function()
+        require('treesitter-context').go_to_context(vim.v.count1)
+    end, { silent = true })
+    key.normal('<leader>cf', function()
+        require('conform').format { async = true, lsp_fallback = true }
+    end, { desc = '[c]ode format' })
 end
 
 local function transformKeymap()
@@ -118,8 +122,10 @@ local function transformKeymap()
 end
 
 local function errorsKeymap()
-    keymap('n', ']d', vim.diagnostic.goto_next)
-    keymap('n', '[d', vim.diagnostic.goto_prev)
+    key.normal(']x', vim.diagnostic.goto_next, { desc = 'Next Error' })
+    key.normal('[x', vim.diagnostic.goto_prev, { desc = 'Previous Error' })
+    key.normal(']d', vim.diagnostic.goto_next, { desc = 'Next Error' })
+    key.normal('[d', vim.diagnostic.goto_prev, { desc = 'Previous Error' })
     key.normal('gR', function()
         require('trouble').toggle 'lsp_references'
     end, { desc = 'Trouble references' })
@@ -128,6 +134,8 @@ end
 
 local function sessionKeymap()
     key.normal('<leader>sf', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
+    key.normal('<leader>so', '<CMD>Oil --float<CR>', { desc = '[o]il.nvim' })
+    key.normal('<leader>sr', require("persistence").load, { desc = '[r]estore session' })
 end
 
 local addKeymaps = function()
@@ -184,7 +192,8 @@ table.insert(M, {
             { '<leader>b', group = '[b]uffers', icon = icon 'tmux' },
             { '<leader>c', group = '[c]ode', icon = icon 'gcode' },
             { '<leader>d', group = '[d]ebug', icon = icon 'debug' },
-            { '<leader>r', group = '[r]ename' },
+            { '<leader>e', group = 'n[e]o tree', icon = icon 'debug' },
+            { '<leader>r', group = '[r]ename', icon = 'desktop' },
             { '<leader>m', group = '[m]ark' },
             { '<leader>R', group = '[R]equest HTTP' },
             { '<leader>s', group = '[s]ession', icon = icon 'nix' },

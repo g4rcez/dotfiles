@@ -1,30 +1,162 @@
-local cmp_kinds = {
-    calc = '󰃬',
+local icons = {
+    Array = ' ',
+    Boolean = ' ',
     Class = ' ',
-    Color = '󰏘',
+    Color = ' ',
     Constant = ' ',
     Constructor = '',
     Enum = ' ',
     EnumMember = '',
-    Event = '',
+    Event = ' ',
     Field = ' ',
     File = '',
     Folder = ' ',
     Function = '󰊕',
     Interface = ' ',
+    Key = ' ',
     Keyword = ' ',
-    Method = '󰆧',
-    Module = '',
+    Method = ' ',
+    Module = ' ',
+    Namespace = ' ',
+    Null = '󰟢',
+    Number = ' ',
+    Object = ' ',
     Operator = ' ',
+    Package = ' ',
     Property = '󰜢',
     Reference = ' ',
-    Snippet = '',
+    Snippet = ' ',
+    String = ' ',
     Struct = ' ',
-    Text = '',
+    Text = ' ',
     TypeParameter = ' ',
     Unit = '',
     Value = ' ',
     Variable = ' ',
+    calc = '󰃬',
+}
+
+local allIcons = {
+    kind = icons,
+    git = {
+        LineAdded = '',
+        LineModified = '',
+        LineRemoved = '',
+        FileDeleted = '',
+        FileIgnored = '◌',
+        FileRenamed = '',
+        FileStaged = 'S',
+        FileUnmerged = '',
+        FileUnstaged = '',
+        FileUntracked = 'U',
+        Diff = '',
+        Repo = '',
+        Octoface = '',
+        Copilot = '',
+        Branch = '',
+    },
+    ui = {
+        ArrowCircleDown = '',
+        ArrowCircleLeft = '',
+        ArrowCircleRight = '',
+        ArrowCircleUp = '',
+        BoldArrowDown = '',
+        BoldArrowLeft = '',
+        BoldArrowRight = '',
+        BoldArrowUp = '',
+        BoldClose = '',
+        BoldDividerLeft = '',
+        BoldDividerRight = '',
+        BoldLineLeft = '▎',
+        BoldLineMiddle = '┃',
+        BoldLineDashedMiddle = '┋',
+        BookMark = '',
+        BoxChecked = '',
+        Bug = '',
+        Stacks = '',
+        Scopes = '',
+        Watches = '󰂥',
+        DebugConsole = '',
+        Calendar = '',
+        Check = '',
+        ChevronRight = '',
+        ChevronShortDown = '',
+        ChevronShortLeft = '',
+        ChevronShortRight = '',
+        ChevronShortUp = '',
+        Circle = '',
+        Close = '󰅖',
+        CloudDownload = '',
+        Code = '',
+        Comment = '',
+        Dashboard = '',
+        DividerLeft = '',
+        DividerRight = '',
+        DoubleChevronRight = '»',
+        Ellipsis = '',
+        EmptyFolder = '',
+        EmptyFolderOpen = '',
+        File = '',
+        FileSymlink = '',
+        Files = '',
+        FindFile = '󰈞',
+        FindText = '󰊄',
+        Fire = '',
+        Folder = '󰉋',
+        FolderOpen = '',
+        FolderSymlink = '',
+        Forward = '',
+        Gear = '',
+        History = '',
+        Lightbulb = '',
+        LineLeft = '▏',
+        LineMiddle = '│',
+        List = '',
+        Lock = '',
+        NewFile = '',
+        Note = '',
+        Package = '',
+        Pencil = '󰏫',
+        Plus = '',
+        Project = '',
+        Search = '',
+        SignIn = '',
+        SignOut = '',
+        Tab = '󰌒',
+        Table = '',
+        Target = '󰀘',
+        Telescope = '',
+        Text = '',
+        Tree = '',
+        Triangle = '󰐊',
+        TriangleShortArrowDown = '',
+        TriangleShortArrowLeft = '',
+        TriangleShortArrowRight = '',
+        TriangleShortArrowUp = '',
+    },
+    diagnostics = {
+        BoldError = '',
+        Error = '',
+        BoldWarning = '',
+        Warning = '',
+        BoldInformation = '',
+        Information = '',
+        BoldQuestion = '',
+        Question = '',
+        BoldHint = '',
+        Hint = '󰌶',
+        Debug = '',
+        Trace = '✎',
+    },
+    misc = {
+        Robot = '󰚩',
+        Squirrel = '',
+        Tag = '',
+        Watch = '',
+        Smiley = '',
+        Package = '',
+        CircuitBoard = '',
+    },
 }
 
 return {
@@ -41,7 +173,6 @@ return {
         'hrsh7th/nvim-cmp',
         event = 'InsertEnter',
         dependencies = {
-            'luckasRanarison/tailwind-tools.nvim',
             'f3fora/cmp-spell',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-calc',
@@ -52,13 +183,29 @@ return {
             'hrsh7th/cmp-path',
             'onsails/lspkind.nvim',
             'saadparwaiz1/cmp_luasnip',
-            { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
+            {
+                'garymjr/nvim-snippets',
+                opts = {
+                    friendly_snippets = true,
+                },
+                dependencies = { 'rafamadriz/friendly-snippets' },
+            },
+            {
+                'L3MON4D3/LuaSnip',
+                event = 'InsertEnter',
+                dependencies = { 'rafamadriz/friendly-snippets' },
+                build = 'make install_jsregexp',
+            },
         },
         config = function()
             -- See `:help cmp`
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
             luasnip.config.setup {}
+            require('luasnip.loaders.from_vscode').lazy_load()
+            require('luasnip.loaders.from_snipmate').lazy_load()
+            require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }
+            luasnip.filetype_extend('typescriptreact', { 'html' })
             -- cmp-vscode-like
             vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
             vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
@@ -104,16 +251,19 @@ return {
             vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { fg = '#58B5A8' })
             vim.api.nvim_set_hl(0, 'CmpItemKindColor', { fg = '#58B5A8' })
             vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', { fg = '#58B5A8' })
-            cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
+            vim.api.nvim_set_hl(0, 'CmpGhostText', { link = 'Comment', default = true })
+            local defaults = require 'cmp.config.default'()
             cmp.setup {
+                auto_brackets = {},
                 view = { entries = 'bordered' },
-                experimental = { ghost_text = true },
+                experimental = { ghost_text = { hl_group = 'CmpGhostText' } },
+                completion = { completeopt = 'menu,menuone,noinsert,noselect' },
+                sorting = defaults.sorting,
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
                     end,
                 },
-                completion = { completeopt = 'menu,menuone,noinsert' },
                 window = {
                     completion = cmp.config.window.bordered {
                         col_offset = -3,
@@ -123,16 +273,10 @@ return {
                     documentation = cmp.config.window.bordered { winhighlight = 'Normal:Normal,FloatBorder:LspBorderBG,CursorLine:PmenuSel,Search:None' },
                 },
                 sources = {
-                    { name = 'calc' },
                     {
                         name = 'nvim_lsp',
-                        max_item_count = 20,
-                        group_index = 1,
                         entry_filter = function(entry, ctx)
                             local kind = require('cmp.types.lsp').CompletionItemKind[entry:get_kind()]
-                            if kind == 'Snippet' and ctx.prev_context.filetype == 'java' then
-                                return false
-                            end
                             if ctx.prev_context.filetype == 'markdown' then
                                 return true
                             end
@@ -142,40 +286,41 @@ return {
                             return true
                         end,
                     },
-                    { name = 'nvim_lsp_signature_help', group_index = 1 },
-                    { name = 'buffer', keyword_length = 2, max_item_count = 5, group_index = 2 },
-                    { name = 'path', group_index = 2 },
-                    { name = 'spell', keyword_length = 4 },
+                    { name = 'nvim_lsp_signature_help' },
+                    { name = 'buffer' },
+                    { name = 'path' },
+                    { name = 'calc' },
+                    { name = 'luasnip' },
+                    { name = 'spell' },
                     { name = 'cody' },
-                    { name = 'lazydev', group_index = 0 },
-                    { name = 'luasnip', max_item_count = 5, group_index = 1 },
-                    { name = 'nvim_lua', group_index = 1 },
+                    { name = 'lazydev' },
+                    { name = 'nvim_lua' },
                     { name = 'emoji' },
                 },
+                -- cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
                 formatting = {
                     fields = { 'kind', 'abbr', 'menu' },
                     expandable_indicator = true,
-                    format = function(entry, vim_item)
-                        local _, lspkind = pcall(require, 'lspkind')
-                        local devicons = require 'nvim-web-devicons'
-                        local fmt = lspkind.cmp_format {
-                            maxwidth = 70,
+                    format = function(entry, item)
+                        item.kind = icons[item.kind]
+                        item.menu = ({
+                            nvim_lsp = '',
+                            nvim_lua = '',
+                            luasnip = '',
+                            buffer = '',
+                            path = '',
+                            emoji = '',
+                        })[entry.source.name]
+                        local color_item = require('nvim-highlight-colors').format(entry, { kind = item.kind })
+                        item = require('lspkind').cmp_format {
                             mode = 'symbol_text',
-                            symbol_map = cmp_kinds,
-                            show_labelDetails = true,
-                            before = require('tailwind-tools.cmp').lspkind_format,
-                        }
-                        local icon, hl_group = devicons.get_icon(entry:get_completion_item().label)
-                        vim_item.kind_hl_group = hl_group or vim_item.kind_hl_group
-                        local option = fmt(entry, vim_item)
-                        local strings = vim.split(option.kind, '%s', { trimempty = true })
-                        option.kind = ('' or '') .. ' ' .. (icon or strings[1] or '') .. ''
-                        option.menu = '(' .. (option.menu or strings[2] or vim_item.menu) .. ')'
-                        if entry.source.name == 'calc' then
-                            option.kind = cmp_kinds.calc
-                            option.menu = '(' .. (strings[2] or '') .. ')'
+                            symbol_map = icons,
+                        }(entry, item)
+                        if color_item.abbr_hl_group then
+                            item.kind_hl_group = color_item.abbr_hl_group
+                            item.kind = color_item.abbr
                         end
-                        return option
+                        return item
                     end,
                 },
                 mapping = cmp.mapping.preset.insert {

@@ -51,6 +51,8 @@ local tailwindcssServer = {
     },
 }
 
+local conformOptsJs = { 'prettierd', 'prettier', stop_after_first = true }
+
 return {
     { lazy = false, 'chrisgrieser/nvim-puppeteer' },
     { 'numToStr/Comment.nvim', opts = {} },
@@ -64,23 +66,17 @@ return {
         'stevearc/conform.nvim',
         event = { 'BufWritePre' },
         cmd = { 'ConformInfo' },
-        keys = {
-            {
-                '<leader>cf',
-                function()
-                    require('conform').format { async = true, lsp_fallback = true }
-                end,
-                mode = 'n',
-                desc = '[C]ode format',
-            },
-        },
         opts = {
             notify_on_error = false,
             format_on_save = false,
+            notify_no_formatters = true,
+            default_format_opts = {
+                lsp_format = 'fallback',
+            },
             formatters_by_ft = {
                 lua = { 'stylua' },
-                javascript = { { 'prettierd', 'prettier' } },
-                typescript = { { 'prettierd', 'prettier' } },
+                javascript = conformOptsJs,
+                typescript = conformOptsJs,
             },
         },
     },
@@ -190,7 +186,7 @@ return {
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
             capabilities.textDocument.completion.completionItem.snippetSupport = true
-            capabilities.textDocument.foldingRange = { dynamicRegistration = true, lineFoldingOnly = true }
+            capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
             local language_servers = lsp.util.available_servers()
             for _, ls in ipairs(language_servers) do
                 lsp[ls].setup { capabilities = capabilities }
