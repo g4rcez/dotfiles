@@ -1,12 +1,15 @@
 local wezterm = require("wezterm")
 local Config = {}
 
-local family = 'JetBrainsMono Nerd Font Propo'
+local family = "JetBrainsMono Nerd Font"
 
 Config.font_size = 18
 Config.line_height = 1.175
-Config.font =
-    wezterm.font({ family = family, harfbuzz_features = { "calt=1", "clig=1", "liga=1" } })
+Config.font = wezterm.font({
+    family = family,
+    harfbuzz_features = { "calt=1", "clig=1", "liga=1" },
+})
+
 Config.font_rules = {
     {
         intensity = "Bold",
@@ -14,7 +17,7 @@ Config.font_rules = {
         font = wezterm.font({ family = family, weight = "Bold" }),
     },
     {
-        intensity = "Bold",
+        intensity = "Half",
         italic = true,
         font = wezterm.font({ family = family, italic = true }),
     },

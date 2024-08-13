@@ -5,22 +5,25 @@ format = """
 $status\
 ${custom.git_host}\
 $directory\
+$git_state\
+$lua\
+$nodejs\
+$package\
+$docker_context\
+$fill\
 $git_branch\
+${custom.since_last_commit}\
 $git_commit\
 $git_metrics\
 $git_status\
-${custom.since_last_commit}\
-$git_state\
-$package\
-$dotnet\
-$nodejs\
+$git_commit\
 $cmd_duration\
 $line_break\
 $character\
 """
 
 [palettes.tailwind]
-fg = "#f8fafc"
+fg = "#ffffff"
 rosewater = "#f5e0dc"
 flamingo = "#f2cdcd"
 pink = "#f5c2e7"
@@ -48,21 +51,28 @@ base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
 
+[docker_context]
+format = '[ $context](sky) '
+
+[lua]
+format = '[󰢱 $version](blue) '
+
 [package]
 disabled = false
 display_private = true
-format = ' [$symbol$version]($style) '
-symbol = " "
+format = '[$symbol$version](flamingo) '
+symbol = " "
 
 [fill]
-symbol = "_"
+style = 'green'
+symbol = " "
 disabled = false
 
 [status]
 style = 'fg:blue'
 symbol = '⚠️ '
 success_symbol = ''
-format = '$symbol$status$signal_name($style) '
+format = '$symbol$status$signal_name($style)'
 map_symbol = true
 disabled = false
 
@@ -81,33 +91,31 @@ vimcmd_symbol = "[❮](green)"
 [git_branch]
 format = '[$symbol$branch(:$remote_branch)]($style) '
 style = "white"
-symbol = ' '
+symbol = ' '
 
 [git_status]
-format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
-style = "red"
-ahead = '⇡${count}'
-behind = '⇣${count}'
-conflicted = ""
-deleted = ""
+ahead = '[⇡${count}](lavender) '
+behind = '😰 ${count}'
+conflicted = '🏳'
+deleted = '󰗨 ${count} '
 diverged = '⇕⇡${ahead_count}⇣${behind_count} '
-modified = ""
-renamed = ""
-staged = ' [+$count](green) '
-stashed = " "
-untracked = " "
-up_to_date = '[✓](green) '
+format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
+modified = '[ ${count}](peach) '
+renamed = '👅'
+staged = '[+$count](green) '
+stashed = " ${count} "
+style = "red"
+untracked = "[ ${count}](sapphire) "
+up_to_date = ''
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "fg"
-cherry_pick = '[🍒](red)'
+cherry_pick = '[🍒PICKING](red)'
 
 [git_metrics]
 disabled = false
-added_style = 'green'
-deleted_style = 'yellow'
-format = '[+$added]($added_style)|[-$deleted]($deleted_style) '
+format = '[+$added](green)|[-$deleted](maroon) '
 only_nonzero_diffs = true
 
 [cmd_duration]
@@ -119,7 +127,7 @@ min_time = 10_000
 min_time_to_notify = 1000
 
 [nodejs]
-format = '[$symbol($version)]($style)'
+format = '[$symbol($version)]($style) '
 detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
 detect_files = ['node_modules', '.yarn']
 symbol = ' '
@@ -131,7 +139,7 @@ directories = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--norc", "--noprofile"]
 style = "yellow"
-format = " [$output]($style) "
+format = "[󰚰 $output]($style) "
 command = """
 if last_commit=$(git log --pretty=format:'%at' -1 2>/dev/null); then
 now=$(date +%s)

@@ -1,6 +1,12 @@
 return {
     'nvim-tree/nvim-web-devicons',
     {
+        'folke/tokyonight.nvim',
+        lazy = false,
+        priority = 1000,
+        opts = {},
+    },
+    {
         'brenoprata10/nvim-highlight-colors',
         config = function()
             require('nvim-highlight-colors').setup {
