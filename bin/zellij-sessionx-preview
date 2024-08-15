@@ -5,6 +5,7 @@ if [[ "${1:0:3}" == "[d]" ]]; then
     DIRLS="$HOME/Documents/$SANITIZE"
     echo "$DIRLS"
     echo
+    onefetch "$DIRLS"
     lsd --git "$DIRLS"
 fi
 

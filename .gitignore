@@ -43,3 +43,4 @@ nvim/LICENSE
 *.wasm
 *.zwc
 ./config/bat/syntaxes/
+nvim/bookmarks.db.json.backup
