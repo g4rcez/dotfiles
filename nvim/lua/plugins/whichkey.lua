@@ -117,6 +117,10 @@ end
 local function transformKeymap()
     key.normal('<leader>tz', '<cmd>ZenMode<cr>', { desc = 'ZenMode' })
     key.normal('<leader>tw', '<cmd>Twilight<cr>', { desc = 'Twilight' })
+    key.visual('<leader>tm', function()
+        vim.cmd 'SnipClose'
+        vim.cmd 'SnipRun'
+    end, { desc = 'Run markdown snippet' })
     key.insert('<c-u>', '<Esc>viwUea', { desc = 'To upper case' })
     key.insert('<c-t>', '<Esc>b~lea', { desc = 'To lower case' })
 end
@@ -133,9 +137,10 @@ local function errorsKeymap()
 end
 
 local function sessionKeymap()
-    key.normal('<leader>sf', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
-    key.normal('<leader>so', '<CMD>Oil --float<CR>', { desc = '[o]il.nvim' })
-    key.normal('<leader>sr', require("persistence").load, { desc = '[r]estore session' })
+    key.normal('\\', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
+    key.normal('<leader>sf', '<CMD>Oil<CR>', { desc = 'oil.nvim' })
+    key.normal('<leader>so', '<CMD>Oil<CR>', { desc = '[o]il.nvim' })
+    key.normal('<leader>sr', require('persistence').load, { desc = '[r]estore session' })
 end
 
 local addKeymaps = function()
@@ -192,7 +197,6 @@ table.insert(M, {
             { '<leader>b', group = '[b]uffers', icon = icon 'tmux' },
             { '<leader>c', group = '[c]ode', icon = icon 'gcode' },
             { '<leader>d', group = '[d]ebug', icon = icon 'debug' },
-            { '<leader>e', group = 'n[e]o tree', icon = icon 'debug' },
             { '<leader>r', group = '[r]ename', icon = 'desktop' },
             { '<leader>m', group = '[m]ark' },
             { '<leader>R', group = '[R]equest HTTP' },

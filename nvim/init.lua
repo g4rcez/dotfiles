@@ -68,7 +68,6 @@ return require('lazy').setup {
     require 'plugins.markdown',
     require 'plugins.matchup',
     require 'plugins.mini',
-    require 'plugins.neo-tree',
     require 'plugins.noice',
     require 'plugins.oil',
     require 'plugins.others',

@@ -76,5 +76,7 @@
     "class:list",
     "cva",
     "container"
-  ]
+  ],
+  "notebook.insertFinalNewline": true,
+  "notebook.stickyScroll.enabled": true
 }

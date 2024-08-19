@@ -19,12 +19,11 @@ o.foldlevelstart = 99
 o.foldenable = true
 o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
-opt.modelines = 0
-opt.showmatch = true
 opt.autowrite = true
 opt.breakindent = true
 opt.clipboard = 'unnamedplus'
 opt.cmdheight = 0 -- hide command line unless needed
+opt.compatible = false
 opt.completeopt = 'menu,menuone,noselect'
 opt.confirm = true
 opt.cursorline = true -- Enable highlighting of the current line
@@ -35,6 +34,7 @@ opt.laststatus = 3 -- global statusline
 opt.linebreak = true -- Wrap lines at convenient points
 opt.list = true -- Show some invisible characters (tabs...
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+opt.modelines = 0
 opt.mouse = 'a' -- Enable mouse mode
 opt.number = true -- Print line number
 opt.pumblend = 10 -- Popup blend
@@ -45,6 +45,7 @@ opt.scrolloff = 4 -- Lines of context
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append { W = true, I = true, c = true, C = true }
+opt.showmatch = true
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.signcolumn = 'yes'
 opt.smartcase = true -- Don't ignore case with capitals

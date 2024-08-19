@@ -78,6 +78,7 @@
   "render-markdown": { "branch": "main", "commit": "72688baea4ef0ed605033bf654b54d801b6a5f01" },
   "render-markdown.nvim": { "branch": "main", "commit": "72688baea4ef0ed605033bf654b54d801b6a5f01" },
   "schemastore.nvim": { "branch": "main", "commit": "088105704cb799e130e2427c815a04eed71a6925" },
+  "sniprun": { "branch": "master", "commit": "a29d7b1c313b00980015ad79fa0ab512a0729940" },
   "statuscol.nvim": { "branch": "main", "commit": "93d8bcda516fc86e11c03f9ef577bae9a72fba0e" },
   "tailwindcss-colorizer-cmp.nvim": { "branch": "main", "commit": "3d3cd95e4a4135c250faf83dd5ed61b8e5502b86" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "a46780830b576049c675680650f773bedfa8677a" },
