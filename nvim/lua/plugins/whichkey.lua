@@ -109,16 +109,13 @@ local function codeKeymap()
     key.normal('g1', function()
         require('treesitter-context').go_to_context(vim.v.count1)
     end, { silent = true })
-    key.normal('<leader>cf', function()
-        require('conform').format { async = true, lsp_fallback = true }
-    end, { desc = '[c]ode format' })
+    key.normal('<leader>cf', vim.lsp.buf.format, { desc = '[c]ode format' })
 end
 
 local function transformKeymap()
     key.normal('<leader>tz', '<cmd>ZenMode<cr>', { desc = 'ZenMode' })
     key.normal('<leader>tw', '<cmd>Twilight<cr>', { desc = 'Twilight' })
     key.visual('<leader>tm', function()
-        vim.cmd 'SnipClose'
         vim.cmd 'SnipRun'
     end, { desc = 'Run markdown snippet' })
     key.insert('<c-u>', '<Esc>viwUea', { desc = 'To upper case' })
@@ -138,8 +135,8 @@ end
 
 local function sessionKeymap()
     key.normal('\\', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
-    key.normal('<leader>sf', '<CMD>Oil<CR>', { desc = 'oil.nvim' })
-    key.normal('<leader>so', '<CMD>Oil<CR>', { desc = '[o]il.nvim' })
+    key.normal('<leader>sf', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
+    key.normal('<leader>so', '<CMD>Oil --float<CR>', { desc = '[o]il.nvim' })
     key.normal('<leader>sr', require('persistence').load, { desc = '[r]estore session' })
 end
 
@@ -176,6 +173,7 @@ if vim.g.vscode then
     vscodeKeymaps()
     return M
 end
+
 table.insert(M, {
     'folke/which-key.nvim',
     event = 'VimEnter',
@@ -185,14 +183,12 @@ table.insert(M, {
         addKeymaps()
         wh.setup {
             preset = 'helix',
-            win = { border = 'rounded' },
             plugins = {
                 marks = true,
                 registers = true,
-                spelling = { enabled = true, suggestions = 20 },
+                spelling = { enabled = true, suggestions = 10 },
             },
         }
-        -- Set highlight on search, but clear on pressing <Esc> in normal mode
         wh.add({
             { '<leader>b', group = '[b]uffers', icon = icon 'tmux' },
             { '<leader>c', group = '[c]ode', icon = icon 'gcode' },
@@ -212,4 +208,5 @@ table.insert(M, {
         })
     end,
 })
+
 return M

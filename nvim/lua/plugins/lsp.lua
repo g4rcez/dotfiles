@@ -51,10 +51,8 @@ local tailwindcssServer = {
     },
 }
 
-local conformOptsJs = { 'prettierd', 'prettier', stop_after_first = true }
-
 return {
-    { lazy = false, 'chrisgrieser/nvim-puppeteer' },
+    { lazy = false,            'chrisgrieser/nvim-puppeteer' },
     { 'numToStr/Comment.nvim', opts = {} },
     {
         'olrtg/nvim-emmet',
@@ -63,31 +61,13 @@ return {
         end,
     },
     {
-        'stevearc/conform.nvim',
-        event = { 'BufWritePre' },
-        cmd = { 'ConformInfo' },
-        opts = {
-            notify_on_error = false,
-            format_on_save = false,
-            notify_no_formatters = true,
-            default_format_opts = {
-                lsp_format = 'fallback',
-            },
-            formatters_by_ft = {
-                lua = { 'stylua' },
-                javascript = conformOptsJs,
-                typescript = conformOptsJs,
-            },
-        },
-    },
-    {
         'neovim/nvim-lspconfig',
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'WhoIsSethDaniel/mason-tool-installer.nvim',
             { 'williamboman/mason.nvim', config = true },
-            { 'Bilal2453/luvit-meta', lazy = true },
-            { 'j-hui/fidget.nvim', opts = {} },
+            { 'Bilal2453/luvit-meta',    lazy = true },
+            { 'j-hui/fidget.nvim',       opts = {} },
             {
                 'folke/lazydev.nvim',
                 ft = 'lua',
@@ -143,7 +123,8 @@ return {
                     -- When you move your cursor, the highlights will be cleared (the second autocommand).
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight',
+                            { clear = false })
                         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
                             buffer = event.buf,
                             group = highlight_augroup,
@@ -221,6 +202,56 @@ return {
                 },
             }
             lsp.emmet_language_server.setup { capabilities = capabilities, flags = lsp_flags }
+        end,
+    },
+    {
+        'nvimtools/none-ls.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            local c = require 'null-ls'
+            c.setup {
+                sources = {
+                    c.builtins.code_actions.impl,
+                    c.builtins.code_actions.refactoring,
+                    c.builtins.code_actions.ts_node_action,
+                    c.builtins.completion.luasnip,
+                    c.builtins.completion.spell,
+                    c.builtins.diagnostics.actionlint,
+                    c.builtins.diagnostics.codespell,
+                    c.builtins.diagnostics.editorconfig_checker,
+                    c.builtins.diagnostics.markdownlint,
+                    c.builtins.diagnostics.semgrep,
+                    c.builtins.diagnostics.spectral,
+                    c.builtins.diagnostics.sqlfluff.with { extra_args = { '--dialect', 'postgres' } },
+                    c.builtins.formatting.rustywind,
+                    c.builtins.formatting.shellharden,
+                    c.builtins.formatting.shfmt,
+                    c.builtins.formatting.stylua,
+                    c.builtins.formatting.prettier.with {
+                        filetypes = {
+                            'javascript',
+                            'javascriptreact',
+                            'typescript',
+                            'typescriptreact',
+                            'vue',
+                            'css',
+                            'scss',
+                            'less',
+                            'html',
+                            'json',
+                            'jsonc',
+                            'yaml',
+                            'markdown',
+                            'markdown.mdx',
+                            'graphql',
+                            'handlebars',
+                            'svelte',
+                            'astro',
+                            'htmlangular',
+                        },
+                    },
+                },
+            }
         end,
     },
 }

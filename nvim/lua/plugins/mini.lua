@@ -16,18 +16,25 @@ return {
         require('mini.surround').setup()
         require('mini.pairs').setup()
         require('mini.comment').setup()
-
+        require('mini.move').setup {
+            mappings = {
+                left = '<M-h>',
+                right = '<M-l>',
+                down = '<M-j>',
+                up = '<M-k>',
+                line_left = '<M-h>',
+                line_right = '<M-l>',
+                line_down = '<M-j>',
+                line_up = '<M-k>',
+            },
+            options = { reindent_linewise = true }
+        }
         require('mini.indentscope').setup {
             draw = {
                 symbol = '|',
-                options = {
-                    border = 'both',
-                    indent_at_cursor = true,
-                    try_as_border = false,
-                },
+                options = { border = 'both', indent_at_cursor = true, try_as_border = true },
             },
         }
-
         local hipatterns = require 'mini.hipatterns'
         hipatterns.setup {
             highlighters = {
