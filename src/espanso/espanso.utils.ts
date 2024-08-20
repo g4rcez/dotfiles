@@ -12,6 +12,8 @@ export const _ = "~/dotfiles";
 
 export const node = "$(mise where node)/bin/node";
 
+export const tsx = "$(mise where node)/bin/tsx";
+
 const commander = (s: string) => `;${s}` as const;
 
 export const t = (key: Trigger): EspansoTrigger =>
@@ -19,17 +21,37 @@ export const t = (key: Trigger): EspansoTrigger =>
 
 export const k = (key: Trigger): string => (Array.isArray(key) ? key[0] : key);
 
-export type Trigger = string | string[];
+export type Trigger = string;
 
 export const triggers = {
-    c: (key: Trigger, name: string, syntax: string): EspansoVarReplacer => ({
+    clipboard: (
+        key: Trigger,
+        name: string,
+        syntax: string,
+    ): EspansoVarReplacer => ({
         trigger: t(key),
         replace: syntax,
         vars: [{ name, type: "clipboard" }],
     }),
-    i: (key: Trigger, syntax: string): EspansoVarReplacer => ({
+    insert: (key: Trigger, syntax: string): EspansoVarReplacer => ({
         trigger: t(key),
         replace: syntax,
+    }),
+    form: (key: string, replace: string, cmd: string): EspansoVarReplacer => ({
+        trigger: t(key),
+        replace,
+        vars: [
+            {
+                name: "form",
+                type: "form",
+                params: { layout: "[[input]]" },
+            },
+            {
+                name: k(key),
+                type: "shell",
+                params: { shell: "bash", cmd },
+            },
+        ],
     }),
     $: (key: Trigger, cmd: string, capture?: Trigger): EspansoVarReplacer => ({
         [capture ? "regex" : "trigger"]: capture ? t(capture) : t(key),
@@ -42,7 +64,7 @@ export const triggers = {
             },
         ],
     }),
-    r: (key: Trigger, choices: string[]): EspansoVarReplacer => ({
+    random: (key: Trigger, choices: string[]): EspansoVarReplacer => ({
         trigger: t(key),
         replace: `{{${key}}}`,
         vars: [
@@ -53,7 +75,7 @@ export const triggers = {
             },
         ],
     }),
-    n: (
+    format: (
         key: Trigger,
         type: EspansoType,
         format: string,

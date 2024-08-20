@@ -1,14 +1,14 @@
 import { home } from "../utils";
-import { _, imports, node, stringify, triggers } from "./espanso.utils";
+import { _, imports, node, stringify, triggers, tsx } from "./espanso.utils";
 
 const simpleTriggers = [
-    triggers.n("isodate", "date", "%Y-%m-%dT%H:%M:%S"),
-    triggers.n("date", "date", "%d/%m/%Y"),
-    triggers.n("time", "date", "%H:%M"),
-    triggers.i("youtube", "https://www.youtube.com/@allangarcez"),
-    triggers.i("blog", "https://garcez.dev"),
-    triggers.i("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
-    triggers.c("mdl", "link", "[$|$]({{link}})"),
+    triggers.format("isodate", "date", "%Y-%m-%dT%H:%M:%S"),
+    triggers.format("date", "date", "%d/%m/%Y"),
+    triggers.format("time", "date", "%H:%M"),
+    triggers.insert("youtube", "https://www.youtube.com/@allangarcez"),
+    triggers.insert("blog", "https://garcez.dev"),
+    triggers.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
+    triggers.clipboard("mdl", "link", "[$|$]({{link}})"),
     triggers.$(
         "pass",
         `${node} ${_}/bin/password $ESPANSO_N`,
@@ -17,6 +17,9 @@ const simpleTriggers = [
     triggers.$("cellphone", `${node} ${_}/bin/phone cellphone`),
     triggers.$("telephone", `${node} ${_}/bin/phone telephone`),
     triggers.$("email", `${node} ${_}/bin/email`),
+    triggers.form("hex", "{{hex}}", `${tsx} ${_}/bin/colors.ts hex "{{form.input}}"`),
+    triggers.form("hsl", "{{hsl}}", `${tsx} ${_}/bin/colors.ts hsl "{{form.input}}"`),
+    triggers.form("rgb", "{{rgb}}", `${tsx} ${_}/bin/colors.ts rgb "{{form.input}}"`),
 ];
 
 const shellTriggers = [
@@ -35,7 +38,7 @@ const shellTriggers = [
 ];
 
 const randomTriggers = [
-    triggers.r("cep", [
+    triggers.random("cep", [
         "04538-133",
         "04543-907",
         "21530-014",
@@ -45,7 +48,7 @@ const randomTriggers = [
         "30260-070",
         "70040-010",
     ]),
-    triggers.r("lorem", [
+    triggers.random("lorem", [
         "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.",
         "Curabitur blandit tempus ardua ridiculus sed magna.",
         "Inmensae subtilitatis, obscuris et malesuada fames.",

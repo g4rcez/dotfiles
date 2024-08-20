@@ -546,6 +546,7 @@ export type RectangleActions =
     | "prev-space";
 
 export type EspansoType =
+    | "form"
     | "date"
     | "choice"
     | "clipboard"
@@ -564,20 +565,20 @@ export type EspansoTrigger =
 export type EspansoVarReplacer = {
     trigger?: EspansoTrigger;
     regex?: string;
-    replace: `{{${string}}}` | string;
-    vars?: [
-        {
-            name: string;
-            type: EspansoType;
-            params?: Partial<{
-                shell: EspansoShell;
-                cmd: string | string[];
-                format: string;
-                choices: string[];
-                locale: string;
-                echo: string;
-                values: Array<string | { label: string; id: string }>;
-            }>;
-        },
-    ];
+    replace?: `{{${string}}}` | string;
+    form?: string;
+    vars?: Array<{
+        name: string;
+        type: EspansoType;
+        params?: Partial<{
+            layout: string;
+            shell: EspansoShell;
+            cmd: string | string[];
+            format: string;
+            choices: string[];
+            locale: string;
+            echo: string;
+            values: Array<string | { label: string; id: string }>;
+        }>;
+    }>;
 };
