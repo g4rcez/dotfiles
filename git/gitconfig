@@ -1,139 +1,137 @@
 [commit]
-	gpgsign = true
-	template = ~/dotfiles/git/gitmessage
+    gpgsign = true
+    template = ~/dotfiles/git/gitmessage
 
 [github]
   user = g4rcez
 
 [user]
-	name = g4rcez
-	email = allan.f.garcez@gmail.com
-	signingkey = 54F46BAA2465C272
+    name = g4rcez
+    email = allan.f.garcez@gmail.com
+    signingkey = 7CC6F296AB5AA7A5EE9C18EF54F46BAA2465C272
 
 [core]
-  pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
-  excludesFile = ~/dotfiles/git/global_gitignore
-  ignoreCase = false
+    pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
+    excludesFile = ~/dotfiles/git/global_gitignore
+    ignoreCase = false
 
 [apply]
-  whitespace = fix
-
+    whitespace = fix
 [grep]
-  lineNumber = true
+    lineNumber = true
 
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [branch]
-  sort = -committerdate
+    sort = -committerdate
 
 [color]
-  ui = true
+    ui = true
 
 [pull]
     rebase = true
 
 [rebase]
-	autoStash = true
+    autoStash = true
 
 [gist]
-  private = yes
+    private = yes
 
 [log]
-  decorate = short
+    decorate = short
 
 [fetch]
-  prune = true
-  output = compact
+    prune = true
+    output = compact
 
 [help]
-    # Automatically correct and execute mistyped commands.
-	autocorrect = prompt
+    autocorrect = prompt
 
 [merge]
-  log = true
-  conflictstyle = diff3
+    log = true
+    conflictstyle = diff3
 
 [interactive]
-  diffFilter = delta --color-only --features=interactive
+    diffFilter = delta --color-only --features=interactive
 
 [delta]
-  dark = true
-  features = decorations
-  hyperlinks = true
-  hyperlinks-file-link-format = "vscode://file/{path}:{line}"
-  line-numbers = true
-  navigate = true
-  side-by-side = true
-  true-color = always
+    dark = true
+    features = decorations
+    hyperlinks = true
+    hyperlinks-file-link-format = "vscode://file/{path}:{line}"
+    line-numbers = true
+    navigate = true
+    side-by-side = true
+    true-color = always
 
 [delta "interactive"]
-  keep-plus-minus-markers = false
+    keep-plus-minus-markers = false
 
 [delta "decorations"]
-  file-style = omit
-  hunk-header-style = file line-number syntax
+    file-style = omit
+    hunk-header-style = file line-number syntax
 
 [gpg]
     program = /usr/local/bin/gpg
 
 [diff]
-	colorMoved = default
-	tool = delta
+    colorMoved = default
+    tool = delta
 
 [gpg "ssh"]
-	allowedSignersFile = ~/.ssh/allowed_signers
+    allowedSignersFile = ~/.ssh/allowed_signers
 
 [push]
-  autoSetupRemove = true
-	autoSetupRemote = true
+    autoSetupRemote = true
+    autoSetupRemove = true
 
 [alias]
-  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-  s = status -s
-  shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
-  alias = config --get-regexp alias
-  # Interactive rebase with the given number of latest commits.
-  reb = "!r() { git rebase -i HEAD~$1; }; r"
-  tag = "tag -s"
-  # Find commits by source code
-  fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-  # Find commits by commit message
-  fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-  # Remove branches that have already been merged with main.
-  # a.k.a. ‘delete merged’
-  bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-  # List contributors with number of commits.
-  contributors = shortlog --summary --numbered
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    s = status -s
+    shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+    alias = config --get-regexp alias
+# Interactive rebase with the given number of latest commits.
+    reb = "!r() { git rebase -i HEAD~$1; }; r"
+    tag = "tag -s"
+# Find commits by source code
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+# Find commits by commit message
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+# Remove branches that have already been merged with main.
+# a.k.a. ‘delete merged’
+    bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+# List contributors with number of commits.
+    contributors = shortlog --summary --numbered
 
 [delta "catppuccin-mocha"]
-	blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
-	commit-decoration-style = "box ul"
-	dark = true
-	file-decoration-style = "#cdd6f4"
-	file-style = "#cdd6f4"
-	hunk-header-decoration-style = "box ul"
-	hunk-header-file-style = "bold"
-	hunk-header-line-number-style = "bold #a6adc8"
-	hunk-header-style = "file line-number syntax"
-	line-numbers = true
-	line-numbers-left-style = "#6c7086"
-	line-numbers-minus-style = "bold #f38ba8"
-	line-numbers-plus-style = "bold #a6e3a1"
-	line-numbers-right-style = "#6c7086"
-	line-numbers-zero-style = "#6c7086"
-	# 25% red 75% base
-	minus-emph-style = "bold syntax #53394c"
-	# 10% red 90% base
-	minus-style = "syntax #35293b"
-	# 25% green 75% base
-	plus-emph-style = "bold syntax #40504b"
-	# 10% green 90% base
-	plus-style = "syntax #2c333a"
-	map-styles = \
-		bold purple => syntax "#494060", \
-		bold blue => syntax "#394361", \
-		bold cyan => syntax "#384d5e", \
-		bold yellow => syntax "#544f4e"
-	# Should match the name of the bat theme
-	syntax-theme = "Catppuccin Mocha"
+    blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
+    commit-decoration-style = "box ul"
+    dark = true
+    file-decoration-style = "#cdd6f4"
+    file-style = "#cdd6f4"
+    hunk-header-decoration-style = "box ul"
+    hunk-header-file-style = "bold"
+    hunk-header-line-number-style = "bold #a6adc8"
+    hunk-header-style = "file line-number syntax"
+    line-numbers = true
+    line-numbers-left-style = "#6c7086"
+    line-numbers-minus-style = "bold #f38ba8"
+    line-numbers-plus-style = "bold #a6e3a1"
+    line-numbers-right-style = "#6c7086"
+    line-numbers-zero-style = "#6c7086"
+# 25% red 75% base
+    minus-emph-style = "bold syntax #53394c"
+# 10% red 90% base
+    minus-style = "syntax #35293b"
+# 25% green 75% base
+    plus-emph-style = "bold syntax #40504b"
+# 10% green 90% base
+    plus-style = "syntax #2c333a"
+    map-styles = \
+        bold purple => syntax "#494060", \
+        bold blue => syntax "#394361", \
+        bold cyan => syntax "#384d5e", \
+        bold yellow => syntax "#544f4e"
+    syntax-theme = "Catppuccin Mocha"
+

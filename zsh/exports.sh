@@ -17,6 +17,9 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export LC_COLLATE=C
 export MANPATH="/usr/local/man:$MANPATH"
+if [ -x "$(command -v colima)" ]; then
+    export DOCKER_HOST="unix://${HOME}/.config/colima/default/docker.sock"
+fi
 
 #####################################################################################
 ## ZELLIJ_CONFIG

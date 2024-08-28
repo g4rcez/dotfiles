@@ -174,7 +174,7 @@ return {
         event = 'InsertEnter',
         dependencies = {
             'f3fora/cmp-spell',
-            'hrsh7th/cmp-buffer',
+            -- 'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-calc',
             'hrsh7th/cmp-cmdline',
             'hrsh7th/cmp-emoji',
@@ -202,10 +202,10 @@ return {
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
             luasnip.config.setup {}
-            require('luasnip.loaders.from_vscode').lazy_load()
-            require('luasnip.loaders.from_snipmate').lazy_load()
-            require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }
-            luasnip.filetype_extend('typescriptreact', { 'html' })
+            -- require('luasnip.loaders.from_vscode').lazy_load()
+            -- require('luasnip.loaders.from_snipmate').lazy_load()
+            -- require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }
+            -- luasnip.filetype_extend('typescriptreact', { 'html' })
             -- cmp-vscode-like
             vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
             vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
@@ -252,18 +252,18 @@ return {
             vim.api.nvim_set_hl(0, 'CmpItemKindColor', { fg = '#58B5A8' })
             vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', { fg = '#58B5A8' })
             vim.api.nvim_set_hl(0, 'CmpGhostText', { link = 'Comment', default = true })
-            local defaults = require 'cmp.config.default'()
+            cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
             cmp.setup {
+                performance = { debounce = 0, throttle = 0 },
                 auto_brackets = {},
                 view = { entries = 'bordered' },
                 experimental = { ghost_text = { hl_group = 'CmpGhostText' } },
-                completion = { completeopt = 'menu,menuone,noinsert,noselect' },
-                sorting = defaults.sorting,
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
+                completion = { completeopt = 'menu,menuone,preview,noselect' },
+                -- snippet = {
+                --     expand = function(args)
+                --         luasnip.lsp_expand(args.body)
+                --     end,
+                -- },
                 window = {
                     completion = cmp.config.window.bordered {
                         col_offset = -3,
@@ -273,31 +273,16 @@ return {
                     documentation = cmp.config.window.bordered { winhighlight = 'Normal:Normal,FloatBorder:LspBorderBG,CursorLine:PmenuSel,Search:None' },
                 },
                 sources = {
-                    {
-                        name = 'nvim_lsp',
-                        entry_filter = function(entry, ctx)
-                            local kind = require('cmp.types.lsp').CompletionItemKind[entry:get_kind()]
-                            if ctx.prev_context.filetype == 'markdown' then
-                                return true
-                            end
-                            if kind == 'Text' then
-                                return false
-                            end
-                            return true
-                        end,
-                    },
-                    { name = 'nvim_lsp_signature_help' },
-                    { name = 'buffer' },
-                    { name = 'path' },
+                    { name = 'nvim_lsp',                group_index = 1,   priority = 1000000000 },
+                    { name = 'nvim_lsp_signature_help', group_index = 1,   priority = 1000000000 },
                     { name = 'calc' },
-                    { name = 'luasnip' },
-                    { name = 'spell' },
-                    { name = 'cody' },
                     { name = 'lazydev' },
                     { name = 'nvim_lua' },
-                    { name = 'emoji' },
+                    { name = 'path' },
+                    { name = 'luasnip',                 keyword_length = 3 },
+                    { name = 'spell' },
+                    { name = 'buffer',                  keyword_length = 3, priority = -1000000000 },
                 },
-                -- cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
                 formatting = {
                     fields = { 'kind', 'abbr', 'menu' },
                     expandable_indicator = true,
@@ -315,7 +300,7 @@ return {
                         item = require('lspkind').cmp_format {
                             mode = 'symbol_text',
                             symbol_map = icons,
-                        }(entry, item)
+                        } (entry, item)
                         if color_item.abbr_hl_group then
                             item.kind_hl_group = color_item.abbr_hl_group
                             item.kind = color_item.abbr

@@ -78,5 +78,8 @@
     "container"
   ],
   "notebook.insertFinalNewline": true,
-  "notebook.stickyScroll.enabled": true
+  "notebook.stickyScroll.enabled": true,
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
