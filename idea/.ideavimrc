@@ -277,8 +277,8 @@ let g:WhichKeyDesc_Breakpoint = "<leader>db Toggle Line Breakpoint"
 "" code tools - prefix c(code)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
-nmap <leader><leader> <action>(SearchEverywhere)
-let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> SearchEverywhere"
+nmap <leader><leader> <action>(GotoFile)
+let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> GotoFile"
 
 nmap <leader>ca <action>(CodeEditorViewGroup)
 let g:WhichKeyDesc_reformat_code = "<leader>ca CodeEditorViewGroup"

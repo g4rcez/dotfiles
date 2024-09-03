@@ -44,3 +44,4 @@ nvim/LICENSE
 *.zwc
 ./config/bat/syntaxes/
 nvim/bookmarks.db.json.backup
+custom-nvim/bookmarks.db.json.backup
