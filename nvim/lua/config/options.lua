@@ -11,10 +11,6 @@ g.mapleader = " "
 g.maplocalleader = " "
 g.have_nerd_font = true
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-
--- [[ Setting options ]]
-
 -- Minimal number of screen lines to keep above and below the cursor.
 o.foldcolumn = "1" -- '0' is not bad
 o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -33,18 +29,17 @@ opt.cursorline = true -- Enable highlighting of the current line
 opt.expandtab = true -- Use spaces instead of tabs
 opt.ignorecase = true
 opt.inccommand = "split"
-opt.laststatus = 3 -- global statusline
+opt.laststatus = 5 -- global statusline
 opt.linebreak = true -- Wrap lines at convenient points
 opt.list = true -- Show some invisible characters (tabs...
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 opt.modelines = 0
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
-opt.pumblend = 10 -- Popup blend
+opt.pumblend = 2 -- Popup blend
 opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = true
 opt.scrolloff = 10
-opt.scrolloff = 4 -- Lines of context
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })

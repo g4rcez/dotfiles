@@ -85,8 +85,6 @@ keybinds clear-defaults=true {
         bind "Alt s" { SwitchToMode "Search"; }
         bind "Alt f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "Alt g" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-        bind "Ctrl f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
-        bind "Ctrl t" { NewTab; }
         bind "Alt ;" { EditScrollback; }
         bind "Alt [" {
             LaunchOrFocusPlugin "zellij:session-manager" {

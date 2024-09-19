@@ -6,7 +6,7 @@ return {
   {
     "Wansmer/treesj",
     keys = { { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" } },
-    opts = { use_default_keymaps = false, max_join_length = 150 },
+    opts = { use_default_keymaps = false, max_join_length = 180 },
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -43,6 +43,29 @@ return {
   },
   { "folke/twilight.nvim", opts = {} },
   {
+    "folke/noice.nvim",
+    enabled = false,
+    opts = {
+      notify = { enabled = true, view = "notify" },
+      messages = {
+        enabled = false,
+        view = "notify",
+        view_error = "notify",
+        view_warn = "notify",
+        view_history = "messages",
+        view_search = "virtualtext",
+      },
+      lsp = {
+        override = {
+          ["cmp.entry.get_documentation"] = true,
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+        },
+      },
+      presets = { lsp_doc_border = true },
+    },
+  },
+  {
     "folke/zen-mode.nvim",
     opts = {
       plugins = {
@@ -50,5 +73,4 @@ return {
       },
     },
   },
-  { "Fildo7525/pretty_hover", event = "LspAttach", opts = {} },
 }

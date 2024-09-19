@@ -1,0 +1,77 @@
+{
+    "Print to console": {
+        "scope": "javascript,typescript,typescriptreact,javascriptreact",
+        "prefix": "clg",
+        "body": [
+            "console.log($0)"
+        ],
+        "description": "Log output to console"
+    },
+    "Print JSON": {
+        "scope": "javascript,typescript,typescriptreact,javascriptreact",
+        "prefix": "clgj",
+        "body": [
+            "console.log(JSON.stringify($0, null, 2))"
+        ],
+        "description": "Log output to console in JSON format"
+    },
+    "Named import": {
+        "scope": "javascript,typescript,typescriptreact,javascriptreact",
+        "prefix": "inm",
+        "body": [
+            "import { $0 } from \"$1\";"
+        ],
+        "description": "Named import"
+    },
+    "Default import": {
+        "scope": "javascript,typescript,typescriptreact,javascriptreact",
+        "prefix": "imp",
+        "body": [
+            "import ${1/(.*)/${1:/capitalize}/} from \"$1\";"
+        ],
+        "description": "Default import"
+    },
+    "Dict of": {
+        "scope": "typescript,typescriptreact",
+        "prefix": "dictt",
+        "body": [
+            "type $1 = {",
+            "\t[k in keyof $2]: $0",
+            "}"
+        ],
+        "description": "Create a dictionary from keyof Type"
+    },
+    "Interval": {
+        "scope": "typescript,typescriptreact,javascriptreact,typescriptreact",
+        "prefix": "interval",
+        "body": [
+            "setInterval(() => $0, $1)"
+        ],
+        "description": "Create a setInterval function"
+    },
+    "Timeout": {
+        "scope": "typescript,typescriptreact,javascriptreact,typescriptreact",
+        "prefix": "timeout",
+        "body": [
+            "setTimeout(() => $0, $1)"
+        ],
+        "description": "Create a setTimeout function"
+    },
+    "Promise": {
+        "prefix": "prm",
+        "body": [
+            "new Promise(async (res, rej) => {",
+            "\t$0",
+            "})",
+            ""
+        ],
+        "description": "Create a new Promise"
+    },
+    "Sleep": {
+        "prefix": "slp",
+        "body": [
+            "new Promise((res) => setInterval(res, $0)"
+        ],
+        "description": "Create a sleep function with new Promise"
+    }
+}

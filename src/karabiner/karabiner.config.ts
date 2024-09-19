@@ -1,18 +1,16 @@
-import { KarabinerRule, Conditions, Manipulator } from "../types";
-import { createLeaderLayers } from "./leader-layers";
+import { KarabinerRule, Manipulator } from "../types";
 import {
-    app,
     appInstance,
     browser,
     createHyperSubLayers,
     dotfile,
-    execMultipleTo,
     karabinerNotify,
     open,
     rectangle,
     shell,
     vim,
 } from "../utils";
+import { createLeaderLayers } from "./leader-layers";
 
 const modKeys = createHyperSubLayers({
     slash: open(
@@ -71,6 +69,7 @@ const withLeaderKeys = createLeaderLayers({
         backslash: rectangle("right-half"),
         return_or_enter: appInstance("Wezterm"),
     },
+    m: {},
     n: {
         description: "Notion layer",
         n: open(

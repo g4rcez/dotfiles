@@ -8,6 +8,10 @@ const simpleTriggers = [
     triggers.insert("youtube", "https://www.youtube.com/@allangarcez"),
     triggers.insert("blog", "https://garcez.dev"),
     triggers.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
+    triggers.insert(
+        "tnc",
+        "$|$\n\u2026\u2026..\u2026..\/\u00B4\u00AF\/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026\/\u2026.\/\/\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026..\/\u2026.\/\/\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026..\/\u00B4\u00AF\/\u2026.\/\u00B4\u00AF\\\u2026\u2026\u2026..\/\u00AF `\\\u2026.\\\u00AF`\\\r\n..\/.\/\u2026\/\u2026.\/\u2026.\/.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026.\/.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\\/\u2026\/\u2026.\\. ..\\\/\u2026\u2026\u2026"
+    ),
     triggers.clipboard("mdl", "link", "[$|$]({{link}})"),
     triggers.$(
         "pass",
@@ -17,9 +21,21 @@ const simpleTriggers = [
     triggers.$("cellphone", `${node} ${_}/bin/phone cellphone`),
     triggers.$("telephone", `${node} ${_}/bin/phone telephone`),
     triggers.$("email", `${node} ${_}/bin/email`),
-    triggers.form("hex", "{{hex}}", `${tsx} ${_}/bin/colors.ts hex "{{form.input}}"`),
-    triggers.form("hsl", "{{hsl}}", `${tsx} ${_}/bin/colors.ts hsl "{{form.input}}"`),
-    triggers.form("rgb", "{{rgb}}", `${tsx} ${_}/bin/colors.ts rgb "{{form.input}}"`),
+    triggers.form(
+        "hex",
+        "{{hex}}",
+        `${tsx} ${_}/bin/colors.ts hex "{{form.input}}"`,
+    ),
+    triggers.form(
+        "hsl",
+        "{{hsl}}",
+        `${tsx} ${_}/bin/colors.ts hsl "{{form.input}}"`,
+    ),
+    triggers.form(
+        "rgb",
+        "{{rgb}}",
+        `${tsx} ${_}/bin/colors.ts rgb "{{form.input}}"`,
+    ),
 ];
 
 const shellTriggers = [
@@ -75,3 +91,4 @@ export const createEspansoConfig = () => {
     };
     return stringify(config);
 };
+

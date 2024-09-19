@@ -18,7 +18,7 @@ export LC_ALL="en_US.UTF-8"
 export LC_COLLATE=C
 export MANPATH="/usr/local/man:$MANPATH"
 if [ -x "$(command -v colima)" ]; then
-    export DOCKER_HOST="unix://${HOME}/.config/colima/default/docker.sock"
+    export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
 fi
 
 #####################################################################################

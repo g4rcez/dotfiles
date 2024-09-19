@@ -81,6 +81,8 @@ local function buffersAndBookmarks()
     "<cmd>BookmarksGotoRecent<cr>",
     { desc = "Go to latest visited/created Bookmark" }
   )
+
+  vim.keymap.set({ "v", "n" }, "<C-n>", "<cmd>MCstart<cr>", { desc = "Multicursor" })
 end
 
 local function codeKeymap()
@@ -93,6 +95,7 @@ local function codeKeymap()
 end
 
 local function transformKeymap()
+  key.normal("<leader>tl", "<cmd>set wrap<cr>", { desc = "Set wrap mode" })
   key.normal("<leader>tz", "<cmd>ZenMode<cr>", { desc = "ZenMode" })
   key.normal("<leader>tw", "<cmd>Twilight<cr>", { desc = "Twilight" })
   key.visual("<leader>tm", function()
@@ -149,7 +152,6 @@ local vscodeKeymaps = function()
 end
 
 if vim.g.vscode then
-  commonKeymaps()
   vscodeKeymaps()
   return M
 end

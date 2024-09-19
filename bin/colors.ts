@@ -62,5 +62,5 @@ const normalize = (id: ColorId, mode: string, color: string) => {
 const [mode, arg] = process.argv.slice(2);
 
 const color = normalize(identify(arg), mode, arg);
-//
+
 console.log(formatters[mode](...color));
