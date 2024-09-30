@@ -28,8 +28,8 @@ plugins {
 
 themes {
     mytheme {
-        bg "#09090b"
-        fg "#1f2937"
+        bg "#11111b"
+        fg "#313244"
         red "#991b1b"
         green "#89B4FA"
         blue "#1e40af"
@@ -38,7 +38,7 @@ themes {
         orange "#c2410c"
         cyan "#0e7490"
         black "#181825"
-        white "#d0d0d0"
+        white "#cdd6f4"
     }
 }
 
