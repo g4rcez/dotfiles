@@ -44,7 +44,8 @@ return {
   { "folke/twilight.nvim", opts = {} },
   {
     "folke/noice.nvim",
-    enabled = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
+    enabled = true,
     opts = {
       notify = { enabled = true, view = "notify" },
       messages = {
@@ -62,7 +63,13 @@ return {
           ["vim.lsp.util.stylize_markdown"] = true,
         },
       },
-      presets = { lsp_doc_border = true },
+      presets = {
+        lsp_doc_border = true,
+        bottom_search = false,
+        command_palette = true,
+        long_message_to_split = true,
+        inc_rename = true,
+      },
     },
   },
   {

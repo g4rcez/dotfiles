@@ -1,12 +1,7 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
 local opt = vim.opt
 local o = vim.o
 local g = vim.g
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
+
 g.mapleader = " "
 g.maplocalleader = " "
 g.have_nerd_font = true
@@ -24,6 +19,7 @@ opt.clipboard = "unnamedplus"
 opt.cmdheight = 0 -- hide command line unless needed
 opt.compatible = false
 opt.completeopt = "menu,menuone,noselect"
+opt.conceallevel = 0
 opt.confirm = true
 opt.cursorline = true -- Enable highlighting of the current line
 opt.expandtab = true -- Use spaces instead of tabs
@@ -37,6 +33,7 @@ opt.modelines = 0
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
 opt.pumblend = 2 -- Popup blend
+opt.pumheight = 10
 opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = true
 opt.scrolloff = 10
@@ -74,5 +71,4 @@ opt.wildignore:append(".,..")
 -- lazy
 -- LazyVim auto format
 vim.g.autoformat = false
-vim.g.lazyvim_picker = "telescope"
 vim.g.lazyvim_prettier_needs_config = false

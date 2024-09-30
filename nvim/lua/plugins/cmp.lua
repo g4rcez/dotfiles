@@ -6,15 +6,26 @@ return {
     end,
   },
   {
+    {
+      "brunotvs/cmp-conventionalcommits",
+      dependencies = { "hrsh7th/nvim-cmp", lazy = true },
+      setup = function()
+        require("cmp").setup.buffer({
+          sources = require("cmp").config.sources({ { name = "conventionalcommits" } }, { { name = "buffer" } }),
+        })
+      end,
+    },
+  },
+  {
     "hrsh7th/nvim-cmp",
     version = false, -- last release is way too old
     event = "InsertEnter",
     dependencies = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-calc",
+      "hrsh7th/cmp-cmdline",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-path",
       "hrsh7th/cmp-path",
       "onsails/lspkind.nvim",
     },
@@ -23,6 +34,28 @@ return {
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
       local auto_select = true
+
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!" },
+            },
+          },
+        }),
+      })
+
       vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
       vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { link = "CmpIntemAbbrMatch" })
       vim.api.nvim_set_hl(0, "CmpItemKindInterface", { link = "CmpItemKindVariable" })

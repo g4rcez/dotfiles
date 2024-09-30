@@ -1,35 +1,11 @@
 return {
-  {
-    "stevearc/dressing.nvim",
-    opts = {
-      input = {
-        border = "rounded",
-        relative = "cursor",
-        win_options = { winhighlight = "NormalFloat:DiagnosticError" },
-      },
-      select = {
-        backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
-      },
-    },
-  },
-  "nvim-tree/nvim-web-devicons",
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "catppuccin",
-    },
-  },
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
-  },
+  { "nvim-tree/nvim-web-devicons" },
+  { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
+  { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {} },
   {
     "brenoprata10/nvim-highlight-colors",
     config = function()
       require("nvim-highlight-colors").setup({
-        ---@usage 'background'|'foreground'|'virtual'
         render = "background",
         virtual_symbol = "■",
         virtual_symbol_prefix = "",

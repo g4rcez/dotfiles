@@ -1,6 +1,67 @@
-local layoutConfig = { mirror = false, preview_width = 0.65, size = { width = 0.9, height = 0.9 } }
+local layoutConfig = { mirror = false, preview_width = 0.65, size = { width = 1, height = 0.9 } }
+
+-- Credits to telescope buffer builtin, some code taken from it
+-- Src: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/internal.lua
+
+local pickers = require("telescope.pickers")
+local finders = require("telescope.finders")
+
+local conf = require("telescope.config").values
+local actions = require("telescope.actions")
+local make_entry = require("telescope.make_entry")
+local action_state = require("telescope.actions.state")
+
+local function wrapper()
+  local term_bufs = vim.g.nvchad_terms or {}
+  local buffers = {}
+
+  for buf, _ in pairs(term_bufs) do
+    buf = tonumber(buf)
+    local element = { bufnr = buf, flag = "", info = vim.fn.getbufinfo(buf)[1] }
+    table.insert(buffers, element)
+  end
+
+  local bufnrs = vim.tbl_keys(term_bufs)
+
+  if #bufnrs == 0 then
+    print("no terminal buffers are opened/hidden!")
+    return
+  end
+
+  local opts = { bufnr_width = math.max(unpack(bufnrs)) }
+
+  local picker = pickers.new({
+    prompt_title = " Pick Term",
+    previewer = conf.grep_previewer(opts),
+    finder = finders.new_table({
+      results = buffers,
+      entry_maker = make_entry.gen_from_buffer(opts),
+    }),
+    sorter = conf.generic_sorter(),
+
+    attach_mappings = function(prompt_bufnr)
+      actions.select_default:replace(function()
+        local entry = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+
+        -- open term only if its window isnt opened
+        if vim.fn.bufwinid(entry.bufnr) == -1 then
+          local termopts = vim.g.nvchad_terms[tostring(entry.bufnr)]
+          require("nvchad.term").display(termopts)
+        end
+      end)
+      return true
+    end,
+  })
+
+  picker:find()
+end
 
 return {
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+  },
   {
     "piersolenski/telescope-import.nvim",
     dependencies = "nvim-telescope/telescope.nvim",
@@ -14,10 +75,8 @@ return {
     event = "VimEnter",
     dependencies = {
       { "debugloop/telescope-undo.nvim" },
-      { "ibhagwan/fzf-lua" },
       { "nvim-lua/plenary.nvim" },
       { "nvim-telescope/telescope-file-browser.nvim" },
-      { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable("make") == 1, build = "make" },
       { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-tree/nvim-web-devicons", enabled = true },
     },
@@ -136,9 +195,9 @@ return {
       })
       pcall(telescope.load_extension, "fzf")
       pcall(telescope.load_extension, "file_browser")
-      pcall(telescope.load_extension("aerial"))
       pcall(telescope.load_extension, "ui-select")
       pcall(telescope.load_extension, "import")
+      telescope.register_extension({ exports = { terms = wrapper } })
 
       local builtin = require("telescope.builtin")
       vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "[ ] Find files" })

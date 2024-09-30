@@ -65,11 +65,14 @@ key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
 key.visual(">", ">gv", DEFAULT_OPTS)
 key.x("p", [["_dP]], DEFAULT_OPTS)
 
--- barbar + buffers
+-- barbar + buffers + dropbar
 key.normal("<C-h>", "<Cmd>BufferPrevious<CR>", DEFAULT_OPTS)
 key.normal("<C-l>", "<Cmd>BufferNext<CR>", DEFAULT_OPTS)
 key.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer" })
 key.normal("<leader>bs", "<Cmd>BufferOrderByDirectory<CR>", { desc = "Sort buffers by dir" })
 key.normal("<leader>bo", "<cmd>BufferCloseAllButCurrent<cr>", { desc = "Close all except current" })
 key.normal("<leader>q", "<cmd>bdelete<cr>", { desc = "Delete current buffer" })
+key.normal("<leader>bb", function()
+  require("dropbar.api").pick()
+end, { desc = "Breadcrumbs movement" })
 
