@@ -65,7 +65,7 @@ tmux_set status-left "$LS"
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$G12"
 tmux_set status-right-length 150
-git_status="#(bash $SCRIPTS_PATH/git-status.sh \"#{pane_current_path}\")"
+git_status="#(bash $SCRIPTS_PATH/git-branch.sh \"#{pane_current_path}\")"
 RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]  #(basename \"#{pane_current_path}\") #[fg=$TC,bg=$G06]"
 RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07]  $git_status $RS"
 if "$show_web_reachable"; then

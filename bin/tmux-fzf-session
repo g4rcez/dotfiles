@@ -1,0 +1,75 @@
+#!/bin/bash
+
+function homename() {
+    HOME_SED_SAFE=$?
+    if [ $HOME_SED_SAFE -eq 0 ]; then
+        echo "$1" | sed -e "s|^~/|$HOME/|"
+    else
+        echo "$1"
+    fi
+}
+
+function fzf_window() {
+    fzf --cycle --border-label "tmux-fzf-session - ctrl+d: delete session" --reverse --no-sort \
+        --border "sharp" \
+        --info inline \
+        --height 100% \
+        --color=dark --color='bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8' \
+        --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc' --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8' \
+        --prompt "Session > " \
+        --preview "bash ~/dotfiles/bin/tmux-fzf-preview {}" \
+        --header "ctrl+d: Delete session" \
+        --preview-window right,70% --bind "ctrl-d:execute-silent(tmux kill-session -t {2..})+abort"
+}
+
+function getProjects() {
+    tmux list-sessions | awk '{ print "[s] " $1 }' | sed 's/:$//1'
+    fd -p -t directory -a -d 2 "./Documents" ~/Documents | sed "s@$HOME/Documents/@[d] @g" | grep -e '.*/.*/' | sed 's/\/$//g'
+}
+
+function selectProject() {
+    PROJECT=$(getProjects | fzf_window)
+    if [ "${PROJECT:0:3}" == "[d]" ]; then
+        SANITIZE=$(echo $PROJECT | sed 's/\[d] //g')
+        echo "$HOME/Documents/$SANITIZE"
+    fi
+    if [ "${PROJECT:0:3}" == "[s]" ]; then
+        echo "$(echo $PROJECT | sed 's/\[s] //g')"
+    fi
+    exit
+}
+
+isSelected() {
+    if [ -n "$(echo "$1" | grep "^([0-9]*)\\\t\[Session\]")" ]; then
+        echo 1
+    fi
+}
+
+sanitizeName() {
+    echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
+}
+
+getSessionName() {
+    project_dir=$1
+    directory=$(basename "$project_dir")
+    session_name=$(echo "$directory" | tr ' .:' '_')
+    echo "$session_name"
+}
+
+selected=$(selectProject)
+echo "SELECTED $selected"
+if [ -z "$selected" ]; then
+    exit 0
+fi
+
+is_session=$(isSelected "$selected")
+selected_name=$(sanitizeName "$selected")
+session_name=$(getSessionName "$(homename "$selected_name")")
+
+if [[ -n "$is_session" ]]; then
+    tmux switch -t "$session_name"
+else
+    cd "$selected"
+    tmux new-session -ds "$session_name"
+    tmux switch -t "$session_name"
+fi

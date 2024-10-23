@@ -1,0 +1,20 @@
+#!/bin/env bash
+
+if [[ "${1:0:3}" == "[d]" ]]; then
+    SANITIZE=$(echo $1 | sed 's/\[d] //g')
+    DIRLS="$HOME/Documents/$SANITIZE"
+    echo "$DIRLS"
+    echo
+    onefetch "$DIRLS"
+    lsd --git "$DIRLS"
+fi
+
+if [[ "${1:0:3}" == "[s]" ]]; then
+    SANITIZE=$(echo $1 | sed 's/\[s] //g')
+    DIRLS="$SANITIZE"
+    tmux list-session | grep "$SANITIZE"
+    CURRENT_DIR="$(pwd)"
+    echo "Directory: $CURRENT_DIR"
+    echo
+    bash $HOME/dotfiles/bin/tmux-preview-window $SANITIZE
+fi

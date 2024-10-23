@@ -1,6 +1,0 @@
-#!/bin/env node
-console.log(
-    require("@faker-js/faker/locale/pt_BR")
-        .faker.internet.email()
-        .toLowerCase(),
-);

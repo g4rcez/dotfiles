@@ -154,10 +154,11 @@ nnoremap <C-u> <C-u>zz
 nnoremap ! :call Invert(0)<CR>
 vnoremap ! :<C-u>call Invert(1)<CR>
 
-"" Numbers
+"" Dec numbers
 nnoremap - <C-x>
 let g:WhichKeyDesc_decrease = "- Decrease number"
 
+"" Inc numbers
 nnoremap + <C-a>
 let g:WhichKeyDesc_increase = "+ Increase number"
 
@@ -177,6 +178,8 @@ map 0 ^
 map Q gq
 map U <C-R>
 map gl $
+map j gj
+map k gk
 vnoremap < <gv
 vnoremap > >gv
 nmap < <<
@@ -204,14 +207,6 @@ let g:WhichKeyDesc_show_this = "<leader>1 Show current file in NERDTree"
 nmap <leader>P <action>(RecentProjectListGroup)
 
 let g:WhichKeyDesc_recent_projects = "<leader>P Open recent projects"
-
-nmap [d <action>(GotoPreviousError)
-let g:WhichKeyDesc_goto_prev_error = "[d Goto prev error"
-
-nmap ]d <action>(GotoNextError)
-nmap <leader>x <action>(GotoNextError)
-let g:WhichKeyDesc_goto_next_error = "]d Goto next error"
-let g:WhichKeyDesc_goto_next_error = "<leader>x Goto next error"
 
 nmap <leader>git <action>(Git.Menu)
 let g:WhichKeyDesc_git_menu = "<leader>git Open git menu"
@@ -277,8 +272,6 @@ let g:WhichKeyDesc_Breakpoint = "<leader>db Toggle Line Breakpoint"
 "" code tools - prefix c(code)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
-nmap <leader><leader> <action>(GotoFile)
-let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> GotoFile"
 
 nmap <leader>ca <action>(CodeEditorViewGroup)
 let g:WhichKeyDesc_reformat_code = "<leader>ca CodeEditorViewGroup"
@@ -292,6 +285,12 @@ let g:WhichKeyDesc_optimize_imports = "<leader>co Optimize Imports"
 nmap <leader>cr <action>(RenameElement)
 let g:WhichKeyDesc_rename_element = "<leader>cr Rename Element"
 
+nmap <leader>cp <action>(RenameFile)
+let g:WhichKeyDesc_rename_file = "<leader>cp Rename path file"
+
+nmap <leader>tl <action>(EditorToggleUseSoftWraps)
+let g:WhichKeyDesc_toggle_soft_wrap = "<leader>tl Toggle soft wrap"
+
 """ asc sort
 vnoremap <leader>cs :'<,'>sort<cr>
 let g:WhichKeyDesc_sort_asc = "<leader>cs Sort Asc"
@@ -303,11 +302,14 @@ let g:WhichKeyDesc_sort_reverse = "<leader>cr Sort Desc"
 map gr <Action>(FindUsages)
 let g:WhichKeyDesc_find_usages = "<leader>gr Find usages"
 
+map <leader>sl <action>(StringManipulation.Sort)
+let g:WhichKeyDesc_sort_len = "<leader>sl Sort by length"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" file/find tools - prefix file(file/find)
+"" telescope - prefix file(file/find)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>fr <action>(RenameFile)
-let g:WhichKeyDesc_rename_file = "<leader>fr File rename"
+nmap <leader><leader> <action>(GotoFile)
+let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> GotoFile"
 
 nmap <leader>fR <action>(RecentFiles)
 let g:WhichKeyDesc_recent_files = "<leader>fR Open recent files"
@@ -315,26 +317,24 @@ let g:WhichKeyDesc_recent_files = "<leader>fR Open recent files"
 nmap <leader>fn <action>(NewFile)
 let g:WhichKeyDesc_rename_file = "<leader>fn New file"
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" search tools - telescope like - prefix s(search)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_search_tools_prefix = "<leader>s +Search"
-nmap <leader>sp <action>(FindInPath)
 
+nmap <leader>fp <action>(FindInPath)
 let g:WhichKeyDesc_find_in_path = "<leader>sp Find in path"
-nmap <leader>sf <action>(GotoFile)
+
+nmap <leader>ff <action>(GotoFile)
 let g:WhichKeyDesc_goto_file = "<leader>sf Goto file"
 
-nmap <leader>sa <action>(TextSearchAction)
-let g:WhichKeyDesc_text_search_action = "<leader>sa Text search action"
+nmap <leader>fa <action>(TextSearchAction)
+let g:WhichKeyDesc_text_search_action = "<leader>fa Text search action"
 
-nmap <leader>sr <action>(ReplaceInPath)
+nmap <leader>fr <action>(ReplaceInPath)
 let g:WhichKeyDesc_replace_in_path = "<leader>sr Replace in path"
 
-nmap <leader>ss <action>(GotoSymbol)
+nmap <leader>fs <action>(GotoSymbol)
 let g:WhichKeyDesc_goto_symbol = "<leader>ss Goto symbol"
 
-nmap <leader>sc <action>(GotoClass)
+nmap <leader>fc <action>(GotoClass)
 let g:WhichKeyDesc_goto_symbol = "<leader>sc Search Class"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -362,12 +362,24 @@ xmap <C-n> <plug>NextWholeOccurrence
 xmap <C-p> <plug>RemoveOccurrence
 xmap <C-x> <plug>SkipOccurrence
 xmap g<C-n> <plug>NextOccurrence
+nmap <leader>tj <Action>(EditorCloneCaretBelow)
+nmap <leader>tk <Action>(EditorCloneCaretAbove)
+
+nmap <C-k> <Action>(EditorCloneCaretAbove)
+nmap <C-j> <Action>(EditorCloneCaretBelow)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" errors - prefix [
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap ]n :action GotoNextError<cr>
 nnoremap ]p :action GotoPreviousError<cr>
+nmap [d <action>(GotoPreviousError)
+let g:WhichKeyDesc_goto_prev_error = "[d Goto prev error"
+
+nmap ]d <action>(GotoNextError)
+nmap <leader>x <action>(GotoNextError)
+let g:WhichKeyDesc_goto_next_error = "]d Goto next error"
+let g:WhichKeyDesc_goto_next_error = "<leader>x Goto next error"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" handlers
@@ -382,10 +394,10 @@ nmap <leader>ba <Action>(ToggleBookmark)
 nmap <leader>bm <Action>(ToggleBookmark)
 nmap <leader>br <Action>(ToggleBookmark)
 nmap <leader>mm <Action>(ToggleBookmark)
+nmap <leader>mo <Action>(ShowBookmark)
 let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>ma Toggle bookmark"
 
 nmap <Tab><Tab> <Action>(ShowBookmarks)
-nmap <leader>bs <Action>(ShowBookmarks)
 let g:WhichKeyDesc_toggle_bookmarks_leader = "<tab><tab> Show bookmarks"
 let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>bs Show bookmarks"
 
@@ -409,13 +421,20 @@ let g:WhichKeyDesc_next_splitter = "<leader>bl next splitter"
 nmap <leader>bh <Action>(PrevSplitter)
 let g:WhichKeyDesc_previous_splitter = "<leader>bh prev splitter"
 
-nmap <leader>tt :tabo<CR>
-let g:WhichKeyDesc_tabo = "<leader>tt Close all except current"
+nmap <leader>bd <action>(CloseEditor)
+let g:WhichKeyDesc_close_editor = "<leader>bd Close editor"
+
 nmap <leader>bo :tabo<CR>
 let g:WhichKeyDesc_tabo = "<leader>tt Close all except current"
 
 nmap <leader>tr <action>(ReopenClosedTab)
 let g:WhichKeyDesc_reopen_tab = "<leader>tr Reopen closed tab"
+
+nmap <leader>bn <action>(SelectIn)
+let g:WhichKeyDesc_select_in = "<leader>bn Select in"
+
+nmap <leader>bs <action>(ShowNavBar)
+let g:WhichKeyDesc_select_in = "<leader>bs Show navbar"
 
 "" Split
 nmap <leader>\ <action>(SplitVertically)

@@ -1094,30 +1094,6 @@
               {
                 "to": [
                   {
-                    "shell_command": "osascript /Users/allangarcez/dotfiles/bin/notifications"
-                  }
-                ],
-                "description": "Clear all notifications",
-                "type": "basic",
-                "from": {
-                  "key_code": "n",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
                     "key_code": "volume_decrement"
                   }
                 ],
@@ -3877,106 +3853,6 @@
                 "to": [
                   {
                     "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + close_bracket - Open raycast://extensions/raycast/window-management/next-desktop",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + close_bracket - Open raycast://extensions/raycast/window-management/next-desktop",
-                "from": {
-                  "key_code": "close_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/raycast/window-management/next-desktop"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + close_bracket - Open raycast://extensions/raycast/window-management/next-desktop",
-                "from": {
-                  "key_code": "close_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/raycast/window-management/next-desktop"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + open_bracket - Open raycast://extensions/raycast/window-management/previous-desktop",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + open_bracket - Open raycast://extensions/raycast/window-management/previous-desktop",
-                "from": {
-                  "key_code": "open_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/raycast/window-management/previous-desktop"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + open_bracket - Open raycast://extensions/raycast/window-management/previous-desktop",
-                "from": {
-                  "key_code": "open_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/raycast/window-management/previous-desktop"
                   }
                 ],
                 "type": "basic"

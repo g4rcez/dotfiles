@@ -14,21 +14,21 @@ Hi. This is my dotfiles project. Here you will find all my configurations to cre
 
 # CLI softwares
 
--   [fzf](https://github.com/junegunn/fzf)
--   [lazyvim](https://lazyvim.org/)
--   [starship.rs](https://starship.rs)
--   [bat](https://github.com/sharkdp/bat)
--   [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
--   [zellij](https://zellij.dev/)
--   [lsd](https://github.com/lsd-rs/lsd)
--   [zellij](https://zellij.dev/)
+- [fzf](https://github.com/junegunn/fzf)
+- [lazyvim](https://lazyvim.org/)
+- [starship.rs](https://starship.rs)
+- [bat](https://github.com/sharkdp/bat)
+- [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
+- [zellij](https://zellij.dev/)
+- [lsd](https://github.com/lsd-rs/lsd)
+- [zellij](https://zellij.dev/)
 
 # GUI softwares
 
--   [espanso](https://espanso.org/)
--   [karabiner](https://karabiner-elements.pqrs.org/index.html) - replace CapsLock to Esc
--   [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner) - with some modifications
--   [raycast](https://www.raycast.com/)
+- [espanso](https://espanso.org/)
+- [karabiner](https://karabiner-elements.pqrs.org/index.html) - replace CapsLock to Esc
+- [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner) - with some modifications
+- [raycast](https://www.raycast.com/)
 
 ![my shell](./assets/shell.png)
 
@@ -36,8 +36,8 @@ Hi. This is my dotfiles project. Here you will find all my configurations to cre
 
 First, check the requirements:
 
--   zsh > v4
--   git > v2
+- zsh > v4
+- git > v2
 
 ```bash
 git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
@@ -48,21 +48,28 @@ zsh
 
 # Karabiner
 
-My karabiner config was very inspired by [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner). You can check the Youtube videos below:
+My karabiner config was very inspired by [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner). You can
+check the Youtube videos below:
 
--   [Max Stoiber Owns His Workflow with Raycast](https://www.youtube.com/watch?v=m5MDv9qwhU8)
--   [How I Programed the Most Productive MacOS Keyboard Setup Ever: Karabiner Elements](https://www.youtube.com/watch?v=j4b_uQX3Vu0)
+- [Max Stoiber Owns His Workflow with Raycast](https://www.youtube.com/watch?v=m5MDv9qwhU8)
+- [How I Programed the Most Productive MacOS Keyboard Setup Ever: Karabiner Elements](https://www.youtube.com/watch?v=j4b_uQX3Vu0)
 
-With these videos I have the idea to implement keybindings like Tmux, with a prefix + key. My karabiner config have two modes:
+With these videos I have the idea to implement keybindings like Tmux, with a prefix + key. My karabiner config have two
+modes:
 
--   `single`: that just press one time the prefix + key
--   `hold`: you need to hold the prefix until the karabiner notification and press the other key. With this mode you can repeat all keys at layer. Hold again to exit from this mode
+- `single`: that just press one time the prefix + key
+- `hold`: you need to hold the prefix until the karabiner notification and press the other key. With this mode you can
+  repeat all keys at layer. Hold again to exit from this mode
 
-Inspired by [which-key.nvim](https://github.com/folke/which-key.nvim), I created the local extension of [https://www.raycast.com/](https://www.raycast.com/) to check all my karabiner shortcuts.
+Inspired by [which-key.nvim](https://github.com/folke/which-key.nvim), I created the local extension of
+[https://www.raycast.com/](https://www.raycast.com/) to check all my karabiner shortcuts.
 
 # Espanso
 
-[Espanso](https://espanso.org/) it's an amazing tool to expand your texts to other utilities. I work in frontend and I need a lots of texts like lorem ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some personal informations at my espanso config, this file will not be able to check at this repo. But you can generate using the `make` or check this sample.
+[Espanso](https://espanso.org/) it's an amazing tool to expand your texts to other utilities. I work in frontend and I
+need a lots of texts like lorem ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some
+personal informations at my espanso config, this file will not be able to check at this repo. But you can generate using
+the `make` or check this sample.
 
 The espanso command key is `;`, since I use the `:` for emojis in most of applications.
 

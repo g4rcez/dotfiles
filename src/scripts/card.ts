@@ -1,4 +1,4 @@
-#!/bin/env node
+import { Script } from "../script.ts";
 
 const creditCardTemplate = {
     visa: "xxxx xxxx xxxx xxxx",
@@ -6,9 +6,11 @@ const creditCardTemplate = {
     amex: "xxxx xxxxxx xxxxx",
 };
 
-const createCreditCard = (type) => {
-    let pos;
-    let str = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+type Brand = keyof typeof creditCardTemplate;
+
+const createCreditCard = (type: Brand) => {
+    let pos = 0;
+    const str = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let sum = 0;
     let final_digit = 0;
     let i = 0;
@@ -49,10 +51,10 @@ const createCreditCard = (type) => {
     }
     final_digit = (10 - (sum % 10)) % 10;
     str[len - 1] = final_digit;
-    return creditCardTemplate[type].replace(/[x]/g, () => str[i++]);
+    return creditCardTemplate[type].replace(/[x]/g, () => str[i++].toString());
 };
 
-function createCardCvv(type) {
+function createCardCvv(type: Brand) {
     let cvv = "";
     if (type === "visa" || type === "master") {
         cvv = ("00" + Math.floor(Math.random() * 999)).slice(-3);
@@ -62,7 +64,13 @@ function createCardCvv(type) {
     return cvv;
 }
 
-const [type, func] = process.argv.slice(2);
-
-if (func === "cvv") return void console.log(createCardCvv(type));
-console.log(createCreditCard(type));
+export default class CreditCardScript extends Script<{
+    brand: Brand;
+    cvv: boolean;
+}> {
+    public override run(): string {
+        return this.args.cvv
+            ? createCardCvv(this.args.brand)
+            : createCreditCard(this.args.brand);
+    }
+}

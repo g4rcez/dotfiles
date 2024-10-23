@@ -1,12 +1,5 @@
-import { KarabinerRule, KeyCode, To } from "../types";
-import {
-    LayerCommand,
-    WhichKey,
-    karabinerNotify,
-    notify,
-    replaceWhichKeys,
-    vim,
-} from "../utils";
+import { KarabinerRule, KeyCode, To } from "../types.ts";
+import { karabinerNotify, LayerCommand, notify, replaceWhichKeys, vim, WhichKey } from "_";
 
 type VimMotion = { to: To[]; description?: string } | LayerCommand;
 
@@ -27,7 +20,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
     const entries = Object.entries(config);
     const whichKey: WhichKey[] = [];
     const keys: string[] = [];
-    const allLayers = entries.reduce(
+    const allLayers = entries.reduce<KarabinerRule[]>(
         (acc, [key, { description: leaderDescription = "", ...motions }]) => {
             const modal = `leader: ${key} ${leaderDescription}` as const;
             keys.push(key);
@@ -128,8 +121,12 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                 ([subKey, subMotion]): KarabinerRule => {
                     const description = `leader + ${key} + ${subKey} - ${subMotion.description}`;
                     whichKey.push({
-                        key: `<Leader>${replaceWhichKeys(key as KeyCode)}${replaceWhichKeys(subKey as KeyCode)}`,
-                        description: subMotion.description,
+                        key: `<Leader>${
+                            replaceWhichKeys(
+                                key as KeyCode,
+                            )
+                        }${replaceWhichKeys(subKey as KeyCode)}`,
+                        description: subMotion.description!,
                     });
                     return {
                         description,
@@ -144,7 +141,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                                 ],
                                 description,
                                 from: { key_code: subKey as KeyCode },
-                                to: subMotion.to.concat(vim.off(key, false)),
+                                to: subMotion.to!.concat(vim.off(key, false)),
                                 type: "basic",
                             },
                             {

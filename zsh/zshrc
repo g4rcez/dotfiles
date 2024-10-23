@@ -72,6 +72,7 @@ znap prompt
 ##############################################################################################################
 ## fpath hooks
 znap fpath _cargo    "rustup completions zsh cargo"
+znap fpath _deno     "deno completions zsh"
 znap fpath _fx       "source <(fx --comp zsh)"
 znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _kubectl  "kubectl completion zsh"
@@ -120,4 +121,3 @@ _postcd
 chpwd_functions+=(_postcd)
 chpwd_functions+=(_zellij_tab_name_update)
 zellij-start
-#

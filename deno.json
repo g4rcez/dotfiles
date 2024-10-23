@@ -1,0 +1,30 @@
+{
+    "license": "MIT",
+    "tasks": {
+        "dev": "deno run --watch main.ts",
+        "compile": "deno run --allow-run -WSER main.ts"
+    },
+    "imports": {
+        "@faker-js/faker": "npm:@faker-js/faker@8.4.1",
+        "@quentinadam/uuidv7": "jsr:@quentinadam/uuidv7@0.1.0",
+        "@std/assert": "jsr:@std/assert@1",
+        "@std/cli": "jsr:@std/cli@^1.0.6",
+        "@std/collections": "jsr:@std/collections@^1.0.8",
+        "@std/crypto": "jsr:@std/crypto@^1.0.3",
+        "@std/uuid": "jsr:@std/uuid@1.0.4",
+        "@utility/git": "jsr:@utility/git@0.4.1",
+        "_": "./src/utils.ts",
+        "color-convert": "npm:color-convert@2.0.1",
+        "jsr:@utility/git": "jsr:@utility/git@0.4.1",
+        "polished": "npm:polished@4.3.1",
+        "yaml": "jsr:@jsr/yaml@1.0.5"
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "lineWidth": 120,
+        "useTabs": false,
+        "semiColons": true,
+        "singleQuote": false,
+        "proseWrap": "always"
+    }
+}

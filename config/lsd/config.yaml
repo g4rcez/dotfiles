@@ -6,9 +6,9 @@ indicators: false
 size: short
 total-size: false
 color:
-  when: always
-  theme: custom
+    when: always
+    theme: custom
 icons:
-  when: always
-  theme: fancy
-  separator: " "
+    when: always
+    theme: fancy
+    separator: " "

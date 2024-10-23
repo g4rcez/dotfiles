@@ -1,29 +1,19 @@
-import yaml from "yaml";
-import {
-    EspansoCommander,
-    EspansoTrigger,
-    EspansoType,
-    EspansoVarReplacer,
-} from "../types";
+import { stringify as yaml } from "jsr:@std/yaml";
+import { EspansoTrigger, EspansoType, EspansoVarReplacer } from "../types.ts";
 
 export const imports = (paths: string[]) => ({ imports: paths });
 
 export const _ = "~/dotfiles";
 
-export const node = "$(mise where node)/bin/node";
-
-export const tsx = "$(mise where node)/bin/tsx";
-
 const commander = (s: string) => `;${s}` as const;
 
-export const t = (key: Trigger): EspansoTrigger =>
-    Array.isArray(key) ? key.map(commander) : commander(key);
+export const t = (key: Trigger): EspansoTrigger => Array.isArray(key) ? key.map(commander) : commander(key);
 
 export const k = (key: Trigger): string => (Array.isArray(key) ? key[0] : key);
 
 export type Trigger = string;
 
-export const triggers = {
+export const espanso = {
     clipboard: (
         key: Trigger,
         name: string,
@@ -53,7 +43,7 @@ export const triggers = {
             },
         ],
     }),
-    $: (key: Trigger, cmd: string, capture?: Trigger): EspansoVarReplacer => ({
+    shell: (key: Trigger, cmd: string, capture?: Trigger): EspansoVarReplacer => ({
         [capture ? "regex" : "trigger"]: capture ? t(capture) : t(key),
         replace: `{{${key}}}`,
         vars: [
@@ -92,12 +82,4 @@ export const triggers = {
     }),
 };
 
-export const stringify = (config: any) =>
-    yaml.stringify(config, {
-        blockQuote: true,
-        defaultKeyType: "PLAIN",
-        defaultStringType: "QUOTE_DOUBLE",
-        doubleQuotedAsJSON: true,
-        doubleQuotedMinMultiLineLength: 120,
-        lineWidth: 120,
-    });
+export const stringify = (config: unknown) => yaml(config, { sortKeys: true });

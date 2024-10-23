@@ -1,4 +1,5 @@
-import convert from "color-convert";
+import convert from "npm:color-convert";
+import { Script } from "../script.ts";
 
 const identify = (s: string) => {
     if (s.startsWith("#")) {
@@ -15,24 +16,24 @@ const identify = (s: string) => {
 
 type ColorId = ReturnType<typeof identify>;
 
-const rgba =
-    /^rgba?\((?<r>[0-9\.]+),(?<g>[0-9\.]+),(?<b>[0-9\.]+),?(?<a>[0-9\.]+)?\)$/;
+const rgba = /^rgba?\((?<r>[0-9\.]+),(?<g>[0-9\.]+),(?<b>[0-9\.]+),?(?<a>[0-9\.]+)?\)$/;
 
-const hsla =
-    /^hsla?\((?<h>[0-9\.]+),(?<s>[0-9\.%]+),(?<l>[0-9\.%]+),(?<a>[0-9\.%]+)\)$/;
+const hsla = /^hsla?\((?<h>[0-9\.]+),(?<s>[0-9\.%]+),(?<l>[0-9\.%]+),(?<a>[0-9\.%]+)\)$/;
 
 const trim = (s: string) => s.trim().replace(/[ ]/g, "");
 
+type Color = string | number;
+
 const formatters = {
-    rgb: (r: number, g: number, b: number) => `rgba(${r}, ${g}, ${b}, 1)`,
-    hsl: (h: number, s: number, l: number) => `hsl(${h}, ${s}%, ${l}%, 1)`,
-    hex: (s: string) => s,
+    rgb: (r: Color, g: Color, b: Color): string => `rgba(${r}, ${g}, ${b}, 1)`,
+    hsl: (h: Color, s: Color, l: Color): string => `hsl(${h}, ${s}%, ${l}%, 1)`,
+    hex: (s: Color): string => s.toString(),
 };
 
-const normalize = (id: ColorId, mode: string, color: string) => {
+const normalize = (id: ColorId, mode: string, color: string): string[] => {
     const trimmed = trim(color);
     if (mode === id) return [trimmed];
-    if (id === "") return color;
+    if (id === "") return [color];
     if (id === "hsl") {
         const result = hsla.exec(trimmed);
         if (result && result.groups) {
@@ -59,8 +60,13 @@ const normalize = (id: ColorId, mode: string, color: string) => {
     return convert.hex[mode](trimmed);
 };
 
-const [mode, arg] = process.argv.slice(2);
-
-const color = normalize(identify(arg), mode, arg);
-
-console.log(formatters[mode](...color));
+export default class CpfScript extends Script<{ mode: keyof typeof formatters; value: string }> {
+    public override run(): string {
+        const color = normalize(identify(this.args.value), this.args.mode, this.args.value);
+        return formatters[this.args.mode](
+            color[0],
+            color[1],
+            color[2],
+        );
+    }
+}

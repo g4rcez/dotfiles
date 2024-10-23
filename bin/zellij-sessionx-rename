@@ -1,12 +1,20 @@
 #!/bin/env bash
-
 source $HOME/dotfiles/zsh/utils.sh
-
+USER_CONFIG="$HOME/dotfiles/config/tmux/icons.yml"
 DIR="$2"
 OUTPUT="$2"
+CMD="$(echo $1 | cut -d ' ' -f1)"
+
+get_config_value() {
+    local key=$1
+    local value
+    value="$(yq "$key" "$USER_CONFIG")"
+    echo "${value-''}"
+}
 
 function fn() {
     HAS_GIT=$(git -C "$DIR" rev-parse --is-inside-work-tree 2>/dev/null)
+    ICON="$(get_config_value ".icons.\"$CMD\"")"
     if [[ "$1" == "" ]]; then
         if [[ "$HAS_GIT" == "true" ]]; then
             OUTPUT="$(git -C "$DIR" config --get remote.origin.url | cut -d ':' -f2- | sed ' s/\.git$//g')"

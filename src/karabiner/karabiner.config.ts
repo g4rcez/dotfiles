@@ -1,27 +1,27 @@
-import { KarabinerRule, Manipulator } from "../types";
+import { KarabinerRule, Manipulator } from "../types.ts";
 import {
     appInstance,
     browser,
     createHyperSubLayers,
-    dotfile,
     karabinerNotify,
     open,
     rectangle,
+    script,
     shell,
     vim,
-} from "../utils";
-import { createLeaderLayers } from "./leader-layers";
+} from "_";
+import { createLeaderLayers } from "./leader-layers.ts";
 
 const modKeys = createHyperSubLayers({
     slash: open(
         "raycast://extensions/g4rcez/dev-toolbelt/whichkey",
         "",
-        "Which key Karabiner + Raycast",
+        "Which key Karabiner + Raycast"
     ),
     tab: open(
         "raycast://extensions/raycast/navigation/switch-windows",
         "",
-        "Switch windows with raycast",
+        "Switch windows with raycast"
     ),
     h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
     l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
@@ -36,10 +36,6 @@ const modKeys = createHyperSubLayers({
         description: "Go to end of line",
     },
     s: {
-        n: shell(
-            `osascript ${dotfile("bin", "notifications")}`,
-            "Clear all notifications",
-        ),
         hyphen: {
             to: [{ key_code: "volume_decrement" }],
             description: "Decrease volume",
@@ -75,7 +71,7 @@ const withLeaderKeys = createLeaderLayers({
         n: open(
             "raycast://extensions/HenriChabrand/notion/create-database-page?launchContext=%7B%22defaults%22%3A%7B%22database%22%3A%228f300386-4489-4bd2-a787-8ba1b6fc9c59%22%2C%22property%3A%3Astatus%3A%3ATiQl%22%3A%2218f563fd-783b-4f3a-9403-235a3a1f804c%22%7D%2C%22visiblePropIds%22%3A%5B%22title%22%2C%22x%255ET%255E%22%2C%22rPKH%22%2C%22TiQl%22%2C%22%253FlMM%22%5D%7D",
             "",
-            "Notion read it later",
+            "Notion read it later"
         ),
     },
     r: {
@@ -83,47 +79,47 @@ const withLeaderKeys = createLeaderLayers({
         m: open(
             "raycast://extensions/raycast/navigation/search-menu-items",
             "",
-            "Search menu of current app",
+            "Search menu of current app"
         ),
         b: open(
             "raycast://extensions/jomifepe/bitwarden/search",
             "",
-            "Bitwarden search",
+            "Bitwarden search"
         ),
         w: open(
             "raycast://extensions/raycast/navigation/switch-windows",
             "",
-            "Switch windows with raycast",
+            "Switch windows with raycast"
         ),
         c: open(
             "raycast://extensions/raycast/raycast/confetti",
             "",
-            "Confetti",
+            "Confetti"
         ),
         d: open(
             `raycast://extensions/yakitrak/do-not-disturb/toggle`,
             "",
-            "Do not disturb",
+            "Do not disturb"
         ),
         e: open(
             "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
             "",
-            "Emoji finder",
+            "Emoji finder"
         ),
         p: open(
             "raycast://extensions/thomas/color-picker/pick-color",
             "",
-            "Raycast color picker",
+            "Raycast color picker"
         ),
         s: open(
             "raycast://extensions/mattisssa/spotify-player/yourLibrary",
             "",
-            "My spotify library",
+            "My spotify library"
         ),
         o: open(
             "raycast://extensions/huzef44/screenocr/recognize-text",
             "",
-            "OCR screen area",
+            "OCR screen area"
         ),
     },
     b: {
@@ -133,7 +129,7 @@ const withLeaderKeys = createLeaderLayers({
         s: open(
             "raycast://extensions/Codely/google-chrome/search-tab",
             "",
-            "Search tabs",
+            "Search tabs"
         ),
         h: {
             description: "Window: Previous Tab",

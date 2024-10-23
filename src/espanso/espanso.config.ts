@@ -1,60 +1,61 @@
-import { home } from "../utils";
-import { _, imports, node, stringify, triggers, tsx } from "./espanso.utils";
+import { home, runMain } from "_";
+import { espanso, imports, stringify } from "./espanso.utils.ts";
 
 const simpleTriggers = [
-    triggers.format("isodate", "date", "%Y-%m-%dT%H:%M:%S"),
-    triggers.format("date", "date", "%d/%m/%Y"),
-    triggers.format("time", "date", "%H:%M"),
-    triggers.insert("youtube", "https://www.youtube.com/@allangarcez"),
-    triggers.insert("blog", "https://garcez.dev"),
-    triggers.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
-    triggers.insert(
-        "tnc",
-        "$|$\n\u2026\u2026..\u2026..\/\u00B4\u00AF\/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026\/\u2026.\/\/\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026..\/\u2026.\/\/\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026..\/\u00B4\u00AF\/\u2026.\/\u00B4\u00AF\\\u2026\u2026\u2026..\/\u00AF `\\\u2026.\\\u00AF`\\\r\n..\/.\/\u2026\/\u2026.\/\u2026.\/.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026.\/.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\\/\u2026\/\u2026.\\. ..\\\/\u2026\u2026\u2026"
+    espanso.format("date", "date", "%d/%m/%Y"),
+    espanso.format("time", "date", "%H:%M"),
+    espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
+    espanso.insert(
+        "sort",
+        ` ! awk '{ print length(), $0 | "sort -n | cut -d\\  -f2-" }'`,
     ),
-    triggers.clipboard("mdl", "link", "[$|$]({{link}})"),
-    triggers.$(
+    espanso.insert("blog", "https://garcez.dev"),
+    espanso.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
+    espanso.insert(
+        "tnc",
+        "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
+    ),
+    espanso.clipboard("mdl", "link", "[$|$]({{link}})"),
+    espanso.shell(
         "pass",
-        `${node} ${_}/bin/password $ESPANSO_N`,
+        runMain("password --length $ESPANSO_N"),
         "pass\\((?P<N>.*)\\)",
     ),
-    triggers.$("cellphone", `${node} ${_}/bin/phone cellphone`),
-    triggers.$("telephone", `${node} ${_}/bin/phone telephone`),
-    triggers.$("email", `${node} ${_}/bin/email`),
-    triggers.form(
+    espanso.shell("cellphone", runMain("phone --mode=cellphone")),
+    espanso.shell("telephone", runMain("phone --mode=telephone")),
+    espanso.shell("email", runMain("email")),
+    espanso.shell("isodate", runMain("isodate")),
+    espanso.form(
         "hex",
         "{{hex}}",
-        `${tsx} ${_}/bin/colors.ts hex "{{form.input}}"`,
+        runMain(`colors --mode=hex --value="{{form.input}}"`),
     ),
-    triggers.form(
+    espanso.form(
         "hsl",
         "{{hsl}}",
-        `${tsx} ${_}/bin/colors.ts hsl "{{form.input}}"`,
+        runMain(`colors --mode=hsl --value="{{form.input}}"`),
     ),
-    triggers.form(
+    espanso.form(
         "rgb",
         "{{rgb}}",
-        `${tsx} ${_}/bin/colors.ts rgb "{{form.input}}"`,
+        runMain(`colors --mode=rgb --value="{{form.input}}"`),
     ),
 ];
 
 const shellTriggers = [
-    triggers.$("cnpj", `${node} ${_}/bin/cnpj`),
-    triggers.$("cpf", `${node} ${_}/bin/cpf`),
-    triggers.$("master", `${node} ${_}/bin/credit-card master card`),
-    triggers.$("visa", `${node} ${_}/bin/credit-card visa card`),
-    triggers.$("amex", `${node} ${_}/bin/credit-card amex card`),
-    triggers.$("cvvmaster", `${node} ${_}/bin/credit-card master cvv`),
-    triggers.$("cvvvisa", `${node} ${_}/bin/credit-card visa cvv`),
-    triggers.$("cvvamex", `${node} ${_}/bin/credit-card amex cvv`),
-    triggers.$(
-        "uuid",
-        `${node} -e "console.log(require('crypto').randomUUID())"`,
-    ),
+    espanso.shell("cnpj", runMain("cnpj")),
+    espanso.shell("cpf", runMain("cpf")),
+    espanso.shell("master", runMain("card --brand=master")),
+    espanso.shell("cvvmaster", runMain("card --brand=master --cvv")),
+    espanso.shell("visa", runMain("card --brand=visa")),
+    espanso.shell("cvvvisa", runMain("card --brand=visa --cvv")),
+    espanso.shell("amex", runMain("card --brand=amex")),
+    espanso.shell("cvvamex", runMain("card --brand=amex --cvv")),
+    espanso.shell("uuid", runMain("uuid")),
 ];
 
 const randomTriggers = [
-    triggers.random("cep", [
+    espanso.random("cep", [
         "04538-133",
         "04543-907",
         "21530-014",
@@ -64,7 +65,7 @@ const randomTriggers = [
         "30260-070",
         "70040-010",
     ]),
-    triggers.random("lorem", [
+    espanso.random("lorem", [
         "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.",
         "Curabitur blandit tempus ardua ridiculus sed magna.",
         "Inmensae subtilitatis, obscuris et malesuada fames.",
@@ -82,6 +83,13 @@ const randomTriggers = [
         "Quisque ut dolor gravida, placerat libero vel, euismod.",
         "Ullamco laboris nisi ut aliquid ex ea commodi consequat.",
     ]),
+
+    // emojis 👍🏾
+    espanso.insert("blz", "👍🏾"),
+    espanso.insert("pray", "🙏🏾"),
+    espanso.insert("s2", "❤️"),
+    espanso.insert("deal", "🤝🏾"),
+    espanso.insert("cry", "😭"),
 ];
 
 export const createEspansoConfig = () => {
@@ -91,4 +99,3 @@ export const createEspansoConfig = () => {
     };
     return stringify(config);
 };
-

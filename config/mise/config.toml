@@ -1,9 +1,9 @@
 [tools]
 usage = "0.3.0"
-node = "20.17.0"
+node = "20.18.0"
 bun = "1.1.13"
 dotnet = "8.0.401"
-deno = "1.45.5"
+deno = "2.0.2"
 
 [settings]
 legacy_version_file = true
@@ -15,12 +15,12 @@ always_keep_install = false  # deleted on failure by default
 # configure how frequently (in minutes) to fetch updated plugin repository changes
 # this is updated whenever a new runtime is installed
 # (note: this isn't currently implemented but there are plans to add it: https://github.com/jdx/mise/issues/128)
-plugin_autoupdate_last_check_duration = '1 week' # set to 0 to disable updates
+plugin_autoupdate_last_check_duration = '1 day' # set to 0 to disable updates
 
 verbose = false    # set to true to see full installation output, see `MISE_VERBOSE`
 asdf_compat = true # set to true to ensure .tool-versions will be compatible with asdf, see `MISE_ASDF_COMPAT`
 http_timeout = 30  # set the timeout for http requests in seconds, see `MISE_HTTP_TIMEOUT`
-jobs = 8           # number of plugins or runtimes to install in parallel. The default is `4`.
+jobs = 16           # number of plugins or runtimes to install in parallel. The default is `4`.
 raw = false        # set to true to directly pipe plugins to stdin/stdout/stderr
 yes = false        # set to true to automatically answer yes to all prompts
 

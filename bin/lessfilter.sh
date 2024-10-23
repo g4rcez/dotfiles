@@ -5,20 +5,23 @@ category=${mime%%/*}
 kind=${mime##*/}
 regex='(https?|ftp|file)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
 
-if [ -d "$1" ]; then
-    lsd --git -hl --color=always --tree
+TARGET_PATH="${1/\~/$HOME}"
+
+if [ -d "$TARGET_PATH" ]; then
+    echo "$TARGET_PATH"
+    lsd --git --color=always "$TARGET_PATH"
 elif [ "$category" = "image" ]; then
     echo "$PWD/$1"
-    exiftool "$1"
+    exiftool "$TARGET_PATH"
 elif [ "$kind" = "vnd.openxmlformats-officedocument.spreadsheetml.sheet" ] ||
     [ "$kind" = "vnd.ms-excel" ]; then
-    in2csv "$1" | xsv table | bat --theme OneHalfDark --color=always -ltsv
+    in2csv "$TARGET_PATH" | xsv table | bat --theme OneHalfDark --color=always -ltsv
 elif [ "$category" = "text" ]; then
-    bat --theme OneHalfDark --color=always "$1"
+    bat --theme OneHalfDark --color=always "$TARGET_PATH"
 elif [ "$category" = "application/pdf" ]; then
-    bat --theme OneHalfDark --color=always "$1"
+    bat --theme OneHalfDark --color=always "$TARGET_PATH"
 elif [[ ${1} =~ $regex ]]; then
-    echo "$1"
+    echo "$TARGET_PATH"
 else
-    bat --theme OneHalfDark --color=always "$1"
+    bat --theme OneHalfDark --color=always "$TARGET_PATH" &>/dev/null
 fi

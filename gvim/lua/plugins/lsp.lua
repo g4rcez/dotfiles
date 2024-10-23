@@ -178,7 +178,6 @@ return {
                 html = {},
                 bashls = {},
                 eslint = {},
-                tsserver = { enabled = false },
                 tailwindcss = tailwindcssServer,
                 yamlls = { settings = { yaml = { schemaStore = { enable = true, url = '' }, schemas = require('schemastore').yaml.schemas() } } },
                 jsonls = { settings = { json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } } } },

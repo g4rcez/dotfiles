@@ -1,3 +1,5 @@
+export type Empty = Record<string | number | symbol, never>;
+
 export type KarabinerRule = {
     description?: string;
     manipulators?: Manipulator[];
@@ -145,7 +147,7 @@ export interface MouseKey {
 }
 
 export interface SoftwareFunction {
-    iokit_power_management_sleep_system?: {};
+    iokit_power_management_sleep_system?: Empty;
 }
 
 export type Alphabet =

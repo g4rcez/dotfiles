@@ -40,6 +40,7 @@
 
 [log]
     decorate = short
+	date = iso
 
 [fetch]
     prune = true

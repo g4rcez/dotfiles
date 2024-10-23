@@ -12,6 +12,12 @@ scroll_buffer_size 10000
 scrollback_editor "nvim"
 theme "mytheme"
 
+ui {
+    pane_frames {
+        rounded_corners false
+    }
+}
+
 plugins {
     tab-bar location="zellij:tab-bar"
     status-bar location="zellij:status-bar"
@@ -43,38 +49,6 @@ themes {
 }
 
 keybinds clear-defaults=true {
-    tmux {
-        bind "[" { SwitchToMode "Scroll"; }
-        bind "\\" { NewPane "Right"; SwitchToMode "Normal"; }
-        bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
-        bind "t" { NewTab; SwitchToMode "Normal"; }
-        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
-        bind "g" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-        bind "1" { GoToTab 1; SwitchToMode "Normal"; }
-        bind "2" { GoToTab 2; SwitchToMode "Normal"; }
-        bind "3" { GoToTab 3; SwitchToMode "Normal"; }
-        bind "4" { GoToTab 4; SwitchToMode "Normal"; }
-        bind "5" { GoToTab 5; SwitchToMode "Normal"; }
-        bind "6" { GoToTab 6; SwitchToMode "Normal"; }
-        bind "7" { GoToTab 7; SwitchToMode "Normal"; }
-        bind "8" { GoToTab 8; SwitchToMode "Normal"; }
-        bind "9" { GoToTab 9; SwitchToMode "Normal"; }
-        bind "Tab" { ToggleTab; }
-        bind "k" {
-            SwitchToMode "Normal";
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx-kill" {
-                close_on_exit true
-            }
-        }
-        bind "s" "p" {
-            SwitchToMode "Normal";
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
-                close_on_exit true
-            }
-        }
-    }
-
     normal {
         bind "Alt q" { SwitchToMode "Tmux"; }
         bind "Ctrl p" { SwitchToMode "Tmux"; }
@@ -118,9 +92,6 @@ keybinds clear-defaults=true {
     }
     shared_except "move" "locked" { 
         bind "Alt h" { SwitchToMode "Move"; } 
-    }
-    locked { 
-        bind "Ctrl g" { SwitchToMode "Normal"; } 
     }
     resize {
         bind "Ctrl n" { SwitchToMode "Normal"; }
@@ -237,7 +208,6 @@ keybinds clear-defaults=true {
         }
     }
     shared_except "locked" {
-        bind "Ctrl g" { SwitchToMode "Locked"; }
         bind "Ctrl q" { Quit; }
         bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "Left"; }
@@ -257,4 +227,37 @@ keybinds clear-defaults=true {
             }
         }
     }
+    tmux {
+        bind "[" { SwitchToMode "Scroll"; }
+        bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "t" { NewTab; SwitchToMode "Normal"; }
+        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "r" { SwitchToMode "Resize"; }
+        bind "f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "g" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
+        bind "0" { SwitchToMode "Pane"; }
+        bind "1" { GoToTab 1; SwitchToMode "Normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "Normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "Normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "Normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "Normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "Normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "Normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "Normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "Normal"; }
+        bind "Tab" { ToggleTab; }
+        bind "k" {
+            SwitchToMode "Normal";
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx-kill" {
+                close_on_exit true
+            }
+        }
+        bind "s" "p" {
+            SwitchToMode "Normal";
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
+                close_on_exit true
+            }
+        }
+        bind "\\" { NewPane "Right"; SwitchToMode "Normal"; }
+}
 }

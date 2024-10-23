@@ -1,22 +1,14 @@
 #!/usr/bin/env bash
+source $HOME/dotfiles/zsh/utils.sh
 
 NAME="$1"
 USER_CONFIG="$HOME/dotfiles/config/tmux/icons.yml"
-
-function fishify() {
-    echo $(echo "$1" | perl -pe '
-   BEGIN {
-      binmode STDIN,  ":encoding(UTF-8)";
-      binmode STDOUT, ":encoding(UTF-8)";
-   }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
-')
-}
 
 get_config_value() {
     local key=$1
     local value
     value="$(yq "$key" "$USER_CONFIG")"
-    echo "$value"
+    echo "${value-''}"
 }
 
 ICON="$(get_config_value ".icons.\"$NAME\"")"

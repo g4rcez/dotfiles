@@ -1,7 +1,6 @@
-import fs from "node:fs";
-import { dotfile } from "../utils";
-import { devices } from "./devices";
-import { config, whichKey } from "./karabiner.config";
+import { dotfile } from "_";
+import { devices } from "./devices.ts";
+import { config, whichKey } from "./karabiner.config.ts";
 
 export const karabiner = () => {
     const wkPath = dotfile(
@@ -9,12 +8,12 @@ export const karabiner = () => {
         "extensions",
         "dev-toolbelt",
         "src",
-        "whichkey.json",
+        "whichkey.json"
     );
     console.log(`The whichkey map "${wkPath}" was created`);
-    fs.writeFileSync(wkPath, JSON.stringify(whichKey, null, 4), "utf-8");
+    Deno.writeTextFileSync(wkPath, JSON.stringify(whichKey, null, 4));
     const configFile = dotfile("karabiner", "karabiner.json");
-    fs.writeFileSync(
+    Deno.writeTextFileSync(
         configFile,
         JSON.stringify(
             {
@@ -44,8 +43,8 @@ export const karabiner = () => {
                 ],
             },
             null,
-            2,
-        ),
+            2
+        )
     );
     console.log(`The config file "${configFile}" was created`);
 };
