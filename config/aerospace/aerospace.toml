@@ -1,0 +1,44 @@
+accordion-padding = 10
+automatically-unhide-macos-hidden-apps = true
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+start-at-login = true
+
+[key-mapping]
+preset = 'qwerty'
+
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
+
+[mode.main.binding]
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+
+[mode.resize.binding]
+h = 'resize smart -50'
+minus = 'resize smart -50'
+equal = 'resize smart +50'
+l = 'resize smart +50'
+k = 'resize height +50'
+j = 'resize height -50'
+
+[mode.workspace.binding]
+h = 'move-node-to-workspace prev'
+l = 'move-node-to-workspace next'
+1 = 'move-node-to-workspace 1'
+2 = 'move-node-to-workspace 2'
+3 = 'move-node-to-workspace 3'
+4 = 'move-node-to-workspace 4'
+5 = 'move-node-to-workspace 5'
+

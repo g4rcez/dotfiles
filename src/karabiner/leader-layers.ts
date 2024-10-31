@@ -1,4 +1,4 @@
-import { KarabinerRule, KeyCode, To } from "../types.ts";
+import { KarabinerRule, KeyCode, To, Manipulator } from "../types.ts";
 import { karabinerNotify, LayerCommand, notify, replaceWhichKeys, vim, WhichKey } from "_";
 
 type VimMotion = { to: To[]; description?: string } | LayerCommand;
@@ -174,3 +174,26 @@ export const createLeaderLayers = (config: Config): WhichMods => {
     );
     return { layers: allLayers, whichKey, keys: Array.from(new Set(keys)) };
 };
+
+export const createLeaderDisable = (key: string, hold: boolean): Manipulator => ({
+    description: `Caps Lock -> Hyper Key(${key}_single)`,
+    type: "basic",
+    to_if_alone: [{ key_code: "escape" }],
+    from: {
+        key_code: "caps_lock",
+        modifiers: { optional: ["any"] },
+    },
+    to: [{ set_variable: { name: "hyper", value: 1 } }],
+    to_after_key_up: [
+        vim.off(key, hold),
+        { set_variable: { name: "hyper", value: 0 } },
+        karabinerNotify(),
+    ],
+    conditions: [
+        {
+            type: "variable_if",
+            name: vim.off(key, hold).set_variable.name,
+            value: "on",
+        },
+    ],
+});

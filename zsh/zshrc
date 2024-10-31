@@ -65,7 +65,7 @@ done
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,termsupport}
-znap source ohmyzsh/ohmyzsh plugins/{git,fzf,brew,aws}
+znap source ohmyzsh/ohmyzsh plugins/{git,fzf,brew,aws,tmux}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 
@@ -110,14 +110,5 @@ for config in $SOURCE; do
 done
 ##############################################################################################################
 ## zsh hooks
-
-_zellij_tab_name_update "" "$PWD"
-
-preexec () {
-    bash "$DOTFILES/bin/zellij-sessionx-rename" "$2" "$(pwd)"
-}
-
 _postcd
 chpwd_functions+=(_postcd)
-chpwd_functions+=(_zellij_tab_name_update)
-zellij-start

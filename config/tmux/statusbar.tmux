@@ -1,4 +1,6 @@
+source $HOME/dotfiles/zsh/utils.sh
 SCRIPTS_PATH="$HOME/dotfiles/bin"
+
 tmux_get() {
     local value="$(tmux show -gqv "$1")"
     [ -n "$value" ] && echo "$value" || echo "$2"
@@ -11,10 +13,7 @@ tmux_set() {
 # Options
 rarrow=$(tmux_get '@tmux_power_right_arrow_icon' '█')
 larrow=$(tmux_get '@tmux_power_left_arrow_icon' '█')
-upload_speed_icon=$(tmux_get '@tmux_power_upload_speed_icon' '󰕒')
-download_speed_icon=$(tmux_get '@tmux_power_download_speed_icon' '󰇚')
 session_icon="$(tmux_get '@tmux_power_session_icon' '')"
-user_icon="$(tmux_get '@tmux_power_user_icon' '')"
 prefix_highlight_pos=$(tmux_get @tmux_power_prefix_highlight_pos)
 # short for Theme-Colour
 TC=$(tmux_get '@tmux_power_theme' '##669EF9')
@@ -56,23 +55,20 @@ tmux_set status-left-bg "$G04"
 tmux_set status-left-fg "$G12"
 tmux_set status-left-length 150
 LS="#[fg=$TC,bg=$G06] $session_icon #S "
-# if [[ $prefix_highlight_pos == 'L' || $prefix_highlight_pos == 'LR' ]]; then
-#    LS="$LS#{prefix_highlight}"
-# fi
+LS="$LS#{prefix_highlight}"
 tmux_set status-left "$LS"
 
 # Right side of status bar
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$G12"
 tmux_set status-right-length 150
+RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]   #(basename \"#{pane_current_path}\") #[fg=$TC,bg=$G06]"
 git_status="#(bash $SCRIPTS_PATH/git-branch.sh \"#{pane_current_path}\")"
-RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]  #(basename \"#{pane_current_path}\") #[fg=$TC,bg=$G06]"
-RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07]  $git_status $RS"
-if "$show_web_reachable"; then
-    RS=" #{web_reachable_status} $RS"
-fi
-if [[ $prefix_highlight_pos == 'R' || $prefix_highlight_pos == 'LR' ]]; then
-    RS="#{prefix_highlight}$RS"
+if [[ -n "${git_status}" ]]; then
+    echo -n ""
+    RS="$RS"
+else
+    RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07] '$git_status' $RS"
 fi
 tmux_set status-right "$RS"
 

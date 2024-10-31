@@ -53,7 +53,7 @@ export const createHyperSubLayer = (
     subLayer: KeyCode,
     commands: HyperKeySublayer,
     variables: string[],
-    addWhichKey: (item: WhichKey) => void
+    addWhichKey: (item: WhichKey) => void,
 ): Manipulator[] => {
     const subLayerName = createSubLayerName(subLayer);
     const cmds = keys(commands);
@@ -121,7 +121,7 @@ const hasTo = (str: object | string): str is LayerCommand => {
 export type WhichKey = { key: string; description: string };
 
 export const createHyperSubLayers = (
-    modKeys: SubLayers
+    modKeys: SubLayers,
 ): { layers: KarabinerRule[]; hyper: string[]; whichKey: WhichKey[] } => {
     const allSubLayerVariables = keys(modKeys).map(createSubLayerName);
     const whichKeyMap: WhichKey[] = [];
@@ -159,10 +159,10 @@ export const createHyperSubLayers = (
                     key as KeyCode,
                     value as HyperKeySublayer,
                     allSubLayerVariables,
-                    (item) => whichKeyMap.push(item)
+                    (item) => whichKeyMap.push(item),
                 ),
             };
-        }
+        },
     );
     return {
         layers: modSubLayers,
@@ -181,7 +181,7 @@ export const shell = (cmd: string, what: string = ""): LayerCommand => ({
 export const open = (
     what: string,
     params: string = "",
-    description: string = ""
+    description: string = "",
 ): LayerCommand => ({
     to: [{ shell_command: `open ${params} ${what}` }],
     description: description || `Open ${what}`,
@@ -189,7 +189,7 @@ export const open = (
 
 export const execMultipleTo = (
     description: string,
-    commands: LayerCommand[]
+    commands: LayerCommand[],
 ): LayerCommand => ({
     to: commands.flatMap((x) => x.to!),
     description: description,
@@ -202,7 +202,7 @@ export const notify = (message: string, title: string) => ({
 const BROWSER = "Google Chrome";
 export const browser = (
     profile: "Profile 1" | "Default",
-    description?: string
+    description?: string,
 ): LayerCommand => ({
     description: description || `Open ${BROWSER} ${profile}`,
     to: [
@@ -211,6 +211,13 @@ export const browser = (
         },
     ],
 });
+
+export const aerospace = (command: string): LayerCommand => {
+    return {
+        to: [{ shell_command: `/opt/homebrew/bin/aerospace ${command}` }],
+        description: `Window: ${command}`,
+    };
+};
 
 export const rectangle = (name: RectangleActions): LayerCommand => {
     const isPro = true;
@@ -261,4 +268,16 @@ export const replaceWhichKeys = (str: KeyCode) => {
     if (str === "hyphen") return "-";
     if (str === "backslash") return "\\";
     return str;
+};
+
+export const args = (
+    strings: TemplateStringsArray,
+    ...values: any[]
+): string => {
+    let result = "";
+    for (let i = 0; i < strings.length; i++) {
+        result += strings[i];
+        if (i < values.length) result += values[i];
+    }
+    return `${deno} ${main} ${result}`;
 };

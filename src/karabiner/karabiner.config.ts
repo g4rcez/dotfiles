@@ -5,12 +5,61 @@ import {
     createHyperSubLayers,
     karabinerNotify,
     open,
+    aerospace,
     rectangle,
-    script,
-    shell,
     vim,
 } from "_";
-import { createLeaderLayers } from "./leader-layers.ts";
+import { createLeaderDisable, createLeaderLayers } from "./leader-layers.ts";
+
+const windowManagerMap = {
+    aerospace: {
+        "1": aerospace("workspace 1"),
+        "2": aerospace("workspace 2"),
+        "3": aerospace("workspace 3"),
+        "4": aerospace("workspace 4"),
+        "5": aerospace("workspace 5"),
+        "6": aerospace("move-node-to-workspace 1"),
+        "7": aerospace("move-node-to-workspace 2"),
+        "8": aerospace("move-node-to-workspace 3"),
+        "9": aerospace("move-node-to-workspace 4"),
+        "0": aerospace("move-node-to-workspace 5"),
+        escape: aerospace("mode main"),
+        caps_lock: aerospace("mode main"),
+        return_or_enter: aerospace("mode main"),
+        delete_or_backspace: aerospace("mode main"),
+        semicolon: aerospace("reload-config"),
+        b: aerospace("balance-sizes"),
+        backslash: aerospace("split vertical"),
+        f: aerospace("fullscreen on"),
+        h: aerospace("move left"),
+        hyphen: aerospace("split horizontal"),
+        j: aerospace("move down"),
+        k: aerospace("move up"),
+        l: aerospace("move right"),
+        r: aerospace("mode resize"),
+        spacebar: aerospace("layout floating tiling"),
+        w: aerospace("mode workspace"),
+    },
+    rectangle: {
+        equal_sign: rectangle("larger"),
+        hyphen: rectangle("smaller"),
+        b: rectangle("maximize-height"),
+        c: rectangle("center"),
+        d: rectangle("first-third"),
+        e: rectangle("first-two-thirds"),
+        h: rectangle("left-half"),
+        i: rectangle("maximize-height"),
+        j: rectangle("bottom-half"),
+        k: rectangle("top-half"),
+        l: rectangle("right-half"),
+        o: rectangle("maximize"),
+        r: rectangle("last-two-thirds"),
+        f: rectangle("maximize"),
+        return_or_enter: rectangle("maximize"),
+    },
+};
+
+const WINDOW_MANAGER = windowManagerMap.rectangle;
 
 const modKeys = createHyperSubLayers({
     slash: open(
@@ -65,7 +114,7 @@ const withLeaderKeys = createLeaderLayers({
         backslash: rectangle("right-half"),
         return_or_enter: appInstance("Wezterm"),
     },
-    m: {},
+    w: { description: "Window manager", ...WINDOW_MANAGER },
     n: {
         description: "Notion layer",
         n: open(
@@ -145,47 +194,6 @@ const withLeaderKeys = createLeaderLayers({
             to: [{ key_code: "tab", modifiers: ["right_control"] }],
         },
     },
-    w: {
-        description: "Rectangle actions",
-        equal_sign: rectangle("larger"),
-        hyphen: rectangle("smaller"),
-        b: rectangle("maximize-height"),
-        c: rectangle("center"),
-        d: rectangle("first-third"),
-        e: rectangle("first-two-thirds"),
-        h: rectangle("left-half"),
-        i: rectangle("maximize-height"),
-        j: rectangle("bottom-half"),
-        k: rectangle("top-half"),
-        l: rectangle("right-half"),
-        o: rectangle("maximize"),
-        r: rectangle("last-two-thirds"),
-        f: rectangle("maximize"),
-        return_or_enter: rectangle("maximize"),
-    },
-});
-
-const createLeaderDisable = (key: string, hold: boolean): Manipulator => ({
-    description: `Caps Lock -> Hyper Key(${key}_single)`,
-    type: "basic",
-    to_if_alone: [{ key_code: "escape" }],
-    from: {
-        key_code: "caps_lock",
-        modifiers: { optional: ["any"] },
-    },
-    to: [{ set_variable: { name: "hyper", value: 1 } }],
-    to_after_key_up: [
-        vim.off(key, hold),
-        { set_variable: { name: "hyper", value: 0 } },
-        karabinerNotify(),
-    ],
-    conditions: [
-        {
-            type: "variable_if",
-            name: vim.off(key, hold).set_variable.name,
-            value: "on",
-        },
-    ],
 });
 
 const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [

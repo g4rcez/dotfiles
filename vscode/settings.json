@@ -85,7 +85,7 @@
     "[markdown]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "deno.enable": true,
+    "deno.enable": false,
     "deno.lint": true,
     "deno.codeLens.implementations": true,
     "deno.codeLens.references": true,
