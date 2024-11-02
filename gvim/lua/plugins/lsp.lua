@@ -52,7 +52,7 @@ local tailwindcssServer = {
 }
 
 return {
-    { lazy = false,            'chrisgrieser/nvim-puppeteer' },
+    { lazy = false, 'chrisgrieser/nvim-puppeteer' },
     { 'numToStr/Comment.nvim', opts = {} },
     {
         'olrtg/nvim-emmet',
@@ -66,8 +66,8 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'WhoIsSethDaniel/mason-tool-installer.nvim',
             { 'williamboman/mason.nvim', config = true },
-            { 'Bilal2453/luvit-meta',    lazy = true },
-            { 'j-hui/fidget.nvim',       opts = {} },
+            { 'Bilal2453/luvit-meta', lazy = true },
+            { 'j-hui/fidget.nvim', opts = {} },
             {
                 'folke/lazydev.nvim',
                 ft = 'lua',
@@ -123,8 +123,7 @@ return {
                     -- When you move your cursor, the highlights will be cleared (the second autocommand).
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight',
-                            { clear = false })
+                        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
                         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
                             buffer = event.buf,
                             group = highlight_augroup,
@@ -163,6 +162,9 @@ return {
             --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
             --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
             local lsp = require 'lspconfig'
+            lsp.denols.setup {
+                root_dir = lsp.util.root_pattern('deno.json', 'deno.jsonc'),
+            }
             local lsp_flags = { allow_incremental_sync = true, debounce_text_changes = 150 }
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())

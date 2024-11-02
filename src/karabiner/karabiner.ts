@@ -8,7 +8,7 @@ export const karabiner = () => {
         "extensions",
         "dev-toolbelt",
         "src",
-        "whichkey.json"
+        "whichkey.json",
     );
     console.log(`The whichkey map "${wkPath}" was created`);
     Deno.writeTextFileSync(wkPath, JSON.stringify(whichKey, null, 4));
@@ -43,8 +43,8 @@ export const karabiner = () => {
                 ],
             },
             null,
-            2
-        )
+            2,
+        ),
     );
     console.log(`The config file "${configFile}" was created`);
 };

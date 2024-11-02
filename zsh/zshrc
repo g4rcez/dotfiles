@@ -79,7 +79,7 @@ znap fpath _kubectl  "kubectl completion zsh"
 znap fpath _mise     "mise completion zsh"
 znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
 znap fpath _npm      "npm completion"
-znap fpath _pnpm     "source $HOME/.config/tabtab/zsh/__tabtab.zsh"
+znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _typeid   "typeid completion zsh"
 znap fpath _zellij   "zellij setup --generate-completion zsh;echo"
@@ -87,6 +87,7 @@ znap fpath _zellij   "zellij setup --generate-completion zsh;echo"
 ##############################################################################################################
 ## source files
 eval "$(zoxide init zsh)"
+eval "$(direnv hook zsh)"
 eval "$(~/.local/bin/mise activate zsh)"
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
@@ -108,7 +109,6 @@ local -a SOURCE=(
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
-##############################################################################################################
-## zsh hooks
-_postcd
-chpwd_functions+=(_postcd)
+
+export CARAPACE_BRIDGES='zsh'
+source <(carapace _carapace)

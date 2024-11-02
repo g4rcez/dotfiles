@@ -15,7 +15,7 @@ return {
       semantic_letters = true,
       tabpages = true,
       icons = {
-        preset = "slanted",
+        preset = "default",
         buffer_index = true,
         buffer_number = false,
         separator_at_end = true,

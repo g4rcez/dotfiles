@@ -156,3 +156,4 @@ shell = ["bash", "--norc", "--noprofile"]
 style = "white"
 format = "[$output]($style) "
 command = """deno --allow-sys --allow-run --allow-read $TS_SCRIPTS/github-icon.ts"""
+

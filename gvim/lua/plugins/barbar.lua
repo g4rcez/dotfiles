@@ -8,12 +8,12 @@ return {
         opts = {
             animation = false,
             highlight_alternate = false,
-            maximum_padding = 2,
-            minimum_padding = 2,
+            maximum_padding = 1,
+            minimum_padding = 1,
             maximum_length = 32,
             semantic_letters = true,
             icons = {
-                preset = 'slanted',
+                preset = 'powerline',
                 buffer_index = true,
                 buffer_number = false,
                 separator_at_end = true,

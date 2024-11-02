@@ -2,27 +2,17 @@ import { exec } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import {
-    Conditions,
-    KarabinerRule,
-    KeyCode,
-    Manipulator,
-    Parameters,
-    RectangleActions,
-    To,
-} from "./types.ts";
+import { Conditions, KarabinerRule, KeyCode, Manipulator, Parameters, RectangleActions, To } from "./types.ts";
 
 export const $ = promisify(exec);
 
 export const deno = "deno run";
 
-export const home = (...names: string[]) =>
-    path.resolve(os.homedir(), ...names);
+export const home = (...names: string[]) => path.resolve(os.homedir(), ...names);
 
 export const dotfile = (...names: string[]) => home("dotfiles", ...names);
 
-export const script = (...names: string[]) =>
-    home("dotfiles", "src", "scripts", ...names);
+export const script = (...names: string[]) => home("dotfiles", "src", "scripts", ...names);
 
 export const main = home("dotfiles", "src", "controller.ts");
 
@@ -234,13 +224,11 @@ export const rectangle = (name: RectangleActions): LayerCommand => {
 
 export const app = (name: string): LayerCommand => open(`-a '${name}.app'`);
 
-export const appInstance = (name: string): LayerCommand =>
-    open(`-n -a '${name}.app'`);
+export const appInstance = (name: string): LayerCommand => open(`-n -a '${name}.app'`);
 
 export const vim = {
     value: { on: "on", off: "off" },
-    name: <H extends boolean>(leader: string, hold: H) =>
-        `VIM_MODE_${leader}_${hold ? "HOLD" : "SINGLE"}` as const,
+    name: <H extends boolean>(leader: string, hold: H) => `VIM_MODE_${leader}_${hold ? "HOLD" : "SINGLE"}` as const,
     on: (leader: string, hold: boolean) => ({
         halt: true,
         set_variable: {

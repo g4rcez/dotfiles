@@ -5,41 +5,18 @@ const simpleTriggers = [
     espanso.format("date", "date", "%d/%m/%Y"),
     espanso.format("time", "date", "%H:%M"),
     espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
-    espanso.insert(
-        "sort",
-        ` ! awk '{ print length(), $0 | "sort -n | cut -d\\  -f2-" }'`,
-    ),
+    espanso.insert("sort", ` ! awk '{ print length(), $0 | "sort -n | cut -d\\  -f2-" }'`),
     espanso.insert("blog", "https://garcez.dev"),
     espanso.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
-    espanso.insert(
-        "tnc",
-        "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
-    ),
     espanso.clipboard("mdl", "link", "[$|$]({{link}})"),
-    espanso.shell(
-        "pass",
-        runMain("password --length $ESPANSO_N"),
-        "pass\\((?P<N>.*)\\)",
-    ),
+    espanso.shell("pass", runMain("password --length $ESPANSO_N"), "pass\\((?P<N>.*)\\)"),
     espanso.shell("cellphone", runMain("phone --mode=cellphone")),
     espanso.shell("telephone", runMain("phone --mode=telephone")),
     espanso.shell("email", runMain("email")),
     espanso.shell("isodate", runMain("isodate")),
-    espanso.form(
-        "hex",
-        "{{hex}}",
-        runMain(`colors --mode=hex --value="{{form.input}}"`),
-    ),
-    espanso.form(
-        "hsl",
-        "{{hsl}}",
-        runMain(`colors --mode=hsl --value="{{form.input}}"`),
-    ),
-    espanso.form(
-        "rgb",
-        "{{rgb}}",
-        runMain(`colors --mode=rgb --value="{{form.input}}"`),
-    ),
+    espanso.form("hex", "{{hex}}", runMain(`colors --mode=hex --value="{{form.input}}"`)),
+    espanso.form("hsl", "{{hsl}}", runMain(`colors --mode=hsl --value="{{form.input}}"`)),
+    espanso.form("rgb", "{{rgb}}", runMain(`colors --mode=rgb --value="{{form.input}}"`)),
 ];
 
 const shellTriggers = [
@@ -90,6 +67,11 @@ const randomTriggers = [
     espanso.insert("s2", "❤️"),
     espanso.insert("deal", "🤝🏾"),
     espanso.insert("cry", "😭"),
+    espanso.insert("eye", "👀"),
+    espanso.insert(
+        "tnc",
+        "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
+    ),
 ];
 
 export const createEspansoConfig = () => {

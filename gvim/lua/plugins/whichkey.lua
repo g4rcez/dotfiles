@@ -89,10 +89,14 @@ local function buffersAndBookmarks()
     end, { desc = 'Open harpoon window' })
 
     -- bookmarks
-    vim.keymap.set({ 'n', 'v' }, '<leader>mm', '<cmd>BookmarksMark<cr>', { desc = 'Mark current line into active BookmarkList.' })
-    vim.keymap.set({ 'n', 'v' }, '<leader>mo', '<cmd>BookmarksGoto<cr>', { desc = 'Go to bookmark at current active BookmarkList' })
-    vim.keymap.set({ 'n', 'v' }, '<leader>ma', '<cmd>BookmarksCommands<cr>', { desc = 'Find and trigger a bookmark command.' })
-    vim.keymap.set({ 'n', 'v' }, '<leader>mg', '<cmd>BookmarksGotoRecent<cr>', { desc = 'Go to latest visited/created Bookmark' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>mm', '<cmd>BookmarksMark<cr>',
+        { desc = 'Mark current line into active BookmarkList.' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>mo', '<cmd>BookmarksGoto<cr>',
+        { desc = 'Go to bookmark at current active BookmarkList' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>ma', '<cmd>BookmarksCommands<cr>',
+        { desc = 'Find and trigger a bookmark command.' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>mg', '<cmd>BookmarksGotoRecent<cr>',
+        { desc = 'Go to latest visited/created Bookmark' })
 
     -- barbar + buffers
     key.normal('<C-h>', '<Cmd>BufferPrevious<CR>', opts)
@@ -150,8 +154,14 @@ end
 local M = {}
 
 local vscodeKeymaps = function()
+    local function vscodeCommand(key, cmd)
+        key.normal(key, function()
+            vscode.action(cmd)
+        end)
+    end
     local vscode = require 'vscode'
     vim.notify = vscode.notify
+    vscodeCommand("<leader><leader>", 'workbench.action.quickOpen')
     key.normal('J', 'mzJ`z', { desc = 'Join lines as ThePrimeagen' })
     key.normal('<leader>cf', function()
         vscode.action 'editor.action.formatDocument'
@@ -190,21 +200,21 @@ table.insert(M, {
             },
         }
         wh.add({
-            { '<leader>b', group = '[b]uffers', icon = icon 'tmux' },
-            { '<leader>c', group = '[c]ode', icon = icon 'gcode' },
-            { '<leader>d', group = '[d]ebug', icon = icon 'debug' },
-            { '<leader>r', group = '[r]ename', icon = 'desktop' },
+            { '<leader>b', group = '[b]uffers',        icon = icon 'tmux' },
+            { '<leader>c', group = '[c]ode',           icon = icon 'gcode' },
+            { '<leader>d', group = '[d]ebug',          icon = icon 'debug' },
+            { '<leader>r', group = '[r]ename',         icon = 'desktop' },
             { '<leader>m', group = '[m]ark' },
             { '<leader>R', group = '[R]equest HTTP' },
-            { '<leader>s', group = '[s]ession', icon = icon 'nix' },
-            { '<leader>f', group = '[f]ind', icon = icon 'desktop' },
-            { '<leader>w', group = '[w]orkspace', icon = icon 'workspace' },
+            { '<leader>s', group = '[s]ession',        icon = icon 'nix' },
+            { '<leader>f', group = '[f]ind',           icon = icon 'desktop' },
+            { '<leader>w', group = '[w]orkspace',      icon = icon 'workspace' },
             { '<leader>t', group = '[t]oggle' },
             { '<leader>x', group = '[x]trouble/errors' },
-            { '<leader>h', group = 'git [h]unk', mode = { 'n', 'v' }, icon = icon 'git' },
+            { '<leader>h', group = 'git [h]unk',       mode = { 'n', 'v' },    icon = icon 'git' },
         }, {
-            { '<leader>cr', vim.lsp.buf.rename, desc = 'Rename variable', icon = icon 'gcode' },
-            { '<leader>cd', vim.diagnostic.setloclist, desc = 'Quickfix list', icon = icon 'linux' },
+            { '<leader>cr', vim.lsp.buf.rename,        desc = 'Rename variable', icon = icon 'gcode' },
+            { '<leader>cd', vim.diagnostic.setloclist, desc = 'Quickfix list',   icon = icon 'linux' },
         })
     end,
 })

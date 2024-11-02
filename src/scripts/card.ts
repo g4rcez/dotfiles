@@ -69,8 +69,6 @@ export default class CreditCardScript extends Script<{
     cvv: boolean;
 }> {
     public override run(): string {
-        return this.args.cvv
-            ? createCardCvv(this.args.brand)
-            : createCreditCard(this.args.brand);
+        return this.args.cvv ? createCardCvv(this.args.brand) : createCreditCard(this.args.brand);
     }
 }

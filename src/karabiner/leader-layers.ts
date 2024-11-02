@@ -1,4 +1,4 @@
-import { KarabinerRule, KeyCode, To, Manipulator } from "../types.ts";
+import { KarabinerRule, KeyCode, Manipulator, To } from "../types.ts";
 import { karabinerNotify, LayerCommand, notify, replaceWhichKeys, vim, WhichKey } from "_";
 
 type VimMotion = { to: To[]; description?: string } | LayerCommand;

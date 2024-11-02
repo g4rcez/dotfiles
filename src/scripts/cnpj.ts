@@ -2,8 +2,7 @@ import { Script } from "../script.ts";
 
 const random = (n: number) => Math.round(Math.random() * n);
 
-const mod = (base: number, div: number) =>
-    Math.round(base - Math.floor(base / div) * div);
+const mod = (base: number, div: number) => Math.round(base - Math.floor(base / div) * div);
 
 export default class CnpjScript extends Script<never> {
     public override run(): string {
@@ -20,8 +19,7 @@ export default class CnpjScript extends Script<never> {
         const n10 = 0;
         const n11 = 0;
         const n12 = 1;
-        let d1 =
-            n12 * 2 +
+        let d1 = n12 * 2 +
             n11 * 3 +
             n10 * 4 +
             n9 * 5 +
@@ -35,8 +33,7 @@ export default class CnpjScript extends Script<never> {
             n1 * 5;
         d1 = 11 - mod(d1, 11);
         if (d1 >= 10) d1 = 0;
-        let d2 =
-            d1 * 2 +
+        let d2 = d1 * 2 +
             n12 * 3 +
             n11 * 4 +
             n10 * 5 +

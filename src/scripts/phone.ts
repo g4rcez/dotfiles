@@ -12,7 +12,7 @@ export default class PhoneScript extends Script<{ mode: ContactType }> {
             .split("")
             .reduce(
                 (acc, el) => (el === "x" ? `${acc}${rand()}` : `${acc}${el}`),
-                ""
+                "",
             );
     }
 }
