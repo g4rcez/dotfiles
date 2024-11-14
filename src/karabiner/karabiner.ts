@@ -27,6 +27,7 @@ export const karabiner = () => {
                 profiles: [
                     {
                         name: "Default",
+                        virtual_hid_keyboard: { keyboard_type_v2: "ansi" },
                         // You must change this devices for your own
                         devices,
                         complex_modifications: {

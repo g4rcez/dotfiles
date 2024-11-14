@@ -49,12 +49,12 @@ opt.splitbelow = true
 opt.splitright = true
 opt.swapfile = false
 opt.termguicolors = true
-opt.timeoutlen = 300
 opt.undofile = true
-opt.updatetime = 250
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
+opt.ttimeout = true
+opt.ttimeoutlen = 0
 
 opt.wildignore:append(".git,.hg,.svn")
 opt.wildignore:append(".aux,*.out,*.toc")
@@ -69,6 +69,6 @@ opt.wildignore:append(".swp,.lock,.DS_Store,._*")
 opt.wildignore:append(".,..")
 
 -- lazy
--- LazyVim auto format
 vim.g.autoformat = false
+-- LazyVim auto format
 vim.g.lazyvim_prettier_needs_config = false

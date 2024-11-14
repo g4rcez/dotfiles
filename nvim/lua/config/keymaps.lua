@@ -51,7 +51,6 @@ key.normal("-", "<C-x>", { desc = "Decrement" })
 key.normal("0", "^", { desc = "Goto first non-whitespace" })
 key.normal("<BS>", '"_', { desc = "BlackHole register" })
 key.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
-key.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
 key.normal("<leader>tc", fns.replaceHexWithHSL, { desc = "Transform from hex to hsl", silent = true, noremap = true })
 key.normal(">", ">>", { desc = "Indent" })
 key.normal("<", "<<", { desc = "Deindent" })
@@ -65,6 +64,9 @@ key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
 key.visual(">", ">gv", DEFAULT_OPTS)
 key.x("p", [["_dP]], DEFAULT_OPTS)
 
+key.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
+key.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
+
 -- barbar + buffers + dropbar
 key.normal("<C-h>", "<Cmd>BufferPrevious<CR>", DEFAULT_OPTS)
 key.normal("<C-l>", "<Cmd>BufferNext<CR>", DEFAULT_OPTS)
@@ -76,3 +78,6 @@ key.normal("<leader>bb", function()
   require("dropbar.api").pick()
 end, { desc = "Breadcrumbs movement" })
 
+-- ufo
+key.normal("zo", require("ufo").openAllFolds, { desc = "Open folds" })
+key.normal("zc", require("ufo").closeAllFolds, { desc = "Close folds" })

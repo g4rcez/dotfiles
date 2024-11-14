@@ -4,7 +4,6 @@ return {
     config = function()
       local lualine = require("lualine")
       local colors = require("catppuccin.palettes").get_palette("mocha")
-
       local conditions = {
         buffer_not_empty = function()
           return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
@@ -61,10 +60,10 @@ return {
         color = function()
           local mode_color = {
             n = colors.lavender,
-            i = colors.green,
-            v = colors.blue,
+            i = colors.blue,
+            v = colors.yellow,
             [""] = colors.blue,
-            V = colors.blue,
+            V = colors.yellow,
             c = colors.maroon,
             no = colors.red,
             s = colors.mauve,
@@ -137,10 +136,8 @@ return {
         },
         cond = conditions.hide_in_width,
       })
-
       onRight({ "branch", icon = "", color = { fg = colors.blue, gui = "bold" } })
       onRight({ "progress", color = { fg = colors.fg, gui = "bold" } })
-
       lualine.setup(config)
     end,
   },

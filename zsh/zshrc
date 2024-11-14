@@ -1,3 +1,6 @@
+if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
+    return
+fi
 ##############################################################################################################
 ## exports
 export UID=$(id -u)
@@ -65,7 +68,7 @@ done
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,termsupport}
-znap source ohmyzsh/ohmyzsh plugins/{git,fzf,brew,aws,tmux}
+znap source ohmyzsh/ohmyzsh plugins/{git,fzf,brew,tmux}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 
@@ -82,13 +85,12 @@ znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _typeid   "typeid completion zsh"
-znap fpath _zellij   "zellij setup --generate-completion zsh;echo"
 
 ##############################################################################################################
 ## source files
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
-eval "$(~/.local/bin/mise activate zsh)"
+eval "$(mise activate zsh)"
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
@@ -110,5 +112,7 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-export CARAPACE_BRIDGES='zsh'
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense,carapace'
 source <(carapace _carapace)
+
+. "$HOME/.local/share/../bin/env"

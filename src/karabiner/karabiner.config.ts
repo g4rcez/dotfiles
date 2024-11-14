@@ -1,9 +1,15 @@
 import { KarabinerRule, Manipulator } from "../types.ts";
-import { aerospace, appInstance, browser, createHyperSubLayers, karabinerNotify, open, rectangle, vim } from "_";
+import { aerospace, appInstance, browser, createHyperSubLayers, open, rectangle } from "_";
 import { createLeaderDisable, createLeaderLayers } from "./leader-layers.ts";
 
 const windowManagerMap = {
     aerospace: {
+        r: aerospace("mode resize"),
+        w: aerospace("mode workspace"),
+        escape: aerospace("mode main"),
+        caps_lock: aerospace("mode main"),
+        return_or_enter: aerospace("mode main"),
+        delete_or_backspace: aerospace("mode main"),
         "1": aerospace("workspace 1"),
         "2": aerospace("workspace 2"),
         "3": aerospace("workspace 3"),
@@ -14,10 +20,6 @@ const windowManagerMap = {
         "8": aerospace("move-node-to-workspace 3"),
         "9": aerospace("move-node-to-workspace 4"),
         "0": aerospace("move-node-to-workspace 5"),
-        escape: aerospace("mode main"),
-        caps_lock: aerospace("mode main"),
-        return_or_enter: aerospace("mode main"),
-        delete_or_backspace: aerospace("mode main"),
         semicolon: aerospace("reload-config"),
         b: aerospace("balance-sizes"),
         backslash: aerospace("split vertical"),
@@ -27,9 +29,7 @@ const windowManagerMap = {
         j: aerospace("move down"),
         k: aerospace("move up"),
         l: aerospace("move right"),
-        r: aerospace("mode resize"),
         spacebar: aerospace("layout floating tiling"),
-        w: aerospace("mode workspace"),
     },
     rectangle: {
         equal_sign: rectangle("larger"),
@@ -39,12 +39,12 @@ const windowManagerMap = {
         d: rectangle("first-third"),
         e: rectangle("first-two-thirds"),
         h: rectangle("left-half"),
-        i: rectangle("maximize-height"),
         j: rectangle("bottom-half"),
         k: rectangle("top-half"),
         l: rectangle("right-half"),
         o: rectangle("maximize"),
         r: rectangle("last-two-thirds"),
+        i: rectangle("center-two-thirds"),
         f: rectangle("maximize"),
         return_or_enter: rectangle("maximize"),
     },
@@ -98,7 +98,6 @@ const modKeys = createHyperSubLayers({
     ## Clipboard
     https://github.com/Vonng/Capslock/blob/master/mac_v3/capslock.json#L5416
 */
-
 const withLeaderKeys = createLeaderLayers({
     return_or_enter: {
         description: "Tmux leader",

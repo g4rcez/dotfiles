@@ -11,7 +11,7 @@ return {
       highlight_alternate = false,
       maximum_padding = 2,
       minimum_padding = 2,
-      maximum_length = 32,
+      maximum_length = 40,
       semantic_letters = true,
       tabpages = true,
       icons = {

@@ -74,6 +74,13 @@ set updatetime=100
 set viminfo
 set visualbell
 set ideavimsupport=+singleline,dialog
+set confirm
+set expandtab
+set foldlevel=99
+set formatoptions=jcroqlnt " tcqj
+set grepformat=%f:%l:%c:%m
+set grepprg=rg\ --vimgrep
+set list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" idea things
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -103,6 +110,7 @@ let g:WhichKey_SortCaseSensitive = "false"
 set notimeout
 set timeoutlen=5000
 set which-key
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" surround - argtextobj - matchit
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -113,6 +121,8 @@ set textobj-entire
 set textobj-indent
 set matchit
 set vim-paragraph-motion
+Plug 'justinmk/vim-sneak'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" yanks
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -220,6 +230,14 @@ let g:WhichKeyDesc_back = "<leader>u Back"
 nmap <leader>zen <action>(ToggleDistractionFreeMode)
 let g:WhichKeyDesc_zen_mode = "<leader>zen Zen mode"
 
+" Move Up
+nmap <A-j> <Action>(MoveLineDown)
+" Move Down
+nmap <A-k> <Action>(MoveLineUp)
+
+let g:WhichKeyDesc_new_file = "<leader>fn New file"
+nmap <leader>fn <action>(NewFile)
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" jetbrains actions - prefix j(jetbrains)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -273,37 +291,40 @@ let g:WhichKeyDesc_Breakpoint = "<leader>db Toggle Line Breakpoint"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
 
-nmap <leader>ca <action>(CodeEditorViewGroup)
 let g:WhichKeyDesc_reformat_code = "<leader>ca CodeEditorViewGroup"
+nmap <leader>ca <action>(CodeEditorViewGroup)
 
-nmap <leader>cf <action>(ReformatCode)
 let g:WhichKeyDesc_reformat_code = "<leader>cf Reformat Code"
+nmap <leader>cf <action>(ReformatCode)
 
-nmap <leader>co <action>(OptimizeImports)
 let g:WhichKeyDesc_optimize_imports = "<leader>co Optimize Imports"
+nmap <leader>co <action>(OptimizeImports)
 
-nmap <leader>cr <action>(RenameElement)
+let g:WhichKeyDesc_optimize_imports = "<leader>cd Show errors in project"
+nmap <leader>cd <action>(ShowErrorsInProject)
+
 let g:WhichKeyDesc_rename_element = "<leader>cr Rename Element"
+nmap <leader>cr <action>(RenameElement)
 
-nmap <leader>cp <action>(RenameFile)
 let g:WhichKeyDesc_rename_file = "<leader>cp Rename path file"
+nmap <leader>cp <action>(RenameFile)
 
-nmap <leader>tl <action>(EditorToggleUseSoftWraps)
 let g:WhichKeyDesc_toggle_soft_wrap = "<leader>tl Toggle soft wrap"
+nmap <leader>tl <action>(EditorToggleUseSoftWraps)
 
 """ asc sort
-vnoremap <leader>cs :'<,'>sort<cr>
 let g:WhichKeyDesc_sort_asc = "<leader>cs Sort Asc"
+vnoremap <leader>cs :'<,'>sort<cr>
 """ desc sort
-vnoremap <leader>cr :'<,'>!tail -r<cr>
 let g:WhichKeyDesc_sort_reverse = "<leader>cr Sort Desc"
+vnoremap <leader>cr :'<,'>!tail -r<cr>
 
 """ find usage
-map gr <Action>(FindUsages)
 let g:WhichKeyDesc_find_usages = "<leader>gr Find usages"
+map gr <Action>(FindUsages)
 
-map <leader>sl <action>(StringManipulation.Sort)
 let g:WhichKeyDesc_sort_len = "<leader>sl Sort by length"
+map <leader>sl <action>(StringManipulation.Sort)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" telescope - prefix file(file/find)
@@ -313,9 +334,6 @@ let g:WhichKeyDesc_reformat_code_leader = "<leader><leader> GotoFile"
 
 nmap <leader>fR <action>(RecentFiles)
 let g:WhichKeyDesc_recent_files = "<leader>fR Open recent files"
-
-nmap <leader>fn <action>(NewFile)
-let g:WhichKeyDesc_rename_file = "<leader>fn New file"
 
 let g:WhichKeyDesc_search_tools_prefix = "<leader>s +Search"
 
@@ -373,13 +391,15 @@ nmap <C-j> <Action>(EditorCloneCaretBelow)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap ]n :action GotoNextError<cr>
 nnoremap ]p :action GotoPreviousError<cr>
-nmap [d <action>(GotoPreviousError)
+
 let g:WhichKeyDesc_goto_prev_error = "[d Goto prev error"
+nmap [d <action>(GotoPreviousError)
 
 nmap ]d <action>(GotoNextError)
-nmap <leader>x <action>(GotoNextError)
 let g:WhichKeyDesc_goto_next_error = "]d Goto next error"
+
 let g:WhichKeyDesc_goto_next_error = "<leader>x Goto next error"
+nmap <leader>x <action>(GotoNextError)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" handlers
@@ -445,3 +465,23 @@ let g:WhichKeyDesc_split_horizontally = "<leader>- Split vertically"
 
 "" Save in normal mode
 nmap <C-s> :w<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" lazyvim bindings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>ui <Actrion>(FindUsages)
+" Inspect Tree
+let g:WhichKeyDesc_activate_structure_tool = "<leader>gl Activate structure tool"
+nmap <leader>gl <Action>(ActivateStructureToolWindow)
+
+" Signature Help
+let g:WhichKeyDesc_signature_help = "<leader>gK Signature help"
+nmap gK <Action>(ParameterInfo)
+
+" Rename File
+let g:WhichKeyDesc_rename_file = "<leader>cR Rename file"
+nmap <leader>cR <Action>(RenameFile)
+
+" Rename File
+let g:WhichKeyDesc_show_intentions = "<leader>cA ShowIntentionActions"
+nmap <leader>cA <action>(ShowIntentionActions)

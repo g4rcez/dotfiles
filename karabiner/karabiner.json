@@ -9,6 +9,9 @@
     "profiles": [
         {
             "name": "Default",
+            "virtual_hid_keyboard": {
+                "keyboard_type_v2": "ansi"
+            },
             "devices": [
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -1870,56 +1873,6 @@
                         ]
                     },
                     {
-                        "description": "leader + w + i - Window: maximize-height",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "type": "variable_if",
-                                        "name": "VIM_MODE_w_SINGLE",
-                                        "value": "on"
-                                    }
-                                ],
-                                "description": "leader + w + i - Window: maximize-height",
-                                "from": {
-                                    "key_code": "i"
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
-                                    },
-                                    {
-                                        "halt": true,
-                                        "set_variable": {
-                                            "name": "VIM_MODE_w_SINGLE",
-                                            "value": "off"
-                                        }
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
-                                "conditions": [
-                                    {
-                                        "type": "variable_if",
-                                        "name": "VIM_MODE_w_HOLD",
-                                        "value": "on"
-                                    }
-                                ],
-                                "description": "leader + w + i - Window: maximize-height",
-                                "from": {
-                                    "key_code": "i"
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "leader + w + j - Window: bottom-half",
                         "manipulators": [
                             {
@@ -2163,6 +2116,56 @@
                                 "to": [
                                     {
                                         "shell_command": "open -g rectangle-pro://execute-action?name=last-two-thirds"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "leader + w + i - Window: center-two-thirds",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "VIM_MODE_w_SINGLE",
+                                        "value": "on"
+                                    }
+                                ],
+                                "description": "leader + w + i - Window: center-two-thirds",
+                                "from": {
+                                    "key_code": "i"
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
+                                    },
+                                    {
+                                        "halt": true,
+                                        "set_variable": {
+                                            "name": "VIM_MODE_w_SINGLE",
+                                            "value": "off"
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "VIM_MODE_w_HOLD",
+                                        "value": "on"
+                                    }
+                                ],
+                                "description": "leader + w + i - Window: center-two-thirds",
+                                "from": {
+                                    "key_code": "i"
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
                                     }
                                 ],
                                 "type": "basic"
