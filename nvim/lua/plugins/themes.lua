@@ -1,6 +1,4 @@
 return {
-  { "nvim-tree/nvim-web-devicons" },
-  { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
   { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = {} },
   {
     "brenoprata10/nvim-highlight-colors",
@@ -22,15 +20,6 @@ return {
         exclude_buftypes = {},
       })
     end,
-  },
-  {
-    "mawkler/modicator.nvim",
-    init = function()
-      vim.o.cursorline = true
-      vim.o.number = true
-      vim.o.termguicolors = true
-    end,
-    opts = {},
   },
   {
     "NvChad/nvim-colorizer.lua",
@@ -75,73 +64,6 @@ return {
       background = { light = "latte", dark = "mocha" },
       term_colors = true,
       dim_inactive = { enabled = false },
-      styles = {
-        comments = { "italic" },
-        functions = { "bold" },
-        keywords = { "italic" },
-        operators = { "bold" },
-        conditionals = { "bold" },
-        loops = { "bold" },
-        booleans = { "bold", "italic" },
-        numbers = { "bold" },
-        types = { "bold" },
-        strings = {},
-        variables = {},
-        properties = {},
-      },
-      custom_highlights = {},
-      default_integrations = true,
-      highlight_overrides = {
-        all = function(colors)
-          return {
-            CurSearch = { bg = colors.sky },
-            IncSearch = { bg = colors.sky },
-            CursorLineNr = { fg = colors.blue, style = { "bold" } },
-            DashboardFooter = { fg = colors.overlay0 },
-            TreesitterContextBottom = { style = {} },
-            WinSeparator = { fg = colors.overlay0, style = { "bold" } },
-            ["@markup.italic"] = { fg = colors.blue, style = { "italic" } },
-            ["@markup.strong"] = { fg = colors.blue, style = { "bold" } },
-            Headline = { style = { "bold" } },
-            Headline1 = { fg = colors.blue, style = { "bold" } },
-            Headline2 = { fg = colors.pink, style = { "bold" } },
-            Headline3 = { fg = colors.lavender, style = { "bold" } },
-            Headline4 = { fg = colors.green, style = { "bold" } },
-            Headline5 = { fg = colors.peach, style = { "bold" } },
-            Headline6 = { fg = colors.flamingo, style = { "bold" } },
-          }
-        end,
-      },
-      color_overrides = {
-        mocha = {
-          rosewater = "#efc9c2",
-          flamingo = "#ebb2b2",
-          pink = "#f2a7de",
-          mauve = "#b889f4",
-          red = "#ea7183",
-          maroon = "#ea838c",
-          peach = "#f39967",
-          yellow = "#eaca89",
-          green = "#96d382",
-          teal = "#78cec1",
-          sky = "#91d7e3",
-          sapphire = "#68bae0",
-          blue = "#739df2",
-          lavender = "#a0a8f6",
-          text = "#b5c1f1",
-          subtext1 = "#a6b0d8",
-          subtext0 = "#959ec2",
-          overlay2 = "#848cad",
-          overlay1 = "#717997",
-          overlay0 = "#63677f",
-          surface2 = "#505469",
-          surface1 = "#3e4255",
-          surface0 = "#2c2f40",
-          base = "#1a1c2a",
-          mantle = "#141620",
-          crust = "#0e0f16",
-        },
-      },
       integrations = {
         aerial = true,
         alpha = true,

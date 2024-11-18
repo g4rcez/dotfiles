@@ -1,7 +1,7 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
---
+
 local autocmd = vim.api.nvim_create_autocmd
 
 autocmd("BufReadPost", {
@@ -20,4 +20,4 @@ autocmd("BufReadPost", {
 })
 
 -- Disable diagnostics in node_modules (0 is current buffer only)
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" })
+autocmd({ "BufRead", "BufNewFile" }, { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" })
