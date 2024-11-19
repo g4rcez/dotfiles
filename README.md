@@ -14,13 +14,12 @@ Hi. This is my dotfiles project. Here you will find all my configurations to cre
 
 # CLI softwares
 
-- [fzf](https://github.com/junegunn/fzf)
-- [lazyvim](https://lazyvim.org/)
-- [starship.rs](https://starship.rs)
 - [bat](https://github.com/sharkdp/bat)
 - [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
-- [zellij](https://zellij.dev/)
+- [fzf](https://github.com/junegunn/fzf)
+- [lazyvim](https://lazyvim.org/)
 - [lsd](https://github.com/lsd-rs/lsd)
+- [starship.rs](https://starship.rs)
 - [zellij](https://zellij.dev/)
 
 # GUI softwares
@@ -104,3 +103,4 @@ matches:
 # My Keyboard
 
 ![my keyboard](./assets/keyboard.jpg)
+

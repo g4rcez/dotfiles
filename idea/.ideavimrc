@@ -414,7 +414,6 @@ nmap <leader>ba <Action>(ToggleBookmark)
 nmap <leader>bm <Action>(ToggleBookmark)
 nmap <leader>br <Action>(ToggleBookmark)
 nmap <leader>mm <Action>(ToggleBookmark)
-nmap <leader>mo <Action>(ShowBookmark)
 let g:WhichKeyDesc_toggle_bookmarks_leader = "<leader>ma Toggle bookmark"
 
 nmap <Tab><Tab> <Action>(ShowBookmarks)
@@ -468,8 +467,8 @@ nmap <C-s> :w<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" lazyvim bindings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>ui <Actrion>(FindUsages)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""ctrion>(FindUsages)
+nmap <leader>ui <Action>(FindUsages)
 " Inspect Tree
 let g:WhichKeyDesc_activate_structure_tool = "<leader>gl Activate structure tool"
 nmap <leader>gl <Action>(ActivateStructureToolWindow)

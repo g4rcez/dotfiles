@@ -7,8 +7,10 @@
     "jsr:@std/cli@^1.0.6": "1.0.6",
     "jsr:@std/collections@^1.0.8": "1.0.8",
     "jsr:@std/crypto@^1.0.3": "1.0.3",
+    "jsr:@std/fmt@^1.0.3": "1.0.3",
     "jsr:@std/internal@^1.0.4": "1.0.4",
     "jsr:@std/semver@*": "1.0.3",
+    "jsr:@std/text@^1.0.8": "1.0.8",
     "jsr:@std/uuid@1.0.4": "1.0.4",
     "jsr:@std/yaml@*": "1.0.5",
     "jsr:@utility/git@0.4.1": "0.4.1",
@@ -42,11 +44,17 @@
     "@std/crypto@1.0.3": {
       "integrity": "a2a32f51ddef632d299e3879cd027c630dcd4d1d9a5285d6e6788072f4e51e7f"
     },
+    "@std/fmt@1.0.3": {
+      "integrity": "97765c16aa32245ff4e2204ecf7d8562496a3cb8592340a80e7e554e0bb9149f"
+    },
     "@std/internal@1.0.4": {
       "integrity": "62e8e4911527e5e4f307741a795c0b0a9e6958d0b3790716ae71ce085f755422"
     },
     "@std/semver@1.0.3": {
       "integrity": "7c139c6076a080eeaa4252c78b95ca5302818d7eafab0470d34cafd9930c13c8"
+    },
+    "@std/text@1.0.8": {
+      "integrity": "40ba34caa095f393e78796e5eda37b8b4e2cc6cfd6f51f34658ad7487b1451e4"
     },
     "@std/uuid@1.0.4": {
       "integrity": "f4233149cc8b4753cc3763fd83a7c4101699491f55c7be78dc7b30281946d7a0",
@@ -111,6 +119,8 @@
       "jsr:@std/cli@^1.0.6",
       "jsr:@std/collections@^1.0.8",
       "jsr:@std/crypto@^1.0.3",
+      "jsr:@std/fmt@^1.0.3",
+      "jsr:@std/text@^1.0.8",
       "jsr:@std/uuid@1.0.4",
       "jsr:@utility/git@0.4.1",
       "npm:@faker-js/faker@8.4.1",

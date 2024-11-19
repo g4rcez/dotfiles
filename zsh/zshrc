@@ -38,8 +38,7 @@ export PATH="$PATH_RESULT"
 ##############################################################################################################
 ## zsh-snap + plugins
 [[ -r "$SNAP_DIR/znap.zsh" ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git $SNAP_DIR
+    git clone --depth 1 -- "https://github.com/marlonrichert/zsh-snap.git" $SNAP_DIR
 source "$SNAP_DIR/znap.zsh"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
@@ -111,8 +110,5 @@ local -a SOURCE=(
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
-
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense,carapace'
-source <(carapace _carapace)
 
 . "$HOME/.local/share/../bin/env"

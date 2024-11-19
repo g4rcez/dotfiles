@@ -1,11 +1,3 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
-
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
---
 local DEFAULT_OPTS = { noremap = true, silent = true }
 
 local function keymap(mode, from, to, opts)
@@ -87,5 +79,4 @@ key.normal("<leader>so", "<cmd>Oil --float<cr>", { desc = "oil.nvim", noremap = 
 -- ufo
 -- key.normal("zo", require("ufo").openAllFolds, { desc = "Open folds" })
 -- key.normal("zc", require("ufo").closeAllFolds, { desc = "Close folds" })
-
 

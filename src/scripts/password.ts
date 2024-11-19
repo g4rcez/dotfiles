@@ -3,7 +3,8 @@ import { Script } from "../script.ts";
 
 const numbers = "0123456789";
 
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕ";
+const letters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕ";
 
 const specialChars = "_%^&*()[|\\];:,.?/~!@-#$œåΩ∑ß´ç∂®ƒ√†©∫¥˙˜¨∆ºª•¶§∞";
 
