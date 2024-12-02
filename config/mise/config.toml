@@ -3,7 +3,9 @@ usage = "0.3.0"
 node = "20.18.0"
 bun = "1.1.13"
 dotnet = "8.0.401"
-deno = "2.0.2"
+deno = "2.1.2"
+java = "21.0.2"
+python = "3.13.0"
 
 [settings]
 legacy_version_file = true

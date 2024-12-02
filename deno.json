@@ -1,11 +1,10 @@
 {
     "license": "MIT",
     "tasks": {
-        "dev": "deno run --watch main.ts",
-        "compile": "deno run --allow-run -WSER main.ts"
+        "compile": "deno run --allow-run -WSER main.ts",
+        "dev": "deno run --watch --allow-run -WSER main.ts"
     },
     "imports": {
-        "_": "./src/utils.ts",
         "@faker-js/faker": "npm:@faker-js/faker@8.4.1",
         "@quentinadam/uuidv7": "jsr:@quentinadam/uuidv7@0.1.0",
         "@std/assert": "jsr:@std/assert@1",
@@ -13,12 +12,13 @@
         "@std/collections": "jsr:@std/collections@^1.0.8",
         "@std/crypto": "jsr:@std/crypto@^1.0.3",
         "@std/fmt": "jsr:@std/fmt@^1.0.3",
+        "@std/path": "jsr:@std/path@^1.0.8",
         "@std/text": "jsr:@std/text@^1.0.8",
         "@std/uuid": "jsr:@std/uuid@1.0.4",
         "@utility/git": "jsr:@utility/git@0.4.1",
+        "_": "./src/utils.ts",
         "color-convert": "npm:color-convert@2.0.1",
         "jsr:@utility/git": "jsr:@utility/git@0.4.1",
-        "polished": "npm:polished@4.3.1",
         "yaml": "jsr:@jsr/yaml@1.0.5"
     },
     "fmt": {

@@ -294,6 +294,9 @@ let g:WhichKeyDesc_code_tools_prefix = "<leader>c +Code"
 let g:WhichKeyDesc_reformat_code = "<leader>ca CodeEditorViewGroup"
 nmap <leader>ca <action>(CodeEditorViewGroup)
 
+let g:WhichKeyDesc_reformat_code = "<leader>ci Expression info"
+nmap <leader>ci <Action>(ExpressionTypeInfo)
+
 let g:WhichKeyDesc_reformat_code = "<leader>cf Reformat Code"
 nmap <leader>cf <action>(ReformatCode)
 
@@ -366,6 +369,7 @@ let g:WhichKeyDesc_move_line_down = "<A-down> Move line down"
 
 set easymotion
 let g:EasyMotion_do_mapping = 1
+let g:EasyMotion_startofline = 0
 
 nmap <leader>mj <action>(AceDeclarationAction)
 let g:WhichKeyDesc_ace_jump = "<leader>mj Easy motion plugin"
@@ -464,6 +468,21 @@ let g:WhichKeyDesc_split_horizontally = "<leader>- Split vertically"
 
 "" Save in normal mode
 nmap <C-s> :w<CR>
+
+nmap <C-w>q :wq<CR>
+let g:WhichKeyDesc_close_window_ctrl = "<C-w>q Close window"
+
+nmap <C-w>s <action>(SplitVertically)
+let g:WhichKeyDesc_split_window_ctrl = "<C-w>s Split window"
+
+nmap <C-w>w <action>(NextSplitter)
+nmap <C-w>l <action>(NextSplitter)
+nmap <C-w>j <action>(NextSplitter)
+let g:WhichKeyDesc_next_splitter_ctrl = "<C-w>l/w Next Splitter"
+
+nmap <C-w>h <action>(PrevSplitter)
+nmap <C-w>k <action>(PrevSplitter)
+let g:WhichKeyDesc_prev_splitter_ctrl = "<C-w>s Prev splitter"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" lazyvim bindings

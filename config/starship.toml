@@ -112,7 +112,7 @@ up_to_date = ''
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "fg"
-cherry_pick = '[🍒PICKING](red)'
+cherry_pick = '[🍒PICK](red)'
 
 [git_metrics]
 disabled = false

@@ -9,7 +9,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias ls="lsd --git"
+alias ls="lsd"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'

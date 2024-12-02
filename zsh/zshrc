@@ -1,6 +1,7 @@
 if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
     return
 fi
+
 ##############################################################################################################
 ## exports
 export UID=$(id -u)
@@ -111,4 +112,9 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-. "$HOME/.local/share/../bin/env"
+export CARAPACE_BRIDGES='zsh,fish,bash'
+zstyle ':completion:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+zstyle ':completion:*:ls:*' group-order 'main commands' 'alias commands' 'external commands'
+source <(carapace _carapace)
+

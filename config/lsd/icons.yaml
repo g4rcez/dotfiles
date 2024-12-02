@@ -21,6 +21,7 @@ name:
     coverage: 
     database: 
     db: 
+    deno.json: 🦖
     dist: 󰷌
     docker: 
     dockerfile: 

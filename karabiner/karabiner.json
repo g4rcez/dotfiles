@@ -3119,7 +3119,6 @@
                   {
                     "key_code": "right_arrow",
                     "modifiers": [
-                      "left_shift",
                       "left_alt"
                     ]
                   },
@@ -3149,7 +3148,6 @@
                   {
                     "key_code": "right_arrow",
                     "modifiers": [
-                      "left_shift",
                       "left_alt"
                     ]
                   }
@@ -3177,7 +3175,6 @@
                   {
                     "key_code": "left_arrow",
                     "modifiers": [
-                      "left_shift",
                       "left_alt"
                     ]
                   },
@@ -3207,7 +3204,6 @@
                   {
                     "key_code": "left_arrow",
                     "modifiers": [
-                      "left_shift",
                       "left_alt"
                     ]
                   }
@@ -3440,56 +3436,6 @@
                 "to": [
                   {
                     "shell_command": "open  raycast://extensions/raycast/navigation/search-menu-items"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + r + b - Bitwarden search",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_r_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + r + b - Bitwarden search",
-                "from": {
-                  "key_code": "b"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/jomifepe/bitwarden/search"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_r_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_r_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + r + b - Bitwarden search",
-                "from": {
-                  "key_code": "b"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/jomifepe/bitwarden/search"
                   }
                 ],
                 "type": "basic"
@@ -4027,7 +3973,7 @@
             ]
           },
           {
-            "description": "leader + b + w - Chrome: Open work profile",
+            "description": "leader + b + w - Work profile",
             "manipulators": [
               {
                 "conditions": [
@@ -4037,13 +3983,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + w - Chrome: Open work profile",
+                "description": "leader + b + w - Work profile",
                 "from": {
                   "key_code": "w"
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n  'Google Chrome.app' --args --profile-directory='Profile 1'"
                   },
                   {
                     "halt": true,
@@ -4063,13 +4009,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + w - Chrome: Open work profile",
+                "description": "leader + b + w - Work profile",
                 "from": {
                   "key_code": "w"
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Profile 1'"
+                    "shell_command": "open -n  'Google Chrome.app' --args --profile-directory='Profile 1'"
                   }
                 ],
                 "type": "basic"
@@ -4077,7 +4023,7 @@
             ]
           },
           {
-            "description": "leader + b + return_or_enter - Chrome: Open personal profile",
+            "description": "leader + b + return_or_enter - Personal profile",
             "manipulators": [
               {
                 "conditions": [
@@ -4087,13 +4033,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + return_or_enter - Chrome: Open personal profile",
+                "description": "leader + b + return_or_enter - Personal profile",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n  'Google Chrome.app' --args --profile-directory='Default'"
                   },
                   {
                     "halt": true,
@@ -4113,13 +4059,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + return_or_enter - Chrome: Open personal profile",
+                "description": "leader + b + return_or_enter - Personal profile",
                 "from": {
                   "key_code": "return_or_enter"
                 },
                 "to": [
                   {
-                    "shell_command": "open -n -a 'Google Chrome.app' --args --profile-directory='Default'"
+                    "shell_command": "open -n  'Google Chrome.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"
@@ -4127,7 +4073,7 @@
             ]
           },
           {
-            "description": "leader + b + s - Search tabs",
+            "description": "leader + b + t - Search tabs",
             "manipulators": [
               {
                 "conditions": [
@@ -4137,13 +4083,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + s - Search tabs",
+                "description": "leader + b + t - Search tabs",
                 "from": {
-                  "key_code": "s"
+                  "key_code": "t"
                 },
                 "to": [
                   {
-                    "shell_command": "open  raycast://extensions/Codely/google-chrome/search-tab"
+                    "shell_command": "open  raycast://extensions/koinzhang/browser-tabs/index"
                   },
                   {
                     "halt": true,
@@ -4163,127 +4109,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + b + s - Search tabs",
+                "description": "leader + b + t - Search tabs",
                 "from": {
-                  "key_code": "s"
+                  "key_code": "t"
                 },
                 "to": [
                   {
-                    "shell_command": "open  raycast://extensions/Codely/google-chrome/search-tab"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + b + h - Window: Previous Tab",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_b_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + b + h - Window: Previous Tab",
-                "from": {
-                  "key_code": "h"
-                },
-                "to": [
-                  {
-                    "key_code": "tab",
-                    "modifiers": [
-                      "right_control",
-                      "right_shift"
-                    ]
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_b_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_b_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + b + h - Window: Previous Tab",
-                "from": {
-                  "key_code": "h"
-                },
-                "to": [
-                  {
-                    "key_code": "tab",
-                    "modifiers": [
-                      "right_control",
-                      "right_shift"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + b + l - Window: Next Tab",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_b_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + b + l - Window: Next Tab",
-                "from": {
-                  "key_code": "l"
-                },
-                "to": [
-                  {
-                    "key_code": "tab",
-                    "modifiers": [
-                      "right_control"
-                    ]
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_b_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_b_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + b + l - Window: Next Tab",
-                "from": {
-                  "key_code": "l"
-                },
-                "to": [
-                  {
-                    "key_code": "tab",
-                    "modifiers": [
-                      "right_control"
-                    ]
+                    "shell_command": "open  raycast://extensions/koinzhang/browser-tabs/index"
                   }
                 ],
                 "type": "basic"

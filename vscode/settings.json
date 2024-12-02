@@ -86,9 +86,11 @@
     "[markdown]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "deno.enable": false,
+    "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
+    "deno.enable": true,
     "deno.lint": true,
-    "deno.codeLens.implementations": true,
     "deno.codeLens.references": true,
-    "terminal.integrated.shellIntegration.decorationsEnabled": "gutter"
+    "deno.codeLens.implementations": true,
+    "deno.path": "/Users/allangarcez/.local/share/mise/installs/deno/2.0.2/bin/deno",
+    "deno.codeLens.referencesAllFunctions": true
 }

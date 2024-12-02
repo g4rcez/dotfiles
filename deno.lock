@@ -9,6 +9,7 @@
     "jsr:@std/crypto@^1.0.3": "1.0.3",
     "jsr:@std/fmt@^1.0.3": "1.0.3",
     "jsr:@std/internal@^1.0.4": "1.0.4",
+    "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/semver@*": "1.0.3",
     "jsr:@std/text@^1.0.8": "1.0.8",
     "jsr:@std/uuid@1.0.4": "1.0.4",
@@ -19,7 +20,6 @@
     "npm:@types/node@*": "22.5.4",
     "npm:color-convert@*": "2.0.1",
     "npm:color-convert@2.0.1": "2.0.1",
-    "npm:polished@4.3.1": "4.3.1",
     "npm:yaml@*": "2.5.1"
   },
   "jsr": {
@@ -50,6 +50,9 @@
     "@std/internal@1.0.4": {
       "integrity": "62e8e4911527e5e4f307741a795c0b0a9e6958d0b3790716ae71ce085f755422"
     },
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
     "@std/semver@1.0.3": {
       "integrity": "7c139c6076a080eeaa4252c78b95ca5302818d7eafab0470d34cafd9930c13c8"
     },
@@ -71,12 +74,6 @@
     }
   },
   "npm": {
-    "@babel/runtime@7.25.7": {
-      "integrity": "sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==",
-      "dependencies": [
-        "regenerator-runtime"
-      ]
-    },
     "@faker-js/faker@8.4.1": {
       "integrity": "sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg=="
     },
@@ -95,15 +92,6 @@
     "color-name@1.1.4": {
       "integrity": "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=="
     },
-    "polished@4.3.1": {
-      "integrity": "sha512-OBatVyC/N7SCW/FaDHrSd+vn0o5cS855TOmYi4OkdWUMSJCET/xip//ch8xGUvtr3i44X9LVyWwQlRMTN3pwSA==",
-      "dependencies": [
-        "@babel/runtime"
-      ]
-    },
-    "regenerator-runtime@0.14.1": {
-      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
-    },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
     },
@@ -120,12 +108,12 @@
       "jsr:@std/collections@^1.0.8",
       "jsr:@std/crypto@^1.0.3",
       "jsr:@std/fmt@^1.0.3",
+      "jsr:@std/path@^1.0.8",
       "jsr:@std/text@^1.0.8",
       "jsr:@std/uuid@1.0.4",
       "jsr:@utility/git@0.4.1",
       "npm:@faker-js/faker@8.4.1",
-      "npm:color-convert@2.0.1",
-      "npm:polished@4.3.1"
+      "npm:color-convert@2.0.1"
     ]
   }
 }

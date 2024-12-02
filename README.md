@@ -47,28 +47,25 @@ zsh
 
 # Karabiner
 
-My karabiner config was very inspired by [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner). You can
-check the Youtube videos below:
+My karabiner config was very inspired by [karabiner keybind - mxstbr](https://github.com/mxstbr/karabiner). You can check the Youtube videos below:
 
 - [Max Stoiber Owns His Workflow with Raycast](https://www.youtube.com/watch?v=m5MDv9qwhU8)
 - [How I Programed the Most Productive MacOS Keyboard Setup Ever: Karabiner Elements](https://www.youtube.com/watch?v=j4b_uQX3Vu0)
 
-With these videos I have the idea to implement keybindings like Tmux, with a prefix + key. My karabiner config have two
-modes:
+With these videos I have the idea to implement keybindings like Tmux, with a prefix + key. My karabiner config have two modes:
 
 - `single`: that just press one time the prefix + key
-- `hold`: you need to hold the prefix until the karabiner notification and press the other key. With this mode you can
-  repeat all keys at layer. Hold again to exit from this mode
+- `hold`: you need to hold the prefix until the karabiner notification and press the other key. With this mode you can repeat all keys at layer. Hold
+  again to exit from this mode
 
 Inspired by [which-key.nvim](https://github.com/folke/which-key.nvim), I created the local extension of
 [https://www.raycast.com/](https://www.raycast.com/) to check all my karabiner shortcuts.
 
 # Espanso
 
-[Espanso](https://espanso.org/) it's an amazing tool to expand your texts to other utilities. I work in frontend and I
-need a lots of texts like lorem ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some
-personal informations at my espanso config, this file will not be able to check at this repo. But you can generate using
-the `make` or check this sample.
+[Espanso](https://espanso.org/) it's an amazing tool to expand your texts to other utilities. I work in frontend and I need a lots of texts like lorem
+ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some personal informations at my espanso config, this file will not
+be able to check at this repo. But you can generate using the `make` or check this sample.
 
 The espanso command key is `;`, since I use the `:` for emojis in most of applications.
 
@@ -103,4 +100,3 @@ matches:
 # My Keyboard
 
 ![my keyboard](./assets/keyboard.jpg)
-
