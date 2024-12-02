@@ -1,9 +1,7 @@
 {
-  "extras": [
-
-  ],
-  "news": {
-    "NEWS.md": "7429"
-  },
-  "version": 7
+    "extras": [],
+    "news": {
+        "NEWS.md": "7429"
+    },
+    "version": 7
 }

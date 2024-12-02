@@ -1,5 +1,9 @@
 return {
   {
+    "lukas-reineke/virt-column.nvim",
+    opts = { char = "│" },
+  },
+  {
     "kevinhwang91/nvim-bqf",
     lazy = false,
     dependencies = {
