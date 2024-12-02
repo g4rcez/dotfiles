@@ -12,7 +12,7 @@ const simpleTriggers = [
     espanso.format("dh", "date", "%d/%m/%Y %H:%M"),
     espanso.insert(
         "sort",
-        ` ! awk '{ print length(), $0 | "sort -n | cut -d\\  -f2-" }'`,
+        `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
     ),
     espanso.clipboard("mdl", "link", "[$|$]({{link}})"),
     espanso.form(
@@ -33,23 +33,26 @@ const simpleTriggers = [
 
     // emojis 👍🏾
     espanso.insert("blz", "👍🏾"),
+    espanso.insert("cry", "😭"),
+    espanso.insert("deal", "🤝🏾"),
+    espanso.insert("eye", "👀"),
     espanso.insert("pray", "🙏🏾"),
     espanso.insert("s2", "❤️"),
-    espanso.insert("deal", "🤝🏾"),
-    espanso.insert("cry", "😭"),
-    espanso.insert("eye", "👀"),
+    espanso.insert("up", "🙌🏾"),
     espanso.insert(
         "tnc",
         "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
     ),
 ];
 
+const withParam = (x: string) => `${x}\\[(?P<N>.*)\\]`;
+
 const snippetsTriggers = ["umh", "uch", "inm", "imp", "ush"]
     .map((x) => {
         return espanso.shell(
             x,
             runMain(`snippets --value $ESPANSO_N --mode=${x}`),
-            `${x}\\[(?P<N>.*)\\]`,
+            withParam(x),
         );
     })
     .concat(
@@ -69,7 +72,7 @@ const shellTriggers = [
     espanso.shell(
         "pass",
         runMain("password --length $ESPANSO_N"),
-        "pass\\[(?P<N>.*)\\]",
+        withParam("pass"),
     ),
     espanso.shell("cellphone", runMain("phone --mode=cellphone")),
     espanso.shell("telephone", runMain("phone --mode=telephone")),
@@ -108,14 +111,12 @@ const randomTriggers = [
     ]),
 ];
 
-export const createEspansoConfig = () => {
-    const config = {
+export const createEspansoConfig = () =>
+    stringify({
         ...imports([home(".shortcuts.yml")]),
         matches: shellTriggers.concat(
             randomTriggers,
             simpleTriggers,
             snippetsTriggers,
         ),
-    };
-    return stringify(config);
-};
+    });

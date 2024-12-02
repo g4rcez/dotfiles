@@ -1,6 +1,5 @@
+import * as path from "@std/path";
 import { exec } from "node:child_process";
-import os from "node:os";
-import path from "node:path";
 import { promisify } from "node:util";
 import { Conditions, KarabinerRule, KeyCode, Manipulator, Parameters, RectangleActions, To } from "./types.ts";
 
@@ -8,7 +7,7 @@ export const $ = promisify(exec);
 
 export const deno = "deno run";
 
-export const home = (...names: string[]) => path.resolve(os.homedir(), ...names);
+export const home = (...names: string[]) => path.resolve(Deno.env.get("HOME")!, ...names);
 
 export const dotfile = (...names: string[]) => home("dotfiles", ...names);
 
@@ -190,14 +189,16 @@ export const notify = (message: string, title: string) => ({
 });
 
 const BROWSER = "Google Chrome";
+
 export const browser = (
     profile: "Profile 1" | "Default",
-    description?: string,
+    description: string,
+    append: string = "-a",
 ): LayerCommand => ({
     description: description || `Open ${BROWSER} ${profile}`,
     to: [
         {
-            shell_command: `open -n -a '${BROWSER}.app' --args --profile-directory='${profile}'`,
+            shell_command: `open -n ${append} '${BROWSER}.app' --args --profile-directory='${profile}'`,
         },
     ],
 });

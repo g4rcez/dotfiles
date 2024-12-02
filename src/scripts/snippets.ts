@@ -7,8 +7,7 @@ const mappers = {
     uch: (value: string) => `const ${value} = useCallback(() => {$|$}, []);`,
     ueh: () => `useEffect(() => {$|$}, []);`,
     umh: (value: string) => `const ${value} = useMemo(() => {$|$}, []);`,
-    ush: (value: string) =>
-        `const [${value}, set${toPascalCase(value)}] = useState($|$)`,
+    ush: (value: string) => `const [${value}, set${toPascalCase(value)}] = useState($|$)`,
 };
 
 type Mappers = keyof typeof mappers;

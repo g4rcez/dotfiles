@@ -24,6 +24,6 @@ export const espanso = async () => {
     await fs.mkdir(config, { recursive: true });
     await fs.writeFile(defaultYml, stringify(espansoConfigDefaults), "utf-8");
     console.log("Espanso was configured");
-    const created = [matches, config, baseYml, defaultYml];
-    created.forEach((x) => console.log(`\t - Created: "${x}"`));
+    const toCreate = [matches, config, baseYml, defaultYml];
+    toCreate.forEach((x) => console.log(`\t - Created: "${x}"`));
 };
