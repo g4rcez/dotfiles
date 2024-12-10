@@ -14,6 +14,7 @@ DOTFILES_DIR="$HOME/dotfiles"
 HOME_CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 source $HOME/dotfiles/zsh/utils.sh
+sh <(curl -L https://nixos.org/nix/install) --daemon
 
 ########################################################################################################################
 ##### core installs
@@ -24,29 +25,6 @@ ln -sf $DOTFILES_DIR/idea/.ideavimrc $HOME/.ideavimrc
 ln -sf $DOTFILES_DIR/wezterm $HOME_CONFIG_DIR
 ln -sf $DOTFILES_DIR/git/gitconfig $HOME/.gitconfig
 
-########################################################################################################################
-##### brew
-function installbrew() {
-    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-}
-checkcommand "brew" installbrew
-if [[ -f "$(command -v brew)" ]]; then
-    bash $HOME/dotfiles/setup/brew.sh
-fi
-
-########################################################################################################################
-##### fzf
-function installfzf() {
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
-}
-checkcommand "fzf" installfzf
-########################################################################################################################
-##### starship
-function installStarship() {
-    curl -sS https://starship.rs/install.sh | sh
-}
-checkcommand "fzf" installStarship
 ########################################################################################################################
 ##### mise config
 function installmise() {

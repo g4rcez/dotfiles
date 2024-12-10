@@ -181,7 +181,7 @@ table.insert(M, {
       { "<leader>s", group = "[s]ession", icon = icon("nix") },
       { "<leader>f", group = "[f]ind", icon = icon("desktop") },
       { "<leader>w", group = "[w]orkspace", icon = icon("workspace") },
-      { "<leader>t", group = "[t]oggle" },
+      { "<leader>t", group = "[t]oggle", icon = icon("workspace") },
       { "<leader>x", group = "[x]trouble/errors" },
       { "<leader>h", group = "git [h]unk", mode = { "n", "v" }, icon = icon("git") },
     }, {

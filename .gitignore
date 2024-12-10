@@ -46,3 +46,5 @@ nvim/LICENSE
 nvim/bookmarks.db.json.backup
 custom-nvim/bookmarks.db.json.backup
 *.log
+nix/result
+./nix/result

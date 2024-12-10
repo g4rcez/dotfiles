@@ -1,7 +1,7 @@
 brew install \
     bat coreutils git-delta espanso lsd wezterm \
     fd ffmpeg findutils gh git gnupg grep ipython \
-    jq obsidian orbstack ripgrep rust starship telegram \
+    jq obsidian ripgrep rust starship telegram \
     visual-studio-code zoxide starship nvim vivid tokei \
     gitleaks docker docker-compose colima fx
 
