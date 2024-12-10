@@ -30,14 +30,14 @@ layout {
             mode_tmux          "#[bg=#f5a97f,fg=#181926,bold]  #[bg=#181926,fg=#f5a97f]█"
 
             // formatting for inactive tabs
-            tab_normal              "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_normal_fullscreen   "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_normal_sync         "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_normal              "#[bg=#181926,fg=#475569]█#[bg=#475569,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#475569,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_normal_fullscreen   "#[bg=#181926,fg=#475569]█#[bg=#475569,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#475569,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_normal_sync         "#[bg=#181926,fg=#475569]█#[bg=#475569,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#475569,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
 
             // formatting for the current active tab
-            tab_active              "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_active_fullscreen   "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_active_sync         "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active              "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active_fullscreen   "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active_sync         "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
 
             // separator between the tabs
             tab_separator           "#[bg=#181926] "

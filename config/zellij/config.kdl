@@ -218,9 +218,7 @@ keybinds clear-defaults=true {
         bind "Alt k" "Alt Up" { MoveFocus "Up"; }
         bind "Alt =" "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
-        bind "Alt [" { PreviousSwapLayout; }
-        bind "Alt ]" { NextSwapLayout; }
-        bind "Ctrl y" {
+        bind "Alt ]" {
             LaunchOrFocusPlugin "file:~/dotfiles/config/zellij/plugins/zellij_forgot.wasm" {
                 "LOAD_ZELLIJ_BINDINGS" "true"
                 floating true
