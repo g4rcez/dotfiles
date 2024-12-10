@@ -50,7 +50,7 @@
     "tailwindCSS.emmetCompletions": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "vscode-neovim.logOutputToConsole": false,
-    "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+    "vscode-neovim.neovimExecutablePaths.darwin": "/run/current-system/sw/bin/nvim",
     "vscode-neovim.normalSelectionDebounceTime": 100,
     "vscode-neovim.revealCursorScrollLine": true,
     "window.commandCenter": false,

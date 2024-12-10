@@ -35,9 +35,9 @@ layout {
             tab_normal_sync         "#[bg=#181926,fg=#89b4fa]█#[bg=#89b4fa,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#89b4fa,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
 
             // formatting for the current active tab
-            tab_active              "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_active_fullscreen   "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
-            tab_active_sync         "#[bg=#181926,fg=#fab387]█#[bg=#fab387,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#fab387,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active              "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{floating_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active_fullscreen   "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{fullscreen_indicator}#[bg=#181926,fg=#363a4f,bold]█"
+            tab_active_sync         "#[bg=#181926,fg=#10b981]█#[bg=#10b981,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#10b981,bold] {name}{sync_indicator}#[bg=#181926,fg=#363a4f,bold]█"
 
             // separator between the tabs
             tab_separator           "#[bg=#181926] "

@@ -1,7 +1,5 @@
 {
   description = "Setup osx";
-
-
   inputs = {
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-darwin.url = "github:LnL7/nix-darwin";
@@ -30,7 +28,6 @@
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
-      # Necessary for using flakes on this system.
       services.nix-daemon.enable = true;
       nix.settings.experimental-features = "nix-command flakes";
       nixpkgs.config.allowUnfree = true;
@@ -43,7 +40,7 @@
 
       # Used for backwards compatibility, please read the changelog before changing.
       # $ darwin-rebuild changelog
-      system.stateVersion = 5;
+      system.stateVersion = 2;
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
@@ -56,8 +53,8 @@
         NSGlobalDomain = {
             AppleInterfaceStyle = "Dark";
             AppleICUForce24HourTime = true;
-            KeyRepeat = 5;
-            InitialKeyRepeat = 17;
+            KeyRepeat = 2;
+            InitialKeyRepeat = 15;
         };
         finder = {
             ShowPathbar = true;
@@ -69,7 +66,9 @@
       homebrew = {
         enable = true;
         brews = ["mas"];
-        casks = [];
+        casks = ["rectangle-pro"];
+        masApps = {
+        };
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
@@ -89,20 +88,28 @@
             pkgs.findutils
             pkgs.fx
             pkgs.fzf
-            pkgs.gnupg
             pkgs.gh
             pkgs.git
-            pkgs.nixd
             pkgs.gitleaks
+            pkgs.gnupg
             pkgs.google-chrome
             pkgs.jq
             pkgs.karabiner-elements
             pkgs.kitty
             pkgs.kubectl
+            pkgs.lazydocker
+            pkgs.lazygit
             pkgs.lsd
             pkgs.neovim
+            pkgs.nixd
+            pkgs.nmap
+            pkgs.nuclei
             pkgs.obsidian
+            pkgs.pinentry_mac
             pkgs.ripgrep
+            pkgs.htop
+            pkgs.fortune
+            pkgs.figlet
             pkgs.rustup
             pkgs.starship
             pkgs.tokei
@@ -111,16 +118,21 @@
             pkgs.wezterm
             pkgs.zellij
             pkgs.zoxide
-            pkgs.pinentry_mac
+            pkgs.telegram-desktop
+            pkgs.raycast
         ];
     };
+  rectanglePro = import ./pkgs/rectangle-pro;
   in
   {
+    environment.systemPackages = [
+        rectanglePro
+    ];
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#garcez
     darwinConfigurations."garcez" = nix-darwin.lib.darwinSystem {
       specialArgs = { inherit inputs self; };
-      modules = [ 
+      modules = [
         configuration
         nix-homebrew.darwinModules.nix-homebrew
         {
@@ -129,11 +141,6 @@
             enableRosetta = true;
             user = "allangarcez";
             autoMigrate = true;
-	    taps = {
-              "homebrew/homebrew-core" = homebrew-core;
-              "homebrew/homebrew-cask" = homebrew-cask;
-              "homebrew/homebrew-bundle" = homebrew-bundle;
-            };
           };
         }
       ];

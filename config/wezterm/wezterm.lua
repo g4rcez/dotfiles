@@ -13,7 +13,7 @@ local wezterm = require("wezterm")
 local Config = wezterm.config_builder()
 
 Config.front_end = "WebGpu"
-Config.webgpu_power_preference = 'HighPerformance'
+Config.webgpu_power_preference = 'LowPower'
 Config.enable_wayland = false
 
 local theme = require("./lua/theme")
@@ -22,7 +22,6 @@ local keymap = require("./lua/keymap")
 local hyperlinks = require("./lua/hyper-links")
 local events = require("./lua/events")
 local X = require("./lua/helpers")
-
 
 X.merge(Config, events)
 X.merge(Config, theme)

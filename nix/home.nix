@@ -1,10 +1,12 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "allangarcez";
   home.homeDirectory = "/Users/allangarcez";
+
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -17,24 +19,7 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    pkgs.htop
-    pkgs.fortune
-    pkgs.figlet
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+  home.packages = [];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -45,11 +30,11 @@
     # ".screenrc".source = dotfiles/screenrc;
     ".zshrc".source = ~/dotfiles/zsh/zshrc;
     ".gitconfig".source = ~/dotfiles/git/gitconfig;
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+    ".ideavimrc".source = ~/dotfiles/idea/.ideavimrc;
+    ".config/starship.toml".source = ~/dotfiles/config/starship.toml;
+    ".config/yazi".source = ~/dotfiles/config/yazi;
+    ".config/lazygit".source = ~/dotfiles/config/lazygit;
+    "Library/Application Support/Code/User/settings.json".source = ~/dotfiles/vscode/settings.json;
   };
 
   home.sessionVariables = {

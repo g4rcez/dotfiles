@@ -113,3 +113,6 @@ for config in $SOURCE; do
 done
 
 eval "$(~/.local/bin/mise activate zsh)"
+
+zellij-start
+

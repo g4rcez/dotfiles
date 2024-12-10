@@ -190,3 +190,7 @@ function karabiner-reset() {
     sleep 0.5
     launchctl start org.pqrs.karabiner.karabiner_console_user_server
 }
+
+function home-sync() {
+    darwin-rebuild switch --flake $DOTFILES/nix#garcez; home-manager switch
+}
