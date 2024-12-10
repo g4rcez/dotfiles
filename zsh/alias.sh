@@ -140,8 +140,6 @@ function updateAll() {
     znap pull
     vivid-update
     nodeUpdatePackages
-    fzf-update
-    brew upgrade
 }
 
 function secretuuid() {
