@@ -34,6 +34,10 @@
     ".config/starship.toml".source = ~/dotfiles/config/starship.toml;
     ".config/yazi".source = ~/dotfiles/config/yazi;
     ".config/lazygit".source = ~/dotfiles/config/lazygit;
+    ".config/zellij".source = ~/dotfiles/config/zellij;
+    ".config/nvim".source = ~/dotfiles/nvim;
+    ".config/wezterm".source = ~/dotfiles/config/wezterm;
+    ".config/mise".source = ~/dotfiles/config/mise;
     "Library/Application Support/Code/User/settings.json".source = ~/dotfiles/vscode/settings.json;
   };
 

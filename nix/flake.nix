@@ -66,15 +66,14 @@
       homebrew = {
         enable = true;
         brews = ["mas"];
-        casks = ["rectangle-pro"];
-        masApps = {
-        };
+        casks = ["rectangle-pro" "jordanbaird-ice"];
+        masApps = {};
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
       };
 
-        environment.systemPackages =
+      environment.systemPackages =
         [ 
             pkgs.alt-tab-macos
             pkgs.bat
@@ -120,14 +119,17 @@
             pkgs.zoxide
             pkgs.telegram-desktop
             pkgs.raycast
+            pkgs.onefetch
+            pkgs.mise
+            pkgs.delta
+            pkgs.jetbrains.rider
+            pkgs.jetbrains.webstorm
+            pkgs.jetbrains.datagrip
+            pkgs.jetbrains.idea-ultimate
         ];
     };
-  rectanglePro = import ./pkgs/rectangle-pro;
   in
   {
-    environment.systemPackages = [
-        rectanglePro
-    ];
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#garcez
     darwinConfigurations."garcez" = nix-darwin.lib.darwinSystem {
