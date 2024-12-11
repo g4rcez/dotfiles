@@ -73,11 +73,10 @@ return {
                 build = 'make install_jsregexp',
             },
         },
-        config = function()
+        opts = function()
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
             luasnip.config.setup {}
-            -- cmp-vscode-like
             vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
             vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
             vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
@@ -124,17 +123,12 @@ return {
             vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', { fg = '#58B5A8' })
             vim.api.nvim_set_hl(0, 'CmpGhostText', { link = 'Comment', default = true })
             cmp.config.formatting = { format = require('tailwindcss-colorizer-cmp').formatter }
-            cmp.setup {
+            return {
                 performance = { debounce = 0, throttle = 0 },
                 auto_brackets = {},
                 view = { entries = 'bordered' },
                 experimental = { ghost_text = { hl_group = 'CmpGhostText' } },
                 completion = { completeopt = 'menu,menuone,preview,noselect' },
-                -- snippet = {
-                --     expand = function(args)
-                --         luasnip.lsp_expand(args.body)
-                --     end,
-                -- },
                 window = {
                     completion = cmp.config.window.bordered {
                         col_offset = -3,
@@ -145,11 +139,11 @@ return {
                 },
                 sources = {
                     { name = 'nvim_lsp', group_index = 1, priority = 1000000000 },
+                    { name = 'path' },
                     { name = 'nvim_lsp_signature_help', group_index = 1, priority = 1000000000 },
                     { name = 'calc' },
                     { name = 'lazydev' },
                     { name = 'nvim_lua' },
-                    { name = 'path' },
                     { name = 'luasnip', keyword_length = 3 },
                     { name = 'spell' },
                     { name = 'buffer', keyword_length = 3, priority = -1000000000 },

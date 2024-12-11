@@ -17,15 +17,6 @@ source $HOME/dotfiles/zsh/utils.sh
 sh <(curl -L https://nixos.org/nix/install) --daemon
 
 ########################################################################################################################
-##### core installs
-ln -sf $DOTFILES_DIR/nvim $HOME_CONFIG_DIR/
-ln -sf $DOTFILES_DIR/zsh/zshrc $HOME/.zshrc
-ln -sf $DOTFILES_DIR/tmux $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/idea/.ideavimrc $HOME/.ideavimrc
-ln -sf $DOTFILES_DIR/wezterm $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/git/gitconfig $HOME/.gitconfig
-
-########################################################################################################################
 ##### mise config
 function installmise() {
     curl https://mise.run | sh
@@ -35,6 +26,7 @@ function installmise() {
     ~/.local/bin/mise doctor
 }
 checkcommand "mise" installmise
+
 ########################################################################################################################
 ##### other links
 function setupBat() {
@@ -44,11 +36,4 @@ function setupBat() {
     ln -sf $DOTFILES_CONFIG_DIR/bat $HOME_CONFIG_DIR
 }
 setupBat
-ln -sf $DOTFILES_CONFIG_DIR/starship.toml $HOME_CONFIG_DIR
-ln -sf $DOTFILES_DIR/fd/.fdignore $HOME/.fdignore
-ln -sf $DOTFILES_DIR/Raise $HOME/
-ln -sf $DOTFILES_CONFIG_DIR/alacritty/ $HOME_CONFIG_DIR
-ln -sf $DOTFILES_CONFIG_DIR/yazi $HOME_CONFIG_DIR
-ln -sf $DOTFILES_CONFIG_DIR/lazygit $HOME_CONFIG_DIR
-ln -sf $PWD/config/mise $HOME/.config
 

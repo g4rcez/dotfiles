@@ -11,9 +11,6 @@ local key = {
   normal = function(from, to, desc)
     keymap("n", from, to, desc)
   end,
-  nx = function(from, to, desc)
-    keymap({ "x", "n" }, from, to, desc)
-  end,
   x = function(from, to, desc)
     keymap("x", from, to, desc)
   end,
@@ -51,9 +48,9 @@ key.normal("<leader>tc", fns.replaceHexWithHSL, { desc = "Transform from hex to 
 key.normal(">", ">>", { desc = "Indent" })
 key.normal("<", "<<", { desc = "Deindent" })
 key.normal("vv", "V", { desc = "Select line" })
-key.nx(";", ":", DEFAULT_OPTS)
-key.nx("j", "gj", DEFAULT_OPTS)
-key.nx("k", "gk", DEFAULT_OPTS)
+key.n(";", ":", DEFAULT_OPTS)
+key.n("j", "gj", DEFAULT_OPTS)
+key.n("k", "gk", DEFAULT_OPTS)
 key.visual("<", "<gv", DEFAULT_OPTS)
 key.visual("<leader>sr", "<cmd>!tail -r<CR>", { desc = "Reverse sort lines" })
 key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
