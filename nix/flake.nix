@@ -4,7 +4,6 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
     # homebrew-nix
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     # Optional: Declarative tap management
@@ -126,6 +125,9 @@
             pkgs.jetbrains.webstorm
             pkgs.jetbrains.datagrip
             pkgs.jetbrains.idea-ultimate
+            pkgs.exiftool
+            pkgs.go
+            pkgs.ncdu
         ];
     };
   in

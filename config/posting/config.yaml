@@ -1,0 +1,11 @@
+editor: nvim
+theme: galaxy
+animation: basic
+layout: horizontal
+load_builtin_themes: true
+pager_json: jq
+response:
+  prettify_json: true
+heading:
+  visible: true
+  show_host: true

@@ -153,6 +153,7 @@ const withLeaderKeys = createLeaderLayers({
             "",
             "OCR screen area",
         ),
+        n: open("raycast://extensions/aiotter/nixpkgs-search/index","", "Nix search")
     },
     b: {
         description: "Google chrome profiler/controls",

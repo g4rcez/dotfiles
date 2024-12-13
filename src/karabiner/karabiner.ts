@@ -2,7 +2,7 @@ import { dotfile } from "_";
 import { devices } from "./devices.ts";
 import { config, whichKey } from "./karabiner.config.ts";
 
-export const karabiner = () => {
+export const karabiner = async () => {
     const wkPath = dotfile(
         "raycast",
         "extensions",
@@ -11,9 +11,9 @@ export const karabiner = () => {
         "whichkey.json",
     );
     console.log(`The whichkey map "${wkPath}" was created`);
-    Deno.writeTextFileSync(wkPath, JSON.stringify(whichKey, null, 4));
+    await Deno.writeTextFile(wkPath, JSON.stringify(whichKey, null, 4));
     const configFile = dotfile("karabiner", "karabiner.json");
-    Deno.writeTextFileSync(
+    await Deno.writeTextFile(
         configFile,
         JSON.stringify(
             {

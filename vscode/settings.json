@@ -8,7 +8,7 @@
     "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "cSpell.language": "en,pt,pt-BR,en-GB,en-US",
     "editor.accessibilitySupport": "off",
-    "editor.defaultColorDecorators": true,
+    "editor.defaultColorDecorators": "auto",
     "editor.definitionLinkOpensInPeek": true,
     "editor.fontFamily": "JetBrainsMono Nerd Font",
     "editor.fontLigatures": true,
@@ -57,7 +57,7 @@
     "window.customTitleBarVisibility": "never",
     "window.titleBarStyle": "native",
     "workbench.colorTheme": "Catppuccin Mocha",
-    "workbench.iconTheme": "material-icon-theme",
+    "workbench.iconTheme": "a-file-icon-vscode",
     "workbench.layoutControl.enabled": true,
     "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
     "workbench.settings.editor": "json",
@@ -91,6 +91,5 @@
     "deno.lint": true,
     "deno.codeLens.references": true,
     "deno.codeLens.implementations": true,
-    "deno.path": "/Users/allangarcez/.local/share/mise/installs/deno/2.0.2/bin/deno",
     "deno.codeLens.referencesAllFunctions": true
 }

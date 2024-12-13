@@ -3793,6 +3793,56 @@
             ]
           },
           {
+            "description": "leader + r + n - Nix search",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + n - Nix search",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/aiotter/nixpkgs-search/index"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + n - Nix search",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/aiotter/nixpkgs-search/index"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "disable single - leader b",
             "manipulators": [
               {

@@ -5,19 +5,20 @@ format = """
 $status\
 ${custom.git_host}\
 $directory\
-$git_state\
-$lua\
-$nodejs\
-$deno\
-$package\
-$docker_context\
-$fill\
 $git_branch\
+$fill\
 ${custom.since_last_commit}\
+$git_state\
 $git_commit\
 $git_metrics\
 $git_status\
 $git_commit\
+$lua\
+$nodejs\
+$deno\
+$package\
+$dotnet\
+$docker_context\
 $cmd_duration\
 $line_break\
 $character\
@@ -59,101 +60,110 @@ format = '[ $context](sky) '
 format = '[󰢱 $version](blue) '
 
 [package]
+symbol = " "
+style = "teal"
 disabled = false
 display_private = true
-format = '[$symbol$version](flamingo) '
-symbol = " "
+format = '[$symbol$version]($style) '
 
 [fill]
-style = 'green'
 symbol = " "
+style = 'green'
 disabled = false
 
 [status]
-style = 'fg:blue'
-symbol = '⚠️ '
-success_symbol = ''
-format = '$symbol$status$signal_name($style)'
-map_symbol = true
+symbol = ' '
 disabled = false
+map_symbol = true
+style = 'fg:blue'
+success_symbol = ''
+format = '[$symbol](yellow)$status ($style)'
 
 [directory]
-format = '[\[$path\]]($style)[$read_only]($read_only_style) '
-style = "bold sapphire"
+style = "blue"
+home_symbol = "~"
 truncation_length = 0
 fish_style_pwd_dir_length = 1
-home_symbol = "~"
+format = '[$path]($style)[$read_only]($read_only_style) '
 
 [character]
-success_symbol = "[[>_](fg)](fg)"
 error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
+success_symbol = "[[>_](fg)](fg)"
 
 [git_branch]
-format = '[$symbol$branch(:$remote_branch)]($style) '
 style = "white"
 symbol = ' '
+format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_status]
-ahead = '[⇡${count}](lavender) '
-behind = '😰 ${count}'
-conflicted = '🏳'
-deleted = '󰗨 ${count} '
-diverged = '⇕⇡${ahead_count}⇣${behind_count} '
-format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
-modified = '[ ${count}](peach) '
-renamed = '👅'
-staged = '[+$count](green) '
-stashed = " ${count} "
-style = "red"
-untracked = "[ ${count}](sapphire) "
+style = "white"
 up_to_date = ''
+renamed = '👅'
+conflicted = '🏳'
+behind = '😰 ${count}'
+stashed = " ${count} "
+staged = '[+$count](green) '
+deleted = '󰗨 ${count}(red) '
+ahead = '[⇡${count}](lavender) '
+modified = '[ ${count}](lavender) '
+untracked = "[ ${count}](sapphire) "
+diverged = '⇕⇡${ahead_count}⇣${behind_count} '
+format = "[[($conflicted$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
+# format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
 
 [git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "fg"
 cherry_pick = '[🍒PICK](red)'
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
 
 [git_metrics]
 disabled = false
-format = '[+$added](green)|[-$deleted](maroon) '
 only_nonzero_diffs = true
+format = '[+$added](green)[-$deleted](maroon) '
 
 [cmd_duration]
-format = "[ ⏰ $duration]($style) "
 disabled = false
 style = "yellow"
-show_notifications = false
 min_time = 10_000
 min_time_to_notify = 1000
+show_notifications = false
+format = "[ ⏰ $duration]($style) "
+
+[dotnet]
+symbol = ' '
+disabled = false
+format = '[$symbol($version)]($style) '
 
 [deno]
-format = '[$symbol($version)]($style) '
-symbol = '🦖 '
 disabled = false
+symbol = '🦕'
+format = '[$symbol($version)]($style) '
 
 [nodejs]
-format = '[$symbol($version)]($style) '
-detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
-detect_files = ['node_modules', '.yarn']
 symbol = ' '
+style = "green"
 disabled = false
+format = '[$symbol($version)]($style) '
+detect_files = ['node_modules', '.yarn']
+# detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
+detect_extensions = []
 
 [custom.since_last_commit]
-description = "Show time since last commit"
+style = "mauve"
 directories = [".git"]
-when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-shell = ["bash", "--norc", "--noprofile"]
-style = "yellow"
 format = "[󰚰 $output]($style) "
+shell = ["bash", "--norc", "--noprofile"]
+description = "Show time since last commit"
+when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 command = """deno --allow-sys --allow-run --allow-read $TS_SCRIPTS/relative-time-commit.ts"""
 
 [custom.git_host]
-description = "Show icon of git host platform"
-directories = [".git"]
-when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-shell = ["bash", "--norc", "--noprofile"]
 style = "white"
+directories = [".git"]
 format = "[$output]($style) "
+shell = ["bash", "--norc", "--noprofile"]
+description = "Show icon of git host platform"
+when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 command = """deno --allow-sys --allow-run --allow-read $TS_SCRIPTS/github-icon.ts"""
 

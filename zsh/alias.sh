@@ -192,5 +192,9 @@ function karabiner-reset() {
 }
 
 function home-sync() {
-    darwin-rebuild switch --flake $DOTFILES/nix#garcez; home-manager switch
+    darwin-rebuild switch --flake $DOTFILES/nix#garcez
+}
+
+function jarvis () {
+    deno task -q --config $DOTFILES/deno.json dotfiles --config $DOTFILES/dotfiles.config.ts $@
 }
