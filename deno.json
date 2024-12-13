@@ -1,7 +1,7 @@
 {
     "license": "MIT",
     "tasks": {
-        "dotfiles": "deno run --allow-env --allow-read --allow-write ./src/dotfiles/program.ts"
+        "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./src/dotfiles/program.ts"
     },
     "imports": {
         "@faker-js/faker": "npm:@faker-js/faker@8.4.1",
