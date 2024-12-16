@@ -5,6 +5,7 @@ export class ArgParser {
     public argParsed: ArgParsed;
     public map = new Map<string, Callback>();
     public configPath: string = "";
+
     public constructor(public args: string[]) {
         const parsed = parseArgs(args, { string: ["config"] });
         this.configPath = parsed.config || "~/dotfiles/dotfiles.config.ts";

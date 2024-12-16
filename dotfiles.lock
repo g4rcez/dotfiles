@@ -1,0 +1,8 @@
+{
+    "imports": [
+        {
+            "origin": "/Users/allangarcez/dotfiles/deno.json",
+            "target": "/Users/allangarcez/deno.json"
+        }
+    ]
+}

@@ -5,13 +5,16 @@ export type JoinFn = typeof path.join;
 
 export const fs = {
     copy: FS.copy,
-    isAbsolute: (str: string) => str.startsWith("/") || str.startsWith("\\"),
     join: path.join,
-    basename: path.basename,
     exists: FS.exists,
+    resolve: path.resolve,
+    cat: Deno.readTextFile,
+    basename: path.basename,
+    write: Deno.writeTextFile,
+    isAbsolute: (str: string) => str.startsWith("/") || str.startsWith("\\"),
     link: async (source: string, target: string) => {
         const exist = await fs.exists(target);
-        console.log(source, target);
+        console.log(source, "->", target);
         if (!exist) {
             return Deno.symlink(source, target);
         }
@@ -33,10 +36,15 @@ export const fs = {
             await fs.link(source, target);
         }
     },
+    homeParse: (str: string) =>
+        str
+            .replace(/^\$HOME/g, ENV.HOME)
+            .replace(/^~/g, ENV.HOME),
 };
 
 export const ENV = {
     OS: Deno.build.os,
+    CWD: Deno.env.get("INIT_CWD")!,
     HOME: Deno.env.get("HOME") || "~",
     XDG: Deno.env.get("XDG_CONFIG_HOME")!,
 };
@@ -67,3 +75,32 @@ export const Vscode = {
         }
     },
 };
+
+type LockfileImport = { origin: string; target: string };
+
+type LockfileSpec = {
+    imports: LockfileImport[];
+};
+
+export class Lockfile {
+    public static async lock(p: string, spec: Partial<LockfileSpec>) {
+        const json = await Lockfile.getLockfile(p);
+        json.imports = Lockfile.imports(json, spec);
+        const file = fs.homeParse(path.resolve(p));
+        await fs.write(file, JSON.stringify(json, null, 4));
+    }
+
+    public static async getLockfile(p: string): Promise<LockfileSpec> {
+        const file = fs.homeParse(path.resolve(p));
+        if (await fs.exists(file)) {
+            return JSON.parse(await fs.cat(file)) as LockfileSpec;
+        }
+        return { imports: [] };
+    }
+
+    private static imports(origin: LockfileSpec, spec?: Partial<LockfileSpec>) {
+        if (!Array.isArray(spec?.imports)) return origin.imports;
+        const concat = origin.imports.concat(spec.imports ?? []);
+        return Array.from(new Map(concat.map((x) => [x.origin, x])).values());
+    }
+}
