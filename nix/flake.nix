@@ -128,6 +128,8 @@
             pkgs.exiftool
             pkgs.go
             pkgs.ncdu
+            pkgs.autoconf
+            pkgs.wireshark
         ];
     };
   in
