@@ -1,4 +1,6 @@
 import { parseArgs } from "jsr:@std/cli";
+import { Command } from "./commands/commands.ts";
+import { DotfilesPlugin, PluginSpec } from "./plugins/plugin.ts";
 import { fs, JoinFn } from "./tools.ts";
 
 export type ArgParsed = ReturnType<typeof parseArgs>;
@@ -16,9 +18,16 @@ type EntryConfig = (x: {
 
 export type DotfilesSetup = {
     /*
-     * Path to configure vscode
+     * package manager used by user
      */
-    vscode?: string | "vscode";
+    packageManager: {
+        name: "brew";
+        configFile: string
+    }
+    /*
+     * plugins to install
+     */
+    plugins?: PluginSpec[];
     dotfiles: {
         /*
          * Path from $HOME or ~
@@ -41,5 +50,5 @@ export type DotfilesSetup = {
 };
 
 export type ConfiguredDotfiles = DotfilesSetup & {
-    __internal: { home: typeof fs.join; dotfiles: typeof fs.join; xdgDotfiles: typeof fs.join; xdg: typeof fs.join };
+    pathJoin: { home: typeof fs.join; dotfiles: typeof fs.join; xdgDotfiles: typeof fs.join; xdg: typeof fs.join };
 };

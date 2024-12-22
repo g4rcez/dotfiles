@@ -1,4 +1,4 @@
-import { Lockfile, fs } from "../tools.ts";
+import { fs, Lockfile } from "../tools.ts";
 import { Command } from "./commands.ts";
 
 export const migrateCommand: Command = (userConfig, exec, argParsed) => async () => {

@@ -13,21 +13,12 @@ export const fs = {
     write: Deno.writeTextFile,
     isAbsolute: (str: string) => str.startsWith("/") || str.startsWith("\\"),
     link: async (source: string, target: string) => {
-        const exist = await fs.exists(target);
-        console.log(source, "->", target);
-        if (!exist) {
-            return Deno.symlink(source, target);
-        }
-        const stats = await Deno.lstat(source);
-        if (stats.isDirectory || stats.isFile || stats.isSymlink) {
+        const targetExist = await fs.exists(target);
+        console.log(`[link] ${source} -> ${target}`);
+        if (targetExist) {
             await Deno.remove(target, { recursive: true });
         }
-        try {
-            return Deno.symlink(source, target);
-        } catch (e) {
-            console.error(e);
-            console.log(target, await FS.exists(source));
-        }
+        return Deno.symlink(source, target);
     },
     linkDirFiles: async (dotfiles: string, xdg: string) => {
         for await (const dirEntry of Deno.readDir(dotfiles)) {
@@ -47,33 +38,6 @@ export const ENV = {
     CWD: Deno.env.get("INIT_CWD")!,
     HOME: Deno.env.get("HOME") || "~",
     XDG: Deno.env.get("XDG_CONFIG_HOME")!,
-};
-
-export const Vscode = {
-    unixDefaults: path.join(ENV.HOME, ".config", "Code", "User"),
-    /**
-     * https://code.visualstudio.com/docs/getstarted/settings#_user-settingsjson-location
-     * Windows:
-     * macOS:
-     * Linux:
-     */
-    configurationPaths: {
-        windows: "%APPDATA%\\Code\\User\\",
-        darwin: path.join(ENV.HOME, "Library", "Application Support", "Code", "User"),
-    } as Partial<Record<typeof Deno.build.os, string>>,
-    link: async (entryDir: string) => {
-        const copyTo = ENV.OS in Vscode.configurationPaths ? Vscode.configurationPaths[ENV.OS]! : Vscode.unixDefaults;
-        const dirExists = await fs.exists(copyTo);
-        if (!dirExists) {
-            await Deno.mkdir(copyTo, { recursive: true });
-        }
-        for await (const dirEntry of Deno.readDir(entryDir)) {
-            await fs.link(
-                fs.join(entryDir, dirEntry.name),
-                fs.join(copyTo, dirEntry.name),
-            );
-        }
-    },
 };
 
 type LockfileImport = { origin: string; target: string };
@@ -104,3 +68,22 @@ export class Lockfile {
         return Array.from(new Map(concat.map((x) => [x.origin, x])).values());
     }
 }
+
+export const promiseSequence = async <V>(tasks: Array<() => Promise<V>>) => {
+    const result: V[] = [];
+    for (let i = 0; i < tasks.length; i++) {
+        try {
+            const x = await tasks[i]();
+            result.push(x);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    return result;
+};
+
+export const css = String.raw;
+
+export const SUCCESS_OUTPUT_STYLE = css`color: green;font-weight: bold`;
+
+export const INFO_OUTPUT_STYLE = css`color: violet;font-weight: bold`;

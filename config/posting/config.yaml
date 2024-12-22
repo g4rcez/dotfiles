@@ -5,7 +5,7 @@ layout: horizontal
 load_builtin_themes: true
 pager_json: jq
 response:
-  prettify_json: true
+    prettify_json: true
 heading:
-  visible: true
-  show_host: true
+    visible: true
+    show_host: true

@@ -1,17 +1,8 @@
 import { dotfile } from "_";
 import { devices } from "./devices.ts";
-import { config, whichKey } from "./karabiner.config.ts";
+import { config } from "./karabiner.config.ts";
 
 export const karabiner = async () => {
-    const wkPath = dotfile(
-        "raycast",
-        "extensions",
-        "dev-toolbelt",
-        "src",
-        "whichkey.json",
-    );
-    console.log(`The whichkey map "${wkPath}" was created`);
-    await Deno.writeTextFile(wkPath, JSON.stringify(whichKey, null, 4));
     const configFile = dotfile("karabiner", "karabiner.json");
     await Deno.writeTextFile(
         configFile,
@@ -28,7 +19,7 @@ export const karabiner = async () => {
                     {
                         name: "Default",
                         virtual_hid_keyboard: { keyboard_type_v2: "ansi" },
-                        // You must change this devices for your own
+                        // You must change these devices for your own
                         devices,
                         complex_modifications: {
                             rules: config,
@@ -47,5 +38,5 @@ export const karabiner = async () => {
             2,
         ),
     );
-    console.log(`The config file "${configFile}" was created`);
+    console.log(`%c[karabiner] "${configFile}" was created`, "color: green");
 };

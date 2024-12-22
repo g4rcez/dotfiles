@@ -6,3 +6,4 @@
 vim.g.autoformat = false
 vim.g.lazyvim_prettier_needs_config = false
 vim.opt.cmdheight = 0
+vim.g.snacks_animate = false

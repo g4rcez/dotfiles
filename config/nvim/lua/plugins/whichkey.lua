@@ -29,21 +29,6 @@ end
 
 local function buffersAndBookmarks()
   local harpoon = require("harpoon")
-  local conf = require("telescope.config").values
-  local function telescopeHarpoon(harpoon_files)
-    local file_paths = {}
-    for _, item in ipairs(harpoon_files.items) do
-      table.insert(file_paths, item.value)
-    end
-    require("telescope.pickers")
-      .new({}, {
-        prompt_title = "Harpoon",
-        finder = require("telescope.finders").new_table({ results = file_paths }),
-        previewer = conf.file_previewer({}),
-        sorter = conf.generic_sorter({}),
-      })
-      :find()
-  end
 
   -- harpoon
   key.normal("<leader>br", function()
@@ -52,9 +37,6 @@ local function buffersAndBookmarks()
   key.normal("<leader>ba", function()
     harpoon:list():add()
   end, { desc = "Hook using harpoon" })
-  key.normal("<TAB><TAB>", function()
-    telescopeHarpoon(harpoon:list())
-  end, { desc = "Open harpoon window" })
 
   -- bookmarks
   vim.keymap.set(

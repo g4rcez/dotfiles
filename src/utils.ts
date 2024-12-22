@@ -5,7 +5,7 @@ import { Conditions, KarabinerRule, KeyCode, Manipulator, Parameters, RectangleA
 
 export const $ = promisify(exec);
 
-export const deno = "deno run";
+export const deno = "$($HOME/.local/bin/mise which deno) run";
 
 export const home = (...names: string[]) => path.resolve(Deno.env.get("HOME")!, ...names);
 

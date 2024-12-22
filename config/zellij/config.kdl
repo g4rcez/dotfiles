@@ -24,6 +24,9 @@ plugins {
     strider location="zellij:strider"
     compact-bar location="zellij:compact-bar"
     session-manager location="zellij:session-manager"
+    room location="file:~/.config/zellij/plugins/room.wasm"
+    zellij_forgot location="file:~/dotfiles/config/zellij/plugins/zellij_forgot.wasm"
+    zjstatus location="file:~/dotfiles/config/zellij/plugins/zjstatus.wasm"
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
     }

@@ -153,7 +153,7 @@ const withLeaderKeys = createLeaderLayers({
             "",
             "OCR screen area",
         ),
-        n: open("raycast://extensions/aiotter/nixpkgs-search/index","", "Nix search")
+        n: open("raycast://extensions/aiotter/nixpkgs-search/index", "", "Nix search"),
     },
     b: {
         description: "Google chrome profiler/controls",
@@ -192,5 +192,3 @@ export const config: KarabinerRule[] = [
     ...modKeys.layers,
     ...withLeaderKeys.layers,
 ];
-
-export const whichKey = modKeys.whichKey.concat(withLeaderKeys.whichKey);

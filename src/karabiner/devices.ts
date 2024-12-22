@@ -1,4 +1,4 @@
-// You must change this devices for your own
+// You must change these devices for your own
 export const devices = [
     {
         disable_built_in_keyboard_if_exists: false,

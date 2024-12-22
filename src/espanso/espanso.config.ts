@@ -9,7 +9,7 @@ const simpleTriggers = [
 
     espanso.format("date", "date", "%d/%m/%Y"),
     espanso.format("time", "date", "%H:%M"),
-    espanso.format("dh", "date", "%d/%m/%Y %H:%M"),
+    espanso.format("now", "date", "%d/%m/%Y %H:%M"),
     espanso.insert(
         "sort",
         `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
@@ -39,6 +39,7 @@ const simpleTriggers = [
     espanso.insert("pray", "🙏🏾"),
     espanso.insert("s2", "❤️"),
     espanso.insert("up", "🙌🏾"),
+    espanso.insert("idk", "'¯\\\\_(ツ)_/¯'"),
     espanso.insert(
         "tnc",
         "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
@@ -60,6 +61,9 @@ const snippetsTriggers = ["umh", "uch", "inm", "imp", "ush"]
     );
 
 const shellTriggers = [
+    espanso.shell("yesterday", runMain(`dates --value=yesterday`)),
+    espanso.shell("tomorrow", runMain(`dates --value=tomorrow`)),
+    espanso.shell("iso", runMain(`dates --value=iso`)),
     espanso.shell("cnpj", runMain("cnpj")),
     espanso.shell("cpf", runMain("cpf")),
     espanso.shell("master", runMain("card --brand=master")),
