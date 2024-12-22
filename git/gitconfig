@@ -1,5 +1,5 @@
 [commit]
-    gpgsign = true
+	gpgsign = true
     template = ~/dotfiles/git/gitmessage
 
 [github]
@@ -8,7 +8,7 @@
 [user]
     name = g4rcez
     email = allan.f.garcez@gmail.com
-    signingkey = 7CC6F296AB5AA7A5EE9C18EF54F46BAA2465C272
+	signingkey = 41F5211E
 
 [core]
     pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
@@ -74,7 +74,7 @@
     hunk-header-style = file line-number syntax
 
 [gpg]
-    program = /usr/local/bin/gpg
+	program = /opt/homebrew/bin/gpg
 
 [diff]
     colorMoved = default
@@ -136,3 +136,9 @@
         bold yellow => syntax "#544f4e"
     syntax-theme = "Catppuccin Mocha"
 
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

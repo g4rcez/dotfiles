@@ -37,9 +37,6 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 # "Enable tap to click (Trackpad)"
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 
-# "Enable Safari’s debug menu"
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
 # "Show Status bar in Finder"
 defaults write com.apple.finder ShowStatusBar -bool true
 

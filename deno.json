@@ -1,7 +1,7 @@
 {
     "license": "MIT",
     "tasks": {
-        "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./src/dotfiles/program.ts"
+        "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./dotfiles-cli/program.ts"
     },
     "imports": {
         "@faker-js/faker": "npm:@faker-js/faker@8.4.1",
@@ -17,7 +17,8 @@
         "@utility/git": "jsr:@utility/git@0.4.1",
         "_": "./src/utils.ts",
         "color-convert": "npm:color-convert@2.0.1",
-        "dotfiles": "./src/dotfiles/dotfiles.ts",
+        "@dotfiles/core": "./dotfiles-cli/dotfiles.ts",
+        "@dotfiles/plugins": "./dotfiles-cli/plugins/index.ts",
         "jsr:@utility/git": "jsr:@utility/git@0.4.1",
         "yaml": "jsr:@jsr/yaml@1.0.5"
     },

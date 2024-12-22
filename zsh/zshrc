@@ -84,7 +84,6 @@ znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
-znap fpath _typeid   "typeid completion zsh"
 
 ##############################################################################################################
 ## source files

@@ -14,18 +14,18 @@ DOTFILES_DIR="$HOME/dotfiles"
 HOME_CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 source $HOME/dotfiles/zsh/utils.sh
-sh <(curl -L https://nixos.org/nix/install) --daemon
 
 ########################################################################################################################
 ##### mise config
 function installmise() {
     curl https://mise.run | sh
     ~/.local/bin/mise activate
-    ~/.local/bin/mise use -g usage
     ~/.local/bin/mise use -g node
+    ~/.local/bin/mise use -g deno
+    ~/.local/bin/mise use -g dotnet
     ~/.local/bin/mise doctor
 }
-checkcommand "mise" installmise
+# checkcommand "mise" installmise
 
 ########################################################################################################################
 ##### other links

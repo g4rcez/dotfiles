@@ -43,7 +43,7 @@ function getProjects() {
 function selectProject() {
     PROJECT=$(getProjects | fzf_window)
     if [ "${PROJECT:0:3}" == "[d]" ]; then
-        SANITIZE=$(echo $PROJECT | sed 's/\[d] //g')
+        SANITIZE=$(echo "$PROJECT" | sed 's/\[d] //g')
         echo "$HOME/Documents/$SANITIZE"
     fi
     if [ "${PROJECT:0:3}" == "[s]" ]; then
@@ -59,7 +59,7 @@ isSelected() {
 }
 
 sanitizeName() {
-    echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
+    echo "${1}" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
 }
 
 getSessionName() {
@@ -70,23 +70,11 @@ getSessionName() {
 }
 
 selected=$(selectProject)
-echo "SELECTED $selected"
 if [ -z "$selected" ]; then
     exit 0
 fi
 
-is_session=$(isSelected "$selected")
 selected_name=$(sanitizeName "$selected")
 session_name=$(getSessionName "$(homename "$selected_name")")
-session=$(zellij list-sessions | grep "$session_name")
+zellij pipe --plugin https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.0/zellij-switch.wasm -- "--session $session_name --default-cwd $DIRNAME --layout $ZLAYOUT"
 
-if [[ -n "$ZELLIJ" ]]; then
-    zellij pipe --plugin file:~/dotfiles/config/zellij/plugins/zellij-switch.wasm -- "$session_name::$selected_name"
-else
-    if [[ -n "$is_session" ]]; then
-        zellij attach "$selected_name" -c
-    else
-        cd "$selected"
-        zinit "$session_name" "$PWD"
-    fi
-fi

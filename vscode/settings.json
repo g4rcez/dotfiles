@@ -50,14 +50,14 @@
     "tailwindCSS.emmetCompletions": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "vscode-neovim.logOutputToConsole": false,
-    "vscode-neovim.neovimExecutablePaths.darwin": "/run/current-system/sw/bin/nvim",
+    "vscode-neovim.neovimExecutablePaths.darwin": "nvim",
     "vscode-neovim.normalSelectionDebounceTime": 100,
     "vscode-neovim.revealCursorScrollLine": true,
     "window.commandCenter": false,
     "window.customTitleBarVisibility": "never",
     "window.titleBarStyle": "native",
     "workbench.colorTheme": "Catppuccin Mocha",
-    "workbench.iconTheme": "a-file-icon-vscode",
+    "workbench.iconTheme": "vscode-icons",
     "workbench.layoutControl.enabled": true,
     "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
     "workbench.settings.editor": "json",
@@ -91,5 +91,6 @@
     "deno.lint": true,
     "deno.codeLens.references": true,
     "deno.codeLens.implementations": true,
-    "deno.codeLens.referencesAllFunctions": true
+    "deno.codeLens.referencesAllFunctions": true,
+    "redhat.telemetry.enabled": false
 }
