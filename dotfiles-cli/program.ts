@@ -13,11 +13,7 @@ const module = await import(argParse.configPath);
 
 export const [userConfig, exec]: [ConfiguredDotfiles, Callback] = module.default;
 
-const args: CommandArgs = {
-    exec,
-    userConfig,
-    argParsed: parseArgs(Deno.args, { string: ["config"] }),
-} as const;
+const args: CommandArgs = { exec, userConfig, argParsed: parseArgs(Deno.args, { string: ["config"] }) } as const;
 
 argParse
     .command("add", addCommand(args))

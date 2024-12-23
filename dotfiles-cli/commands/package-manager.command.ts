@@ -31,6 +31,8 @@ export const packageManagerCommand: Command = (input) => async () => {
     if (!installWithin) return;
     const cmd = new Deno.Command(pkgManager, {
         args: installWithin.install(pkgToInstall, pkgManagerArgs).filter(Boolean) as string[],
+        stderr: "inherit",
+        stdout: "inherit",
     });
     await cmd.output();
     const pkgConfigFile = fs.isAbsolute(input.userConfig.packageManager.configFile)

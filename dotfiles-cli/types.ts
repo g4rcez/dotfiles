@@ -1,6 +1,5 @@
 import { parseArgs } from "jsr:@std/cli";
-import { Command } from "./commands/commands.ts";
-import { DotfilesPlugin, PluginSpec } from "./plugins/plugin.ts";
+import { PluginSpec } from "./plugins/plugin.ts";
 import { fs, JoinFn } from "./tools.ts";
 
 export type ArgParsed = ReturnType<typeof parseArgs>;
@@ -22,8 +21,8 @@ export type DotfilesSetup = {
      */
     packageManager: {
         name: "brew";
-        configFile: string
-    }
+        configFile: string;
+    };
     /*
      * plugins to install
      */

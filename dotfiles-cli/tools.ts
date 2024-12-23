@@ -3,18 +3,34 @@ import * as path from "jsr:@std/path";
 
 export type JoinFn = typeof path.join;
 
+export type LinkOptions = Partial<{
+    homedir: string;
+    label: string;
+    css: [name: string, rest: string];
+}>;
+
+export const css = String.raw;
+
+const defaults: LinkOptions = { label: "link", css: [css`color:blue;font-weight:bold`, ""], homedir: "~" };
+
 export const fs = {
     copy: FS.copy,
     join: path.join,
     exists: FS.exists,
+    mkdir: Deno.mkdir,
     resolve: path.resolve,
     cat: Deno.readTextFile,
     basename: path.basename,
     write: Deno.writeTextFile,
     isAbsolute: (str: string) => str.startsWith("/") || str.startsWith("\\"),
-    link: async (source: string, target: string) => {
+    replaceHomedir: (str: string, symbol: string = "~") => str.replace(ENV.HOME, symbol),
+    link: async (source: string, target: string, o: LinkOptions = defaults) => {
+        const options = { ...defaults, ...o };
         const targetExist = await fs.exists(target);
-        console.log(`[link] ${source} -> ${target}`);
+        console.log(
+            `%c[${options.label}] %c${fs.replaceHomedir(source, options.homedir)} -> ${fs.replaceHomedir(target, options.homedir)}`,
+            ...options.css!,
+        );
         if (targetExist) {
             await Deno.remove(target, { recursive: true });
         }
@@ -82,8 +98,8 @@ export const promiseSequence = async <V>(tasks: Array<() => Promise<V>>) => {
     return result;
 };
 
-export const css = String.raw;
-
 export const SUCCESS_OUTPUT_STYLE = css`color: green;font-weight: bold`;
 
 export const INFO_OUTPUT_STYLE = css`color: violet;font-weight: bold`;
+
+export const trim = (str: string) => str.trim().normalize("NFKD");

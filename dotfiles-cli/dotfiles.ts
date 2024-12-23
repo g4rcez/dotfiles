@@ -1,7 +1,9 @@
-import figlet from "npm:figlet@1.8.0";
 import { parseArgs } from "jsr:@std/cli";
-import { ENV, fs, JoinFn } from "./tools.ts";
+import figlet from "npm:figlet@1.8.0";
+import { css, ENV, fs, INFO_OUTPUT_STYLE, JoinFn, Lockfile, promiseSequence, SUCCESS_OUTPUT_STYLE, trim } from "./tools.ts";
 import { DotfilesSetup } from "./types.ts";
+
+export { css, ENV, fs, INFO_OUTPUT_STYLE, Lockfile, promiseSequence, SUCCESS_OUTPUT_STYLE, trim };
 
 const normalizeDotfile = (str: string) => `.${str}`.replace(/\.+/g, ".");
 
@@ -84,7 +86,7 @@ export const dotfiles = (setup: DotfilesSetup) => {
         }
 
         if (Array.isArray(setup.plugins)) {
-            await Promise.allSettled(setup.plugins.map((plugin) => plugin({ userConfig, argParsed })));
+            await promiseSequence(setup.plugins.map((plugin) => () => plugin({ userConfig, argParsed })));
         }
 
         console.log("%cSync successful!", "color: green");
