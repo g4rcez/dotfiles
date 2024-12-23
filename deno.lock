@@ -1,11 +1,11 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@quentinadam/uuidv7@0.1.0": "0.1.0",
     "jsr:@std/assert@1": "1.0.6",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
     "jsr:@std/cli@*": "1.0.6",
     "jsr:@std/cli@^1.0.6": "1.0.6",
+    "jsr:@std/collections@*": "1.0.8",
     "jsr:@std/collections@^1.0.8": "1.0.8",
     "jsr:@std/crypto@^1.0.3": "1.0.3",
     "jsr:@std/fmt@^1.0.3": "1.0.3",
@@ -27,9 +27,6 @@
     "npm:yaml@*": "2.5.1"
   },
   "jsr": {
-    "@quentinadam/uuidv7@0.1.0": {
-      "integrity": "9d9a5e6dc71fa603723945f9be4a5113b83e73cc0cb3562fac68c9ebd104e241"
-    },
     "@std/assert@1.0.6": {
       "integrity": "1904c05806a25d94fe791d6d883b685c9e2dcd60e4f9fc30f4fc5cf010c72207",
       "dependencies": [
@@ -115,7 +112,6 @@
   "workspace": {
     "dependencies": [
       "jsr:@jsr/yaml@1.0.5",
-      "jsr:@quentinadam/uuidv7@0.1.0",
       "jsr:@std/assert@1",
       "jsr:@std/cli@^1.0.6",
       "jsr:@std/collections@^1.0.8",

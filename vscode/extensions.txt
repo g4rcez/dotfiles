@@ -1,9 +1,10 @@
 asvetliakov.vscode-neovim
 bradlc.vscode-tailwindcss
+catppuccin.catppuccin-vsc
 dbaeumer.vscode-eslint
 drcika.apc-extension
 ecmel.vscode-html-css
-EditorConfig.EditorConfig
+editorconfig.editorconfig
 esbenp.prettier-vscode
 g4rcez.dark-brabo
 g4rcez.nuclei-vscode
@@ -17,7 +18,7 @@ ms-playwright.playwright
 ms-vscode-remote.remote-containers
 naumovs.color-highlight
 nrwl.angular-console
-PKief.material-icon-theme
+pkief.material-icon-theme
 pranaygp.vscode-css-peek
 redhat.vscode-yaml
 stone-co.stone-backstage-helper
@@ -28,4 +29,4 @@ tamasfe.even-better-toml
 vscode-icons-team.vscode-icons
 wix.vscode-import-cost
 yinfei.luahelper
-Zignd.html-css-class-completion
+zignd.html-css-class-completion

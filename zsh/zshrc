@@ -1,9 +1,9 @@
 export UID=$(id -u)
 export GID=$(id -g)
+
 if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
     return
 fi
-
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -12,7 +12,7 @@ source $HOME/dotfiles/zsh/utils.sh
 local -a PATH_EXPORTS=(
   "/usr/local/bin"
   "/usr/local/opt/libpq/bin"
-  # "/opt/homebrew/opt/libpq/bin"
+  "/opt/homebrew/opt/libpq/bin"
   "$HOME/.cargo/env"
   "$HOME/.local/bin"
   "$HOME/.local/share"
@@ -55,7 +55,7 @@ local -a PLUGINS=(
     "zsh-users/zsh-syntax-highlighting"
 )
 
-# FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
@@ -67,7 +67,7 @@ done
 
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
-znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc,termsupport}
+znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc}
 znap source ohmyzsh/ohmyzsh plugins/{git,fzf}
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
@@ -112,6 +112,9 @@ for config in $SOURCE; do
 done
 
 eval "$(~/.local/bin/mise activate zsh)"
-
+zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
+source <(carapace _carapace zsh)
+source <(carapace chmod zsh)
 zellij-start
+
 

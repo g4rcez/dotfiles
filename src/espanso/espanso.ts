@@ -1,7 +1,6 @@
 import { $, trim } from "_";
 import { stringify } from "jsr:@std/yaml";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { css, fs } from "@dotfiles/core";
 import { createEspansoConfig } from "./espanso.config.ts";
 
 const espansoConfigDefaults = {
@@ -14,16 +13,15 @@ export const espanso = async () => {
     const result = await $("espanso path config");
     const espansoPath = trim(result.stdout);
     if (!espansoPath) return Deno.exit(1);
-    const matches = path.join(espansoPath, "match");
-    const config = path.join(espansoPath, "config");
-    const baseYml = path.join(espansoPath, "match", "base.yml");
-    const defaultYml = path.join(espansoPath, "config", "default.yml");
+    const matches = fs.join(espansoPath, "match");
+    const config = fs.join(espansoPath, "config");
+    const baseYml = fs.join(espansoPath, "match", "base.yml");
+    const defaultYml = fs.join(espansoPath, "config", "default.yml");
     await fs.mkdir(espansoPath, { recursive: true });
     await fs.mkdir(matches, { recursive: true });
-    await fs.writeFile(baseYml, createEspansoConfig(), "utf-8");
+    await fs.write(baseYml, createEspansoConfig());
     await fs.mkdir(config, { recursive: true });
-    await fs.writeFile(defaultYml, stringify(espansoConfigDefaults), "utf-8");
+    await fs.write(defaultYml, stringify(espansoConfigDefaults));
     const toCreate = [matches, config, baseYml, defaultYml];
-    toCreate.forEach((x) => console.log(`\t - Created: "${x}"`));
-    console.log(`%c[espanso] "${baseYml}" was created`, "color: green");
+    toCreate.forEach((x) => console.log(`%c[espanso]%c Created: ${fs.replaceHomedir(x)}`, css`color:greenyellow`, ""));
 };

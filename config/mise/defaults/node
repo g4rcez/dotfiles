@@ -2,3 +2,4 @@ pnpm
 ts-node
 tsx
 typescript
+commitizen

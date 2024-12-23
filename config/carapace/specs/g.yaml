@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: g
+commands:
+    - name: log
+      description: Show commit logs
+      group: git
+      run: "[git, log]"
+
+    - name: issue
+      description: Manage issues
+      group: gh
+      run: "[gh, issue]"
+      commands:
+          - name: bugs
+            description: List bugs
+            run: "[gh, issue, list, --label, bug]"
+
+    - name: edit
+      description: Edit changed files
+      run: "$(hx $@)"
+      flags:
+          -s, --staged: include staged files
+      completion:
+          positionalany: ["$carapace.tools.git.Changes({staged: ${C_FLAG_STAGED:-false}, unstaged: true})"]

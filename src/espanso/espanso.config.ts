@@ -38,6 +38,8 @@ const simpleTriggers = [
     espanso.insert("eye", "👀"),
     espanso.insert("pray", "🙏🏾"),
     espanso.insert("s2", "❤️"),
+    espanso.insert("party", "🥳"),
+    espanso.insert("boom", "🤯"),
     espanso.insert("up", "🙌🏾"),
     espanso.insert("idk", "'¯\\\\_(ツ)_/¯'"),
     espanso.insert(

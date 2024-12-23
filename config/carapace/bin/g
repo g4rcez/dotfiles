@@ -1,0 +1,2 @@
+#!/bin/sh
+carapace --run "/Users/allangarcez/.config/carapace/specs/g.yaml" "$@"

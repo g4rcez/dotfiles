@@ -9,7 +9,7 @@ _fzf_comprun() {
 
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix"
 export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -type d -printf '%P\n' 2>/dev/null"
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_OPTS="--preview 'lsd --tree --depth=2 {}'"
 export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -printf '%P\n' 2>/dev/null"
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 

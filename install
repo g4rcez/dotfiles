@@ -1,19 +1,19 @@
 #!/bin/bash
 ########################################################################################################################
-# ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
-# ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
-# ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
-# ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
-# ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
-# ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
+#### ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
+#### ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
+#### ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
+#### ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
+#### ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
+#### ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ########################################################################################################################
 set -xe
-mkdir -p $HOME/tools $HOME/.tmp
-mkdir -p $HOME/.config
+mkdir -p "$HOME/tools $HOME/.tmp"
+mkdir -p "$HOME/.config"
 DOTFILES_DIR="$HOME/dotfiles"
 HOME_CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
-source $HOME/dotfiles/zsh/utils.sh
+source "$HOME/dotfiles/zsh/utils.sh"
 
 ########################################################################################################################
 ##### mise config
@@ -25,7 +25,7 @@ function installmise() {
     ~/.local/bin/mise use -g dotnet
     ~/.local/bin/mise doctor
 }
-# checkcommand "mise" installmise
+checkcommand "mise" installmise
 
 ########################################################################################################################
 ##### other links
@@ -33,7 +33,7 @@ function setupBat() {
     mkdir -p "$(bat --config-dir)/syntaxes"
     cd "$(bat --config-dir)/syntaxes"
     git clone https://github.com/tellnobody1/sublime-purescript-syntax
-    ln -sf $DOTFILES_CONFIG_DIR/bat $HOME_CONFIG_DIR
+    ln -sf "$DOTFILES_CONFIG_DIR/bat" "$HOME_CONFIG_DIR"
 }
 setupBat
 

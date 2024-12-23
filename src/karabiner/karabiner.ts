@@ -1,4 +1,5 @@
 import { dotfile } from "_";
+import { fs } from "../../dotfiles-cli/tools.ts";
 import { devices } from "./devices.ts";
 import { config } from "./karabiner.config.ts";
 
@@ -38,5 +39,5 @@ export const karabiner = async () => {
             2,
         ),
     );
-    console.log(`%c[karabiner] "${configFile}" was created`, "color: green");
+    console.log(`%c[karabiner] %c${fs.replaceHomedir(configFile)} was created`, "color: purple", "");
 };
