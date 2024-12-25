@@ -564,23 +564,25 @@ export type EspansoTrigger =
     | `${EspansoCommander}${string}`
     | Array<`${EspansoCommander}${string}`>;
 
+type Var = {
+    name: string;
+    type: EspansoType;
+    params?: Partial<{
+        layout: string;
+        shell: EspansoShell;
+        cmd: string | string[];
+        format: string;
+        choices: string[];
+        locale: string;
+        echo: string;
+        values: Array<string | { label: string; id: string }>;
+    }>;
+};
+
 export type EspansoVarReplacer = {
     trigger?: EspansoTrigger;
     regex?: string;
     replace?: `{{${string}}}` | string;
     form?: string;
-    vars?: Array<{
-        name: string;
-        type: EspansoType;
-        params?: Partial<{
-            layout: string;
-            shell: EspansoShell;
-            cmd: string | string[];
-            format: string;
-            choices: string[];
-            locale: string;
-            echo: string;
-            values: Array<string | { label: string; id: string }>;
-        }>;
-    }>;
+    vars?: Array<Var>;
 };

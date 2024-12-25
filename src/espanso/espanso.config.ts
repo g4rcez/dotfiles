@@ -2,18 +2,13 @@ import { home, runMain } from "_";
 import { espanso, imports, stringify } from "./espanso.utils.ts";
 
 const simpleTriggers = [
-    // social media
-    espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
     espanso.insert("blog", "https://garcez.dev"),
+    espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
     espanso.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
 
     espanso.format("date", "date", "%d/%m/%Y"),
     espanso.format("time", "date", "%H:%M"),
     espanso.format("now", "date", "%d/%m/%Y %H:%M"),
-    espanso.insert(
-        "sort",
-        `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
-    ),
     espanso.clipboard("mdl", "link", "[$|$]({{link}})"),
     espanso.form(
         "hex",
@@ -30,7 +25,10 @@ const simpleTriggers = [
         "{{rgb}}",
         runMain(`colors --mode=rgb --value="{{form.input}}"`),
     ),
-
+    espanso.insert(
+        "sort",
+        `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
+    ),
     // emojis 👍🏾
     espanso.insert("blz", "👍🏾"),
     espanso.insert("cry", "😭"),
@@ -63,6 +61,7 @@ const snippetsTriggers = ["umh", "uch", "inm", "imp", "ush"]
     );
 
 const shellTriggers = [
+    espanso.shell("url", runMain(`url --value "$ESPANSO_CLIPBOARD"`)),
     espanso.shell("yesterday", runMain(`dates --value=yesterday`)),
     espanso.shell("tomorrow", runMain(`dates --value=tomorrow`)),
     espanso.shell("iso", runMain(`dates --value=iso`)),
@@ -83,7 +82,6 @@ const shellTriggers = [
     espanso.shell("cellphone", runMain("phone --mode=cellphone")),
     espanso.shell("telephone", runMain("phone --mode=telephone")),
     espanso.shell("email", runMain("email")),
-    espanso.shell("isodate", runMain("isodate")),
 ];
 
 const randomTriggers = [

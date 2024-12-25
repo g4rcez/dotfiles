@@ -43,10 +43,18 @@ export const espanso = {
             },
         ],
     }),
-    shell: (key: Trigger, cmd: string, capture?: Trigger): EspansoVarReplacer => ({
+    shell: (
+        key: Trigger,
+        cmd: string,
+        capture: Trigger | undefined = undefined,
+    ): EspansoVarReplacer => ({
         [capture ? "regex" : "trigger"]: capture ? t(capture) : t(key),
         replace: `{{${key}}}`,
         vars: [
+            {
+                name: "clipboard",
+                type: "clipboard",
+            },
             {
                 name: k(key),
                 type: "shell",
