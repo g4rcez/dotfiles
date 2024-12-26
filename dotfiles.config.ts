@@ -1,7 +1,7 @@
 import { dotfiles } from "@dotfiles/core";
-import { vscodePlugin } from "@dotfiles/plugins";
-import { espanso } from "./src/espanso/espanso.ts";
-import { karabiner } from "./src/karabiner/karabiner.ts";
+import { espansoPlugin, karabinerPlugin, vscodePlugin } from "@dotfiles/plugins";
+import KarabinerRules from "./karabiner.config.ts";
+import EspansoRules from "./espanso.config.ts";
 
 export default dotfiles({
     xdg: ".config",
@@ -16,6 +16,7 @@ export default dotfiles({
             "carapace",
             "curlrc",
             "fd",
+            "karabiner",
             "lazygit",
             "lsd",
             "mise",
@@ -28,8 +29,8 @@ export default dotfiles({
         ],
     },
     plugins: [
-        espanso,
-        karabiner,
+        espansoPlugin(EspansoRules),
         vscodePlugin({ path: "vscode", extensionsFile: "vscode/extensions.txt" }),
+        karabinerPlugin({ rules: KarabinerRules, configFile: "karabiner/karabiner.json" }),
     ],
 });

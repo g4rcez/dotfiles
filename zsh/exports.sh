@@ -2,7 +2,7 @@
 ## Important exports
 export LISTMAX=10000
 export DOTFILES="$HOME/dotfiles"
-export TS_SCRIPTS="$HOME/dotfiles/src/scripts"
+export TS_SCRIPTS="$HOME/dotfiles/bin"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
 export SNAP_DIR="$PLUGINS_DIR/znap"

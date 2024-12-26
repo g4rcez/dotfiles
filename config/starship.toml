@@ -156,7 +156,7 @@ format = "[󰚰 $output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 description = "Show time since last commit"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $TS_SCRIPTS/relative-time-commit.ts"""
+command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/relative-time-commit"""
 
 [custom.git_host]
 style = "white"
@@ -165,5 +165,5 @@ format = "[$output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 description = "Show icon of git host platform"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $TS_SCRIPTS/github-icon.ts"""
+command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/github-icon"""
 

@@ -1,3 +1,8 @@
 {
-    "imports": []
+    "imports": [
+        {
+            "origin": "$HOME/dotfiles/config/flameshot",
+            "target": "$HOME/.config/flameshot"
+        }
+    ]
 }
