@@ -219,7 +219,6 @@ const replaceWhichKeys = (str: KeyCode) => {
 
 export const karabiner = {
     app,
-    replaceWhichKeys,
     vim,
     open,
     shell,
@@ -229,11 +228,15 @@ export const karabiner = {
     rectangle,
     appInstance,
     karabinerNotify,
+    replaceWhichKeys,
     createLeaderLayers,
     createSubLayerName,
     createLeaderDisable,
     createHyperSubLayers,
 };
+
+export const createKarabinerConfig = (...t: Array<KarabinerRule | KarabinerRule[]>): KarabinerRule[] =>
+    t.flatMap((x) => Array.isArray(x) ? x.flat() : x);
 
 export const karabinerPlugin: DotbotPlugin<{ rules: KarabinerRule[]; configFile: string }> = (args) => async (settings) => {
     const configFile = settings.userConfig.pathJoin.xdgDotfiles(args.configFile);

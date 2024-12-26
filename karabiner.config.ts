@@ -1,4 +1,4 @@
-import { karabiner, KarabinerRule, Manipulator } from "@dotfiles/plugins";
+import { createKarabinerConfig, karabiner, KarabinerRule, Manipulator } from "@dotfiles/plugins";
 
 const modKeys = karabiner.createHyperSubLayers({
     slash: karabiner.open(
@@ -188,8 +188,4 @@ const hyperKey: KarabinerRule = {
     ],
 } as const;
 
-export default [
-    hyperKey,
-    ...modKeys.layers,
-    ...withLeaderKeys.layers,
-];
+export default createKarabinerConfig(hyperKey, modKeys.layers, withLeaderKeys.layers);
