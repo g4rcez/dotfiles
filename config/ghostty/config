@@ -1,0 +1,28 @@
+# misc 
+background = #171717
+config-default-files = true
+font-family = "JetBrainsMono Nerd Font"
+font-size = 18
+foreground = #ffffff
+quick-terminal-screen = main
+shell-integration = zsh
+theme = catppuccin-mocha
+
+# window 
+quit-after-last-window-closed = false
+window-decoration = true
+window-padding-color = extend
+window-padding-x = 5
+
+# OSX 
+macos-titlebar-style = hidden
+macos-window-shadow = true
+macos-auto-secure-input = true
+macos-secure-input-indication = true
+macos-icon-frame = plastic
+desktop-notifications = true
+
+# keybind
+macos-option-as-alt = true
+keybind = global:super+shift+zero=toggle_quick_terminal
+
