@@ -5,7 +5,7 @@ async function main() {
     const mode = Deno.args[0];
     const args = cli.parseArgs(Deno.args.slice(1), {
         boolean: ["cvv"],
-        string: ["brand", "mode", "length", "value"],
+        string: ["brand", "mode", "length", "value", "json", "variables"],
         default: { cvv: false, mode: "", length: "20", value: "" },
     });
     const module = await import(`./scripts/${mode}.ts`);

@@ -62,10 +62,10 @@ With these videos I have the idea to implement keybindings like Tmux, with a pre
 # Espanso
 
 [Espanso](https://espanso.org/) it's an amazing tool to expand your texts to other utilities. I work in frontend and I need a lots of texts like lorem
-ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some personal informations at my espanso config, this file will not
+ipsum or random brazilian documents (CPF/CNPJ) to test some accounts. Since I have some personal information at my espanso config, this file will not
 be able to check at this repo. But you can generate using the `make` or check this sample.
 
-The espanso command key is `;`, since I use the `:` for emojis in most of applications.
+The espanso command key is `;`, since I use the `:` for emojis in most applications.
 
 ```yaml
 matches:
@@ -76,7 +76,7 @@ matches:
             type: "shell"
             params:
                 shell: "bash"
-                cmd: "env node ~/dotfiles/bin/cnpj"
+                cmd: "deno ~/dotfiles/espanso/cnpj"
     - trigger: ";date"
       replace: "{{date}}"
       vars:

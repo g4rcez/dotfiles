@@ -51,3 +51,4 @@ export type DotfilesSetup = {
 export type ConfiguredDotfiles = DotfilesSetup & {
     pathJoin: { home: typeof dotbot.join; dotfiles: typeof dotbot.join; xdgDotfiles: typeof dotbot.join; xdg: typeof dotbot.join };
 };
+

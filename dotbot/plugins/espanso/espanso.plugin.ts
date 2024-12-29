@@ -1,11 +1,9 @@
 import { DotbotPlugin } from "@dotfiles/plugins";
-import { stringify as yaml } from "jsr:@std/yaml";
 import { css, dotbot } from "@dotfiles/core";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
+import { toYaml } from "./espanso-matches.ts";
 import { EspansoCreateConfig } from "./espanso.types.ts";
-
-const stringify = (config: unknown) => yaml(config, { sortKeys: true });
 
 const $ = promisify(exec);
 
@@ -18,6 +16,17 @@ const espansoConfigDefaults = {
 };
 
 export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) => async () => {
+    const matchesFromPlugin = Array.isArray(args.tasks)
+        ? await Promise.all(args.tasks.map(async (x) => {
+            const result = await x(args);
+            console.log(`%c[espanso]%c Plugin ${result.name} added`, css`color:greenyellow`, "");
+            return result.matches;
+        }))
+        : [];
+    const espansoYmlContent = {
+        matches: args.matches.concat(...matchesFromPlugin),
+        imports: args.imports,
+    };
     const result = await $("espanso path config");
     const espansoPath = trimNewLines(result.stdout);
     if (!espansoPath) return Deno.exit(1);
@@ -27,9 +36,9 @@ export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) =
     const defaultYml = dotbot.join(espansoPath, "config", "default.yml");
     await dotbot.mkdir(espansoPath, { recursive: true });
     await dotbot.mkdir(matches, { recursive: true });
-    await dotbot.write(baseYml, stringify(args));
+    await dotbot.write(baseYml, toYaml(espansoYmlContent));
     await dotbot.mkdir(config, { recursive: true });
-    await dotbot.write(defaultYml, stringify(espansoConfigDefaults));
+    await dotbot.write(defaultYml, toYaml(espansoConfigDefaults));
     const toCreate = [matches, config, baseYml, defaultYml];
     toCreate.forEach((x) => console.log(`%c[espanso]%c Created: ${dotbot.replaceHomedir(x)}`, css`color:greenyellow`, ""));
 };

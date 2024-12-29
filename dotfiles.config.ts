@@ -1,7 +1,7 @@
 import { dotfiles } from "@dotfiles/core";
 import { espansoPlugin, karabinerPlugin, vscodePlugin } from "@dotfiles/plugins";
-import KarabinerRules from "./karabiner.config.ts";
 import EspansoRules from "./espanso.config.ts";
+import KarabinerRules from "./karabiner.config.ts";
 
 export default dotfiles({
     xdg: ".config",

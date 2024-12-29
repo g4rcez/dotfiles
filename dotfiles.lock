@@ -3,6 +3,10 @@
         {
             "origin": "$HOME/dotfiles/config/flameshot",
             "target": "$HOME/.config/flameshot"
+        },
+        {
+            "origin": "$HOME/dotfiles/config/ghostty",
+            "target": "$HOME/.config/ghostty"
         }
     ]
 }

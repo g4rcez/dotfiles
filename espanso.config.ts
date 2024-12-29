@@ -1,11 +1,12 @@
 import { dotbot } from "@dotfiles/core";
-import { createEspansoConfig } from "@dotfiles/plugins";
+import { createEspansoConfig, runMain, snippetsPlugin } from "@dotfiles/plugins";
 
-const deno = "$($HOME/.local/bin/mise which deno) run";
+const withParam = (x: string) => `${x}\\[(?P<N>.*)\\]`;
 
-const runMain = (cmd: string) => `${deno} ${dotbot.home("dotfiles", "espanso", "controller.ts")} ${cmd}`;
-
-export default createEspansoConfig(";", (espanso) => {
+export default createEspansoConfig({
+    trigger: ";",
+    snippets: dotbot.dotfiles("snippets"),
+}, (espanso) => {
     const simpleTriggers = [
         espanso.insert("blog", "https://garcez.dev"),
         espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
@@ -50,20 +51,6 @@ export default createEspansoConfig(";", (espanso) => {
             "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
         ),
     ];
-
-    const withParam = (x: string) => `${x}\\[(?P<N>.*)\\]`;
-
-    const snippetsTriggers = ["umh", "uch", "inm", "imp", "ush"]
-        .map((x) => {
-            return espanso.shell(
-                x,
-                runMain(`snippets --value $ESPANSO_N --mode=${x}`),
-                withParam(x),
-            );
-        })
-        .concat(
-            espanso.shell("ueh", runMain("snippets --value $ESPANSO_N --mode=ueh")),
-        );
 
     const shellTriggers = [
         espanso.shell("url", runMain(`url --value "$ESPANSO_CLIPBOARD"`)),
@@ -119,12 +106,11 @@ export default createEspansoConfig(";", (espanso) => {
             "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.",
         ]),
     ];
+
     return {
+        ...espanso,
+        tasks: [snippetsPlugin],
         imports: [dotbot.home(".shortcuts.yml")],
-        matches: shellTriggers.concat(
-            randomTriggers,
-            simpleTriggers,
-            snippetsTriggers,
-        ),
+        matches: shellTriggers.concat(randomTriggers, simpleTriggers),
     };
 });

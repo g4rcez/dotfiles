@@ -6,6 +6,7 @@ const modKeys = karabiner.createHyperSubLayers({
         "",
         "Which key Karabiner + Raycast",
     ),
+    p: karabiner.open("raycast://extensions/kud/espanso/index", "", "List all espanso matches"),
     tab: karabiner.open(
         "raycast://extensions/raycast/navigation/switch-windows",
         "",
@@ -114,6 +115,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     r: {
         description: "Raycast layer",
+        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery"),
         m: karabiner.open(
             "raycast://extensions/raycast/navigation/search-menu-items",
             "",

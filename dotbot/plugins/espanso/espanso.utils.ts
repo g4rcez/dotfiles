@@ -1,3 +1,4 @@
+import { dotbot } from "@dotfiles/core";
 import { EspansoCreateConfig, EspansoTrigger, EspansoType, EspansoVarReplacer } from "./espanso.types.ts";
 
 type EspansoCreator<T extends string> = {
@@ -9,7 +10,17 @@ type EspansoCreator<T extends string> = {
     shell: (key: string, cmd: string, capture?: string | undefined) => EspansoVarReplacer<T>;
 };
 
-export const createEspansoConfig = <T extends string>(ownTrigger: T, c: (c: EspansoCreator<T>) => EspansoCreateConfig<T>) => {
+export const DENO_BIN = "$($HOME/.local/bin/mise which deno) run";
+
+export const runMain = (cmd: string) => `${DENO_BIN} ${dotbot.home("dotfiles", "espanso", "main.ts")} ${cmd}`;
+
+export type EspansoConfigParams<T> = { trigger: T; snippets: string };
+
+export const createEspansoConfig = <T extends string>(
+    config: EspansoConfigParams<T>,
+    c: (c: EspansoCreator<T> & EspansoConfigParams<T>) => EspansoCreateConfig<T>,
+) => {
+    const ownTrigger = config.trigger;
     const commander = (s: string) => `${ownTrigger}${s}` as const;
 
     const getTrigger = (key: string): EspansoTrigger<T> => Array.isArray(key) ? key.map(commander) : commander(key);
@@ -17,6 +28,7 @@ export const createEspansoConfig = <T extends string>(ownTrigger: T, c: (c: Espa
     const getTriggerKey = (key: string): string => (Array.isArray(key) ? key[0] : key);
 
     const espanso = {
+        ...config,
         clipboard: (
             key: string,
             name: string,
@@ -54,13 +66,10 @@ export const createEspansoConfig = <T extends string>(ownTrigger: T, c: (c: Espa
             [capture ? "regex" : "trigger"]: capture ? getTrigger(capture) : getTrigger(key),
             replace: `{{${key}}}`,
             vars: [
+                { name: "clipboard", type: "clipboard" },
                 {
-                    name: "clipboard",
-                    type: "clipboard",
-                },
-                {
-                    name: getTriggerKey(key),
                     type: "shell",
+                    name: getTriggerKey(key),
                     params: { shell: "bash", cmd },
                 },
             ],

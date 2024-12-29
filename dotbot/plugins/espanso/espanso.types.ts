@@ -1,5 +1,3 @@
-export type Empty = Record<string | number | symbol, never>;
-
 export type EspansoType =
     | "form"
     | "date"
@@ -32,10 +30,22 @@ type Var = {
 
 export type EspansoVarReplacer<T extends string> = {
     trigger?: EspansoTrigger<T>;
+    label?: string;
     regex?: string;
     replace?: `{{${string}}}` | string;
     form?: string;
     vars?: Array<Var>;
 };
 
-export type EspansoCreateConfig<T extends string> = { imports: string[]; matches: EspansoVarReplacer<T>[] };
+export type EspansoPlugin = (config: { snippets: string; trigger: string }) => Promise<{
+    name: string;
+    matches: EspansoVarReplacer<string>[];
+}>;
+
+export type EspansoCreateConfig<T extends string> = {
+    trigger: T;
+    snippets: string;
+    imports: string[];
+    tasks?: EspansoPlugin[];
+    matches: EspansoVarReplacer<T>[];
+};

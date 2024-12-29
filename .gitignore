@@ -1,50 +1,37 @@
-.idea
-shortcuts.yml
-### OMG
-passwords.txt
-
-### OSX ###
-# General
-.DS_Store
+*.log
+*.wasm
+*.zwc
+./.obsidian/workspace.json
+./config/bat/syntaxes/
+./lvim/session
+./nix/result
+./nvim/spell/
+./tmp
+.AppleDB
+.AppleDesktop
 .AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
+.DS_Store
 .DocumentRevisions-V100
-.fseventsd
+.LSOverride
 .Spotlight-V100
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+._*
+.apdisk
 .com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
+.fseventsd
+.idea
+/bin/*.zwc
+/zsh/*.zwc
+Icon
 Network Trash Folder
 Temporary Items
-.apdisk
-/zsh/*.zwc
-/bin/*.zwc
-
-# nvim
-./nvim/spell/
-nvim/lazy-lock.json
-nvim/README.md
-nvim/LICENSE
-./lvim/session
-./tmp
-*.wasm
-*.zwc
-./config/bat/syntaxes/
-nvim/bookmarks.db.json.backup
 custom-nvim/bookmarks.db.json.backup
-*.log
 nix/result
-./nix/result
+nvim/LICENSE
+nvim/README.md
+nvim/bookmarks.db.json.backup
+nvim/lazy-lock.json
+passwords.txt
+shortcuts.yml

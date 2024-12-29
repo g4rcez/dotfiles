@@ -1,25 +1,31 @@
-import { Script } from "../script.ts";
+import { decodeBase64 } from "@std/encoding";
 import { toPascalCase } from "@std/text";
+import { getSnippetMatches } from "@dotfiles/espanso";
+import { Script } from "../script.ts";
 
-const mappers = {
-    imp: (value: string) => `import ${toPascalCase(value)}$|$ from "${value}"`,
-    inm: (value: string) => `import { $|$ } from "${value}"`,
-    uch: (value: string) => `const ${value} = useCallback(() => {$|$}, []);`,
-    ueh: () => `useEffect(() => {$|$}, []);`,
-    umh: (value: string) => `const ${value} = useMemo(() => {$|$}, []);`,
-    ush: (value: string) => `const [${value}, set${toPascalCase(value)}] = useState($|$)`,
+type Props = { json: string; variables: string };
+
+const transform = {
+    capitalize: toPascalCase,
 };
 
-type Mappers = keyof typeof mappers;
-
-type Props = { value: string; mode: string };
+const parseStr = (rule: string, map: Record<string, any>): string => {
+    const [word, ...mappers] = rule.split("|");
+    return mappers.reduce((acc, el) => (transform as any)[el]?.(acc || "") || acc, map[word] || word);
+};
 
 export default class SnippetsScript extends Script<Props> {
     public override run(): string {
-        if (this.args.mode in mappers) {
-            const key = this.args.mode as Mappers;
-            return mappers[key](this.args.value);
-        }
-        return "";
+        const metadata = JSON.parse(new TextDecoder().decode(decodeBase64(this.args.json)));
+        const matches = getSnippetMatches(metadata.block.code || "");
+        const items = JSON.parse(this.args.variables) as any[];
+        const variables = items.reduce<Record<string, any>>((acc, x) => {
+            const [name, ...value] = x.split("=");
+            return { ...acc, [name]: value.join("") };
+        }, {});
+        return matches.reduce((acc, el) => {
+            const value = el.includes("|") ? parseStr(el, variables) : variables[el];
+            return acc.replace(`\${{${el}}}`, value);
+        }, metadata.block.code || "");
     }
 }
