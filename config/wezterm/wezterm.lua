@@ -10,6 +10,7 @@
 --------------------------------------------------------------------
 
 local wezterm = require("wezterm")
+local act = wezterm.action
 local Config = wezterm.config_builder()
 
 Config.front_end = "WebGpu"
@@ -26,7 +27,7 @@ local X = require("./lua/helpers")
 X.merge(Config, events)
 X.merge(Config, theme)
 X.merge(Config, font)
-X.merge(Config, keymap)
 X.merge(Config, hyperlinks)
+X.merge(Config, keymap)
 
 return Config

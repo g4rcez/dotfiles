@@ -1,11 +1,24 @@
 # misc 
-background = #171717
+adjust-cell-height = 20%
+background = #121212
+background-blur-radius = 50
+background-opacity = 0.97
+bold-is-bright = true
 config-default-files = true
+cursor-style = block
+cursor-style-blink = true
+custom-shader-animation = true
+desktop-notifications = true
 font-family = "JetBrainsMono Nerd Font"
 font-size = 18
+font-thicken = true
 foreground = #ffffff
+link-url = true
+minimum-contrast = 1.1
+mouse-shift-capture = true
+quick-terminal-position = top
 quick-terminal-screen = main
-shell-integration = zsh
+shell-integration-features = no-cursor
 theme = catppuccin-mocha
 
 # window 
@@ -13,16 +26,27 @@ quit-after-last-window-closed = false
 window-decoration = true
 window-padding-color = extend
 window-padding-x = 5
+window-theme = dark
+window-save-state = always
+window-colorspace = display-p3
+window-padding-color = extend
+window-inherit-working-directory = true
 
 # OSX 
-macos-titlebar-style = hidden
-macos-window-shadow = true
 macos-auto-secure-input = true
-macos-secure-input-indication = true
 macos-icon-frame = plastic
-desktop-notifications = true
+macos-secure-input-indication = true
+macos-titlebar-style = transparent
+macos-window-shadow = true
+macos-option-as-alt = true
 
 # keybind
-macos-option-as-alt = true
 keybind = global:super+shift+zero=toggle_quick_terminal
-
+keybind = super+p>-=new_split:down
+keybind = super+p>\=new_split:right
+keybind = super+p>equal=equalize_splits
+keybind = super+p>h=previous_tab
+keybind = super+p>l=next_tab
+keybind = super+p>n=new_window
+keybind = super+p>r=reload_config
+keybind = super+p>t=new_tab

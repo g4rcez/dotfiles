@@ -872,6 +872,35 @@
             ]
           },
           {
+            "description": "Hyper Key + p",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/kud/espanso/index"
+                  }
+                ],
+                "description": "List all espanso matches",
+                "type": "basic",
+                "from": {
+                  "key_code": "p",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Hyper Key + tab",
             "manipulators": [
               {
@@ -1060,6 +1089,11 @@
                   {
                     "type": "variable_if",
                     "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_p",
                     "value": 0
                   },
                   {
@@ -3536,6 +3570,56 @@
                       "id": "dev.garcez.vim_mode",
                       "text": "Hold leader: r Raycast layer"
                     }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + r + t - Open my personal snippets gallery",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + t - Open my personal snippets gallery",
+                "from": {
+                  "key_code": "t"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/g4rcez/snippets/snippets"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + t - Open my personal snippets gallery",
+                "from": {
+                  "key_code": "t"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/g4rcez/snippets/snippets"
                   }
                 ],
                 "type": "basic"

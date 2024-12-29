@@ -73,19 +73,6 @@ znap eval starship "starship init zsh --print-full-init"
 znap prompt
 
 ##############################################################################################################
-## fpath hooks
-znap fpath _cargo    "rustup completions zsh cargo"
-znap fpath _deno     "deno completions zsh"
-znap fpath _fx       "source <(fx --comp zsh)"
-znap fpath _gitleaks "gitleaks completion zsh"
-znap fpath _kubectl  "kubectl completion zsh"
-znap fpath _mise     "mise completion zsh"
-znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
-znap fpath _npm      "npm completion"
-znap fpath _pnpm     "pnpm completion zsh"
-znap fpath _rustup   "rustup completions zsh"
-
-##############################################################################################################
 ## source files
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
@@ -115,6 +102,21 @@ eval "$(~/.local/bin/mise activate zsh)"
 zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
 source <(carapace _carapace zsh)
 source <(carapace chmod zsh)
-zellij-start
+
+##############################################################################################################
+## fpath hooks
+
+znap fpath _cargo    "rustup completions zsh cargo"
+znap fpath _deno     "deno completions zsh"
+znap fpath _fx       "source <(fx --comp zsh)"
+znap fpath _gitleaks "gitleaks completion zsh"
+znap fpath _kubectl  "kubectl completion zsh"
+znap fpath _mise     "mise completion zsh"
+znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
+znap fpath _npm      "npm completion"
+znap fpath _pnpm     "pnpm completion zsh"
+znap fpath _rustup   "rustup completions zsh"
+
+# zellij-start
 
 

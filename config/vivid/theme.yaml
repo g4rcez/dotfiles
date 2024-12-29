@@ -1,174 +1,136 @@
 colors:
-    rosewater: "f5e0dc"
-    flamingo: "f2cdcd"
-    pink: "f5c2e7"
-    mauve: "cba6f7"
-    red: "f38ba8"
-    maroon: "eba0ac"
-    peach: "fab387"
-    yellow: "f9e2af"
-    green: "a6e3a1"
-    teal: "94e2d5"
-    sky: "89dceb"
-    sapphire: "74c7ec"
-    cyan: "74c7ec"
-    blue: "89b4fa"
-    lavender: "b4befe"
-    orange: "fab387"
-    dark-gray: "1e1e2e"
-    darkgray: "1e1e2e"
-    gray: "cdd6f4"
-    white: "ffffff"
+  # Original "catppuccin" theme
+  # https://github.com/catppuccin/catppuccin
 
-    text: "cdd6f4"
-    subtext1: "bac2de"
-    subtext0: "a6adc8"
-    overlay2: "9399b2"
-    overlay1: "7f849c"
-    overlay0: "6c7086"
-    surface2: "585b70"
-    surface1: "45475a"
-    surface0: "313244"
+  rosewater: 'f5e0dc'
+  flamingo: 'f2cdcd'
+  pink: 'f5c2e7'
+  mauve: 'cba6f7'
+  red: 'f38ba8'
+  maroon: 'eba0ac'
+  peach: 'fab387'
+  yellow: 'f9e2af'
+  green: 'a6e3a1'
+  teal: '94e2d5'
+  sky: '89dceb'
+  sapphire: '74c7ec'
+  blue: '89b4fa'
+  lavender: 'b4befe'
 
-    base: "1e1e2e"
-    mantle: "181825"
-    crust: "11111b"
+  text: 'cdd6f4'
+  subtext1: 'bac2de'
+  subtext0: 'a6adc8'
+  overlay2: '9399b2'
+  overlay1: '7f849c'
+  overlay0: '6c7086'
+  surface2: '585b70'
+  surface1: '45475a'
+  surface0: '313244'
+  
+  base: '1e1e2e'
+  mantle: '181825'
+  crust: '11111b'
 
 core:
-    normal_text: {}
-    regular_file: {}
-    reset_to_normal: {}
+  normal_text: {}
+  regular_file: {}
+  reset_to_normal: {}
 
-    directory:
-        foreground: blue
+  directory:
+    foreground: blue
 
-    symlink:
-        foreground: pink
-
-    multi_hard_link: {}
-
-    fifo:
-        foreground: crust
-        background: blue
-
-    socket:
-        foreground: crust
-        background: pink
-
-    door:
-        foreground: crust
-        background: pink
-
-    block_device:
-        foreground: sapphire
-        background: surface0
-
-    character_device:
-        foreground: pink
-        background: surface0
-
-    broken_symlink:
-        foreground: crust
-        background: red
-
-    missing_symlink_target:
-        foreground: crust
-        background: red
-
-    setuid: {}
-
-    setgid: {}
-
-    file_with_capability: {}
-
-    sticky_other_writable: {}
-
-    other_writable: {}
-
-    sticky: {}
-
-    executable_file:
-        foreground: red
-        font-style: bold
-
-text:
-    special:
-        foreground: orange
-
-    todo:
-        font-style: bold
-
-    licenses:
-        foreground: gray
-
-    configuration:
-        generic:
-            foreground: orange
-        dockercompose:
-            foreground: sapphire
-        dockerfile:
-            foreground: sapphire
-        nix:
-            foreground: white
-        qt:
-            foreground: white
-        system:
-            foreground: white
-        metadata:
-            foreground: orange
-        desktop:
-            foreground: orange
-        bibtex:
-            foreground: white
-    other:
-        foreground: yellow
-
-markup:
-    foreground: yellow
-
-programming:
-    source:
-        foreground: green
-        typescript:
-            foreground: "4476C0"
-        json:
-            foreground: "E5D565"
-        javascript:
-            foreground: "E5D565"
-        tailwindcss:
-            foreground: "62BAF3"
-        lua:
-            foreground: "4141B9"
-        yaml:
-            foreground: "4141B9"
-        yml:
-            foreground: "4141B9"
-
-    tooling:
-        foreground: green
-        vcs:
-            other:
-                foreground: green
-            hg:
-                foreground: green
-            git:
-                foreground: white
-        continuous-integration:
-            foreground: green
-
-media:
+  symlink:
     foreground: pink
 
-office:
-    foreground: cyan
+  multi_hard_link: {}
 
-archives:
-    foreground: cyan
-    font-style: underline
+  fifo:
+    foreground: crust
+    background: blue
 
-executable:
-    foreground: green
+  socket:
+    foreground: crust
+    background: pink
+
+  door:
+    foreground: crust
+    background: pink
+
+  block_device:
+    foreground: sapphire
+    background: surface0
+
+  character_device:
+    foreground: pink
+    background: surface0
+
+  broken_symlink:
+    foreground: crust
+    background: red
+
+  missing_symlink_target:
+    foreground: crust
+    background: red
+
+  setuid: {}
+
+  setgid: {}
+
+  file_with_capability: {}
+
+  sticky_other_writable: {}
+
+  other_writable: {}
+
+  sticky: {}
+
+  executable_file:
+    foreground: red
     font-style: bold
 
+text:
+  special:
+    foreground: base
+    background: yellow
+
+  todo:
+    font-style: bold
+
+  licenses:
+    foreground: overlay2
+
+  configuration:
+    foreground: yellow
+
+  other:
+    foreground: yellow
+
+markup:
+  foreground: yellow
+
+programming:
+  source:
+    foreground: green
+
+  tooling:
+    foreground: teal
+
+    continuous-integration:
+      foreground: green
+
+media:
+  foreground: flamingo
+
+office:
+  foreground: red
+
+archives:
+  foreground: sapphire
+  font-style: underline
+
+executable:
+  foreground: red
+  font-style: bold
+
 unimportant:
-    foreground: darkgray
+  foreground: surface2

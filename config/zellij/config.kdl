@@ -68,11 +68,11 @@ keybinds clear-defaults=true {
                 floating true
             }
         }
-        bind "Alt y" {
-            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/room.wasm" {
+        bind "Alt b" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zbuffers.wasm" {
                 floating true
-                ignore_case true
             }
+            SwitchToMode "Normal"
         }
     }
     shared_except "normal" "locked" { 
