@@ -68,7 +68,7 @@ done
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc}
-znap source ohmyzsh/ohmyzsh plugins/{git,fzf}
+znap source ohmyzsh/ohmyzsh plugins/fzf
 znap eval starship "starship init zsh --print-full-init"
 znap prompt
 
@@ -77,6 +77,12 @@ znap prompt
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
+eval "$(~/.local/bin/mise activate zsh)"
+eval "$(sunbeam completion zsh)"
+zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
+source <(carapace _carapace zsh)
+source <(carapace chmod zsh)
+
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
@@ -97,11 +103,6 @@ local -a SOURCE=(
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
-
-eval "$(~/.local/bin/mise activate zsh)"
-zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
-source <(carapace _carapace zsh)
-source <(carapace chmod zsh)
 
 ##############################################################################################################
 ## fpath hooks

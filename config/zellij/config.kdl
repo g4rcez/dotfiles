@@ -1,15 +1,15 @@
-mirror_session false
-styled_underlines true
-simplified_ui true
-pane_frames false
 auto_layout true
-session_serialization true
-serialize_pane_viewport true
-mouse_mode true
-scrollback_lines_to_serialize 10000
 default_layout "compact"
+mirror_session false
+mouse_mode true
+pane_frames false
 scroll_buffer_size 10000
 scrollback_editor "nvim"
+scrollback_lines_to_serialize 10000
+serialize_pane_viewport true
+session_serialization true
+simplified_ui true
+styled_underlines true
 theme "mytheme"
 
 ui {
@@ -63,11 +63,6 @@ keybinds clear-defaults=true {
         bind "Alt f" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "Alt g" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
         bind "Alt ;" { EditScrollback; }
-        bind "Alt [" {
-            LaunchOrFocusPlugin "zellij:session-manager" {
-                floating true
-            }
-        }
         bind "Alt b" {
             LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zbuffers.wasm" {
                 floating true

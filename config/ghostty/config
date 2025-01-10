@@ -14,7 +14,7 @@ font-size = 18
 font-thicken = true
 foreground = #ffffff
 link-url = true
-minimum-contrast = 1.1
+minimum-contrast = 1
 mouse-shift-capture = true
 quick-terminal-position = top
 quick-terminal-screen = main
@@ -23,9 +23,10 @@ theme = catppuccin-mocha
 
 # window 
 quit-after-last-window-closed = false
-window-decoration = true
+window-decoration = false
 window-padding-color = extend
 window-padding-x = 5
+window-padding-y = 1
 window-theme = dark
 window-save-state = always
 window-colorspace = display-p3

@@ -10,7 +10,7 @@ type EspansoCreator<T extends string> = {
     shell: (key: string, cmd: string, capture?: string | undefined) => EspansoVarReplacer<T>;
 };
 
-export const DENO_BIN = "$($HOME/.local/bin/mise which deno) run";
+export const DENO_BIN = "$($HOME/.local/bin/mise which deno) run --allow-read";
 
 export const runMain = (cmd: string) => `${DENO_BIN} ${dotbot.home("dotfiles", "espanso", "main.ts")} ${cmd}`;
 

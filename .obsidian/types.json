@@ -1,8 +1,8 @@
 {
-  "types": {
-    "aliases": "aliases",
-    "cssclasses": "multitext",
-    "tags": "tags",
-    "parameters": "multitext"
-  }
+    "types": {
+        "aliases": "aliases",
+        "cssclasses": "multitext",
+        "tags": "tags",
+        "parameters": "multitext"
+    }
 }

@@ -16,5 +16,5 @@ if [[ "${1:0:3}" == "[s]" ]]; then
     CURRENT_DIR="$(pwd)"
     echo "Directory: $CURRENT_DIR"
     echo
-    bash $HOME/dotfiles/bin/tmux-preview-window $SANITIZE
+    bash "$HOME/dotfiles/bin/tmux-preview-window" "$SANITIZE"
 fi

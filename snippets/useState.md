@@ -9,7 +9,5 @@ shortcut: ush
 ---
 
 ```typescript
-
 const [${{state}}, set${{state|capitalize}}] = useState($|$);
-
 ```

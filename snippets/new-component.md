@@ -8,7 +8,6 @@ shortcut: rfc
 ---
 
 ```typescript
-
 type Props = {};
 
 const ${{name|capitalize}} = (props: PropsWithChildren<Props>) => {

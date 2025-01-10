@@ -76,5 +76,7 @@ fi
 
 selected_name=$(sanitizeName "$selected")
 session_name=$(getSessionName "$(homename "$selected_name")")
-zellij pipe --plugin https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.0/zellij-switch.wasm -- "--session $session_name --default-cwd $DIRNAME --layout $ZLAYOUT"
+dir_name=$(zoxide query "$session_name")
+cwd="$(sanitizeName "$dir_name")"
+zellij pipe --name session-switch --plugin "https://github.com/mostafaqanbaryan/zellij-switch/releases/download/0.2.0/zellij-switch.wasm" -- "--session $session_name --cwd $cwd"
 

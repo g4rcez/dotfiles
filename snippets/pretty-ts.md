@@ -7,5 +7,5 @@ shortcut: tsmerge
 ---
 
 ```typescript
-type Merge<T> = { [K in keyof T]: T[K] } & {}
+type Merge<T> = { [K in keyof T]: T[K] } & {};
 ```

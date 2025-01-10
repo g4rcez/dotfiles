@@ -5,7 +5,7 @@ Hi. This is my dotfiles project. Here you will find all my configurations to cre
 # Know the dotfiles
 
 | File                                                                                      | Purpose                                                                                                          |
-|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | [zsh/zshrc](https://github.com/g4rcez/dotfiles/blob/master/zsh/zshrc)                     | Entrypoint of all my ZShell configs                                                                              |
 | [git/gitconfig](https://github.com/g4rcez/dotfiles/blob/master/git/gitconfig)             | Gitconfig settings. Alias, core, diff style                                                                      |
 | [starship.toml](https://github.com/g4rcez/dotfiles/blob/master/config/starship.toml)      | Configure of [starship.rs](https://starship.rs)                                                                  |

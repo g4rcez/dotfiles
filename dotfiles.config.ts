@@ -23,6 +23,7 @@ export default dotfiles({
             "nvim",
             "posting",
             "starship.toml",
+            "tmux",
             "wezterm",
             "yazi",
             "zellij",

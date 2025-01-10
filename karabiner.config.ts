@@ -6,7 +6,16 @@ const modKeys = karabiner.createHyperSubLayers({
         "",
         "Which key Karabiner + Raycast",
     ),
-    p: karabiner.open("raycast://extensions/kud/espanso/index", "", "List all espanso matches"),
+    p: karabiner.open(
+        "raycast://extensions/kud/espanso/index",
+        "",
+        "List all espanso matches",
+    ),
+    e: karabiner.open(
+        "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+        "",
+        "Open emojis",
+    ),
     tab: karabiner.open(
         "raycast://extensions/raycast/navigation/switch-windows",
         "",
@@ -115,7 +124,11 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     r: {
         description: "Raycast layer",
-        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery"),
+        t: karabiner.open(
+            "raycast://extensions/g4rcez/snippets/snippets",
+            "",
+            "Open my personal snippets gallery",
+        ),
         m: karabiner.open(
             "raycast://extensions/raycast/navigation/search-menu-items",
             "",
@@ -156,7 +169,6 @@ const withLeaderKeys = karabiner.createLeaderLayers({
             "",
             "OCR screen area",
         ),
-        n: karabiner.open("raycast://extensions/aiotter/nixpkgs-search/index", "", "Nix search"),
     },
     b: {
         description: "Edge profiler/controls",
@@ -190,4 +202,8 @@ const hyperKey: KarabinerRule = {
     ],
 } as const;
 
-export default createKarabinerConfig(hyperKey, modKeys.layers, withLeaderKeys.layers);
+export default createKarabinerConfig(
+    hyperKey,
+    modKeys.layers,
+    withLeaderKeys.layers,
+);

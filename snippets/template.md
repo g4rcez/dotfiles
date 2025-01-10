@@ -1,10 +1,9 @@
 ---
-title: 
-tags: 
-description: 
+title:
+tags:
+description:
 shortcut:
 ---
 
 ```typescript
-
 ```

@@ -901,6 +901,35 @@
             ]
           },
           {
+            "description": "Hyper Key + e",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+                  }
+                ],
+                "description": "Open emojis",
+                "type": "basic",
+                "from": {
+                  "key_code": "e",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Hyper Key + tab",
             "manipulators": [
               {
@@ -1094,6 +1123,11 @@
                   {
                     "type": "variable_if",
                     "name": "hyper_sublayer_p",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -4020,56 +4054,6 @@
                 "to": [
                   {
                     "shell_command": "open  raycast://extensions/huzef44/screenocr/recognize-text"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + r + n - Nix search",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_r_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + r + n - Nix search",
-                "from": {
-                  "key_code": "n"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/aiotter/nixpkgs-search/index"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_r_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_r_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + r + n - Nix search",
-                "from": {
-                  "key_code": "n"
-                },
-                "to": [
-                  {
-                    "shell_command": "open  raycast://extensions/aiotter/nixpkgs-search/index"
                   }
                 ],
                 "type": "basic"

@@ -11,6 +11,7 @@
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/crypto@1.0.3": "1.0.3",
     "jsr:@std/crypto@^1.0.3": "1.0.3",
+    "jsr:@std/datetime@~0.225.2": "0.225.2",
     "jsr:@std/encoding@^1.0.6": "1.0.6",
     "jsr:@std/fmt@^1.0.3": "1.0.3",
     "jsr:@std/front-matter@^1.0.5": "1.0.5",
@@ -30,6 +31,8 @@
     "npm:@faker-js/faker@8.4.1": "8.4.1",
     "npm:color-convert@*": "2.0.1",
     "npm:color-convert@2.0.1": "2.0.1",
+    "npm:date-fns@*": "4.1.0",
+    "npm:date-fns@^4.1.0": "4.1.0",
     "npm:figlet@1.8.0": "1.8.0",
     "npm:github-slugger@2": "2.0.0",
     "npm:he@^1.2.0": "1.2.0",
@@ -86,6 +89,9 @@
     },
     "@std/crypto@1.0.3": {
       "integrity": "a2a32f51ddef632d299e3879cd027c630dcd4d1d9a5285d6e6788072f4e51e7f"
+    },
+    "@std/datetime@0.225.2": {
+      "integrity": "45f0100554a912cd65f48089ef0a33aa1eb6ea21f08090840b539ab582827eaa"
     },
     "@std/encoding@1.0.6": {
       "integrity": "ca87122c196e8831737d9547acf001766618e78cd8c33920776c7f5885546069"
@@ -180,6 +186,9 @@
     },
     "commander@8.3.0": {
       "integrity": "sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww=="
+    },
+    "date-fns@4.1.0": {
+      "integrity": "sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg=="
     },
     "debug@4.4.0": {
       "integrity": "sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==",
@@ -641,6 +650,7 @@
       "jsr:@std/cli@1.0.6",
       "jsr:@std/collections@1.0.8",
       "jsr:@std/crypto@1.0.3",
+      "jsr:@std/datetime@~0.225.2",
       "jsr:@std/encoding@^1.0.6",
       "jsr:@std/fmt@^1.0.3",
       "jsr:@std/front-matter@^1.0.5",
@@ -651,6 +661,7 @@
       "jsr:@utility/git@0.4.1",
       "npm:@faker-js/faker@8.4.1",
       "npm:color-convert@2.0.1",
+      "npm:date-fns@^4.1.0",
       "npm:marked@^15.0.4",
       "npm:remark-parse@11",
       "npm:remark-stringify@11",

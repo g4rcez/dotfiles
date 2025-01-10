@@ -7,5 +7,5 @@ shortcut: override
 ---
 
 ```typescript
-export type Override<Source, New> = Omit<Source, keyof New> & New
+export type Override<Source, New> = Omit<Source, keyof New> & New;
 ```

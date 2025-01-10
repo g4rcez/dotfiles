@@ -8,7 +8,5 @@ shortcut: arrs
 ---
 
 ```typescript
-
-type ArraySize<T, Size extends number, A extends T[] = []> = A["length"] extends Size ? A : ArraySize<T, Size, [...A, T]>
-
+type ArraySize<T, Size extends number, A extends T[] = []> = A["length"] extends Size ? A : ArraySize<T, Size, [...A, T]>;
 ```

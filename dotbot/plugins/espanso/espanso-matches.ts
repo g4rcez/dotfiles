@@ -12,5 +12,3 @@ export const getSnippetMatches = (input: string) => {
     }
     return matches;
 };
-
-
