@@ -1,4 +1,4 @@
-import { ActionPanel, Action, List } from "@raycast/api";
+import { Action, ActionPanel, List } from "@raycast/api";
 import path from "node:path";
 import { readdirSync, readFileSync } from "node:fs";
 
