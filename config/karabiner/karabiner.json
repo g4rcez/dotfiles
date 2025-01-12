@@ -744,6 +744,112 @@
                 ]
               },
               {
+                "description": "Caps Lock -> Hyper Key(o_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
+                "description": "Caps Lock -> Hyper Key(o_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
                 "description": "Caps Lock -> Hyper Key",
                 "type": "basic",
                 "to_if_alone": [
@@ -1947,56 +2053,6 @@
             ]
           },
           {
-            "description": "leader + w + b - Window: maximize-height",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + b - Window: maximize-height",
-                "from": {
-                  "key_code": "b"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + b - Window: maximize-height",
-                "from": {
-                  "key_code": "b"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize-height"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
             "description": "leader + w + c - Window: center",
             "manipulators": [
               {
@@ -2040,6 +2096,56 @@
                 "to": [
                   {
                     "shell_command": "open -g rectangle-pro://execute-action?name=center"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + i - Window: center-two-thirds",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + i - Window: center-two-thirds",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + i - Window: center-two-thirds",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
                   }
                 ],
                 "type": "basic"
@@ -2097,7 +2203,7 @@
             ]
           },
           {
-            "description": "leader + w + e - Window: first-two-thirds",
+            "description": "leader + w + f - Window: maximize",
             "manipulators": [
               {
                 "conditions": [
@@ -2107,13 +2213,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + e - Window: first-two-thirds",
+                "description": "leader + w + f - Window: maximize",
                 "from": {
-                  "key_code": "e"
+                  "key_code": "f"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
                   },
                   {
                     "halt": true,
@@ -2133,13 +2239,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + e - Window: first-two-thirds",
+                "description": "leader + w + f - Window: maximize",
                 "from": {
-                  "key_code": "e"
+                  "key_code": "f"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
                   }
                 ],
                 "type": "basic"
@@ -2347,7 +2453,7 @@
             ]
           },
           {
-            "description": "leader + w + o - Window: maximize",
+            "description": "leader + w + return_or_enter - Window: maximize",
             "manipulators": [
               {
                 "conditions": [
@@ -2357,9 +2463,9 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + o - Window: maximize",
+                "description": "leader + w + return_or_enter - Window: maximize",
                 "from": {
-                  "key_code": "o"
+                  "key_code": "return_or_enter"
                 },
                 "to": [
                   {
@@ -2383,13 +2489,163 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + o - Window: maximize",
+                "description": "leader + w + return_or_enter - Window: maximize",
                 "from": {
-                  "key_code": "o"
+                  "key_code": "return_or_enter"
                 },
                 "to": [
                   {
                     "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + q - Window: first-two-thirds",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + q - Window: first-two-thirds",
+                "from": {
+                  "key_code": "q"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + q - Window: first-two-thirds",
+                "from": {
+                  "key_code": "q"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + tab - Window: first-third",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + tab - Window: first-third",
+                "from": {
+                  "key_code": "tab"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + tab - Window: first-third",
+                "from": {
+                  "key_code": "tab"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + e - Window: last-third",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + e - Window: last-third",
+                "from": {
+                  "key_code": "e"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=last-third"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + e - Window: last-third",
+                "from": {
+                  "key_code": "e"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=last-third"
                   }
                 ],
                 "type": "basic"
@@ -2447,7 +2703,7 @@
             ]
           },
           {
-            "description": "leader + w + i - Window: center-two-thirds",
+            "description": "leader + w + delete_or_backspace - Window: last",
             "manipulators": [
               {
                 "conditions": [
@@ -2457,13 +2713,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + i - Window: center-two-thirds",
+                "description": "leader + w + delete_or_backspace - Window: last",
                 "from": {
-                  "key_code": "i"
+                  "key_code": "delete_or_backspace"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=last"
                   },
                   {
                     "halt": true,
@@ -2483,13 +2739,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + i - Window: center-two-thirds",
+                "description": "leader + w + delete_or_backspace - Window: last",
                 "from": {
-                  "key_code": "i"
+                  "key_code": "delete_or_backspace"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=last"
                   }
                 ],
                 "type": "basic"
@@ -2497,7 +2753,7 @@
             ]
           },
           {
-            "description": "leader + w + f - Window: maximize",
+            "description": "leader + w + slash - Window: bottom-right",
             "manipulators": [
               {
                 "conditions": [
@@ -2507,13 +2763,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + f - Window: maximize",
+                "description": "leader + w + slash - Window: bottom-right",
                 "from": {
-                  "key_code": "f"
+                  "key_code": "slash"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-right"
                   },
                   {
                     "halt": true,
@@ -2533,13 +2789,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + f - Window: maximize",
+                "description": "leader + w + slash - Window: bottom-right",
                 "from": {
-                  "key_code": "f"
+                  "key_code": "slash"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-right"
                   }
                 ],
                 "type": "basic"
@@ -2547,7 +2803,7 @@
             ]
           },
           {
-            "description": "leader + w + return_or_enter - Window: maximize",
+            "description": "leader + w + period - Window: bottom-left",
             "manipulators": [
               {
                 "conditions": [
@@ -2557,13 +2813,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + period - Window: bottom-left",
                 "from": {
-                  "key_code": "return_or_enter"
+                  "key_code": "period"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-left"
                   },
                   {
                     "halt": true,
@@ -2583,13 +2839,113 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + period - Window: bottom-left",
                 "from": {
-                  "key_code": "return_or_enter"
+                  "key_code": "period"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-left"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + backslash - Window: top-right",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + backslash - Window: top-right",
+                "from": {
+                  "key_code": "backslash"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=top-right"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + backslash - Window: top-right",
+                "from": {
+                  "key_code": "backslash"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=top-right"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + close_bracket - Window: top-left",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + close_bracket - Window: top-left",
+                "from": {
+                  "key_code": "close_bracket"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=top-left"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + close_bracket - Window: top-left",
+                "from": {
+                  "key_code": "close_bracket"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -g rectangle-pro://execute-action?name=top-left"
                   }
                 ],
                 "type": "basic"
@@ -2979,12 +3335,15 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_v_SINGLE",
+                      "name": "VIM_MODE_v_HOLD",
                       "value": "on"
                     }
                   },
                   {
-                    "shell_command": "/opt/homebrew/bin/terminal-notifier -title \"Leader v activated\" -message \"leader: v Vim mode\""
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: v Vim mode"
+                    }
                   }
                 ],
                 "to_if_held_down": [
@@ -4384,6 +4743,386 @@
                 "to": [
                   {
                     "shell_command": "open  raycast://extensions/koinzhang/browser-tabs/index"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader o",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_o",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "esc disable single - leader o",
+            "manipulators": [
+              {
+                "description": "esc_disable_single_leader_key_o",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 0
+                  }
+                ],
+                "from": {
+                  "key_code": "escape",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ],
+                    "mandatory": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader o",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_o",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader o",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "leader_key_o",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_if_alone": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "shell_command": "/opt/homebrew/bin/terminal-notifier -title \"Leader o activated\" -message \"leader: o Open applications\""
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: o Open applications"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + o + t - Open Wezterm",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + t - Open Wezterm",
+                "from": {
+                  "key_code": "t"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Wezterm.app'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + t - Open Wezterm",
+                "from": {
+                  "key_code": "t"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Wezterm.app'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + o + m - Open Telegram",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + m - Open Telegram",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Telegram.app'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + m - Open Telegram",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Telegram.app'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + o + w - Open Webstorm",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + w - Open Webstorm",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Webstorm.app'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + w - Open Webstorm",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  -a 'Webstorm.app'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + o + b - Open default profile",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + b - Open default profile",
+                "from": {
+                  "key_code": "b"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_o_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_o_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + o + b - Open default profile",
+                "from": {
+                  "key_code": "b"
+                },
+                "to": [
+                  {
+                    "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
                   }
                 ],
                 "type": "basic"

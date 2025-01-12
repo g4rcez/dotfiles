@@ -34,17 +34,20 @@ export const createEspansoConfig = <T extends string>(
             name: string,
             syntax: string,
         ): EspansoVarReplacer<T> => ({
-            trigger: getTrigger(key),
             replace: syntax,
+            label: `${key}: ${name}`,
+            trigger: getTrigger(key),
             vars: [{ name, type: "clipboard" }],
         }),
         insert: (key: string, syntax: string): EspansoVarReplacer<T> => ({
-            trigger: getTrigger(key),
             replace: syntax,
+            trigger: getTrigger(key),
+            label: `${key}: ${syntax}`,
         }),
         form: (key: string, replace: string, cmd: string): EspansoVarReplacer<T> => ({
             trigger: getTrigger(key),
             replace,
+            label: `${key}: ${replace}`,
             vars: [
                 {
                     name: "form",
@@ -65,6 +68,7 @@ export const createEspansoConfig = <T extends string>(
         ): EspansoVarReplacer<T> => ({
             [capture ? "regex" : "trigger"]: capture ? getTrigger(capture) : getTrigger(key),
             replace: `{{${key}}}`,
+            label: `${key}: ${cmd}`,
             vars: [
                 { name: "clipboard", type: "clipboard" },
                 {
@@ -77,6 +81,7 @@ export const createEspansoConfig = <T extends string>(
         random: (key: string, choices: string[]): EspansoVarReplacer<T> => ({
             trigger: getTrigger(key),
             replace: `{{${key}}}`,
+            label: `${key}: Random choices\n${choices.join("\n\n")}`,
             vars: [
                 {
                     name: getTriggerKey(key),
@@ -92,6 +97,7 @@ export const createEspansoConfig = <T extends string>(
         ): EspansoVarReplacer<T> => ({
             trigger: getTrigger(key),
             replace: `{{${key}}}`,
+            label: `${key}: ${type} -> ${format}`,
             vars: [
                 {
                     name: getTriggerKey(key),

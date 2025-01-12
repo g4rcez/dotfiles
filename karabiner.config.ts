@@ -67,19 +67,26 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         description: "Window manager",
         equal_sign: karabiner.rectangle("larger"),
         hyphen: karabiner.rectangle("smaller"),
-        b: karabiner.rectangle("maximize-height"),
         c: karabiner.rectangle("center"),
+        i: karabiner.rectangle("center-two-thirds"),
         d: karabiner.rectangle("first-third"),
-        e: karabiner.rectangle("first-two-thirds"),
+        f: karabiner.rectangle("maximize"),
         h: karabiner.rectangle("left-half"),
         j: karabiner.rectangle("bottom-half"),
         k: karabiner.rectangle("top-half"),
         l: karabiner.rectangle("right-half"),
-        o: karabiner.rectangle("maximize"),
-        r: karabiner.rectangle("last-two-thirds"),
-        i: karabiner.rectangle("center-two-thirds"),
-        f: karabiner.rectangle("maximize"),
         return_or_enter: karabiner.rectangle("maximize"),
+        q: karabiner.rectangle("first-two-thirds"),
+        tab: karabiner.rectangle("first-third"),
+        e: karabiner.rectangle("last-third"),
+        r: karabiner.rectangle("last-two-thirds"),
+        delete_or_backspace: karabiner.rectangle("last"),
+
+        slash: karabiner.rectangle("bottom-right"),
+        period: karabiner.rectangle("bottom-left"),
+
+        backslash: karabiner.rectangle("top-right"),
+        close_bracket: karabiner.rectangle("top-left"),
     },
     n: {
         description: "Notion layer",
@@ -90,6 +97,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         ),
     },
     v: {
+        hold: true,
         description: "Vim mode",
         h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
         l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
@@ -180,6 +188,13 @@ const withLeaderKeys = karabiner.createLeaderLayers({
             "Search tabs",
         ),
     },
+    o: {
+        description: "Open applications",
+        t: karabiner.app("Wezterm"),
+        m: karabiner.app("Telegram"),
+        w: karabiner.app("Webstorm"),
+        b: karabiner.browser("Default", "Open default profile"),
+    },
 });
 
 const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [
@@ -203,6 +218,7 @@ const hyperKey: KarabinerRule = {
 } as const;
 
 export default createKarabinerConfig(
+    [...modKeys.whichKey, ...withLeaderKeys.whichKey],
     hyperKey,
     modKeys.layers,
     withLeaderKeys.layers,

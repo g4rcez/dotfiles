@@ -137,8 +137,9 @@ function vivid-update() {
 }
 
 function updateAll() {
-    znap pull
     vivid-update
+    znap pull
+    brew update; brew upgrade
     nodeUpdatePackages
 }
 
@@ -189,10 +190,6 @@ function karabiner-reset() {
     launchctl stop org.pqrs.karabiner.karabiner_console_user_server
     sleep 0.5
     launchctl start org.pqrs.karabiner.karabiner_console_user_server
-}
-
-function home-sync() {
-    darwin-rebuild switch --flake $DOTFILES/nix#garcez
 }
 
 function jarvis () {

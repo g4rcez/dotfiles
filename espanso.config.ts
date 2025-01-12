@@ -9,10 +9,11 @@ export default createEspansoConfig({
 }, (espanso) => {
     const simpleTriggers = [
         espanso.insert("blog", "https://garcez.dev"),
+        espanso.insert("git", "https://github.com/g4rcez"),
+        espanso.insert("twitter", "https://x.com/garcez_allan"),
+        espanso.insert("dots", "https://github.com/g4rcez/dotfiles"),
         espanso.insert("youtube", "https://www.youtube.com/@allangarcez"),
         espanso.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/"),
-        espanso.insert("git", "https://github.com/g4rcez"),
-        espanso.insert("dots", "https://github.com/g4rcez/dotfiles"),
 
         espanso.format("date", "date", "%d/%m/%Y"),
         espanso.format("time", "date", "%H:%M"),

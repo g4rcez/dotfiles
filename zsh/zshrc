@@ -77,8 +77,6 @@ znap prompt
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
-eval "$(~/.local/bin/mise activate zsh)"
-eval "$(sunbeam completion zsh)"
 zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
 source <(carapace _carapace zsh)
 source <(carapace chmod zsh)

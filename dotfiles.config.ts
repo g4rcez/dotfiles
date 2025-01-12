@@ -1,7 +1,7 @@
 import { dotfiles } from "@dotfiles/core";
 import { espansoPlugin, karabinerPlugin, vscodePlugin } from "@dotfiles/plugins";
 import EspansoRules from "./espanso.config.ts";
-import KarabinerRules from "./karabiner.config.ts";
+import KarabinerConfig from "./karabiner.config.ts";
 
 export default dotfiles({
     xdg: ".config",
@@ -32,6 +32,11 @@ export default dotfiles({
     plugins: [
         espansoPlugin(EspansoRules),
         vscodePlugin({ path: "vscode", extensionsFile: "vscode/extensions.txt" }),
-        karabinerPlugin({ rules: KarabinerRules, configFile: "karabiner/karabiner.json" }),
+        karabinerPlugin({
+            rules: KarabinerConfig.map,
+            whichKey: KarabinerConfig.whichKey,
+            configFile: "karabiner/karabiner.json",
+            whichKeyFile: "karabiner/karabiner-whichkey.json",
+        }),
     ],
 });

@@ -9,9 +9,11 @@ export type LayerCommand = {
     to_if_held_down?: To[];
     to_if_alone?: To[];
     to_delayed_action?: { to_if_canceled?: To[]; to_if_invoked?: To[] };
+    hold?: boolean;
 };
 
 export type KarabinerRule = {
+    hold?: string;
     description?: string;
     manipulators?: Manipulator[];
 };

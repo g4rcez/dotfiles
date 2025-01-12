@@ -24,7 +24,7 @@ const notify = (message: string, title: string) => ({
     shell_command: `/opt/homebrew/bin/terminal-notifier -title "${title}" -message "${message}"`,
 });
 
-const BROWSER = "Microsoft Edge";
+export const BROWSER = "Microsoft Edge";
 
 const browser = (
     profile: "Profile 1" | "Default",
@@ -39,27 +39,21 @@ const browser = (
     ],
 });
 
-const aerospace = (command: string): LayerCommand => {
-    return {
-        to: [{ shell_command: `/opt/homebrew/bin/aerospace ${command}` }],
-        description: `Window: ${command}`,
-    };
-};
+const aerospace = (command: string): LayerCommand => ({
+    to: [{ shell_command: `/opt/homebrew/bin/aerospace ${command}` }],
+    description: `Window: ${command}`,
+});
 
 const createSubLayerName = (key: KeyCode) => `hyper_sublayer_${key}`;
 
-const rectangle = (name: RectangleActions): LayerCommand => {
-    const isPro = true;
-    const protocol = isPro ? "rectangle-pro" : "rectangle";
-    return {
-        to: [
-            {
-                shell_command: `open -g ${protocol}://execute-action?name=${name}`,
-            },
-        ],
-        description: `Window: ${name}`,
-    };
-};
+const rectangle = (name: RectangleActions): LayerCommand => ({
+    description: `Window: ${name}`,
+    to: [
+        {
+            shell_command: `open -g rectangle-pro://execute-action?name=${name}`,
+        },
+    ],
+});
 
 const app = (name: string): LayerCommand => open(`-a '${name}.app'`, "", `Open ${name}`);
 
@@ -223,6 +217,7 @@ export const karabiner = {
     open,
     shell,
     notify,
+    BROWSER,
     browser,
     aerospace,
     rectangle,
@@ -235,44 +230,51 @@ export const karabiner = {
     createHyperSubLayers,
 };
 
-export const createKarabinerConfig = (...t: Array<KarabinerRule | KarabinerRule[]>): KarabinerRule[] =>
-    t.flatMap((x) => Array.isArray(x) ? x.flat() : x);
+export const createKarabinerConfig = (whichKey: WhichKey[], ...t: Array<KarabinerRule | KarabinerRule[]>) => ({
+    whichKey,
+    map: t.flatMap((x) => Array.isArray(x) ? x.flat() : x),
+});
 
-export const karabinerPlugin: DotbotPlugin<{ rules: KarabinerRule[]; configFile: string }> = (args) => async (settings) => {
-    const configFile = settings.userConfig.pathJoin.xdgDotfiles(args.configFile);
-    await Deno.writeTextFile(
-        configFile,
-        JSON.stringify(
-            {
-                global: {
-                    ask_for_confirmation_before_quitting: true,
-                    check_for_updates_on_startup: true,
-                    show_in_menu_bar: true,
-                    show_profile_name_in_menu_bar: false,
-                    unsafe_ui: false,
-                },
-                profiles: [
-                    {
-                        name: "Default",
-                        virtual_hid_keyboard: { keyboard_type_v2: "ansi" },
-                        // You must change these devices for your own
-                        devices,
-                        complex_modifications: {
-                            rules: args.rules,
-                            parameters: {
-                                "basic.simultaneous_threshold_milliseconds": 50,
-                                "basic.to_delayed_action_delay_milliseconds": 250,
-                                "basic.to_if_alone_timeout_milliseconds": 250,
-                                "basic.to_if_held_down_threshold_milliseconds": 250,
-                                "mouse_motion_to_scroll.speed": 100,
+export const karabinerPlugin: DotbotPlugin<{ rules: KarabinerRule[]; whichKey: WhichKey[]; whichKeyFile: string; configFile: string }> =
+    (args) => async (settings) => {
+        const configFile = settings.userConfig.pathJoin.xdgDotfiles(args.configFile);
+        const whichKeyFile = settings.userConfig.pathJoin.xdgDotfiles(args.whichKeyFile);
+
+        await Deno.writeTextFile(whichKeyFile, JSON.stringify({ items: args.whichKey }));
+        await Deno.writeTextFile(
+            configFile,
+            JSON.stringify(
+                {
+                    global: {
+                        ask_for_confirmation_before_quitting: true,
+                        check_for_updates_on_startup: true,
+                        show_in_menu_bar: true,
+                        show_profile_name_in_menu_bar: false,
+                        unsafe_ui: false,
+                    },
+                    profiles: [
+                        {
+                            name: "Default",
+                            virtual_hid_keyboard: { keyboard_type_v2: "ansi" },
+                            // You must change these devices for your own
+                            devices,
+                            complex_modifications: {
+                                rules: args.rules,
+                                parameters: {
+                                    "basic.simultaneous_threshold_milliseconds": 50,
+                                    "basic.to_delayed_action_delay_milliseconds": 250,
+                                    "basic.to_if_alone_timeout_milliseconds": 250,
+                                    "basic.to_if_held_down_threshold_milliseconds": 250,
+                                    "mouse_motion_to_scroll.speed": 100,
+                                },
                             },
                         },
-                    },
-                ],
-            },
-            null,
-            2,
-        ),
-    );
-    console.log(`%c[karabiner] %c${dotbot.replaceHomedir(configFile)} was created`, "color: purple", "");
-};
+                    ],
+                },
+                null,
+                2,
+            ),
+        );
+        console.log(`%c[karabiner] %c${dotbot.replaceHomedir(configFile)} was created`, "color: purple", "");
+        console.log(`%c[karabiner] %cwhichkey: ${dotbot.replaceHomedir(whichKeyFile)} was created`, "color: purple", "");
+    };

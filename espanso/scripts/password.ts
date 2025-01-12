@@ -5,7 +5,7 @@ const numbers = "0123456789";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕ";
 
-const specialChars = "_%^&*()[|\\];:,.?/~!@-#$œåΩ∑ß´ç∂®ƒ√†©∫¥˙˜¨∆ºª•¶§∞";
+const specialChars = "!@#$%^&*()_+-=[]{}\\|;:'\",./<>?~`";
 
 const allOfThen = numbers + letters + specialChars;
 

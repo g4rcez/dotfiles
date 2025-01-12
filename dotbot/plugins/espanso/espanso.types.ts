@@ -30,7 +30,7 @@ type Var = {
 
 export type EspansoVarReplacer<T extends string> = {
     trigger?: EspansoTrigger<T>;
-    label?: string;
+    label: string;
     regex?: string;
     replace?: `{{${string}}}` | string;
     form?: string;

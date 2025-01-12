@@ -1,12 +1,14 @@
 import { karabiner } from "@dotfiles/plugins";
 import { KarabinerRule, KeyCode, LayerCommand, Manipulator, To, WhichKey } from "./karabiner.types.ts";
 
-type VimMotion = { to: To[]; description?: string } | LayerCommand;
+type KarabinerMotion = { to: To[]; description?: string } | LayerCommand;
 
 type Config = Partial<
     Record<
         KeyCode,
-        Partial<Record<KeyCode, VimMotion> & { description?: string }>
+        Partial<
+            Record<KeyCode, KarabinerMotion> & { description?: string; hold?: boolean }
+        >
     >
 >;
 
@@ -21,7 +23,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
     const whichKey: WhichKey[] = [];
     const keys: string[] = [];
     const allLayers = entries.reduce<KarabinerRule[]>(
-        (acc, [key, { description: leaderDescription = "", ...motions }]) => {
+        (acc, [key, { description: leaderDescription = "", hold: leaderHold = false, ...motions }]) => {
             const modal = `leader: ${key} ${leaderDescription}` as const;
             keys.push(key);
             const leader: KarabinerRule = {
@@ -37,8 +39,8 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                             modifiers: { optional: ["any"] },
                         },
                         to_if_alone: [
-                            karabiner.vim.on(key, false),
-                            karabiner.notify(modal, `Leader ${key} activated`),
+                            karabiner.vim.on(key, leaderHold),
+                            leaderHold ? karabiner.karabinerNotify(`Hold ${modal}`) : karabiner.notify(modal, `Leader ${key} activated`),
                         ],
                         to_if_held_down: [
                             karabiner.vim.on(key, true),

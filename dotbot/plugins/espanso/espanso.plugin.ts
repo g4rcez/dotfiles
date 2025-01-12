@@ -15,7 +15,7 @@ const espansoConfigDefaults = {
     auto_restart: true,
 };
 
-export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) => async () => {
+export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) => async (inner) => {
     const matchesFromPlugin = Array.isArray(args.tasks)
         ? await Promise.all(args.tasks.map(async (x) => {
             const result = await x(args);
@@ -39,6 +39,11 @@ export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) =
     await dotbot.write(baseYml, toYaml(espansoYmlContent));
     await dotbot.mkdir(config, { recursive: true });
     await dotbot.write(defaultYml, toYaml(espansoConfigDefaults));
-    const toCreate = [matches, config, baseYml, defaultYml];
+    const whichFile = inner.userConfig.pathJoin.xdgDotfiles("espanso", "which-triggers.json");
+    await dotbot.write(
+        whichFile,
+        JSON.stringify(espansoYmlContent.matches.map((x) => ({ trigger: x.trigger, label: x.label }))),
+    );
+    const toCreate = [matches, config, baseYml, defaultYml, whichFile];
     toCreate.forEach((x) => console.log(`%c[espanso]%c Created: ${dotbot.replaceHomedir(x)}`, css`color:greenyellow`, ""));
 };
