@@ -1,9 +1,9 @@
 {
-    "showLineNumber": true,
-    "useMarkdownLinks": true,
-    "newLinkFormat": "absolute",
-    "showUnsupportedFiles": true,
-    "alwaysUpdateLinks": true,
-    "newFileLocation": "folder",
-    "newFileFolderPath": "snippets"
+  "showLineNumber": true,
+  "useMarkdownLinks": true,
+  "newLinkFormat": "absolute",
+  "showUnsupportedFiles": true,
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "snippets"
 }

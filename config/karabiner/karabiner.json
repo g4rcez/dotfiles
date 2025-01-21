@@ -850,6 +850,112 @@
                 ]
               },
               {
+                "description": "Caps Lock -> Hyper Key(i_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_i_SINGLE",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
+                "description": "Caps Lock -> Hyper Key(i_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_i_HOLD",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
                 "description": "Caps Lock -> Hyper Key",
                 "type": "basic",
                 "to_if_alone": [
@@ -949,18 +1055,47 @@
             ]
           },
           {
-            "description": "Hyper Key + slash",
+            "description": "Hyper Key + open_bracket",
             "manipulators": [
               {
                 "to": [
                   {
-                    "shell_command": "open  raycast://extensions/g4rcez/dev-toolbelt/whichkey"
+                    "shell_command": "open  raycast://extensions/g4rcez/whichkey/whichkey"
                   }
                 ],
-                "description": "Which key Karabiner + Raycast",
+                "description": "Snippets",
                 "type": "basic",
                 "from": {
-                  "key_code": "slash",
+                  "key_code": "open_bracket",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + close_bracket",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/g4rcez/snippets/snippets"
+                  }
+                ],
+                "description": "Snippets",
+                "type": "basic",
+                "from": {
+                  "key_code": "close_bracket",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -1223,7 +1358,12 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_slash",
+                    "name": "hyper_sublayer_open_bracket",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_close_bracket",
                     "value": 0
                   },
                   {
@@ -1264,6 +1404,30 @@
                   {
                     "type": "variable_if",
                     "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "osascript $HOME/dotfiles/bin/clear-notifications"
+                  }
+                ],
+                "description": "Clear notifications",
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
                     "value": 1
                   }
                 ]
@@ -3970,6 +4134,56 @@
             ]
           },
           {
+            "description": "leader + r + i - Open raycast://extensions/raycast/raycast-ai/ai-chat",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + i - Open raycast://extensions/raycast/raycast-ai/ai-chat",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/raycast-ai/ai-chat"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_r_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_r_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + r + i - Open raycast://extensions/raycast/raycast-ai/ai-chat",
+                "from": {
+                  "key_code": "i"
+                },
+                "to": [
+                  {
+                    "shell_command": "open  raycast://extensions/raycast/raycast-ai/ai-chat"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "leader + r + t - Open my personal snippets gallery",
             "manipulators": [
               {
@@ -5123,6 +5337,186 @@
                 "to": [
                   {
                     "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader i",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_i_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_i",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "esc disable single - leader i",
+            "manipulators": [
+              {
+                "description": "esc_disable_single_leader_key_i",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_i_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 0
+                  }
+                ],
+                "from": {
+                  "key_code": "escape",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ],
+                    "mandatory": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader i",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_i_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_i",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader i",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "leader_key_i",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_if_alone": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_SINGLE",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "shell_command": "/opt/homebrew/bin/terminal-notifier -title \"Leader i activated\" -message \"leader: i \""
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_i_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Hold leader: i "
+                    }
                   }
                 ],
                 "type": "basic"

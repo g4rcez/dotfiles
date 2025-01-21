@@ -1,9 +1,9 @@
 ---
 title: pretty-ts
-tags:
-  - typescript
 description: Merge types in a beautiful way
 shortcut: tsmerge
+tags:
+  - typescript
 ---
 
 ```typescript

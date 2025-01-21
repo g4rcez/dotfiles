@@ -6,6 +6,12 @@ unsetopt menu_complete
 unsetopt flowcontrol
 unsetopt FLOW_CONTROL
 
+## directories
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+
 ############################## setops #################################
 # Reference: https://zsh.sourceforge.io/Doc/Release/Options.html
 setopt ALWAYS_TO_END

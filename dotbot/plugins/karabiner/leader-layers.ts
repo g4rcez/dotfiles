@@ -18,6 +18,15 @@ type WhichMods = {
     keys: string[];
 };
 
+export const createWhichCommand = (value: LayerCommand) =>
+    `${
+        value?.to?.flatMap((x) => x.shell_command).join(" | ") ||
+        value?.to?.flatMap((x) => x.key_code).join(" + ") ||
+        value.description
+    }`;
+
+
+
 export const createLeaderLayers = (config: Config): WhichMods => {
     const entries = Object.entries(config);
     const whichKey: WhichKey[] = [];
@@ -128,6 +137,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                                 key as KeyCode,
                             )
                         }${karabiner.replaceWhichKeys(subKey as KeyCode)}`,
+                        command: createWhichCommand(subMotion),
                         description: subMotion.description!,
                     });
                     return {

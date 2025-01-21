@@ -566,4 +566,4 @@ export type SubLayers = {
     [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
 };
 
-export type WhichKey = { key: string; description: string };
+export type WhichKey = { key: string; description: string; command: string };

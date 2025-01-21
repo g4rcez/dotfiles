@@ -1,6 +1,5 @@
 export UID=$(id -u)
 export GID=$(id -g)
-
 if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
     return
 fi
@@ -38,8 +37,7 @@ export PATH="$PATH_RESULT"
 
 ##############################################################################################################
 ## zsh-snap + plugins
-[[ -r "$SNAP_DIR/znap.zsh" ]] ||
-    git clone --depth 1 -- "https://github.com/marlonrichert/zsh-snap.git" $SNAP_DIR
+[[ -r "$SNAP_DIR/znap.zsh" ]] || git clone --depth 1 -- "https://github.com/marlonrichert/zsh-snap.git" $SNAP_DIR
 source "$SNAP_DIR/znap.zsh"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
@@ -55,8 +53,6 @@ local -a PLUGINS=(
     "zsh-users/zsh-syntax-highlighting"
 )
 
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
     znap source $plugin || echo "failed -> $plugin"
@@ -67,27 +63,23 @@ done
 
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
-znap source ohmyzsh/ohmyzsh lib/{git,bzr,cli,clipboard,compfix,completion,correction,directories,functions,git,grep,history,key-bindings,misc}
+znap source ohmyzsh/ohmyzsh lib/{cli,compfix,completion,functions,grep,history,key-bindings}
 znap source ohmyzsh/ohmyzsh plugins/fzf
+znap install funcoeszz/funcoeszz
 znap eval starship "starship init zsh --print-full-init"
-znap prompt
 
 ##############################################################################################################
 ## source files
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
-zstyle ':completion:*:*:*' group-order 'main commands' 'alias commands' 'external commands'
-source <(carapace _carapace zsh)
-source <(carapace chmod zsh)
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
   "$HOME/.fzf.zsh"
+  "$HOME/.secrets.sh"
   "$HOME/.fzf/shell/key-bindings.zsh"
-  "$HOME/.ghcup/env"
-  "$HOME/.bun/_bun"
   "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
   "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/zstyle.sh"
@@ -104,18 +96,18 @@ done
 
 ##############################################################################################################
 ## fpath hooks
-
-znap fpath _cargo    "rustup completions zsh cargo"
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 znap fpath _deno     "deno completions zsh"
-znap fpath _fx       "source <(fx --comp zsh)"
-znap fpath _gitleaks "gitleaks completion zsh"
-znap fpath _kubectl  "kubectl completion zsh"
-znap fpath _mise     "mise completion zsh"
-znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
+znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
+znap fpath _cargo    "rustup completions zsh cargo"
+znap fpath _fx       "source <(fx --comp zsh)"
+znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _rustup   "rustup completions zsh"
+znap fpath _mise     "mise completion zsh"
 
-# zellij-start
-
-
+# funcoeszz
+export ZZPATH=$HOME/.zsh/plugins/funcoeszz/funcoeszz/funcoeszz
+export ZZDIR=$HOME/.zsh/plugins/funcoeszz/funcoeszz/zz
+source $HOME/.zzzshrc

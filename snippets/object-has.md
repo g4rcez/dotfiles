@@ -1,10 +1,10 @@
 ---
 title: object-has
+description: Check if key exists in object
+shortcut: has
 tags:
   - typescript
   - javascript
-description: Check if key exists in object
-shortcut: has
 ---
 
 ```typescript

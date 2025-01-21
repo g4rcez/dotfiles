@@ -42,7 +42,11 @@ export const espansoPlugin: DotbotPlugin<EspansoCreateConfig<string>> = (args) =
     const whichFile = inner.userConfig.pathJoin.xdgDotfiles("espanso", "which-triggers.json");
     await dotbot.write(
         whichFile,
-        JSON.stringify(espansoYmlContent.matches.map((x) => ({ trigger: x.trigger, label: x.label }))),
+        JSON.stringify(espansoYmlContent.matches.map((x) => ({
+            ...x,
+            label: x.label,
+            trigger: x.trigger,
+        }))),
     );
     const toCreate = [matches, config, baseYml, defaultYml, whichFile];
     toCreate.forEach((x) => console.log(`%c[espanso]%c Created: ${dotbot.replaceHomedir(x)}`, css`color:greenyellow`, ""));

@@ -1,10 +1,10 @@
 ---
 title: namedImport
+description: Create a named import
+shortcut: inm
 tags:
   - typescript
   - javascript
-description: Create a named import
-shortcut: inm
 ---
 
 ```typescript

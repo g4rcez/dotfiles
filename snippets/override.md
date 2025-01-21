@@ -1,9 +1,9 @@
 ---
 title: override
-tags:
-  - typescript
 description: Override properties in A using B type
 shortcut: override
+tags:
+  - typescript
 ---
 
 ```typescript

@@ -6,7 +6,7 @@ import { expandGlob } from "@std/fs";
 import markdown from "remark-parse";
 import { unified } from "unified";
 import { EspansoPlugin, EspansoVarReplacer } from "./espanso.types.ts";
-import { DENO_BIN } from "./espanso.utils.ts";
+import { DENO_BIN, MAIN_SCRIPT } from "./espanso.utils.ts";
 
 interface MarkdownElement {
     type: string;
@@ -87,8 +87,8 @@ const parseSnippet = async (content: string, triggerPrefix: string): Promise<Esp
                 name: CMD_NAME,
                 type: "shell",
                 params: {
-                    cmd: `${DENO_BIN} ${dotbot.home("dotfiles", "espanso", "main.ts")} snippets --variables ${espansoVariables} --json "${cmdInput}"`,
                     shell: "bash",
+                    cmd: `${DENO_BIN} ${MAIN_SCRIPT} snippets --variables ${espansoVariables} --json "${cmdInput}"`,
                 },
             },
         ],

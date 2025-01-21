@@ -2,17 +2,19 @@ import { dotbot } from "@dotfiles/core";
 import { EspansoCreateConfig, EspansoTrigger, EspansoType, EspansoVarReplacer } from "./espanso.types.ts";
 
 type EspansoCreator<T extends string> = {
-    insert: (key: string, syntax: string) => EspansoVarReplacer<T>;
-    random: (key: string, choices: string[]) => EspansoVarReplacer<T>;
-    form: (key: string, replace: string, cmd: string) => EspansoVarReplacer<T>;
-    clipboard: (key: string, name: string, syntax: string) => EspansoVarReplacer<T>;
-    format: (key: string, type: EspansoType, format: string) => EspansoVarReplacer<T>;
-    shell: (key: string, cmd: string, capture?: string | undefined) => EspansoVarReplacer<T>;
+    insert: (key: string, syntax: string, label: string) => EspansoVarReplacer<T>;
+    random: (key: string, choices: string[], label: string) => EspansoVarReplacer<T>;
+    form: (key: string, replace: string, cmd: string, label: string) => EspansoVarReplacer<T>;
+    clipboard: (key: string, name: string, syntax: string, label: string) => EspansoVarReplacer<T>;
+    format: (key: string, type: EspansoType, format: string, label: string) => EspansoVarReplacer<T>;
+    shell: (key: string, label: string, cmd: string, capture?: string | undefined) => EspansoVarReplacer<T>;
 };
 
 export const DENO_BIN = "$($HOME/.local/bin/mise which deno) run --allow-read";
 
-export const runMain = (cmd: string) => `${DENO_BIN} ${dotbot.home("dotfiles", "espanso", "main.ts")} ${cmd}`;
+export const MAIN_SCRIPT = '"$HOME/dotfiles/espanso/main.ts"';
+
+export const runMain = (cmd: string) => `${DENO_BIN} ${MAIN_SCRIPT} ${cmd}`;
 
 export type EspansoConfigParams<T> = { trigger: T; snippets: string };
 
@@ -21,6 +23,7 @@ export const createEspansoConfig = <T extends string>(
     c: (c: EspansoCreator<T> & EspansoConfigParams<T>) => EspansoCreateConfig<T>,
 ) => {
     const ownTrigger = config.trigger;
+
     const commander = (s: string) => `${ownTrigger}${s}` as const;
 
     const getTrigger = (key: string): EspansoTrigger<T> => Array.isArray(key) ? key.map(commander) : commander(key);
@@ -33,21 +36,22 @@ export const createEspansoConfig = <T extends string>(
             key: string,
             name: string,
             syntax: string,
+            label: string,
         ): EspansoVarReplacer<T> => ({
+            label: label,
             replace: syntax,
-            label: `${key}: ${name}`,
             trigger: getTrigger(key),
             vars: [{ name, type: "clipboard" }],
         }),
-        insert: (key: string, syntax: string): EspansoVarReplacer<T> => ({
+        insert: (key: string, syntax: string, label: string): EspansoVarReplacer<T> => ({
+            label: label,
             replace: syntax,
             trigger: getTrigger(key),
-            label: `${key}: ${syntax}`,
         }),
-        form: (key: string, replace: string, cmd: string): EspansoVarReplacer<T> => ({
-            trigger: getTrigger(key),
+        form: (key: string, replace: string, cmd: string, label: string): EspansoVarReplacer<T> => ({
             replace,
-            label: `${key}: ${replace}`,
+            label: label,
+            trigger: getTrigger(key),
             vars: [
                 {
                     name: "form",
@@ -63,12 +67,13 @@ export const createEspansoConfig = <T extends string>(
         }),
         shell: (
             key: string,
+            label: string,
             cmd: string,
             capture: string | undefined = undefined,
         ): EspansoVarReplacer<T> => ({
+            label,
             [capture ? "regex" : "trigger"]: capture ? getTrigger(capture) : getTrigger(key),
             replace: `{{${key}}}`,
-            label: `${key}: ${cmd}`,
             vars: [
                 { name: "clipboard", type: "clipboard" },
                 {
@@ -78,10 +83,10 @@ export const createEspansoConfig = <T extends string>(
                 },
             ],
         }),
-        random: (key: string, choices: string[]): EspansoVarReplacer<T> => ({
-            trigger: getTrigger(key),
+        random: (key: string, choices: string[], label: string): EspansoVarReplacer<T> => ({
+            label: label,
             replace: `{{${key}}}`,
-            label: `${key}: Random choices\n${choices.join("\n\n")}`,
+            trigger: getTrigger(key),
             vars: [
                 {
                     name: getTriggerKey(key),
@@ -94,10 +99,11 @@ export const createEspansoConfig = <T extends string>(
             key: string,
             type: EspansoType,
             format: string,
+            label: string,
         ): EspansoVarReplacer<T> => ({
-            trigger: getTrigger(key),
+            label: label,
             replace: `{{${key}}}`,
-            label: `${key}: ${type} -> ${format}`,
+            trigger: getTrigger(key),
             vars: [
                 {
                     name: getTriggerKey(key),

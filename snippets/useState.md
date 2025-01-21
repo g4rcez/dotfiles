@@ -1,11 +1,11 @@
 ---
 title: useState
+description: Create a inline useState using $name as parameter
+shortcut: ush
 tags:
   - react
   - typescript
   - frontend
-description: Create a inline useState using $name as parameter
-shortcut: ush
 ---
 
 ```typescript

@@ -1,10 +1,15 @@
 import { createKarabinerConfig, karabiner, KarabinerRule, Manipulator } from "@dotfiles/plugins";
 
 const modKeys = karabiner.createHyperSubLayers({
-    slash: karabiner.open(
-        "raycast://extensions/g4rcez/dev-toolbelt/whichkey",
+    open_bracket: karabiner.open(
+        "raycast://extensions/g4rcez/whichkey/whichkey",
         "",
-        "Which key Karabiner + Raycast",
+        "Snippets",
+    ),
+    close_bracket: karabiner.open(
+        "raycast://extensions/g4rcez/snippets/snippets",
+        "",
+        "Snippets",
     ),
     p: karabiner.open(
         "raycast://extensions/kud/espanso/index",
@@ -34,6 +39,7 @@ const modKeys = karabiner.createHyperSubLayers({
         description: "Go to end of line",
     },
     s: {
+        n: karabiner.shell("osascript $HOME/dotfiles/bin/clear-notifications", "Clear notifications"),
         hyphen: {
             to: [{ key_code: "volume_decrement" }],
             description: "Decrease volume",
@@ -132,21 +138,10 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     r: {
         description: "Raycast layer",
-        t: karabiner.open(
-            "raycast://extensions/g4rcez/snippets/snippets",
-            "",
-            "Open my personal snippets gallery",
-        ),
-        m: karabiner.open(
-            "raycast://extensions/raycast/navigation/search-menu-items",
-            "",
-            "Search menu of current app",
-        ),
-        w: karabiner.open(
-            "raycast://extensions/raycast/navigation/switch-windows",
-            "",
-            "Switch windows with raycast",
-        ),
+        i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
+        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery",),
+        m: karabiner.open("raycast://extensions/raycast/navigation/search-menu-items", "", "Search menu of current app",),
+        w: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast",),
         c: karabiner.open(
             "raycast://extensions/raycast/raycast/confetti",
             "",
@@ -194,6 +189,8 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         m: karabiner.app("Telegram"),
         w: karabiner.app("Webstorm"),
         b: karabiner.browser("Default", "Open default profile"),
+    },
+    i: {
     },
 });
 

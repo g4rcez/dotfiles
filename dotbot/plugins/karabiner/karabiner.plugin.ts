@@ -2,7 +2,7 @@ import { dotbot } from "@dotfiles/core";
 import { DotbotPlugin } from "../plugin.ts";
 import { devices } from "./devices.ts";
 import { HyperKeySublayer, KarabinerRule, KeyCode, LayerCommand, Manipulator, RectangleActions, SubLayers, WhichKey } from "./karabiner.types.ts";
-import { createLeaderDisable, createLeaderLayers } from "./leader-layers.ts";
+import { createLeaderDisable, createLeaderLayers, createWhichCommand } from "./leader-layers.ts";
 
 export type { KarabinerRule, Manipulator } from "./karabiner.types.ts";
 
@@ -78,11 +78,7 @@ const createHyperSubLayer = (
                     optional: ["any"],
                 },
             },
-            to_after_key_up: [
-                {
-                    set_variable: { name: subLayerName, value: 0 },
-                },
-            ],
+            to_after_key_up: [{ set_variable: { name: subLayerName, value: 0 } }],
             to: [{ set_variable: { name: subLayerName, value: 1 } }],
             conditions: [
                 ...conditions.map((subLayerVariable) => ({
@@ -96,8 +92,9 @@ const createHyperSubLayer = (
         ...cmds.map((cmd): Manipulator => {
             const spread = commands[cmd]!;
             addWhichKey({
-                key: `Hyper + ${subLayer} + ${cmd}`,
                 description: spread.description!,
+                command: createWhichCommand(spread),
+                key: `Hyper + ${subLayer} + ${cmd}`,
             });
             return {
                 ...spread,
@@ -138,6 +135,7 @@ const createHyperSubLayers = (
             if (hasTo(value)) {
                 whichKeyMap.push({
                     key: `Hyper + ${key}`,
+                    command: createWhichCommand(value),
                     description: value.description || `Hyper Key + ${key}`,
                 });
                 return {
@@ -239,7 +237,6 @@ export const karabinerPlugin: DotbotPlugin<{ rules: KarabinerRule[]; whichKey: W
     (args) => async (settings) => {
         const configFile = settings.userConfig.pathJoin.xdgDotfiles(args.configFile);
         const whichKeyFile = settings.userConfig.pathJoin.xdgDotfiles(args.whichKeyFile);
-
         await Deno.writeTextFile(whichKeyFile, JSON.stringify({ items: args.whichKey }));
         await Deno.writeTextFile(
             configFile,

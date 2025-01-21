@@ -1,10 +1,10 @@
 ---
 title: type-array-size
+description: Create a utility type that limit the size of array
+shortcut: arrs
 tags:
   - typescript
   - hacks
-description: Create a utility type that limit the size of array
-shortcut: arrs
 ---
 
 ```typescript
