@@ -11,11 +11,6 @@ const modKeys = karabiner.createHyperSubLayers({
         "",
         "Snippets",
     ),
-    p: karabiner.open(
-        "raycast://extensions/kud/espanso/index",
-        "",
-        "List all espanso matches",
-    ),
     e: karabiner.open(
         "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
         "",
@@ -139,6 +134,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     r: {
         description: "Raycast layer",
         i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
+        q: karabiner.open("raycast://extensions/raycast/raycast-ai/search-ai-chat-presets"),
         t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery",),
         m: karabiner.open("raycast://extensions/raycast/navigation/search-menu-items", "", "Search menu of current app",),
         w: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast",),
