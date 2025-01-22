@@ -1,7 +1,7 @@
 {
     "license": "MIT",
     "tasks": {
-        "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./dotbot/program.ts"
+        "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./dotfiles.config.ts"
     },
     "imports": {
         "@deno/gfm": "jsr:@deno/gfm@^0.10.0",

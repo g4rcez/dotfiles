@@ -1,5 +1,11 @@
 import { parseArgs } from "jsr:@std/cli";
 import figlet from "npm:figlet@1.8.0";
+import { addCommand } from "./commands/add.command.ts";
+import { DotbotCommandArgs } from "./commands/dotbot-command.ts";
+import { linkCommand } from "./commands/link.command.ts";
+import { migrateCommand } from "./commands/migrate.command.ts";
+import { packageManagerCommand } from "./commands/package-manager.command.ts";
+import { Commander } from "./lib/commander.ts";
 import { css, dotbot, ENV, INFO_OUTPUT_STYLE, JoinFn, promiseSequence, SUCCESS_OUTPUT_STYLE, trim } from "./lib/dotbot.ts";
 import { DotfilesSetup } from "./types.ts";
 import { Lockfile } from "./lib/lockfile.ts";
@@ -52,7 +58,7 @@ export const tasks = async (...taskList: PromiseFn[]) => {
     }
 };
 
-export const dotfiles = (setup: DotfilesSetup) => {
+export const dotfiles = async (setup: DotfilesSetup) => {
     const paths = (...entry: string[]) => (...p: string[]) => dotbot.join(...entry, ...p);
     const home = paths(ENV.HOME);
     const dotfiles = paths(ENV.HOME, setup.dotfiles.home);
@@ -66,7 +72,7 @@ export const dotfiles = (setup: DotfilesSetup) => {
 
     const argParsed = parseArgs(Deno.args, { string: ["config"] });
 
-    const scriptExec = async () => {
+    const exec = async () => {
         const banner = await figlet.text("Dot Manager", {
             font: "ANSI Shadow",
             horizontalLayout: "default",
@@ -93,6 +99,18 @@ export const dotfiles = (setup: DotfilesSetup) => {
 
         console.log("%cSync successful!", "color: green");
     };
+    const argParse = new Commander(Deno.args);
+    const args: DotbotCommandArgs = {
+        exec,
+        userConfig,
+        argParsed: parseArgs(Deno.args, { string: ["config"] }),
+    } as const;
 
-    return [userConfig, scriptExec] as const;
+    return argParse
+        .command("add", addCommand(args))
+        .command("link", linkCommand(args))
+        .command("migrate", migrateCommand(args))
+        .command("pkg", packageManagerCommand(args))
+        .command("sync", exec)
+        .run();
 };

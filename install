@@ -38,4 +38,4 @@ function setupBat() {
 setupBat
 
 curl -fsSL https://deno.land/install.sh | sh
-deno task dotfiles --config $HOME/dotfiles/dotfiles.config.ts sync
+deno task dotfiles --config "$HOME/dotfiles/dotfiles.config.ts" sync

@@ -6,11 +6,11 @@ import path from "node:path";
 import React from "react";
 
 type Trigger = {
-    label: string;
-    trigger?: string;
-    replace: string;
     vars?: Var[];
+    label: string;
     regex?: string;
+    replace: string;
+    trigger?: string;
 };
 
 type Var = {
@@ -71,8 +71,9 @@ const toMarkdown = (x: Trigger) => {
         x.params?.cmd || x.params?.choices?.join(",") || ""
     );
     return `
-\`\`\`plaintext
-Trigger: ${x.trigger || x.regex || x.replace}
+Trigger: \`${x.trigger || x.regex || x.replace}\`
+
+\`\`\`bash
 ${find?.params?.cmd || find?.params?.choices?.join(",") || x.replace}
 \`\`\`
 `;

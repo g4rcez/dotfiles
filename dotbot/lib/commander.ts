@@ -20,10 +20,10 @@ export class Commander {
         return this;
     }
 
-    public run() {
+    public async run() {
         const command = (this.argParsed._[0] ?? "") as string;
         const fn = this.map.get(command);
         if (!fn) return;
-        return fn(this.argParsed);
+        return await fn(this.argParsed);
     }
 }

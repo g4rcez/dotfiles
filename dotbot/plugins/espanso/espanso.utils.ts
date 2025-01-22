@@ -1,4 +1,3 @@
-import { dotbot } from "@dotfiles/core";
 import { EspansoCreateConfig, EspansoTrigger, EspansoType, EspansoVarReplacer } from "./espanso.types.ts";
 
 type EspansoCreator<T extends string> = {
