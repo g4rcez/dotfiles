@@ -1,3 +1,0 @@
-return {
-  "SmiteshP/nvim-navbuddy",
-}
