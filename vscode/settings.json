@@ -87,10 +87,13 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
-    "deno.enable": true,
+    "deno.enable": false,
     "deno.lint": true,
     "deno.codeLens.references": true,
     "deno.codeLens.implementations": true,
     "deno.codeLens.referencesAllFunctions": true,
-    "redhat.telemetry.enabled": false
+    "redhat.telemetry.enabled": false,
+    "[nginx]": {
+        "editor.defaultFormatter": "raynigon.nginx-formatter"
+    }
 }

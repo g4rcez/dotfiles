@@ -1,37 +1,54 @@
 return {
-  "saghen/blink.cmp",
+  'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
-  dependencies = "rafamadriz/friendly-snippets",
-
+  dependencies = 'rafamadriz/friendly-snippets',
   -- use a release tag to download pre-built binaries
-  version = "v0.*",
-  -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-  -- build = 'cargo build --release',
-  -- If you use nix, you can build from source using latest nightly rust with:
-  -- build = 'nix run .#build-plugin',
-
+  version = '*',
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
+    -- 'default' for mappings similar to built-in completion
+    -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+    -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+    -- See the full "keymap" documentation for information on defining your own keymap.
+    appearance = { use_nvim_cmp_as_default = true, nerd_font_variant = 'mono' },
     keymap = {
-      preset = "enter",
+      preset = 'enter',
+      ['<tab>'] = { 'accept' },
       ['<C-k>'] = { 'select_prev', 'fallback' },
       ['<C-j>'] = { 'select_next', 'fallback' },
-    },
-    appearance = {
-      use_nvim_cmp_as_default = true,
-      nerd_font_variant = "Nerd Font Mono",
+      ['<C-p>'] = { 'show_signature' },
+      ['<C-d>'] = { 'show_documentation' },
     },
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
-      -- optionally disable cmdline completions
-      -- cmdline = {},
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      min_keyword_length = function(ctx)
+        if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then
+          return 2
+        end
+        return 3
+      end,
     },
-
-    -- experimental signature help support
-    signature = { enabled = true },
+    completion = {
+      keyword = { range = 'full' },
+      documentation = { window = { border = 'single' }, auto_show = true, auto_show_delay_ms = 500 },
+      ghost_text = { enabled = true, show_with_selection = true, show_without_selection = false },
+      menu = {
+        border = 'single',
+        auto_show = function(ctx)
+          return ctx.mode ~= 'cmdline'
+        end,
+        draw = {
+          treesitter = { 'lsp' },
+          columns = {
+            { 'label', 'label_description', gap = 1 },
+            { 'kind_icon', 'kind' },
+          },
+        },
+      },
+    },
+    signature = { enabled = true, window = { border = 'single' } },
   },
-  -- allows extending the providers array elsewhere in your config
-  -- without having to redefine it
-  opts_extend = { "sources.default" },
+  opts_extend = { 'sources.default' },
 }
+

@@ -2,7 +2,8 @@
 adjust-cell-height = 20%
 background = #121212
 background-blur-radius = 50
-background-opacity = 0.97
+window-colorspace = display-p3
+background-opacity = 0.90
 bold-is-bright = true
 config-default-files = true
 cursor-style = block
@@ -12,6 +13,7 @@ desktop-notifications = true
 font-family = "JetBrainsMono Nerd Font"
 font-size = 18
 font-thicken = true
+font-thicken-strength = 127
 foreground = #ffffff
 link-url = true
 minimum-contrast = 1
@@ -23,7 +25,7 @@ theme = catppuccin-mocha
 
 # window 
 quit-after-last-window-closed = false
-window-decoration = false
+window-decoration = true
 window-padding-color = extend
 window-padding-x = 5
 window-padding-y = 1

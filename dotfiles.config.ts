@@ -7,6 +7,16 @@ export default dotfiles({
     xdg: ".config",
     dotfiles: { home: "dotfiles", xdg: "config" },
     packageManager: { name: "brew", configFile: "Brewfile" },
+    plugins: [
+        espansoPlugin(EspansoRules),
+        vscodePlugin({ path: "vscode", extensionsFile: "vscode/extensions.txt" }),
+        karabinerPlugin({
+            rules: KarabinerConfig.map,
+            whichKey: KarabinerConfig.whichKey,
+            configFile: "karabiner/karabiner.json",
+            whichKeyFile: "karabiner/karabiner-whichkey.json",
+        }),
+    ],
     sync: {
         home: ["zsh/zshrc", "git/gitconfig", "idea/.ideavimrc"],
         xdg: [
@@ -29,14 +39,4 @@ export default dotfiles({
             "zellij",
         ],
     },
-    plugins: [
-        espansoPlugin(EspansoRules),
-        vscodePlugin({ path: "vscode", extensionsFile: "vscode/extensions.txt" }),
-        karabinerPlugin({
-            rules: KarabinerConfig.map,
-            whichKey: KarabinerConfig.whichKey,
-            configFile: "karabiner/karabiner.json",
-            whichKeyFile: "karabiner/karabiner-whichkey.json",
-        }),
-    ],
 });

@@ -10,8 +10,6 @@ g4rcez.dark-brabo
 g4rcez.nuclei-vscode
 g4rcez.superfile
 github.vscode-github-actions
-kdl-org.kdl
-keifererikson.nightfox
 mikestead.dotenv
 ms-azuretools.vscode-docker
 ms-playwright.playwright
@@ -21,7 +19,6 @@ nrwl.angular-console
 pkief.material-icon-theme
 pranaygp.vscode-css-peek
 redhat.vscode-yaml
-stone-co.stone-backstage-helper
 streetsidesoftware.code-spell-checker
 streetsidesoftware.code-spell-checker-portuguese-brazilian
 sumneko.lua
