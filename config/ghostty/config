@@ -1,9 +1,9 @@
 # misc 
-adjust-cell-height = 20%
-background = #121212
-background-blur-radius = 50
+adjust-cell-height = 25%
+background = #181820
+background-blur-radius = 100
 window-colorspace = display-p3
-background-opacity = 0.90
+background-opacity = 0.97
 bold-is-bright = true
 config-default-files = true
 cursor-style = block
@@ -35,11 +35,11 @@ window-colorspace = display-p3
 window-padding-color = extend
 window-inherit-working-directory = true
 
-# OSX 
+# OSX
 macos-auto-secure-input = true
 macos-icon-frame = plastic
 macos-secure-input-indication = true
-macos-titlebar-style = transparent
+macos-titlebar-style = hidden
 macos-window-shadow = true
 macos-option-as-alt = true
 
@@ -53,3 +53,4 @@ keybind = super+p>l=next_tab
 keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
+
