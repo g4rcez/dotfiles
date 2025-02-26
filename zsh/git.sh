@@ -15,10 +15,6 @@ function _git_log_prettily(){
 
 compdef _git _git_log_prettily=git-log
 
-function work_in_progress() {
-    command git -c log.showSignature=false log -n 1 2>/dev/null | grep -q -- "--wip--" && echo "WIP!!"
-}
-
 function git_main_branch() {
     command git rev-parse --git-dir &>/dev/null || return
     local ref

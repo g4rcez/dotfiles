@@ -37,15 +37,22 @@ set autoindent
 set autoread
 set cmdheight=0
 set conceallevel=1
+set confirm
 set copyindent
 set cursorcolumn
 set cursorline
 set encoding=utf-8
 set expandtab
+set foldlevel=99
+set formatoptions=jcroqlnt " tcqj
+set grepformat=%f:%l:%c:%m
+set grepprg=rg\ --vimgrep
 set hlsearch
+set ideavimsupport=+singleline,dialog
 set ignorecase
 set incsearch
 set laststatus=2
+set list
 set magic
 set matchpairs
 set mouse=a
@@ -73,14 +80,6 @@ set undofile
 set updatetime=100
 set viminfo
 set visualbell
-set ideavimsupport=+singleline,dialog
-set confirm
-set expandtab
-set foldlevel=99
-set formatoptions=jcroqlnt " tcqj
-set grepformat=%f:%l:%c:%m
-set grepprg=rg\ --vimgrep
-set list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" idea things
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -88,7 +87,6 @@ sethandler n:vim i:vim
 let g:NERDTreeMapActivateNode='l'
 let g:NERDTreeMapJumpParent='l'
 nnoremap <C-t> :NERDTreeFocus<CR>
-set clipboard=unnamedplus,unnamed,ideaput
 set ideaput
 set ideajoin
 set ideamarks
@@ -96,21 +94,23 @@ set idearefactormode=keep
 set ideastrictmode
 set NERDTree
 set commentary
+set clipboard=unnamedplus,unnamed,ideaput
+set mini-ai
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" WhichKey
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:WhichKeyDesc_leader = "<leader> Leader key"
 let g:WhichKey_CommandColor = "#987DD2"
-let g:WhichKey_FontSize = 14
+let g:WhichKey_FontSize = 16
 let g:WhichKey_PrefixColor = "#8AA9F9"
 let g:WhichKey_ShowVimActions = "true"
 let g:WhichKey_DefaultDelay = 400
 let g:WhichKey_SortOrder = "by_key_prefix_first"
 let g:WhichKey_SortCaseSensitive = "false"
+
 set notimeout
 set timeoutlen=5000
 set which-key
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" surround - argtextobj - matchit
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -137,6 +137,7 @@ nmap <leader>p <action>(EditorPaste)
 noremap ' "-
 noremap <bs> "-
 noremap X "_x
+nnoremap x "_x
 nnoremap yy "+yy
 vnoremap y "+y
 nnoremap p "+p
@@ -478,28 +479,25 @@ let g:WhichKeyDesc_split_window_ctrl = "<C-w>s Split window"
 nmap <C-w>w <action>(NextSplitter)
 nmap <C-w>l <action>(NextSplitter)
 nmap <C-w>j <action>(NextSplitter)
-let g:WhichKeyDesc_next_splitter_ctrl = "<C-w>l/w Next Splitter"
+let g:WhichKeyDesc_next_splitter_ctrl = "<C-w>l Next Splitter"
 
 nmap <C-w>h <action>(PrevSplitter)
+let g:WhichKeyDesc_prev_splitter_ctrl = "<C-w>h Prev splitter"
 nmap <C-w>k <action>(PrevSplitter)
-let g:WhichKeyDesc_prev_splitter_ctrl = "<C-w>s Prev splitter"
-
+let g:WhichKeyDesc_prev_splitter_ctrl = "<C-w>k Prev splitter"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" lazyvim bindings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""ctrion>(FindUsages)
 nmap <leader>ui <Action>(FindUsages)
-" Inspect Tree
+
 let g:WhichKeyDesc_activate_structure_tool = "<leader>gl Activate structure tool"
 nmap <leader>gl <Action>(ActivateStructureToolWindow)
 
-" Signature Help
 let g:WhichKeyDesc_signature_help = "<leader>gK Signature help"
 nmap gK <Action>(ParameterInfo)
 
-" Rename File
 let g:WhichKeyDesc_rename_file = "<leader>cR Rename file"
 nmap <leader>cR <Action>(RenameFile)
 
-" Rename File
 let g:WhichKeyDesc_show_intentions = "<leader>cA ShowIntentionActions"
 nmap <leader>cA <action>(ShowIntentionActions)

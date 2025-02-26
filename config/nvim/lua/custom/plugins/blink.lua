@@ -2,55 +2,52 @@ return {
   'onsails/lspkind.nvim',
   {
     'saghen/blink.cmp',
-    dependencies = 'rafamadriz/friendly-snippets',
+    dependencies = { 'rafamadriz/friendly-snippets', 'Kaiser-Yang/blink-cmp-git', 'nvim-lua/plenary.nvim' },
     version = '*',
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      -- 'default' for mappings similar to built-in completion
-      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-      -- See the full "keymap" documentation for information on defining your own keymap.
       keymap = {
         preset = 'super-tab',
-        ['<Enter>'] = { 'accept', 'fallback' },
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<C-k>'] = { 'select_prev', 'fallback' },
+        ['<C-j>'] = { 'select_next', 'fallback' },
+        ['<C-space>'] = {
+          function(cmp)
+            cmp.show()
+          end,
+        },
       },
       appearance = {
         use_nvim_cmp_as_default = true,
         nerd_font_variant = 'mono',
       },
+      cmdline = {
+        keymap = {
+          preset = 'default',
+        },
+      },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
-        min_keyword_length = function()
-          return 2
-        end,
+        default = { 'lsp', 'lazydev', 'git', 'path', 'snippets', 'buffer' },
         providers = {
+          lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
+          git = { module = 'blink-cmp-git', name = 'Git', opts = {} },
           lsp = {
             name = 'LSP',
             module = 'blink.cmp.sources.lsp',
-            fallbacks = { 'buffer' },
-            -- Filter text items from the LSP provider, since we have the buffer provider for that
+            fallbacks = {},
+            enabled = true,
+            async = true,
+            timeout_ms = 2000,
+            should_show_items = true,
+            max_items = nil,
+            min_keyword_length = 0,
             transform_items = function(_, items)
               return vim.tbl_filter(function(item)
                 return item.kind ~= require('blink.cmp.types').CompletionItemKind.Text
               end, items)
             end,
-
-            --- These properties apply to !!ALL sources!!
-            --- NOTE: All of these options may be functions to get dynamic behavior
-            --- See the type definitions for more information
-            enabled = true, -- Whether or not to enable the provider
-            async = false, -- Whether we should wait for the provider to return before showing the completions
-            timeout_ms = 2000, -- How long to wait for the provider to return before showing completions and treating it as asynchronous
-            should_show_items = true, -- Whether or not to show the items
-            max_items = nil, -- Maximum number of items to display in the menu
-            min_keyword_length = 0, -- Minimum number of characters in the keyword to trigger the provider
-            -- If this provider returns 0 items, it will fallback to these providers.
-            -- If multiple providers falback to the same provider, all of the providers must return 0 items for it to fallback
-            score_offset = 0, -- Boost/penalize the score of the items
-            override = nil, -- Override the source's functions
           },
-
           path = {
             name = 'Path',
             module = 'blink.cmp.sources.path',
@@ -62,28 +59,24 @@ return {
               get_cwd = function(context)
                 return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
               end,
-              show_hidden_files_by_default = false,
+              show_hidden_files_by_default = true,
             },
           },
-
           snippets = {
             name = 'Snippets',
             module = 'blink.cmp.sources.snippets',
-            -- For `snippets.preset == 'default'`
             opts = {
               friendly_snippets = true,
               search_paths = { vim.fn.stdpath 'config' .. '/snippets' },
               global_snippets = { 'all' },
               extended_filetypes = {},
               ignored_filetypes = {},
+              clipboard_register = nil,
               get_filetype = function()
                 return vim.bo.filetype
               end,
-              -- Set to '+' to use the system clipboard, or '"' to use the unnamed register
-              clipboard_register = nil,
             },
           },
-
           buffer = {
             name = 'Buffer',
             module = 'blink.cmp.sources.buffer',
@@ -101,7 +94,6 @@ return {
               end,
             },
           },
-
           omni = {
             name = 'Omni',
             module = 'blink.cmp.sources.omni',
@@ -113,52 +105,108 @@ return {
       },
       completion = {
         keyword = { range = 'full' },
-        documentation = { window = { border = 'single' } },
+        ghost_text = { enabled = false },
+        documentation = {
+          window = { border = 'single' },
+          treesitter_highlighting = true,
+        },
         menu = {
           border = 'rounded',
           draw = {
+            -- Aligns the keyword you've typed to a component in the menu
+            align_to = 'label', -- or 'none' to disable, or 'cursor' to align to the cursor
+            -- Left and right padding, optionally { left, right } for different padding on each side
+            padding = 1,
+            -- Gap between columns
+            gap = 1,
+            -- Use treesitter to highlight the label text for the given list of sources
+            treesitter = {},
+            -- treesitter = { 'lsp' }
+
+            -- Components to render, grouped by column
+            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
+
+            -- Definitions for possible components to render. Each defines:
+            --   ellipsis: whether to add an ellipsis when truncating the text
+            --   width: control the min, max and fill behavior of the component
+            --   text function: will be called for each item
+            --   highlight function: will be called only when the line appears on screen
             components = {
               kind_icon = {
                 ellipsis = false,
                 text = function(ctx)
-                  local lspkind = require 'lspkind'
-                  local icon = ctx.kind_icon
-                  if vim.tbl_contains({ 'Path' }, ctx.source_name) then
-                    local dev_icon, _ = require('nvim-web-devicons').get_icon(ctx.label)
-                    if dev_icon then
-                      icon = dev_icon
-                    end
-                  else
-                    icon = require('lspkind').symbolic(ctx.kind, {
-                      mode = 'symbol',
-                    })
-                  end
-
-                  return icon .. ctx.icon_gap
+                  return ctx.kind_icon .. ctx.icon_gap
                 end,
-
-                -- Optionally, use the highlight groups from nvim-web-devicons
-                -- You can also add the same function for `kind.highlight` if you want to
-                -- keep the highlight groups in sync with the icons.
                 highlight = function(ctx)
-                  local hl = 'BlinkCmpKind' .. ctx.kind or require('blink.cmp.completion.windows.render.tailwind').get_hl(ctx)
-                  if vim.tbl_contains({ 'Path' }, ctx.source_name) then
-                    local dev_icon, dev_hl = require('nvim-web-devicons').get_icon(ctx.label)
-                    if dev_icon then
-                      hl = dev_hl
-                    end
-                  end
-                  return hl
+                  return require('blink.cmp.completion.windows.render.tailwind').get_hl(ctx) or 'BlinkCmpKind' .. ctx.kind
                 end,
+              },
+
+              kind = {
+                ellipsis = false,
+                width = { fill = true },
+                text = function(ctx)
+                  return ctx.kind
+                end,
+                highlight = function(ctx)
+                  return require('blink.cmp.completion.windows.render.tailwind').get_hl(ctx) or 'BlinkCmpKind' .. ctx.kind
+                end,
+              },
+
+              label = {
+                width = { fill = true, max = 60 },
+                text = function(ctx)
+                  return ctx.label .. ctx.label_detail
+                end,
+                highlight = function(ctx)
+                  -- label and label details
+                  local highlights = {
+                    { 0, #ctx.label, group = ctx.deprecated and 'BlinkCmpLabelDeprecated' or 'BlinkCmpLabel' },
+                  }
+                  if ctx.label_detail then
+                    table.insert(highlights, { #ctx.label, #ctx.label + #ctx.label_detail, group = 'BlinkCmpLabelDetail' })
+                  end
+
+                  -- characters matched on the label by the fuzzy matcher
+                  for _, idx in ipairs(ctx.label_matched_indices) do
+                    table.insert(highlights, { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
+                  end
+
+                  return highlights
+                end,
+              },
+
+              label_description = {
+                width = { max = 30 },
+                text = function(ctx)
+                  return ctx.label_description
+                end,
+                highlight = 'BlinkCmpLabelDescription',
+              },
+              source_name = {
+                width = { max = 30 },
+                text = function(ctx)
+                  return ctx.source_name
+                end,
+                highlight = 'BlinkCmpSource',
               },
             },
           },
         },
       },
       signature = {
+        enabled = true,
         window = { border = 'single' },
+        trigger = {
+          enabled = true,
+          show_on_keyword = true,
+          blocked_trigger_characters = {},
+          blocked_retrigger_characters = {},
+          show_on_trigger_character = true,
+          show_on_insert = false,
+          show_on_insert_on_trigger_character = true,
+        },
       },
     },
-    opts_extend = { 'sources.default' },
   },
 }
