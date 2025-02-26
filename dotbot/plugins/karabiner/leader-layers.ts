@@ -25,16 +25,15 @@ export const createWhichCommand = (value: LayerCommand) =>
         value.description
     }`;
 
-
-
 export const createLeaderLayers = (config: Config): WhichMods => {
     const entries = Object.entries(config);
     const whichKey: WhichKey[] = [];
     const keys: string[] = [];
     const allLayers = entries.reduce<KarabinerRule[]>(
         (acc, [key, { description: leaderDescription = "", hold: leaderHold = false, ...motions }]) => {
-            const modal = `leader: ${key} ${leaderDescription}` as const;
+            const modal = `Layer "${key}" ${leaderDescription}` as const;
             keys.push(key);
+            const whichKeyModal = Object.entries(motions).map(([key, motion]) => `${key}: ${motion.description || ""}`);
             const leader: KarabinerRule = {
                 description: `leader ${key}`,
                 manipulators: [
@@ -49,11 +48,11 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                         },
                         to_if_alone: [
                             karabiner.vim.on(key, leaderHold),
-                            leaderHold ? karabiner.karabinerNotify(`Hold ${modal}`) : karabiner.notify(modal, `Leader ${key} activated`),
+                            karabiner.notify(`${modal}\n\n${whichKeyModal.join("\n")}`),
                         ],
                         to_if_held_down: [
                             karabiner.vim.on(key, true),
-                            karabiner.karabinerNotify(`Hold ${modal}`),
+                            karabiner.notify(`Persistent mode - ${modal}\n\n${whichKeyModal.join("\n")}`),
                         ],
                         type: "basic",
                     },
@@ -101,7 +100,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                             key_code: key as KeyCode,
                             modifiers: { optional: ["any"] },
                         },
-                        to: [karabiner.vim.off(key, false), karabiner.karabinerNotify()],
+                        to: [karabiner.vim.off(key, false), karabiner.notify()],
                         type: "basic",
                     },
                 ],
@@ -123,7 +122,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                             key_code: key as KeyCode,
                             modifiers: { optional: ["any"] },
                         },
-                        to: [karabiner.vim.off(key, true), karabiner.karabinerNotify()],
+                        to: [karabiner.vim.off(key, true), karabiner.notify()],
                         type: "basic",
                     },
                 ],
@@ -153,7 +152,10 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                                 ],
                                 description,
                                 from: { key_code: subKey as KeyCode },
-                                to: subMotion.to!.concat(karabiner.vim.off(key, false)),
+                                to: subMotion.to!.concat(
+                                    karabiner.vim.off(key, false),
+                                    karabiner.notify(),
+                                ),
                                 type: "basic",
                             },
                             {
@@ -199,7 +201,7 @@ export const createLeaderDisable = (key: string, hold: boolean): Manipulator => 
     to_after_key_up: [
         karabiner.vim.off(key, hold),
         { set_variable: { name: "hyper", value: 0 } },
-        karabiner.karabinerNotify(),
+        karabiner.notify(),
     ],
     conditions: [
         {

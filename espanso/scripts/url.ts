@@ -29,6 +29,9 @@ const sanitize = (s: string) => {
         }).filter((x) => Array.isArray(x));
         url.search = new URLSearchParams(allowed).toString();
     }
+    url.searchParams.forEach((_, key) => {
+        url.searchParams.delete(key);
+    })
     return url.href;
 };
 

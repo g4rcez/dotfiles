@@ -4,7 +4,7 @@ local Config = {}
 local family = "JetBrainsMono Nerd Font"
 
 Config.font_size = 17
-Config.line_height = 1.175
+Config.line_height = 1.25
 Config.font = wezterm.font({
     family = family,
     harfbuzz_features = { "calt=1", "clig=1", "liga=1" },

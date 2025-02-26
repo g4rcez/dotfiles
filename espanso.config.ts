@@ -11,31 +11,31 @@ export default createEspansoConfig({
         espanso.insert("blog", "https://garcez.dev", "My blog"),
         espanso.insert("git", "https://github.com/g4rcez", "My github"),
         espanso.insert("twitter", "https://x.com/garcez_allan", "My twitter"),
-        espanso.insert("dots", "https://github.com/g4rcez/dotfiles", "My dotfiles"),
+        espanso.insert("dotfiles", "https://github.com/g4rcez/dotfiles", "My dotfiles"),
         espanso.insert("youtube", "https://www.youtube.com/@allangarcez", "My youtube channel"),
         espanso.insert("linkedin", "https://www.linkedin.com/in/allan-garcez/", "My Linkedin"),
 
         espanso.format("date", "date", "%d/%m/%Y", "Date in DD/MM/YYYY"),
-        espanso.format("time", "date", "%H:%M","Time in HH:MM"),
+        espanso.format("time", "date", "%H:%M", "Time in HH:MM"),
         espanso.format("now", "date", "%d/%m/%Y %H:%M", "Datetime"),
-        espanso.clipboard("mdl", "link", "[$|$]({{link}})","Clipboard to Markdown link"),
+        espanso.clipboard("mdl", "link", "[$|$]({{link}})", "Clipboard to Markdown link"),
         espanso.form(
             "hex",
             "{{hex}}",
             runMain(`colors --mode=hex --value="{{form.input}}"`),
-            "Color to HEX"
+            "Color to HEX",
         ),
         espanso.form(
             "hsl",
             "{{hsl}}",
             runMain(`colors --mode=hsl --value="{{form.input}}"`),
-            "Color to HSL"
+            "Color to HSL",
         ),
         espanso.form(
             "rgb",
             "{{rgb}}",
             runMain(`colors --mode=rgb --value="{{form.input}}"`),
-            "Color to RGB"
+            "Color to RGB",
         ),
         espanso.insert(
             "sort",
@@ -43,16 +43,18 @@ export default createEspansoConfig({
             "Vim order by line length",
         ),
         // emojis 👍🏾
-        espanso.insert("blz", "👍🏾", "Emoji: Thumbs up"),
-        espanso.insert("cry", "😭", "Emoji: Loudly crying face"),
-        espanso.insert("deal", "🤝🏾", "Emoji: Handshake"),
         espanso.insert("eyes", "👀", "Emoji: Eyes"),
-        espanso.insert("pray", "🙏🏾", "Emoji: Folded hands"),
         espanso.insert("s2", "❤️", "Emoji: Heart"),
         espanso.insert("angry", "😡", "Emoji: Heart"),
-        espanso.insert("party", "🥳", "Emoji: Partying face"),
+        espanso.insert("respect", "🫡", "Emoji: Eyes"),
+        espanso.insert("cold", "🥶", "Emoji: Cold face"),
+        espanso.insert("blz", "👍🏾", "Emoji: Thumbs up"),
+        espanso.insert("deal", "🤝🏾", "Emoji: Handshake"),
         espanso.insert("boom", "🤯", "Emoji: Exploding head"),
+        espanso.insert("party", "🥳", "Emoji: Partying face"),
         espanso.insert("up", "🙌🏾", "Emoji: Raising hands"),
+        espanso.insert("pray", "🙏🏾", "Emoji: Folded hands"),
+        espanso.insert("cry", "😭", "Emoji: Loudly crying face"),
         espanso.insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug"),
         espanso.insert(
             "tnc",
@@ -63,9 +65,6 @@ export default createEspansoConfig({
 
     const shellTriggers = [
         espanso.shell("url", "Sanitize URL in clipboard", runMain(`url --value "$ESPANSO_CLIPBOARD"`)),
-        espanso.shell("yesterday", "Get yesterday date", runMain(`dates --value=yesterday`)),
-        espanso.shell("tomorrow", "Get tomorrow date", runMain(`dates --value=tomorrow`)),
-        espanso.shell("iso", "Get date in ISO format", runMain(`dates --value=iso`)),
         espanso.shell("cnpj", "Generate random and valid CNPJ", runMain("cnpj")),
         espanso.shell("cpf", "Generate random and valid CPF", runMain("cpf")),
         espanso.shell("master", "Generate valid mastercard number", runMain("card --brand=master")),
@@ -84,9 +83,12 @@ export default createEspansoConfig({
         espanso.shell("cellphone", "Generate cellphone number", runMain("phone --mode=cellphone")),
         espanso.shell("telephone", "Generate telephone number", runMain("phone --mode=telephone")),
         espanso.shell("email", "FakerJS email", runMain("email")),
+        espanso.shell("yesterday", "Get yesterday date", runMain(`dates --value=yesterday`)),
+        espanso.shell("tomorrow", "Get tomorrow date", runMain(`dates --value=tomorrow`)),
+        espanso.shell("iso", "Get date in ISO format", runMain(`dates --value=iso`)),
         espanso.shell(
             "d",
-            "d+50",
+            "Sum/Subtract days",
             runMain("dates --value=$ESPANSO_N"),
             withParam("d"),
         ),
@@ -120,7 +122,7 @@ export default createEspansoConfig({
             "Ullamco laboris nisi ut aliquid ex ea commodi consequat.",
             "Paullum deliquit, ponderibus modulisque suis ratio utitur.",
             "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.",
-        ], "Lero lergo generate - LoremIpsum"),
+        ], "Lero lero generate - LoremIpsum"),
     ];
 
     return {

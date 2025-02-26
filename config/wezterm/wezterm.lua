@@ -10,7 +10,6 @@
 --------------------------------------------------------------------
 
 local wezterm = require("wezterm")
-local act = wezterm.action
 local Config = wezterm.config_builder()
 
 Config.front_end = "WebGpu"

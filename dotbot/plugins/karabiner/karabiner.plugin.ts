@@ -20,10 +20,6 @@ const shell = (cmd: string, what: string = ""): LayerCommand => ({
     description: what,
 });
 
-const notify = (message: string, title: string) => ({
-    shell_command: `/opt/homebrew/bin/terminal-notifier -title "${title}" -message "${message}"`,
-});
-
 export const BROWSER = "Microsoft Edge";
 
 const browser = (
@@ -196,9 +192,7 @@ const vim = {
     }),
 };
 
-const karabinerNotify = (text: string = "") => ({
-    set_notification_message: { id: "dev.garcez.vim_mode", text },
-});
+const notify = (text: string = "", enabled = true) => ({ set_notification_message: { id: "dev.garcez.vim_mode", text: enabled ? text : "" } });
 
 const replaceWhichKeys = (str: KeyCode) => {
     str = str.trim() as KeyCode;
@@ -220,7 +214,6 @@ export const karabiner = {
     aerospace,
     rectangle,
     appInstance,
-    karabinerNotify,
     replaceWhichKeys,
     createLeaderLayers,
     createSubLayerName,

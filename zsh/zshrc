@@ -44,7 +44,6 @@ zstyle ':znap:*:*' git-maintenance off
 
 local -a PLUGINS=(
     "MichaelAquilina/zsh-auto-notify"
-    "MichaelAquilina/zsh-you-should-use"
     "wfxr/forgit"
     "hlissner/zsh-autopair"
     "zsh-users/zsh-autosuggestions"
@@ -65,7 +64,6 @@ zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{cli,compfix,completion,functions,grep,history,key-bindings}
 znap source ohmyzsh/ohmyzsh plugins/fzf
-znap install funcoeszz/funcoeszz
 znap eval starship "starship init zsh --print-full-init"
 
 ##############################################################################################################
@@ -107,7 +105,3 @@ znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _mise     "mise completion zsh"
 
-# funcoeszz
-export ZZPATH=$HOME/.zsh/plugins/funcoeszz/funcoeszz/funcoeszz
-export ZZDIR=$HOME/.zsh/plugins/funcoeszz/funcoeszz/zz
-source $HOME/.zzzshrc
