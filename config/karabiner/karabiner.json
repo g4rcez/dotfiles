@@ -1632,7 +1632,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram"
                     }
                   }
                 ],
@@ -1647,7 +1647,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram"
                     }
                   }
                 ],
@@ -2095,7 +2095,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"w\" Window manager\n\nequal_sign: Window: larger\nhyphen: Window: smaller\nc: Window: center\ni: Window: center-two-thirds\nd: Window: first-third\nf: Window: maximize\nh: Window: left-half\nj: Window: bottom-half\nk: Window: top-half\nl: Window: right-half\nreturn_or_enter: Window: maximize\nq: Window: first-two-thirds\ntab: Window: first-third\ne: Window: last-third\nr: Window: last-two-thirds\ndelete_or_backspace: Window: last\nslash: Window: bottom-right\nperiod: Window: bottom-left\nbackslash: Window: top-right\nclose_bracket: Window: top-left"
                     }
                   }
                 ],
@@ -2110,7 +2110,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"w\" Window manager\n\nequal_sign: Window: larger\nhyphen: Window: smaller\nc: Window: center\ni: Window: center-two-thirds\nd: Window: first-third\nf: Window: maximize\nh: Window: left-half\nj: Window: bottom-half\nk: Window: top-half\nl: Window: right-half\nreturn_or_enter: Window: maximize\nq: Window: first-two-thirds\ntab: Window: first-third\ne: Window: last-third\nr: Window: last-two-thirds\ndelete_or_backspace: Window: last\nslash: Window: bottom-right\nperiod: Window: bottom-left\nbackslash: Window: top-right\nclose_bracket: Window: top-left"
                     }
                   }
                 ],
@@ -3398,7 +3398,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"n\" Notion layer\n\nn: Notion read it later"
                     }
                   }
                 ],
@@ -3413,7 +3413,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"n\" Notion layer\n\nn: Notion read it later"
                     }
                   }
                 ],
@@ -3637,7 +3637,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"v\" Vim mode\n\n0: Go to begin of line\n4: Go to end of line\nh: Left arrow\nl: Right arrow\nk: Up arrow\nj: Down arrow\nw: Right arrow\nb: Left arrow"
                     }
                   }
                 ],
@@ -3652,7 +3652,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"v\" Vim mode\n\n0: Go to begin of line\n4: Go to end of line\nh: Left arrow\nl: Right arrow\nk: Up arrow\nj: Down arrow\nw: Right arrow\nb: Left arrow"
                     }
                   }
                 ],
@@ -4292,7 +4292,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"r\" Raycast layer\n\ni: Open raycast://extensions/raycast/raycast-ai/ai-chat\nq: Open raycast://extensions/raycast/raycast-ai/search-ai-chat-presets\nt: Open my personal snippets gallery\nm: Search menu of current app\nw: Switch windows with raycast\nc: Confetti\nd: Do not disturb\ne: Emoji finder\np: Raycast color picker\ns: My spotify library\no: OCR screen area"
                     }
                   }
                 ],
@@ -4307,7 +4307,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"r\" Raycast layer\n\ni: Open raycast://extensions/raycast/raycast-ai/ai-chat\nq: Open raycast://extensions/raycast/raycast-ai/search-ai-chat-presets\nt: Open my personal snippets gallery\nm: Search menu of current app\nw: Switch windows with raycast\nc: Confetti\nd: Do not disturb\ne: Emoji finder\np: Raycast color picker\ns: My spotify library\no: OCR screen area"
                     }
                   }
                 ],
@@ -5091,7 +5091,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"b\" Edge profiler/controls\n\nw: Work profile\nreturn_or_enter: Personal profile\nt: Search tabs"
                     }
                   }
                 ],
@@ -5106,7 +5106,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"b\" Edge profiler/controls\n\nw: Work profile\nreturn_or_enter: Personal profile\nt: Search tabs"
                     }
                   }
                 ],
@@ -5442,7 +5442,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"o\" Open applications\n\nt: Open Wezterm\nm: Open Telegram\nw: Open Webstorm\nb: Open default profile"
                     }
                   }
                 ],
@@ -5457,7 +5457,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"o\" Open applications\n\nt: Open Wezterm\nm: Open Telegram\nw: Open Webstorm\nb: Open default profile"
                     }
                   }
                 ],
@@ -5849,7 +5849,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Layer \"i\" \n\n"
                     }
                   }
                 ],
@@ -5864,7 +5864,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": ""
+                      "text": "Persistent mode - Layer \"i\" \n\n"
                     }
                   }
                 ],

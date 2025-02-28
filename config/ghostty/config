@@ -53,4 +53,3 @@ keybind = super+p>l=next_tab
 keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
-

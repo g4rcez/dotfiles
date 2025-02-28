@@ -8,7 +8,7 @@ return {
     {
         "b0o/schemastore.nvim",
         config = function()
-            local schemas = require("schemastore")
+            local schemas = require "schemastore"
             require("lspconfig").jsonls.setup {
                 settings = {
                     yaml = {
@@ -175,6 +175,15 @@ return {
                     end,
                 },
             }
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                pattern = { "*.zig", "*.zon" },
+                callback = function(ev)
+                    vim.lsp.buf.code_action {
+                        context = { only = { "source.organizeImports" } },
+                        apply = true,
+                    }
+                end,
+            })
         end,
     },
 }

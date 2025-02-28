@@ -87,6 +87,12 @@ export default createEspansoConfig({
         espanso.shell("tomorrow", "Get tomorrow date", runMain(`dates --value=tomorrow`)),
         espanso.shell("iso", "Get date in ISO format", runMain(`dates --value=iso`)),
         espanso.shell(
+            "r",
+            "Repeat string N times",
+            runMain("repeat --value=$ESPANSO_N"),
+            withParam("r"),
+        ),
+        espanso.shell(
             "d",
             "Sum/Subtract days",
             runMain("dates --value=$ESPANSO_N"),
