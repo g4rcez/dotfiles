@@ -18,7 +18,7 @@ return {
                 pattern = "OilActionsPost",
                 callback = function(event)
                     if event.data.actions.type == "move" then
-                        local snacks = require('snacks')
+                        local snacks = require "snacks"
                         snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
                     end
                 end,
@@ -106,6 +106,9 @@ return {
             end
 
             local function code()
+                vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
+                vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
+
                 vim.keymap.set("n", "<leader>cf", function()
                     vim.lsp.buf.format { async = true, timeout_ms = 200 }
                 end, { desc = "[c]ode [f]ormat" })

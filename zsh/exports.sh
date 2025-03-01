@@ -67,10 +67,3 @@ export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
 source "$DOTFILES/zsh/ls.sh"
 
-#####################################################################################
-## carapace
-export CARAPACE_ENV=1
-export CARAPACE_HIDDEN=1
-export CARAPACE_MATCH=1
-export CARAPACE_TOOLTIP=1
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'

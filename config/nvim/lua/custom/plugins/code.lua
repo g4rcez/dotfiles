@@ -7,9 +7,9 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
 
-    { "numToStr/Comment.nvim", opts = {} },
+    { "numToStr/Comment.nvim",                       opts = {} },
     "JoosepAlviste/nvim-ts-context-commentstring",
-    { "Bekaboo/dropbar.nvim", dependencies = { "nvim-telescope/telescope-fzf-native.nvim" } },
+    { "Bekaboo/dropbar.nvim",                        dependencies = { "nvim-telescope/telescope-fzf-native.nvim" } },
     { "nvim-treesitter/nvim-treesitter-textobjects", dependencies = { "nvim-treesitter/nvim-treesitter" } },
     {
         "lewis6991/gitsigns.nvim",
@@ -108,39 +108,39 @@ return {
         "catgoose/nvim-colorizer.lua",
         event = "BufReadPre",
         opts = {
-            filetypes = { "*" }, -- Filetype options.  Accepts table like `user_default_options`
-            buftypes = {}, -- Buftype options.  Accepts table like `user_default_options`
-            user_commands = true, -- Enable all or some usercommands
-            lazy_load = false, -- Lazily schedule buffer highlighting setup function
+            filetypes = { "*" },          -- Filetype options.  Accepts table like `user_default_options`
+            buftypes = {},                -- Buftype options.  Accepts table like `user_default_options`
+            user_commands = true,         -- Enable all or some usercommands
+            lazy_load = false,            -- Lazily schedule buffer highlighting setup function
             user_default_options = {
-                names = true, -- "Name" codes like Blue or red.  Added from `vim.api.nvim_get_color_map()`
-                names_opts = { -- options for mutating/filtering names.
-                    lowercase = true, -- name:lower(), highlight `blue` and `red`
-                    camelcase = true, -- name, highlight `Blue` and `Red`
-                    uppercase = true, -- name:upper(), highlight `BLUE` and `RED`
+                names = true,             -- "Name" codes like Blue or red.  Added from `vim.api.nvim_get_color_map()`
+                names_opts = {            -- options for mutating/filtering names.
+                    lowercase = true,     -- name:lower(), highlight `blue` and `red`
+                    camelcase = true,     -- name, highlight `Blue` and `Red`
+                    uppercase = true,     -- name:upper(), highlight `BLUE` and `RED`
                     strip_digits = false, -- ignore names with digits,
                     -- highlight `blue` and `red`, but not `blue3` and `red4`
                 },
                 names_custom = false,
-                RGB = true, -- #RGB hex codes
-                RGBA = true, -- #RGBA hex codes
-                RRGGBB = true, -- #RRGGBB hex codes
-                RRGGBBAA = true, -- #RRGGBBAA hex codes
-                AARRGGBB = true, -- 0xAARRGGBB hex codes
-                rgb_fn = false, -- CSS rgb() and rgba() functions
-                hsl_fn = false, -- CSS hsl() and hsla() functions
-                css = true, -- Enable all CSS *features*:
+                RGB = true,                -- #RGB hex codes
+                RGBA = true,               -- #RGBA hex codes
+                RRGGBB = true,             -- #RRGGBB hex codes
+                RRGGBBAA = true,           -- #RRGGBBAA hex codes
+                AARRGGBB = true,           -- 0xAARRGGBB hex codes
+                rgb_fn = false,            -- CSS rgb() and rgba() functions
+                hsl_fn = false,            -- CSS hsl() and hsla() functions
+                css = true,                -- Enable all CSS *features*:
                 -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
-                css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+                css_fn = true,             -- Enable all CSS *functions*: rgb_fn, hsl_fn
                 -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-                tailwind = true, -- Enable tailwind colors
-                tailwind_opts = { -- Options for highlighting tailwind names
+                tailwind = true,           -- Enable tailwind colors
+                tailwind_opts = {          -- Options for highlighting tailwind names
                     update_names = "both", -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
                 },
                 -- parsers can contain values used in `user_default_options`
                 sass = { enable = false, parsers = { "css" } }, -- Enable sass colors
                 -- Highlighting mode.  'background'|'foreground'|'virtualtext'
-                mode = "background", -- Set the display mode
+                mode = "background",                            -- Set the display mode
                 -- Virtualtext character to use
                 virtualtext = "■",
                 -- Display virtualtext inline with color.  boolean|'before'|'after'.  True sets to 'after'
@@ -164,6 +164,7 @@ return {
         opts = function(_, opts)
             local nonels = require "null-ls"
             opts.sources = {
+                opts.sources,
                 nonels.builtins.formatting.stylua,
                 nonels.builtins.diagnostics.eslint,
                 nonels.builtins.completion.spell,
@@ -174,6 +175,7 @@ return {
                 nonels.builtins.diagnostics.commitlint,
                 nonels.builtins.diagnostics.semgrep,
                 nonels.builtins.formatting.prettier,
+                nonels.builtins.formatting.prettierd,
                 nonels.builtins.formatting.rustywind,
                 require "none-ls-shellcheck.diagnostics",
                 require "none-ls-shellcheck.code_actions",
@@ -187,8 +189,8 @@ return {
             require("nvim-ts-autotag").setup {
                 opts = {
                     -- Defaults
-                    enable_close = true, -- Auto close tags
-                    enable_rename = true, -- Auto rename pairs of tags
+                    enable_close = true,          -- Auto close tags
+                    enable_rename = true,         -- Auto rename pairs of tags
                     enable_close_on_slash = true, -- Auto close on trailing </
                 },
             }
@@ -235,7 +237,7 @@ return {
                 "vim",
                 "vimdoc",
                 "yaml",
-                "zig"
+                "zig",
             },
             auto_install = true,
             highlight = {

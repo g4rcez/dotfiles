@@ -68,7 +68,7 @@ format = '[$symbol$version]($style) '
 
 [fill]
 symbol = " "
-style = 'green'
+style = 'white'
 disabled = false
 
 [status]
@@ -110,7 +110,6 @@ modified = '[ ${count}](lavender) '
 untracked = "[ ${count}](sapphire) "
 diverged = '⇕⇡${ahead_count}⇣${behind_count} '
 format = "[[($conflicted$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
-# format = "[[($conflicted$untracked$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
 
 [git_state]
 style = "fg"
@@ -139,14 +138,14 @@ format = '[$symbol($version)]($style) '
 disabled = false
 symbol = '🦕'
 format = '[$symbol($version)]($style) '
+detect_files = ['deno.json']
 
 [nodejs]
 symbol = ' '
 style = "green"
 disabled = false
 format = '[$symbol($version)]($style) '
-detect_files = ['node_modules', '.yarn']
-# detect_extensions = ['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'tsx']
+detect_files = ['node_modules', 'package.json']
 detect_extensions = []
 
 [custom.since_last_commit]
