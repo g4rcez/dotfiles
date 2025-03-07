@@ -25,19 +25,23 @@ return {
             })
 
             local function groups()
-                wk.add { "<leader>f", group = "[f]ind", icon = "󱡴" }
-                wk.add { "<leader>g", group = "[g]it", icon = "" }
-                wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
                 wk.add { "<leader>b", group = "[b]uffer", icon = "󱦞" }
                 wk.add { "<leader>c", group = "[c]ode", mode = { "n", "x" }, icon = "" }
+                wk.add { "<leader>f", group = "[f]ind", icon = "󱡴" }
+                wk.add { "<leader>g", group = "[g]it", icon = "" }
+                wk.add { "<leader>h", group = "[h]arpoon", icon = "" }
+                wk.add { "<leader>q", group = "[q]uit", icon = "󰿅" }
+                wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
                 wk.add { "<leader>u", group = "[u]i", mode = { "n" }, icon = "󱣴" }
                 wk.add { "<leader>x", group = "[x]errors", mode = { "n" }, icon = "" }
             end
 
             local key = {
-                normal = function(from, to, opts)
-                    keymap("n", from, to, { desc = opts.desc })
-                    wk.add { from, to, desc = opts.desc or "", mode = { "n" }, icon = opts.icon }
+                normal = function(from, action, opts)
+                    local o = opts or {}
+                    local desc = o.desc or ""
+                    keymap("n", from, action, { desc = desc })
+                    wk.add { from, action, desc = desc or "", mode = { "n" }, icon = o.icon }
                 end,
                 x = function(from, to, opts)
                     keymap("x", from, to, opts)
@@ -82,6 +86,7 @@ return {
                 key.visual("<", "<gv", DEFAULT_OPTS)
                 key.visual("<leader>sr", "<cmd>!tail -r<CR>", { desc = "Reverse sort lines" })
                 key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
+                key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
                 key.visual(">", ">gv", DEFAULT_OPTS)
                 key.x("p", [["_dP]], DEFAULT_OPTS)
                 key.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
@@ -105,15 +110,63 @@ return {
                 end, { desc = "[b]readcrumbs movement", icon = "󰔃" })
             end
 
-            local function code()
-                vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
-                vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
+            local function harpoonConfig()
+                local harpoon = require("harpoon");
+                local Snacks = require("snacks");
+                harpoon.setup({})
+                local function generate_harpoon_picker()
+                    local file_paths = {}
+                    for _, item in ipairs(harpoon:list().items) do
+                        table.insert(file_paths, { text = item.value, file = item.value })
+                    end
+                    return file_paths
+                end
+                key.normal("<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {
+                    desc = "Quick harpoon"
+                })
+                key.normal("<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {
+                    desc = "Quick harpoon"
+                })
+                key.normal("<leader>ha", function() harpoon:list():add() end, {
+                    desc = "Harpoon add"
+                })
+                key.normal("<leader>hf", function()
+                    Snacks.picker({
+                        finder = generate_harpoon_picker,
+                        win = {
+                            input = {
+                                keys = {
+                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } }
+                                }
+                            },
+                            list = {
+                                keys = {
+                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } }
+                                }
+                            },
+                        },
+                        actions = {
+                            harpoon_delete = function(picker, item)
+                                local to_remove = item or picker:selected()
+                                Snacks.debug.log(to_remove)
+                                harpoon:list():remove(to_remove)
+                            end
+                        },
+                    })
+                end, { desc = "harpoon delete" })
+            end
 
-                vim.keymap.set("n", "<leader>cf", function()
-                    vim.lsp.buf.format { async = true, timeout_ms = 200 }
-                end, { desc = "[c]ode [f]ormat" })
-                vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
-                vim.keymap.set("n", "<leader>cF", function()
+            local function code()
+                key.normal("]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
+                key.normal("[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
+                key.normal(
+                    "<leader>cf", function()
+                        vim.lsp.buf.format { async = true, timeout_ms = 200 }
+                    end,
+                    { desc = "[c]ode [f]ormat" }
+                )
+                key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
+                key.normal("<leader>cF", function()
                     require("aerial").snacks_picker {
                         format = "text",
                         layout = { preset = "vscode", preview = true },
@@ -121,7 +174,7 @@ return {
                 end, { desc = "[c]ode [F]ind aerial" })
             end
 
-            local keymaps = { groups, defaults, buffers, code }
+            local keymaps = { groups, defaults, buffers, code, harpoonConfig }
 
             for _, func in ipairs(keymaps) do
                 func()

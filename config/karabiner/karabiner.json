@@ -320,7 +320,7 @@
                 ]
               },
               {
-                "description": "Caps Lock -> Hyper Key(n_single)",
+                "description": "Caps Lock -> Hyper Key(c_single)",
                 "type": "basic",
                 "to_if_alone": [
                   {
@@ -347,7 +347,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_SINGLE",
+                      "name": "VIM_MODE_c_SINGLE",
                       "value": "off"
                     }
                   },
@@ -367,13 +367,13 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_SINGLE",
+                    "name": "VIM_MODE_c_SINGLE",
                     "value": "on"
                   }
                 ]
               },
               {
-                "description": "Caps Lock -> Hyper Key(n_single)",
+                "description": "Caps Lock -> Hyper Key(c_single)",
                 "type": "basic",
                 "to_if_alone": [
                   {
@@ -400,7 +400,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_HOLD",
+                      "name": "VIM_MODE_c_HOLD",
                       "value": "off"
                     }
                   },
@@ -420,7 +420,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_HOLD",
+                    "name": "VIM_MODE_c_HOLD",
                     "value": "on"
                   }
                 ]
@@ -1055,6 +1055,122 @@
             ]
           },
           {
+            "description": "Hyper Key + k",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "key_code": "up_arrow"
+                  }
+                ],
+                "description": "Up arrow",
+                "type": "basic",
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + h",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "key_code": "left_arrow"
+                  }
+                ],
+                "description": "Left arrow",
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + j",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "key_code": "down_arrow"
+                  }
+                ],
+                "description": "Down arrow",
+                "type": "basic",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + l",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "key_code": "right_arrow"
+                  }
+                ],
+                "description": "Right arrow",
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Hyper Key + open_bracket",
             "manipulators": [
               {
@@ -1164,308 +1280,6 @@
                   {
                     "type": "variable_if",
                     "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key + h",
-            "manipulators": [
-              {
-                "to": [
-                  {
-                    "key_code": "left_arrow"
-                  }
-                ],
-                "description": "Left arrow",
-                "type": "basic",
-                "from": {
-                  "key_code": "h",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key + l",
-            "manipulators": [
-              {
-                "to": [
-                  {
-                    "key_code": "right_arrow"
-                  }
-                ],
-                "description": "Right arrow",
-                "type": "basic",
-                "from": {
-                  "key_code": "l",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key + k",
-            "manipulators": [
-              {
-                "to": [
-                  {
-                    "key_code": "up_arrow"
-                  }
-                ],
-                "description": "Up arrow",
-                "type": "basic",
-                "from": {
-                  "key_code": "k",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key + j",
-            "manipulators": [
-              {
-                "to": [
-                  {
-                    "key_code": "down_arrow"
-                  }
-                ],
-                "description": "Down arrow",
-                "type": "basic",
-                "from": {
-                  "key_code": "j",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key sublayer 's'",
-            "manipulators": [
-              {
-                "description": "Toggle Hyper sublayer s",
-                "type": "basic",
-                "from": {
-                  "key_code": "s",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to_after_key_up": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_sublayer_s",
-                      "value": 0
-                    }
-                  }
-                ],
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_sublayer_s",
-                      "value": 1
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_0",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_4",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_open_bracket",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_close_bracket",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_e",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_tab",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_h",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_l",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_k",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_j",
-                    "value": 0
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "shell_command": "osascript $HOME/dotfiles/bin/clear-notifications"
-                  }
-                ],
-                "description": "Clear notifications",
-                "type": "basic",
-                "from": {
-                  "key_code": "n",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "key_code": "volume_decrement"
-                  }
-                ],
-                "description": "Decrease volume",
-                "type": "basic",
-                "from": {
-                  "key_code": "hyphen",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "key_code": "volume_increment"
-                  }
-                ],
-                "description": "Increase volume",
-                "type": "basic",
-                "from": {
-                  "key_code": "equal_sign",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "key_code": "play_or_pause"
-                  }
-                ],
-                "description": "Toggle play or pause",
-                "type": "basic",
-                "from": {
-                  "key_code": "p",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_s",
                     "value": 1
                   }
                 ]
@@ -3239,13 +3053,13 @@
             ]
           },
           {
-            "description": "disable single - leader n",
+            "description": "disable single - leader c",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_SINGLE",
+                    "name": "VIM_MODE_c_SINGLE",
                     "value": "on"
                   },
                   {
@@ -3254,9 +3068,9 @@
                     "value": 1
                   }
                 ],
-                "description": "disable_single_leader_key_n",
+                "description": "disable_single_leader_key_c",
                 "from": {
-                  "key_code": "n",
+                  "key_code": "c",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3267,7 +3081,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_SINGLE",
+                      "name": "VIM_MODE_c_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3283,14 +3097,14 @@
             ]
           },
           {
-            "description": "esc disable single - leader n",
+            "description": "esc disable single - leader c",
             "manipulators": [
               {
-                "description": "esc_disable_single_leader_key_n",
+                "description": "esc_disable_single_leader_key_c",
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_SINGLE",
+                    "name": "VIM_MODE_c_SINGLE",
                     "value": "on"
                   },
                   {
@@ -3314,7 +3128,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_SINGLE",
+                      "name": "VIM_MODE_c_SINGLE",
                       "value": "off"
                     }
                   }
@@ -3324,13 +3138,13 @@
             ]
           },
           {
-            "description": "disable holder - leader n",
+            "description": "disable holder - leader c",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_HOLD",
+                    "name": "VIM_MODE_c_HOLD",
                     "value": "on"
                   },
                   {
@@ -3339,9 +3153,9 @@
                     "value": 1
                   }
                 ],
-                "description": "disable_leader_key_n",
+                "description": "disable_leader_key_c",
                 "from": {
-                  "key_code": "n",
+                  "key_code": "c",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3352,7 +3166,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_HOLD",
+                      "name": "VIM_MODE_c_HOLD",
                       "value": "off"
                     }
                   },
@@ -3368,7 +3182,7 @@
             ]
           },
           {
-            "description": "leader n",
+            "description": "leader c",
             "manipulators": [
               {
                 "conditions": [
@@ -3378,9 +3192,9 @@
                     "value": 1
                   }
                 ],
-                "description": "leader_key_n",
+                "description": "leader_key_c",
                 "from": {
-                  "key_code": "n",
+                  "key_code": "c",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3391,14 +3205,14 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_SINGLE",
+                      "name": "VIM_MODE_c_HOLD",
                       "value": "on"
                     }
                   },
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"n\" Notion layer\n\nn: Notion read it later"
+                      "text": "Layer \"c\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -3406,14 +3220,14 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_HOLD",
+                      "name": "VIM_MODE_c_HOLD",
                       "value": "on"
                     }
                   },
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"n\" Notion layer\n\nn: Notion read it later"
+                      "text": "Persistent mode - Layer \"c\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -3422,28 +3236,28 @@
             ]
           },
           {
-            "description": "leader + n + n - Notion read it later",
+            "description": "leader + c + j - Decrement brightness",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_SINGLE",
+                    "name": "VIM_MODE_c_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + n + n - Notion read it later",
+                "description": "leader + c + j - Decrement brightness",
                 "from": {
-                  "key_code": "n"
+                  "key_code": "j"
                 },
                 "to": [
                   {
-                    "shell_command": "open  raycast://extensions/HenriChabrand/notion/create-database-page?launchContext=%7B%22defaults%22%3A%7B%22database%22%3A%228f300386-4489-4bd2-a787-8ba1b6fc9c59%22%2C%22property%3A%3Astatus%3A%3ATiQl%22%3A%2218f563fd-783b-4f3a-9403-235a3a1f804c%22%7D%2C%22visiblePropIds%22%3A%5B%22title%22%2C%22x%255ET%255E%22%2C%22rPKH%22%2C%22TiQl%22%2C%22%253FlMM%22%5D%7D"
+                    "key_code": "display_brightness_decrement"
                   },
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_n_SINGLE",
+                      "name": "VIM_MODE_c_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3460,17 +3274,297 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_n_HOLD",
+                    "name": "VIM_MODE_c_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + n + n - Notion read it later",
+                "description": "leader + c + j - Decrement brightness",
+                "from": {
+                  "key_code": "j"
+                },
+                "to": [
+                  {
+                    "key_code": "display_brightness_decrement"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + c + k - Increment brightness",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + k - Increment brightness",
+                "from": {
+                  "key_code": "k"
+                },
+                "to": [
+                  {
+                    "key_code": "display_brightness_increment"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_c_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + k - Increment brightness",
+                "from": {
+                  "key_code": "k"
+                },
+                "to": [
+                  {
+                    "key_code": "display_brightness_increment"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + c + n - Clear notifications",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + n - Clear notifications",
                 "from": {
                   "key_code": "n"
                 },
                 "to": [
                   {
-                    "shell_command": "open  raycast://extensions/HenriChabrand/notion/create-database-page?launchContext=%7B%22defaults%22%3A%7B%22database%22%3A%228f300386-4489-4bd2-a787-8ba1b6fc9c59%22%2C%22property%3A%3Astatus%3A%3ATiQl%22%3A%2218f563fd-783b-4f3a-9403-235a3a1f804c%22%7D%2C%22visiblePropIds%22%3A%5B%22title%22%2C%22x%255ET%255E%22%2C%22rPKH%22%2C%22TiQl%22%2C%22%253FlMM%22%5D%7D"
+                    "shell_command": "osascript $HOME/dotfiles/bin/clear-notifications"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_c_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + n - Clear notifications",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "osascript $HOME/dotfiles/bin/clear-notifications"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + c + hyphen - Decrease volume",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + hyphen - Decrease volume",
+                "from": {
+                  "key_code": "hyphen"
+                },
+                "to": [
+                  {
+                    "key_code": "volume_decrement"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_c_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + hyphen - Decrease volume",
+                "from": {
+                  "key_code": "hyphen"
+                },
+                "to": [
+                  {
+                    "key_code": "volume_decrement"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + c + equal_sign - Increase volume",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + equal_sign - Increase volume",
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "key_code": "volume_increment"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_c_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + equal_sign - Increase volume",
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "key_code": "volume_increment"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + c + p - Toggle play or pause",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + p - Toggle play or pause",
+                "from": {
+                  "key_code": "p"
+                },
+                "to": [
+                  {
+                    "key_code": "play_or_pause"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_c_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_c_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + c + p - Toggle play or pause",
+                "from": {
+                  "key_code": "p"
+                },
+                "to": [
+                  {
+                    "key_code": "play_or_pause"
                   }
                 ],
                 "type": "basic"

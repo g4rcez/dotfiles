@@ -1,53 +1,16 @@
 import { createKarabinerConfig, karabiner, KarabinerRule, Manipulator } from "@dotfiles/plugins";
 
 const modKeys = karabiner.createHyperSubLayers({
-    open_bracket: karabiner.open(
-        "raycast://extensions/g4rcez/whichkey/whichkey",
-        "",
-        "Snippets",
-    ),
-    close_bracket: karabiner.open(
-        "raycast://extensions/g4rcez/snippets/snippets",
-        "",
-        "Snippets",
-    ),
-    e: karabiner.open(
-        "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
-        "",
-        "Open emojis",
-    ),
-    tab: karabiner.open(
-        "raycast://extensions/raycast/navigation/switch-windows",
-        "",
-        "Switch windows with raycast",
-    ),
-    h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
-    l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
     k: { to: [{ key_code: "up_arrow" }], description: "Up arrow" },
+    h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
     j: { to: [{ key_code: "down_arrow" }], description: "Down arrow" },
-    0: {
-        to: [{ key_code: "left_arrow", modifiers: ["left_command"] }],
-        description: "Go to begin of line",
-    },
-    4: {
-        to: [{ key_code: "right_arrow", modifiers: ["left_command"] }],
-        description: "Go to end of line",
-    },
-    s: {
-        n: karabiner.shell("osascript $HOME/dotfiles/bin/clear-notifications", "Clear notifications"),
-        hyphen: {
-            to: [{ key_code: "volume_decrement" }],
-            description: "Decrease volume",
-        },
-        equal_sign: {
-            to: [{ key_code: "volume_increment" }],
-            description: "Increase volume",
-        },
-        p: {
-            to: [{ key_code: "play_or_pause" }],
-            description: "Toggle play or pause",
-        },
-    },
+    l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
+    open_bracket: karabiner.open("raycast://extensions/g4rcez/whichkey/whichkey", "", "Snippets"),
+    close_bracket: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Snippets"),
+    4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }], description: "Go to end of line" },
+    e: karabiner.open("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "", "Open emojis"),
+    0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }], description: "Go to begin of line" },
+    tab: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast"),
 });
 
 /*
@@ -89,13 +52,30 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         backslash: karabiner.rectangle("top-right"),
         close_bracket: karabiner.rectangle("top-left"),
     },
-    n: {
-        description: "Notion layer",
-        n: karabiner.open(
-            "raycast://extensions/HenriChabrand/notion/create-database-page?launchContext=%7B%22defaults%22%3A%7B%22database%22%3A%228f300386-4489-4bd2-a787-8ba1b6fc9c59%22%2C%22property%3A%3Astatus%3A%3ATiQl%22%3A%2218f563fd-783b-4f3a-9403-235a3a1f804c%22%7D%2C%22visiblePropIds%22%3A%5B%22title%22%2C%22x%255ET%255E%22%2C%22rPKH%22%2C%22TiQl%22%2C%22%253FlMM%22%5D%7D",
-            "",
-            "Notion read it later",
-        ),
+    c: {
+        hold: true,
+        description: "System layer",
+        j: {
+            to: [{ key_code: "display_brightness_decrement" }],
+            description: "Decrement brightness",
+        },
+        k: {
+            to: [{ key_code: "display_brightness_increment" }],
+            description: "Increment brightness",
+        },
+        n: karabiner.shell("osascript $HOME/dotfiles/bin/clear-notifications", "Clear notifications"),
+        hyphen: {
+            to: [{ key_code: "volume_decrement" }],
+            description: "Decrease volume",
+        },
+        equal_sign: {
+            to: [{ key_code: "volume_increment" }],
+            description: "Increase volume",
+        },
+        p: {
+            to: [{ key_code: "play_or_pause" }],
+            description: "Toggle play or pause",
+        },
     },
     v: {
         hold: true,
@@ -135,9 +115,9 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         description: "Raycast layer",
         i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
         q: karabiner.open("raycast://extensions/raycast/raycast-ai/search-ai-chat-presets"),
-        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery",),
-        m: karabiner.open("raycast://extensions/raycast/navigation/search-menu-items", "", "Search menu of current app",),
-        w: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast",),
+        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery"),
+        m: karabiner.open("raycast://extensions/raycast/navigation/search-menu-items", "", "Search menu of current app"),
+        w: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast"),
         c: karabiner.open(
             "raycast://extensions/raycast/raycast/confetti",
             "",
@@ -186,8 +166,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         w: karabiner.app("Webstorm"),
         b: karabiner.browser("Default", "Open default profile"),
     },
-    i: {
-    },
+    i: {},
 });
 
 const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [

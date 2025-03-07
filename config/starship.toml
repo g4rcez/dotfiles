@@ -125,7 +125,7 @@ format = '[+$added](green)[-$deleted](maroon) '
 disabled = false
 style = "yellow"
 min_time = 10_000
-min_time_to_notify = 1000
+min_time_to_notify = 10000
 show_notifications = false
 format = "[ ⏰ $duration]($style) "
 

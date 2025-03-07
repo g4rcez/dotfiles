@@ -2,7 +2,7 @@ return {
     "onsails/lspkind.nvim",
     {
         "saghen/blink.cmp",
-        dependencies = { "rafamadriz/friendly-snippets", "Kaiser-Yang/blink-cmp-git", "nvim-lua/plenary.nvim" },
+        dependencies = { "rafamadriz/friendly-snippets", "nvim-lua/plenary.nvim" },
         version = "*",
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
@@ -28,10 +28,9 @@ return {
                 },
             },
             sources = {
-                default = { "lsp", "lazydev", "git", "path", "snippets", "buffer" },
+                default = { "lsp", "lazydev", "path", "snippets", "buffer" },
                 providers = {
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
-                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
                     lsp = {
                         name = "LSP",
                         module = "blink.cmp.sources.lsp",
@@ -113,24 +112,13 @@ return {
                 menu = {
                     border = "rounded",
                     draw = {
-                        -- Aligns the keyword you've typed to a component in the menu
                         align_to = "label", -- or 'none' to disable, or 'cursor' to align to the cursor
-                        -- Left and right padding, optionally { left, right } for different padding on each side
                         padding = 1,
-                        -- Gap between columns
                         gap = 1,
-                        -- Use treesitter to highlight the label text for the given list of sources
-                        treesitter = {},
-                        -- treesitter = { 'lsp' }
+                        treesitter = { 'lsp' },
 
                         -- Components to render, grouped by column
                         columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
-
-                        -- Definitions for possible components to render. Each defines:
-                        --   ellipsis: whether to add an ellipsis when truncating the text
-                        --   width: control the min, max and fill behavior of the component
-                        --   text function: will be called for each item
-                        --   highlight function: will be called only when the line appears on screen
                         components = {
                             kind_icon = {
                                 ellipsis = false,
@@ -138,11 +126,14 @@ return {
                                     return ctx.kind_icon .. ctx.icon_gap
                                 end,
                                 highlight = function(ctx)
-                                    return require("blink.cmp.completion.windows.render.tailwind").get_hl(ctx)
-                                        or "BlinkCmpKind" .. ctx.kind
+                                    local success, module = pcall(require, "blink.cmp.completion.windows.render.tailwind")
+                                    local h = "BlinkCmpKind" .. ctx.kind
+                                    if not success then
+                                        return h
+                                    end
+                                    return module.get_hl(ctx) or h
                                 end,
                             },
-
                             kind = {
                                 ellipsis = false,
                                 width = { fill = true },
@@ -150,18 +141,20 @@ return {
                                     return ctx.kind
                                 end,
                                 highlight = function(ctx)
-                                    return require("blink.cmp.completion.windows.render.tailwind").get_hl(ctx)
-                                        or "BlinkCmpKind" .. ctx.kind
-                                end,
+                                    local success, module = pcall(require, "blink.cmp.completion.windows.render.tailwind")
+                                    local h = "BlinkCmpKind" .. ctx.kind
+                                    if not success then
+                                        return h
+                                    end
+                                    return module.get_hl(ctx) or h
+                                end
                             },
-
                             label = {
                                 width = { fill = true, max = 60 },
                                 text = function(ctx)
                                     return ctx.label .. ctx.label_detail
                                 end,
                                 highlight = function(ctx)
-                                    -- label and label details
                                     local highlights = {
                                         {
                                             0,
@@ -176,12 +169,9 @@ return {
                                             group = "BlinkCmpLabelDetail",
                                         })
                                     end
-
-                                    -- characters matched on the label by the fuzzy matcher
                                     for _, idx in ipairs(ctx.label_matched_indices) do
                                         table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
                                     end
-
                                     return highlights
                                 end,
                             },
