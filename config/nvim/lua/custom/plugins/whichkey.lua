@@ -33,6 +33,7 @@ return {
                 wk.add { "<leader>q", group = "[q]uit", icon = "󰿅" }
                 wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
                 wk.add { "<leader>u", group = "[u]i", mode = { "n" }, icon = "󱣴" }
+                wk.add { "<leader>r", group = "[r]eplace", mode = { "n" }, icon = "" }
                 wk.add { "<leader>x", group = "[x]errors", mode = { "n" }, icon = "" }
             end
 
@@ -105,67 +106,99 @@ return {
                     "<cmd>BufferLineCloseOthers<cr>",
                     { desc = "Close all except current", icon = "" }
                 )
-                key.normal("<leader>bb", function()
-                    require("dropbar.api").pick()
-                end, { desc = "[b]readcrumbs movement", icon = "󰔃" })
+                key.normal("<leader>bh", function()
+                    require("treesitter-context").go_to_context(vim.v.count1)
+                end, { silent = true, desc = "[h]eader of context" })
             end
 
             local function harpoonConfig()
-                local harpoon = require("harpoon");
-                local Snacks = require("snacks");
-                harpoon.setup({})
+                local h = require "harpoon"
+                local Snacks = require "snacks"
+                h.setup {}
                 local function generate_harpoon_picker()
                     local file_paths = {}
-                    for _, item in ipairs(harpoon:list().items) do
+                    for _, item in ipairs(h:list().items) do
                         table.insert(file_paths, { text = item.value, file = item.value })
                     end
                     return file_paths
                 end
-                key.normal("<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {
-                    desc = "Quick harpoon"
+                key.normal("<leader>hh", function()
+                    h.ui:toggle_quick_menu(h:list())
+                end, {
+                    desc = "Quick harpoon",
                 })
-                key.normal("<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {
-                    desc = "Quick harpoon"
+                key.normal("<C-e>", function()
+                    h.ui:toggle_quick_menu(h:list())
+                end, {
+                    desc = "Quick harpoon",
                 })
-                key.normal("<leader>ha", function() harpoon:list():add() end, {
-                    desc = "Harpoon add"
+                key.normal("<leader>ha", function()
+                    h:list():add()
+                end, {
+                    desc = "Harpoon add",
                 })
+                key.normal("<leader>ga", function()
+                    Snacks.toggle {
+                        name = "Git Signs",
+                        get = function()
+                            return require("gitsigns.config").config.signcolumn
+                        end,
+                        set = function(state)
+                            require("gitsigns").toggle_signs(state)
+                        end,
+                    }
+                end, { desc = "Git signs" })
+                key.normal("<leader>up", function()
+                    Snacks.toggle {
+                        name = "Mini Pairs",
+                        get = function()
+                            return not vim.g.minipairs_disable
+                        end,
+                        set = function(state)
+                            vim.g.minipairs_disable = not state
+                        end,
+                    }
+                end, { desc = "Snacks mini pairs" })
+
                 key.normal("<leader>hf", function()
-                    Snacks.picker({
+                    Snacks.picker {
                         finder = generate_harpoon_picker,
                         win = {
                             input = {
                                 keys = {
-                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } }
-                                }
+                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } },
+                                },
                             },
                             list = {
                                 keys = {
-                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } }
-                                }
+                                    ["dd"] = { "harpoon_delete", mode = { "n", "x" } },
+                                },
                             },
                         },
                         actions = {
                             harpoon_delete = function(picker, item)
                                 local to_remove = item or picker:selected()
                                 Snacks.debug.log(to_remove)
-                                harpoon:list():remove(to_remove)
-                            end
+                                h:list():remove(to_remove)
+                            end,
                         },
-                    })
+                    }
                 end, { desc = "harpoon delete" })
             end
 
             local function code()
+                key.normal("<leader>rr", function()
+                    require("grug-far").open { engine = "astgrep" }
+                end, { desc = "Replace with grug-far astgrep" })
                 key.normal("]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
                 key.normal("[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
-                key.normal(
-                    "<leader>cf", function()
-                        vim.lsp.buf.format { async = true, timeout_ms = 200 }
-                    end,
-                    { desc = "[c]ode [f]ormat" }
-                )
+
+                key.normal("<leader>cf",
+                    function() require("conform").format { async = true, lsp_format = "fallback" } end,
+                    { desc = "[c]ode [f]ormat" })
                 key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
+                key.normal("<leader>cF", "<cmd>Lspsaga finder<CR>", { desc = "[c]ode [F]inder (lspsaga)" })
+                key.normal('K', '<cmd>Lspsaga hover_doc<cr>', { desc = "Lspsaga hover_doc" })
                 key.normal("<leader>cF", function()
                     require("aerial").snacks_picker {
                         format = "text",

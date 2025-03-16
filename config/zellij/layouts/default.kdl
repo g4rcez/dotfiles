@@ -28,7 +28,7 @@ layout {
             tab_active              "#[bg=#1E1E2E,fg=#89b4fa]{index}.{name}{fullscreen_indicator}{sync_indicator}{floating_indicator}"
             tab_floating_indicator   "󰉈 "
             tab_fullscreen_indicator " 󰊓 "
-            tab_separator           "#[fg=#6C7086] ⋮ "
+            tab_separator           "#[bg=#1E1E2E,fg=#6C7086] ⋮ "
             tab_sync_indicator       "  "
         }
     }

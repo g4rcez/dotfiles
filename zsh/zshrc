@@ -9,6 +9,7 @@ source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
 local -a PATH_EXPORTS=(
+  "/opt/homebrew/opt/libpq/bin"
   "/usr/local/bin"
   "/usr/local/opt/libpq/bin"
   "/opt/homebrew/opt/libpq/bin"
@@ -104,4 +105,3 @@ znap fpath _fx       "source <(fx --comp zsh)"
 znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _mise     "mise completion zsh"
-

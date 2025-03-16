@@ -10,8 +10,8 @@
 --------------------------------------------------------------------
 
 local wezterm = require("wezterm")
-local Config = wezterm.config_builder()
 
+local Config = wezterm.config_builder()
 Config.front_end = "WebGpu"
 Config.webgpu_power_preference = 'LowPower'
 Config.enable_wayland = false

@@ -33,12 +33,18 @@ return {
         },
     },
     {
+        "williamboman/mason.nvim",
+        opts = {
+            ensure_installed = { "markdown-toc" }
+        }
+    },
+    {
         "neovim/nvim-lspconfig",
+        event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             "pmizio/typescript-tools.nvim",
-            { "j-hui/fidget.nvim",       opts = {} },
+            { "j-hui/fidget.nvim", opts = {} },
             "williamboman/mason-lspconfig.nvim",
-            { "williamboman/mason.nvim", opts = {} },
             "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         config = function()
@@ -52,38 +58,8 @@ return {
                     map("<leader>ca", vim.lsp.buf.code_action, "[c]ode [a]ction", { "n", "x" })
                     map("gD", vim.lsp.buf.declaration, "[g]oto [d]eclaration")
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    -- if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-                    --     local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", {
-                    --         clear = false,
-                    --     })
-                    --     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                    --         buffer = event.buf,
-                    --         group = highlight_augroup,
-                    --         callback = vim.lsp.buf.document_highlight,
-                    --     })
-                    --
-                    --     vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-                    --         buffer = event.buf,
-                    --         group = highlight_augroup,
-                    --         callback = vim.lsp.buf.clear_references,
-                    --     })
-                    --
-                    --     vim.api.nvim_create_autocmd("LspDetach", {
-                    --         group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-                    --         callback = function(event2)
-                    --             vim.lsp.buf.clear_references()
-                    --             vim.api.nvim_clear_autocmds { group = "kickstart-lsp-highlight", buffer = event2.buf }
-                    --         end,
-                    --     })
-                    --     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-                    --         map("<leader>th", function()
-                    --             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-                    --         end, "[T]oggle Inlay [H]ints")
-                    --     end
-                    -- end
                 end,
             })
-
             -- Diagnostic Config
             -- See :help vim.diagnostic.Opts
             vim.diagnostic.config {
@@ -115,7 +91,54 @@ return {
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             local lspconfig = require "lspconfig"
             local servers = {
-                vtsls = {},
+                html = {},
+                cssls = {},
+                bashls = {},
+                eslint = {},
+                stylua = {},
+                dockerls = {},
+                marksman = {},
+                postgres_lsp = {},
+                ts_ls = { enabled = false },
+                tsserver = { enabled = false },
+                docker_compose_language_service = {},
+                vtsls = {
+                    filetypes = {
+                        "javascript",
+                        "javascriptreact",
+                        "javascript.jsx",
+                        "typescript",
+                        "typescriptreact",
+                        "typescript.tsx",
+                    },
+                    settings = {
+                        complete_function_calls = true,
+                        vtsls = {
+                            enableMoveToFileCodeAction = true,
+                            autoUseWorkspaceTsdk = true,
+                            experimental = {
+                                maxInlayHintLength = 30,
+                                completion = {
+                                    enableServerSideFuzzyMatch = true,
+                                },
+                            },
+                        },
+                        typescript = {
+                            updateImportsOnFileMove = { enabled = "always" },
+                            suggest = {
+                                completeFunctionCalls = true,
+                            },
+                            inlayHints = {
+                                enumMemberValues = { enabled = true },
+                                functionLikeReturnTypes = { enabled = true },
+                                parameterNames = { enabled = "literals" },
+                                parameterTypes = { enabled = true },
+                                propertyDeclarationTypes = { enabled = true },
+                                variableTypes = { enabled = false },
+                            },
+                        },
+                    },
+                },
                 denols = {
                     root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
                     settings = {
@@ -125,9 +148,6 @@ return {
                         },
                     },
                 },
-                stylua = {},
-                dockerls = {},
-                postgres_lsp = {},
                 tailwindcss = {
                     settings = {
                         tailwindCSS = {
@@ -155,6 +175,8 @@ return {
             }
             require("typescript-tools").setup {
                 settings = {
+                    complete_function_calls = true,
+                    separate_diagnostic_server = true,
                     tsserver_file_preferences = {
                         includeInlayParameterNameHints = "all",
                         includeCompletionsForModuleExports = true,
@@ -175,6 +197,35 @@ return {
                     end,
                 },
             }
+            local function location_handler(_, result, ctx, _)
+                if result == nil or vim.tbl_isempty(result) then
+                    return nil
+                end
+                local client = vim.lsp.get_client_by_id(ctx.client_id)
+                assert(client)
+                local has_telescope = pcall(require, "telescope")
+                if vim.islist(result) then
+                    if all_locations_equal(result) then
+                        pcall(vim.lsp.util.jump_to_location, result[1], client.offset_encoding, false)
+                    else
+                        vim.fn.setloclist(0, {}, " ", {
+                            title = "LSP locations",
+                            items = vim.lsp.util.locations_to_items(result, client.offset_encoding),
+                        })
+                        vim.cmd.lopen()
+                    end
+                else
+                    vim.lsp.util.jump_to_location(result, client.offset_encoding)
+                end
+            end
+            vim.lsp.handlers["textDocument/declaration"] = location_handler
+            vim.lsp.handlers["textDocument/definition"] = location_handler
+            vim.lsp.handlers["textDocument/typeDefinition"] = location_handler
+            vim.lsp.handlers["textDocument/implementation"] = location_handler
+
+            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
+                { border = "rounded" })
             vim.api.nvim_create_autocmd("BufWritePre", {
                 pattern = { "*.zig", "*.zon" },
                 callback = function(ev)

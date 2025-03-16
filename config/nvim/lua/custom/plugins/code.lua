@@ -1,16 +1,58 @@
 local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" }
 
+function nonelsSetup()
+    return {
+        "nvimtools/none-ls.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "gbprod/none-ls-shellcheck.nvim" },
+        opts = function(_, opts)
+            local nonels = require "null-ls"
+            opts.sources = {
+                opts.sources,
+                nonels.builtins.formatting.stylua,
+                nonels.builtins.diagnostics.eslint,
+                nonels.builtins.completion.spell,
+                nonels.builtins.code_actions.gitrebase,
+                nonels.builtins.completion.nvim_snippets,
+                nonels.builtins.diagnostics.codespell,
+                nonels.builtins.diagnostics.commitlint,
+                nonels.builtins.diagnostics.commitlint,
+                nonels.builtins.diagnostics.semgrep,
+                nonels.builtins.formatting.prettier,
+                nonels.builtins.formatting.prettierd,
+                nonels.builtins.formatting.rustywind,
+                require "none-ls-shellcheck.diagnostics",
+                require "none-ls-shellcheck.code_actions",
+            }
+            return opts
+        end,
+    }
+end
+
 return {
     "mattn/emmet-vim",
     "tpope/vim-sleuth",
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-
     { "numToStr/Comment.nvim",                       opts = {} },
     "JoosepAlviste/nvim-ts-context-commentstring",
-    { "Bekaboo/dropbar.nvim",                        dependencies = { "nvim-telescope/telescope-fzf-native.nvim" } },
     { "nvim-treesitter/nvim-treesitter-textobjects", dependencies = { "nvim-treesitter/nvim-treesitter" } },
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        opts = {
+            enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+            multiwindow = false,      -- Enable multiwindow support.
+            max_lines = 2,            -- How many lines the window should span. Values <= 0 mean no limit.
+            min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+            line_numbers = true,
+            multiline_threshold = 20, -- Maximum number of lines to show for a single context
+            trim_scope = "outer",     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+            mode = "cursor",          -- Line used to calculate context. Choices: 'cursor', 'topline'
+            separator = nil,
+            zindex = 20,              -- The Z-index of the context window
+            on_attach = nil,          -- (fun(buf: integer): boolean) return false to disable attaching
+        },
+    },
     {
         "lewis6991/gitsigns.nvim",
         opts = {
@@ -46,21 +88,6 @@ return {
             restore_quotes = {
                 normal = [[']],
                 jsx = [["]],
-            },
-        },
-    },
-    {
-        "smoka7/multicursors.nvim",
-        event = "VeryLazy",
-        opts = {},
-        dependencies = { "nvimtools/hydra.nvim" },
-        cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
-        keys = {
-            {
-                mode = { "v", "n" },
-                "<C-n>",
-                "<cmd>MCstart<cr>",
-                desc = "Multicursor",
             },
         },
     },
@@ -159,31 +186,6 @@ return {
         },
     },
     {
-        "nvimtools/none-ls.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "gbprod/none-ls-shellcheck.nvim" },
-        opts = function(_, opts)
-            local nonels = require "null-ls"
-            opts.sources = {
-                opts.sources,
-                nonels.builtins.formatting.stylua,
-                nonels.builtins.diagnostics.eslint,
-                nonels.builtins.completion.spell,
-                nonels.builtins.code_actions.gitrebase,
-                nonels.builtins.completion.nvim_snippets,
-                nonels.builtins.diagnostics.codespell,
-                nonels.builtins.diagnostics.commitlint,
-                nonels.builtins.diagnostics.commitlint,
-                nonels.builtins.diagnostics.semgrep,
-                nonels.builtins.formatting.prettier,
-                nonels.builtins.formatting.prettierd,
-                nonels.builtins.formatting.rustywind,
-                require "none-ls-shellcheck.diagnostics",
-                require "none-ls-shellcheck.code_actions",
-            }
-            return opts
-        end,
-    },
-    {
         "windwp/nvim-ts-autotag",
         config = function()
             require("nvim-ts-autotag").setup {
@@ -200,6 +202,12 @@ return {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         config = true,
+    },
+    {
+        "stevearc/pair-ls.nvim",
+        config = true,
+        cmd = { "Pair", "PairConnect" },
+        opts = { cmd = { "pair-ls", "lsp" } },
     },
     {
         "nvim-treesitter/nvim-treesitter",
@@ -240,11 +248,48 @@ return {
                 "zig",
             },
             auto_install = true,
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = { "ruby" },
-            },
+            sync_install = true,
             indent = { enable = true },
+            highlight = { enable = true },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    scope_incremental = false,
+                    node_incremental = "<Enter>",
+                    node_decremental = "<Backspace>",
+                    init_selection = "<Enter>", -- set to `false` to disable one of the mappings
+                },
+            },
+        },
+    },
+    {
+        "stevearc/conform.nvim",
+        opts = {
+            notify_no_formatters = true,
+            default_format_opts = {
+                lsp_format = "fallback",
+            },
+            formatters_by_ft = {
+                lua = { "stylua" },
+                -- Conform will run multiple formatters sequentially
+                python = { "isort", "black" },
+                -- You can customize some of the format options for the filetype (:help conform.format)
+                rust = { "rustfmt", lsp_format = "fallback" },
+                -- Conform will run the first available formatter
+                javascript = { "prettierd", "prettier", stop_after_first = true },
+            },
+        },
+        {
+            "nvimdev/lspsaga.nvim",
+            opts = {
+                lightbulb = { enable = false, virtual_text = false },
+                finder = { max_height = 0.8, keys = { vsplit = 'v' } },
+                ui = { enable = false, code_action = '', border = 'rounded' },
+            },
+            dependencies = {
+                "nvim-treesitter/nvim-treesitter", -- optional
+                "nvim-tree/nvim-web-devicons",     -- optional
+            },
         },
     },
 }

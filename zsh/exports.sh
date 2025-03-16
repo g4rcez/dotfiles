@@ -18,6 +18,9 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export LC_COLLATE=C
 export MANPATH="/usr/local/man:$MANPATH"
+export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/libpq/lib/pkgconfig"
 if [ -x "$(command -v colima)" ]; then
     export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
 fi
