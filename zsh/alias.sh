@@ -210,3 +210,7 @@ function karabiner-reset() {
 function jarvis () {
     deno task -q --config $DOTFILES/deno.json dotfiles --config $DOTFILES/dotfiles.config.ts $@
 }
+
+function brewfix() {
+    brew cleanup && rm -f $ZSH_COMPDUMP && omz reload
+}

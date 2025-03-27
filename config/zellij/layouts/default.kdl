@@ -9,7 +9,7 @@ layout {
 
             border_position "top"
 
-            mode_normal        "#[bg=#89b4fa,fg=#1E1E2E]  #[bg=#1E1E2E,fg=#89b4fa]█"
+            mode_normal        "#[bg=#1E1E2E,fg=#89b4fa]  #[bg=#1E1E2E,fg=#1E1E2E]█"
             mode_locked        "#[bg=#6e738d,fg=#1E1E2E]  #[bg=#1E1E2E,fg=#6e738d]█"
             mode_resize        "#[bg=#f38ba8,fg=#1E1E2E]  #[bg=#1E1E2E,fg=#f38ba8]█"
             mode_pane          "#[bg=#89b4fa,fg=#1E1E2E]  #[bg=#1E1E2E,fg=#89b4fa]█"

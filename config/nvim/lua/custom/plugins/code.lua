@@ -1,41 +1,13 @@
 local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" }
 
-function nonelsSetup()
-    return {
-        "nvimtools/none-ls.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "gbprod/none-ls-shellcheck.nvim" },
-        opts = function(_, opts)
-            local nonels = require "null-ls"
-            opts.sources = {
-                opts.sources,
-                nonels.builtins.formatting.stylua,
-                nonels.builtins.diagnostics.eslint,
-                nonels.builtins.completion.spell,
-                nonels.builtins.code_actions.gitrebase,
-                nonels.builtins.completion.nvim_snippets,
-                nonels.builtins.diagnostics.codespell,
-                nonels.builtins.diagnostics.commitlint,
-                nonels.builtins.diagnostics.commitlint,
-                nonels.builtins.diagnostics.semgrep,
-                nonels.builtins.formatting.prettier,
-                nonels.builtins.formatting.prettierd,
-                nonels.builtins.formatting.rustywind,
-                require "none-ls-shellcheck.diagnostics",
-                require "none-ls-shellcheck.code_actions",
-            }
-            return opts
-        end,
-    }
-end
-
 return {
     "mattn/emmet-vim",
     "tpope/vim-sleuth",
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    { "numToStr/Comment.nvim",                       opts = {} },
     "JoosepAlviste/nvim-ts-context-commentstring",
+    { "numToStr/Comment.nvim",                       opts = {} },
     { "nvim-treesitter/nvim-treesitter-textobjects", dependencies = { "nvim-treesitter/nvim-treesitter" } },
     {
         "nvim-treesitter/nvim-treesitter-context",
@@ -79,9 +51,9 @@ return {
         opts = {},
     },
     {
+        "axelvc/template-string.nvim",
         ft = fileTypes,
         event = "InsertEnter",
-        "axelvc/template-string.nvim",
         opts = {
             filetypes = fileTypes,
             remove_template_string = true,
@@ -126,7 +98,7 @@ return {
             enable_hsl = true,
             enable_var_usage = true,
             enable_named_colors = true,
-            enable_tailwind = false,
+            enable_tailwind = true,
             exclude_filetypes = {},
             exclude_buftypes = {},
         },
@@ -154,24 +126,24 @@ return {
                 RRGGBB = true,             -- #RRGGBB hex codes
                 RRGGBBAA = true,           -- #RRGGBBAA hex codes
                 AARRGGBB = true,           -- 0xAARRGGBB hex codes
-                rgb_fn = false,            -- CSS rgb() and rgba() functions
-                hsl_fn = false,            -- CSS hsl() and hsla() functions
+                rgb_fn = true,             -- CSS rgb() and rgba() functions
+                hsl_fn = true,             -- CSS hsl() and hsla() functions
                 css = true,                -- Enable all CSS *features*:
                 -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
                 css_fn = true,             -- Enable all CSS *functions*: rgb_fn, hsl_fn
                 -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-                tailwind = true,           -- Enable tailwind colors
+                tailwind = 'both',         -- Enable tailwind colors
                 tailwind_opts = {          -- Options for highlighting tailwind names
                     update_names = "both", -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
                 },
                 -- parsers can contain values used in `user_default_options`
-                sass = { enable = false, parsers = { "css" } }, -- Enable sass colors
+                sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
                 -- Highlighting mode.  'background'|'foreground'|'virtualtext'
-                mode = "background",                            -- Set the display mode
+                mode = "virtualtext",                          -- Set the display mode
                 -- Virtualtext character to use
                 virtualtext = "■",
                 -- Display virtualtext inline with color.  boolean|'before'|'after'.  True sets to 'after'
-                virtualtext_inline = true,
+                virtualtext_inline = 'before',
                 -- Virtualtext highlight mode: 'background'|'foreground'
                 virtualtext_mode = "foreground",
                 -- update color values even if buffer is not focused
@@ -190,7 +162,6 @@ return {
         config = function()
             require("nvim-ts-autotag").setup {
                 opts = {
-                    -- Defaults
                     enable_close = true,          -- Auto close tags
                     enable_rename = true,         -- Auto rename pairs of tags
                     enable_close_on_slash = true, -- Auto close on trailing </

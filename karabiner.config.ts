@@ -52,7 +52,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         backslash: karabiner.rectangle("top-right"),
         close_bracket: karabiner.rectangle("top-left"),
     },
-    c: {
+    s: {
         hold: true,
         description: "System layer",
         j: {
@@ -166,7 +166,6 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         w: karabiner.app("Webstorm"),
         b: karabiner.browser("Default", "Open default profile"),
     },
-    i: {},
 });
 
 const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [

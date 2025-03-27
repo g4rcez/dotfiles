@@ -127,7 +127,7 @@ return {
                 },
                 lualine_c = { "filename" },
                 lualine_x = { "encoding", "fileformat", "filetype", "branch" },
-                lualine_y = { "progress" },
+                lualine_y = { "" },
                 lualine_z = { "location" },
             },
         },

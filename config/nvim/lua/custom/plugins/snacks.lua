@@ -35,9 +35,9 @@ return {
                     preview = true,
                     cycle = true,
                     box = "horizontal",
-                    width = 0.9,
+                    width = 1,
                     min_width = 120,
-                    height = 0.9,
+                    height = 1,
                 },
             },
         },
@@ -52,13 +52,12 @@ return {
                             backdrop = true,
                             row = 2,
                             preview = true,
-                            width = 0.9,
+                            width = 1,
                             height = 1,
                         },
                         matcher = {
                             cwd_bonus = true,
                             frecency = true,
-                            sort_empty = false,
                         },
                     }
                 end,
@@ -501,7 +500,7 @@ return {
             {
                 "]]",
                 function()
-                   Snacks.words.jump(vim.v.count1)
+                    Snacks.words.jump(vim.v.count1)
                 end,
                 desc = "Next Reference",
                 mode = { "n", "t" },

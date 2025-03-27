@@ -3,7 +3,6 @@ return {
         "folke/flash.nvim",
         event = "VeryLazy",
         ---@type Flash.Config
-        opts = {},
         keys = {
             {
                 "s",
@@ -22,10 +21,6 @@ return {
                 desc = "Flash Treesitter",
             },
         },
-    },
-    {
-        "folke/flash.nvim",
-        optional = true,
         specs = {
             {
                 "folke/snacks.nvim",

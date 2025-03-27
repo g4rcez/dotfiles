@@ -53,7 +53,7 @@ unset git_version
 ## alias
 alias pushf="git push --force-with-lease"
 alias add='git add'
-alias checkout='git checkout'
+alias checkout='git switch'
 alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'

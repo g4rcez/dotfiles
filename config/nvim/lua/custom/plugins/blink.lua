@@ -92,22 +92,15 @@ return {
                                         :totable()
                                 end,
                             },
-                        },
-                        omni = {
-                            name = "Omni",
-                            module = "blink.cmp.sources.omni",
-                            opts = {
-                                disable_omnifuncs = { "v:lua.vim.lsp.omnifunc" },
-                            },
-                        },
-                    },
+                        }
+                    }
                 },
                 completion = {
                     accept = {
                         auto_brackets = { enabled = true }
                     },
                     keyword = { range = "full" },
-                    ghost_text = { enabled = true },
+                    ghost_text = { enabled = false },
                     documentation = {
                         auto_show = true,
                         auto_show_delay_ms = 200,

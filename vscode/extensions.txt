@@ -1,4 +1,3 @@
-asvetliakov.vscode-neovim
 bradlc.vscode-tailwindcss
 catppuccin.catppuccin-vsc
 dbaeumer.vscode-eslint

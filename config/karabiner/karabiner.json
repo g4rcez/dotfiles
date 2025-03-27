@@ -320,7 +320,7 @@
                 ]
               },
               {
-                "description": "Caps Lock -> Hyper Key(c_single)",
+                "description": "Caps Lock -> Hyper Key(s_single)",
                 "type": "basic",
                 "to_if_alone": [
                   {
@@ -347,7 +347,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -367,13 +367,13 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ]
               },
               {
-                "description": "Caps Lock -> Hyper Key(c_single)",
+                "description": "Caps Lock -> Hyper Key(s_single)",
                 "type": "basic",
                 "to_if_alone": [
                   {
@@ -400,7 +400,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_HOLD",
+                      "name": "VIM_MODE_s_HOLD",
                       "value": "off"
                     }
                   },
@@ -420,7 +420,7 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ]
@@ -845,112 +845,6 @@
                   {
                     "type": "variable_if",
                     "name": "VIM_MODE_o_HOLD",
-                    "value": "on"
-                  }
-                ]
-              },
-              {
-                "description": "Caps Lock -> Hyper Key(i_single)",
-                "type": "basic",
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_i_SINGLE",
-                    "value": "on"
-                  }
-                ]
-              },
-              {
-                "description": "Caps Lock -> Hyper Key(i_single)",
-                "type": "basic",
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_HOLD",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 0
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_i_HOLD",
                     "value": "on"
                   }
                 ]
@@ -3053,13 +2947,13 @@
             ]
           },
           {
-            "description": "disable single - leader c",
+            "description": "disable single - leader s",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   },
                   {
@@ -3068,9 +2962,9 @@
                     "value": 1
                   }
                 ],
-                "description": "disable_single_leader_key_c",
+                "description": "disable_single_leader_key_s",
                 "from": {
-                  "key_code": "c",
+                  "key_code": "s",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3081,7 +2975,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3097,14 +2991,14 @@
             ]
           },
           {
-            "description": "esc disable single - leader c",
+            "description": "esc disable single - leader s",
             "manipulators": [
               {
-                "description": "esc_disable_single_leader_key_c",
+                "description": "esc_disable_single_leader_key_s",
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   },
                   {
@@ -3128,7 +3022,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   }
@@ -3138,13 +3032,13 @@
             ]
           },
           {
-            "description": "disable holder - leader c",
+            "description": "disable holder - leader s",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   },
                   {
@@ -3153,9 +3047,9 @@
                     "value": 1
                   }
                 ],
-                "description": "disable_leader_key_c",
+                "description": "disable_leader_key_s",
                 "from": {
-                  "key_code": "c",
+                  "key_code": "s",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3166,7 +3060,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_HOLD",
+                      "name": "VIM_MODE_s_HOLD",
                       "value": "off"
                     }
                   },
@@ -3182,7 +3076,7 @@
             ]
           },
           {
-            "description": "leader c",
+            "description": "leader s",
             "manipulators": [
               {
                 "conditions": [
@@ -3192,9 +3086,9 @@
                     "value": 1
                   }
                 ],
-                "description": "leader_key_c",
+                "description": "leader_key_s",
                 "from": {
-                  "key_code": "c",
+                  "key_code": "s",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -3205,14 +3099,14 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_HOLD",
+                      "name": "VIM_MODE_s_HOLD",
                       "value": "on"
                     }
                   },
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"c\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Layer \"s\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -3220,14 +3114,14 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_HOLD",
+                      "name": "VIM_MODE_s_HOLD",
                       "value": "on"
                     }
                   },
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"c\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Persistent mode - Layer \"s\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -3236,17 +3130,17 @@
             ]
           },
           {
-            "description": "leader + c + j - Decrement brightness",
+            "description": "leader + s + j - Decrement brightness",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + j - Decrement brightness",
+                "description": "leader + s + j - Decrement brightness",
                 "from": {
                   "key_code": "j"
                 },
@@ -3257,7 +3151,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3274,11 +3168,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + j - Decrement brightness",
+                "description": "leader + s + j - Decrement brightness",
                 "from": {
                   "key_code": "j"
                 },
@@ -3292,17 +3186,17 @@
             ]
           },
           {
-            "description": "leader + c + k - Increment brightness",
+            "description": "leader + s + k - Increment brightness",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + k - Increment brightness",
+                "description": "leader + s + k - Increment brightness",
                 "from": {
                   "key_code": "k"
                 },
@@ -3313,7 +3207,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3330,11 +3224,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + k - Increment brightness",
+                "description": "leader + s + k - Increment brightness",
                 "from": {
                   "key_code": "k"
                 },
@@ -3348,17 +3242,17 @@
             ]
           },
           {
-            "description": "leader + c + n - Clear notifications",
+            "description": "leader + s + n - Clear notifications",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + n - Clear notifications",
+                "description": "leader + s + n - Clear notifications",
                 "from": {
                   "key_code": "n"
                 },
@@ -3369,7 +3263,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3386,11 +3280,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + n - Clear notifications",
+                "description": "leader + s + n - Clear notifications",
                 "from": {
                   "key_code": "n"
                 },
@@ -3404,17 +3298,17 @@
             ]
           },
           {
-            "description": "leader + c + hyphen - Decrease volume",
+            "description": "leader + s + hyphen - Decrease volume",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + hyphen - Decrease volume",
+                "description": "leader + s + hyphen - Decrease volume",
                 "from": {
                   "key_code": "hyphen"
                 },
@@ -3425,7 +3319,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3442,11 +3336,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + hyphen - Decrease volume",
+                "description": "leader + s + hyphen - Decrease volume",
                 "from": {
                   "key_code": "hyphen"
                 },
@@ -3460,17 +3354,17 @@
             ]
           },
           {
-            "description": "leader + c + equal_sign - Increase volume",
+            "description": "leader + s + equal_sign - Increase volume",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + equal_sign - Increase volume",
+                "description": "leader + s + equal_sign - Increase volume",
                 "from": {
                   "key_code": "equal_sign"
                 },
@@ -3481,7 +3375,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3498,11 +3392,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + equal_sign - Increase volume",
+                "description": "leader + s + equal_sign - Increase volume",
                 "from": {
                   "key_code": "equal_sign"
                 },
@@ -3516,17 +3410,17 @@
             ]
           },
           {
-            "description": "leader + c + p - Toggle play or pause",
+            "description": "leader + s + p - Toggle play or pause",
             "manipulators": [
               {
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_SINGLE",
+                    "name": "VIM_MODE_s_SINGLE",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + p - Toggle play or pause",
+                "description": "leader + s + p - Toggle play or pause",
                 "from": {
                   "key_code": "p"
                 },
@@ -3537,7 +3431,7 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_c_SINGLE",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "off"
                     }
                   },
@@ -3554,11 +3448,11 @@
                 "conditions": [
                   {
                     "type": "variable_if",
-                    "name": "VIM_MODE_c_HOLD",
+                    "name": "VIM_MODE_s_HOLD",
                     "value": "on"
                   }
                 ],
-                "description": "leader + c + p - Toggle play or pause",
+                "description": "leader + s + p - Toggle play or pause",
                 "from": {
                   "key_code": "p"
                 },
@@ -5777,189 +5671,6 @@
                 "to": [
                   {
                     "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "disable single - leader i",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_i_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_single_leader_key_i",
-                "from": {
-                  "key_code": "i",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "esc disable single - leader i",
-            "manipulators": [
-              {
-                "description": "esc_disable_single_leader_key_i",
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_i_SINGLE",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 0
-                  }
-                ],
-                "from": {
-                  "key_code": "escape",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ],
-                    "mandatory": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_SINGLE",
-                      "value": "off"
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "disable holder - leader i",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_i_HOLD",
-                    "value": "on"
-                  },
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "disable_leader_key_i",
-                "from": {
-                  "key_code": "i",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_HOLD",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader i",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper",
-                    "value": 1
-                  }
-                ],
-                "description": "leader_key_i",
-                "from": {
-                  "key_code": "i",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to_if_alone": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_SINGLE",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"i\" \n\n"
-                    }
-                  }
-                ],
-                "to_if_held_down": [
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_i_HOLD",
-                      "value": "on"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"i\" \n\n"
-                    }
                   }
                 ],
                 "type": "basic"

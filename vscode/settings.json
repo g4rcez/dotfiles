@@ -16,7 +16,7 @@
     "editor.hideCursorInOverviewRuler": true,
     "editor.lineNumbers": "relative",
     "editor.linkedEditing": true,
-    "editor.minimap.enabled": false,
+    "editor.minimap.enabled": true,
     "editor.renderLineHighlightOnlyWhenFocus": true,
     "editor.scrollBeyondLastLine": false,
     "editor.smoothScrolling": true,

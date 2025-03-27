@@ -35,6 +35,7 @@ return {
                 wk.add { "<leader>u", group = "[u]i", mode = { "n" }, icon = "󱣴" }
                 wk.add { "<leader>r", group = "[r]eplace", mode = { "n" }, icon = "" }
                 wk.add { "<leader>x", group = "[x]errors", mode = { "n" }, icon = "" }
+                wk.add { "<leader>n", group = "[n]ew cursor", mode = { "n" }, icon = "" }
             end
 
             local key = {
@@ -124,41 +125,15 @@ return {
                 end
                 key.normal("<leader>hh", function()
                     h.ui:toggle_quick_menu(h:list())
-                end, {
-                    desc = "Quick harpoon",
-                })
+                end, { desc = "Quick harpoon", })
+
                 key.normal("<C-e>", function()
                     h.ui:toggle_quick_menu(h:list())
-                end, {
-                    desc = "Quick harpoon",
-                })
+                end, { desc = "Quick harpoon" })
+
                 key.normal("<leader>ha", function()
                     h:list():add()
-                end, {
-                    desc = "Harpoon add",
-                })
-                key.normal("<leader>ga", function()
-                    Snacks.toggle {
-                        name = "Git Signs",
-                        get = function()
-                            return require("gitsigns.config").config.signcolumn
-                        end,
-                        set = function(state)
-                            require("gitsigns").toggle_signs(state)
-                        end,
-                    }
-                end, { desc = "Git signs" })
-                key.normal("<leader>up", function()
-                    Snacks.toggle {
-                        name = "Mini Pairs",
-                        get = function()
-                            return not vim.g.minipairs_disable
-                        end,
-                        set = function(state)
-                            vim.g.minipairs_disable = not state
-                        end,
-                    }
-                end, { desc = "Snacks mini pairs" })
+                end, { desc = "Harpoon add" })
 
                 key.normal("<leader>hf", function()
                     Snacks.picker {
@@ -183,7 +158,7 @@ return {
                             end,
                         },
                     }
-                end, { desc = "harpoon delete" })
+                end, { desc = "harpoon find" })
             end
 
             local function code()
@@ -197,7 +172,6 @@ return {
                     function() require("conform").format { async = true, lsp_format = "fallback" } end,
                     { desc = "[c]ode [f]ormat" })
                 key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
-                key.normal("<leader>cF", "<cmd>Lspsaga finder<CR>", { desc = "[c]ode [F]inder (lspsaga)" })
                 key.normal('K', '<cmd>Lspsaga hover_doc<cr>', { desc = "Lspsaga hover_doc" })
                 key.normal("<leader>cF", function()
                     require("aerial").snacks_picker {

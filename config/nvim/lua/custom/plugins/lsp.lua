@@ -1,11 +1,6 @@
 return {
     "kabouzeid/nvim-lspinstall",
     {
-        "pmizio/typescript-tools.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        opts = {},
-    },
-    {
         "b0o/schemastore.nvim",
         config = function()
             local schemas = require "schemastore"
@@ -35,14 +30,13 @@ return {
     {
         "williamboman/mason.nvim",
         opts = {
-            ensure_installed = { "markdown-toc" }
+            ensure_installed = { "markdown-toc", "harper-ls" }
         }
     },
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            "pmizio/typescript-tools.nvim",
             { "j-hui/fidget.nvim", opts = {} },
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -57,7 +51,6 @@ return {
                     end
                     map("<leader>ca", vim.lsp.buf.code_action, "[c]ode [a]ction", { "n", "x" })
                     map("gD", vim.lsp.buf.declaration, "[g]oto [d]eclaration")
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
                 end,
             })
             -- Diagnostic Config
@@ -99,10 +92,11 @@ return {
                 dockerls = {},
                 marksman = {},
                 postgres_lsp = {},
+                docker_compose_language_service = {},
                 ts_ls = { enabled = false },
                 tsserver = { enabled = false },
-                docker_compose_language_service = {},
                 vtsls = {
+                    root_dir = lspconfig.util.root_pattern("package.json"),
                     filetypes = {
                         "javascript",
                         "javascriptreact",
@@ -154,11 +148,12 @@ return {
                             validate = true,
                             classAttributes = {
                                 "class",
-                                "container",
-                                "className",
-                                "class:list",
-                                "classList",
                                 "ngClass",
+                                "classList",
+                                "className",
+                                "container",
+                                "class:list",
+                                "containerClassName",
                             },
                         },
                     },
@@ -173,19 +168,34 @@ return {
                     },
                 },
             }
-            require("typescript-tools").setup {
+            require('lspconfig').harper_ls.setup {
                 settings = {
-                    complete_function_calls = true,
-                    separate_diagnostic_server = true,
-                    tsserver_file_preferences = {
-                        includeInlayParameterNameHints = "all",
-                        includeCompletionsForModuleExports = true,
-                    },
-                    tsserver_format_options = {
-                        allowIncompleteCompletions = false,
-                        allowRenameOfImportPath = false,
-                    },
-                },
+                    ["harper-ls"] = {
+                        userDictPath = "",
+                        fileDictPath = "",
+                        linters = {
+                            SpellCheck = true,
+                            SpelledNumbers = false,
+                            AnA = true,
+                            SentenceCapitalization = true,
+                            UnclosedQuotes = true,
+                            WrongQuotes = false,
+                            LongSentences = true,
+                            RepeatedWords = true,
+                            Spaces = true,
+                            Matcher = true,
+                            CorrectNumberSuffix = true
+                        },
+                        codeActions = {
+                            ForceStable = false
+                        },
+                        markdown = {
+                            IgnoreLinkTitle = false
+                        },
+                        diagnosticSeverity = "hint",
+                        isolateEnglish = false
+                    }
+                }
             }
             require("mason-tool-installer").setup { ensure_installed = servers }
             require("mason-lspconfig").setup {
@@ -203,32 +213,18 @@ return {
                 end
                 local client = vim.lsp.get_client_by_id(ctx.client_id)
                 assert(client)
-                local has_telescope = pcall(require, "telescope")
-                if vim.islist(result) then
-                    if all_locations_equal(result) then
-                        pcall(vim.lsp.util.jump_to_location, result[1], client.offset_encoding, false)
-                    else
-                        vim.fn.setloclist(0, {}, " ", {
-                            title = "LSP locations",
-                            items = vim.lsp.util.locations_to_items(result, client.offset_encoding),
-                        })
-                        vim.cmd.lopen()
-                    end
-                else
-                    vim.lsp.util.jump_to_location(result, client.offset_encoding)
-                end
+                vim.lsp.util.jump_to_location(result, client.offset_encoding)
             end
             vim.lsp.handlers["textDocument/declaration"] = location_handler
             vim.lsp.handlers["textDocument/definition"] = location_handler
             vim.lsp.handlers["textDocument/typeDefinition"] = location_handler
             vim.lsp.handlers["textDocument/implementation"] = location_handler
-
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
             vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
                 { border = "rounded" })
             vim.api.nvim_create_autocmd("BufWritePre", {
                 pattern = { "*.zig", "*.zon" },
-                callback = function(ev)
+                callback = function()
                     vim.lsp.buf.code_action {
                         context = { only = { "source.organizeImports" } },
                         apply = true,
