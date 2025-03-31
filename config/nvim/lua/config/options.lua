@@ -66,3 +66,4 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+

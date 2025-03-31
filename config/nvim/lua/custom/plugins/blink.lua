@@ -4,12 +4,11 @@ return {
         {
             "saghen/blink.cmp",
             dependencies = { "rafamadriz/friendly-snippets", "nvim-lua/plenary.nvim" },
-            version = "*",
             ---@module 'blink.cmp'
             ---@type blink.cmp.Config
             opts = {
                 keymap = {
-                    preset = "super-tab",
+                    preset = "enter",
                     ["<CR>"] = { "accept", "fallback" },
                     ["<C-k>"] = { "select_prev", "fallback" },
                     ["<C-j>"] = { "select_next", "fallback" },
@@ -19,15 +18,14 @@ return {
                         end,
                     },
                 },
-                appearance = {
-                    nerd_font_variant = "mono",
-                    use_nvim_cmp_as_default = false,
+                fuzzy = {
+                    use_frecency = true,
+                    use_proximity = true,
+                    implementation = 'lua',
+                    sorts = { "exact", "score", "sort_text" },
                 },
-                cmdline = {
-                    keymap = {
-                        preset = "default",
-                    },
-                },
+                appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = false },
+                cmdline = { keymap = { preset = "default" } },
                 sources = {
                     default = { "lsp", "lazydev", "path", "snippets", "buffer" },
                     providers = {
@@ -92,119 +90,52 @@ return {
                                         :totable()
                                 end,
                             },
-                        }
-                    }
+                        },
+                    },
                 },
                 completion = {
-                    accept = {
-                        auto_brackets = { enabled = true }
-                    },
                     keyword = { range = "full" },
-                    ghost_text = { enabled = false },
+                    ghost_text = {
+                        enabled = true,
+                        show_with_menu = true,
+                        show_without_menu = true,
+                        show_with_selection = true,
+                        show_without_selection = false,
+                    },
+                    accept = {
+                        auto_brackets = {
+                            enabled = true,
+                            kind_resolution = { enabled = true },
+                            semantic_token_resolution = { enabled = true, timeout_ms = 400 }
+                        },
+                    },
                     documentation = {
                         auto_show = true,
                         auto_show_delay_ms = 200,
+                        update_delay_ms = 100,
                         window = { border = "rounded" },
                         treesitter_highlighting = true,
                     },
                     menu = {
                         border = "rounded",
-                        draw = {
-                            padding = 1,
-                            gap = 1,
-                            treesitter = { 'lsp' },
-                            columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
-                            components = {
-                                kind_icon = {
-                                    ellipsis = false,
-                                    text = function(ctx)
-                                        return ctx.kind_icon .. ctx.icon_gap
-                                    end,
-                                    highlight = function(ctx)
-                                        local success, module = pcall(require,
-                                            "blink.cmp.completion.windows.render.tailwind")
-                                        local h = "BlinkCmpKind" .. ctx.kind
-                                        if not success then
-                                            return h
-                                        end
-                                        return module.get_hl(ctx) or h
-                                    end,
-                                },
-                                kind = {
-                                    ellipsis = false,
-                                    width = { fill = true },
-                                    text = function(ctx)
-                                        return ctx.kind
-                                    end,
-                                    highlight = function(ctx)
-                                        local success, module = pcall(require,
-                                            "blink.cmp.completion.windows.render.tailwind")
-                                        local h = "BlinkCmpKind" .. ctx.kind
-                                        if not success then
-                                            return h
-                                        end
-                                        return module.get_hl(ctx) or h
-                                    end
-                                },
-                                label = {
-                                    width = { fill = true, max = 60 },
-                                    text = function(ctx)
-                                        return ctx.label .. ctx.label_detail
-                                    end,
-                                    highlight = function(ctx)
-                                        local highlights = {
-                                            {
-                                                0,
-                                                #ctx.label,
-                                                group = ctx.deprecated and "BlinkCmpLabelDeprecated" or "BlinkCmpLabel",
-                                            },
-                                        }
-                                        if ctx.label_detail then
-                                            table.insert(highlights, {
-                                                #ctx.label,
-                                                #ctx.label + #ctx.label_detail,
-                                                group = "BlinkCmpLabelDetail",
-                                            })
-                                        end
-                                        for _, idx in ipairs(ctx.label_matched_indices) do
-                                            table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
-                                        end
-                                        return highlights
-                                    end,
-                                },
-
-                                label_description = {
-                                    width = { max = 30 },
-                                    text = function(ctx)
-                                        return ctx.label_description
-                                    end,
-                                    highlight = "BlinkCmpLabelDescription",
-                                },
-                                source_name = {
-                                    width = { max = 30 },
-                                    text = function(ctx)
-                                        return ctx.source_name
-                                    end,
-                                    highlight = "BlinkCmpSource",
-                                },
-                            },
-                        },
-                    },
+                        auto_show = false,
+                        draw = { treesitter = { "lsp" } }
+                    }
                 },
                 signature = {
                     enabled = true,
                     window = { border = "rounded" },
                     trigger = {
                         enabled = true,
+                        show_on_insert = false,
                         show_on_keyword = true,
                         blocked_trigger_characters = {},
-                        blocked_retrigger_characters = {},
                         show_on_trigger_character = true,
-                        show_on_insert = false,
+                        blocked_retrigger_characters = {},
                         show_on_insert_on_trigger_character = true,
-                    },
-                },
-            },
-        },
+                    }
+                }
+            }
+        }
     }
 }

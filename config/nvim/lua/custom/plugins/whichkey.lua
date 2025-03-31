@@ -82,7 +82,6 @@ return {
                 key.normal(">", ">>", { desc = "Indent" })
                 key.normal("<", "<<", { desc = "Deindent" })
                 key.normal("vv", "V", { desc = "Select line" })
-                key.normal(";", ":", DEFAULT_OPTS)
                 key.normal("j", "gj", DEFAULT_OPTS)
                 key.normal("k", "gk", DEFAULT_OPTS)
                 key.visual("<", "<gv", DEFAULT_OPTS)

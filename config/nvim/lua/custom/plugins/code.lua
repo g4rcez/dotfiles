@@ -7,22 +7,22 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
     "JoosepAlviste/nvim-ts-context-commentstring",
-    { "numToStr/Comment.nvim",                       opts = {} },
+    { "numToStr/Comment.nvim", opts = {} },
     { "nvim-treesitter/nvim-treesitter-textobjects", dependencies = { "nvim-treesitter/nvim-treesitter" } },
     {
         "nvim-treesitter/nvim-treesitter-context",
         opts = {
-            enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
-            multiwindow = false,      -- Enable multiwindow support.
-            max_lines = 2,            -- How many lines the window should span. Values <= 0 mean no limit.
-            min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+            enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+            multiwindow = false, -- Enable multiwindow support.
+            max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
+            min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
             line_numbers = true,
             multiline_threshold = 20, -- Maximum number of lines to show for a single context
-            trim_scope = "outer",     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-            mode = "cursor",          -- Line used to calculate context. Choices: 'cursor', 'topline'
+            trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+            mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
             separator = nil,
-            zindex = 20,              -- The Z-index of the context window
-            on_attach = nil,          -- (fun(buf: integer): boolean) return false to disable attaching
+            zindex = 20, -- The Z-index of the context window
+            on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
         },
     },
     {
@@ -107,43 +107,43 @@ return {
         "catgoose/nvim-colorizer.lua",
         event = "BufReadPre",
         opts = {
-            filetypes = { "*" },          -- Filetype options.  Accepts table like `user_default_options`
-            buftypes = {},                -- Buftype options.  Accepts table like `user_default_options`
-            user_commands = true,         -- Enable all or some usercommands
-            lazy_load = false,            -- Lazily schedule buffer highlighting setup function
+            filetypes = { "*" }, -- Filetype options.  Accepts table like `user_default_options`
+            buftypes = {}, -- Buftype options.  Accepts table like `user_default_options`
+            user_commands = true, -- Enable all or some usercommands
+            lazy_load = false, -- Lazily schedule buffer highlighting setup function
             user_default_options = {
-                names = true,             -- "Name" codes like Blue or red.  Added from `vim.api.nvim_get_color_map()`
-                names_opts = {            -- options for mutating/filtering names.
-                    lowercase = true,     -- name:lower(), highlight `blue` and `red`
-                    camelcase = true,     -- name, highlight `Blue` and `Red`
-                    uppercase = true,     -- name:upper(), highlight `BLUE` and `RED`
+                names = true, -- "Name" codes like Blue or red.  Added from `vim.api.nvim_get_color_map()`
+                names_opts = { -- options for mutating/filtering names.
+                    lowercase = true, -- name:lower(), highlight `blue` and `red`
+                    camelcase = true, -- name, highlight `Blue` and `Red`
+                    uppercase = true, -- name:upper(), highlight `BLUE` and `RED`
                     strip_digits = false, -- ignore names with digits,
                     -- highlight `blue` and `red`, but not `blue3` and `red4`
                 },
                 names_custom = false,
-                RGB = true,                -- #RGB hex codes
-                RGBA = true,               -- #RGBA hex codes
-                RRGGBB = true,             -- #RRGGBB hex codes
-                RRGGBBAA = true,           -- #RRGGBBAA hex codes
-                AARRGGBB = true,           -- 0xAARRGGBB hex codes
-                rgb_fn = true,             -- CSS rgb() and rgba() functions
-                hsl_fn = true,             -- CSS hsl() and hsla() functions
-                css = true,                -- Enable all CSS *features*:
+                RGB = true, -- #RGB hex codes
+                RGBA = true, -- #RGBA hex codes
+                RRGGBB = true, -- #RRGGBB hex codes
+                RRGGBBAA = true, -- #RRGGBBAA hex codes
+                AARRGGBB = true, -- 0xAARRGGBB hex codes
+                rgb_fn = true, -- CSS rgb() and rgba() functions
+                hsl_fn = true, -- CSS hsl() and hsla() functions
+                css = true, -- Enable all CSS *features*:
                 -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
-                css_fn = true,             -- Enable all CSS *functions*: rgb_fn, hsl_fn
+                css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
                 -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-                tailwind = 'both',         -- Enable tailwind colors
-                tailwind_opts = {          -- Options for highlighting tailwind names
+                tailwind = "both", -- Enable tailwind colors
+                tailwind_opts = { -- Options for highlighting tailwind names
                     update_names = "both", -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
                 },
                 -- parsers can contain values used in `user_default_options`
                 sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
                 -- Highlighting mode.  'background'|'foreground'|'virtualtext'
-                mode = "virtualtext",                          -- Set the display mode
+                mode = "virtualtext", -- Set the display mode
                 -- Virtualtext character to use
                 virtualtext = "■",
                 -- Display virtualtext inline with color.  boolean|'before'|'after'.  True sets to 'after'
-                virtualtext_inline = 'before',
+                virtualtext_inline = "before",
                 -- Virtualtext highlight mode: 'background'|'foreground'
                 virtualtext_mode = "foreground",
                 -- update color values even if buffer is not focused
@@ -162,8 +162,8 @@ return {
         config = function()
             require("nvim-ts-autotag").setup {
                 opts = {
-                    enable_close = true,          -- Auto close tags
-                    enable_rename = true,         -- Auto rename pairs of tags
+                    enable_close = true, -- Auto close tags
+                    enable_rename = true, -- Auto rename pairs of tags
                     enable_close_on_slash = true, -- Auto close on trailing </
                 },
             }
@@ -235,32 +235,110 @@ return {
     },
     {
         "stevearc/conform.nvim",
-        opts = {
-            notify_no_formatters = true,
-            default_format_opts = {
+        event = { "BufReadPre", "BufNewFile" },
+        opts = function(_, opts)
+            local ts = { "prettierd", "prettier", stop_after_first = true }
+            opts.notify_no_formatters = true
+            opts.default_format_opts = {
                 lsp_format = "fallback",
-            },
-            formatters_by_ft = {
+            }
+            opts.formatters_by_ft = {
                 lua = { "stylua" },
                 -- Conform will run multiple formatters sequentially
                 python = { "isort", "black" },
                 -- You can customize some of the format options for the filetype (:help conform.format)
                 rust = { "rustfmt", lsp_format = "fallback" },
                 -- Conform will run the first available formatter
-                javascript = { "prettierd", "prettier", stop_after_first = true },
+                css = ts,
+                html = ts,
+                json = ts,
+                yaml = ts,
+                svelte = ts,
+                graphql = ts,
+                markdown = ts,
+                javascript = ts,
+                typescript = ts,
+                javascriptreact = ts,
+                typescriptreact = ts,
+            }
+            return opts
+        end,
+    },
+    {
+        "nvimdev/lspsaga.nvim",
+        opts = {
+            lightbulb = { enable = false, virtual_text = false },
+            finder = { max_height = 0.8, keys = { vsplit = "v" } },
+            ui = { enable = false, code_action = "", border = "rounded" },
+        },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter", -- optional
+            "nvim-tree/nvim-web-devicons", -- optional
+        },
+    },
+    {
+        enabled = false,
+        "mfussenegger/nvim-lint",
+        event = { "BufReadPre", "BufNewFile" },
+        opts = {
+            events = { "BufWritePost", "BufReadPost", "InsertLeave" },
+            linters = {},
+            linters_by_ft = {
+                javascript = { "eslint_d" },
+                typescript = { "eslint_d" },
+                javascriptreact = { "eslint_d" },
+                typescriptreact = { "eslint_d" },
             },
         },
-        {
-            "nvimdev/lspsaga.nvim",
-            opts = {
-                lightbulb = { enable = false, virtual_text = false },
-                finder = { max_height = 0.8, keys = { vsplit = 'v' } },
-                ui = { enable = false, code_action = '', border = 'rounded' },
-            },
-            dependencies = {
-                "nvim-treesitter/nvim-treesitter", -- optional
-                "nvim-tree/nvim-web-devicons",     -- optional
-            },
-        },
+        config = function(_, opts)
+            local M = {}
+            local lint = require "lint"
+            for name, linter in pairs(opts.linters) do
+                if type(linter) == "table" and type(lint.linters[name]) == "table" then
+                    lint.linters[name] = vim.tbl_deep_extend("force", lint.linters[name], linter)
+                    if type(linter.prepend_args) == "table" then
+                        lint.linters[name].args = lint.linters[name].args or {}
+                        vim.list_extend(lint.linters[name].args, linter.prepend_args)
+                    end
+                else
+                    lint.linters[name] = linter
+                end
+            end
+            lint.linters_by_ft = opts.linters_by_ft
+            function M.debounce(ms, fn)
+                local timer = vim.uv.new_timer()
+                return function(...)
+                    local argv = { ... }
+                    timer:start(ms, 0, function()
+                        timer:stop()
+                        vim.schedule_wrap(fn)(unpack(argv))
+                    end)
+                end
+            end
+            function M.lint()
+                local names = lint._resolve_linter_by_ft(vim.bo.filetype)
+                names = vim.list_extend({}, names)
+                if #names == 0 then
+                    vim.list_extend(names, lint.linters_by_ft["_"] or {})
+                end
+                vim.list_extend(names, lint.linters_by_ft["*"] or {})
+                local ctx = { filename = vim.api.nvim_buf_get_name(0) }
+                ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
+                names = vim.tbl_filter(function(name)
+                    local linter = lint.linters[name]
+                    if not linter then
+                        LazyVim.warn("Linter not found: " .. name, { title = "nvim-lint" })
+                    end
+                    return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
+                end, names)
+                if #names > 0 then
+                    lint.try_lint(names)
+                end
+            end
+            vim.api.nvim_create_autocmd(opts.events, {
+                group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+                callback = M.debounce(100, M.lint),
+            })
+        end,
     },
 }

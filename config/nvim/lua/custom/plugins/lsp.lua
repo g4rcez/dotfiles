@@ -1,24 +1,6 @@
 return {
     "kabouzeid/nvim-lspinstall",
     {
-        "b0o/schemastore.nvim",
-        config = function()
-            local schemas = require "schemastore"
-            require("lspconfig").jsonls.setup {
-                settings = {
-                    yaml = {
-                        schemas = schemas.yaml.schemas(),
-                        validate = { enable = true },
-                    },
-                    json = {
-                        schemas = schemas.json.schemas(),
-                        validate = { enable = true },
-                    },
-                },
-            }
-        end,
-    },
-    {
         "folke/lazydev.nvim",
         ft = "lua",
         opts = {
@@ -30,13 +12,28 @@ return {
     {
         "williamboman/mason.nvim",
         opts = {
-            ensure_installed = { "markdown-toc", "harper-ls" }
-        }
+            ensure_installed = {
+                "markdown-toc",
+                "harper-ls",
+                "prettier",
+                "stylua",
+                "isort",
+                "black",
+                "pylint",
+                "eslint_d",
+            },
+        },
+    },
+    {
+        "vuki656/package-info.nvim",
+        dependencies = { "MunifTanjim/nui.nvim" },
+        opts = {},
+        event = "BufRead package.json",
     },
     {
         "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
         dependencies = {
+            "b0o/schemastore.nvim",
             { "j-hui/fidget.nvim", opts = {} },
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -53,8 +50,6 @@ return {
                     map("gD", vim.lsp.buf.declaration, "[g]oto [d]eclaration")
                 end,
             })
-            -- Diagnostic Config
-            -- See :help vim.diagnostic.Opts
             vim.diagnostic.config {
                 severity_sort = true,
                 float = { border = "rounded", source = "if_many" },
@@ -87,7 +82,12 @@ return {
                 html = {},
                 cssls = {},
                 bashls = {},
-                eslint = {},
+                eslint = {
+                    settings = {
+                        format = true,
+                        workingDirectories = { mode = "auto" },
+                    },
+                },
                 stylua = {},
                 dockerls = {},
                 marksman = {},
@@ -96,7 +96,7 @@ return {
                 ts_ls = { enabled = false },
                 tsserver = { enabled = false },
                 vtsls = {
-                    root_dir = lspconfig.util.root_pattern("package.json"),
+                    root_dir = lspconfig.util.root_pattern "package.json",
                     filetypes = {
                         "javascript",
                         "javascriptreact",
@@ -119,9 +119,7 @@ return {
                         },
                         typescript = {
                             updateImportsOnFileMove = { enabled = "always" },
-                            suggest = {
-                                completeFunctionCalls = true,
-                            },
+                            suggest = { completeFunctionCalls = true },
                             inlayHints = {
                                 enumMemberValues = { enabled = true },
                                 functionLikeReturnTypes = { enabled = true },
@@ -168,7 +166,7 @@ return {
                     },
                 },
             }
-            require('lspconfig').harper_ls.setup {
+            require("lspconfig").harper_ls.setup {
                 settings = {
                     ["harper-ls"] = {
                         userDictPath = "",
@@ -184,27 +182,62 @@ return {
                             RepeatedWords = true,
                             Spaces = true,
                             Matcher = true,
-                            CorrectNumberSuffix = true
+                            CorrectNumberSuffix = true,
                         },
                         codeActions = {
-                            ForceStable = false
+                            ForceStable = false,
                         },
                         markdown = {
-                            IgnoreLinkTitle = false
+                            IgnoreLinkTitle = false,
                         },
                         diagnosticSeverity = "hint",
-                        isolateEnglish = false
-                    }
-                }
+                        isolateEnglish = false,
+                    },
+                },
             }
             require("mason-tool-installer").setup { ensure_installed = servers }
             require("mason-lspconfig").setup {
+                ensure_installed = servers,
                 handlers = {
                     function(server_name)
                         local server = servers[server_name] or {}
                         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
                         require("lspconfig")[server_name].setup(server)
                     end,
+                },
+            }
+            -- require("typescript-tools").setup {
+            --     settings = {
+            --         separate_diagnostic_server = true,
+            --         publish_diagnostic_on = "insert_leave",
+            --         expose_as_code_action = {},
+            --         tsserver_path = nil,
+            --         tsserver_plugins = {},
+            --         tsserver_max_memory = "auto",
+            --         tsserver_format_options = {},
+            --         tsserver_file_preferences = {},
+            --         tsserver_locale = "en",
+            --         complete_function_calls = false,
+            --         include_completions_with_insert_text = true,
+            --         code_lens = "on",
+            --         disable_member_code_lens = true,
+            --         jsx_close_tag = {
+            --             enable = false,
+            --             filetypes = { "javascriptreact", "typescriptreact" },
+            --         },
+            --     },
+            -- }
+            local schemas = require "schemastore"
+            require("lspconfig").jsonls.setup {
+                settings = {
+                    yaml = {
+                        schemas = schemas.yaml.schemas(),
+                        validate = { enable = true },
+                    },
+                    json = {
+                        schemas = schemas.json.schemas(),
+                        validate = { enable = true },
+                    },
                 },
             }
             local function location_handler(_, result, ctx, _)
@@ -220,8 +253,8 @@ return {
             vim.lsp.handlers["textDocument/typeDefinition"] = location_handler
             vim.lsp.handlers["textDocument/implementation"] = location_handler
             vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
-                { border = "rounded" })
+            vim.lsp.handlers["textDocument/signatureHelp"] =
+                vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
             vim.api.nvim_create_autocmd("BufWritePre", {
                 pattern = { "*.zig", "*.zon" },
                 callback = function()
