@@ -21,6 +21,7 @@
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@1.0.8": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
+    "jsr:@std/semver@*": "1.0.4",
     "jsr:@std/text@^1.0.9": "1.0.9",
     "jsr:@std/toml@^1.0.1": "1.0.2",
     "jsr:@std/uuid@1.0.4": "1.0.4",
@@ -123,6 +124,9 @@
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@std/semver@1.0.4": {
+      "integrity": "a62af791917d8fd6c48d6ebbb872f83fad3fc6671ffadbbd39ea229c2d34d175"
     },
     "@std/text@1.0.9": {
       "integrity": "b2db4abc3e6ab93eb0280a0d5e126fd3fca80955bcc297ccaaf555e995eab747"

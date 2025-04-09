@@ -92,6 +92,7 @@
     s = status -s
     shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
     alias = config --get-regexp alias
+    author = config user.name
 # Interactive rebase with the given number of latest commits.
     reb = "!r() { git rebase -i HEAD~$1; }; r"
     tag = "tag -s"

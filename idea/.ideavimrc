@@ -136,8 +136,6 @@ nmap <leader>p <action>(EditorPaste)
 "" don't yank buffer
 noremap ' "-
 noremap <bs> "-
-noremap X "_x
-nnoremap x "_x
 nnoremap yy "+yy
 vnoremap y "+y
 nnoremap p "+p
@@ -155,8 +153,8 @@ nmap gu <action>(ShowUsages)
 nmap gU <action>(FindUsages)
 nmap [[ <action>(MethodUp)
 nmap ]] <action>(MethodDown)
-vnoremap / :action Find<CR>
-nnoremap / :action Find<CR>
+"vnoremap / :action Find<CR>
+"nnoremap / :action Find<CR>
 map U <C-R>
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
@@ -197,7 +195,6 @@ nmap < <<
 nmap > >>
 nmap # #zz
 nmap * *zz
-nmap ; :
 
 imap <C-a> <action>(EditorLineStart)
 imap <C-e> <action>(EditorLineEnd)
@@ -212,7 +209,6 @@ let g:WhichKeyDesc_file_structure = "gp File structure popup"
 nmap <leader>k <Action>(ShowHoverInfo)
 let g:WhichKeyDesc_Show_Hover_info = "<leader>k Show hover info"
 
-nmap ; :
 nmap <leader>1 <Action>(SelectInProjectView)
 let g:WhichKeyDesc_show_this = "<leader>1 Show current file in NERDTree"
 nmap <leader>P <action>(RecentProjectListGroup)

@@ -1,0 +1,86 @@
+#!/bin/bash
+
+function generateChangelog {
+    NEWEST_TAGS=($(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | head -n2));
+    MARKDOWN_FILE="$1"
+    CURRENT="${NEWEST_TAGS[0]}";
+
+    ALREADY_HAS_CURRENT_RELEASE=$(grep -wo "^# ${CURRENT}" CHANGELOG)
+
+    if [ "$ALREADY_HAS_CURRENT_RELEASE" != "" ]; then
+        echo "This release already was written in $MARKDOWN_FILE"
+        exit 0
+    fi
+
+    NOW="$(date -Iseconds)"
+    AUTHOR="$(git config user.name)"
+    PREVIOUS="${NEWEST_TAGS[1]}";
+    ALL_COMMITS=$(git log --pretty=format:"%H" "$PREVIOUS".."$CURRENT");
+
+    function writeFile () {
+        echo "$1" >> "$MARKDOWN_FILE"
+    }
+
+    writeFile "# ${CURRENT}"
+    writeFile
+    writeFile "Date: ${NOW}"
+    writeFile "Author: $AUTHOR"
+    writeFile
+
+    for COMMIT in $ALL_COMMITS; do
+       COMMIT_HASH=$(git show -s --format="%H" "$COMMIT")
+       COMMIT_AUTHOR=$(git show -s --format="%an" "$COMMIT")
+       COMMIT_TIMESTAMP=$(git show -s --format="%cI" "$COMMIT")
+       COMMIT_MESSAGE=$(git show -s --format="%s" "$COMMIT")
+       writeFile "## ${COMMIT_HASH:0:6}"
+       writeFile "Date: $COMMIT_TIMESTAMP"
+       writeFile "Author: @$COMMIT_AUTHOR"
+       writeFile "Commit: $COMMIT_HASH"
+       writeFile "$COMMIT_MESSAGE"
+       writeFile
+       writeFile "---"
+       writeFile
+    done
+
+    gh release create "$CURRENT" --title "Release - $CURRENT" --notes-file "$MARKDOWN_FILE" --latest
+}
+
+# Function to display help message
+show_help() {
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo
+  echo "Options:"
+  echo "  --changelog, -c <file>    Write changelog to the specified file"
+  echo "  --help, -h                Show this help message"
+}
+
+# Check if no arguments are provided
+if [ $# -eq 0 ]; then
+  show_help
+  exit 1
+fi
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --changelog|-c)
+      if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
+        generateChangelog "$2"
+        shift 2
+      else
+        echo "Error: --changelog requires a file path."
+        show_help
+        exit 1
+      fi
+      ;;
+    --help|-h)
+      show_help
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      show_help
+      exit 1
+      ;;
+  esac
+done

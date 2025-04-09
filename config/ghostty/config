@@ -1,5 +1,4 @@
 # misc 
-adjust-cell-height = 25%
 background = #181820
 background-blur-radius = 100
 window-colorspace = display-p3
@@ -12,8 +11,7 @@ custom-shader-animation = true
 desktop-notifications = true
 font-family = "JetBrainsMono Nerd Font"
 font-size = 17
-font-thicken = true
-font-thicken-strength = 127
+font-thicken-strength = 100
 foreground = #ffffff
 link-url = true
 minimum-contrast = 1
@@ -36,12 +34,14 @@ window-padding-color = extend
 window-inherit-working-directory = true
 
 # OSX
+# macos-titlebar-style = hidden
 macos-auto-secure-input = true
 macos-icon-frame = plastic
 macos-secure-input-indication = true
-macos-titlebar-style = hidden
 macos-window-shadow = true
 macos-option-as-alt = true
+alpha-blending = native
+adjust-cell-height = 30%
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal
