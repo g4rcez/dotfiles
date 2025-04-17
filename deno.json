@@ -4,7 +4,6 @@
         "dotfiles": "deno run --allow-env --allow-run --allow-read --allow-write ./dotfiles.config.ts"
     },
     "imports": {
-        "@deno/gfm": "jsr:@deno/gfm@^0.10.0",
         "@dotfiles/core": "./dotbot/dotfiles.ts",
         "@dotfiles/plugins": "./dotbot/plugins/index.ts",
         "@dotfiles/espanso": "./dotbot/plugins/espanso/espanso-matches.ts",
@@ -21,15 +20,11 @@
         "@std/path": "jsr:@std/path@1.0.8",
         "@std/text": "jsr:@std/text@^1.0.9",
         "@std/uuid": "jsr:@std/uuid@1.0.4",
-        "@utility/git": "jsr:@utility/git@0.4.1",
         "_": "./src/utils.ts",
         "color-convert": "npm:color-convert@2.0.1",
         "date-fns": "npm:date-fns@^4.1.0",
-        "jsr:@utility/git": "jsr:@utility/git@0.4.1",
-        "marked": "npm:marked@^15.0.4",
         "remark": "npm:remark@^15.0.1",
         "remark-parse": "npm:remark-parse@^11.0.0",
-        "remark-stringify": "npm:remark-stringify@^11.0.0",
         "unified": "npm:unified@^11.0.5",
         "yaml": "jsr:@jsr/yaml@1.0.5"
     },
