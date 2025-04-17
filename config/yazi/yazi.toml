@@ -1,3 +1,23 @@
 [manager]
 show_hidden = true
 ratio = [1,3,4]
+sort_by = "size"
+sort_sensitive = true
+sort_dir_first = true
+show_symlink = true
+
+[[plugin.prepend_fetchers]]
+id   = "mime"
+name = "*"
+run  = "mime-ext"
+prio = "high"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*"
+run  = "git"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*/"
+run  = "git"
