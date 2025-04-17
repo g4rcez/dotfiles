@@ -26,7 +26,6 @@ local -a PATH_EXPORTS=(
   "$HOME/.local/share/JetBrains/scripts"
   "$HOME/.local/share/JetBrains/Toolbox/scripts"
   "$HOME/.config/yarn/global/node_modules/.bin"
-  "$BUN_INSTALL/bin"
   "$HOME/dotfiles/bin"
 )
 
@@ -95,6 +94,7 @@ done
 
 ##############################################################################################################
 ## fpath hooks
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 znap fpath _deno     "deno completions zsh"
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
@@ -104,4 +104,3 @@ znap fpath _fx       "source <(fx --comp zsh)"
 znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _mise     "mise completion zsh"
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"

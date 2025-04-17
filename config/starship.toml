@@ -4,7 +4,7 @@ palette = "tailwind"
 format = """
 $status\
 ${custom.git_host}\
-$directory\
+${custom.dir}\
 $git_branch\
 $fill\
 ${custom.since_last_commit}\
@@ -14,44 +14,44 @@ $git_metrics\
 $git_status\
 $git_commit\
 $lua\
+$dotnet\
 $nodejs\
 $deno\
-$package\
-$dotnet\
 $docker_context\
+$package\
 $cmd_duration\
 $line_break\
 $character\
 """
 
 [palettes.tailwind]
-fg = "#ffffff"
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
 base = "#1e1e2e"
-mantle = "#181825"
+blue = "#89b4fa"
 crust = "#11111b"
+fg = "#ffffff"
+flamingo = "#f2cdcd"
+green = "#a6e3a1"
+lavender = "#b4befe"
+mantle = "#181825"
+maroon = "#eba0ac"
+mauve = "#cba6f7"
+overlay0 = "#6c7086"
+overlay1 = "#7f849c"
+overlay2 = "#9399b2"
+peach = "#fab387"
+pink = "#f5c2e7"
+red = "#f38ba8"
+rosewater = "#f5e0dc"
+sapphire = "#74c7ec"
+sky = "#89dceb"
+subtext0 = "#a6adc8"
+subtext1 = "#bac2de"
+surface0 = "#313244"
+surface1 = "#45475a"
+surface2 = "#585b70"
+teal = "#94e2d5"
+text = "#cdd6f4"
+yellow = "#f9e2af"
 
 [docker_context]
 format = '[ $context](sky) '
@@ -60,109 +60,116 @@ format = '[ $context](sky) '
 format = '[󰢱 $version](blue) '
 
 [package]
-symbol = " "
-style = "teal"
 disabled = false
 display_private = true
 format = '[$symbol$version]($style) '
+style = "teal"
+symbol = " "
 
 [fill]
-symbol = " "
-style = 'white'
 disabled = false
+style = 'white'
+symbol = " "
 
 [status]
-symbol = ' '
 disabled = false
+format = '[$symbol](yellow)$status ($style)'
 map_symbol = true
 style = 'fg:blue'
 success_symbol = ''
-format = '[$symbol](yellow)$status ($style)'
+symbol = ' '
 
 [directory]
-style = "blue"
-home_symbol = "~"
-truncation_length = 0
 fish_style_pwd_dir_length = 1
 format = '[$path]($style)[$read_only]($read_only_style) '
+home_symbol = "~"
+style = "blue"
+truncation_length = 0
 
 [character]
 error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](green)"
 success_symbol = "[[>_](fg)](fg)"
+vimcmd_symbol = "[❮](green)"
 
 [git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style) '
 style = "white"
 symbol = ' '
-format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_status]
-style = "white"
-up_to_date = ''
-renamed = '👅'
-conflicted = '🏳'
-behind = '😰 ${count}'
-stashed = " ${count} "
-staged = '[+$count](green) '
-deleted = '󰗨 ${count}(red) '
 ahead = '[⇡${count}](lavender) '
-modified = '[ ${count}](lavender) '
-untracked = "[ ${count}](sapphire) "
+behind = '😰 ${count}'
+conflicted = '🏳'
+deleted = '󰗨 ${count}(red) '
 diverged = '⇕⇡${ahead_count}⇣${behind_count} '
 format = "[[($conflicted$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
+modified = '[ ${count}](lavender) '
+renamed = '👅'
+staged = '[+$count](green) '
+stashed = " ${count} "
+style = "white"
+untracked = "[ ${count}](sapphire) "
+up_to_date = ''
 
 [git_state]
-style = "fg"
 cherry_pick = '[🍒PICK](red)'
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "fg"
 
 [git_metrics]
 disabled = false
-only_nonzero_diffs = true
 format = '[+$added](green)[-$deleted](maroon) '
+only_nonzero_diffs = true
 
 [cmd_duration]
 disabled = false
-style = "yellow"
+format = "[ ⏰ $duration]($style) "
 min_time = 10_000
 min_time_to_notify = 10000
 show_notifications = false
-format = "[ ⏰ $duration]($style) "
+style = "yellow"
 
 [dotnet]
-symbol = ' '
 disabled = false
 format = '[$symbol($version)]($style) '
+symbol = ' '
 
 [deno]
-disabled = false
-symbol = '🦕'
-format = '[$symbol($version)]($style) '
 detect_files = ['deno.json']
+disabled = false
+format = '[$symbol($version)]($style) '
+symbol = '🦕'
 
 [nodejs]
-symbol = ' '
-style = "green"
+detect_extensions = []
+detect_files = ['node_modules', 'package.json']
 disabled = false
 format = '[$symbol($version)]($style) '
-detect_files = ['node_modules', 'package.json']
-detect_extensions = []
+style = "green"
+symbol = ' '
 
 [custom.since_last_commit]
-style = "mauve"
+command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/relative-time-commit"""
+description = "Show time since last commit"
 directories = [".git"]
 format = "[󰚰 $output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
-description = "Show time since last commit"
+style = "mauve"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/relative-time-commit"""
 
 [custom.git_host]
-style = "white"
+command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/github-icon"""
+description = "Show icon of git host platform"
 directories = [".git"]
 format = "[$output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
-description = "Show icon of git host platform"
+style = "white"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/github-icon"""
 
+[custom.dir]
+command = """deno --allow-sys --allow-env --allow-run --allow-read $HOME/dotfiles/bin/fishfy-path"""
+description = "Custom directory"
+format = "[$output]($style) "
+shell = ["bash", "--norc", "--noprofile"]
+style = "blue"
+when = 'true'

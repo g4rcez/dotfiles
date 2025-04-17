@@ -1,30 +1,30 @@
 #!/bin/env deno
-import { GITUtility } from "jsr:@utility/git";
 
-const lang = "en";
+async function main() {
+    const lang = "en";
+    const command = new Deno.Command("git", { cwd: Deno.cwd(), args: ["log", "--pretty=format:'%ci'", "-1"] });
+    const result = await command.output();
+    const stdout = new TextDecoder().decode(result.stdout).toString().trim();
+    const date = new Date(stdout);
 
-const repo = await new GITUtility(Deno.cwd());
-
-const result = await repo.runCommand("log", "--pretty=format:'%ci'", "-1");
-
-const date = new Date(result);
-
-export function getRelativeTimeString(date: Date): string {
-    const timeMs = date.getTime();
-    const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
-    const units: Array<{ alias: Intl.RelativeTimeFormatUnit; cut: number }> = [
-        { alias: "minute", cut: 60 },
-        { alias: "hour", cut: 3600 },
-        { alias: "day", cut: 86400 },
-    ];
-
-    const unit = units.find((x) => x.cut > Math.abs(deltaSeconds)) || units.at(-1)!;
-    const rtf = new Intl.RelativeTimeFormat(lang, {
-        style: "narrow",
-        numeric: "auto",
-        localeMatcher: "best fit",
-    });
-    return rtf.format(Math.ceil(deltaSeconds / unit.cut), unit.alias);
+    function getRelativeTimeString(lang: string, date: Date): string {
+        const timeMs = date.getTime();
+        const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+        const units: Array<{ alias: Intl.RelativeTimeFormatUnit; cut: number }> = [
+            { alias: "second", cut: 1 },
+            { alias: "minute", cut: 60 },
+            { alias: "hour", cut: 3600 },
+            { alias: "day", cut: 86400 },
+        ];
+        const unit = units.find((x) => x.cut > Math.abs(deltaSeconds)) || units.at(-1)!;
+        const rtf = new Intl.RelativeTimeFormat(lang, {
+            style: "narrow",
+            numeric: "auto",
+            localeMatcher: "best fit",
+        });
+        return rtf.format(Math.ceil(deltaSeconds / unit.cut), unit.alias);
+    }
+    return (getRelativeTimeString(lang, date).replace(/ +ago/g, ""));
 }
 
-console.log(getRelativeTimeString(date).replace(/[ ]+ago/g, ""));
+main().then((x) => console.log(x));
