@@ -17,6 +17,7 @@
 
 [apply]
     whitespace = fix
+
 [grep]
     lineNumber = true
 
@@ -93,17 +94,17 @@
     shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
     alias = config --get-regexp alias
     author = config user.name
-# Interactive rebase with the given number of latest commits.
+    # Interactive rebase with the given number of latest commits.
     reb = "!r() { git rebase -i HEAD~$1; }; r"
     tag = "tag -s"
-# Find commits by source code
+    # Find commits by source code
     fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-# Find commits by commit message
+    # Find commits by commit message
     fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-# Remove branches that have already been merged with main.
-# a.k.a. ‘delete merged’
+    # Remove branches that have already been merged with main.
+    # a.k.a. ‘delete merged’
     bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-# List contributors with number of commits.
+    # List contributors with number of commits.
     contributors = shortlog --summary --numbered
 
 [delta "catppuccin-mocha"]

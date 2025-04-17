@@ -1,5 +1,5 @@
 pnpm
 ts-node
-tsx
 typescript
-commitizen
+npm-check-updates
+semver

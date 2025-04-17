@@ -95,5 +95,15 @@
     "redhat.telemetry.enabled": false,
     "[nginx]": {
         "editor.defaultFormatter": "raynigon.nginx-formatter"
-    }
+	},
+	"mcp": {
+		"servers": {
+			"playwright": {
+				"command": "npx",
+				"args": [
+					"@playwright/mcp@latest"
+				]
+			}
+		}
+	}
 }

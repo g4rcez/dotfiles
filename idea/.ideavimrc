@@ -195,6 +195,8 @@ nmap < <<
 nmap > >>
 nmap # #zz
 nmap * *zz
+nmap S <action>(AceAction)
+nmap s <action>(AceAction)
 
 imap <C-a> <action>(EditorLineStart)
 imap <C-e> <action>(EditorLineEnd)
