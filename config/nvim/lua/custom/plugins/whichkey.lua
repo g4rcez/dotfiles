@@ -63,8 +63,6 @@ return {
                 end,
             }
 
-            local icon = require("nvim-web-devicons").get_icon
-
             local function defaults()
                 key.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
                 key.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
@@ -100,10 +98,9 @@ return {
                 key.normal("<C-h>", "<Cmd>bprevious<CR>", DEFAULT_OPTS)
                 key.normal("<C-l>", "<Cmd>bnext<CR>", DEFAULT_OPTS)
                 key.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
-                key.normal("<leader>bs", "<Cmd>BufferOrderByDirectory<CR>", { desc = "Sort buffers by dir" })
                 key.normal(
                     "<leader>bo",
-                    "<cmd>BufferLineCloseOthers<cr>",
+                    require("snacks.bufdelete").other,
                     { desc = "Close all except current", icon = "" }
                 )
                 key.normal("<leader>bh", function()
@@ -124,7 +121,7 @@ return {
                 end
                 key.normal("<leader>hh", function()
                     h.ui:toggle_quick_menu(h:list())
-                end, { desc = "Quick harpoon", })
+                end, { desc = "Quick harpoon" })
 
                 key.normal("<C-e>", function()
                     h.ui:toggle_quick_menu(h:list())
@@ -167,9 +164,9 @@ return {
                 key.normal("]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
                 key.normal("[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
 
-                key.normal("<leader>cf",
-                    function() require("conform").format { async = true, lsp_format = "fallback" } end,
-                    { desc = "[c]ode [f]ormat" })
+                key.normal("<leader>cf", function()
+                    require("conform").format { async = true, lsp_format = "fallback" }
+                end, { desc = "[c]ode [f]ormat" })
                 key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
                 key.normal("<leader>cF", function()
                     require("aerial").snacks_picker {

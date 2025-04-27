@@ -24,6 +24,19 @@ return {
             "nvim-treesitter/nvim-treesitter-context",
         },
         opts = {
+            auto_install = true,
+            sync_install = true,
+            indent = { enable = true },
+            highlight = { enable = true },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    scope_incremental = false,
+                    node_incremental = "<Enter>",
+                    node_decremental = "<Backspace>",
+                    init_selection = "<Enter>",
+                },
+            },
             ensure_installed = {
                 "bash",
                 "c",
@@ -57,19 +70,6 @@ return {
                 "vimdoc",
                 "yaml",
                 "zig",
-            },
-            auto_install = true,
-            sync_install = true,
-            indent = { enable = true },
-            highlight = { enable = true },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    scope_incremental = false,
-                    node_incremental = "<Enter>",
-                    node_decremental = "<Backspace>",
-                    init_selection = "<Enter>", -- set to `false` to disable one of the mappings
-                },
             },
         },
     },

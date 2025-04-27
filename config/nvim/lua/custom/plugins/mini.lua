@@ -9,6 +9,7 @@ return {
             require("mini.cursorword").setup()
             require("mini.map").setup()
             require("mini.hipatterns").setup()
+            require("mini.bufremove").setup()
         end,
     },
 }

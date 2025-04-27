@@ -72,7 +72,7 @@ return {
         priority = 1000,
         config = function()
             require("catppuccin").setup {
-                flavour = "mocha", -- latte, frappe, macchiato, mocha
+                flavour = "mocha",
                 transparent_background = false, -- disables setting the background color.
                 show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
                 term_colors = true, -- sets terminal colors (e.g. `g:terminal_color_0`)
@@ -83,17 +83,50 @@ return {
                 styles = { comments = { "italic" }, conditionals = { "italic" } },
                 default_integrations = true,
                 integrations = {
-                    mason = true,
-                    aerial = true,
-                    barbar = true,
+                    cmp = true,
+                    dap = true,
+                    fzf = true,
+                    ufo = true,
+                    alpha = true,
+                    flash = true,
+                    dap_ui = true,
+                    neogit = true,
                     gitsigns = true,
-                    nvimtree = true,
+                    markdown = true,
                     blink_cmp = true,
+                    dashboard = true,
+                    diffview = false,
                     treesitter = true,
-                    mini = { enabled = true, indentscope_color = "" },
+                    render_markdown = true,
+                    semantic_tokens = true,
+                    rainbow_delimiters = true,
+                    treesitter_context = true,
+                    colorful_winsep = { enabled = false, color = "red" },
+                    mini = { enabled = true, indentscope_color = "overlay2" },
+                    indent_blankline = { enabled = true, scope_color = "", colored_indent_levels = false },
+                    native_lsp = {
+                        enabled = true,
+                        virtual_text = {
+                            errors = { "italic" },
+                            hints = { "italic" },
+                            warnings = { "italic" },
+                            information = { "italic" },
+                            ok = { "italic" },
+                        },
+                        underlines = {
+                            errors = { "underline" },
+                            hints = { "underline" },
+                            warnings = { "underline" },
+                            information = { "underline" },
+                            ok = { "underline" },
+                        },
+                        inlay_hints = {
+                            background = true,
+                        },
+                    },
                 },
-                vim.cmd "colorscheme catppuccin",
             }
+            vim.cmd "colorscheme catppuccin"
         end,
     },
     {
@@ -101,23 +134,17 @@ return {
         dependencies = { "Zeioth/heirline-components.nvim", "echasnovski/mini.bufremove" },
         opts = function()
             local lib = require "heirline-components.all"
-            local conditions = require "heirline.conditions"
-            local utils = require "heirline.utils"
+            local component = lib.component;
             local colors = require("catppuccin.palettes").get_palette "mocha"
             require("heirline").load_colors(colors)
             vim.o.showtabline = 2
+            vim.opt.showcmdloc = "statusline"
             local ViMode = {
-                -- get vim current mode, this information will be required by the provider
-                -- and the highlight functions, so we compute it only once per component
-                -- evaluation and store it as a component attribute
                 init = function(self)
-                    self.mode = vim.fn.mode(1) -- :h mode()
+                    self.mode = vim.fn.mode(1)
                 end,
-                -- Now we define some dictionaries to map the output of mode() to the
-                -- corresponding string and color. We can put these into `static` to compute
-                -- them at initialisation time.
                 static = {
-                    mode_names = { -- change the strings if you like it vvvvverbose!
+                    mode_names = {
                         n = "Normal",
                         no = "N?",
                         nov = "N?",
@@ -169,22 +196,12 @@ return {
                         t = "red",
                     },
                 },
-                -- We can now access the value of mode() that, by now, would have been
-                -- computed by `init()` and use it to index our strings dictionary.
-                -- note how `static` fields become just regular attributes once the
-                -- component is instantiated.
-                -- To be extra meticulous, we can also add some vim statusline syntax to
-                -- control the padding and make sure our string is always at least 2
-                -- characters long. Plus a nice Icon.
                 provider = function(self)
-                    return " %2(" .. self.mode_names[self.mode] .. "%)"
+                    return "  %2(" .. self.mode_names[self.mode] .. "%)"
                 end,
-                -- Same goes for the highlight. Now the foreground will change according to the current mode.
                 hl = function(self)
                     return { fg = self.mode_colors[self.mode], bold = true }
                 end,
-                -- Re-evaluate the component only on ModeChanged event!
-                -- Also allows the statusline to be re-evaluated when entering operator-pending mode
                 update = {
                     "ModeChanged",
                     pattern = "*:*",
@@ -193,7 +210,6 @@ return {
                     end),
                 },
             }
-            vim.opt.showcmdloc = "statusline"
             return {
                 opts = {
                     disable_winbar_cb = function(args) -- We do this to avoid showing it on the greeter.
@@ -206,9 +222,9 @@ return {
                     end,
                 },
                 tabline = {
-                    lib.component.tabline_conditional_padding { filename = {} },
-                    lib.component.tabline_buffers { filename = {} },
-                    lib.component.tabline_tabpages {},
+                    component.tabline_conditional_padding { filename = {} },
+                    component.tabline_buffers { filename = {} },
+                    component.tabline_tabpages {},
                 },
                 winbar = {
                     init = function(self)
@@ -216,35 +232,33 @@ return {
                     end,
                     fallthrough = true,
                     {
-                        lib.component.aerial(),
-                        lib.component.breadcrumbs(),
-                        lib.component.neotree(),
-                        lib.component.fill(),
-                        lib.component.compiler_play(),
-                        lib.component.compiler_redo(),
+                        component.aerial(),
+                        component.breadcrumbs(),
+                        component.neotree(),
+                        component.fill(),
+                        component.compiler_play(),
+                        component.compiler_redo(),
                     },
                 },
                 statusline = {
                     hl = { fg = "fg", bg = "bg" },
                     ViMode,
-                    lib.component.diagnostics(),
-                    lib.component.git_branch(),
-                    lib.component.file_info(),
-                    lib.component.git_diff(),
-                    lib.component.fill(),
-                    lib.component.cmd_info(),
-                    lib.component.lsp(),
-                    lib.component.nav(),
+                    component.diagnostics(),
+                    component.git_branch(),
+                    component.file_info(),
+                    component.git_diff(),
+                    component.fill(),
+                    component.cmd_info(),
+                    component.lsp(),
+                    component.nav(),
                 },
             }
         end,
         config = function(_, opts)
             local heirline = require "heirline"
-            local heirline_components = require "heirline-components.all"
-
-            -- Setup
-            heirline_components.init.subscribe_to_events()
-            heirline.load_colors(heirline_components.hl.get_colors())
+            local components = require "heirline-components.all"
+            components.init.subscribe_to_events()
+            heirline.load_colors(components.hl.get_colors())
             heirline.setup(opts)
         end,
     },

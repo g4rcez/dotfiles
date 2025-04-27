@@ -1,39 +1,39 @@
 return {
-    'stevearc/oil.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons', 'folke/snacks.nvim' },
+    "stevearc/oil.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "folke/snacks.nvim" },
     lazy = false,
     ---@module 'oil'
     ---@type oil.SetupOpts
     config = function()
-        vim.keymap.set('n', '<leader>so', '<CMD>Oil --float<CR>', { desc = 'oil.nvim' })
-        vim.api.nvim_create_autocmd('User', {
-            pattern = 'OilActionsPost',
+        vim.keymap.set("n", "<leader>so", "<CMD>Oil --float<CR>", { desc = "oil.nvim" })
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "OilActionsPost",
             callback = function(event)
-                if event.data.actions.type == 'move' then
+                if event.data.actions.type == "move" then
                     Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
                 end
             end,
         })
-        require('oil').setup {
+        require("oil").setup {
             default_file_explorer = true,
             columns = {
-                'icon',
-                'permissions',
-                'size',
+                "icon",
+                "permissions",
+                "size",
             },
             buf_options = {
                 buflisted = false,
-                bufhidden = 'hide',
+                bufhidden = "hide",
             },
             win_options = {
                 wrap = true,
-                signcolumn = 'no',
+                signcolumn = "no",
                 cursorcolumn = false,
-                foldcolumn = '0',
+                foldcolumn = "0",
                 spell = false,
                 list = false,
                 conceallevel = 3,
-                concealcursor = 'nvic',
+                concealcursor = "nvic",
             },
             delete_to_trash = true,
             skip_confirm_for_simple_edits = false,
@@ -44,41 +44,41 @@ return {
                 timeout_ms = 5000,
                 autosave_changes = false,
             },
-            constrain_cursor = 'editable',
+            constrain_cursor = "editable",
             watch_for_changes = true,
             keymaps = {
-                ['g?'] = { 'actions.show_help', mode = 'n' },
-                ['<CR>'] = 'actions.select',
-                ['<C-s>'] = { 'actions.select', opts = { vertical = true } },
-                ['<C-h>'] = { 'actions.select', opts = { horizontal = true } },
-                ['<C-t>'] = { 'actions.select', opts = { tab = true } },
-                ['<C-p>'] = 'actions.preview',
-                ['<C-c>'] = { 'actions.close', mode = 'n' },
-                ['<C-l>'] = 'actions.refresh',
-                ['-'] = { 'actions.parent', mode = 'n' },
-                ['_'] = { 'actions.open_cwd', mode = 'n' },
-                ['`'] = { 'actions.cd', mode = 'n' },
-                ['~'] = { 'actions.cd', opts = { scope = 'tab' }, mode = 'n' },
-                ['gs'] = { 'actions.change_sort', mode = 'n' },
-                ['gx'] = 'actions.open_external',
-                ['g.'] = { 'actions.toggle_hidden', mode = 'n' },
-                ['g\\'] = { 'actions.toggle_trash', mode = 'n' },
+                ["g?"] = { "actions.show_help", mode = "n" },
+                ["<CR>"] = "actions.select",
+                ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+                ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+                ["<C-t>"] = { "actions.select", opts = { tab = true } },
+                ["<C-p>"] = "actions.preview",
+                ["<C-c>"] = { "actions.close", mode = "n" },
+                ["<C-l>"] = "actions.refresh",
+                ["-"] = { "actions.parent", mode = "n" },
+                ["_"] = { "actions.open_cwd", mode = "n" },
+                ["`"] = { "actions.cd", mode = "n" },
+                ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+                ["gs"] = { "actions.change_sort", mode = "n" },
+                ["gx"] = "actions.open_external",
+                ["g."] = { "actions.toggle_hidden", mode = "n" },
+                ["g\\"] = { "actions.toggle_trash", mode = "n" },
             },
             use_default_keymaps = true,
             view_options = {
                 show_hidden = true,
                 is_hidden_file = function(name, bufnr)
-                    local m = name:match '^%.'
+                    local m = name:match "^%."
                     return m ~= nil
                 end,
                 is_always_hidden = function()
                     return false
                 end,
-                natural_order = 'fast',
+                natural_order = "fast",
                 case_insensitive = false,
                 sort = {
-                    { 'type', 'asc' },
-                    { 'name', 'asc' },
+                    { "type", "asc" },
+                    { "name", "asc" },
                 },
                 highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
                     return nil
@@ -100,16 +100,16 @@ return {
             -- Configuration for the floating window in oil.open_float
             float = {
                 -- Padding around the floating window
-                padding = 2,
+                padding = 4,
                 -- max_width and max_height can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
                 max_width = 0,
                 max_height = 0,
-                border = 'rounded',
+                border = "rounded",
                 win_options = { winblend = 0 },
                 -- optionally override the oil buffers window title with custom function: fun(winid: integer): string
                 get_win_title = nil,
                 -- preview_split: Split direction: "auto", "left", "right", "above", "below".
-                preview_split = 'auto',
+                preview_split = "auto",
                 -- This is the config that will be passed to nvim_open_win.
                 -- Change values here to customize the layout
                 override = function(conf)
@@ -121,7 +121,7 @@ return {
                 -- Whether the preview window is automatically updated when the cursor is moved
                 update_on_cursor_moved = true,
                 -- How to open the preview window "load"|"scratch"|"fast_scratch"
-                preview_method = 'fast_scratch',
+                preview_method = "fast_scratch",
                 -- A function that returns true to disable preview on a file e.g. to avoid lag
                 disable_preview = function(filename)
                     return false
@@ -147,12 +147,11 @@ return {
                 min_height = { 5, 0.1 },
                 -- optionally define an integer/float for the exact height of the preview window
                 height = nil,
-                border = 'rounded',
+                border = "rounded",
                 win_options = {
                     winblend = 0,
                 },
             },
-            -- Configuration for the floating progress window
             progress = {
                 max_width = 0.9,
                 min_width = { 40, 0.4 },
@@ -160,20 +159,14 @@ return {
                 max_height = { 10, 0.9 },
                 min_height = { 5, 0.1 },
                 height = nil,
-                border = 'rounded',
-                minimized_border = 'none',
+                border = "rounded",
+                minimized_border = "none",
                 win_options = {
                     winblend = 0,
                 },
             },
-            -- Configuration for the floating SSH window
-            ssh = {
-                border = 'rounded',
-            },
-            -- Configuration for the floating keymaps help window
-            keymaps_help = {
-                border = 'rounded',
-            },
+            ssh = { border = "rounded" },
+            keymaps_help = { border = "rounded" },
         }
     end,
 }

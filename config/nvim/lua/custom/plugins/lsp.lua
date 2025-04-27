@@ -55,8 +55,8 @@ return {
     {
         "neovim/nvim-lspconfig",
         dependencies = {
+            "j-hui/fidget.nvim",
             "b0o/schemastore.nvim",
-            { "j-hui/fidget.nvim", opts = {} },
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
@@ -67,29 +67,19 @@ return {
                 local function opts(desc)
                     return { buffer = bufnr, desc = "LSP " .. desc }
                 end
-
                 map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
                 map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
                 map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
                 map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
-
-                map("n", "<leader>wl", function()
-                    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                end, opts "List workspace folders")
-
                 map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
                 map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
             end
-
-            -- disable semanticTokens
             M.on_init = function(client, _)
                 if client.supports_method "textDocument/semanticTokens" then
                     client.server_capabilities.semanticTokensProvider = nil
                 end
             end
-
             M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
             M.capabilities.textDocument.completion.completionItem = {
                 documentationFormat = { "markdown", "plaintext" },
                 snippetSupport = true,

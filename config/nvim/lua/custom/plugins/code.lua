@@ -15,7 +15,6 @@ return {
         ---@type quicker.SetupOptions
         opts = {},
     },
-    { "lewis6991/gitsigns.nvim" },
     {
         "folke/todo-comments.nvim",
         event = "VimEnter",
@@ -86,51 +85,33 @@ return {
         "catgoose/nvim-colorizer.lua",
         event = "BufReadPre",
         opts = {
-            filetypes = { "*" }, -- Filetype options.  Accepts table like `user_default_options`
-            buftypes = {}, -- Buftype options.  Accepts table like `user_default_options`
-            user_commands = true, -- Enable all or some usercommands
-            lazy_load = false, -- Lazily schedule buffer highlighting setup function
+            filetypes = { "*" },
+            buftypes = {},
+            user_commands = true,
+            lazy_load = false,
             user_default_options = {
-                names = true, -- "Name" codes like Blue or red.  Added from `vim.api.nvim_get_color_map()`
-                names_opts = { -- options for mutating/filtering names.
-                    lowercase = true, -- name:lower(), highlight `blue` and `red`
-                    camelcase = true, -- name, highlight `Blue` and `Red`
-                    uppercase = true, -- name:upper(), highlight `BLUE` and `RED`
-                    strip_digits = false, -- ignore names with digits,
-                    -- highlight `blue` and `red`, but not `blue3` and `red4`
-                },
+                names = true,
+                names_opts = { lowercase = true, camelcase = true, uppercase = true, strip_digits = false },
                 names_custom = false,
-                RGB = true, -- #RGB hex codes
-                RGBA = true, -- #RGBA hex codes
-                RRGGBB = true, -- #RRGGBB hex codes
-                RRGGBBAA = true, -- #RRGGBBAA hex codes
-                AARRGGBB = true, -- 0xAARRGGBB hex codes
-                rgb_fn = true, -- CSS rgb() and rgba() functions
-                hsl_fn = true, -- CSS hsl() and hsla() functions
-                css = true, -- Enable all CSS *features*:
-                -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
-                css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
-                -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-                tailwind = "both", -- Enable tailwind colors
-                tailwind_opts = { -- Options for highlighting tailwind names
-                    update_names = "both", -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
-                },
-                -- parsers can contain values used in `user_default_options`
-                sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
-                -- Highlighting mode.  'background'|'foreground'|'virtualtext'
-                mode = "virtualtext", -- Set the display mode
-                -- Virtualtext character to use
+                RGB = true,
+                RGBA = true,
+                RRGGBB = true,
+                RRGGBBAA = true,
+                AARRGGBB = true,
+                rgb_fn = true,
+                hsl_fn = true,
+                css = true,
+                css_fn = true,
+                tailwind = "both",
+                tailwind_opts = { update_names = "both" },
+                sass = { enable = true, parsers = { "css" } },
+                mode = "virtualtext",
                 virtualtext = "■",
-                -- Display virtualtext inline with color.  boolean|'before'|'after'.  True sets to 'after'
                 virtualtext_inline = "before",
-                -- Virtualtext highlight mode: 'background'|'foreground'
                 virtualtext_mode = "foreground",
-                -- update color values even if buffer is not focused
-                -- example use: cmp_menu, cmp_docs
                 always_update = true,
-                -- hooks to invert control of colorizer
                 hooks = {
-                    -- called before line parsing.  Set to function that returns a boolean and accepts the following parameters.  See hooks section.
+
                     do_lines_parse = false,
                 },
             },
@@ -140,11 +121,7 @@ return {
         "windwp/nvim-ts-autotag",
         config = function()
             require("nvim-ts-autotag").setup {
-                opts = {
-                    enable_close = true, -- Auto close tags
-                    enable_rename = true, -- Auto rename pairs of tags
-                    enable_close_on_slash = true, -- Auto close on trailing </
-                },
+                opts = { enable_close = true, enable_rename = true, enable_close_on_slash = true },
             }
         end,
     },
@@ -168,11 +145,8 @@ return {
             opts.default_format_opts = { lsp_format = "fallback" }
             opts.formatters_by_ft = {
                 lua = { "stylua" },
-                -- Conform will run multiple formatters sequentially
                 python = { "isort", "black" },
-                -- You can customize some of the format options for the filetype (:help conform.format)
                 rust = { "rustfmt", lsp_format = "fallback" },
-                -- Conform will run the first available formatter
                 css = ts,
                 html = ts,
                 json = ts,
@@ -189,7 +163,7 @@ return {
         end,
     },
     {
-        enabled = false,
+        enabled = true,
         "mfussenegger/nvim-lint",
         event = { "BufReadPre", "BufNewFile" },
         opts = {
