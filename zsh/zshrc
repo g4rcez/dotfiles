@@ -60,11 +60,9 @@ for plugin in $PLUGINS; do
   fi
 done
 
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 1
 znap source ohmyzsh/ohmyzsh lib/{cli,compfix,completion,functions,grep,history,key-bindings}
-znap source ohmyzsh/ohmyzsh plugins/fzf
-znap eval starship "starship init zsh --print-full-init"
+znap source ohmyzsh/ohmyzsh plugins/{fzf,tmux}
+znap eval starship "starship init zsh"
 
 ##############################################################################################################
 ## source files
@@ -94,13 +92,10 @@ done
 
 ##############################################################################################################
 ## fpath hooks
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-znap fpath _deno     "deno completions zsh"
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
 znap fpath _cargo    "rustup completions zsh cargo"
-znap fpath _fx       "source <(fx --comp zsh)"
-znap fpath _gitleaks "gitleaks completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _mise     "mise completion zsh"
+
