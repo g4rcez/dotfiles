@@ -1,0 +1,23 @@
+#compdef n
+
+_arguments \
+  '1: :->subcommand' \
+  '*: :->args'
+
+case $state in
+  subcommand)
+    # Define your subcommands
+    local subcommands
+    jq -r '.scripts | to_entries | map("\(.key|gsub(":"; "\\:")): \(.value)") | .[]' "$PWD/package.json" | while IFS= read -r line; do
+        if [[ "$line" == "" ]]; then
+        else
+            subcommands+=("$line")
+        fi
+    done
+    _describe 'subcommand' subcommands
+    ;;
+  args)
+    case $words[2] in
+    esac
+    ;;
+esac

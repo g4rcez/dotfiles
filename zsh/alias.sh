@@ -153,9 +153,9 @@ function vivid-update() {
 
 function updateAll() {
     vivid-update
-    znap pull
-    brew update; brew upgrade
+    antidote update
     nodeUpdatePackages
+    brew update; brew upgrade
 }
 
 function secretuuid() {

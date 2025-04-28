@@ -3,10 +3,6 @@
 autoload -Uz is-at-least
 git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
-function current_branch() {
-    git_current_branch
-}
-
 function _git_log_prettily(){
     if ! [ -z $1 ]; then
         git log --pretty="$1"
@@ -76,7 +72,6 @@ alias ghl='gh pr list'
 alias gdash="gh dash"
 #############################################################################################################################
 ## git functions
-unalias gco
 function gco() {
   _fzf_git_each_ref --no-multi | xargs git checkout
 }

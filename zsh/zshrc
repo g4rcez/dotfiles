@@ -5,11 +5,31 @@ if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
 fi
 
 ##############################################################################################################
+## antidote
+fpath=($fpath "$HOME/dotfiles/zsh/completions")
+autoload -Uz compinit
+compinit
+source "$HOME/.antidote/antidote.zsh"
+ZSH=$(antidote path ohmyzsh/ohmyzsh)
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
+[[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
+
+antidote load
+zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
+[[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
+fpath=(/path/to/antidote/functions $fpath)
+autoload -Uz antidote
+if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+fi
+source ${zsh_plugins}.zsh
+
+##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
-local -a PATH_EXPORTS=(
+local -a paths=(
   "/usr/local/bin"
   "/usr/local/opt/libpq/bin"
   "/opt/homebrew/opt/libpq/bin"
@@ -29,43 +49,16 @@ local -a PATH_EXPORTS=(
   "$HOME/dotfiles/bin"
 )
 
-PATH_RESULT="$PATH"
-for path in $PATH_EXPORTS; do
-  if [[ -d "$path" ]]; then PATH_RESULT="$PATH_RESULT:$path" fi
-done
-export PATH="$PATH_RESULT"
-
-##############################################################################################################
-## zsh-snap + plugins
-[[ -r "$SNAP_DIR/znap.zsh" ]] || git clone --depth 1 -- "https://github.com/marlonrichert/zsh-snap.git" $SNAP_DIR
-source "$SNAP_DIR/znap.zsh"
-zstyle ':znap:*' repos-dir $PLUGINS_DIR
-zstyle ':znap:*:*' git-maintenance off
-
-local -a PLUGINS=(
-    "MichaelAquilina/zsh-auto-notify"
-    "wfxr/forgit"
-    "hlissner/zsh-autopair"
-    "zsh-users/zsh-autosuggestions"
-    "zsh-users/zsh-completions"
-    "zsh-users/zsh-history-substring-search"
-    "zsh-users/zsh-syntax-highlighting"
-)
-
-for plugin in $PLUGINS; do
-  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
-    znap source $plugin || echo "failed -> $plugin"
-  else
-    znap clone $plugin
-  fi
+PATH2="$PATH"
+for path in $paths; do
+  if [[ -d "$path" ]]; then PATH2="$PATH2:$path" fi
 done
 
-znap source ohmyzsh/ohmyzsh lib/{cli,compfix,completion,functions,grep,history,key-bindings}
-znap source ohmyzsh/ohmyzsh plugins/{fzf,tmux}
-znap eval starship "starship init zsh"
+export PATH="$PATH2"
 
 ##############################################################################################################
 ## source files
+eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
@@ -76,7 +69,6 @@ local -a SOURCE=(
   "$HOME/.fzf.zsh"
   "$HOME/.secrets.sh"
   "$HOME/.fzf/shell/key-bindings.zsh"
-  "$PLUGINS_DIR/hlissner/zsh-autopair/autopair.plugin.zsh"
   "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/zstyle.sh"
   "$DOTFILES/zsh/history.sh"
@@ -89,13 +81,3 @@ local -a SOURCE=(
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
-
-##############################################################################################################
-## fpath hooks
-znap fpath _npm      "npm completion"
-znap fpath _pnpm     "pnpm completion zsh"
-znap fpath _n        "source $HOME/dotfiles/bin/node-completion.sh"
-znap fpath _cargo    "rustup completions zsh cargo"
-znap fpath _rustup   "rustup completions zsh"
-znap fpath _mise     "mise completion zsh"
-

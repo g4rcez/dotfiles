@@ -1,0 +1,19 @@
+mattmc3/ez-compinit
+getantidote/use-omz
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
+ohmyzsh/ohmyzsh path:lib/compfix.zsh
+ohmyzsh/ohmyzsh path:plugins/fzf
+ohmyzsh/ohmyzsh path:plugins/tmux
+wfxr/forgit
+hlissner/zsh-autopair
+zsh-users/zsh-completions
+zsh-users/zsh-autosuggestions
+MichaelAquilina/zsh-auto-notify
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-history-substring-search
+belak/zsh-utils path:completion
+g-plane/pnpm-shell-completion
+mattmc3/zephyr path:plugins/color
+mattmc3/zephyr path:plugins/compstyle
+hlissner/zsh-autopair

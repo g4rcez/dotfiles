@@ -2,8 +2,16 @@
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export WORDCHARS="${WORDCHARS/\//}"
 zmodload -i zsh/complist
-unsetopt menu_complete
-unsetopt flowcontrol
+
+############################## setops #################################
+# history
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
 unsetopt FLOW_CONTROL
 
 ## directories
@@ -31,8 +39,6 @@ bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
 # zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 bindkey '^Xa' alias-expension
-bindkey -M menuselect '^o' accept-and-infer-next-history
-bindkey -M menuselect '^[[Z' reverse-menu-complete
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
