@@ -13,7 +13,6 @@ return {
                 opts.noremap = opts.noremap ~= true
                 vim.keymap.set(mode, from, to, opts)
             end
-
             vim.api.nvim_create_autocmd("User", {
                 pattern = "OilActionsPost",
                 callback = function(event)
@@ -158,15 +157,16 @@ return {
             end
 
             local function code()
+                key.normal("<leader>co", "<cmd>TSToolsOrganizeImports<CR>", { desc = "[c]ode [o]rganize" })
                 key.normal("<leader>rr", function()
                     require("grug-far").open { engine = "astgrep" }
                 end, { desc = "Replace with grug-far astgrep" })
                 key.normal("]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
                 key.normal("[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
 
-                key.normal("<leader>cf", function()
-                    require("conform").format { async = true, lsp_format = "fallback" }
-                end, { desc = "[c]ode [f]ormat" })
+                vim.lsp.buf.format()
+                -- key.normal("<leader>cf", function() require("conform").format { async = true, lsp_format = "fallback" } end, { desc = "[c]ode [f]ormat" })
+                key.normal("<leader>cf", vim.lsp.buf.format, { desc = "[c]ode [f]ormat" })
                 key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
                 key.normal("<leader>cF", function()
                     require("aerial").snacks_picker {

@@ -12,18 +12,6 @@ return {
         priority = 1000,
         opts = function(opts)
             opts.style = "night"
-            opts.on_highlights = function(highlights, colors)
-                -- Colors for Snacks pickers
-                highlights.SnacksPickerBoxTitle = { bg = "#1c99f2", fg = "#ffffff", bold = true }
-                highlights.SnacksPickerInput = { bg = "#23273b", fg = "#C0CAF5" }
-                highlights.SnacksPickerInputBorder = { bg = "#23273b", fg = "#23273b" }
-                highlights.SnacksPickerInputTitle = { bg = "#1c99f2", fg = "#ffffff", bold = true }
-                highlights.SnacksPickerList = { bg = "#262e46" }
-                highlights.SnacksPickerListBorder = { bg = "#262e46", fg = "#23273b" }
-                highlights.SnacksPickerListCursorLine = { bg = "#1a1d2f" }
-                highlights.SnacksPickerPreviewBorder = { bg = "#16161E", fg = "#23273b" }
-                highlights.SnacksPickerPrompt = { bg = "#23273b", fg = "#1c99f2" }
-            end
             return opts
         end,
     },
@@ -134,7 +122,7 @@ return {
         dependencies = { "Zeioth/heirline-components.nvim", "echasnovski/mini.bufremove" },
         opts = function()
             local lib = require "heirline-components.all"
-            local component = lib.component;
+            local component = lib.component
             local colors = require("catppuccin.palettes").get_palette "mocha"
             require("heirline").load_colors(colors)
             vim.o.showtabline = 2

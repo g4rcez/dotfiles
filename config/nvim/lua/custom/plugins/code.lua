@@ -53,7 +53,10 @@ return {
     {
         "Wansmer/treesj",
         opts = { use_default_keymaps = false },
-        keys = { { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" } },
+        keys = {
+            { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
+            { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" }
+        },
     },
     {
         "nmac427/guess-indent.nvim",
@@ -137,43 +140,16 @@ return {
         opts = { cmd = { "pair-ls", "lsp" } },
     },
     {
-        "stevearc/conform.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        opts = function(_, opts)
-            local ts = { "prettierd", "prettier", stop_after_first = true }
-            opts.notify_no_formatters = true
-            opts.default_format_opts = { lsp_format = "fallback" }
-            opts.formatters_by_ft = {
-                lua = { "stylua" },
-                python = { "isort", "black" },
-                rust = { "rustfmt", lsp_format = "fallback" },
-                css = ts,
-                html = ts,
-                json = ts,
-                yaml = ts,
-                svelte = ts,
-                graphql = ts,
-                markdown = ts,
-                javascript = ts,
-                typescript = ts,
-                javascriptreact = ts,
-                typescriptreact = ts,
-            }
-            return opts
-        end,
-    },
-    {
-        enabled = true,
         "mfussenegger/nvim-lint",
         event = { "BufReadPre", "BufNewFile" },
         opts = {
             events = { "BufWritePost", "BufReadPost", "InsertLeave" },
             linters = {},
             linters_by_ft = {
-                javascript = { "eslint_d" },
-                typescript = { "eslint_d" },
-                javascriptreact = { "eslint_d" },
-                typescriptreact = { "eslint_d" },
+                javascript = { "eslint" },
+                typescript = { "eslint" },
+                javascriptreact = { "eslint" },
+                typescriptreact = { "eslint" },
             },
         },
         config = function(_, opts)
@@ -201,6 +177,7 @@ return {
                     end)
                 end
             end
+
             function M.lint()
                 local names = lint._resolve_linter_by_ft(vim.bo.filetype)
                 names = vim.list_extend({}, names)
@@ -212,15 +189,13 @@ return {
                 ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
                 names = vim.tbl_filter(function(name)
                     local linter = lint.linters[name]
-                    if not linter then
-                        LazyVim.warn("Linter not found: " .. name, { title = "nvim-lint" })
-                    end
                     return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
                 end, names)
                 if #names > 0 then
                     lint.try_lint(names)
                 end
             end
+
             vim.api.nvim_create_autocmd(opts.events, {
                 group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
                 callback = M.debounce(100, M.lint),

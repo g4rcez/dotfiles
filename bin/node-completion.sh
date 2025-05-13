@@ -6,9 +6,9 @@ function _n_completion() {
         COMMAND="npm"
         complete -F _npm_completion n
     elif [[ -f "yarn.lock" ]]; then 
-        COMMAND="yarn"; 
+        COMMAND="yarn";
     else 
-        COMMAND="pnpm"; 
+        COMMAND="pnpm";
         complete -F _pnpm_completion n
     fi
     LIST=$(jq '.scripts' package.json | sed '1d;$d' | tr -d ' ' | grep -wo -e '^"[a-z:]*"' | tr -d '"' | tr '\n' ' ')

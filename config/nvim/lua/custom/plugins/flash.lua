@@ -20,6 +20,14 @@ return {
                 end,
                 desc = "Flash Treesitter",
             },
+            {
+                "<C-;>",
+                mode = { "o", "n" },
+                function()
+                    require("flash").remote()
+                end,
+                desc = "Remote Flash",
+            },
         },
         specs = {
             {

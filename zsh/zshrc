@@ -9,6 +9,7 @@ fi
 fpath=($fpath "$HOME/dotfiles/zsh/completions")
 autoload -Uz compinit
 compinit
+
 source "$HOME/.antidote/antidote.zsh"
 ZSH=$(antidote path ohmyzsh/ohmyzsh)
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
@@ -17,7 +18,7 @@ ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 antidote load
 zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-fpath=(/path/to/antidote/functions $fpath)
+fpath=("$HOME/.antidote/functions" $fpath)
 autoload -Uz antidote
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
   antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
@@ -59,6 +60,7 @@ export PATH="$PATH2"
 ##############################################################################################################
 ## source files
 eval "$(starship init zsh)"
+# export PS1='$($HOME/Documents/g4rcez/oh-my-shell/bin)'
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
@@ -81,3 +83,9 @@ local -a SOURCE=(
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
+
+WORDCHARS='*_-[]~&;!#$%^(){}<>/\'
+autoload -Uz select-word-style
+select-word-style normal
+zstyle ':zle:*' word-style unspecified
+

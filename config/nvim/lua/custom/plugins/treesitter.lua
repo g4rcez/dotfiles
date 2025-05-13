@@ -19,10 +19,7 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         main = "nvim-treesitter.configs",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-            "nvim-treesitter/nvim-treesitter-context",
-        },
+        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects", "nvim-treesitter/nvim-treesitter-context" },
         opts = {
             auto_install = true,
             sync_install = true,

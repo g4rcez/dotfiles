@@ -16,7 +16,7 @@ function git_main_branch() {
     local ref
     for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default}; do
         if command git show-ref -q --verify $ref; then
-            echo ${ref:t}
+            echo "${ref:t}"
             return
         fi
     done
@@ -28,7 +28,7 @@ function git_develop_branch() {
     local branch
     for branch in dev devel development; do
         if command git show-ref -q --verify refs/heads/$branch; then
-            echo $branch
+            echo "$branch"
             return
         fi
     done
@@ -149,7 +149,7 @@ function commit () {
 }
 
 function lastcommit() {
-    echo $(git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1)
+    git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1
 }
 
 #############################################################################################################################
@@ -167,3 +167,6 @@ function draft() {
     createpr "$1" "--draft"
 }
 
+function ghaction() {
+    gh workflow run "${1}.yml" --ref "${2}"
+}

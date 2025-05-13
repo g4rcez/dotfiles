@@ -34,3 +34,4 @@ shorthands_file = '~/.config/mise/shorthands.toml' # path to the shorthands file
 disable_default_shorthands = false                 # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
 
 experimental = false # enable experimental features
+idiomatic_version_file_enable_tools = ["node"]
