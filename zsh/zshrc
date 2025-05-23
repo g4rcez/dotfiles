@@ -59,11 +59,11 @@ export PATH="$PATH2"
 
 ##############################################################################################################
 ## source files
-eval "$(starship init zsh)"
 # export PS1='$($HOME/Documents/g4rcez/oh-my-shell/bin)'
+eval "$(mise activate zsh)"
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
-eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
@@ -84,8 +84,23 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-WORDCHARS='*_-[]~&;!#$%^(){}<>/\'
+WORDCHARS='*_-[]~&;!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
+function findBuffers() {
+  local windows
+  windows=$(tmux list-windows -F "#{window_index}: #{window_name}")
+  local selection
+  selection=$(echo "$windows" | fzf --header="Select a tmux window:" \
+    --preview 'echo Session name: {}')
+  if [[ -n "$selection" ]]; then
+    local window_index=${selection%%:*}
+    tmux select-window -t "$window_index"
+  fi
+  zle reset-prompt
+}
+
+zle -N findBuffers
+bindkey '^@' findBuffers

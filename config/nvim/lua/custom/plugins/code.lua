@@ -7,6 +7,10 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
     "JoosepAlviste/nvim-ts-context-commentstring",
+    {
+        "smjonas/inc-rename.nvim",
+        opts = {}
+    },
     { "numToStr/Comment.nvim", opts = {} },
     {
         "stevearc/quicker.nvim",

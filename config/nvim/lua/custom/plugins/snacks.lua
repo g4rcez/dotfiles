@@ -4,20 +4,37 @@ return {
         priority = 1000,
         lazy = false,
         ---@type snacks.Config
-        opts = {
-            input = { enabled = true },
-            scope = { enabled = true },
-            words = { enabled = true },
-            indent = { enabled = true },
-            layout = { enabled = true },
-            rename = { enabled = true },
-            toggle = { enabled = true },
-            bigfile = { enabled = true },
-            explorer = { enabled = true },
-            dashboard = { enabled = true },
-            quickfile = { enabled = true },
-            statuscolumn = { enabled = true },
-            picker = {
+        opts = function(_, opts)
+            local set = vim.api.nvim_set_hl
+            local get_hlgroup = vim.api.nvim_get_hl
+            local bg = "#1e1e2e"
+            local green = get_hlgroup(0, { name = "String" }).fg or "green"
+            local red = get_hlgroup(0, { name = "Error" }).fg or "red"
+            set(0, "SnacksPickerBorder", { fg = bg, bg = bg })
+            set(0, "SnacksPicker", { bg = bg })
+            set(0, "SnacksPickerPreviewBorder", { fg = bg, bg = bg })
+            set(0, "SnacksPickerPreview", { bg = bg })
+            set(0, "SnacksPickerPreviewTitle", { fg = bg, bg = green })
+            set(0, "SnacksPickerBoxBorder", { fg = bg, bg = bg })
+            set(0, "SnacksPickerInputBorder", { fg = bg, bg = bg })
+            set(0, "SnacksPickerInputSearch", { fg = red, bg = bg })
+            set(0, "SnacksPickerListBorder", { fg = bg, bg = bg })
+            set(0, "SnacksPickerList", { bg = bg })
+            set(0, "SnacksPickerListTitle", { fg = bg, bg = bg })
+            local x = opts or {}
+            x.input = { enabled = true }
+            x.scope = { enabled = true }
+            x.words = { enabled = true }
+            x.indent = { enabled = true }
+            x.layout = { enabled = true }
+            x.rename = { enabled = true }
+            x.toggle = { enabled = true }
+            x.bigfile = { enabled = true }
+            x.explorer = { enabled = true }
+            x.dashboard = { enabled = true }
+            x.quickfile = { enabled = true }
+            x.statuscolumn = { enabled = true }
+            x.picker = {
                 enabled = true,
                 layout = { preset = "telescope" },
                 matcher = {
@@ -33,22 +50,21 @@ return {
                 },
                 layouts = {
                     telescope = {
-                        -- Copy from https://github.com/folke/snacks.nvim/blob/main/docs/picker.md#telescope
                         reverse = false,
                         layout = {
                             box = "horizontal",
-                            backdrop = true,
-                            height = 0.9,
-                            width = 0.9,
+                            backdrop = 50,
+                            height = 0.95,
+                            width = 0.95,
                             border = "rounded",
                             {
                                 box = "vertical",
                                 {
                                     win = "input",
-                                    height = 1,
+                                    height = 2,
                                     border = "none",
-                                    title = "{title} {live} {flags}",
                                     title_pos = "center",
+                                    title = "{title} {live} {flags}",
                                 },
                                 { win = "list", title = " Results ", title_pos = "center", border = "none" },
                             },
@@ -73,12 +89,15 @@ return {
                         },
                     },
                 },
-            },
-        },
+            }
+            return x
+        end,
         keys = {
             {
                 "<leader><space>",
-                require("snacks").picker.smart,
+                function()
+                    require("snacks").picker.smart {}
+                end,
                 desc = "Smart Find Files",
             },
             {
@@ -474,7 +493,7 @@ return {
             },
             {
                 "<leader>bd",
-               function()
+                function()
                     Snacks.bufdelete()
                 end,
                 desc = "Delete Buffer",

@@ -37,7 +37,7 @@ return {
                 wk.add { "<leader>n", group = "[n]ew cursor", mode = { "n" }, icon = "" }
             end
 
-            local key = {
+            local bind = {
                 normal = function(from, action, opts)
                     local o = opts or {}
                     local desc = o.desc or ""
@@ -63,46 +63,64 @@ return {
             }
 
             local function defaults()
-                key.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
-                key.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
-                key.insert("<C-A>", "<HOME>", { desc = "Go to home in insert" })
-                key.insert("<C-E>", "<END>", { desc = "Go to end in insert" })
-                key.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
-                key.insert("<C-s>", "<Esc>:w<CR>a", { desc = "Save" })
-                key.insert("<C-z>", "<Esc>ua", { desc = "Go to end in insert" })
-                key.normal("#", "#zz", { desc = "Center previous pattern" })
-                key.normal("*", "*zz", { desc = "Center next pattern" })
-                key.normal("+", "<C-a>", { desc = "Increment" })
-                key.normal("-", "<C-x>", { desc = "Decrement" })
-                key.normal("0", "^", { desc = "Goto first non-whitespace" })
-                key.normal("<BS>", '"_', { desc = "BlackHole register" })
-                key.normal(">", ">>", { desc = "Indent" })
-                key.normal("<", "<<", { desc = "Deindent" })
-                key.normal("vv", "V", { desc = "Select line" })
-                key.normal("j", "gj", DEFAULT_OPTS)
-                key.normal("k", "gk", DEFAULT_OPTS)
-                key.visual("<", "<gv", DEFAULT_OPTS)
-                key.visual("<leader>sr", "<cmd>!tail -r<CR>", { desc = "Reverse sort lines" })
-                key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
-                key.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
-                key.visual(">", ">gv", DEFAULT_OPTS)
-                key.x("p", [["_dP]], DEFAULT_OPTS)
-                key.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
-                key.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
-                key.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
+                bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
+                bind.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
+                bind.insert("<C-A>", "<HOME>", { desc = "Go to home in insert" })
+                bind.insert("<C-E>", "<END>", { desc = "Go to end in insert" })
+                bind.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
+                bind.insert("<C-s>", "<Esc>:w<CR>a", { desc = "Save" })
+                bind.insert("<C-z>", "<Esc>ua", { desc = "Go to end in insert" })
+                bind.normal("#", "#zz", { desc = "Center previous pattern" })
+                bind.normal("*", "*zz", { desc = "Center next pattern" })
+                bind.normal("+", "<C-a>", { desc = "Increment" })
+                bind.normal("-", "<C-x>", { desc = "Decrement" })
+                bind.normal("0", "^", { desc = "Goto first non-whitespace" })
+                bind.visual("0", "^", { desc = "Goto first non-whitespace" })
+                bind.normal("<BS>", '"_', { desc = "BlackHole register" })
+                bind.visual("<BS>", '"_', { desc = "BlackHole register" })
+                bind.normal(">", ">>", { desc = "Indent" })
+                bind.normal("<", "<<", { desc = "Deindent" })
+                bind.normal("vv", "V", { desc = "Select line" })
+                bind.normal("j", "gj", DEFAULT_OPTS)
+                bind.normal("k", "gk", DEFAULT_OPTS)
+                bind.visual("<", "<gv", DEFAULT_OPTS)
+                bind.visual("<leader>sr", "<cmd>!tail -r<CR>", { desc = "Reverse sort lines" })
+                bind.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
+                bind.visual(">", ">gv", DEFAULT_OPTS)
+                bind.x("p", [["_dP]], DEFAULT_OPTS)
+                bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
+                bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
+                bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
+            end
+
+            local function navigate(n)
+                local current = vim.api.nvim_get_current_buf()
+                for i, v in ipairs(vim.t.bufs) do
+                    if current == v then
+                        local new_buf = vim.t.bufs[(i + n - 1) % #vim.t.bufs + 1]
+                        if new_buf ~= current then
+                            vim.api.nvim_set_current_buf(new_buf)
+                        end
+                        return
+                    end
+                end
             end
 
             local function buffers()
-                key.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
-                key.normal("<C-h>", "<Cmd>bprevious<CR>", DEFAULT_OPTS)
-                key.normal("<C-l>", "<Cmd>bnext<CR>", DEFAULT_OPTS)
-                key.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
-                key.normal(
+                bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
+                bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
+                bind.normal("<C-h>", function()
+                    navigate(-1)
+                end, DEFAULT_OPTS)
+                bind.normal("<C-l>", function()
+                    navigate(1)
+                end, DEFAULT_OPTS)
+                bind.normal(
                     "<leader>bo",
                     require("snacks.bufdelete").other,
                     { desc = "Close all except current", icon = "" }
                 )
-                key.normal("<leader>bh", function()
+                bind.normal("<leader>bh", function()
                     require("treesitter-context").go_to_context(vim.v.count1)
                 end, { silent = true, desc = "[h]eader of context" })
             end
@@ -118,19 +136,19 @@ return {
                     end
                     return file_paths
                 end
-                key.normal("<leader>hh", function()
+                bind.normal("<leader>hh", function()
                     h.ui:toggle_quick_menu(h:list())
                 end, { desc = "Quick harpoon" })
 
-                key.normal("<C-e>", function()
+                bind.normal("<C-e>", function()
                     h.ui:toggle_quick_menu(h:list())
                 end, { desc = "Quick harpoon" })
 
-                key.normal("<leader>ha", function()
+                bind.normal("<leader>ha", function()
                     h:list():add()
                 end, { desc = "Harpoon add" })
 
-                key.normal("<leader>hf", function()
+                bind.normal("<leader>hf", function()
                     Snacks.picker {
                         finder = generate_harpoon_picker,
                         win = {
@@ -156,28 +174,58 @@ return {
                 end, { desc = "harpoon find" })
             end
 
+            local function rename_once()
+                local clients = vim.lsp.get_clients({ bufnr = 0 })
+                local client_id_to_use = nil
+                for _, client in ipairs(clients) do
+                    if client.supports_method("textDocument/rename") then
+                        client_id_to_use = client.id
+                        break
+                    end
+                end
+
+                if client_id_to_use then
+                    local params = vim.lsp.util.make_position_params()
+                    vim.ui.input({ prompt = 'New Name: ', default = vim.fn.expand('<cword>') }, function(new_name)
+                        if not new_name or new_name == "" then return end
+                        params.newName = new_name
+
+                        vim.lsp.buf_request(0, "textDocument/rename", params, function(err, result, ctx)
+                            if err then return end
+                            if not result then return end
+                            if ctx.client_id == client_id_to_use then
+                                vim.lsp.util.apply_workspace_edit(result, "utf-8")
+                            end
+                        end)
+                    end)
+                end
+            end
+
+
             local function code()
-                key.normal("<leader>co", "<cmd>TSToolsOrganizeImports<CR>", { desc = "[c]ode [o]rganize" })
-                key.normal("<leader>rr", function()
+                bind.normal("<leader>co", "<cmd>TSToolsOrganizeImports<CR>", { desc = "[c]ode [o]rganize" })
+                bind.normal("<leader>rr", function()
                     require("grug-far").open { engine = "astgrep" }
                 end, { desc = "Replace with grug-far astgrep" })
-                key.normal("]g", vim.diagnostic.goto_next, { desc = "Goto next error" })
-                key.normal("[g", vim.diagnostic.goto_prev, { desc = "Goto previous error" })
+                bind.normal("]g", function()
+                    vim.diagnostic.goto_next({})
+                end, { desc = "Goto next error" })
+                bind.normal("[g", function()
+                    vim.diagnostic.goto_prev({})
+                end, { desc = "Goto previous error" })
 
-                vim.lsp.buf.format()
-                -- key.normal("<leader>cf", function() require("conform").format { async = true, lsp_format = "fallback" } end, { desc = "[c]ode [f]ormat" })
-                key.normal("<leader>cf", vim.lsp.buf.format, { desc = "[c]ode [f]ormat" })
-                key.normal("<leader>cr", vim.lsp.buf.rename, { desc = "[c]ode [r]ename" })
-                key.normal("<leader>cF", function()
+                bind.normal("<leader>cr", rename_once, { desc = "[c]ode [r]ename" })
+                bind.normal("<leader>cf", function()
+                    vim.lsp.buf.format()
+                end, { desc = "[c]ode [f]ormat" })
+                bind.normal("<leader>cF", function()
                     require("aerial").snacks_picker {
                         format = "text",
                         layout = { preset = "vscode", preview = true },
                     }
                 end, { desc = "[c]ode [F]ind aerial" })
             end
-
             local keymaps = { groups, defaults, buffers, code, harpoonConfig }
-
             for _, func in ipairs(keymaps) do
                 func()
             end

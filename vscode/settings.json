@@ -5,8 +5,6 @@
     "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
     "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "cSpell.language": "en,pt,pt-BR,en-GB,en-US",
     "editor.accessibilitySupport": "off",
     "editor.defaultColorDecorators": "auto",
     "editor.definitionLinkOpensInPeek": true,
@@ -57,7 +55,7 @@
     "window.customTitleBarVisibility": "never",
     "window.titleBarStyle": "native",
     "workbench.colorTheme": "Catppuccin Mocha",
-    "workbench.iconTheme": "vscode-icons",
+    "workbench.iconTheme": "catppuccin-mocha",
     "workbench.layoutControl.enabled": true,
     "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
     "workbench.settings.editor": "json",
@@ -105,5 +103,8 @@
 				]
 			}
 		}
-	}
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

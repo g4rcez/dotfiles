@@ -1,0 +1,10 @@
+#!/bin/bash
+
+windows=$(tmux list-windows -F "#{window_index}: #{window_name}")
+selection=$(echo "$windows" | fzf --header="Select a tmux window:" \
+--preview 'echo Session name: {}')
+
+if [[ -n "$selection" ]]; then
+    local window_index=${selection%%:*}
+    tmux select-window -t "$window_index"
+fi

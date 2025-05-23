@@ -1,20 +1,20 @@
 local languages = {
     "ast_grep",
-    "jsonls",
-    "html",
-    "harper_ls",
-    "lua_ls",
-    "tailwindcss",
-    "sqlls",
-    "vtsls",
-    "gh_actions_ls",
-    "dockerls",
-    "css_variables",
     "bashls",
-    "emmet_language_server",
+    "css_variables",
     "cssls",
-    "docker_compose_language_service",
     "denols",
+    "docker_compose_language_service",
+    "dockerls",
+    "emmet_language_server",
+    "gh_actions_ls",
+    "harper_ls",
+    "html",
+    "jsonls",
+    "lua_ls",
+    "sqlls",
+    "tailwindcss",
+    "vtsls",
     "yamlls",
 }
 
@@ -54,15 +54,27 @@ return {
         end,
     },
     {
-        "vuki656/package-info.nvim",
-        dependencies = { "MunifTanjim/nui.nvim" },
         opts = {},
+        "vuki656/package-info.nvim",
         event = "BufRead package.json",
+        dependencies = { "MunifTanjim/nui.nvim" },
     },
     {
         "pmizio/typescript-tools.nvim",
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         opts = {},
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        opts = function(_, opts)
+            opts.ensure_installed = { "vtsls", "eslint" }
+        end,
+    },
+    {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        opts = function(_, opts)
+            opts.ensure_installed = { "vtsls", "eslint-lsp", "prettierd", "js-debug-adapter" }
+        end,
     },
     {
         "neovim/nvim-lspconfig",
@@ -81,8 +93,8 @@ return {
                 local function opts(desc)
                     return { buffer = bufnr, desc = "LSP " .. desc }
                 end
-                map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
-                map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
+                -- map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
+                -- map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
                 map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
                 map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
                 map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
@@ -112,7 +124,7 @@ return {
             }
             local lspconfig = require "lspconfig"
             opts.servers = opts.servers or {}
-            local setupArgs = { capabilities = M.capabilities, on_init = M.on_init }
+            local setupArgs = M
             for _, language in ipairs(languages) do
                 lspconfig[language].setup(setupArgs)
                 opts.servers[language] = {}
@@ -124,23 +136,20 @@ return {
             end
             require("typescript-tools").setup {
                 settings = {
-                    separate_diagnostic_server = true,
+                    code_lens = "off",
+                    complete_function_calls = true,
+                    disable_member_code_lens = true,
+                    expose_as_code_action = { "remove_unused_imports", "organize_imports" },
+                    include_completions_with_insert_text = true,
+                    jsx_close_tag = { enable = true, filetypes = { "javascriptreact", "typescriptreact" } },
                     publish_diagnostic_on = "insert_leave",
-                    expose_as_code_action = {
-                        "remove_unused_imports",
-                        "organize_imports",
-                    },
+                    separate_diagnostic_server = true,
+                    tsserver_file_preferences = {},
+                    tsserver_format_options = {},
+                    tsserver_locale = "en",
+                    tsserver_max_memory = "auto",
                     tsserver_path = nil,
                     tsserver_plugins = {},
-                    tsserver_max_memory = "auto",
-                    tsserver_format_options = {},
-                    tsserver_file_preferences = {},
-                    tsserver_locale = "en",
-                    complete_function_calls = true,
-                    include_completions_with_insert_text = true,
-                    code_lens = "off",
-                    disable_member_code_lens = true,
-                    jsx_close_tag = { enable = true, filetypes = { "javascriptreact", "typescriptreact" } },
                 },
             }
         end,

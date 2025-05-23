@@ -2,7 +2,6 @@ import { Detail, List } from "@raycast/api";
 import { readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import React from "react";
 
 type WhichKey = { key: string; description: string; command: string };
 

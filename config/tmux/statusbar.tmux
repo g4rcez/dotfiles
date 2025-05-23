@@ -1,3 +1,4 @@
+#!/bin/bash
 source $HOME/dotfiles/zsh/utils.sh
 SCRIPTS_PATH="$HOME/dotfiles/bin"
 

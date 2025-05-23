@@ -39,17 +39,17 @@ function selectProject() {
     exit
 }
 
-isSelected() {
+function isSelected() {
     if [ -n "$(echo "$1" | grep "^([0-9]*)\\\t\[Session\]")" ]; then
         echo 1
     fi
 }
 
-sanitizeName() {
+function sanitizeName() {
     echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
 }
 
-getSessionName() {
+function getSessionName() {
     project_dir=$1
     directory=$(basename "$project_dir")
     session_name=$(echo "$directory" | tr ' .:' '_')

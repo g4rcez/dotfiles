@@ -45,11 +45,11 @@ return {
                     },
                 },
                 presets = {
+                    inc_rename = true,
                     bottom_search = true,
                     command_palette = true,
-                    long_message_to_split = true,
-                    inc_rename = false,
                     lsp_doc_border = true,
+                    long_message_to_split = true,
                 },
             }
         end,
@@ -62,8 +62,8 @@ return {
             require("catppuccin").setup {
                 flavour = "mocha",
                 transparent_background = false, -- disables setting the background color.
-                show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-                term_colors = true, -- sets terminal colors (e.g. `g:terminal_color_0`)
+                show_end_of_buffer = false,     -- shows the '~' characters after the end of buffers
+                term_colors = true,             -- sets terminal colors (e.g. `g:terminal_color_0`)
                 dim_inactive = { enabled = true, shade = "dark", percentage = 0.15 },
                 no_italic = false,
                 no_bold = false,
@@ -185,7 +185,7 @@ return {
                     },
                 },
                 provider = function(self)
-                    return "  %2(" .. self.mode_names[self.mode] .. "%)"
+                    return "  %2(" .. self.mode_names[self.mode] .. "%) "
                 end,
                 hl = function(self)
                     return { fg = self.mode_colors[self.mode], bold = true }
@@ -201,32 +201,19 @@ return {
             return {
                 opts = {
                     disable_winbar_cb = function(args) -- We do this to avoid showing it on the greeter.
-                        local is_disabled = not require("heirline-components.buffer").is_valid(args.buf)
-                            or lib.condition.buffer_matches({
-                                buftype = { "terminal", "prompt", "nofile", "help", "quickfix" },
-                                filetype = { "NvimTree", "neo%-tree", "dashboard", "Outline", "aerial" },
-                            }, args.buf)
-                        return is_disabled
+                        -- local is_disabled = not require("heirline-components.buffer").is_valid(args.buf)
+                        --     or lib.condition.buffer_matches({
+                        --         buftype = { "terminal", "prompt", "nofile", "help", "quickfix" },
+                        --         filetype = { "NvimTree", "neo%-tree", "dashboard", "Outline", "aerial" },
+                        --     }, args.buf)
+                        -- return is_disabled
+                        return false
                     end,
                 },
                 tabline = {
                     component.tabline_conditional_padding { filename = {} },
                     component.tabline_buffers { filename = {} },
                     component.tabline_tabpages {},
-                },
-                winbar = {
-                    init = function(self)
-                        self.bufnr = vim.api.nvim_get_current_buf()
-                    end,
-                    fallthrough = true,
-                    {
-                        component.aerial(),
-                        component.breadcrumbs(),
-                        component.neotree(),
-                        component.fill(),
-                        component.compiler_play(),
-                        component.compiler_redo(),
-                    },
                 },
                 statusline = {
                     hl = { fg = "fg", bg = "bg" },
