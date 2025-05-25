@@ -1,17 +1,14 @@
+# vim: ft=ghostty
 # misc 
 background = #181820
 background-blur-radius = 100
 window-colorspace = display-p3
 background-opacity = 0.97
-bold-is-bright = true
 config-default-files = true
 cursor-style = block
 cursor-style-blink = true
 custom-shader-animation = true
 desktop-notifications = true
-font-family = "JetBrainsMono Nerd Font"
-font-size = 17
-font-thicken-strength = 100
 foreground = #ffffff
 link-url = true
 minimum-contrast = 1
@@ -21,12 +18,21 @@ quick-terminal-screen = main
 shell-integration-features = no-cursor
 theme = catppuccin-mocha
 
+# font
+font-thicken = true
+bold-is-bright = true
+font-family = "JetBrainsMono Nerd Font"
+font-size = 17
+font-thicken-strength = 150
+adjust-cell-height = 25%
+adjust-cell-width = -5%
+
 # window 
 quit-after-last-window-closed = false
 window-decoration = true
 window-padding-color = extend
-window-padding-x = 5
-window-padding-y = 1
+window-padding-x = 2
+window-padding-y = 0
 window-theme = dark
 window-save-state = always
 window-colorspace = display-p3
@@ -34,14 +40,14 @@ window-padding-color = extend
 window-inherit-working-directory = true
 
 # OSX
-# macos-titlebar-style = hidden
-macos-auto-secure-input = true
-macos-icon-frame = plastic
-macos-secure-input-indication = true
-macos-window-shadow = true
-macos-option-as-alt = true
 alpha-blending = native
-adjust-cell-height = 30%
+macos-icon-frame = plastic
+macos-option-as-alt = true
+macos-window-shadow = false
+macos-icon = holographic
+macos-titlebar-style = hidden
+macos-auto-secure-input = true
+macos-secure-input-indication = true
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal

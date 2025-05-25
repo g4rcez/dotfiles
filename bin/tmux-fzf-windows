@@ -2,9 +2,9 @@
 
 windows=$(tmux list-windows -F "#{window_index}: #{window_name}")
 selection=$(echo "$windows" | fzf --header="Select a tmux window:" \
---preview 'echo Session name: {}')
+--preview "bash $HOME/dotfiles/bin/tmux-fzf-windows-preview {}")
 
 if [[ -n "$selection" ]]; then
-    local window_index=${selection%%:*}
-    tmux select-window -t "$window_index"
+    INDEX_ID=$(echo $selection | cut -d : -f1)
+    tmux select-window -t "$INDEX_ID"
 fi

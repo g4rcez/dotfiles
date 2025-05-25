@@ -36,7 +36,7 @@ return {
             x.statuscolumn = { enabled = true }
             x.picker = {
                 enabled = true,
-                layout = { preset = "telescope" },
+                layout = { preset = "telescope", cycle = true },
                 matcher = {
                     fuzzy = true,
                     smartcase = true,

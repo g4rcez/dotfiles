@@ -1,6 +1,7 @@
 return {
     {
         "stevearc/conform.nvim",
+        enabled = false,
         opts = {
             formatters_by_ft = {
                 lua = { "stylua" },
@@ -16,7 +17,6 @@ return {
     },
     {
         "nvimtools/none-ls.nvim",
-        enabled = false,
         opts = function(_, opts)
             local null_ls = require "null-ls"
             null_ls.setup {

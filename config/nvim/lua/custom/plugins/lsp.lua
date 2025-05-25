@@ -21,6 +21,10 @@ local languages = {
 return {
     "kabouzeid/nvim-lspinstall",
     {
+        "bezhermoso/tree-sitter-ghostty",
+        build = "make nvim_install",
+    },
+    {
         "folke/lazydev.nvim",
         ft = "lua",
         opts = {
@@ -61,6 +65,7 @@ return {
     },
     {
         "pmizio/typescript-tools.nvim",
+        enabled = false,
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         opts = {},
     },
@@ -86,19 +91,11 @@ return {
         },
         config = function(_, opts)
             local M = {}
-            local map = vim.keymap.set
+            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+            vim.lsp.handlers["textDocument/signatureHelp"] =
+                vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
             M.inlay_hints = { enabled = true }
             M.diagnostics = { virtual_text = { prefix = "icons" } }
-            M.on_attach = function(_, bufnr)
-                local function opts(desc)
-                    return { buffer = bufnr, desc = "LSP " .. desc }
-                end
-                -- map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
-                -- map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
-                map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
-                map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
-                map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
-            end
             M.on_init = function(client, _)
                 if client.supports_method "textDocument/semanticTokens" then
                     client.server_capabilities.semanticTokensProvider = nil
@@ -124,34 +121,11 @@ return {
             }
             local lspconfig = require "lspconfig"
             opts.servers = opts.servers or {}
-            local setupArgs = M
-            for _, language in ipairs(languages) do
-                lspconfig[language].setup(setupArgs)
-                opts.servers[language] = {}
-            end
             for server, config in pairs(opts.servers) do
                 config.capabilities =
                     vim.tbl_deep_extend("force", M.capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
                 lspconfig[server].setup(config)
             end
-            require("typescript-tools").setup {
-                settings = {
-                    code_lens = "off",
-                    complete_function_calls = true,
-                    disable_member_code_lens = true,
-                    expose_as_code_action = { "remove_unused_imports", "organize_imports" },
-                    include_completions_with_insert_text = true,
-                    jsx_close_tag = { enable = true, filetypes = { "javascriptreact", "typescriptreact" } },
-                    publish_diagnostic_on = "insert_leave",
-                    separate_diagnostic_server = true,
-                    tsserver_file_preferences = {},
-                    tsserver_format_options = {},
-                    tsserver_locale = "en",
-                    tsserver_max_memory = "auto",
-                    tsserver_path = nil,
-                    tsserver_plugins = {},
-                },
-            }
         end,
     },
 }

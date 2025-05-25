@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "$1"
+INDEX_ID=$(echo $1 | cut -d : -f1)
+tmux capture-pane -ep -t "$INDEX_ID"
+
+
