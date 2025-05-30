@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "$1"
-INDEX_ID=$(echo $1 | cut -d : -f1)
-tmux capture-pane -ep -t "$INDEX_ID"
+INDEX_ID=$(echo "$1" | cut -d : -f1)
+echo "Index: $INDEX_ID. Window: $1"
+bash "$HOME/dotfiles/bin/tmux-preview-window" "$INDEX_ID"
 
 

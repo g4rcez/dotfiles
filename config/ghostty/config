@@ -1,4 +1,5 @@
 # vim: ft=ghostty
+
 # misc 
 background = #181820
 background-blur-radius = 100
@@ -23,9 +24,9 @@ font-thicken = true
 bold-is-bright = true
 font-family = "JetBrainsMono Nerd Font"
 font-size = 17
-font-thicken-strength = 150
 adjust-cell-height = 25%
 adjust-cell-width = -5%
+cursor-invert-fg-bg = true
 
 # window 
 quit-after-last-window-closed = false
@@ -41,10 +42,8 @@ window-inherit-working-directory = true
 
 # OSX
 alpha-blending = native
-macos-icon-frame = plastic
 macos-option-as-alt = true
 macos-window-shadow = false
-macos-icon = holographic
 macos-titlebar-style = hidden
 macos-auto-secure-input = true
 macos-secure-input-indication = true
@@ -59,3 +58,4 @@ keybind = super+p>l=next_tab
 keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
+

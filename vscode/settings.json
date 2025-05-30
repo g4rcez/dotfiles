@@ -1,10 +1,14 @@
 {
-    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
+    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[nginx]": { "editor.defaultFormatter": "raynigon.nginx-formatter" },
+    "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "editor.accessibilitySupport": "off",
     "editor.defaultColorDecorators": "auto",
     "editor.definitionLinkOpensInPeek": true,
@@ -78,33 +82,6 @@
     ],
     "notebook.insertFinalNewline": true,
     "notebook.stickyScroll.enabled": true,
-    "[scss]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
-    "deno.enable": false,
-    "deno.lint": true,
-    "deno.codeLens.references": true,
-    "deno.codeLens.implementations": true,
-    "deno.codeLens.referencesAllFunctions": true,
     "redhat.telemetry.enabled": false,
-    "[nginx]": {
-        "editor.defaultFormatter": "raynigon.nginx-formatter"
-	},
-	"mcp": {
-		"servers": {
-			"playwright": {
-				"command": "npx",
-				"args": [
-					"@playwright/mcp@latest"
-				]
-			}
-		}
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
 }
