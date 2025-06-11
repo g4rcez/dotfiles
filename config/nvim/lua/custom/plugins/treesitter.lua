@@ -1,6 +1,8 @@
 return {
+    "nvim-treesitter/nvim-treesitter-textobjects",
     {
         "nvim-treesitter/nvim-treesitter-context",
+        dependencies = {"nvim-treesitter/nvim-treesitter-textobjects"},
         opts = {
             enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
             multiwindow = false, -- Enable multiwindow support.

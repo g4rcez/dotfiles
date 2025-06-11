@@ -130,10 +130,14 @@ return {
             end
             local createMotions = require "config.motions"
             local motions = createMotions(keymap)
+            require("config.window-mode").setup {
+                timeout = 30000,
+            }
             local keymaps = { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, harpoonConfig }
             for _, func in ipairs(keymaps) do
                 func()
             end
+
             return defaultOpts
         end,
     },
