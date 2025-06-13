@@ -59,12 +59,14 @@ alias gitree='git log --oneline --graph --decorate --all'
 alias gitree='git-graph'
 alias gittree='git-graph'
 alias gst='git status'
-alias gtv='git tag | sort -V'
 alias logs='forgit::log'
 alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
+function gtv() {
+    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | grep --color=never '.'
+}
 #############################################################################################################################
 ## github-cli
 alias ghc='gh pr checkout'
@@ -169,4 +171,8 @@ function draft() {
 
 function ghaction() {
     gh workflow run "${1}.yml" --ref "${2}"
+}
+
+function aicommit(){
+     git diff -U5 | pbcopy && open "raycast://ai-commands/git-commit?arguments='{{.Form.Explain | quote}}'"
 }

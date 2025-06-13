@@ -58,7 +58,9 @@ return {
                     avante = {
                         module = "blink-cmp-avante",
                         name = "Avante",
-                        opts = {},
+                        opts = {
+                            model = "claude-sonnet-4-20250514",
+                        },
                     },
                 },
             },

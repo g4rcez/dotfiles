@@ -129,6 +129,7 @@ return {
                 end, { desc = "[c]ode [F]ind aerial" })
             end
             local createMotions = require "config.motions"
+            require "config.switch".setup()
             local motions = createMotions(keymap)
             require("config.window-mode").setup {
                 timeout = 30000,

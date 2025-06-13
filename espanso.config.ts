@@ -15,7 +15,7 @@ export default createEspansoConfig(
     (espanso) => {
         const simpleTriggers = [
             espanso.insert("blog", "https://garcez.dev", "My blog"),
-            espanso.insert("git", "https://github.com/g4rcez", "My github"),
+            espanso.insert("git", "https://github.com/g4rcez/", "My github"),
             espanso.insert(
                 "twitter",
                 "https://x.com/garcez_allan",

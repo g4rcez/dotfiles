@@ -1,4 +1,5 @@
 {
+    "cSpell.language": "en,pt,pt_BR",
     "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
     "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -55,6 +56,7 @@
     "vscode-neovim.neovimExecutablePaths.darwin": "nvim",
     "vscode-neovim.normalSelectionDebounceTime": 100,
     "vscode-neovim.revealCursorScrollLine": true,
+    "vscode-neovim.logPath": null,
     "window.commandCenter": false,
     "window.customTitleBarVisibility": "never",
     "window.titleBarStyle": "native",

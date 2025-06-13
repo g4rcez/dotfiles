@@ -1,6 +1,7 @@
 return {
     {
         "nguyenvukhang/nvim-toggler",
+        enabled = false,
         config = function()
             local toggler = require "nvim-toggler"
             toggler.setup {
@@ -22,7 +23,7 @@ return {
                 -- auto-selects the longest match when there are multiple matches
                 autoselect_longest_match = false,
             }
-            vim.keymap.set({ "n", "v" }, "!", toggler.toggle)
+            -- vim.keymap.set({ "n", "v" }, "!", toggler.toggle)
         end,
     },
 }
