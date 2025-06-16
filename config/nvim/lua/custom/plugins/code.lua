@@ -68,20 +68,20 @@ return {
     {
         "brenoprata10/nvim-highlight-colors",
         opts = {
+            enable_hex = true,
+            enable_hsl = true,
+            enable_rgb = true,
+            exclude_buftypes = {},
             render = "background",
+            enable_tailwind = true,
+            exclude_filetypes = {},
             virtual_symbol = "■",
+            enable_short_hex = true,
+            enable_var_usage = true,
+            enable_named_colors = true,
             virtual_symbol_prefix = "",
             virtual_symbol_suffix = " ",
             virtual_symbol_position = "inline",
-            enable_hex = true,
-            enable_short_hex = true,
-            enable_rgb = true,
-            enable_hsl = true,
-            enable_var_usage = true,
-            enable_named_colors = true,
-            enable_tailwind = true,
-            exclude_filetypes = {},
-            exclude_buftypes = {},
         },
     },
     {
@@ -121,33 +121,31 @@ return {
         },
     },
     {
+        "tronikelis/ts-autotag.nvim",
+        opts = {},
+        event = "VeryLazy",
+    },
+    {
         "windwp/nvim-ts-autotag",
-        config = function()
-            require("nvim-ts-autotag").setup {
-                opts = { enable_close = true, enable_rename = true, enable_close_on_slash = true },
-            }
-        end,
+        opts = { opts = { enable_close = true, enable_rename = true, enable_close_on_slash = true } },
     },
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         opts = {
             disable_filetype = { "TelescopePrompt", "spectre_panel", "snacks_picker_input" },
-            disable_in_macro = true,        -- disable when recording or executing a macro
-            disable_in_visualblock = false, -- disable when insert after visual block mode
-            disable_in_replace_mode = true,
-            ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
-            enable_moveright = true,
-            enable_afterquote = true,         -- add bracket pairs after quote
-            enable_check_bracket_line = true, --- check bracket in same line
-            enable_bracket_in_quote = true,   --
-            enable_abbr = true,               -- trigger abbreviation
-            break_undo = true,                -- switch for basic rule break undo sequence
             check_ts = true,
-            map_cr = true,
-            map_bs = true,   -- map the <BS> key
-            map_c_h = false, -- Map the <C-h> key to delete a pair
-            map_c_w = false, -- map <c-w> to delete a pair if possible
+            fast_wrap = {
+                map = "<M-e>",
+                chars = { "{", "[", "(", '"', "'" },
+                pattern = ([[ [%'%"%)%>%]%)%}%,] ]]):gsub("%s+", ""),
+                offset = 0,
+                end_key = "$",
+                keys = "qwertyuiopzxcvbnmasdfghjkl",
+                check_comma = true,
+                highlight = "PmenuSel",
+                highlight_grey = "LineNr",
+            },
         },
     },
     {

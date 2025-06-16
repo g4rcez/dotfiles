@@ -107,6 +107,13 @@ return {
             end
 
             local function code()
+                bind.normal("<leader>co", function()
+                    vim.lsp.buf.code_action {
+                        apply = true,
+                        context = { only = { "source.organizeImports" } },
+                    }
+                end, { desc = "Organize Imports" })
+
                 bind.normal("<leader>rr", function()
                     require("grug-far").open { engine = "astgrep" }
                 end, { desc = "Replace with grug-far astgrep" })
@@ -129,7 +136,7 @@ return {
                 end, { desc = "[c]ode [F]ind aerial" })
             end
             local createMotions = require "config.motions"
-            require "config.switch".setup()
+            require("config.switch").setup()
             local motions = createMotions(keymap)
             require("config.window-mode").setup {
                 timeout = 30000,

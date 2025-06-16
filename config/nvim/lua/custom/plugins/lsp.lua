@@ -1,23 +1,3 @@
-local languages = {
-    "ast_grep",
-    "bashls",
-    "css_variables",
-    "cssls",
-    "denols",
-    "docker_compose_language_service",
-    "dockerls",
-    "emmet_language_server",
-    "gh_actions_ls",
-    "harper_ls",
-    "html",
-    "jsonls",
-    "lua_ls",
-    "sqlls",
-    "tailwindcss",
-    "vtsls",
-    "yamlls",
-}
-
 return {
     "kabouzeid/nvim-lspinstall",
     {
@@ -30,6 +10,7 @@ return {
         opts = {
             library = {
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                { path = "lazy.nvim",          words = { "Lazy" } },
             },
         },
     },
@@ -58,29 +39,17 @@ return {
         end,
     },
     {
+        "jay-babu/mason-null-ls.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+    },
+    {
         opts = {},
         "vuki656/package-info.nvim",
         event = "BufRead package.json",
         dependencies = { "MunifTanjim/nui.nvim" },
     },
-    {
-        "pmizio/typescript-tools.nvim",
-        enabled = false,
-        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        opts = {},
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        opts = function(_, opts)
-            opts.ensure_installed = { "vtsls", "eslint" }
-        end,
-    },
-    {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        opts = function(_, opts)
-            opts.ensure_installed = { "vtsls", "eslint-lsp", "prettierd", "js-debug-adapter" }
-        end,
-    },
+    { "williamboman/mason-lspconfig.nvim", opts = {} },
     {
         "neovim/nvim-lspconfig",
         dependencies = {
@@ -121,11 +90,25 @@ return {
             }
             local lspconfig = require "lspconfig"
             opts.servers = opts.servers or {}
+            opts.servers.vtsls = opts.servers.vtsls or {}
+            opts.servers.vtsls.init_options = {
+                typescript = {
+                    unstable = {
+                        organizeImportsLocale = "en",
+                        organizeImportsCaseFirst = false,
+                        organizeImportsIgnoreCase = "auto",
+                        organizeImportsCollation = "unicode",
+                        organizeImportsAccentCollation = true,
+                        organizeImportsNumericCollation = true,
+                    },
+                },
+            }
             for server, config in pairs(opts.servers) do
                 config.capabilities =
                     vim.tbl_deep_extend("force", M.capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
                 lspconfig[server].setup(config)
             end
+            return opts
         end,
     },
 }

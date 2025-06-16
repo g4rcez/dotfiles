@@ -1,21 +1,5 @@
 return {
     {
-        "stevearc/conform.nvim",
-        enabled = false,
-        opts = {
-            formatters_by_ft = {
-                lua = { "stylua" },
-                python = { "isort", "black" },
-                rust = { "rustfmt", lsp_format = "fallback" },
-                javascript = { "prettierd", "prettier", stop_after_first = true },
-                typescript = { "prettierd", "prettier", stop_after_first = true },
-                typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-                deno = { "deno_fmt" },
-                bash = { "shfmt" },
-            },
-        },
-    },
-    {
         "nvimtools/none-ls.nvim",
         opts = function(_, opts)
             local null_ls = require "null-ls"
