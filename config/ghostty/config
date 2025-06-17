@@ -17,6 +17,7 @@ mouse-shift-capture = true
 quick-terminal-position = top
 quick-terminal-screen = main
 shell-integration-features = no-cursor
+shell-integration = zsh
 theme = catppuccin-mocha
 
 # font
@@ -43,8 +44,8 @@ window-inherit-working-directory = true
 # OSX
 alpha-blending = native
 macos-option-as-alt = true
-macos-window-shadow = false
-macos-titlebar-style = hidden
+macos-window-shadow = true
+macos-titlebar-style = transparent
 macos-auto-secure-input = true
 macos-secure-input-indication = true
 
