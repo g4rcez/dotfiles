@@ -107,6 +107,9 @@ return {
             end
 
             local function code()
+                bind.normal("<leader>ud", function()
+                    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+                end, { desc = "Toggle diagnostics" })
                 bind.normal("<leader>co", function()
                     vim.lsp.buf.code_action {
                         apply = true,

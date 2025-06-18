@@ -1803,7 +1803,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"w\" Window manager\n\nequal_sign: Window: larger\nhyphen: Window: smaller\nc: Window: center\ni: Window: center-two-thirds\nd: Window: first-third\nf: Window: maximize\nh: Window: left-half\nj: Window: bottom-half\nk: Window: top-half\nl: Window: right-half\nreturn_or_enter: Window: maximize\nq: Window: first-two-thirds\ntab: Window: first-third\ne: Window: last-third\nr: Window: last-two-thirds\ndelete_or_backspace: Window: last\nslash: Window: bottom-right\nperiod: Window: bottom-left\nbackslash: Window: top-right\nclose_bracket: Window: top-left"
+                      "text": "Layer \"w\" Window manager\n\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -1818,7 +1818,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"w\" Window manager\n\nequal_sign: Window: larger\nhyphen: Window: smaller\nc: Window: center\ni: Window: center-two-thirds\nd: Window: first-third\nf: Window: maximize\nh: Window: left-half\nj: Window: bottom-half\nk: Window: top-half\nl: Window: right-half\nreturn_or_enter: Window: maximize\nq: Window: first-two-thirds\ntab: Window: first-third\ne: Window: last-third\nr: Window: last-two-thirds\ndelete_or_backspace: Window: last\nslash: Window: bottom-right\nperiod: Window: bottom-left\nbackslash: Window: top-right\nclose_bracket: Window: top-left"
+                      "text": "Persistent mode - Layer \"w\" Window manager\n\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -1827,7 +1827,7 @@
             ]
           },
           {
-            "description": "leader + w + equal_sign - Window: larger",
+            "description": "leader + w + h - Window: focus --boundaries-action wrap-around-the-workspace left",
             "manipulators": [
               {
                 "conditions": [
@@ -1837,349 +1837,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + equal_sign - Window: larger",
-                "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=larger"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + equal_sign - Window: larger",
-                "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=larger"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + hyphen - Window: smaller",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + hyphen - Window: smaller",
-                "from": {
-                  "key_code": "hyphen"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=smaller"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + hyphen - Window: smaller",
-                "from": {
-                  "key_code": "hyphen"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=smaller"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + c - Window: center",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + c - Window: center",
-                "from": {
-                  "key_code": "c"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + c - Window: center",
-                "from": {
-                  "key_code": "c"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + i - Window: center-two-thirds",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + i - Window: center-two-thirds",
-                "from": {
-                  "key_code": "i"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + i - Window: center-two-thirds",
-                "from": {
-                  "key_code": "i"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=center-two-thirds"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + d - Window: first-third",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + d - Window: first-third",
-                "from": {
-                  "key_code": "d"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + d - Window: first-third",
-                "from": {
-                  "key_code": "d"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + f - Window: maximize",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + f - Window: maximize",
-                "from": {
-                  "key_code": "f"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + f - Window: maximize",
-                "from": {
-                  "key_code": "f"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + h - Window: left-half",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + h - Window: left-half",
+                "description": "leader + w + h - Window: focus --boundaries-action wrap-around-the-workspace left",
                 "from": {
                   "key_code": "h"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=left-half"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus --boundaries-action wrap-around-the-workspace left"
                   },
                   {
                     "halt": true,
@@ -2205,13 +1869,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + h - Window: left-half",
+                "description": "leader + w + h - Window: focus --boundaries-action wrap-around-the-workspace left",
                 "from": {
                   "key_code": "h"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=left-half"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus --boundaries-action wrap-around-the-workspace left"
                   }
                 ],
                 "type": "basic"
@@ -2219,7 +1883,7 @@
             ]
           },
           {
-            "description": "leader + w + j - Window: bottom-half",
+            "description": "leader + w + l - Window: focus --boundaries-action wrap-around-the-workspace right",
             "manipulators": [
               {
                 "conditions": [
@@ -2229,125 +1893,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + j - Window: bottom-half",
-                "from": {
-                  "key_code": "j"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-half"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + j - Window: bottom-half",
-                "from": {
-                  "key_code": "j"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-half"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + k - Window: top-half",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + k - Window: top-half",
-                "from": {
-                  "key_code": "k"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-half"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + k - Window: top-half",
-                "from": {
-                  "key_code": "k"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-half"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + l - Window: right-half",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + l - Window: right-half",
+                "description": "leader + w + l - Window: focus --boundaries-action wrap-around-the-workspace right",
                 "from": {
                   "key_code": "l"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus --boundaries-action wrap-around-the-workspace right"
                   },
                   {
                     "halt": true,
@@ -2373,13 +1925,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + l - Window: right-half",
+                "description": "leader + w + l - Window: focus --boundaries-action wrap-around-the-workspace right",
                 "from": {
                   "key_code": "l"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=right-half"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus --boundaries-action wrap-around-the-workspace right"
                   }
                 ],
                 "type": "basic"
@@ -2387,7 +1939,7 @@
             ]
           },
           {
-            "description": "leader + w + return_or_enter - Window: maximize",
+            "description": "leader + w + f - Window: fullscreen",
             "manipulators": [
               {
                 "conditions": [
@@ -2397,13 +1949,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + f - Window: fullscreen",
                 "from": {
-                  "key_code": "return_or_enter"
+                  "key_code": "f"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "/opt/homebrew/bin/aerospace fullscreen"
                   },
                   {
                     "halt": true,
@@ -2429,13 +1981,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + return_or_enter - Window: maximize",
+                "description": "leader + w + f - Window: fullscreen",
                 "from": {
-                  "key_code": "return_or_enter"
+                  "key_code": "f"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=maximize"
+                    "shell_command": "/opt/homebrew/bin/aerospace fullscreen"
                   }
                 ],
                 "type": "basic"
@@ -2443,7 +1995,7 @@
             ]
           },
           {
-            "description": "leader + w + q - Window: first-two-thirds",
+            "description": "leader + w + b - Window: balance-sizes",
             "manipulators": [
               {
                 "conditions": [
@@ -2453,13 +2005,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + q - Window: first-two-thirds",
+                "description": "leader + w + b - Window: balance-sizes",
                 "from": {
-                  "key_code": "q"
+                  "key_code": "b"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                    "shell_command": "/opt/homebrew/bin/aerospace balance-sizes"
                   },
                   {
                     "halt": true,
@@ -2485,13 +2037,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + q - Window: first-two-thirds",
+                "description": "leader + w + b - Window: balance-sizes",
                 "from": {
-                  "key_code": "q"
+                  "key_code": "b"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-two-thirds"
+                    "shell_command": "/opt/homebrew/bin/aerospace balance-sizes"
                   }
                 ],
                 "type": "basic"
@@ -2499,7 +2051,7 @@
             ]
           },
           {
-            "description": "leader + w + tab - Window: first-third",
+            "description": "leader + w + hyphen - Window: resize smart -50",
             "manipulators": [
               {
                 "conditions": [
@@ -2509,13 +2061,181 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + tab - Window: first-third",
+                "description": "leader + w + hyphen - Window: resize smart -50",
+                "from": {
+                  "key_code": "hyphen"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace resize smart -50"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + hyphen - Window: resize smart -50",
+                "from": {
+                  "key_code": "hyphen"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace resize smart -50"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + equal_sign - Window: resize smart +50",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + equal_sign - Window: resize smart +50",
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace resize smart +50"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + equal_sign - Window: resize smart +50",
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace resize smart +50"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + w - Window: layout tiles accordion",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + w - Window: layout tiles accordion",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace layout tiles accordion"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + w - Window: layout tiles accordion",
+                "from": {
+                  "key_code": "w"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace layout tiles accordion"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + tab - Window: focus-back-and-forth",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + tab - Window: focus-back-and-forth",
                 "from": {
                   "key_code": "tab"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus-back-and-forth"
                   },
                   {
                     "halt": true,
@@ -2541,13 +2261,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + tab - Window: first-third",
+                "description": "leader + w + tab - Window: focus-back-and-forth",
                 "from": {
                   "key_code": "tab"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=first-third"
+                    "shell_command": "/opt/homebrew/bin/aerospace focus-back-and-forth"
                   }
                 ],
                 "type": "basic"
@@ -2555,7 +2275,7 @@
             ]
           },
           {
-            "description": "leader + w + e - Window: last-third",
+            "description": "leader + w + spacebar - Window: layout floating tiling",
             "manipulators": [
               {
                 "conditions": [
@@ -2565,13 +2285,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + e - Window: last-third",
+                "description": "leader + w + spacebar - Window: layout floating tiling",
                 "from": {
-                  "key_code": "e"
+                  "key_code": "spacebar"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last-third"
+                    "shell_command": "/opt/homebrew/bin/aerospace layout floating tiling"
                   },
                   {
                     "halt": true,
@@ -2597,349 +2317,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + e - Window: last-third",
+                "description": "leader + w + spacebar - Window: layout floating tiling",
                 "from": {
-                  "key_code": "e"
+                  "key_code": "spacebar"
                 },
                 "to": [
                   {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last-third"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + r - Window: last-two-thirds",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + r - Window: last-two-thirds",
-                "from": {
-                  "key_code": "r"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last-two-thirds"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + r - Window: last-two-thirds",
-                "from": {
-                  "key_code": "r"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last-two-thirds"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + delete_or_backspace - Window: last",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + delete_or_backspace - Window: last",
-                "from": {
-                  "key_code": "delete_or_backspace"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + delete_or_backspace - Window: last",
-                "from": {
-                  "key_code": "delete_or_backspace"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=last"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + slash - Window: bottom-right",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + slash - Window: bottom-right",
-                "from": {
-                  "key_code": "slash"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-right"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + slash - Window: bottom-right",
-                "from": {
-                  "key_code": "slash"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-right"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + period - Window: bottom-left",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + period - Window: bottom-left",
-                "from": {
-                  "key_code": "period"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-left"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + period - Window: bottom-left",
-                "from": {
-                  "key_code": "period"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=bottom-left"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + backslash - Window: top-right",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + backslash - Window: top-right",
-                "from": {
-                  "key_code": "backslash"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-right"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + backslash - Window: top-right",
-                "from": {
-                  "key_code": "backslash"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-right"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "leader + w + close_bracket - Window: top-left",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_SINGLE",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + close_bracket - Window: top-left",
-                "from": {
-                  "key_code": "close_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-left"
-                  },
-                  {
-                    "halt": true,
-                    "set_variable": {
-                      "name": "VIM_MODE_w_SINGLE",
-                      "value": "off"
-                    }
-                  },
-                  {
-                    "set_notification_message": {
-                      "id": "dev.garcez.vim_mode",
-                      "text": ""
-                    }
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "VIM_MODE_w_HOLD",
-                    "value": "on"
-                  }
-                ],
-                "description": "leader + w + close_bracket - Window: top-left",
-                "from": {
-                  "key_code": "close_bracket"
-                },
-                "to": [
-                  {
-                    "shell_command": "open -g rectangle-pro://execute-action?name=top-left"
+                    "shell_command": "/opt/homebrew/bin/aerospace layout floating tiling"
                   }
                 ],
                 "type": "basic"

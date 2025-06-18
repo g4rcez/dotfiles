@@ -7,7 +7,10 @@ type Config = Partial<
     Record<
         KeyCode,
         Partial<
-            Record<KeyCode, KarabinerMotion> & { description?: string; hold?: boolean }
+            Record<KeyCode, KarabinerMotion> & {
+                description?: string;
+                hold?: boolean;
+            }
         >
     >
 >;
@@ -30,10 +33,26 @@ export const createLeaderLayers = (config: Config): WhichMods => {
     const whichKey: WhichKey[] = [];
     const keys: string[] = [];
     const allLayers = entries.reduce<KarabinerRule[]>(
-        (acc, [key, { description: leaderDescription = "", hold: leaderHold = false, ...motions }]) => {
+        (
+            acc,
+            [
+                key,
+                {
+                    description: leaderDescription = "",
+                    hold: leaderHold = false,
+                    ...motions
+                },
+            ],
+        ) => {
             const modal = `Layer "${key}" ${leaderDescription}` as const;
             keys.push(key);
-            const whichKeyModal = Object.entries(motions).map(([key, motion]) => `${key}: ${motion.description || ""}`);
+            const whichKeyModal = Object.entries(motions).map(
+                ([key, motion]) => `${key}: ${motion.description || ""}`,
+            );
+            const fromModifiers = ["any"];
+            if (key === key.toUpperCase()) {
+                fromModifiers.push("shift");
+            }
             const leader: KarabinerRule = {
                 description: `leader ${key}`,
                 manipulators: [
@@ -44,15 +63,19 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                         description: `leader_key_${key}`,
                         from: {
                             key_code: key as KeyCode,
-                            modifiers: { optional: ["any"] },
+                            modifiers: { optional: fromModifiers },
                         },
                         to_if_alone: [
                             karabiner.vim.on(key, leaderHold),
-                            karabiner.notify(`${modal}\n\n${whichKeyModal.join("\n")}`),
+                            karabiner.notify(
+                                `${modal}\n\n${whichKeyModal.join("\n")}`,
+                            ),
                         ],
                         to_if_held_down: [
                             karabiner.vim.on(key, true),
-                            karabiner.notify(`Persistent mode - ${modal}\n\n${whichKeyModal.join("\n")}`),
+                            karabiner.notify(
+                                `Persistent mode - ${modal}\n\n${whichKeyModal.join("\n")}`,
+                            ),
                         ],
                         type: "basic",
                     },
@@ -189,7 +212,10 @@ export const createLeaderLayers = (config: Config): WhichMods => {
     return { layers: allLayers, whichKey, keys: Array.from(new Set(keys)) };
 };
 
-export const createLeaderDisable = (key: string, hold: boolean): Manipulator => ({
+export const createLeaderDisable = (
+    key: string,
+    hold: boolean,
+): Manipulator => ({
     description: `Caps Lock -> Hyper Key(${key}_single)`,
     type: "basic",
     to_if_alone: [{ key_code: "escape" }],

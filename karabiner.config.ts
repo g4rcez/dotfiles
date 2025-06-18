@@ -5,12 +5,34 @@ const modKeys = karabiner.createHyperSubLayers({
     h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
     j: { to: [{ key_code: "down_arrow" }], description: "Down arrow" },
     l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
-    open_bracket: karabiner.open("raycast://extensions/g4rcez/whichkey/whichkey", "", "Snippets"),
-    close_bracket: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Snippets"),
-    4: { to: [{ key_code: "right_arrow", modifiers: ["left_command"] }], description: "Go to end of line" },
-    e: karabiner.open("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "", "Open emojis"),
-    0: { to: [{ key_code: "left_arrow", modifiers: ["left_command"] }], description: "Go to begin of line" },
-    tab: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast"),
+    open_bracket: karabiner.open(
+        "raycast://extensions/g4rcez/whichkey/whichkey",
+        "",
+        "Snippets",
+    ),
+    close_bracket: karabiner.open(
+        "raycast://extensions/g4rcez/snippets/snippets",
+        "",
+        "Snippets",
+    ),
+    4: {
+        to: [{ key_code: "right_arrow", modifiers: ["left_command"] }],
+        description: "Go to end of line",
+    },
+    e: karabiner.open(
+        "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+        "",
+        "Open emojis",
+    ),
+    0: {
+        to: [{ key_code: "left_arrow", modifiers: ["left_command"] }],
+        description: "Go to begin of line",
+    },
+    tab: karabiner.open(
+        "raycast://extensions/raycast/navigation/switch-windows",
+        "",
+        "Switch windows with raycast",
+    ),
 });
 
 /*
@@ -29,28 +51,19 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     w: {
         description: "Window manager",
-        equal_sign: karabiner.rectangle("larger"),
-        hyphen: karabiner.rectangle("smaller"),
-        c: karabiner.rectangle("center"),
-        i: karabiner.rectangle("center-two-thirds"),
-        d: karabiner.rectangle("first-third"),
-        f: karabiner.rectangle("maximize"),
-        h: karabiner.rectangle("left-half"),
-        j: karabiner.rectangle("bottom-half"),
-        k: karabiner.rectangle("top-half"),
-        l: karabiner.rectangle("right-half"),
-        return_or_enter: karabiner.rectangle("maximize"),
-        q: karabiner.rectangle("first-two-thirds"),
-        tab: karabiner.rectangle("first-third"),
-        e: karabiner.rectangle("last-third"),
-        r: karabiner.rectangle("last-two-thirds"),
-        delete_or_backspace: karabiner.rectangle("last"),
-
-        slash: karabiner.rectangle("bottom-right"),
-        period: karabiner.rectangle("bottom-left"),
-
-        backslash: karabiner.rectangle("top-right"),
-        close_bracket: karabiner.rectangle("top-left"),
+        h: karabiner.aerospace(
+            "focus --boundaries-action wrap-around-the-workspace left",
+        ),
+        l: karabiner.aerospace(
+            "focus --boundaries-action wrap-around-the-workspace right",
+        ),
+        f: karabiner.aerospace("fullscreen"),
+        b: karabiner.aerospace("balance-sizes"),
+        hyphen: karabiner.aerospace("resize smart -50"),
+        equal_sign: karabiner.aerospace("resize smart +50"),
+        w: karabiner.aerospace("layout tiles accordion"),
+        tab: karabiner.aerospace("focus-back-and-forth"),
+        spacebar: karabiner.aerospace("layout floating tiling"),
     },
     s: {
         hold: true,
@@ -63,7 +76,10 @@ const withLeaderKeys = karabiner.createLeaderLayers({
             to: [{ key_code: "display_brightness_increment" }],
             description: "Increment brightness",
         },
-        n: karabiner.shell("osascript $HOME/dotfiles/bin/clear-notifications", "Clear notifications"),
+        n: karabiner.shell(
+            "osascript $HOME/dotfiles/bin/clear-notifications",
+            "Clear notifications",
+        ),
         hyphen: {
             to: [{ key_code: "volume_decrement" }],
             description: "Decrease volume",
@@ -114,10 +130,24 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     r: {
         description: "Raycast layer",
         i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
-        q: karabiner.open("raycast://extensions/raycast/raycast-ai/search-ai-chat-presets"),
-        t: karabiner.open("raycast://extensions/g4rcez/snippets/snippets", "", "Open my personal snippets gallery"),
-        m: karabiner.open("raycast://extensions/raycast/navigation/search-menu-items", "", "Search menu of current app"),
-        w: karabiner.open("raycast://extensions/raycast/navigation/switch-windows", "", "Switch windows with raycast"),
+        q: karabiner.open(
+            "raycast://extensions/raycast/raycast-ai/search-ai-chat-presets",
+        ),
+        t: karabiner.open(
+            "raycast://extensions/g4rcez/snippets/snippets",
+            "",
+            "Open my personal snippets gallery",
+        ),
+        m: karabiner.open(
+            "raycast://extensions/raycast/navigation/search-menu-items",
+            "",
+            "Search menu of current app",
+        ),
+        w: karabiner.open(
+            "raycast://extensions/raycast/navigation/switch-windows",
+            "",
+            "Switch windows with raycast",
+        ),
         c: karabiner.open(
             "raycast://extensions/raycast/raycast/confetti",
             "",

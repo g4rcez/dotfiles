@@ -52,4 +52,8 @@ defaults write com.knollsoft.Rectangle almostMaximizeWidth -float 0.95
 
 # If the font quality on non-retina display looks bad then set
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool YES
+defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+defaults write com.apple.dock expose-group-apps -bool true && killall Dock
+defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+
 

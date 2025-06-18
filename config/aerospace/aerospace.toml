@@ -1,44 +1,63 @@
-accordion-padding = 10
-automatically-unhide-macos-hidden-apps = true
+accordion-padding = 2
+start-at-login = true
+after-login-command = []
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
-enable-normalization-flatten-containers = false
-enable-normalization-opposite-orientation-for-nested-containers = false
-start-at-login = true
+automatically-unhide-macos-hidden-apps = false
+enable-normalization-flatten-containers = true
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+enable-normalization-opposite-orientation-for-nested-containers = true
 
 [key-mapping]
-preset = 'qwerty'
-
-[gaps]
-inner.horizontal = 0
-inner.vertical = 0
-outer.left = 0
-outer.bottom = 0
-outer.top = 0
-outer.right = 0
+    preset = 'qwerty'
 
 [mode.main.binding]
-alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-4 = 'workspace 4'
-alt-5 = 'workspace 5'
+    alt-shift-c = 'reload-config'
+    alt-shift-r = 'mode controller'
+    alt-shift-m = 'mode controller'
+    alt-shift-w = 'mode workspaces'
+    alt-1 = 'workspace browser'
+    alt-2 = 'workspace work'
+    alt-3 = 'workspace dotfiles'
+    alt-4 = 'workspace chat'
+    alt-5 = 'workspace ai'
+    alt-6 = 'workspace infra'
+    alt-7 = 'workspace 7'
+    alt-8 = 'workspace music'
+    alt-9 = 'workspace 9'
+    alt-0 = 'workspace 0'
+    cmd-h = [] 
+    cmd-alt-h = [] 
 
-[mode.resize.binding]
-h = 'resize smart -50'
-minus = 'resize smart -50'
-equal = 'resize smart +50'
-l = 'resize smart +50'
-k = 'resize height +50'
-j = 'resize height -50'
+    shift-alt-1 = 'move-node-to-workspace --focus-follows-window browser'
+    shift-alt-2 = 'move-node-to-workspace --focus-follows-window work'
+    shift-alt-3 = 'move-node-to-workspace --focus-follows-window dotfiles'
+    shift-alt-4 = 'move-node-to-workspace --focus-follows-window chat'
+    shift-alt-5 = 'move-node-to-workspace --focus-follows-window ai'
+    shift-alt-6 = 'move-node-to-workspace --focus-follows-window 6'
+    shift-alt-7 = 'move-node-to-workspace --focus-follows-window 7'
+    shift-alt-8 = 'move-node-to-workspace --focus-follows-window music'
+    shift-alt-9 = 'move-node-to-workspace --focus-follows-window 9'
+    shift-alt-0 = 'move-node-to-workspace --focus-follows-window 0'
 
-[mode.workspace.binding]
-h = 'move-node-to-workspace prev'
-l = 'move-node-to-workspace next'
-1 = 'move-node-to-workspace 1'
-2 = 'move-node-to-workspace 2'
-3 = 'move-node-to-workspace 3'
-4 = 'move-node-to-workspace 4'
-5 = 'move-node-to-workspace 5'
+[mode.controller.binding]
+    esc = 'mode main'
 
+    h = 'focus left'
+    j = 'focus down'
+    k = 'focus up'
+    l = 'focus right'
+    minus = 'resize smart -50'
+    equal = 'resize smart +50'
+    b = "balance-sizes"
+
+    alt-h = 'move left'
+    alt-j = 'move down'
+    alt-k = 'move up'
+    alt-l = 'move right'
+
+[mode.workspaces.binding]
+    esc = 'mode main'
+
+    h = 'move-node-to-workspace --focus-follows-window prev'
+    l = 'move-node-to-workspace --focus-follows-window next'

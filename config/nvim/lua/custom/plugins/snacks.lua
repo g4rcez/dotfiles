@@ -96,9 +96,14 @@ return {
             {
                 "<leader><space>",
                 function()
-                    require("snacks").picker.smart {}
+                    require("snacks").picker.files ({
+                        hidden = true,
+                        ignored = false,
+                        follow = true,
+                        supports_live = true,
+                    })
                 end,
-                desc = "Smart Find Files",
+                desc = "Find Files",
             },
             {
                 "<leader>fg",

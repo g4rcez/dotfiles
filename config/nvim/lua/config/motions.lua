@@ -57,7 +57,9 @@ local function createMotions(mapper)
         end, DEFAULT_OPTS)
         mapper.bind.normal(
             "<leader>bo",
-            require("snacks.bufdelete").other,
+            function ()
+                require("snacks.bufdelete").other()
+            end,
             { desc = "Close all except current", icon = "" }
         )
         mapper.bind.normal("<leader>bh", function()
