@@ -1,5 +1,5 @@
 import { Script } from "../script.ts";
-import { add, sub } from "npm:date-fns";
+import { add, format, sub } from "npm:date-fns";
 
 const dateFormatPtBR = Intl.DateTimeFormat("pt-BR", {
     day: "numeric",
@@ -8,6 +8,10 @@ const dateFormatPtBR = Intl.DateTimeFormat("pt-BR", {
 });
 
 const parsers = {
+    isod: () => {
+        const now = new Date();
+        return format(now, "yyyy-MM-dd");
+    },
     tomorrow: () => {
         const now = new Date();
         now.setDate(now.getDate() + 1);

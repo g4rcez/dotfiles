@@ -220,8 +220,8 @@ let g:WhichKeyDesc_recent_projects = "<leader>P Open recent projects"
 nmap <leader>git <action>(Git.Menu)
 let g:WhichKeyDesc_git_menu = "<leader>git Open git menu"
 
-nmap <leader>q <action>(CloseEditor)
-let g:WhichKeyDesc_close_editor = "<leader>q Close editor"
+nmap <leader>qq <action>(CloseEditor)
+let g:WhichKeyDesc_close_editor = "<leader>qq Close editor"
 
 nmap <leader>u <action>(Back)
 let g:WhichKeyDesc_back = "<leader>u Back"
@@ -325,9 +325,6 @@ vnoremap <leader>cr :'<,'>!tail -r<cr>
 let g:WhichKeyDesc_find_usages = "<leader>gr Find usages"
 map gr <Action>(FindUsages)
 
-let g:WhichKeyDesc_sort_len = "<leader>sl Sort by length"
-map <leader>sl <action>(StringManipulation.Sort)
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" telescope - prefix file(file/find)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -339,23 +336,26 @@ let g:WhichKeyDesc_recent_files = "<leader>fR Open recent files"
 
 let g:WhichKeyDesc_search_tools_prefix = "<leader>s +Search"
 
+nmap <leader>so <Action>(SelectInProjectView)
+let g:WhichKeyDesc_oil = "<leader>so Show current file in NERDTree"
+
 nmap <leader>fp <action>(FindInPath)
-let g:WhichKeyDesc_find_in_path = "<leader>sp Find in path"
+let g:WhichKeyDesc_find_in_path = "<leader>fp Find in path"
 
 nmap <leader>ff <action>(GotoFile)
-let g:WhichKeyDesc_goto_file = "<leader>sf Goto file"
+let g:WhichKeyDesc_goto_file = "<leader>ff Goto file"
 
 nmap <leader>fa <action>(TextSearchAction)
 let g:WhichKeyDesc_text_search_action = "<leader>fa Text search action"
 
 nmap <leader>fr <action>(ReplaceInPath)
-let g:WhichKeyDesc_replace_in_path = "<leader>sr Replace in path"
+let g:WhichKeyDesc_replace_in_path = "<leader>fr Replace in path"
 
 nmap <leader>fs <action>(GotoSymbol)
-let g:WhichKeyDesc_goto_symbol = "<leader>ss Goto symbol"
+let g:WhichKeyDesc_goto_symbol = "<leader>fs Goto symbol"
 
 nmap <leader>fc <action>(GotoClass)
-let g:WhichKeyDesc_goto_symbol = "<leader>sc Search Class"
+let g:WhichKeyDesc_goto_symbol = "<leader>fc Search Class"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" movement tools - prefix m(move)

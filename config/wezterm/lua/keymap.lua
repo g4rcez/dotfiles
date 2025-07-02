@@ -14,6 +14,9 @@ M.mouse_bindings = {
 M.keys = {
     { key = "t", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
     { key = "f", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
+    { key = 'm', mods = 'CMD', action = wezterm.action.DisableDefaultAssignment, },
+    { key = 'f', mods = 'CTRL|SHIFT', action = wezterm.action.DisableDefaultAssignment, },
+    { key = 'p', mods = 'CTRL|SHIFT', action = wezterm.action.DisableDefaultAssignment, },
 }
 
 return M

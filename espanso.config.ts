@@ -82,6 +82,7 @@ export default createEspansoConfig(
             espanso.insert("up", "🙌🏾", "Emoji: Raising hands"),
             espanso.insert("pray", "🙏🏾", "Emoji: Folded hands"),
             espanso.insert("cry", "😭", "Emoji: Loudly crying face"),
+            espanso.insert("think", "🤔", "Emoji: Thinking face"),
             espanso.insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug"),
             espanso.insert(
                 "tnc",
@@ -163,6 +164,11 @@ export default createEspansoConfig(
                 "tomorrow",
                 "Get tomorrow date",
                 runMain(`dates --value=tomorrow`),
+            ),
+            espanso.shell(
+                "dd",
+                "Get date in ISO format",
+                runMain('dates --value=isod'),
             ),
             espanso.shell(
                 "iso",

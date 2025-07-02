@@ -49,7 +49,49 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         w: karabiner.app("Spotify"),
         t: karabiner.app("Telegram"),
     },
+    m: {
+        "1": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window browser",
+        ),
+        "2": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window work",
+        ),
+        "3": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window dotfiles",
+        ),
+        "4": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window chat",
+        ),
+        "5": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window ai",
+        ),
+        "6": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window infra",
+        ),
+        "7": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window notes",
+        ),
+        "8": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window music",
+        ),
+        "9": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window 9",
+        ),
+        "0": karabiner.aerospace(
+            "move-node-to-workspace --focus-follows-window 0",
+        ),
+    },
     w: {
+        "1": karabiner.aerospace("workspace browser"),
+        "2": karabiner.aerospace("workspace work"),
+        "3": karabiner.aerospace("workspace dotfiles"),
+        "4": karabiner.aerospace("workspace chat"),
+        "5": karabiner.aerospace("workspace ai"),
+        "6": karabiner.aerospace("workspace infra"),
+        "7": karabiner.aerospace("workspace notes"),
+        "8": karabiner.aerospace("workspace music"),
+        "9": karabiner.aerospace("workspace 9"),
+        "0": karabiner.aerospace("workspace 0"),
         description: "Window manager",
         h: karabiner.aerospace(
             "focus --boundaries-action wrap-around-the-workspace left",
@@ -62,6 +104,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         hyphen: karabiner.aerospace("resize smart -50"),
         equal_sign: karabiner.aerospace("resize smart +50"),
         w: karabiner.aerospace("layout tiles accordion"),
+        n: karabiner.aerospace("workspace notes"),
         tab: karabiner.aerospace("focus-back-and-forth"),
         spacebar: karabiner.aerospace("layout floating tiling"),
     },

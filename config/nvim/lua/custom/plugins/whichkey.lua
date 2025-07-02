@@ -1,4 +1,5 @@
 return {
+    { "meznaric/key-analyzer.nvim", opts = {} },
     {
         "folke/which-key.nvim",
         event = "VimEnter",
@@ -11,17 +12,18 @@ return {
             local bind = keymap.bind
 
             local function groups()
+                wk.add { "<leader>a", group = "[a]i", icon = "󱦞" }
                 wk.add { "<leader>b", group = "[b]uffer", icon = "󱦞" }
-                wk.add { "<leader>c", group = "[c]ode", mode = { "n", "x" }, icon = "" }
+                wk.add { "<leader>c", group = "[c]ode", icon = "" }
                 wk.add { "<leader>f", group = "[f]ind", icon = "󱡴" }
                 wk.add { "<leader>g", group = "[g]it", icon = "" }
                 wk.add { "<leader>h", group = "[h]arpoon", icon = "" }
                 wk.add { "<leader>q", group = "[q]uit", icon = "󰿅" }
                 wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
-                wk.add { "<leader>u", group = "[u]i", mode = { "n" }, icon = "󱣴" }
-                wk.add { "<leader>r", group = "[r]eplace", mode = { "n" }, icon = "" }
-                wk.add { "<leader>x", group = "[x]errors", mode = { "n" }, icon = "" }
-                wk.add { "<leader>n", group = "[n]ew cursor", mode = { "n" }, icon = "" }
+                wk.add { "<leader>u", group = "[u]i", icon = "󱣴" }
+                wk.add { "<leader>r", group = "[r]eplace", icon = "" }
+                wk.add { "<leader>x", group = "[x]errors", icon = "" }
+                wk.add { "<leader>n", group = "[n]ew cursor", icon = "" }
             end
 
             local function harpoonConfig()
@@ -107,6 +109,7 @@ return {
             end
 
             local function code()
+                bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
                 bind.normal("<leader>ud", function()
                     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
                 end, { desc = "Toggle diagnostics" })
@@ -117,9 +120,13 @@ return {
                     }
                 end, { desc = "Organize Imports" })
 
+                bind.normal("<sc-f>", function()
+                    require("grug-far").open { engine = "astgrep" }
+                end, { desc = "Replace with grug-far astgrep" })
                 bind.normal("<leader>rr", function()
                     require("grug-far").open { engine = "astgrep" }
                 end, { desc = "Replace with grug-far astgrep" })
+
                 bind.normal("]g", function()
                     vim.diagnostic.goto_next {}
                 end, { desc = "Goto next error" })
@@ -134,7 +141,7 @@ return {
                 bind.normal("<leader>cF", function()
                     require("aerial").snacks_picker {
                         format = "text",
-                        layout = { preset = "vscode", preview = true },
+                        layout = { preset = "vscode" },
                     }
                 end, { desc = "[c]ode [F]ind aerial" })
             end
@@ -144,7 +151,15 @@ return {
             require("config.window-mode").setup {
                 timeout = 30000,
             }
-            local keymaps = { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, harpoonConfig }
+
+            local function ai()
+                bind.normal("<leader>auc", ":Augment chat<CR>", { desc = "Augment chat" })
+                bind.normal("<leader>aun", ":Augment chat-new<CR>", { desc = "New Augment chat" })
+                bind.normal("<leader>aut", ":Augment chat-toggle<CR>", { desc = "Toggle Augment chat" })
+            end
+
+            local keymaps =
+                { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
             for _, func in ipairs(keymaps) do
                 func()
             end

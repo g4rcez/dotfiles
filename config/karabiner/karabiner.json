@@ -214,6 +214,112 @@
                 ]
               },
               {
+                "description": "Caps Lock -> Hyper Key(m_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
+                "description": "Caps Lock -> Hyper Key(m_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
                 "description": "Caps Lock -> Hyper Key(w_single)",
                 "type": "basic",
                 "to_if_alone": [
@@ -1644,6 +1750,749 @@
             ]
           },
           {
+            "description": "disable single - leader m",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_m",
+                "from": {
+                  "key_code": "m",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "esc disable single - leader m",
+            "manipulators": [
+              {
+                "description": "esc_disable_single_leader_key_m",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 0
+                  }
+                ],
+                "from": {
+                  "key_code": "escape",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ],
+                    "mandatory": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader m",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_m",
+                "from": {
+                  "key_code": "m",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader m",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "leader_key_m",
+                "from": {
+                  "key_code": "m",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_if_alone": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window browser\n2: Window: move-node-to-workspace --focus-follows-window work\n3: Window: move-node-to-workspace --focus-follows-window dotfiles\n4: Window: move-node-to-workspace --focus-follows-window chat\n5: Window: move-node-to-workspace --focus-follows-window ai\n6: Window: move-node-to-workspace --focus-follows-window infra\n7: Window: move-node-to-workspace --focus-follows-window notes\n8: Window: move-node-to-workspace --focus-follows-window music\n9: Window: move-node-to-workspace --focus-follows-window 9"
+                    }
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Persistent mode - Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window browser\n2: Window: move-node-to-workspace --focus-follows-window work\n3: Window: move-node-to-workspace --focus-follows-window dotfiles\n4: Window: move-node-to-workspace --focus-follows-window chat\n5: Window: move-node-to-workspace --focus-follows-window ai\n6: Window: move-node-to-workspace --focus-follows-window infra\n7: Window: move-node-to-workspace --focus-follows-window notes\n8: Window: move-node-to-workspace --focus-follows-window music\n9: Window: move-node-to-workspace --focus-follows-window 9"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 0 - Window: move-node-to-workspace --focus-follows-window 0",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 0 - Window: move-node-to-workspace --focus-follows-window 0",
+                "from": {
+                  "key_code": "0"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 0"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 0 - Window: move-node-to-workspace --focus-follows-window 0",
+                "from": {
+                  "key_code": "0"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 0"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+                "from": {
+                  "key_code": "1"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window browser"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+                "from": {
+                  "key_code": "1"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window browser"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+                "from": {
+                  "key_code": "2"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window work"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+                "from": {
+                  "key_code": "2"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window work"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+                "from": {
+                  "key_code": "3"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window dotfiles"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+                "from": {
+                  "key_code": "3"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window dotfiles"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+                "from": {
+                  "key_code": "4"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window chat"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+                "from": {
+                  "key_code": "4"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window chat"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+                "from": {
+                  "key_code": "5"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window ai"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+                "from": {
+                  "key_code": "5"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window ai"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+                "from": {
+                  "key_code": "6"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window infra"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+                "from": {
+                  "key_code": "6"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window infra"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+                "from": {
+                  "key_code": "7"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window notes"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+                "from": {
+                  "key_code": "7"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window notes"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+                "from": {
+                  "key_code": "8"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window music"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+                "from": {
+                  "key_code": "8"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window music"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + m + 9 - Window: move-node-to-workspace --focus-follows-window 9",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 9 - Window: move-node-to-workspace --focus-follows-window 9",
+                "from": {
+                  "key_code": "9"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 9"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_m_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_m_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + m + 9 - Window: move-node-to-workspace --focus-follows-window 9",
+                "from": {
+                  "key_code": "9"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 9"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "disable single - leader w",
             "manipulators": [
               {
@@ -1803,7 +2652,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"w\" Window manager\n\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -1818,8 +2667,568 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"w\" Window manager\n\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Persistent mode - Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 0 - Window: workspace 0",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 0 - Window: workspace 0",
+                "from": {
+                  "key_code": "0"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 0"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 0 - Window: workspace 0",
+                "from": {
+                  "key_code": "0"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 0"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 1 - Window: workspace browser",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 1 - Window: workspace browser",
+                "from": {
+                  "key_code": "1"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace browser"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 1 - Window: workspace browser",
+                "from": {
+                  "key_code": "1"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace browser"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 2 - Window: workspace work",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 2 - Window: workspace work",
+                "from": {
+                  "key_code": "2"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace work"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 2 - Window: workspace work",
+                "from": {
+                  "key_code": "2"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace work"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 3 - Window: workspace dotfiles",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 3 - Window: workspace dotfiles",
+                "from": {
+                  "key_code": "3"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace dotfiles"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 3 - Window: workspace dotfiles",
+                "from": {
+                  "key_code": "3"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace dotfiles"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 4 - Window: workspace chat",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 4 - Window: workspace chat",
+                "from": {
+                  "key_code": "4"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace chat"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 4 - Window: workspace chat",
+                "from": {
+                  "key_code": "4"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace chat"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 5 - Window: workspace ai",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 5 - Window: workspace ai",
+                "from": {
+                  "key_code": "5"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace ai"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 5 - Window: workspace ai",
+                "from": {
+                  "key_code": "5"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace ai"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 6 - Window: workspace infra",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 6 - Window: workspace infra",
+                "from": {
+                  "key_code": "6"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace infra"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 6 - Window: workspace infra",
+                "from": {
+                  "key_code": "6"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace infra"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 7 - Window: workspace notes",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 7 - Window: workspace notes",
+                "from": {
+                  "key_code": "7"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 7 - Window: workspace notes",
+                "from": {
+                  "key_code": "7"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 8 - Window: workspace music",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 8 - Window: workspace music",
+                "from": {
+                  "key_code": "8"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace music"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 8 - Window: workspace music",
+                "from": {
+                  "key_code": "8"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace music"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + 9 - Window: workspace 9",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 9 - Window: workspace 9",
+                "from": {
+                  "key_code": "9"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 9"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + 9 - Window: workspace 9",
+                "from": {
+                  "key_code": "9"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 9"
                   }
                 ],
                 "type": "basic"
@@ -2212,6 +3621,62 @@
                 "to": [
                   {
                     "shell_command": "/opt/homebrew/bin/aerospace layout tiles accordion"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + w + n - Window: workspace notes",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + n - Window: workspace notes",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_w_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_w_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + w + n - Window: workspace notes",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
                   }
                 ],
                 "type": "basic"

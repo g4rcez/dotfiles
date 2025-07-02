@@ -1,14 +1,17 @@
 return {
-    "onsails/lspkind.nvim",
     {
         "saghen/blink.cmp",
         version = "1.*",
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
-            "rafamadriz/friendly-snippets",
+            "onsails/lspkind.nvim",
+            "bydlw98/blink-cmp-env",
             "nvim-lua/plenary.nvim",
-            { "L3MON4D3/LuaSnip", version = "v2.*" },
+            "Kaiser-Yang/blink-cmp-git",
             "Kaiser-Yang/blink-cmp-avante",
+            "rafamadriz/friendly-snippets",
+            "mikavilpas/blink-ripgrep.nvim",
+            { "L3MON4D3/LuaSnip", version = "v2.*" },
         },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
@@ -30,7 +33,8 @@ return {
                 keyword = { range = "full" },
                 accept = { auto_brackets = { enabled = true } },
                 menu = {
-                    auto_show = false,
+                    enabled = true,
+                    auto_show = true,
                     border = "rounded",
                     winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     draw = { treesitter = { "lsp" } },
@@ -51,16 +55,53 @@ return {
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<Esc>"] = { "cancel", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+                ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "avante", "lsp", "path", "snippets", "buffer" },
+                default = { "lsp", "avante", "snippets", "path", "git", "ripgrep", "buffer" },
                 providers = {
+                    git = {
+                        module = "blink-cmp-git",
+                        name = "Git",
+                        opts = {},
+                    },
                     avante = {
                         module = "blink-cmp-avante",
                         name = "Avante",
+                        opts = {},
+                    },
+                    ripgrep = {
+                        module = "blink-ripgrep",
+                        name = "Ripgrep",
+                        -- the options below are optional, some default values are shown
+                        ---@module "blink-ripgrep"
+                        ---@type blink-ripgrep.Options
                         opts = {
-                            model = "claude-sonnet-4-20250514",
+                            prefix_min_len = 3,
+                            context_size = 5,
+                            max_filesize = "1M",
+                            project_root_marker = ".git",
+                            project_root_fallback = true,
+                            search_casing = "--smart-case",
+                            additional_rg_options = {},
+                            fallback_to_regex_highlighting = true,
+                            ignore_paths = {},
+                            additional_paths = {},
+                            toggles = { on_off = nil, debug = nil },
+                            future_features = {
+                                backend = {
+                                    use = "ripgrep",
+                                    customize_icon_highlight = true,
+                                },
+                            },
+                            debug = false,
                         },
+                        transform_items = function(_, items)
+                            for _, item in ipairs(items) do
+                                item.labelDetails = { description = "(rg)" }
+                            end
+                            return items
+                        end,
                     },
                 },
             },

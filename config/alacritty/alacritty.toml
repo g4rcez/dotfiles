@@ -1,5 +1,8 @@
+[env]
+TERM = "xterm-256color"
+
 [window]
-opacity = 0.9
+opacity = 0.8
 padding.x = 2
 padding.y = 0
 decorations = "Buttonless"
@@ -17,7 +20,7 @@ italic.family = "JetBrainsMono Nerd Font Mono"
 normal.family = "JetBrainsMono Nerd Font Mono"
 offset.y = 3
 offset.x = 1
-size = 18
+size = 17
 
 [cursor]
 blink_interval = 500
@@ -28,12 +31,9 @@ unfocused_hollow = true
 [selection]
 save_to_clipboard = true
 
-[colors]
-draw_bold_text_with_bright_colors = true
-
 [colors.primary]
-background = "#121212"
-foreground = "#ffffff"
+background = "#1e1e2e"
+foreground = "#cdd6f4"
 dim_foreground = "#7f849c"
 bright_foreground = "#cdd6f4"
 
@@ -89,16 +89,6 @@ magenta = "#f5c2e7"
 cyan = "#94e2d5"
 white = "#a6adc8"
 
-[colors.dim]
-black = "#45475a"
-red = "#f38ba8"
-green = "#a6e3a1"
-yellow = "#f9e2af"
-blue = "#89b4fa"
-magenta = "#f5c2e7"
-cyan = "#94e2d5"
-white = "#bac2de"
-
 [[colors.indexed_colors]]
 index = 16
 color = "#fab387"
@@ -106,4 +96,3 @@ color = "#fab387"
 [[colors.indexed_colors]]
 index = 17
 color = "#f5e0dc"
-

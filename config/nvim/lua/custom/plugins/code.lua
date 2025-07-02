@@ -7,7 +7,7 @@ return {
     "editorconfig/editorconfig-vim",
     "JoosepAlviste/nvim-ts-context-commentstring",
     { "smjonas/inc-rename.nvim", opts = {} },
-    { "numToStr/Comment.nvim",   opts = {} },
+    { "numToStr/Comment.nvim", opts = {} },
     {
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -113,17 +113,9 @@ return {
                 virtualtext_inline = "before",
                 virtualtext_mode = "foreground",
                 always_update = true,
-                hooks = {
-
-                    do_lines_parse = false,
-                },
+                hooks = { do_lines_parse = false },
             },
         },
-    },
-    {
-        "tronikelis/ts-autotag.nvim",
-        opts = {},
-        event = "VeryLazy",
     },
     {
         "windwp/nvim-ts-autotag",
@@ -132,27 +124,8 @@ return {
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
-        opts = {
-            disable_filetype = { "TelescopePrompt", "spectre_panel", "snacks_picker_input" },
-            check_ts = true,
-            fast_wrap = {
-                map = "<M-e>",
-                chars = { "{", "[", "(", '"', "'" },
-                pattern = ([[ [%'%"%)%>%]%)%}%,] ]]):gsub("%s+", ""),
-                offset = 0,
-                end_key = "$",
-                keys = "qwertyuiopzxcvbnmasdfghjkl",
-                check_comma = true,
-                highlight = "PmenuSel",
-                highlight_grey = "LineNr",
-            },
-        },
-    },
-    {
-        "stevearc/pair-ls.nvim",
         config = true,
-        cmd = { "Pair", "PairConnect" },
-        opts = { cmd = { "pair-ls", "lsp" } },
+        opts = {},
     },
     {
         "mfussenegger/nvim-lint",

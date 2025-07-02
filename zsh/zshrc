@@ -14,7 +14,6 @@ source "$HOME/.antidote/antidote.zsh"
 ZSH=$(antidote path ohmyzsh/ohmyzsh)
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 [[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
-
 antidote load
 zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
@@ -32,21 +31,17 @@ source $HOME/dotfiles/zsh/utils.sh
 
 local -a paths=(
   "/usr/local/bin"
-  "/usr/local/opt/libpq/bin"
-  "/opt/homebrew/opt/libpq/bin"
   "$HOME/.cargo/env"
   "$HOME/.local/bin"
   "$HOME/.local/share"
   "$HOME/.local/share/bin"
   "$PNPM_HOME"
-  "$HOME/.yarn/bin"
   "$HOME/.dotnet"
   "$HOME/.dotnet/tools"
   "$HOME/tools"
   "$HOME/tools/google-cloud-sdk/bin"
   "$HOME/.local/share/JetBrains/scripts"
   "$HOME/.local/share/JetBrains/Toolbox/scripts"
-  "$HOME/.config/yarn/global/node_modules/.bin"
   "$HOME/dotfiles/bin"
 )
 
@@ -84,23 +79,12 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-WORDCHARS='*_-[]~&;!#$%^(){}<>/\ '
+WORDCHARS='.*_-[]@~&;!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
-function findBuffers() {
-  local windows
-  windows=$(tmux list-windows -F "#{window_index}: #{window_name}")
-  local selection
-  selection=$(echo "$windows" | fzf --header="Select a tmux window:" \
-    --preview 'echo Session name: {}')
-  if [[ -n "$selection" ]]; then
-    local window_index=${selection%%:*}
-    tmux select-window -t "$window_index"
-  fi
-  zle reset-prompt
-}
-
-zle -N findBuffers
-bindkey '^@' findBuffers
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+source <(carapace _carapace)

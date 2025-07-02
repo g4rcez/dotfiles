@@ -49,6 +49,27 @@ return {
                     history_bonus = true,
                 },
                 layouts = {
+                    vscode = {
+                        preview = true,
+                        layout = {
+                            backdrop = true,
+                            row = 1,
+                            width = 0.4,
+                            min_width = 80,
+                            height = 0.4,
+                            border = "none",
+                            box = "vertical",
+                            {
+                                win = "input",
+                                height = 1,
+                                border = "rounded",
+                                title = "{title} {live} {flags}",
+                                title_pos = "center",
+                            },
+                            { win = "list", border = "hpad" },
+                            { win = "preview", title = "{preview}", border = "rounded" },
+                        },
+                    },
                     telescope = {
                         reverse = false,
                         layout = {
@@ -96,12 +117,23 @@ return {
             {
                 "<leader><space>",
                 function()
-                    require("snacks").picker.files ({
+                    require("snacks").picker.files {
                         hidden = true,
                         ignored = false,
                         follow = true,
                         supports_live = true,
-                    })
+                        matcher = {
+                            fuzzy = true,
+                            file_pos = true,
+                            frecency = true,
+                            cwd_bonus = true,
+                            smartcase = true,
+                            ignorecase = true,
+                            sort_empty = false,
+                            history_bonus = true,
+                            filename_bonus = true,
+                        },
+                    }
                 end,
                 desc = "Find Files",
             },
@@ -495,6 +527,13 @@ return {
                     Snacks.scratch.select()
                 end,
                 desc = "Select Scratch Buffer",
+            },
+            {
+                "<leader>fd",
+                function()
+                    Snacks.picker.diagnostics_buffer()
+                end,
+                desc = "Diagnostics",
             },
             {
                 "<leader>bd",

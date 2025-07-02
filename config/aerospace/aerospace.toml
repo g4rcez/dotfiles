@@ -1,4 +1,4 @@
-accordion-padding = 2
+accordion-padding = 0
 start-at-login = true
 after-login-command = []
 default-root-container-layout = 'tiles'
@@ -13,40 +13,42 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 
 [mode.main.binding]
     alt-shift-c = 'reload-config'
-    alt-shift-r = 'mode controller'
-    alt-shift-m = 'mode controller'
-    alt-shift-w = 'mode workspaces'
+    alt-shift-w = 'mode windows'
+
+    alt-shift-h = 'focus --boundaries-action wrap-around-the-workspace left'
+    alt-shift-l = 'focus --boundaries-action wrap-around-the-workspace right'
+
     alt-1 = 'workspace browser'
     alt-2 = 'workspace work'
     alt-3 = 'workspace dotfiles'
     alt-4 = 'workspace chat'
     alt-5 = 'workspace ai'
     alt-6 = 'workspace infra'
-    alt-7 = 'workspace 7'
+    alt-7 = 'workspace notes'
     alt-8 = 'workspace music'
     alt-9 = 'workspace 9'
     alt-0 = 'workspace 0'
-    cmd-h = [] 
-    cmd-alt-h = [] 
+    cmd-h = []
+    cmd-alt-h = []
 
     shift-alt-1 = 'move-node-to-workspace --focus-follows-window browser'
     shift-alt-2 = 'move-node-to-workspace --focus-follows-window work'
     shift-alt-3 = 'move-node-to-workspace --focus-follows-window dotfiles'
     shift-alt-4 = 'move-node-to-workspace --focus-follows-window chat'
     shift-alt-5 = 'move-node-to-workspace --focus-follows-window ai'
-    shift-alt-6 = 'move-node-to-workspace --focus-follows-window 6'
-    shift-alt-7 = 'move-node-to-workspace --focus-follows-window 7'
+    shift-alt-6 = 'move-node-to-workspace --focus-follows-window infra'
+    shift-alt-7 = 'move-node-to-workspace --focus-follows-window notes'
     shift-alt-8 = 'move-node-to-workspace --focus-follows-window music'
     shift-alt-9 = 'move-node-to-workspace --focus-follows-window 9'
     shift-alt-0 = 'move-node-to-workspace --focus-follows-window 0'
 
-[mode.controller.binding]
+[mode.windows.binding]
     esc = 'mode main'
 
-    h = 'focus left'
-    j = 'focus down'
-    k = 'focus up'
-    l = 'focus right'
+    h = 'focus --boundaries-action wrap-around-the-workspace left'
+    j = 'focus --boundaries-action wrap-around-the-workspace down'
+    k = 'focus --boundaries-action wrap-around-the-workspace up'
+    l = 'focus --boundaries-action wrap-around-the-workspace right'
     minus = 'resize smart -50'
     equal = 'resize smart +50'
     b = "balance-sizes"
@@ -56,8 +58,3 @@ enable-normalization-opposite-orientation-for-nested-containers = true
     alt-k = 'move up'
     alt-l = 'move right'
 
-[mode.workspaces.binding]
-    esc = 'mode main'
-
-    h = 'move-node-to-workspace --focus-follows-window prev'
-    l = 'move-node-to-workspace --focus-follows-window next'
