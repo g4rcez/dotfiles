@@ -1,9 +1,20 @@
 return {
     "kabouzeid/nvim-lspinstall",
+    { "dnlhc/glance.nvim",              cmd = "Glance" },
     {
-        "bezhermoso/tree-sitter-ghostty",
-        build = "make nvim_install",
+        "nvimdev/lspsaga.nvim",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter", -- optional
+            "nvim-tree/nvim-web-devicons",     -- optional
+        },
+        opts = {
+            ui = {
+                enable = false,
+                code_action = "",
+            },
+        },
     },
+    { "bezhermoso/tree-sitter-ghostty", build = "make nvim_install" },
     {
         "folke/lazydev.nvim",
         ft = "lua",

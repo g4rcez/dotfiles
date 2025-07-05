@@ -58,22 +58,13 @@ return {
                 ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "lsp", "avante", "snippets", "path", "git", "ripgrep", "buffer" },
+                default = { "lsp", "avante", "snippets", "path", "git", "buffer" },
                 providers = {
-                    git = {
-                        module = "blink-cmp-git",
-                        name = "Git",
-                        opts = {},
-                    },
-                    avante = {
-                        module = "blink-cmp-avante",
-                        name = "Avante",
-                        opts = {},
-                    },
+                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
+                    avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
                     ripgrep = {
                         module = "blink-ripgrep",
                         name = "Ripgrep",
-                        -- the options below are optional, some default values are shown
                         ---@module "blink-ripgrep"
                         ---@type blink-ripgrep.Options
                         opts = {

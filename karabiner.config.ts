@@ -82,6 +82,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         ),
     },
     w: {
+        description: "Window manager",
         "1": karabiner.aerospace("workspace browser"),
         "2": karabiner.aerospace("workspace work"),
         "3": karabiner.aerospace("workspace dotfiles"),
@@ -92,7 +93,6 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         "8": karabiner.aerospace("workspace music"),
         "9": karabiner.aerospace("workspace 9"),
         "0": karabiner.aerospace("workspace 0"),
-        description: "Window manager",
         h: karabiner.aerospace(
             "focus --boundaries-action wrap-around-the-workspace left",
         ),

@@ -109,6 +109,10 @@ return {
             end
 
             local function code()
+                bind.normal("gD", "<CMD>Glance definitions<CR>", { desc = "Glance implementations" })
+                bind.normal("gR", "<CMD>Glance references<CR>", { desc = "Glance implementations" })
+                bind.normal("gY", "<CMD>Glance type_definitions<CR>", { desc = "Glance implementations" })
+                bind.normal("gM", "<CMD>Glance implementations<CR>", { desc = "Glance implementations" })
                 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
                 bind.normal("<leader>ud", function()
                     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
@@ -159,7 +163,7 @@ return {
             end
 
             local keymaps =
-                { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
+            { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
             for _, func in ipairs(keymaps) do
                 func()
             end
