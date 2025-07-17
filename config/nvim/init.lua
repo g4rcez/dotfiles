@@ -19,16 +19,20 @@
 =====================================================================
 =====================================================================
 --]]
+--
 
-local function vscode()
+local function setup()
     require "config.options"
     require "config.autocmd"
+end
+
+local function vscode()
+    setup()
     require "config.vscode"
 end
 
 local function nvim()
-    require "config.options"
-    require "config.autocmd"
+    setup()
     local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
     if not (vim.uv or vim.loop).fs_stat(lazypath) then
         local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -38,7 +42,6 @@ local function nvim()
         end
     end ---@diagnostic disable-next-line: undefined-field
     vim.opt.rtp:prepend(lazypath)
-
     require("lazy").setup {
         checker = { enabled = true },
         defaults = { version = false },

@@ -1,8 +1,9 @@
 local wezterm = require("wezterm")
 local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
+theme.background = "#181820"
+
 local Config = {}
 
--- Background, window and tabs
 Config.adjust_window_size_when_changing_font_size = false
 Config.animation_fps = 120
 Config.audible_bell = "Disabled"
@@ -20,10 +21,7 @@ Config.show_tabs_in_tab_bar = false
 Config.use_fancy_tab_bar = false
 Config.window_background_opacity = 0.97
 Config.window_decorations = "RESIZE"
-Config.window_padding = { top = 0, bottom = 0, left = 5, right = 5 }
-
-theme.background = "#181820"
-
+Config.window_padding = { top = 0, bottom = 0, left = 6, right = 6 }
 Config.color_schemes = { ["catppuccin-custom"] = theme }
 Config.color_scheme = "catppuccin-custom"
 
