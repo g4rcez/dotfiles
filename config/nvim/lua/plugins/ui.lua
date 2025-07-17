@@ -55,6 +55,7 @@ return {
     },
     {
         "catppuccin/nvim",
+        lazy = false,
         name = "catppuccin",
         priority = 1000,
         config = function()
@@ -118,6 +119,7 @@ return {
     },
     {
         "rebelot/heirline.nvim",
+        lazy = false,
         dependencies = { "Zeioth/heirline-components.nvim", "echasnovski/mini.bufremove" },
         opts = function()
             local lib = require "heirline-components.all"

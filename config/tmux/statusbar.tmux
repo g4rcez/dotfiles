@@ -17,7 +17,7 @@ larrow=$(tmux_get '@tmux_power_left_arrow_icon' '█')
 session_icon="$(tmux_get '@tmux_power_session_icon' '')"
 prefix_highlight_pos=$(tmux_get @tmux_power_prefix_highlight_pos)
 # short for Theme-Colour
-TC=$(tmux_get '@tmux_power_theme' '##669EF9')
+TC=$(tmux_get '@tmux_power_theme')
 G01=#080808 #232
 G02=#121212 #233
 G03=#1c1c1c #234
@@ -62,14 +62,13 @@ tmux_set status-left "$LS"
 # Right side of status bar
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$G12"
-tmux_set status-right-length 150
-RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]   #(basename \"#{pane_current_path}\") #[fg=$TC,bg=$G06]"
+tmux_set status-right-length 200
+RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]  #(basename \"#{pane_current_path}\")#[fg=$TC,bg=$G06]"
 git_status="#(bash $SCRIPTS_PATH/git-branch.sh \"#{pane_current_path}\")"
-if [[ -n "${git_status}" ]]; then
-    echo -n ""
+if [[ "${git_status}" == "" ]]; then
     RS="$RS"
 else
-    RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07] '$git_status' $RS"
+    RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07] $git_status $RS"
 fi
 tmux_set status-right "$RS"
 

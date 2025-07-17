@@ -1,10 +1,10 @@
 # vim: ft=ghostty
 
-# misc 
+# misc
 background = #181820
 background-blur-radius = 100
 window-colorspace = display-p3
-background-opacity = 0.97
+background-opacity = 1
 config-default-files = true
 cursor-style = block
 cursor-style-blink = true
@@ -16,25 +16,25 @@ minimum-contrast = 1
 mouse-shift-capture = true
 quick-terminal-position = top
 quick-terminal-screen = main
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor,sudo,title
 shell-integration = zsh
 theme = catppuccin-mocha
 
 # font
-font-thicken = true
+font-thicken = false
 bold-is-bright = true
 font-family = "JetBrainsMono Nerd Font"
 font-size = 17
-adjust-cell-height = 25%
+adjust-cell-height = 30%
 adjust-cell-width = -5%
 cursor-invert-fg-bg = true
 
-# window 
+# window
 quit-after-last-window-closed = false
-window-decoration = true
+window-decoration = false
 window-padding-color = extend
 window-padding-x = 2
-window-padding-y = 0
+window-padding-y = 1
 window-theme = dark
 window-save-state = always
 window-colorspace = display-p3
@@ -45,7 +45,7 @@ window-inherit-working-directory = true
 alpha-blending = native
 macos-option-as-alt = true
 macos-window-shadow = true
-macos-titlebar-style = transparent
+macos-titlebar-style = tabs
 macos-auto-secure-input = true
 macos-secure-input-indication = true
 

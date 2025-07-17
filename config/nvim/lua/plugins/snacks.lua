@@ -21,97 +21,106 @@ return {
             set(0, "SnacksPickerListBorder", { fg = bg, bg = bg })
             set(0, "SnacksPickerList", { bg = bg })
             set(0, "SnacksPickerListTitle", { fg = bg, bg = bg })
-            local x = opts or {}
-            x.input = { enabled = true }
-            x.scope = { enabled = true }
-            x.words = { enabled = true }
-            x.indent = { enabled = true }
-            x.layout = { enabled = true }
-            x.rename = { enabled = true }
-            x.toggle = { enabled = true }
-            x.bigfile = { enabled = true }
-            x.explorer = { enabled = true }
-            x.dashboard = { enabled = true }
-            x.quickfile = { enabled = true }
-            x.statuscolumn = { enabled = true }
-            x.picker = {
-                enabled = true,
-                layout = { preset = "telescope", cycle = true },
-                matcher = {
-                    fuzzy = true,
-                    smartcase = true,
-                    ignorecase = true,
-                    sort_empty = false,
-                    filename_bonus = true,
-                    file_pos = true,
-                    cwd_bonus = true,
-                    frecency = true,
-                    history_bonus = true,
-                },
-                layouts = {
-                    vscode = {
-                        preview = true,
-                        layout = {
-                            backdrop = true,
-                            row = 1,
-                            width = 0.4,
-                            min_width = 80,
-                            height = 0.4,
-                            border = "none",
-                            box = "vertical",
-                            {
-                                win = "input",
-                                height = 1,
-                                border = "rounded",
-                                title = "{title} {live} {flags}",
-                                title_pos = "center",
-                            },
-                            { win = "list", border = "hpad" },
-                            { win = "preview", title = "{preview}", border = "rounded" },
-                        },
+            -- @type snacks.Config
+            return vim.tbl_deep_extend("force", opts, {
+                input = { enabled = true },
+                scope = { enabled = true },
+                words = { enabled = true },
+                indent = { enabled = true },
+                layout = { enabled = true },
+                toggle = { enabled = true },
+                bigfile = { enabled = true },
+                explorer = { enabled = true },
+                dashboard = { enabled = true },
+                quickfile = { enabled = true },
+                statuscolumn = { enabled = true },
+                picker = {
+                    enabled = true,
+                    layout = { preset = "telescope", cycle = true },
+                    matcher = {
+                        fuzzy = true,
+                        smartcase = true,
+                        ignorecase = true,
+                        sort_empty = false,
+                        filename_bonus = true,
+                        file_pos = true,
+                        cwd_bonus = true,
+                        frecency = true,
+                        history_bonus = true,
                     },
-                    telescope = {
-                        reverse = false,
-                        layout = {
-                            box = "horizontal",
-                            backdrop = 50,
-                            height = 0.95,
-                            width = 0.95,
-                            border = "rounded",
-                            {
+                    layouts = {
+                        vscode = {
+                            preview = true,
+                            layout = {
+                                backdrop = true,
+                                row = 1,
+                                width = 0.5,
+                                min_width = 80,
+                                height = 0.9,
+                                border = "none",
                                 box = "vertical",
                                 {
                                     win = "input",
-                                    height = 2,
+                                    height = 1,
+                                    border = "rounded",
+                                    title = "{title} {live} {flags}",
+                                    title_pos = "center",
+                                },
+                                { win = "list", border = "hpad" },
+                                { win = "preview", title = "{preview}", border = "rounded" },
+                            },
+                        },
+                        telescope = {
+                            reverse = false,
+                            layout = {
+                                box = "horizontal",
+                                backdrop = 50,
+                                height = 0.95,
+                                width = 0.95,
+                                border = "rounded",
+                                {
+                                    box = "vertical",
+                                    {
+                                        win = "input",
+                                        height = 2,
+                                        border = "none",
+                                        title_pos = "center",
+                                        title = "{title} {live} {flags}",
+                                    },
+                                    { win = "list", title = " Results ", title_pos = "center", border = "none" },
+                                },
+                                {
+                                    win = "preview",
+                                    title = "{preview:Preview}",
+                                    width = 0.60,
                                     border = "none",
                                     title_pos = "center",
-                                    title = "{title} {live} {flags}",
                                 },
-                                { win = "list", title = " Results ", title_pos = "center", border = "none" },
                             },
-                            {
-                                win = "preview",
-                                title = "{preview:Preview}",
-                                width = 0.60,
+                        },
+                    },
+                    sources = {
+                        files = {},
+                        explorer = {
+                            layout = {
+                                height = 0.9,
+                                preview = true,
+                                backdrop = true,
                                 border = "none",
-                                title_pos = "center",
+                                box = "vertical",
+                                preset = "vscode",
+                            },
+                        },
+                        lines = {
+                            layout = {
+                                preset = function()
+                                    return "telescope"
+                                end,
                             },
                         },
                     },
                 },
-                sources = {
-                    files = {},
-                    explorer = { layout = { layout = { position = "right" } } },
-                    lines = {
-                        layout = {
-                            preset = function()
-                                return "telescope"
-                            end,
-                        },
-                    },
-                },
-            }
-            return x
+            })
         end,
         keys = {
             {

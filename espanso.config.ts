@@ -69,6 +69,12 @@ export default createEspansoConfig(
                 `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
                 "Vim order by line length",
             ),
+            // nerd fonts
+            espanso.insert("ivim", "", "Nerd font: neovim"),
+            espanso.insert("ishell", "", "Nerd font: shell/terminal"),
+            espanso.insert("idotnet", "", "Nerd font: dotnet"),
+            espanso.insert("inode", "", "Nerd font: nodejs"),
+            espanso.insert("itmux","","Nerd font: tmux"),
             // emojis 👍🏾
             espanso.insert("eyes", "👀", "Emoji: Eyes"),
             espanso.insert("s2", "❤️", "Emoji: Heart"),

@@ -9,29 +9,20 @@ python = "3.13.0"
 
 [settings]
 legacy_version_file = true
-
-# configure `mise install` to always keep the downloaded archive
+idiomatic_version_file_enable_tools = ['node']
 always_keep_download = false # deleted after install by default
 always_keep_install = false  # deleted on failure by default
-
-# configure how frequently (in minutes) to fetch updated plugin repository changes
-# this is updated whenever a new runtime is installed
-# (note: this isn't currently implemented but there are plans to add it: https://github.com/jdx/mise/issues/128)
-plugin_autoupdate_last_check_duration = '1 day' # set to 0 to disable updates
-
-verbose = false    # set to true to see full installation output, see `MISE_VERBOSE`
 asdf_compat = true # set to true to ensure .tool-versions will be compatible with asdf, see `MISE_ASDF_COMPAT`
+disable_default_shorthands = false                 # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
+env_file = '.env'
+experimental = false # enable experimental features
 http_timeout = "30"  # set the timeout for http requests in seconds, see `MISE_HTTP_TIMEOUT`
 jobs = 16           # number of plugins or runtimes to install in parallel. The default is `4`.
-raw = false        # set to true to directly pipe plugins to stdin/stdout/stderr
-yes = false        # set to true to automatically answer yes to all prompts
-
 not_found_auto_install = true # see MISE_NOT_FOUND_AUTO_INSTALL
-task_output = "prefix"        # see Tasks Runner for more information
 paranoid = false              # see MISE_PARANOID
-
+plugin_autoupdate_last_check_duration = '1 day' # set to 0 to disable updates
+raw = false        # set to true to directly pipe plugins to stdin/stdout/stderr
 shorthands_file = '~/.config/mise/shorthands.toml' # path to the shorthands file, see `MISE_SHORTHANDS_FILE`
-disable_default_shorthands = false                 # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
-
-experimental = false # enable experimental features
-idiomatic_version_file_enable_tools = ["node"]
+task_output = "prefix"        # see Tasks Runner for more information
+verbose = false    # set to true to see full installation output, see `MISE_VERBOSE`
+yes = false        # set to true to automatically answer yes to all prompts

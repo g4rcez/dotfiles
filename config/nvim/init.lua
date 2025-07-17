@@ -42,7 +42,7 @@ local function nvim()
     require("lazy").setup {
         checker = { enabled = true },
         defaults = { version = false },
-        spec = { { import = "custom.plugins" } },
+        spec = { { import = "plugins" } },
     }
 end
 

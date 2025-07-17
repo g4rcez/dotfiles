@@ -138,6 +138,7 @@ return {
                     vim.diagnostic.goto_prev {}
                 end, { desc = "Goto previous error" })
 
+                bind.normal("<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "[c]ode [a]ction" })
                 bind.normal("<leader>cr", rename_once, { desc = "[c]ode [r]ename" })
                 bind.normal("<leader>cf", function()
                     vim.lsp.buf.format()

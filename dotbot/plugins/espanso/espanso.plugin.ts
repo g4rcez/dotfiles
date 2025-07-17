@@ -2,7 +2,7 @@ import { DotbotPlugin } from "@dotfiles/plugins";
 import { css, dotbot } from "@dotfiles/core";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import { toYaml } from "./espanso-matches.ts";
+import { toYaml } from "@dotfiles/espanso";
 import { EspansoCreateConfig } from "./espanso.types.ts";
 
 const $ = promisify(exec);

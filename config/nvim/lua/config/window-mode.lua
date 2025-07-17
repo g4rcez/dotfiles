@@ -1,7 +1,7 @@
 local M = {}
 
 M.in_window_mode = false
-M.timeout = 5000
+M.timeout = 500000
 M.timer = nil
 M.original_mappings = {}
 
@@ -16,7 +16,7 @@ function M.enter_window_mode()
     M.in_window_mode = true
     M.notification_id = vim.notify("Window mode - Press ESC or Q to exit", vim.log.levels.INFO, {
         icon = "󰘖",
-        timeout = false,
+        timeout = 99999999,
         title = "Window Mode",
     })
     M.create_window_mappings()
@@ -25,7 +25,7 @@ end
 
 function M.exit_window_mode()
     if not M.in_window_mode then
-        return -- Not in window mode
+        return
     end
     M.in_window_mode = false
     M.restore_original_mappings()
@@ -73,7 +73,6 @@ function M.create_window_mappings()
 
     local exit_commands = {
         c = { cmd = "c", desc = "Close window", exit = true },
-        q = { cmd = "q", desc = "Quit window", exit = true },
         o = { cmd = "o", desc = "Only window", exit = true },
     }
 
@@ -108,7 +107,7 @@ function M.create_window_mappings()
         end, { desc = config.desc, buffer = false })
     end
 
-    local exit_keys = { "<Esc>", "Q" }
+    local exit_keys = { "<esc>" }
     for _, key in ipairs(exit_keys) do
         local original_map = vim.fn.maparg(key, "n", false, true)
         if original_map and original_map.lhs then
@@ -180,11 +179,11 @@ function M.setup(opts)
 
     vim.keymap.set("n", "<leader>w", function()
         if M.in_window_mode then
-            vim.cmd "wincmd w"
-            M.reset_timer()
+            M.exit_window_mode()
         else
             M.enter_window_mode()
             vim.cmd "wincmd w"
+            M.reset_timer()
         end
     end, { desc = "Window mode" })
 
