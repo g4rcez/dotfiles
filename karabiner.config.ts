@@ -99,6 +99,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         l: karabiner.aerospace(
             "focus --boundaries-action wrap-around-the-workspace right",
         ),
+        r: karabiner.aerospace("move right"),
         f: karabiner.aerospace("fullscreen"),
         b: karabiner.aerospace("balance-sizes"),
         hyphen: karabiner.aerospace("resize smart -50"),

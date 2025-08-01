@@ -3,7 +3,7 @@ local Config = {}
 
 local family = "JetBrainsMono Nerd Font"
 
-Config.font_size = 17
+Config.font_size = 18
 Config.line_height = 1.25
 Config.font = wezterm.font({
     family = family,

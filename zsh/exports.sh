@@ -65,5 +65,6 @@ export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
+unset ANTHROPIC_API_KEY
 source "$DOTFILES/zsh/ls.sh"
 
