@@ -4,6 +4,11 @@ if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
     return
 fi
 
+LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
+if [[ -e "$LOCAL_VARIABLES_EXPORTS" ]]; then 
+    source "$LOCAL_VARIABLES_EXPORTS" 
+fi
+
 ##############################################################################################################
 ## antidote
 fpath=($fpath "$HOME/dotfiles/zsh/completions")
@@ -89,6 +94,4 @@ zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 source <(carapace _carapace)
 
-# opencode
-export PATH=/Users/allangarcez/.opencode/bin:$PATH
-alias claude="$HOME/.claude/local/claude"
+zellij-start

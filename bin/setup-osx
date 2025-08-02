@@ -5,24 +5,24 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 chflags nohidden ~/Library
 
 # Disable press-and-hold for keys in favor of key repeat.
-sudo defaults write -g ApplePressAndHoldEnabled -bool false
+defaults write -g ApplePressAndHoldEnabled -bool false
 
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
 # in the login window
-sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # Increase sound quality for Bluetooth headphones/headsets
-sudo defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
+defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
-sudo defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 # Enable Firewall Service
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 
 # Enable Stealth Mode (Prevent others from discovering your Mac)
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
+/usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 
 # Set a really fast key repeat
 defaults write NSGlobalDomain KeyRepeat -int 1
@@ -41,7 +41,7 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults write com.apple.finder ShowStatusBar -bool true
 
 # Disable the sound effects on boot
-sudo nvram SystemAudioVolume=" "
+nvram SystemAudioVolume=" "
 
 # https://github.com/rxhanson/Rectangle/blob/main/TerminalCommands.md#cycle-thirds-on-repeated-center-half-commands
 defaults write com.knollsoft.Rectangle centerHalfCycles -int 1

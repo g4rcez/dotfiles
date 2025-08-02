@@ -27,7 +27,7 @@ function zj() {
 function zinit() {
     local SESSION_NAME="${1-localhost}"
     local CURRENT_WORK_DIR="${2-$HOME}"
-    zellij --layout "$ZLAYOUT" attach "$SESSION_NAME" -c options --default-cwd "$CURRENT_WORK_DIR"
+    zellij --layout "$ZLAYOUT" attach "$SESSION_NAME" options --session-name "$SESSION_NAME" --default-cwd "$CURRENT_WORK_DIR"
 }
 
 function zellij-start() {
@@ -68,4 +68,9 @@ function zpipe() {
     else
         zellij pipe -p $1
     fi
+}
+
+function zcheck () {
+    mkdir -p ~/.config/zellij/plugins && curl -L "https://github.com/stretch/zbuffers/releases/latest/download/zbuffers.wasm" -o ~/.config/zellij/plugins/zbuffers.wasm
+    mkdir -p ~/.config/zellij/plugins && curl -L "https://github.com/rvcas/room/releases/latest/download/room.wasm" -o ~/.config/zellij/plugins/room.wasm
 }

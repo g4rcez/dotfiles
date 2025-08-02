@@ -19,9 +19,9 @@ Config.max_fps = 120
 Config.scrollback_lines = 1000000
 Config.show_tabs_in_tab_bar = false
 Config.use_fancy_tab_bar = false
-Config.window_background_opacity = 0.97
+Config.window_background_opacity = 1
 Config.window_decorations = "RESIZE"
-Config.window_padding = { top = 0, bottom = 0, left = 6, right = 6 }
+Config.window_padding = { top = 0, bottom = 0, left = 10, right = 10 }
 Config.color_schemes = { ["catppuccin-custom"] = theme }
 Config.color_scheme = "catppuccin-custom"
 

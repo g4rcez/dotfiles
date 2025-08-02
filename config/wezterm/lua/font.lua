@@ -3,8 +3,10 @@ local Config = {}
 
 local family = "JetBrainsMono Nerd Font"
 
-Config.font_size = 18
-Config.line_height = 1.25
+local ENV_SIZE = os.getenv("WEZTERM_FONT_SIZE")
+
+Config.font_size = tonumber(ENV_SIZE or "18")
+Config.line_height = 1.5
 Config.font = wezterm.font({
     family = family,
     harfbuzz_features = { "calt=1", "clig=1", "liga=1" },

@@ -1,5 +1,21 @@
 return {
     {
+        enabled = false,
+        "dmtrKovalenko/fff.nvim",
+        build = "cargo build --release",
+        opts = {
+        },
+        keys = {
+            {
+                "<leader>tt", -- try it if you didn't it is a banger keybinding for a picker
+                function()
+                    require("fff").toggle()
+                end,
+                desc = "Toggle FFF",
+            },
+        },
+    },
+    {
         "folke/snacks.nvim",
         priority = 1000,
         lazy = false,
@@ -66,7 +82,7 @@ return {
                                     title = "{title} {live} {flags}",
                                     title_pos = "center",
                                 },
-                                { win = "list", border = "hpad" },
+                                { win = "list",    border = "hpad" },
                                 { win = "preview", title = "{preview}", border = "rounded" },
                             },
                         },
