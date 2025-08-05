@@ -5,9 +5,19 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    "JoosepAlviste/nvim-ts-context-commentstring",
     { "smjonas/inc-rename.nvim", opts = {} },
-    { "numToStr/Comment.nvim", opts = {} },
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+        config = function()
+            require("ufo").setup()
+        end,
+    },
+    {
+        "folke/ts-comments.nvim",
+        event = "VeryLazy",
+        opts = {},
+    },
     {
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -20,13 +30,6 @@ return {
         event = "VimEnter",
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = { signs = true },
-    },
-    {
-        "lukas-reineke/indent-blankline.nvim",
-        main = "ibl",
-        ---@module "ibl"
-        ---@type ibl.config
-        opts = {},
     },
     {
         "axelvc/template-string.nvim",
@@ -119,7 +122,8 @@ return {
     },
     {
         "windwp/nvim-ts-autotag",
-        opts = { opts = { enable_close = true, enable_rename = true, enable_close_on_slash = true } },
+        config = true,
+        opts = {},
     },
     {
         "windwp/nvim-autopairs",
@@ -137,14 +141,14 @@ return {
             -- "modern", "classic", "minimal", "powerline",
             -- "ghost", "simple", "nonerdfont", "amongus"
             preset = "minimal",
-            transparent_bg = true, -- Set the background of the diagnostic to transparent
-            transparent_cursorline = true, -- Set the background of the cursorline to transparent (only one the first diagnostic)
+            transparent_bg = false,         -- Set the background of the diagnostic to transparent
+            transparent_cursorline = false, -- Set the background of the cursorline to transparent (only one the first diagnostic)
             hi = {
-                error = "DiagnosticError", -- Highlight group for error messages
-                warn = "DiagnosticWarn", -- Highlight group for warning messages
-                info = "DiagnosticInfo", -- Highlight group for informational messages
-                hint = "DiagnosticHint", -- Highlight group for hint or suggestion messages
-                arrow = "NonText", -- Highlight group for diagnostic arrows
+                error = "DiagnosticError",  -- Highlight group for error messages
+                warn = "DiagnosticWarn",    -- Highlight group for warning messages
+                info = "DiagnosticInfo",    -- Highlight group for informational messages
+                hint = "DiagnosticHint",    -- Highlight group for hint or suggestion messages
+                arrow = "NonText",          -- Highlight group for diagnostic arrows
                 background = "CursorLine",
                 mixing_color = "None",
             },

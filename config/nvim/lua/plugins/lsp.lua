@@ -1,11 +1,11 @@
 return {
     "kabouzeid/nvim-lspinstall",
-    { "dnlhc/glance.nvim",              cmd = "Glance" },
+    { "dnlhc/glance.nvim", cmd = "Glance" },
     {
         "nvimdev/lspsaga.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter", -- optional
-            "nvim-tree/nvim-web-devicons",     -- optional
+            "nvim-tree/nvim-web-devicons", -- optional
         },
         opts = {
             ui = {
@@ -21,7 +21,7 @@ return {
         opts = {
             library = {
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                { path = "lazy.nvim",          words = { "Lazy" } },
+                { path = "lazy.nvim", words = { "Lazy" } },
             },
         },
     },
@@ -71,9 +71,15 @@ return {
         },
         config = function(_, opts)
             local M = {}
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-            vim.lsp.handlers["textDocument/signatureHelp"] =
-                vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+            vim.lsp.handlers["textDocument/publishDiagnostics"] =
+                vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+                    underline = true,
+                    virtual_text = {
+                        spacing = 5,
+                        severity_limit = "Warning",
+                    },
+                    update_in_insert = true,
+                })
             M.inlay_hints = { enabled = true }
             M.diagnostics = { virtual_text = { prefix = "icons" } }
             M.on_init = function(client, _)
@@ -82,6 +88,10 @@ return {
                 end
             end
             M.capabilities = vim.lsp.protocol.make_client_capabilities()
+            M.capabilities.textDocument.foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+            }
             M.capabilities.textDocument.completion.completionItem = {
                 documentationFormat = { "markdown", "plaintext" },
                 snippetSupport = true,

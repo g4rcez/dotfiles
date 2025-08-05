@@ -109,6 +109,9 @@ return {
             end
 
             local function code()
+                vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+                vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+                vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith)
                 bind.normal("gD", "<CMD>Glance definitions<CR>", { desc = "Glance implementations" })
                 bind.normal("gR", "<CMD>Glance references<CR>", { desc = "Glance implementations" })
                 bind.normal("gY", "<CMD>Glance type_definitions<CR>", { desc = "Glance implementations" })
