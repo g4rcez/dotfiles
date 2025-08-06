@@ -109,9 +109,17 @@ return {
             end
 
             local function code()
-                vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-                vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-                vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith)
+                vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+                vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+                vim.keymap.set("n", "zm", require("ufo").closeFoldsWith)
+                bind.normal("zo", function()
+                    local line = vim.fn.line "."
+                    if vim.fn.foldclosed(line) == -1 then
+                        vim.cmd "normal! zc"
+                    else
+                        vim.cmd "normal! zo"
+                    end
+                end, { desc = "Fold" })
                 bind.normal("gD", "<CMD>Glance definitions<CR>", { desc = "Glance implementations" })
                 bind.normal("gR", "<CMD>Glance references<CR>", { desc = "Glance implementations" })
                 bind.normal("gY", "<CMD>Glance type_definitions<CR>", { desc = "Glance implementations" })
@@ -167,7 +175,7 @@ return {
             end
 
             local keymaps =
-            { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
+                { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
             for _, func in ipairs(keymaps) do
                 func()
             end

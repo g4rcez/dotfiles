@@ -18,8 +18,14 @@ opt.conceallevel = 0
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
--- opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
-o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+opt.fillchars = {
+    foldopen = "",
+    foldclose = "",
+    fold = " ",
+    foldsep = " ",
+    diff = "╱",
+    eob = " ",
+}
 opt.formatoptions = "jcroqlnt"
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
@@ -67,7 +73,12 @@ opt.wrap = false
 
 vim.diagnostic.config { virtual_text = false, signs = true, underline = true }
 
-vim.o.foldcolumn = "1"
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
+opt.foldcolumn = "1"
+opt.foldexpr = "0"
+opt.foldenable = true
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+
+opt.smoothscroll = true
+opt.foldmethod = "expr"
+opt.foldtext = ">"

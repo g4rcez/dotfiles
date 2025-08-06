@@ -23,7 +23,12 @@ return {
         ---@type blink.cmp.Config
         opts = {
             snippets = { preset = "luasnip" },
-            fuzzy = { use_frecency = true, use_proximity = true, implementation = "rust" },
+            fuzzy = {
+                use_frecency = true,
+                use_proximity = true,
+                implementation = "rust",
+                sorts = { "score", "sort_text", "label" },
+            },
             appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
             signature = { enabled = true },
             cmdline = { keymap = { preset = "default" } },
@@ -58,42 +63,10 @@ return {
                 ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "lsp", "avante", "snippets", "path", "git", "buffer" },
+                default = { "lsp", "snippets", "path", "git", "buffer" },
                 providers = {
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
-                    avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
-                    ripgrep = {
-                        module = "blink-ripgrep",
-                        name = "Ripgrep",
-                        ---@module "blink-ripgrep"
-                        ---@type blink-ripgrep.Options
-                        opts = {
-                            prefix_min_len = 3,
-                            context_size = 5,
-                            max_filesize = "1M",
-                            project_root_marker = ".git",
-                            project_root_fallback = true,
-                            search_casing = "--smart-case",
-                            additional_rg_options = {},
-                            fallback_to_regex_highlighting = true,
-                            ignore_paths = {},
-                            additional_paths = {},
-                            toggles = { on_off = nil, debug = nil },
-                            future_features = {
-                                backend = {
-                                    use = "ripgrep",
-                                    customize_icon_highlight = true,
-                                },
-                            },
-                            debug = false,
-                        },
-                        transform_items = function(_, items)
-                            for _, item in ipairs(items) do
-                                item.labelDetails = { description = "(rg)" }
-                            end
-                            return items
-                        end,
-                    },
+                    -- avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
                 },
             },
         },
