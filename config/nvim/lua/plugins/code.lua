@@ -6,6 +6,13 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
     { "smjonas/inc-rename.nvim", opts = {} },
+    { "dmmulroy/ts-error-translator.nvim" },
+    {
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        event = "VeryLazy",
+        opts = {},
+    },
     {
         "kevinhwang91/nvim-ufo",
         dependencies = { "kevinhwang91/promise-async" },
@@ -29,8 +36,8 @@ return {
         "tronikelis/ts-autotag.nvim",
         opts = {
             disable_in_macro = true,
-            auto_close = { enabled = true, },
-            opening_node_types = { "tag_start", "STag", "start_tag", "jsx_opening_element", },
+            auto_close = { enabled = true },
+            opening_node_types = { "tag_start", "STag", "start_tag", "jsx_opening_element" },
             identifier_node_types = {
                 "tag_name",
                 "erroneous_end_tag_name",
@@ -152,7 +159,7 @@ return {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         config = true,
-        opts = {},
+        opts = { check_ts = true },
     },
     {
         "rachartier/tiny-inline-diagnostic.nvim",

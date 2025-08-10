@@ -8,9 +8,7 @@ return {
             "bydlw98/blink-cmp-env",
             "nvim-lua/plenary.nvim",
             "Kaiser-Yang/blink-cmp-git",
-            "Kaiser-Yang/blink-cmp-avante",
             "rafamadriz/friendly-snippets",
-            "mikavilpas/blink-ripgrep.nvim",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
         },
         ---@module 'blink.cmp'
@@ -27,7 +25,18 @@ return {
                 use_frecency = true,
                 use_proximity = true,
                 implementation = "rust",
-                sorts = { "score", "sort_text", "label" },
+                sorts = {
+                    function(a, b)
+                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+                            return
+                        end
+                        return b.client_name == "emmet_ls"
+                    end,
+                    "exact",
+                    "score",
+                    "sort_text",
+                    "label",
+                },
             },
             appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
             signature = { enabled = true },
@@ -36,16 +45,17 @@ return {
                 list = { selection = { preselect = true, auto_insert = true } },
                 ghost_text = { enabled = false },
                 keyword = { range = "full" },
-                accept = { auto_brackets = { enabled = true } },
+                accept = { create_undo_point = true, auto_brackets = { enabled = true } },
                 menu = {
                     enabled = true,
                     auto_show = true,
                     border = "rounded",
-                    winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     draw = { treesitter = { "lsp" } },
+                    winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                 },
                 documentation = {
                     auto_show = false,
+                    treesitter_highlighting = true,
                     window = {
                         border = "rounded",
                         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
@@ -63,10 +73,17 @@ return {
                 ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "lsp", "snippets", "path", "git", "buffer" },
+                default = { "lsp", "path", "snippets" },
                 providers = {
-                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
-                    -- avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
+                    lsp = {
+                        name = "LSP",
+                        module = "blink.cmp.sources.lsp",
+                        transform_items = function(_, items)
+                            return vim.tbl_filter(function(item)
+                                return item.kind ~= require("blink.cmp.types").CompletionItemKind.Keyword
+                            end, items)
+                        end,
+                    },
                 },
             },
         },
