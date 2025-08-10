@@ -26,48 +26,16 @@ return {
         },
     },
     {
-        "williamboman/mason.nvim",
-        opts = function(_, opts)
-            vim.list_extend(opts.ensure_installed or {}, {
-                "black",
-                "css-lsp",
-                "eslint",
-                "eslint_d",
-                "harper-ls",
-                "isort",
-                "luacheck",
-                "markdown-toc",
-                "prettier",
-                "selene",
-                "shellcheck",
-                "shfmt",
-                "stylua",
-                "tailwindcss-language-server",
-                "typescript-language-server",
-                "vtsls",
-            })
-            return opts
-        end,
-    },
-    {
-        "jay-babu/mason-null-ls.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
-    },
-    {
         opts = {},
         "vuki656/package-info.nvim",
         event = "BufRead package.json",
         dependencies = { "MunifTanjim/nui.nvim" },
     },
-    { "williamboman/mason-lspconfig.nvim", opts = {} },
     {
         "neovim/nvim-lspconfig",
         dependencies = {
             "j-hui/fidget.nvim",
             "b0o/schemastore.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         config = function(_, opts)
             local M = {}

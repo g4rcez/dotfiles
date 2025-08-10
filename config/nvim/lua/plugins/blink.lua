@@ -40,9 +40,20 @@ return {
             },
             appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
             signature = { enabled = true },
-            cmdline = { keymap = { preset = "default" } },
+            cmdline = {
+                keymap = { preset = "default" },
+                sources = function()
+                    local type = vim.fn.getcmdtype()
+                    if type == "/" or type == "?" then return { "buffer" } end
+                    if type == ":" then return { "cmdline" } end
+                    return {}
+                end,
+            },
             completion = {
-                list = { selection = { preselect = true, auto_insert = true } },
+                list = {
+                    selection = { preselect = false, auto_insert = false },
+                    max_items = 50,
+                },
                 ghost_text = { enabled = false },
                 keyword = { range = "full" },
                 accept = { create_undo_point = true, auto_brackets = { enabled = true } },
@@ -73,16 +84,65 @@ return {
                 ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "lsp", "path", "snippets" },
+                default = { "lsp", "path", "snippets", "buffer" },
                 providers = {
                     lsp = {
                         name = "LSP",
                         module = "blink.cmp.sources.lsp",
+                        enabled = true,
                         transform_items = function(_, items)
                             return vim.tbl_filter(function(item)
-                                return item.kind ~= require("blink.cmp.types").CompletionItemKind.Keyword
+                                local kind = item.kind
+                                local types = require("blink.cmp.types").CompletionItemKind
+                                return kind ~= types.Keyword
+                                    and kind ~= types.Text
+                                    and kind ~= types.Operator
                             end, items)
                         end,
+                    },
+                    path = {
+                        name = "Path",
+                        module = "blink.cmp.sources.path",
+                        score_offset = -3,
+                        opts = {
+                            trailing_slash = false,
+                            label_trailing_slash = true,
+                            get_cwd = function(context)
+                                return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
+                            end,
+                            show_hidden_files_by_default = false,
+                        }
+                    },
+                    snippets = {
+                        name = "Snippets",
+                        module = "blink.cmp.sources.snippets",
+                        score_offset = -1,
+                        opts = {
+                            friendly_snippets = true,
+                            search_paths = { vim.fn.stdpath("config") .. "/snippets" },
+                            global_snippets = { "all" },
+                            extended_filetypes = {},
+                            ignored_filetypes = {},
+                        }
+                    },
+                    buffer = {
+                        name = "Buffer",
+                        module = "blink.cmp.sources.buffer",
+                        enabled = true,
+                        score_offset = -5,
+                        opts = {
+                            max_items = 5,
+                            get_bufnrs = function()
+                                local bufs = {}
+                                for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                                    local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+                                    if byte_size < 1024 * 1024 then -- 1MB limit
+                                        table.insert(bufs, buf)
+                                    end
+                                end
+                                return bufs
+                            end,
+                        }
                     },
                 },
             },
