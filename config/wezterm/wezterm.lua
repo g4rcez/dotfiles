@@ -23,10 +23,10 @@ local hyperlinks = require("./lua/hyper-links")
 local events = require("./lua/events")
 local X = require("./lua/helpers")
 
-X.merge(Config, events)
 X.merge(Config, theme)
 X.merge(Config, font)
 X.merge(Config, hyperlinks)
 X.merge(Config, keymap)
+X.merge(Config, events)
 
 return Config

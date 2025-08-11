@@ -1,5 +1,7 @@
 local wezterm = require("wezterm")
 
+wezterm.action({ CloseCurrentTab = { confirm = false } })
+
 wezterm.on("user-var-changed", function(window, pane, name, value)
     local overrides = window:get_config_overrides() or {}
     if name == "ZEN_MODE" then
@@ -23,6 +25,19 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
     window:set_config_overrides(overrides)
 end)
 
-wezterm.action({ CloseCurrentTab = { confirm = false } })
+local function font_size_overrides(window)
+    local defaulScreen = "Built-in Retina Display"
+    local screens = wezterm.gui.screens();
+    local activeScreen = screens.active.name
+    if defaulScreen == activeScreen then
+        window:set_config_overrides({
+            font_size = 17
+        })
+    end
+end
+
+wezterm.on('window-resized', function(window)
+    font_size_overrides(window)
+end)
 
 return {}

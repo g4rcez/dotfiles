@@ -5,7 +5,7 @@ local family = "JetBrainsMono Nerd Font"
 
 local ENV_SIZE = os.getenv("WEZTERM_FONT_SIZE")
 
-Config.font_size = tonumber(ENV_SIZE or "18")
+Config.font_size = ENV_SIZE and tonumber(ENV_SIZE) or 17
 Config.line_height = 1.5
 Config.font = wezterm.font({
     family = family,

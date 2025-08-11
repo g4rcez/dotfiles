@@ -63,7 +63,7 @@ tmux_set window-status-activity-style "fg=$TC,bg=$BG"
 tmux_set window-status-separator "#[fg=$DISABLED,bg=$BG]⋮"
 
 # Pane border
-tmux_set pane-border-style "fg=$BG,bg=default"
+tmux_set pane-border-style "fg=default,bg=default"
 
 # Active pane border
 tmux_set pane-active-border-style "fg=$TC,bg=$BG"
