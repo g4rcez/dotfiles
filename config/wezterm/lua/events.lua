@@ -26,7 +26,9 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
 end)
 
 local workstations = {
-    { name = "Built-in Retina Display", font_size = 17 }
+    { name = "Built-in Retina Display", font_size = 17 },
+    { name = "LG ULTRAFINE (1)", font_size = 18 },
+    { name = "LG ULTRAFINE (2)", font_size = 18 },
 }
 
 local Array = {}
