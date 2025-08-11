@@ -25,15 +25,32 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
     window:set_config_overrides(overrides)
 end)
 
-local function font_size_overrides(window)
-    local defaulScreen = "Built-in Retina Display"
-    local screens = wezterm.gui.screens();
-    local activeScreen = screens.active.name
-    if defaulScreen == activeScreen then
-        window:set_config_overrides({
-            font_size = 17
-        })
+local workstations = {
+    { name = "Built-in Retina Display", font_size = 17 }
+}
+
+local Array = {}
+
+function Array.find(tbl, predicate)
+    for i, value in ipairs(tbl) do
+        if predicate(value, i, tbl) then
+            return value
+        end
     end
+    return nil
+end
+
+local function font_size_overrides(window)
+    local screens = wezterm.gui.screens();
+    local screen = Array.find(workstations, function(v)
+        return v.name == screens.active.name
+    end)
+    if screen == nil then
+        return
+    end
+    window:set_config_overrides({
+        font_size = screen.font_size
+    })
 end
 
 wezterm.on('window-resized', function(window)

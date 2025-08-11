@@ -1,6 +1,6 @@
 local wezterm = require("wezterm")
 local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
-theme.background = "#181820"
+theme.background = "#181826"
 
 local Config = {}
 
