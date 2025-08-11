@@ -110,8 +110,15 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         spacebar: karabiner.aerospace("layout floating tiling"),
     },
     s: {
-        hold: true,
         description: "System layer",
+        h: {
+            to: [{ key_code: "vk_consumer_previous" }],
+            description: "Previous music",
+        },
+        l: {
+            to: [{ key_code: "vk_consumer_next" }],
+            description: "Next music",
+        },
         j: {
             to: [{ key_code: "display_brightness_decrement" }],
             description: "Decrement brightness",

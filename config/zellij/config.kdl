@@ -14,7 +14,7 @@ session_serialization true
 serialize_pane_viewport true
 scrollback_lines_to_serialize 10000
 styled_underlines true
-support_kitty_keyboard_protocol false
+support_kitty_keyboard_protocol true
 show_startup_tips false
 
 themes {

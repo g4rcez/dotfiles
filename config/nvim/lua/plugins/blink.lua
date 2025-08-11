@@ -51,8 +51,8 @@ return {
             },
             completion = {
                 list = {
-                    selection = { preselect = false, auto_insert = false },
                     max_items = 50,
+                    selection = { preselect = true, auto_insert = false },
                 },
                 ghost_text = { enabled = false },
                 keyword = { range = "full" },

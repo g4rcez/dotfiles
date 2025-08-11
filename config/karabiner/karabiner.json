@@ -2652,7 +2652,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -2667,7 +2667,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Persistent mode - Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -3348,7 +3348,7 @@
             ]
           },
           {
-            "description": "leader + w + r - Window: move right",
+            "description": "leader + w + r - Window: move --boundaries workspace right",
             "manipulators": [
               {
                 "conditions": [
@@ -3358,13 +3358,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + r - Window: move right",
+                "description": "leader + w + r - Window: move --boundaries workspace right",
                 "from": {
                   "key_code": "r"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move right"
+                    "shell_command": "/opt/homebrew/bin/aerospace move --boundaries workspace right"
                   },
                   {
                     "halt": true,
@@ -3390,13 +3390,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + r - Window: move right",
+                "description": "leader + w + r - Window: move --boundaries workspace right",
                 "from": {
                   "key_code": "r"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move right"
+                    "shell_command": "/opt/homebrew/bin/aerospace move --boundaries workspace right"
                   }
                 ],
                 "type": "basic"
@@ -4011,7 +4011,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"s\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Layer \"s\" System layer\n\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -4026,8 +4026,64 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"s\" System layer\n\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Persistent mode - Layer \"s\" System layer\n\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + s + l - Next music",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_s_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + s + l - Next music",
+                "from": {
+                  "key_code": "l"
+                },
+                "to": [
+                  {
+                    "key_code": "vk_consumer_next"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_s_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_s_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + s + l - Next music",
+                "from": {
+                  "key_code": "l"
+                },
+                "to": [
+                  {
+                    "key_code": "vk_consumer_next"
                   }
                 ],
                 "type": "basic"

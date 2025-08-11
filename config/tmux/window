@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source $HOME/dotfiles/zsh/utils.sh
+source "$HOME/dotfiles/zsh/utils.sh"
 
 NAME="$1"
 USER_CONFIG="$HOME/dotfiles/config/tmux/icons.yml"

@@ -89,4 +89,3 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
-zellij-start

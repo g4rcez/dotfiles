@@ -1,6 +1,6 @@
 #!/bin/bash
-source $HOME/dotfiles/zsh/utils.sh
-SCRIPTS_PATH="$HOME/dotfiles/bin"
+source "$HOME/dotfiles/zsh/utils.sh";
+# SCRIPTS_PATH="$HOME/dotfiles/bin"
 
 tmux_get() {
     local value="$(tmux show -gqv "$1")"
@@ -11,28 +11,13 @@ tmux_set() {
     tmux set-option -gq "$1" "$2"
 }
 
-# Options
-rarrow=$(tmux_get '@tmux_power_right_arrow_icon' '█')
-larrow=$(tmux_get '@tmux_power_left_arrow_icon' '█')
-session_icon="$(tmux_get '@tmux_power_session_icon' '')"
-prefix_highlight_pos=$(tmux_get @tmux_power_prefix_highlight_pos)
 # short for Theme-Colour
-TC=$(tmux_get '@tmux_power_theme')
-G01=#080808 #232
-G02=#121212 #233
-G03=#1c1c1c #234
-G04=#141621 #235
-G05=#303030 #236
-G06=#1e293b #237
-G07=#27272a #238
-G08=#4e4e4e #239
-G09=#585858 #240
-G10=#626262 #241
-G11=#6c6c6c #242
-G12=#767676 #243
-
-FG="$G10"
-BG="$G04"
+TC="#89b4fa"
+FG="#89b4fa"
+DISABLED="#64748b"
+HIGHLIGHT="#89b4fa"
+G04=#141621
+BG="#181825"
 
 # Status options
 tmux_set status-interval 1
@@ -44,54 +29,47 @@ tmux_set status-bg "$BG"
 tmux_set status-attr none
 
 # tmux-prefix-highlight
-tmux_set @prefix_highlight_fg "$BG"
-tmux_set @prefix_highlight_bg "$FG"
+tmux_set @prefix_highlight_fg "$HIGHLIGHT"
+tmux_set @prefix_highlight_bg "$TC"
 tmux_set @prefix_highlight_show_copy_mode 'on'
-tmux_set @prefix_highlight_copy_mode_attr "fg=$TC,bg=$BG,bold"
-tmux_set @prefix_highlight_output_prefix "#[fg=$TC]#[bg=$BG]$larrow#[bg=$TC]#[fg=$BG]"
-tmux_set @prefix_highlight_output_suffix "#[fg=$TC]#[bg=$BG]$rarrow"
+tmux_set @prefix_highlight_copy_mode_attr "fg=$TC,bg=$BG"
+tmux_set @prefix_highlight_output_prefix "#[fg=$HIGHLIGHT]#[bg=$BG]"
+tmux_set @prefix_highlight_output_suffix "#[fg=$HIGHLIGHT]#[bg=$BG]"
 
 # Left side of status bar
 tmux_set status-left-bg "$G04"
-tmux_set status-left-fg "$G12"
+tmux_set status-left-fg "$FG"
 tmux_set status-left-length 150
-LS="#[fg=$TC,bg=$G06] $session_icon #S "
-LS="$LS#{prefix_highlight}"
-tmux_set status-left "$LS"
+tmux_set status-left " #{prefix_highlight} "
+# tmux_set status-left "#[fg=$FG,bg=$BG] $session_icon #S #{prefix_highlight} "
 
 # Right side of status bar
 tmux_set status-right-bg "$BG"
-tmux_set status-right-fg "$G12"
+tmux_set status-right-fg "$FG"
 tmux_set status-right-length 200
-RS="#[fg=$G06]$larrow#[fg=$TC,bg=$G06]  #(basename \"#{pane_current_path}\")#[fg=$TC,bg=$G06]"
-git_status="#(bash $SCRIPTS_PATH/git-branch.sh \"#{pane_current_path}\")"
-if [[ "${git_status}" == "" ]]; then
-    RS="$RS"
-else
-    RS="#[fg=$G07]$larrow#[fg=$TC,bg=$G07] $git_status $RS"
-fi
-tmux_set status-right "$RS"
+# tmux_set status-right "  #(basename \"#{pane_current_path}\")"
+tmux_set status-right " #S "
 
 # Window status format
-tmux_set window-status-format "#[fg=$BG,bg=$G06]$rarrow#[fg=$TC,bg=$G06] #I:#W #[fg=$G06,bg=$BG]$rarrow"
-tmux_set window-status-current-format "#[fg=$BG,bg=$TC]$rarrow#[fg=$BG,bg=$TC,bold] #I:#W #[fg=$TC,bg=$BG,nobold]$rarrow"
+tmux_set window-status-format "#[fg=$DISABLED,bg=$BG] #I:#W "
+tmux_set window-status-current-format "#[fg=$HIGHLIGHT,bg=$BG] #I:#W "
 
 # Window status style
-tmux_set window-status-style "fg=$TC,bg=$BG,none"
-tmux_set window-status-last-style "fg=$TC,bg=$BG,bold"
-tmux_set window-status-activity-style "fg=$TC,bg=$BG,bold"
+tmux_set window-status-style "fg=$FG,bg=$BG,none"
+tmux_set window-status-last-style "fg=$TC,bg=$BG"
+tmux_set window-status-activity-style "fg=$TC,bg=$BG"
 
 # Window separator
-tmux_set window-status-separator ""
+tmux_set window-status-separator "#[fg=$DISABLED,bg=$BG]⋮"
 
 # Pane border
-tmux_set pane-border-style "fg=$G07,bg=default"
+tmux_set pane-border-style "fg=$BG,bg=default"
 
 # Active pane border
-tmux_set pane-active-border-style "fg=$TC,bg=default"
+tmux_set pane-active-border-style "fg=$TC,bg=$BG"
 
 # Pane number indicator
-tmux_set display-panes-colour "$G07"
+tmux_set display-panes-colour "$BG"
 tmux_set display-panes-active-colour "$TC"
 
 # Message
