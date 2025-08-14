@@ -51,28 +51,28 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     m: {
         "1": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window browser",
+            "move-node-to-workspace --focus-follows-window 1",
         ),
         "2": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window work",
+            "move-node-to-workspace --focus-follows-window 2",
         ),
         "3": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window dotfiles",
+            "move-node-to-workspace --focus-follows-window 3",
         ),
         "4": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window chat",
+            "move-node-to-workspace --focus-follows-window 4",
         ),
         "5": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window ai",
+            "move-node-to-workspace --focus-follows-window 5",
         ),
         "6": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window infra",
+            "move-node-to-workspace --focus-follows-window 6",
         ),
         "7": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window notes",
+            "move-node-to-workspace --focus-follows-window 7",
         ),
         "8": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window music",
+            "move-node-to-workspace --focus-follows-window 8",
         ),
         "9": karabiner.aerospace(
             "move-node-to-workspace --focus-follows-window 9",
@@ -83,14 +83,14 @@ const withLeaderKeys = karabiner.createLeaderLayers({
     },
     w: {
         description: "Window manager",
-        "1": karabiner.aerospace("workspace browser"),
-        "2": karabiner.aerospace("workspace work"),
-        "3": karabiner.aerospace("workspace dotfiles"),
-        "4": karabiner.aerospace("workspace chat"),
-        "5": karabiner.aerospace("workspace ai"),
-        "6": karabiner.aerospace("workspace infra"),
-        "7": karabiner.aerospace("workspace notes"),
-        "8": karabiner.aerospace("workspace music"),
+        "1": karabiner.aerospace("workspace 1"),
+        "2": karabiner.aerospace("workspace 2"),
+        "3": karabiner.aerospace("workspace 3"),
+        "4": karabiner.aerospace("workspace 4"),
+        "5": karabiner.aerospace("workspace 5"),
+        "6": karabiner.aerospace("workspace 6"),
+        "7": karabiner.aerospace("workspace 7"),
+        "8": karabiner.aerospace("workspace 8"),
         "9": karabiner.aerospace("workspace 9"),
         "0": karabiner.aerospace("workspace 0"),
         h: karabiner.aerospace(

@@ -1909,7 +1909,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window browser\n2: Window: move-node-to-workspace --focus-follows-window work\n3: Window: move-node-to-workspace --focus-follows-window dotfiles\n4: Window: move-node-to-workspace --focus-follows-window chat\n5: Window: move-node-to-workspace --focus-follows-window ai\n6: Window: move-node-to-workspace --focus-follows-window infra\n7: Window: move-node-to-workspace --focus-follows-window notes\n8: Window: move-node-to-workspace --focus-follows-window music\n9: Window: move-node-to-workspace --focus-follows-window 9"
+                      "text": "Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window 1\n2: Window: move-node-to-workspace --focus-follows-window 2\n3: Window: move-node-to-workspace --focus-follows-window 3\n4: Window: move-node-to-workspace --focus-follows-window 4\n5: Window: move-node-to-workspace --focus-follows-window 5\n6: Window: move-node-to-workspace --focus-follows-window 6\n7: Window: move-node-to-workspace --focus-follows-window 7\n8: Window: move-node-to-workspace --focus-follows-window 8\n9: Window: move-node-to-workspace --focus-follows-window 9"
                     }
                   }
                 ],
@@ -1924,7 +1924,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window browser\n2: Window: move-node-to-workspace --focus-follows-window work\n3: Window: move-node-to-workspace --focus-follows-window dotfiles\n4: Window: move-node-to-workspace --focus-follows-window chat\n5: Window: move-node-to-workspace --focus-follows-window ai\n6: Window: move-node-to-workspace --focus-follows-window infra\n7: Window: move-node-to-workspace --focus-follows-window notes\n8: Window: move-node-to-workspace --focus-follows-window music\n9: Window: move-node-to-workspace --focus-follows-window 9"
+                      "text": "Persistent mode - Layer \"m\" \n\n0: Window: move-node-to-workspace --focus-follows-window 0\n1: Window: move-node-to-workspace --focus-follows-window 1\n2: Window: move-node-to-workspace --focus-follows-window 2\n3: Window: move-node-to-workspace --focus-follows-window 3\n4: Window: move-node-to-workspace --focus-follows-window 4\n5: Window: move-node-to-workspace --focus-follows-window 5\n6: Window: move-node-to-workspace --focus-follows-window 6\n7: Window: move-node-to-workspace --focus-follows-window 7\n8: Window: move-node-to-workspace --focus-follows-window 8\n9: Window: move-node-to-workspace --focus-follows-window 9"
                     }
                   }
                 ],
@@ -1989,7 +1989,7 @@
             ]
           },
           {
-            "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+            "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window 1",
             "manipulators": [
               {
                 "conditions": [
@@ -1999,13 +1999,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window 1",
                 "from": {
                   "key_code": "1"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window browser"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 1"
                   },
                   {
                     "halt": true,
@@ -2031,13 +2031,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window browser",
+                "description": "leader + m + 1 - Window: move-node-to-workspace --focus-follows-window 1",
                 "from": {
                   "key_code": "1"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window browser"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 1"
                   }
                 ],
                 "type": "basic"
@@ -2045,7 +2045,7 @@
             ]
           },
           {
-            "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+            "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window 2",
             "manipulators": [
               {
                 "conditions": [
@@ -2055,13 +2055,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window 2",
                 "from": {
                   "key_code": "2"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window work"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 2"
                   },
                   {
                     "halt": true,
@@ -2087,13 +2087,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window work",
+                "description": "leader + m + 2 - Window: move-node-to-workspace --focus-follows-window 2",
                 "from": {
                   "key_code": "2"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window work"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 2"
                   }
                 ],
                 "type": "basic"
@@ -2101,7 +2101,7 @@
             ]
           },
           {
-            "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+            "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window 3",
             "manipulators": [
               {
                 "conditions": [
@@ -2111,13 +2111,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window 3",
                 "from": {
                   "key_code": "3"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window dotfiles"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 3"
                   },
                   {
                     "halt": true,
@@ -2143,13 +2143,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window dotfiles",
+                "description": "leader + m + 3 - Window: move-node-to-workspace --focus-follows-window 3",
                 "from": {
                   "key_code": "3"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window dotfiles"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 3"
                   }
                 ],
                 "type": "basic"
@@ -2157,7 +2157,7 @@
             ]
           },
           {
-            "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+            "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window 4",
             "manipulators": [
               {
                 "conditions": [
@@ -2167,13 +2167,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window 4",
                 "from": {
                   "key_code": "4"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window chat"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 4"
                   },
                   {
                     "halt": true,
@@ -2199,13 +2199,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window chat",
+                "description": "leader + m + 4 - Window: move-node-to-workspace --focus-follows-window 4",
                 "from": {
                   "key_code": "4"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window chat"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 4"
                   }
                 ],
                 "type": "basic"
@@ -2213,7 +2213,7 @@
             ]
           },
           {
-            "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+            "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window 5",
             "manipulators": [
               {
                 "conditions": [
@@ -2223,13 +2223,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window 5",
                 "from": {
                   "key_code": "5"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window ai"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 5"
                   },
                   {
                     "halt": true,
@@ -2255,13 +2255,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window ai",
+                "description": "leader + m + 5 - Window: move-node-to-workspace --focus-follows-window 5",
                 "from": {
                   "key_code": "5"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window ai"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 5"
                   }
                 ],
                 "type": "basic"
@@ -2269,7 +2269,7 @@
             ]
           },
           {
-            "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+            "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window 6",
             "manipulators": [
               {
                 "conditions": [
@@ -2279,13 +2279,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window 6",
                 "from": {
                   "key_code": "6"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window infra"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 6"
                   },
                   {
                     "halt": true,
@@ -2311,13 +2311,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window infra",
+                "description": "leader + m + 6 - Window: move-node-to-workspace --focus-follows-window 6",
                 "from": {
                   "key_code": "6"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window infra"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 6"
                   }
                 ],
                 "type": "basic"
@@ -2325,7 +2325,7 @@
             ]
           },
           {
-            "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+            "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window 7",
             "manipulators": [
               {
                 "conditions": [
@@ -2335,13 +2335,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window 7",
                 "from": {
                   "key_code": "7"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window notes"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 7"
                   },
                   {
                     "halt": true,
@@ -2367,13 +2367,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window notes",
+                "description": "leader + m + 7 - Window: move-node-to-workspace --focus-follows-window 7",
                 "from": {
                   "key_code": "7"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window notes"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 7"
                   }
                 ],
                 "type": "basic"
@@ -2381,7 +2381,7 @@
             ]
           },
           {
-            "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+            "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window 8",
             "manipulators": [
               {
                 "conditions": [
@@ -2391,13 +2391,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window 8",
                 "from": {
                   "key_code": "8"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window music"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 8"
                   },
                   {
                     "halt": true,
@@ -2423,13 +2423,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window music",
+                "description": "leader + m + 8 - Window: move-node-to-workspace --focus-follows-window 8",
                 "from": {
                   "key_code": "8"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window music"
+                    "shell_command": "/opt/homebrew/bin/aerospace move-node-to-workspace --focus-follows-window 8"
                   }
                 ],
                 "type": "basic"
@@ -2652,7 +2652,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace 1\n2: Window: workspace 2\n3: Window: workspace 3\n4: Window: workspace 4\n5: Window: workspace 5\n6: Window: workspace 6\n7: Window: workspace 7\n8: Window: workspace 8\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -2667,7 +2667,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace browser\n2: Window: workspace work\n3: Window: workspace dotfiles\n4: Window: workspace chat\n5: Window: workspace ai\n6: Window: workspace infra\n7: Window: workspace notes\n8: Window: workspace music\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
+                      "text": "Persistent mode - Layer \"w\" Window manager\n\n0: Window: workspace 0\n1: Window: workspace 1\n2: Window: workspace 2\n3: Window: workspace 3\n4: Window: workspace 4\n5: Window: workspace 5\n6: Window: workspace 6\n7: Window: workspace 7\n8: Window: workspace 8\n9: Window: workspace 9\nh: Window: focus --boundaries-action wrap-around-the-workspace left\nl: Window: focus --boundaries-action wrap-around-the-workspace right\nr: Window: move --boundaries workspace right\nf: Window: fullscreen\nb: Window: balance-sizes\nhyphen: Window: resize smart -50\nequal_sign: Window: resize smart +50\nw: Window: layout tiles accordion\nn: Window: workspace notes\ntab: Window: focus-back-and-forth\nspacebar: Window: layout floating tiling"
                     }
                   }
                 ],
@@ -2732,7 +2732,7 @@
             ]
           },
           {
-            "description": "leader + w + 1 - Window: workspace browser",
+            "description": "leader + w + 1 - Window: workspace 1",
             "manipulators": [
               {
                 "conditions": [
@@ -2742,13 +2742,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 1 - Window: workspace browser",
+                "description": "leader + w + 1 - Window: workspace 1",
                 "from": {
                   "key_code": "1"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace browser"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 1"
                   },
                   {
                     "halt": true,
@@ -2774,13 +2774,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 1 - Window: workspace browser",
+                "description": "leader + w + 1 - Window: workspace 1",
                 "from": {
                   "key_code": "1"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace browser"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 1"
                   }
                 ],
                 "type": "basic"
@@ -2788,7 +2788,7 @@
             ]
           },
           {
-            "description": "leader + w + 2 - Window: workspace work",
+            "description": "leader + w + 2 - Window: workspace 2",
             "manipulators": [
               {
                 "conditions": [
@@ -2798,13 +2798,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 2 - Window: workspace work",
+                "description": "leader + w + 2 - Window: workspace 2",
                 "from": {
                   "key_code": "2"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace work"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 2"
                   },
                   {
                     "halt": true,
@@ -2830,13 +2830,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 2 - Window: workspace work",
+                "description": "leader + w + 2 - Window: workspace 2",
                 "from": {
                   "key_code": "2"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace work"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 2"
                   }
                 ],
                 "type": "basic"
@@ -2844,7 +2844,7 @@
             ]
           },
           {
-            "description": "leader + w + 3 - Window: workspace dotfiles",
+            "description": "leader + w + 3 - Window: workspace 3",
             "manipulators": [
               {
                 "conditions": [
@@ -2854,13 +2854,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 3 - Window: workspace dotfiles",
+                "description": "leader + w + 3 - Window: workspace 3",
                 "from": {
                   "key_code": "3"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace dotfiles"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 3"
                   },
                   {
                     "halt": true,
@@ -2886,13 +2886,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 3 - Window: workspace dotfiles",
+                "description": "leader + w + 3 - Window: workspace 3",
                 "from": {
                   "key_code": "3"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace dotfiles"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 3"
                   }
                 ],
                 "type": "basic"
@@ -2900,7 +2900,7 @@
             ]
           },
           {
-            "description": "leader + w + 4 - Window: workspace chat",
+            "description": "leader + w + 4 - Window: workspace 4",
             "manipulators": [
               {
                 "conditions": [
@@ -2910,13 +2910,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 4 - Window: workspace chat",
+                "description": "leader + w + 4 - Window: workspace 4",
                 "from": {
                   "key_code": "4"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace chat"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 4"
                   },
                   {
                     "halt": true,
@@ -2942,13 +2942,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 4 - Window: workspace chat",
+                "description": "leader + w + 4 - Window: workspace 4",
                 "from": {
                   "key_code": "4"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace chat"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 4"
                   }
                 ],
                 "type": "basic"
@@ -2956,7 +2956,7 @@
             ]
           },
           {
-            "description": "leader + w + 5 - Window: workspace ai",
+            "description": "leader + w + 5 - Window: workspace 5",
             "manipulators": [
               {
                 "conditions": [
@@ -2966,13 +2966,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 5 - Window: workspace ai",
+                "description": "leader + w + 5 - Window: workspace 5",
                 "from": {
                   "key_code": "5"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace ai"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 5"
                   },
                   {
                     "halt": true,
@@ -2998,13 +2998,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 5 - Window: workspace ai",
+                "description": "leader + w + 5 - Window: workspace 5",
                 "from": {
                   "key_code": "5"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace ai"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 5"
                   }
                 ],
                 "type": "basic"
@@ -3012,7 +3012,7 @@
             ]
           },
           {
-            "description": "leader + w + 6 - Window: workspace infra",
+            "description": "leader + w + 6 - Window: workspace 6",
             "manipulators": [
               {
                 "conditions": [
@@ -3022,13 +3022,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 6 - Window: workspace infra",
+                "description": "leader + w + 6 - Window: workspace 6",
                 "from": {
                   "key_code": "6"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace infra"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 6"
                   },
                   {
                     "halt": true,
@@ -3054,13 +3054,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 6 - Window: workspace infra",
+                "description": "leader + w + 6 - Window: workspace 6",
                 "from": {
                   "key_code": "6"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace infra"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 6"
                   }
                 ],
                 "type": "basic"
@@ -3068,7 +3068,7 @@
             ]
           },
           {
-            "description": "leader + w + 7 - Window: workspace notes",
+            "description": "leader + w + 7 - Window: workspace 7",
             "manipulators": [
               {
                 "conditions": [
@@ -3078,13 +3078,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 7 - Window: workspace notes",
+                "description": "leader + w + 7 - Window: workspace 7",
                 "from": {
                   "key_code": "7"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 7"
                   },
                   {
                     "halt": true,
@@ -3110,13 +3110,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 7 - Window: workspace notes",
+                "description": "leader + w + 7 - Window: workspace 7",
                 "from": {
                   "key_code": "7"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace notes"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 7"
                   }
                 ],
                 "type": "basic"
@@ -3124,7 +3124,7 @@
             ]
           },
           {
-            "description": "leader + w + 8 - Window: workspace music",
+            "description": "leader + w + 8 - Window: workspace 8",
             "manipulators": [
               {
                 "conditions": [
@@ -3134,13 +3134,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 8 - Window: workspace music",
+                "description": "leader + w + 8 - Window: workspace 8",
                 "from": {
                   "key_code": "8"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace music"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 8"
                   },
                   {
                     "halt": true,
@@ -3166,13 +3166,13 @@
                     "value": "on"
                   }
                 ],
-                "description": "leader + w + 8 - Window: workspace music",
+                "description": "leader + w + 8 - Window: workspace 8",
                 "from": {
                   "key_code": "8"
                 },
                 "to": [
                   {
-                    "shell_command": "/opt/homebrew/bin/aerospace workspace music"
+                    "shell_command": "/opt/homebrew/bin/aerospace workspace 8"
                   }
                 ],
                 "type": "basic"
@@ -4004,14 +4004,14 @@
                   {
                     "halt": true,
                     "set_variable": {
-                      "name": "VIM_MODE_s_HOLD",
+                      "name": "VIM_MODE_s_SINGLE",
                       "value": "on"
                     }
                   },
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"s\" System layer\n\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Layer \"s\" System layer\n\nh: Previous music\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
                   }
                 ],
@@ -4026,8 +4026,64 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"s\" System layer\n\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
+                      "text": "Persistent mode - Layer \"s\" System layer\n\nh: Previous music\nl: Next music\nj: Decrement brightness\nk: Increment brightness\nn: Clear notifications\nhyphen: Decrease volume\nequal_sign: Increase volume\np: Toggle play or pause"
                     }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + s + h - Previous music",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_s_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + s + h - Previous music",
+                "from": {
+                  "key_code": "h"
+                },
+                "to": [
+                  {
+                    "key_code": "vk_consumer_previous"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_s_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_s_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + s + h - Previous music",
+                "from": {
+                  "key_code": "h"
+                },
+                "to": [
+                  {
+                    "key_code": "vk_consumer_previous"
                   }
                 ],
                 "type": "basic"
