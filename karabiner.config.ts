@@ -93,6 +93,12 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         "8": karabiner.aerospace("workspace 8"),
         "9": karabiner.aerospace("workspace 9"),
         "0": karabiner.aerospace("workspace 0"),
+        a: karabiner.aerospace(
+            "focus --boundaries-action wrap-around-the-workspace left",
+        ),
+        d: karabiner.aerospace(
+            "focus --boundaries-action wrap-around-the-workspace right",
+        ),
         h: karabiner.aerospace(
             "focus --boundaries-action wrap-around-the-workspace left",
         ),

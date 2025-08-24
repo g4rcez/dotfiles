@@ -1,7 +1,7 @@
 # vim: ft=ghostty
 
 # misc
-background = #181820
+background = #181826
 background-blur-radius = 100
 window-colorspace = display-p3
 background-opacity = 1

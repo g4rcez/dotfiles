@@ -7,8 +7,7 @@ return {
             {
                 "<leader>cg",
                 function()
-                    local grug = require "grug-far"
-                    grug.open { transient = true }
+                    require("grug-far").open { transient = true }
                 end,
                 desc = "[c]ode [g]rug",
                 mode = { "n", "v" },

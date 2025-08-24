@@ -14,14 +14,14 @@ return {
         opts = function()
             local actions = require "diffview.actions"
             local opts = {
-                diff_binaries = false,   -- Show diffs for binaries
-                enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
-                git_cmd = { "git" },     -- The git executable followed by default args.
-                hg_cmd = { "hg" },       -- The hg executable followed by default args.
-                use_icons = true,        -- Requires nvim-web-devicons
-                show_help_hints = true,  -- Show hints for how to open the help panel
-                watch_index = true,      -- Update views and index buffers when the git index changes.
-                icons = {                -- Only applies when use_icons is true.
+                diff_binaries = false,
+                enhanced_diff_hl = true,
+                git_cmd = { "git" },
+                hg_cmd = { "hg" },
+                use_icons = true,
+                show_help_hints = true,
+                watch_index = true,
+                icons = {
                     folder_closed = "",
                     folder_open = "",
                 },

@@ -147,6 +147,13 @@ return {
                 desc = "Find Files",
             },
             {
+                "<C-S-f>",
+                function()
+                    Snacks.picker.grep()
+                end,
+                desc = "Grep",
+            },
+            {
                 "<leader>fg",
                 function()
                     Snacks.picker.grep()

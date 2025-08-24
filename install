@@ -8,34 +8,27 @@
 #### ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ########################################################################################################################
 set -xe
-mkdir -p "$HOME/tools $HOME/.tmp"
-mkdir -p "$HOME/.config"
-DOTFILES_DIR="$HOME/dotfiles"
 HOME_CONFIG_DIR="$HOME/.config"
-DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
+DOTFILES_CONFIG_DIR="$HOME/dotfiles/config"
+mkdir -p "$HOME/tools" 
+mkdir -p "$HOME/.tmp" 
+mkdir -p "$HOME/.config"
 source "$HOME/dotfiles/zsh/utils.sh"
+ln -sf $PWD/zsh/zshrc $HOME/.zshrc
 
 ########################################################################################################################
 ##### mise config
 function installmise() {
     curl https://mise.run | sh
     ~/.local/bin/mise activate
-    ~/.local/bin/mise use -g node@latest
-    ~/.local/bin/mise use -g deno@latest
-    ~/.local/bin/mise use -g dotnet@latest
+
+    ~/.local/bin/mise install deno@latest
+    ~/.local/bin/mise use deno@latest
+
+    ~/.local/bin/mise install node@latest
+    ~/.local/bin/mise use node@latest
+
     ~/.local/bin/mise doctor
 }
 checkcommand "mise" installmise
-
-########################################################################################################################
-##### other links
-function setupBat() {
-    mkdir -p "$(bat --config-dir)/syntaxes"
-    cd "$(bat --config-dir)/syntaxes"
-    git clone https://github.com/tellnobody1/sublime-purescript-syntax
-    ln -sf "$DOTFILES_CONFIG_DIR/bat" "$HOME_CONFIG_DIR"
-}
-setupBat
-
-curl -fsSL https://deno.land/install.sh | sh
-deno task dotfiles --config "$HOME/dotfiles/dotfiles.config.ts" sync
+jarvis sync

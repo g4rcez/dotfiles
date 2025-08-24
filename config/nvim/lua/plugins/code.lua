@@ -13,18 +13,8 @@ return {
         event = "VeryLazy",
         opts = {},
     },
-    {
-        "kevinhwang91/nvim-ufo",
-        dependencies = { "kevinhwang91/promise-async" },
-        config = function()
-            require("ufo").setup()
-        end,
-    },
-    {
-        "folke/ts-comments.nvim",
-        event = "VeryLazy",
-        opts = {},
-    },
+    { opts = {},                "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
+    { "folke/ts-comments.nvim", event = "VeryLazy",      opts = {}, },
     {
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -68,13 +58,7 @@ return {
             { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
         },
     },
-    {
-        "nmac427/guess-indent.nvim",
-        opts = {
-            auto_cmd = true,
-            override_editorconfig = false,
-        },
-    },
+    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
     {
         "brenoprata10/nvim-highlight-colors",
         opts = {
@@ -92,39 +76,6 @@ return {
             virtual_symbol_prefix = "",
             virtual_symbol_suffix = " ",
             virtual_symbol_position = "inline",
-        },
-    },
-    {
-        "catgoose/nvim-colorizer.lua",
-        event = "BufReadPre",
-        opts = {
-            filetypes = { "*" },
-            buftypes = {},
-            user_commands = true,
-            lazy_load = false,
-            user_default_options = {
-                names = true,
-                names_opts = { lowercase = true, camelcase = true, uppercase = true, strip_digits = false },
-                names_custom = false,
-                RGB = true,
-                RGBA = true,
-                RRGGBB = true,
-                RRGGBBAA = true,
-                AARRGGBB = true,
-                rgb_fn = true,
-                hsl_fn = true,
-                css = true,
-                css_fn = true,
-                tailwind = "both",
-                tailwind_opts = { update_names = "both" },
-                sass = { enable = true, parsers = { "css" } },
-                mode = "virtualtext",
-                virtualtext = "■",
-                virtualtext_inline = "before",
-                virtualtext_mode = "foreground",
-                always_update = true,
-                hooks = { do_lines_parse = false },
-            },
         },
     },
     {
@@ -252,10 +203,11 @@ return {
                     lint.try_lint(names)
                 end
             end
+
             vim.api.nvim_create_autocmd(opts.events, {
                 group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
                 callback = M.debounce(100, M.lint),
             })
         end,
-    },
+    }
 }
