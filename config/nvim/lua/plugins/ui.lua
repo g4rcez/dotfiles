@@ -61,9 +61,10 @@ return {
         config = function()
             require("catppuccin").setup {
                 flavour = "mocha",
-                transparent_background = false, -- disables setting the background color.
-                show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-                term_colors = true, -- sets terminal colors (e.g. `g:terminal_color_0`)
+                float = { solid = true, transparent = false },
+                transparent_background = false,
+                show_end_of_buffer = false,
+                term_colors = true,
                 dim_inactive = { enabled = true, shade = "dark", percentage = 0.15 },
                 no_italic = false,
                 no_bold = false,
@@ -201,7 +202,7 @@ return {
             }
             return {
                 opts = {
-                    disable_winbar_cb = function(args) -- We do this to avoid showing it on the greeter.
+                    disable_winbar_cb = function()
                         return false
                     end,
                 },

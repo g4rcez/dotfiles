@@ -5,7 +5,7 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    { "smjonas/inc-rename.nvim", opts = {} },
+    { "smjonas/inc-rename.nvim",          opts = {} },
     { "dmmulroy/ts-error-translator.nvim" },
     {
         "zeioth/garbage-day.nvim",
@@ -31,33 +31,6 @@ return {
         ---@module "quicker"
         ---@type quicker.SetupOptions
         opts = {},
-    },
-    {
-        "tronikelis/ts-autotag.nvim",
-        opts = {
-            disable_in_macro = true,
-            auto_close = { enabled = true },
-            opening_node_types = { "tag_start", "STag", "start_tag", "jsx_opening_element" },
-            identifier_node_types = {
-                "tag_name",
-                "erroneous_end_tag_name",
-                "Name",
-                "member_expression",
-                "identifier",
-                "element_identifier",
-            },
-            auto_rename = {
-                enabled = true,
-                closing_node_types = {
-                    "jsx_closing_element",
-                    "ETag",
-                    "end_tag",
-                    "erroneous_end_tag",
-                    "tag_end",
-                },
-            },
-        },
-        event = "VeryLazy",
     },
     {
         "folke/todo-comments.nvim",
@@ -154,7 +127,17 @@ return {
             },
         },
     },
-    -- { "windwp/nvim-ts-autotag", config = true, opts = {} },
+    {
+        "windwp/nvim-ts-autotag",
+        config = true,
+        opts = {
+            opts = {
+                enable_close = true,
+                enable_rename = true,
+                enable_close_on_slash = true,
+            }
+        }
+    },
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
@@ -171,14 +154,14 @@ return {
             -- "modern", "classic", "minimal", "powerline",
             -- "ghost", "simple", "nonerdfont", "amongus"
             preset = "minimal",
-            transparent_bg = false, -- Set the background of the diagnostic to transparent
+            transparent_bg = false,         -- Set the background of the diagnostic to transparent
             transparent_cursorline = false, -- Set the background of the cursorline to transparent (only one the first diagnostic)
             hi = {
-                error = "DiagnosticError", -- Highlight group for error messages
-                warn = "DiagnosticWarn", -- Highlight group for warning messages
-                info = "DiagnosticInfo", -- Highlight group for informational messages
-                hint = "DiagnosticHint", -- Highlight group for hint or suggestion messages
-                arrow = "NonText", -- Highlight group for diagnostic arrows
+                error = "DiagnosticError",  -- Highlight group for error messages
+                warn = "DiagnosticWarn",    -- Highlight group for warning messages
+                info = "DiagnosticInfo",    -- Highlight group for informational messages
+                hint = "DiagnosticHint",    -- Highlight group for hint or suggestion messages
+                arrow = "NonText",          -- Highlight group for diagnostic arrows
                 background = "CursorLine",
                 mixing_color = "None",
             },
@@ -269,7 +252,6 @@ return {
                     lint.try_lint(names)
                 end
             end
-
             vim.api.nvim_create_autocmd(opts.events, {
                 group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
                 callback = M.debounce(100, M.lint),

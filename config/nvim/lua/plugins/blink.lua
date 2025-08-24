@@ -1,3 +1,75 @@
+local function lspIntegrations(blinkCmp)
+    local opts = {}
+    local M = {}
+
+    M.inlay_hints = { enabled = true }
+    M.diagnostics = { virtual_text = { prefix = "icons" } }
+    M.on_init = function(client, _)
+        if client.supports_method "textDocument/semanticTokens" then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
+    end
+    M.capabilities = vim.lsp.protocol.make_client_capabilities()
+    M.capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+    }
+    M.capabilities.textDocument.completion.completionItem = {
+        documentationFormat = { "markdown", "plaintext" },
+        snippetSupport = true,
+        preselectSupport = true,
+        insertReplaceSupport = true,
+        labelDetailsSupport = true,
+        deprecatedSupport = true,
+        commitCharactersSupport = true,
+        tagSupport = { valueSet = { 1 } },
+        resolveSupport = {
+            properties = {
+                "documentation",
+                "detail",
+                "additionalTextEdits",
+            },
+        },
+    }
+    opts.servers = opts.servers or {}
+    opts.servers.vtsls = opts.servers.vtsls or {}
+    opts.servers.vtsls.init_options = {
+        typescript = {
+            unstable = {
+                organizeImportsLocale = "en",
+                organizeImportsCaseFirst = false,
+                organizeImportsIgnoreCase = "auto",
+                organizeImportsCollation = "unicode",
+                organizeImportsAccentCollation = true,
+                organizeImportsNumericCollation = true,
+            },
+        },
+    }
+    for server, config in pairs(opts.servers) do
+        config.capabilities = vim.tbl_deep_extend("force", M.capabilities, blinkCmp.get_lsp_capabilities({}, false))
+        config.capabilities =
+            vim.tbl_deep_extend("force", M.capabilities, {
+                textDocument = {
+                    semanticTokens = {
+                        multilineTokenSupport = true,
+                    }
+                }
+            })
+        config.root_markers = { '.git' }
+        vim.lsp.config(server, config);
+    end
+
+    vim.diagnostic.config {
+        virtual_text = false,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+        float = { border = "rounded", source = true },
+    }
+
+    return opts
+end
+
 return {
     {
         "saghen/blink.cmp",
@@ -14,8 +86,10 @@ return {
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         config = function(_, opts)
-            require("blink.cmp").setup(opts)
+            local blink = require("blink.cmp")
+            blink.setup(opts)
             vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(nil, true) })
+            lspIntegrations(blink)
         end,
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
@@ -148,4 +222,5 @@ return {
             },
         },
     },
+
 }

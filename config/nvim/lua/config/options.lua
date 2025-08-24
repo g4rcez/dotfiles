@@ -1,5 +1,4 @@
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
-
 local opt = vim.opt
 local g = vim.g
 local o = vim.o
@@ -71,7 +70,6 @@ opt.wildmode = "longest:full,full"
 opt.winminwidth = 5
 opt.wrap = false
 
-vim.diagnostic.config { virtual_text = false, signs = true, underline = true }
 
 opt.foldcolumn = "1"
 opt.foldexpr = "0"

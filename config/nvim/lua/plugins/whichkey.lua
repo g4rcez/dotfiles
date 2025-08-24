@@ -10,7 +10,6 @@ return {
             local createKeyMap = require "config.keymap"
             local keymap = createKeyMap(wk)
             local bind = keymap.bind
-
             local function groups()
                 wk.add { "<leader>a", group = "[a]i", icon = "󱦞" }
                 wk.add { "<leader>b", group = "[b]uffer", icon = "󱦞" }
