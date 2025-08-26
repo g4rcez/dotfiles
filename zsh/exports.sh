@@ -70,5 +70,4 @@ source "$DOTFILES/zsh/ls.sh"
 #####################################################################################
 ## ai
 export PATH="$HOME/.opencode/bin:$PATH"
-alias claude="$HOME/.claude/local/claude"
 unset ANTHROPIC_API_KEY

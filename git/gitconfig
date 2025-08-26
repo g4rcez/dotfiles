@@ -8,7 +8,7 @@
 [user]
     name = g4rcez
     email = allan.f.garcez@gmail.com
-	signingkey = 41F5211E
+	signingkey = ~/.ssh/id_ed25519.pub
 
 [core]
     pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
@@ -76,6 +76,7 @@
 
 [gpg]
 	program = /opt/homebrew/bin/gpg
+	format = ssh
 
 [diff]
     colorMoved = default
