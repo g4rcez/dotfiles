@@ -1,0 +1,86 @@
+-- -- npm i -g bash-language-server
+-- vim.lsp.enable "bashls"
+--
+-- -- npm i -g vscode-langservers-extracted
+-- -- npm i -g css-variables-language-server
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- vim.lsp.config("cssls", { capabilities = capabilities })
+-- vim.lsp.enable "cssls"
+-- vim.lsp.enable "css_variables"
+--
+-- -- deno must be installed
+-- vim.g.markdown_fenced_languages = { "ts=typescript" }
+-- vim.lsp.enable "denols"
+--
+-- -- npm install @microsoft/compose-language-service
+-- -- go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
+-- -- npm install -g dockerfile-language-server-nodejs
+-- vim.lsp.config("dockerls", {
+--     settings = {
+--         docker = {
+--             languageserver = { formatter = { ignoreMultilineInstructions = true } },
+--         },
+--     },
+-- })
+-- vim.lsp.enable "docker_compose_language_service"
+-- vim.lsp.enable "docker_language_server"
+-- vim.lsp.enable "dockerls"
+--
+-- -- harper_ls
+-- vim.lsp.config("harper_ls", {
+--     settings = {
+--         ["harper-ls"] = {
+--             userDictPath = "~/dict.txt",
+--         },
+--     },
+-- })
+-- vim.lsp.enable "harper_ls"
+--
+-- -- https://github.com/luals/lua-language-server
+-- vim.lsp.config("lua_ls", {
+--     on_init = function(client)
+--         if client.workspace_folders then
+--             local path = client.workspace_folders[1].name
+--             if
+--                 path ~= vim.fn.stdpath "config"
+--                 and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+--             then
+--                 return
+--             end
+--         end
+--         client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+--             runtime = { version = "LuaJIT", path = { "lua/?.lua", "lua/?/init.lua" } },
+--             workspace = { checkThirdParty = false, library = { vim.env.VIMRUNTIME } },
+--         })
+--     end,
+--     settings = { Lua = {} },
+-- })
+-- vim.lsp.enable "lua_ls"
+--
+-- -- npm i -g oxlint
+-- vim.lsp.enable "oxlint"
+--
+-- -- https://github.com/rust-lang/rust-analyzer
+-- vim.lsp.config("rust_analyzer", {
+--     settings = { ["rust-analyzer"] = { diagnostics = { enable = true } } },
+-- })
+-- vim.lsp.enable "rust_analyzer"
+--
+-- -- https://github.com/tailwindlabs/tailwindcss-intellisense
+-- vim.lsp.enable "tailwindcss"
+--
+-- -- npm install -g @vtsls/language-server
+-- vim.lsp.enable "vtsls"
+--
+-- -- npm i -g yaml-language-server
+-- vim.lsp.config("yamlls", {
+--     settings = {
+--         yaml = {
+--             schemas = {
+--                 ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+--             },
+--         },
+--     },
+-- })
+-- vim.lsp.enable "yamlls"

@@ -11,6 +11,7 @@ return {
             local keymap = createKeyMap(wk)
             local bind = keymap.bind
             local function groups()
+                wk.add { "]", group = "]move", icon = "" }
                 wk.add { "<leader>a", group = "[a]i", icon = "󱦞" }
                 wk.add { "<leader>b", group = "[b]uffer", icon = "󱦞" }
                 wk.add { "<leader>c", group = "[c]ode", icon = "" }
@@ -141,6 +142,13 @@ return {
                     require("grug-far").open { engine = "astgrep" }
                 end, { desc = "Replace with grug-far astgrep" })
 
+                bind.normal("]d", function()
+                    vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
+                end, { desc = "Goto next error" })
+                bind.normal("[d", function()
+                    vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
+                end, { desc = "Goto previous error" })
+
                 bind.normal("]g", function()
                     vim.diagnostic.goto_next {}
                 end, { desc = "Goto next error" })
@@ -167,14 +175,7 @@ return {
                 timeout = 30000,
             }
 
-            local function ai()
-                bind.normal("<leader>auc", ":Augment chat<CR>", { desc = "Augment chat" })
-                bind.normal("<leader>aun", ":Augment chat-new<CR>", { desc = "New Augment chat" })
-                bind.normal("<leader>aut", ":Augment chat-toggle<CR>", { desc = "Toggle Augment chat" })
-            end
-
-            local keymaps =
-                { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, ai, harpoonConfig }
+            local keymaps = { groups, defaults = motions.defaults(), buffers = motions.buffers(), code, harpoonConfig }
             for _, func in ipairs(keymaps) do
                 func()
             end
