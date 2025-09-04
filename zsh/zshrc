@@ -64,6 +64,7 @@ eval "$(mise activate zsh)"
 eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
+eval "$(gh completion -s zsh)"
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"

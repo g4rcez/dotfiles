@@ -1,15 +1,23 @@
 return {
     "kabouzeid/nvim-lspinstall",
-    { "dnlhc/glance.nvim",              cmd = "Glance" },
+    { "dnlhc/glance.nvim", cmd = "Glance" },
     {
         "nvimdev/lspsaga.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
         },
-        opts = { ui = { enable = false, code_action = "", } },
+        opts = { ui = { enable = false, code_action = "" } },
     },
-    { "bezhermoso/tree-sitter-ghostty", build = "make nvim_install" },
+    {
+        "oribarilan/lensline.nvim",
+        enabled = false,
+        tag = "1.0.0",
+        event = "LspAttach",
+        config = function()
+            require("lensline").setup()
+        end,
+    },
     {
         "folke/lazydev.nvim",
         ft = "lua",

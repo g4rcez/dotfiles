@@ -5,16 +5,10 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    { "smjonas/inc-rename.nvim",          opts = {} },
+    { "smjonas/inc-rename.nvim", opts = {} },
     { "dmmulroy/ts-error-translator.nvim" },
-    {
-        "zeioth/garbage-day.nvim",
-        dependencies = "neovim/nvim-lspconfig",
-        event = "VeryLazy",
-        opts = {},
-    },
-    { opts = {},                "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
-    { "folke/ts-comments.nvim", event = "VeryLazy",      opts = {}, },
+    { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
+    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -86,8 +80,8 @@ return {
                 enable_close = true,
                 enable_rename = true,
                 enable_close_on_slash = true,
-            }
-        }
+            },
+        },
     },
     {
         "windwp/nvim-autopairs",
@@ -105,14 +99,14 @@ return {
             -- "modern", "classic", "minimal", "powerline",
             -- "ghost", "simple", "nonerdfont", "amongus"
             preset = "minimal",
-            transparent_bg = false,         -- Set the background of the diagnostic to transparent
+            transparent_bg = false, -- Set the background of the diagnostic to transparent
             transparent_cursorline = false, -- Set the background of the cursorline to transparent (only one the first diagnostic)
             hi = {
-                error = "DiagnosticError",  -- Highlight group for error messages
-                warn = "DiagnosticWarn",    -- Highlight group for warning messages
-                info = "DiagnosticInfo",    -- Highlight group for informational messages
-                hint = "DiagnosticHint",    -- Highlight group for hint or suggestion messages
-                arrow = "NonText",          -- Highlight group for diagnostic arrows
+                error = "DiagnosticError", -- Highlight group for error messages
+                warn = "DiagnosticWarn", -- Highlight group for warning messages
+                info = "DiagnosticInfo", -- Highlight group for informational messages
+                hint = "DiagnosticHint", -- Highlight group for hint or suggestion messages
+                arrow = "NonText", -- Highlight group for diagnostic arrows
                 background = "CursorLine",
                 mixing_color = "None",
             },
@@ -209,5 +203,5 @@ return {
                 callback = M.debounce(100, M.lint),
             })
         end,
-    }
+    },
 }

@@ -54,4 +54,5 @@ if vim.g.vscode then
     vscode()
 else
     nvim()
+    require("config.lsp")
 end

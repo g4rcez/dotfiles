@@ -66,7 +66,7 @@ return {
                                     title = "{title} {live} {flags}",
                                     title_pos = "center",
                                 },
-                                { win = "list",    border = "hpad" },
+                                { win = "list", border = "hpad" },
                                 { win = "preview", title = "{preview}", border = "rounded" },
                             },
                         },

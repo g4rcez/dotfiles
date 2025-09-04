@@ -1,75 +1,3 @@
-local function lspIntegrations(blinkCmp)
-    local opts = {}
-    local M = {}
-
-    M.inlay_hints = { enabled = true }
-    M.diagnostics = { virtual_text = { prefix = "icons" } }
-    M.on_init = function(client, _)
-        if client.supports_method "textDocument/semanticTokens" then
-            client.server_capabilities.semanticTokensProvider = nil
-        end
-    end
-    M.capabilities = vim.lsp.protocol.make_client_capabilities()
-    M.capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
-    }
-    M.capabilities.textDocument.completion.completionItem = {
-        documentationFormat = { "markdown", "plaintext" },
-        snippetSupport = true,
-        preselectSupport = true,
-        insertReplaceSupport = true,
-        labelDetailsSupport = true,
-        deprecatedSupport = true,
-        commitCharactersSupport = true,
-        tagSupport = { valueSet = { 1 } },
-        resolveSupport = {
-            properties = {
-                "documentation",
-                "detail",
-                "additionalTextEdits",
-            },
-        },
-    }
-    opts.servers = opts.servers or {}
-    opts.servers.vtsls = opts.servers.vtsls or {}
-    opts.servers.vtsls.init_options = {
-        typescript = {
-            unstable = {
-                organizeImportsLocale = "en",
-                organizeImportsCaseFirst = false,
-                organizeImportsIgnoreCase = "auto",
-                organizeImportsCollation = "unicode",
-                organizeImportsAccentCollation = true,
-                organizeImportsNumericCollation = true,
-            },
-        },
-    }
-    for server, config in pairs(opts.servers) do
-        config.capabilities = vim.tbl_deep_extend("force", M.capabilities, blinkCmp.get_lsp_capabilities({}, false))
-        config.capabilities =
-            vim.tbl_deep_extend("force", M.capabilities, {
-                textDocument = {
-                    semanticTokens = {
-                        multilineTokenSupport = true,
-                    }
-                }
-            })
-        config.root_markers = { '.git' }
-        vim.lsp.config(server, config);
-    end
-
-    vim.diagnostic.config {
-        virtual_text = false,
-        underline = true,
-        update_in_insert = false,
-        severity_sort = true,
-        float = { border = "rounded", source = true },
-    }
-
-    return opts
-end
-
 return {
     {
         "saghen/blink.cmp",
@@ -83,14 +11,6 @@ return {
             "rafamadriz/friendly-snippets",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
         },
-        ---@module 'blink.cmp'
-        ---@type blink.cmp.Config
-        config = function(_, opts)
-            local blink = require("blink.cmp")
-            blink.setup(opts)
-            vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(nil, true) })
-            lspIntegrations(blink)
-        end,
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
@@ -118,8 +38,12 @@ return {
                 keymap = { preset = "default" },
                 sources = function()
                     local type = vim.fn.getcmdtype()
-                    if type == "/" or type == "?" then return { "buffer" } end
-                    if type == ":" then return { "cmdline" } end
+                    if type == "/" or type == "?" then
+                        return { "buffer" }
+                    end
+                    if type == ":" then
+                        return { "cmdline" }
+                    end
                     return {}
                 end,
             },
@@ -168,9 +92,7 @@ return {
                             return vim.tbl_filter(function(item)
                                 local kind = item.kind
                                 local types = require("blink.cmp.types").CompletionItemKind
-                                return kind ~= types.Keyword
-                                    and kind ~= types.Text
-                                    and kind ~= types.Operator
+                                return kind ~= types.Keyword and kind ~= types.Text and kind ~= types.Operator
                             end, items)
                         end,
                     },
@@ -182,10 +104,10 @@ return {
                             trailing_slash = false,
                             label_trailing_slash = true,
                             get_cwd = function(context)
-                                return vim.fn.expand(('#%d:p:h'):format(context.bufnr))
+                                return vim.fn.expand(("#%d:p:h"):format(context.bufnr))
                             end,
                             show_hidden_files_by_default = false,
-                        }
+                        },
                     },
                     snippets = {
                         name = "Snippets",
@@ -193,11 +115,11 @@ return {
                         score_offset = -1,
                         opts = {
                             friendly_snippets = true,
-                            search_paths = { vim.fn.stdpath("config") .. "/snippets" },
+                            search_paths = { vim.fn.stdpath "config" .. "/snippets" },
                             global_snippets = { "all" },
                             extended_filetypes = {},
                             ignored_filetypes = {},
-                        }
+                        },
                     },
                     buffer = {
                         name = "Buffer",
@@ -216,7 +138,7 @@ return {
                                 end
                                 return bufs
                             end,
-                        }
+                        },
                     },
                 },
             },

@@ -111,7 +111,6 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         hyphen: karabiner.aerospace("resize smart -50"),
         equal_sign: karabiner.aerospace("resize smart +50"),
         w: karabiner.aerospace("layout tiles accordion"),
-        n: karabiner.aerospace("workspace notes"),
         tab: karabiner.aerospace("focus-back-and-forth"),
         spacebar: karabiner.aerospace("layout floating tiling"),
     },

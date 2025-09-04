@@ -12,9 +12,9 @@ return {
                     null_ls.builtins.diagnostics.hadolint,
                     null_ls.builtins.diagnostics.stylelint,
                     null_ls.builtins.diagnostics.yamllint,
-                    null_ls.builtins.formatting.codespell.with({
+                    null_ls.builtins.formatting.codespell.with {
                         extra_args = { "--builtin", "clear,rare,en-GB_to_en-US", "--locale", "en,pt-BR" },
-                    }),
+                    },
                     null_ls.builtins.formatting.pg_format,
                     null_ls.builtins.formatting.prettier,
                     null_ls.builtins.formatting.prettierd,
