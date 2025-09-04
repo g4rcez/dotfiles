@@ -10,25 +10,27 @@ if [[ -e "$LOCAL_VARIABLES_EXPORTS" ]]; then
 fi
 
 ##############################################################################################################
-## antidote
-fpath=($fpath "$HOME/dotfiles/zsh/completions")
-autoload -Uz compinit
-compinit
+## znap
+ZNAP_DIR="$HOME/.znap/"
+ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
+[[ -r "$ZNAP_ENTRYPOINT" ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
+source "$ZNAP_ENTRYPOINT"
 
-source "$HOME/.antidote/antidote.zsh"
-ZSH=$(antidote path ohmyzsh/ohmyzsh)
-ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
-[[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
-antidote load
-zsh_plugins=${ZDOTDIR:-~}/.zsh_plugins
-[[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-fpath=("$HOME/.antidote/functions" $fpath)
-autoload -Uz antidote
-if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
-fi
-source ${zsh_plugins}.zsh
-
+znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
+PLUGINS=(
+    MichaelAquilina/zsh-auto-notify
+    hlissner/zsh-autopair
+    wfxr/forgit
+    zsh-users/zsh-autosuggestions
+    zsh-users/zsh-completions
+    zsh-users/zsh-history-substring-search
+    zsh-users/zsh-syntax-highlighting
+)
+for plugin in $PLUGINS; do
+    znap source "$plugin";
+done
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -45,8 +47,6 @@ local -a paths=(
   "$HOME/.dotnet/tools"
   "$HOME/tools"
   "$HOME/tools/google-cloud-sdk/bin"
-  "$HOME/.local/share/JetBrains/scripts"
-  "$HOME/.local/share/JetBrains/Toolbox/scripts"
   "$HOME/dotfiles/bin"
 )
 
@@ -56,15 +56,16 @@ for path in $paths; do
 done
 
 export PATH="$PATH2"
-
 ##############################################################################################################
 ## source files
 # export PS1='$($HOME/Documents/g4rcez/oh-my-shell/bin)'
-eval "$(starship init zsh)"
+znap eval starship 'starship init zsh --print-full-init'
+znap prompt
 eval "$(zoxide init zsh)"
 eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"
 eval "$(gh completion -s zsh)"
+source <(fzf --zsh)
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
@@ -85,8 +86,7 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-WORDCHARS='.*_-[]@~&;!#$%^(){}<>/\ '
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
-
