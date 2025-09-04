@@ -101,10 +101,10 @@ function st() {
 }
 
 export FZF_COMPLETION_TRIGGER=''
-bindkey "^I" expand-or-complete
+# bindkey "^I" expand-or-complete
 bindkey "^[[Z" expand-or-complete
 bindkey '^ ' fzf-completion
-bindkey '^I' $fzf_default_completion
+# bindkey '^I' $fzf_default_completion
 
 _fzf_compgen_path() {
     bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null

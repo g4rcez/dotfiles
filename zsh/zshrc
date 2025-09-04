@@ -60,10 +60,10 @@ export PATH="$PATH2"
 ##############################################################################################################
 ## source files
 # export PS1='$($HOME/Documents/g4rcez/oh-my-shell/bin)'
-eval "$(mise activate zsh)"
-eval "$(zoxide init zsh)"
-eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+eval "$(mise activate zsh)"
+eval "$(direnv hook zsh)"
 eval "$(gh completion -s zsh)"
 
 local -a SOURCE=(

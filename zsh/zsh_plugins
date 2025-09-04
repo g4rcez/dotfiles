@@ -1,7 +1,4 @@
 getantidote/use-omz
-ohmyzsh/ohmyzsh path:lib
-ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
-ohmyzsh/ohmyzsh path:lib/compfix.zsh
 ohmyzsh/ohmyzsh path:plugins/fzf
 MichaelAquilina/zsh-auto-notify
 hlissner/zsh-autopair
