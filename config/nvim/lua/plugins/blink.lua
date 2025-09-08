@@ -7,9 +7,11 @@ return {
             "onsails/lspkind.nvim",
             "bydlw98/blink-cmp-env",
             "nvim-lua/plenary.nvim",
+            "jdrupal-dev/css-vars.nvim",
             "Kaiser-Yang/blink-cmp-git",
             "rafamadriz/friendly-snippets",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
+            { "disrupted/blink-cmp-conventional-commits" },
         },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
@@ -19,18 +21,7 @@ return {
                 use_frecency = true,
                 use_proximity = true,
                 implementation = "rust",
-                sorts = {
-                    function(a, b)
-                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-                            return
-                        end
-                        return b.client_name == "emmet_ls"
-                    end,
-                    "exact",
-                    "score",
-                    "sort_text",
-                    "label",
-                },
+                sorts = { "exact", "score", "sort_text", "label" },
             },
             appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
             signature = { enabled = true },
@@ -50,10 +41,10 @@ return {
             completion = {
                 list = {
                     max_items = 50,
-                    selection = { preselect = true, auto_insert = false },
+                    selection = { preselect = false, auto_insert = false },
                 },
-                ghost_text = { enabled = false },
                 keyword = { range = "full" },
+                ghost_text = { enabled = true },
                 accept = { create_undo_point = true, auto_brackets = { enabled = true } },
                 menu = {
                     enabled = true,
@@ -74,7 +65,7 @@ return {
             keymap = {
                 preset = "enter",
                 ["<CR>"] = { "accept", "fallback" },
-                ["<Tab>"] = { "accept", "fallback" },
+                ["<Tab>"] = { "select_next", "accept", "fallback" },
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<Esc>"] = { "cancel", "fallback" },
@@ -82,8 +73,26 @@ return {
                 ["<C-y>"] = { "select_and_accept" },
             },
             sources = {
-                default = { "lsp", "path", "snippets", "buffer" },
+                default = { "conventional_commits", "lazydev", "lsp", "path", "snippets", "buffer" },
                 providers = {
+                    lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+                    conventional_commits = {
+                        name = "Conventional Commits",
+                        module = "blink-cmp-conventional-commits",
+                        enabled = function()
+                            return vim.bo.filetype == "gitcommit"
+                        end,
+                        opts = {}, -- none so far
+                    },
+                    css_vars = {
+                        name = "css-vars",
+                        module = "css-vars.blink",
+                        opts = {
+                            -- WARNING: The search is not optimized to look for variables in JS files.
+                            -- If you change the search_extensions you might get false positives and weird completion results.
+                            search_extensions = { ".js", ".ts", ".jsx", ".tsx" },
+                        },
+                    },
                     lsp = {
                         name = "LSP",
                         module = "blink.cmp.sources.lsp",

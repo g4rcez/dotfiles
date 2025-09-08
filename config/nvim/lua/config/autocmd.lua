@@ -1,6 +1,3 @@
-local diagnostic = vim.diagnostic
-local api = vim.api
-
 local function augroup(name)
     return vim.api.nvim_create_augroup("autocmd_group_" .. name, { clear = true })
 end
@@ -102,13 +99,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         local is_node_project = vim.fn.filereadable "package.json" == 1
         local is_deno_project = vim.fn.filereadable "deno.json" == 1
-
-        -- Stop `denols` in Node.js projects
         if client.name == "denols" and is_node_project then
             client.stop()
         end
-
-        -- Stop `tsserver` in Deno projects
         if client.name == "vtsls" and is_deno_project then
             client.stop()
         end

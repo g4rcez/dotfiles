@@ -1,0 +1,6 @@
+{
+    "foo": {
+        "prefix": "sout",
+        "body": ["console.log(${1})"]
+    }
+}

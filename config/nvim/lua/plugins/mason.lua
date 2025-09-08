@@ -16,7 +16,7 @@ return {
                 "docker-compose-language-service",
                 "docker-language-server",
                 "dockerfile-language-server",
-                "emmet-ls",
+                "emmet-language-server",
                 "gh-actions-language-server",
                 "graphql-language-service-cli",
                 "html-lsp",

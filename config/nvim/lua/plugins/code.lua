@@ -1,7 +1,6 @@
 local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" }
 
 return {
-    "mattn/emmet-vim",
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
@@ -9,6 +8,17 @@ return {
     { "dmmulroy/ts-error-translator.nvim" },
     { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
+    {
+        "olrtg/nvim-emmet",
+        config = function()
+            vim.keymap.set(
+                { "n", "v" },
+                "<leader>ce",
+                require("nvim-emmet").wrap_with_abbreviation,
+                { desc = "[e]mmet" }
+            )
+        end,
+    },
     {
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -46,7 +56,7 @@ return {
     },
     {
         "Wansmer/treesj",
-        opts = { use_default_keymaps = false },
+        opts = { use_default_keymaps = false, max_join_length = 1000 },
         keys = {
             { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
             { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
