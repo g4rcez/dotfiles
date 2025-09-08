@@ -124,7 +124,7 @@ return {
         end,
         keys = {
             {
-                "<leader><space>",
+                "<leader>f<space>",
                 function()
                     require("snacks").picker.files {
                         hidden = true,

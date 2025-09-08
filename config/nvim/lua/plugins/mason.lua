@@ -2,35 +2,7 @@ return {
     {
         "williamboman/mason.nvim",
         opts = function(_, opts)
-            vim.list_extend(opts.ensure_installed or {}, {
-                "astro-language-server",
-                "bash-language-server",
-                "codespell",
-                "commitlint",
-                "cspell",
-                "css-lsp",
-                "css-variables-language-server",
-                "cssmodules-language-server",
-                "deno",
-                "diagnostic-languageserver",
-                "docker-compose-language-service",
-                "docker-language-server",
-                "dockerfile-language-server",
-                "emmet-language-server",
-                "gh-actions-language-server",
-                "graphql-language-service-cli",
-                "html-lsp",
-                "jq",
-                "json-lsp",
-                "nextls",
-                "prettierd",
-                "rust-analyzer",
-                "rustywind",
-                "shellcheck",
-                "tailwindcss-language-server",
-                "vtsls",
-                "yamlfmt",
-            })
+            vim.list_extend(opts.ensure_installed or {}, {})
             return opts
         end,
     },
@@ -38,11 +10,11 @@ return {
         "jay-babu/mason-null-ls.nvim",
         event = { "BufReadPre", "BufNewFile" },
         dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+        opts = {},
     },
-    { "williamboman/mason-lspconfig.nvim", opts = {} },
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        dependencies = { "williamboman/mason.nvim" },
+        dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" },
         opts = {},
     },
     {
@@ -64,16 +36,19 @@ return {
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
-                group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+                group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                 callback = function(event)
                     local map = function(keys, func, desc, mode)
                         mode = mode or "n"
                         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                     end
                     map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-                    -- WARN: This is not Goto Definition, this is Goto Declaration.
-                    --  For example, in C this would take you to the header.
                     map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+                    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+                        border = "rounded",
+                        width = 80,
+                        height = 20,
+                    })
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
                         local highlight_augroup =
@@ -103,40 +78,11 @@ return {
                     end
                 end,
             })
-
-            -- Change diagnostic symbols in the sign column (gutter)
-            -- if vim.g.have_nerd_font then
-            --   local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
-            --   local diagnostic_signs = {}
-            --   for type, icon in pairs(signs) do
-            --     diagnostic_signs[vim.diagnostic.severity[type]] = icon
-            --   end
-            --   vim.diagnostic.config { signs = { text = diagnostic_signs } }
-            -- end
-
-            -- LSP servers and clients are able to communicate to each other what features they support.
-            --  By default, Neovim doesn't support everything that is in the LSP specification.
-            --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-            --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
             local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-            -- Enable the following language servers
-            --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-            --
-            --  Add any additional override configuration in the following tables. Available keys are:
-            --  - cmd (table): Override the default command used to start the server
-            --  - filetypes (table): Override the default list of associated filetypes for the server
-            --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-            --  - settings (table): Override the default settings passed when initializing the server.
-            --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
             local servers = {
                 rust_analyzer = {},
                 vtsls = {},
-                lua_ls = {
-                    settings = {
-                        Lua = { completion = { callSnippet = "Replace" } },
-                    },
-                },
+                lua_ls = { settings = { Lua = { completion = { callSnippet = "Replace" } } } },
             }
             local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, {

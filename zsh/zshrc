@@ -65,10 +65,11 @@ eval "$(zoxide init zsh)"
 eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"
 eval "$(gh completion -s zsh)"
-source <(fzf --zsh)
+eval "$(fzf --zsh)"
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
+  "$HOME/.cargo/env"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
   "$HOME/.fzf.zsh"
   "$HOME/.secrets.sh"
@@ -90,3 +91,4 @@ WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
+. "$HOME/.cargo/env"

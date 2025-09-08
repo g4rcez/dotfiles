@@ -12,6 +12,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         }
     end,
 })
+
 return {
     cmd = { "vscode-html-language-server", "--stdio" },
     filetypes = { "html" },

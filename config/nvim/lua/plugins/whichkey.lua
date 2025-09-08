@@ -20,6 +20,7 @@ return {
                 wk.add { "<leader>h", group = "[h]arpoon", icon = "" }
                 wk.add { "<leader>q", group = "[q]uit", icon = "󰿅" }
                 wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
+                wk.add { "<leader>t", group = "[T]ests", icon = "󰙨" }
                 wk.add { "<leader>u", group = "[u]i", icon = "󱣴" }
                 wk.add { "<leader>r", group = "[r]eplace", icon = "" }
                 wk.add { "<leader>x", group = "[x]errors", icon = "" }

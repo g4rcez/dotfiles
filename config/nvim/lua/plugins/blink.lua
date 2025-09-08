@@ -15,17 +15,17 @@ return {
         },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
-        opts = {
-            snippets = { preset = "luasnip" },
-            fuzzy = {
+        opts = function(_, opts)
+            opts.snippets = { preset = "luasnip" }
+            opts.fuzzy = {
                 use_frecency = true,
                 use_proximity = true,
                 implementation = "rust",
                 sorts = { "exact", "score", "sort_text", "label" },
-            },
-            appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
-            signature = { enabled = true },
-            cmdline = {
+            }
+            opts.appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true }
+            opts.signature = { enabled = true }
+            opts.cmdline = {
                 keymap = { preset = "default" },
                 sources = function()
                     local type = vim.fn.getcmdtype()
@@ -37,8 +37,8 @@ return {
                     end
                     return {}
                 end,
-            },
-            completion = {
+            }
+            opts.completion = {
                 list = {
                     max_items = 50,
                     selection = { preselect = false, auto_insert = false },
@@ -61,18 +61,29 @@ return {
                         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     },
                 },
-            },
-            keymap = {
-                preset = "enter",
-                ["<CR>"] = { "accept", "fallback" },
-                ["<Tab>"] = { "select_next", "accept", "fallback" },
+            }
+            opts.keymap = {
+                preset = "none",
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<Esc>"] = { "cancel", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
                 ["<C-y>"] = { "select_and_accept" },
-            },
-            sources = {
+                ["<Tab>"] = { "select_and_accept" },
+                ["<S-Tab>"] = { "insert_prev" },
+                ["<CR>"] = {
+                    function(cmp)
+                        if cmp.snippet_active() then
+                            return cmp.cancel()
+                        else
+                            return cmp.select_and_accept()
+                        end
+                    end,
+                    "snippet_forward",
+                    "fallback",
+                },
+            }
+            opts.sources = {
                 default = { "conventional_commits", "lazydev", "lsp", "path", "snippets", "buffer" },
                 providers = {
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
@@ -150,7 +161,8 @@ return {
                         },
                     },
                 },
-            },
-        },
+            }
+            return opts
+        end,
     },
 }

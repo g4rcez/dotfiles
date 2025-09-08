@@ -12,6 +12,7 @@ export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -type
 export FZF_ALT_C_OPTS="--preview 'lsd --tree --depth=2 {}'"
 export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -printf '%P\n' 2>/dev/null"
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
+export FZF_COMPLETION_TRIGGER="**"
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --ansi
@@ -99,10 +100,6 @@ function st() {
         for prog in $(echo $selected); do $EDITOR $prog; done
     fi
 }
-
-export FZF_COMPLETION_TRIGGER=''
-bindkey "^[[Z" expand-or-complete
-bindkey '^ ' fzf-completion
 
 _fzf_compgen_path() {
     bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null
