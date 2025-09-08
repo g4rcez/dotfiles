@@ -1,6 +1,11 @@
 return {
     { "MunifTanjim/nui.nvim", lazy = true },
     {
+        "max397574/colortils.nvim",
+        cmd = { "Colortils" },
+        opts = {},
+    },
+    {
         "stevearc/aerial.nvim",
         opts = {},
         dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },

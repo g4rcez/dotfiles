@@ -173,6 +173,3 @@ function ghaction() {
     gh workflow run "${1}.yml" --ref "${2}"
 }
 
-function aicommit(){
-     git diff -U5 | pbcopy && open "raycast://ai-commands/git-commit?arguments='{{.Form.Explain | quote}}'"
-}

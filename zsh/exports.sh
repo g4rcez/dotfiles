@@ -71,3 +71,4 @@ source "$DOTFILES/zsh/ls.sh"
 ## ai
 export PATH="$HOME/.opencode/bin:$PATH"
 unset ANTHROPIC_API_KEY
+

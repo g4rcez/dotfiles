@@ -218,3 +218,9 @@ function brewfix() {
 function tmux-start() {
     tmux -S "$HOME/.tmp/socket" new-session -A -s localhost
 }
+
+### AI commands
+function aicommit(){
+     git diff -U5 | pbcopy && open "raycast://ai-commands/git-commit?arguments='{{.Form.Explain | quote}}'"
+}
+
