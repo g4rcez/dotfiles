@@ -12,7 +12,7 @@ function _n_completion() {
         complete -F _pnpm_completion n
     fi
     LIST=$(jq '.scripts' package.json | sed '1d;$d' | tr -d ' ' | grep -wo -e '^"[a-z:]*"' | tr -d '"' | tr '\n' ' ')
-    COMPREPLY=($(compgen -W "$LIST" -- "${COMP_WORDS[1]}"))    
+    COMPREPLY=($(compgen -W "$LIST" -- "${COMP_WORDS[1]}"))
 }
 
 complete -F _n_completion n

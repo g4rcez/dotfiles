@@ -16,6 +16,8 @@ ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 [[ -r "$ZNAP_ENTRYPOINT" ]] ||
     git clone --depth 1 -- \
         https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
+zstyle ':znap:*' repos-dir $PLUGINS_DIR
+zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
@@ -28,9 +30,18 @@ PLUGINS=(
     zsh-users/zsh-history-substring-search
     zsh-users/zsh-syntax-highlighting
 )
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 1
 for plugin in $PLUGINS; do
-    znap source "$plugin";
+  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+    znap source $plugin || echo "failed -> $plugin"
+  else
+    znap clone $plugin
+  fi
 done
+
+znap eval starship 'starship init zsh --print-full-init'
+# export PS1="$(deno run -A ~/Documents/g4rcez/ohmyshell/src/main.ts)"
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -58,8 +69,6 @@ done
 export PATH="$PATH2"
 ##############################################################################################################
 ## source files
-# export PS1='$($HOME/Documents/g4rcez/oh-my-shell/bin)'
-znap eval starship 'starship init zsh --print-full-init'
 znap prompt
 eval "$(zoxide init zsh)"
 eval "$(mise activate zsh)"
@@ -80,6 +89,7 @@ local -a SOURCE=(
   "$DOTFILES/zsh/fzf.sh"
   "$DOTFILES/bin/fzf-git"
   "$DOTFILES/zsh/git.sh"
+  "$DOTFILES/bin/node-completion.sh"
   "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
 )
@@ -92,3 +102,14 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 . "$HOME/.cargo/env"
+
+##############################################################################################################
+## fpath hooks
+znap fpath _cargo    "rustup completions zsh cargo"
+znap fpath _deno     "deno completions zsh"
+znap fpath _mise     "mise completion zsh"
+znap fpath _n        "source $HOME/dotfiles/zsh/completions/_n"
+znap fpath _npm      "npm completion"
+znap fpath _pnpm     "pnpm completion zsh"
+znap fpath _rustup   "rustup completions zsh"
+

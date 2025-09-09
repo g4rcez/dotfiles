@@ -1,5 +1,6 @@
 return {
     "dmtrKovalenko/fff.nvim",
+    enabled = false,
     build = "cargo build --release",
     opts = {
         title = "Find",

@@ -64,6 +64,8 @@ return {
             }
             opts.keymap = {
                 preset = "none",
+                ["<Up>"] = { "select_prev" },
+                ["<Down>"] = { "select_next" },
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<Esc>"] = { "cancel", "fallback" },
