@@ -41,7 +41,6 @@ for plugin in $PLUGINS; do
 done
 
 znap eval starship 'starship init zsh --print-full-init'
-# export PS1="$(deno run -A ~/Documents/g4rcez/ohmyshell/src/main.ts)"
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -89,7 +88,6 @@ local -a SOURCE=(
   "$DOTFILES/zsh/fzf.sh"
   "$DOTFILES/bin/fzf-git"
   "$DOTFILES/zsh/git.sh"
-  "$DOTFILES/bin/node-completion.sh"
   "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
 )
@@ -97,19 +95,20 @@ for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
 
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
-autoload -Uz select-word-style
-select-word-style normal
-zstyle ':zle:*' word-style unspecified
-. "$HOME/.cargo/env"
-
 ##############################################################################################################
 ## fpath hooks
 znap fpath _cargo    "rustup completions zsh cargo"
 znap fpath _deno     "deno completions zsh"
 znap fpath _mise     "mise completion zsh"
-znap fpath _n        "source $HOME/dotfiles/zsh/completions/_n"
+znap fpath _n        "source $HOME/dotfiles/zsh/completion/node-completion.sh"  > /dev/null 2>&1 
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
+
+
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
+autoload -Uz select-word-style
+select-word-style normal
+zstyle ':zle:*' word-style unspecified
+. "$HOME/.cargo/env"
 

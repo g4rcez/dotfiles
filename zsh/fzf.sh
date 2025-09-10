@@ -72,7 +72,6 @@ function cdf() {
 
 function fns() {
     if [[ -f package.json ]]; then
-        local CONTENT="$(jq -r '.scripts' package.json)"
         local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo 'Script -> {}\n';grep '{}' package.json | sed 's/^[ ]*//g'")
         if [[ "$script" != "" ]]; then
             n "$script"
