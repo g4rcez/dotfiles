@@ -6,11 +6,6 @@ return {
         opts = {},
     },
     {
-        "stevearc/aerial.nvim",
-        opts = {},
-        dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },
-    },
-    {
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
@@ -82,7 +77,6 @@ return {
                     fzf = true,
                     ufo = false,
                     alpha = true,
-                    flash = true,
                     dap_ui = true,
                     neogit = true,
                     gitsigns = true,
@@ -97,7 +91,7 @@ return {
                     treesitter_context = true,
                     colorful_winsep = { enabled = false, color = "red" },
                     mini = { enabled = true, indentscope_color = "overlay2" },
-                    indent_blankline = { enabled = true, scope_color = "", colored_indent_levels = false },
+                    indent_blankline = { enabled = true, scope_color = "blue", colored_indent_levels = false },
                     native_lsp = {
                         enabled = true,
                         virtual_text = {
@@ -127,7 +121,7 @@ return {
         "Bekaboo/dropbar.nvim",
         event = "UIEnter",
         opts = {
-            bar = { padding = { left = 2, right = 2 } },
+            bar = { padding = { left = 8, right = 2 } },
         },
         config = function()
             local dropbar_api = require "dropbar.api"

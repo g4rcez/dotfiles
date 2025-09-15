@@ -5,7 +5,6 @@ return {
     opts = {
         parser = { comments = { "#", "//" } },
         keymaps = {
-            -- Text objects for selecting fields
             textobject_field_inner = { "if", mode = { "o", "x" } },
             textobject_field_outer = { "af", mode = { "o", "x" } },
             -- Excel-like navigation:

@@ -1,52 +1,5 @@
 # vim: ft=ghostty
-
-# misc
-background = #181826
-background-blur-radius = 50
-window-colorspace = display-p3
-background-opacity = 0.9
-config-default-files = true
-cursor-style = block
-cursor-style-blink = true
-custom-shader-animation = true
-desktop-notifications = true
-foreground = #ffffff
-link-url = true
-minimum-contrast = 1
-mouse-shift-capture = true
-quick-terminal-position = top
-quick-terminal-screen = main
-shell-integration-features = no-cursor,sudo,title
-shell-integration = zsh
 theme = catppuccin-mocha
-
-# font
-font-thicken = false
-bold-is-bright = true
-font-family = "JetBrainsMono Nerd Font"
-font-size = 17
-adjust-cell-height = 20%
-cursor-invert-fg-bg = true
-
-# window
-quit-after-last-window-closed = false
-window-decoration = false
-window-padding-color = extend
-window-padding-x = 2
-window-padding-y = 1
-window-theme = dark
-window-save-state = always
-window-colorspace = display-p3
-window-padding-color = extend
-window-inherit-working-directory = true
-
-# OSX
-alpha-blending = native
-macos-option-as-alt = true
-macos-window-shadow = true
-macos-titlebar-style = tabs
-macos-auto-secure-input = true
-macos-secure-input-indication = true
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal

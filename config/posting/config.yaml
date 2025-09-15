@@ -1,5 +1,7 @@
+pager: less
 editor: nvim
-theme: galaxy
+theme: tokyo-night
+spacing: compact
 animation: basic
 layout: horizontal
 load_builtin_themes: true
@@ -9,3 +11,8 @@ response:
 heading:
     visible: true
     show_host: true
+    show_version: true
+collection_browser:
+    position: "right"
+keymap:
+    commands: ctrl+e

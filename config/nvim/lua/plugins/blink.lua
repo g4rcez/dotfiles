@@ -63,15 +63,13 @@ return {
                 },
             }
             opts.keymap = {
-                preset = "none",
-                ["<Up>"] = { "select_prev" },
-                ["<Down>"] = { "select_next" },
+                preset = "enter",
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<Esc>"] = { "cancel", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
                 ["<C-y>"] = { "select_and_accept" },
-                ["<Tab>"] = { "select_and_accept" },
+                ["<Tab>"] = { "select_and_accept", "fallback" },
                 ["<S-Tab>"] = { "insert_prev" },
                 ["<CR>"] = {
                     function(cmp)

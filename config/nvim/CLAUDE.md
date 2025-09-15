@@ -29,7 +29,6 @@ The configuration is built around these key plugins:
 ### Navigation & File Management
 - **Snacks.nvim**: Primary picker/finder (replaces telescope), file explorer, and various utilities
 - **Oil.nvim**: File manager with buffer-like editing (`<leader>so` for float mode)
-- **Flash.nvim**: Motion plugin for quick navigation (`s` for jump, `S` for treesitter)
 
 ### LSP & Development
 - **nvim-lspconfig**: LSP configuration with extensive server setup

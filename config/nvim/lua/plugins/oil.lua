@@ -17,10 +17,7 @@ return {
         require("oil").setup {
             default_file_explorer = true,
             columns = { "icon", "permissions", "size" },
-            buf_options = {
-                buflisted = false,
-                bufhidden = "hide",
-            },
+            buf_options = { buflisted = false, bufhidden = "hide" },
             win_options = {
                 wrap = true,
                 signcolumn = "no",
@@ -77,7 +74,7 @@ return {
                     { "type", "asc" },
                     { "name", "asc" },
                 },
-                highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
+                highlight_filename = function()
                     return nil
                 end,
             },

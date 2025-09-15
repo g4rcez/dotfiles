@@ -7,6 +7,6 @@ vim.lsp.config("dockerls", {
 })
 
 return {
-    cmd = { "docker-langserver", "--stdio" }
+    cmd = { "docker-langserver", "--stdio" },
     filetypes = { "Dockerfile", "dockerfile" }
 }
