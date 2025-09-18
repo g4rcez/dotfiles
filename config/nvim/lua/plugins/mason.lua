@@ -1,10 +1,21 @@
 return {
     {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = function(_, opts)
-            vim.list_extend(opts.ensure_installed or {}, {})
+            vim.list_extend(opts.ensure_installed or {}, {
+                "markdown-toc",
+                "sqlfluff",
+            })
             return opts
         end,
+    },
+    {
+        "mason-org/mason-lspconfig.nvim",
+        opts = {},
+        dependencies = {
+            { "mason-org/mason.nvim", opts = {} },
+            "neovim/nvim-lspconfig",
+        },
     },
     {
         "jay-babu/mason-null-ls.nvim",
@@ -27,12 +38,18 @@ return {
         },
     },
     {
+        "b0o/SchemaStore.nvim",
+        lazy = true,
+        version = false,
+    },
+    {
         "neovim/nvim-lspconfig",
         dependencies = {
-            { "williamboman/mason.nvim", opts = {} },
-            "williamboman/mason-lspconfig.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "b0o/SchemaStore.nvim",
+            "mason-org/mason-lspconfig.nvim",
             { "j-hui/fidget.nvim", opts = {} },
+            { "williamboman/mason.nvim", opts = {} },
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -46,8 +63,8 @@ return {
                     map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
                     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
                         border = "rounded",
-                        width = 80,
-                        height = 20,
+                        width = 100,
+                        height = 30,
                     })
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
@@ -76,28 +93,14 @@ return {
                             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
                         end, "[T]oggle Inlay [H]ints")
                     end
+                    local lspconfig_defaults = require("lspconfig").util.default_config
+                    lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+                        "force",
+                        lspconfig_defaults.capabilities,
+                        require("blink.cmp").get_lsp_capabilities()
+                    )
                 end,
             })
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            local servers = {
-                rust_analyzer = {},
-                vtsls = {},
-                lua_ls = { settings = { Lua = { completion = { callSnippet = "Replace" } } } },
-            }
-            local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
-                "stylua",
-            })
-            require("mason-tool-installer").setup { ensure_installed = ensure_installed }
-            require("mason-lspconfig").setup {
-                handlers = {
-                    function(server_name)
-                        local server = servers[server_name] or {}
-                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                        require("lspconfig")[server_name].setup(server)
-                    end,
-                },
-            }
         end,
     },
 }

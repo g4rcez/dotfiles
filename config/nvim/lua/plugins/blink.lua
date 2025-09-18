@@ -10,17 +10,17 @@ return {
             "jdrupal-dev/css-vars.nvim",
             "Kaiser-Yang/blink-cmp-git",
             "rafamadriz/friendly-snippets",
+            "kristijanhusak/vim-dadbod-completion",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
-            { "disrupted/blink-cmp-conventional-commits" },
+            "disrupted/blink-cmp-conventional-commits",
         },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = function(_, opts)
             opts.snippets = { preset = "luasnip" }
             opts.fuzzy = {
-                use_frecency = true,
                 use_proximity = true,
-                implementation = "rust",
+                frecency = { enabled = true },
                 sorts = { "exact", "score", "sort_text", "label" },
             }
             opts.appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true }
@@ -84,8 +84,17 @@ return {
                 },
             }
             opts.sources = {
-                default = { "conventional_commits", "lazydev", "lsp", "path", "snippets", "buffer" },
+                default = {
+                    "lsp",
+                    "path",
+                    "lazydev",
+                    "conventional_commits",
+                    "dadbod",
+                    "buffer",
+                    "snippets",
+                },
                 providers = {
+                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                     conventional_commits = {
                         name = "Conventional Commits",
@@ -93,14 +102,12 @@ return {
                         enabled = function()
                             return vim.bo.filetype == "gitcommit"
                         end,
-                        opts = {}, -- none so far
+                        opts = {},
                     },
                     css_vars = {
                         name = "css-vars",
                         module = "css-vars.blink",
                         opts = {
-                            -- WARNING: The search is not optimized to look for variables in JS files.
-                            -- If you change the search_extensions you might get false positives and weird completion results.
                             search_extensions = { ".js", ".ts", ".jsx", ".tsx" },
                         },
                     },
@@ -134,7 +141,6 @@ return {
                         module = "blink.cmp.sources.snippets",
                         score_offset = -1,
                         opts = {
-                            friendly_snippets = true,
                             search_paths = { vim.fn.stdpath "config" .. "/snippets" },
                             global_snippets = { "all" },
                             extended_filetypes = {},

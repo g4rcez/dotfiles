@@ -2,7 +2,7 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     {
         "nvim-treesitter/nvim-treesitter-context",
-        dependencies = {"nvim-treesitter/nvim-treesitter-textobjects"},
+        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         opts = {
             enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
             multiwindow = true, -- Enable multiwindow support.
@@ -46,6 +46,7 @@ return {
                 "dockerfile",
                 "git_config",
                 "git_rebase",
+                "gitattributes",
                 "gitcommit",
                 "gitignore",
                 "html",
@@ -64,6 +65,7 @@ return {
                 "query",
                 "regex",
                 "styled",
+                "sql",
                 "tsx",
                 "typescript",
                 "vim",
