@@ -82,7 +82,6 @@ return {
                     gitsigns = true,
                     markdown = true,
                     blink_cmp = true,
-                    dashboard = true,
                     diffview = false,
                     treesitter = true,
                     render_markdown = true,

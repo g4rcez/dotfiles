@@ -106,15 +106,22 @@ function tag() {
     git tag "$1" && git push origin "$1"
 }
 
-# rebase your current branch with the $1 branch
-function rebasewith() {
+function actionWith() {
     git fetch
     local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-    local TARGET_BRANCH="$1"
+    local TARGET_BRANCH="$2"
     git switch "$TARGET_BRANCH"
     git pull origin "$TARGET_BRANCH"
     git switch "$CURRENT_BRANCH"
-    git rebase "$TARGET_BRANCH"
+    git $1 "$TARGET_BRANCH"
+}
+
+function mergewith() {
+    actionWith "merge" $1
+}
+
+function rebasewith() {
+    actionWith "rebase" $1
 }
 
 function squash() {

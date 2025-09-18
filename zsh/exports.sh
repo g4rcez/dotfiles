@@ -72,3 +72,24 @@ source "$DOTFILES/zsh/ls.sh"
 export PATH="$HOME/.opencode/bin:$PATH"
 unset ANTHROPIC_API_KEY
 
+#####################################################################################
+## PATH
+local -a paths=(
+  "/usr/local/bin"
+  "$PNPM_HOME"
+  "$HOME/.cargo/env"
+  "$HOME/.local/bin"
+  "$HOME/.local/share"
+  "$HOME/.local/share/bin"
+  "$HOME/.dotnet"
+  "$HOME/.dotnet/tools"
+  "$HOME/tools"
+  "$HOME/tools/google-cloud-sdk/bin"
+  "$HOME/dotfiles/bin"
+)
+
+PATH2="$PATH"
+for path in $paths; do
+  if [[ -d "$path" ]]; then PATH2="$PATH2:$path" fi
+done
+

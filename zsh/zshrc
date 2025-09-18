@@ -4,6 +4,13 @@ if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
     return
 fi
 
+##############################################################################################################
+## exports
+source $HOME/dotfiles/zsh/exports.sh
+source $HOME/dotfiles/zsh/utils.sh
+
+export PATH="$PATH2"
+
 LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
 if [[ -e "$LOCAL_VARIABLES_EXPORTS" ]]; then 
     source "$LOCAL_VARIABLES_EXPORTS" 
@@ -41,31 +48,6 @@ for plugin in $PLUGINS; do
   fi
 done
 
-##############################################################################################################
-## exports
-source $HOME/dotfiles/zsh/exports.sh
-source $HOME/dotfiles/zsh/utils.sh
-
-local -a paths=(
-  "/usr/local/bin"
-  "$HOME/.cargo/env"
-  "$HOME/.local/bin"
-  "$HOME/.local/share"
-  "$HOME/.local/share/bin"
-  "$PNPM_HOME"
-  "$HOME/.dotnet"
-  "$HOME/.dotnet/tools"
-  "$HOME/tools"
-  "$HOME/tools/google-cloud-sdk/bin"
-  "$HOME/dotfiles/bin"
-)
-
-PATH2="$PATH"
-for path in $paths; do
-  if [[ -d "$path" ]]; then PATH2="$PATH2:$path" fi
-done
-
-export PATH="$PATH2"
 ##############################################################################################################
 ## source files
 znap prompt
@@ -112,4 +94,3 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 . "$HOME/.cargo/env"
-
