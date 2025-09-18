@@ -43,7 +43,7 @@ return {
             },
             heading = {
                 sign = true,
-                icons = { "1 ", "2 ", "3 ", "4 ", "5 ", "6 " },
+                icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
                 backgrounds = {
                     "Headline1Bg",
                     "Headline2Bg",

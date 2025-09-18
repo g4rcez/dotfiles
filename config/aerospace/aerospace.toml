@@ -58,3 +58,6 @@ enable-normalization-opposite-orientation-for-nested-containers = true
     alt-k = 'move up'
     alt-l = 'move right'
 
+[[on-window-detected]]
+    if.app-id =  'org.alacritty'
+    run = 'layout floating'

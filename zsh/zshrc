@@ -20,6 +20,7 @@ zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 
+znap eval starship 'starship init zsh --print-full-init'
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
 PLUGINS=(
     MichaelAquilina/zsh-auto-notify
@@ -40,7 +41,6 @@ for plugin in $PLUGINS; do
   fi
 done
 
-znap eval starship 'starship init zsh --print-full-init'
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -74,6 +74,7 @@ eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"
 eval "$(gh completion -s zsh)"
 eval "$(fzf --zsh)"
+eval "$(atuin init zsh --disable-up-arrow)"
 
 local -a SOURCE=(
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"

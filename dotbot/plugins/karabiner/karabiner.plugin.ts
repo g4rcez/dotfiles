@@ -15,9 +15,9 @@ const open = (
     description: description || `Open ${what}`,
 });
 
-const shell = (cmd: string, what: string = ""): LayerCommand => ({
+const shell = (cmd: string, description: string = ""): LayerCommand => ({
+    description,
     to: [{ shell_command: cmd }],
-    description: what,
 });
 
 export const BROWSER = "Microsoft Edge";

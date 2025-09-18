@@ -56,5 +56,6 @@ defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 defaults write com.apple.dock expose-group-apps -bool true && killall Dock
 defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
 mdutil -i off -a
+defaults write -g NSWindowShouldDragOnGesture -bool true
 
 

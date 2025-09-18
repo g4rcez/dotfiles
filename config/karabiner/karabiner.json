@@ -956,6 +956,112 @@
                 ]
               },
               {
+                "description": "Caps Lock -> Hyper Key(a_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
+                "description": "Caps Lock -> Hyper Key(a_single)",
+                "type": "basic",
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  }
+                ]
+              },
+              {
                 "description": "Caps Lock -> Hyper Key",
                 "type": "basic",
                 "to_if_alone": [
@@ -6744,6 +6850,301 @@
                 "to": [
                   {
                     "shell_command": "open -n -a 'Microsoft Edge.app' --args --profile-directory='Default'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable single - leader a",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_single_leader_key_a",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "esc disable single - leader a",
+            "manipulators": [
+              {
+                "description": "esc_disable_single_leader_key_a",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 0
+                  }
+                ],
+                "from": {
+                  "key_code": "escape",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ],
+                    "mandatory": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "disable holder - leader a",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "disable_leader_key_a",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_HOLD",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader a",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ],
+                "description": "leader_key_a",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_if_alone": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Layer \"a\" \n\nn: Temporary notes\nc: CLI math expressions"
+                    }
+                  }
+                ],
+                "to_if_held_down": [
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_HOLD",
+                      "value": "on"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": "Persistent mode - Layer \"a\" \n\nn: Temporary notes\nc: CLI math expressions"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + a + n - Temporary notes",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + n - Temporary notes",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + n - Temporary notes",
+                "from": {
+                  "key_code": "n"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + a + c - CLI math expressions",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + c - CLI math expressions",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + c - CLI math expressions",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'"
                   }
                 ],
                 "type": "basic"

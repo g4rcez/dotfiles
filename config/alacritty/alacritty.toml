@@ -2,7 +2,7 @@
 TERM = "xterm-256color"
 
 [window]
-opacity = 0.8
+opacity = 1
 padding.x = 2
 padding.y = 0
 decorations = "Buttonless"
@@ -10,15 +10,14 @@ decorations_theme_variant = "Dark"
 blur = true
 resize_increments = true
 option_as_alt = "Both"
+startup_mode = "Windowed"
+level = "AlwaysOnTop"
 
 [font]
-bold.family = "JetBrainsMono Nerd Font Mono"
+normal.family = "JetBrainsMono Nerd Font"
 bold.style = "Regular"
-bold_italic.family = "JetBrainsMono Nerd Font Mono"
 builtin_box_drawing = true
-italic.family = "JetBrainsMono Nerd Font Mono"
-normal.family = "JetBrainsMono Nerd Font Mono"
-offset.y = 3
+offset.y = 15
 offset.x = 1
 size = 17
 
@@ -32,7 +31,7 @@ unfocused_hollow = true
 save_to_clipboard = true
 
 [colors.primary]
-background = "#1e1e2e"
+background = "#181826"
 foreground = "#cdd6f4"
 dim_foreground = "#7f849c"
 bright_foreground = "#cdd6f4"

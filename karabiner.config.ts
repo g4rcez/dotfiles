@@ -252,6 +252,16 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         w: karabiner.app("Webstorm"),
         b: karabiner.browser("Default", "Open default profile"),
     },
+    a: {
+        n: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
+            "Temporary notes",
+        ),
+        c: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
+            "CLI math expressions",
+        ),
+    },
 });
 
 const disableLeaderKeys = withLeaderKeys.keys.flatMap((key): Manipulator[] => [
