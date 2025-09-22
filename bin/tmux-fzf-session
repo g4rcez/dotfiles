@@ -69,7 +69,7 @@ session_name=$(getSessionName "$(homename "$selected_name")")
 if [[ -n "$is_session" ]]; then
     tmux switch -t "$session_name"
 else
-    cd "$selected"
+    cd $(zoxide query "$selected")
     tmux new-session -ds "$session_name"
-    tmux switch -t "$session_name"
+    tmux -S "$HOME/.tmp/socket" switch -t "$session_name"
 fi

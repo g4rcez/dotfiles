@@ -253,6 +253,14 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         b: karabiner.browser("Default", "Open default profile"),
     },
     a: {
+        m: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop",
+            "Monitoring with htop",
+        ),
+        j: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect",
+            "Inspect json",
+        ),
         n: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
             "Temporary notes",

@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+function main() {
+    source "$HOME/dotfiles/zsh/exports.sh"
+    source "$HOME/dotfiles/zsh/utils.sh"
+    source "$HOME/dotfiles/zsh/fzf.sh"
+    local FILE="$(fzf)"
+    fx "$FILE"
+}
+
+main

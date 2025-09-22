@@ -9,8 +9,6 @@ fi
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
-export PATH="$PATH2"
-
 LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
 if [[ -e "$LOCAL_VARIABLES_EXPORTS" ]]; then 
     source "$LOCAL_VARIABLES_EXPORTS" 

@@ -1,4 +1,4 @@
-_fzf_comprun() {
+function _fzf_comprun() {
     local command=$1
     shift
     case "$command" in
@@ -28,7 +28,7 @@ $FZF_COLORS
 -i
 "
 
-_fzf_git_fzf() {
+function _fzf_git_fzf() {
     fzf-tmux \
         --ansi \
         --bind 'ctrl-/:toggle-preview' \
@@ -100,10 +100,10 @@ function st() {
     fi
 }
 
-_fzf_compgen_path() {
+function _fzf_compgen_path() {
     bfs -H "$1" -color -exclude \( -name .git \) 2>/dev/null
 }
 
-_fzf_compgen_dir() {
+function _fzf_compgen_dir() {
     bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
 }

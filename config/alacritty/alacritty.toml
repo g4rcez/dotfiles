@@ -4,14 +4,14 @@ TERM = "xterm-256color"
 [window]
 opacity = 1
 padding.x = 2
-padding.y = 0
+padding.y = 1
 decorations = "Buttonless"
 decorations_theme_variant = "Dark"
 blur = true
 resize_increments = true
 option_as_alt = "Both"
 startup_mode = "Windowed"
-level = "AlwaysOnTop"
+
 
 [font]
 normal.family = "JetBrainsMono Nerd Font"

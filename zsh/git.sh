@@ -94,14 +94,32 @@ function pullb() {
     git pull --rebase origin "$(git branch --show-current)";
 }
 
+PRS_TMP_FILE="/tmp/fzf-gitcli"
+function parseprs() { 
+    if [[ "$(jq length $PRS_TMP_FILE)" == 0 ]]; then
+        echo "No pull requests available"
+        return;
+    fi
+    jq -c '.[] | .title' "$PRS_TMP_FILE"\
+        | fzf --ansi --info inline\
+        --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' /tmp/fzf-gitcli | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
+        --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' /tmp/fzf-gitcli | xargs -n 1 gh pr checkout)"
+}
+
 function prs() {
-    bash "$DOTFILES/bin/gh-fzf"
+    gh pr list --json 'body,number,id,title' > $PRS_TMP_FILE
+    parseprs
+}
+
+function myprs() {
+    gh pr list --author "@me" --json 'body,number,id,title' > $PRS_TMP_FILE
+    parseprs
 }
 
 function killbranches() {
     git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
-
 }
+
 function tag() {
     git tag "$1" && git push origin "$1"
 }
@@ -159,6 +177,10 @@ function commit () {
 
 function lastcommit() {
     git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1
+}
+
+function gtag() {
+    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview 'bash $HOME/dotfiles/bin/git-fzf-preview.sh tag {}'
 }
 
 #############################################################################################################################

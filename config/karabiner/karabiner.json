@@ -7016,7 +7016,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"a\" \n\nn: Temporary notes\nc: CLI math expressions"
+                      "text": "Layer \"a\" \n\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions"
                     }
                   }
                 ],
@@ -7031,8 +7031,120 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"a\" \n\nn: Temporary notes\nc: CLI math expressions"
+                      "text": "Persistent mode - Layer \"a\" \n\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions"
                     }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + a + m - Monitoring with htop",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + m - Monitoring with htop",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + m - Monitoring with htop",
+                "from": {
+                  "key_code": "m"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + a + j - Inspect json",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + j - Inspect json",
+                "from": {
+                  "key_code": "j"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_a_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_a_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + a + j - Inspect json",
+                "from": {
+                  "key_code": "j"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect"
                   }
                 ],
                 "type": "basic"

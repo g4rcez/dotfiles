@@ -1,5 +1,11 @@
 # vim: ft=ghostty
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
+font-family = "JetBrainsMono Nerd Font"
+font-size = 17
+adjust-cell-height = 50%
+
+background = #181826
+foreground = #efefef
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal

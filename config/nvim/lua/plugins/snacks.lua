@@ -267,9 +267,13 @@ return {
                 end,
                 desc = "File Explorer",
             },
-            -- find
             {
                 "<Tab><Tab>",
+                require("snacks").picker.buffers,
+                desc = "Buffers",
+            },
+            {
+                "<leader><Tab>",
                 require("snacks").picker.buffers,
                 desc = "Buffers",
             },

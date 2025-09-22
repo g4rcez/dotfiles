@@ -1,4 +1,32 @@
 #####################################################################################
+## PATH
+PATH2="$PATH"
+LOCAL_SOURCE_FILES=(
+    "/usr/local/bin"
+    "/opt/homebrew/bin"
+    "$PNPM_HOME"
+    "$HOME/.cargo/env"
+    "$HOME/.local/bin"
+    "$HOME/.local/share"
+    "$HOME/.local/share/bin"
+    "$HOME/.dotnet"
+    "$HOME/.dotnet/tools"
+    "$HOME/tools"
+    "$HOME/tools/google-cloud-sdk/bin"
+    "$HOME/dotfiles/bin"
+    "$HOME/.opencode/bin"
+)
+
+for SOURCE_FILE in "${LOCAL_SOURCE_FILES[@]}"; do
+  if [[ -d "$SOURCE_FILE" ]]; then 
+      PATH2="$PATH2:$SOURCE_FILE";
+  fi
+done
+
+PATH="$PATH2"
+export PATH="$PATH2"
+
+#####################################################################################
 ## Important exports
 export LISTMAX=10000
 export DOTFILES="$HOME/dotfiles"
@@ -69,27 +97,4 @@ source "$DOTFILES/zsh/ls.sh"
 
 #####################################################################################
 ## ai
-export PATH="$HOME/.opencode/bin:$PATH"
 unset ANTHROPIC_API_KEY
-
-#####################################################################################
-## PATH
-local -a paths=(
-  "/usr/local/bin"
-  "$PNPM_HOME"
-  "$HOME/.cargo/env"
-  "$HOME/.local/bin"
-  "$HOME/.local/share"
-  "$HOME/.local/share/bin"
-  "$HOME/.dotnet"
-  "$HOME/.dotnet/tools"
-  "$HOME/tools"
-  "$HOME/tools/google-cloud-sdk/bin"
-  "$HOME/dotfiles/bin"
-)
-
-PATH2="$PATH"
-for path in $paths; do
-  if [[ -d "$path" ]]; then PATH2="$PATH2:$path" fi
-done
-
