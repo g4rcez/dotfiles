@@ -70,7 +70,6 @@ opt.wildmode = "longest:full,full"
 opt.winminwidth = 5
 opt.wrap = false
 
-
 opt.foldcolumn = "1"
 opt.foldexpr = "0"
 opt.foldenable = true
@@ -80,3 +79,4 @@ opt.foldlevelstart = 99
 opt.smoothscroll = true
 opt.foldmethod = "expr"
 opt.foldtext = ">"
+

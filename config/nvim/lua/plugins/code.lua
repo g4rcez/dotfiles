@@ -8,6 +8,12 @@ return {
     { "dmmulroy/ts-error-translator.nvim" },
     { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
+    {
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        event = "VeryLazy",
+        opts = {},
+    },
     { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
     {
         "stevearc/aerial.nvim",

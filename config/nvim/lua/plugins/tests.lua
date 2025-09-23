@@ -1,4 +1,14 @@
-local function config()
+local function config(_, opts)
+    local neotest_ns = vim.api.nvim_create_namespace "neotest"
+    vim.diagnostic.config({
+        virtual_text = {
+            format = function(diagnostic)
+                local message = diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+                return message
+            end,
+        },
+    }, neotest_ns)
+    require("neotest").setup(opts)
     return {
         status = { virtual_text = true },
         output = { open_on_run = true },
@@ -28,12 +38,12 @@ return {
     "nvim-neotest/neotest",
     opts = config,
     dependencies = {
-        "nvim-neotest/nvim-nio",
         "nvim-lua/plenary.nvim",
+        "nvim-neotest/nvim-nio",
+        "marilari88/neotest-vitest",
+        "nvim-neotest/neotest-jest",
         "antoinemadec/FixCursorHold.nvim",
         "nvim-treesitter/nvim-treesitter",
-        "nvim-neotest/neotest-jest",
-        "marilari88/neotest-vitest",
     },
     keys = {
         {

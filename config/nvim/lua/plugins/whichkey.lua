@@ -22,7 +22,7 @@ return {
                 wk.add { "<leader>s", group = "[s]earch", icon = "󱡴" }
                 wk.add { "<leader>t", group = "[T]ests", icon = "󰙨" }
                 wk.add { "<leader>u", group = "[u]i", icon = "󱣴" }
-                wk.add { "<leader>r", group = "[r]eplace", icon = "" }
+                wk.add { "<leader>r", group = "[r]epl", icon = "" }
                 wk.add { "<leader>x", group = "[x]errors", icon = "" }
                 wk.add { "<leader>n", group = "[n]ew cursor", icon = "" }
             end
@@ -61,6 +61,9 @@ return {
             end
 
             local function code()
+                -- Open compiler
+                bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
+                vim.keymap.set("n", "<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
                 vim.keymap.set("n", "zR", require("ufo").openAllFolds)
                 vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
                 vim.keymap.set("n", "zm", require("ufo").closeFoldsWith)
@@ -77,9 +80,9 @@ return {
                 bind.normal("gY", "<CMD>Glance type_definitions<CR>", { desc = "Glance implementations" })
                 bind.normal("gM", "<CMD>Glance implementations<CR>", { desc = "Glance implementations" })
                 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
-                bind.normal("<leader>ud", function()
+                bind.normal("<leader>cd", function()
                     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-                end, { desc = "Toggle diagnostics" })
+                end, { desc = "[c]ode [d]iagnostics" })
                 bind.normal("<leader>co", function()
                     vim.lsp.buf.code_action {
                         apply = true,

@@ -59,7 +59,6 @@ return {
                         mode = mode or "n"
                         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                     end
-                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
                     map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
                     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
                         border = "rounded",
@@ -88,11 +87,9 @@ return {
                             end,
                         })
                     end
-                    if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-                        map("<leader>th", function()
-                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-                        end, "[T]oggle Inlay [H]ints")
-                    end
+                    map("<leader>ch", function()
+                        vim.lsp.inlay_hint.enable(event.buf, true)
+                    end, "[c]ode [h]ints")
                     local lspconfig_defaults = require("lspconfig").util.default_config
                     lspconfig_defaults.capabilities = vim.tbl_deep_extend(
                         "force",
