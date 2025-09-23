@@ -1,4 +1,5 @@
 return {
+    { "kevinhwang91/nvim-hlslens" },
     { "MunifTanjim/nui.nvim", lazy = true },
     {
         "max397574/colortils.nvim",
@@ -30,6 +31,34 @@ return {
                 return package.loaded["nvim-web-devicons"]
             end
         end,
+    },
+    {
+        "tzachar/highlight-undo.nvim",
+        opts = { duration = 150, hlgroup = "IncSearch" },
+        config = function(_, opts)
+            require("highlight-undo").setup(opts)
+            vim.api.nvim_create_autocmd("TextYankPost", {
+                desc = "Highlight yanked text",
+                pattern = "*",
+                callback = function()
+                    (vim.hl or vim.highlight).on_yank()
+                end,
+            })
+        end,
+    },
+    {
+        "petertriho/nvim-scrollbar",
+        opts = {
+            handlers = { gitsigns = true, ale = true, search = true },
+            excluded_filetypes = {
+                "cmp_docs",
+                "cmp_menu",
+                "noice",
+                "prompt",
+                "TelescopePrompt",
+                "alpha",
+            },
+        },
     },
     {
         "folke/noice.nvim",
