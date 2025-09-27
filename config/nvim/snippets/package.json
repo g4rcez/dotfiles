@@ -10,6 +10,15 @@
                     "javascript"
                 ],
                 "path": "./node.json"
+            },
+            {
+                "language": [
+                    "typescriptreact",
+                    "javascriptreact",
+                    "typescript",
+                    "javascript"
+                ],
+                "path": "./react.json"
             }
         ]
     }

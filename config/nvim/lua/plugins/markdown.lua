@@ -24,6 +24,12 @@ return {
         },
     },
     {
+        lazy = false,
+        priority = 49,
+        "OXY2DEV/markview.nvim",
+        dependencies = { "saghen/blink.cmp" },
+    },
+    {
         "MeanderingProgrammer/render-markdown.nvim",
         ft = { "markdown", "codecompanion", "Avante" },
         opts = {

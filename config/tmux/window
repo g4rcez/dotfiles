@@ -8,7 +8,7 @@ get_config_value() {
     local key=$1
     local value
     value="$(yq "$key" "$USER_CONFIG")"
-    echo "${value-''}"
+    echo "${value-$1}"
 }
 
 ICON="$(get_config_value ".icons.\"$NAME\"")"

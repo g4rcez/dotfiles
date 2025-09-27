@@ -183,6 +183,7 @@ return {
             })
         end,
         keys = {
+            { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
             {
                 "<leader><space>",
                 function()
@@ -314,6 +315,13 @@ return {
                     Snacks.picker.git_log_line()
                 end,
                 desc = "Git Log Line",
+            },
+            {
+                "<leader>fs",
+                function()
+                    Snacks.picker.git_status()
+                end,
+                desc = "Git Status",
             },
             {
                 "<leader>gs",

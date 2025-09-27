@@ -1,24 +1,55 @@
 return {
     {
-        "rafamadriz/friendly-snippets",
+        "L3MON4D3/LuaSnip",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        keys = {
+            {
+                "<C-r>s",
+                function()
+                    require("luasnip.extras.otf").on_the_fly "s"
+                end,
+                desc = "Insert on-the-fly snippet",
+                mode = "i",
+            },
+        },
+        opts = function()
+            local types = require "luasnip.util.types"
+            require("luasnip.loaders.from_vscode").lazy_load()
+            return {
+                delete_check_events = "TextChanged",
+                ext_opts = {
+                    [types.insertNode] = {
+                        unvisited = {
+                            virt_text = { { "|", "Conceal" } },
+                            virt_text_pos = "inline",
+                        },
+                    },
+                    [types.exitNode] = {
+                        unvisited = {
+                            virt_text = { { "|", "Conceal" } },
+                            virt_text_pos = "inline",
+                        },
+                    },
+                    [types.choiceNode] = {
+                        active = {
+                            virt_text = { { "(snippet) choice node", "LspInlayHint" } },
+                        },
+                    },
+                },
+            }
+        end,
         config = function(_, opts)
             local luasnip = require "luasnip"
-            if opts then
-                luasnip.config.setup(opts)
-            end
-            vim.tbl_map(function(type)
-                require("luasnip.loaders.from_" .. type).lazy_load()
-            end, { "vscode", "snipmate", "lua" })
-            require("luasnip.loaders.from_vscode").lazy_load()
+            ---@diagnostic disable: undefined-field
+            luasnip.setup(opts)
             require("luasnip.loaders.from_vscode").lazy_load {
-                paths = { vim.fn.stdpath "config" .. "/snippets" },
+                paths = vim.fn.stdpath "config" .. "/snippets",
             }
-            luasnip.filetype_extend("c", { "cdoc" })
-            luasnip.filetype_extend("lua", { "luadoc" })
-            luasnip.filetype_extend("sh", { "shelldoc" })
-            luasnip.filetype_extend("cs", { "csharpdoc" })
-            luasnip.filetype_extend("javascript", { "jsdoc" })
-            luasnip.filetype_extend("typescript", { "tsdoc" })
+            vim.keymap.set({ "i", "s" }, "<C-c>", function()
+                if luasnip.choice_active() then
+                    require "luasnip.extras.select_choice"()
+                end
+            end, { desc = "Select choice" })
         end,
     },
     {
@@ -57,6 +88,7 @@ return {
                 end,
             },
             completion = {
+                trigger = { show_in_snippet = true, prefetch_on_insert = true, show_on_insert = true },
                 list = {
                     max_items = 100,
                     cycle = { from_bottom = true, from_top = true },
@@ -64,12 +96,12 @@ return {
                 },
                 keyword = { range = "full" },
                 ghost_text = { enabled = true, show_with_menu = false },
-                accept = { create_undo_point = true, auto_brackets = { enabled = false } },
+                accept = { create_undo_point = true, auto_brackets = { enabled = true } },
                 menu = {
                     enabled = true,
                     auto_show = true,
-                    auto_show_delay_ms = 500,
                     border = "rounded",
+                    auto_show_delay_ms = 800,
                     winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     draw = {
                         treesitter = { "lsp" },
@@ -124,8 +156,18 @@ return {
                 ["<Esc>"] = { "cancel", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
                 ["<C-y>"] = { "select_and_accept" },
-                ["<Tab>"] = { "select_and_accept", "fallback" },
-                ["<S-Tab>"] = { "insert_prev" },
+                ["<S-Tab>"] = { "snippet_backward", "fallback" },
+                ["<Tab>"] = {
+                    function(cmp)
+                        if cmp.snippet_active() then
+                            return cmp.accept()
+                        else
+                            return cmp.select_and_accept()
+                        end
+                    end,
+                    "snippet_forward",
+                    "fallback",
+                },
                 ["<CR>"] = {
                     function(cmp)
                         if cmp.snippet_active() then
@@ -140,13 +182,13 @@ return {
             },
             sources = {
                 default = {
-                    "lsp",
-                    "path",
                     "lazydev",
+                    "lsp",
+                    "snippets",
+                    "path",
                     "conventional_commits",
                     "dadbod",
-                    -- "buffer",
-                    "snippets",
+                    "buffer",
                 },
                 providers = {
                     dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
@@ -164,6 +206,15 @@ return {
                         module = "css-vars.blink",
                         opts = {
                             search_extensions = { ".js", ".ts", ".jsx", ".tsx" },
+                        },
+                    },
+                    snippets = {
+                        opts = {
+                            friendly_snippets = true,
+                            extended_filetypes = {
+                                markdown = { "jekyll" },
+                                sh = { "shelldoc" },
+                            },
                         },
                     },
                     lsp = {
@@ -199,17 +250,7 @@ return {
             preferred_environment = "development",
             shelter = {
                 configuration = {
-                    -- Partial mode configuration:
-                    -- false: completely mask values (default)
-                    -- true: use default partial masking settings
-                    -- table: customize partial masking
-                    -- partial_mode = false,
-                    -- or with custom settings:
-                    partial_mode = {
-                        show_start = 3, -- Show first 3 characters
-                        show_end = 3, -- Show last 3 characters
-                        min_mask = 3, -- Minimum masked characters
-                    },
+                    partial_mode = { show_start = 3, show_end = 3, min_mask = 3 },
                     mask_char = "*", -- Character used for masking
                     mask_length = nil, -- Optional: fixed length for masked portion (defaults to value length)
                     skip_comments = false, -- Skip masking comment lines in environment files (default: false)
