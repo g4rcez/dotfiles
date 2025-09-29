@@ -1,4 +1,6 @@
 {
+    "editor.minimap.autohide": "mouseover",
+    "window.nativeTabs": true,
     "cSpell.language": "en,pt,pt_BR",
     "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
     "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
