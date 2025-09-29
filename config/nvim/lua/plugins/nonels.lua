@@ -28,6 +28,7 @@ return {
                     diagnostics.trail_space,
                     diagnostics.dotenv_linter,
                     diagnostics.editorconfig_checker,
+                    null_ls.builtins.code_actions.refactoring,
                     null_ls.builtins.formatting.codespell.with {
                         extra_args = { "--builtin", "clear,rare,en-GB_to_en-US", "--locale", "en,pt-BR" },
                     },

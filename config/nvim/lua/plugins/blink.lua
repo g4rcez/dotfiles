@@ -73,7 +73,7 @@ return {
             signature = { enabled = true },
             snippets = { preset = "luasnip" },
             fuzzy = { implementation = "rust" },
-            appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
+            appearance = { nerd_font_variant = "mono" },
             cmdline = {
                 keymap = { preset = "default" },
                 sources = function()
@@ -101,7 +101,7 @@ return {
                     enabled = true,
                     auto_show = true,
                     border = "rounded",
-                    auto_show_delay_ms = 800,
+                    auto_show_delay_ms = 100,
                     winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     draw = {
                         treesitter = { "lsp" },
@@ -139,7 +139,8 @@ return {
                     },
                 },
                 documentation = {
-                    auto_show = false,
+                    auto_show = true,
+                    auto_show_delay_ms = 300,
                     treesitter_highlighting = true,
                     window = {
                         border = "rounded",
@@ -176,7 +177,6 @@ return {
                             return cmp.select_and_accept()
                         end
                     end,
-                    "snippet_forward",
                     "fallback",
                 },
             },
@@ -211,25 +211,22 @@ return {
                     snippets = {
                         opts = {
                             friendly_snippets = true,
-                            extended_filetypes = {
-                                markdown = { "jekyll" },
-                                sh = { "shelldoc" },
-                            },
+                            extended_filetypes = { markdown = { "jekyll" }, sh = { "shelldoc" } },
                         },
                     },
                     lsp = {
                         name = "LSP",
-                        module = "blink.cmp.sources.lsp",
-                        enabled = true,
                         async = false,
+                        enabled = true,
+                        fallbacks = {},
+                        override = nil,
+                        max_items = nil,
+                        score_offset = 10,
                         timeout_ms = 2000,
                         transform_items = nil,
-                        should_show_items = true,
-                        max_items = nil,
                         min_keyword_length = 0,
-                        fallbacks = {},
-                        score_offset = 10,
-                        override = nil,
+                        should_show_items = true,
+                        module = "blink.cmp.sources.lsp",
                     },
                 },
             },

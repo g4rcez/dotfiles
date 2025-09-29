@@ -32,6 +32,7 @@ return {
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
                 explorer = { enabled = true },
+                terminal = { enabled = true },
                 dashboard = {
                     width = 40,
                     row = nil,
@@ -183,7 +184,13 @@ return {
             })
         end,
         keys = {
-            { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+            {
+                "<leader>,",
+                function()
+                    Snacks.picker.buffers()
+                end,
+                desc = "Buffers",
+            },
             {
                 "<leader><space>",
                 function()

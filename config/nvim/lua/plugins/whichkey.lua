@@ -60,9 +60,22 @@ return {
                 end
             end
 
+            function openMiniFiles()
+                local MiniFiles = require "mini.files"
+                local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+                MiniFiles.reveal_cwd()
+            end
+
+            function openMiniFilesRootDir()
+                local MiniFiles = require "mini.files"
+                local _ = MiniFiles.close() or MiniFiles.open()
+                MiniFiles.reveal_cwd()
+            end
+
             local function code()
-                -- Open compiler
                 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
+                vim.keymap.set("n", "<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
+                vim.keymap.set("n", "<leader>so", openMiniFiles, { desc = "MiniFiles" })
                 vim.keymap.set("n", "<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
                 vim.keymap.set("n", "zR", require("ufo").openAllFolds)
                 vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
@@ -88,7 +101,7 @@ return {
                         apply = true,
                         context = { only = { "source.organizeImports" } },
                     }
-                end, { desc = "Organize Imports" })
+                end, { desc = "[c]ode [o]rganizeImports" })
 
                 bind.normal("<sc-f>", function()
                     require("grug-far").open { engine = "astgrep" }
@@ -110,8 +123,12 @@ return {
                 bind.normal("[g", function()
                     vim.diagnostic.goto_prev {}
                 end, { desc = "Goto previous error" })
-
-                bind.normal("<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "[c]ode [a]ction" })
+                vim.keymap.set({ "n", "x" }, "<leader>rr", function()
+                    require("refactoring").select_refactor()
+                end, { desc = "[r]efacto[r]ing" })
+                bind.normal("<leader>ca", function()
+                    require("tiny-code-action").code_action()
+                end, { noremap = true, silent = true, desc = "[c]ode [a]ction" })
                 bind.normal("<leader>cr", rename_once, { desc = "[c]ode [r]ename" })
                 bind.normal("<leader>cf", function()
                     vim.lsp.buf.format()

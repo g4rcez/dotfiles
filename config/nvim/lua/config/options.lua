@@ -12,7 +12,7 @@ opt.autowrite = true
 opt.breakindent = true
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 opt.cmdheight = 0
-opt.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = { "menu", "fuzzy", "menuone", "noselect", "popup" }
 opt.conceallevel = 0
 opt.confirm = true
 opt.cursorline = true
@@ -79,4 +79,3 @@ opt.foldlevelstart = 99
 opt.smoothscroll = true
 opt.foldmethod = "expr"
 opt.foldtext = ">"
-

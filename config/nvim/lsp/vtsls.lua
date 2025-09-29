@@ -1,4 +1,5 @@
 vim.lsp.config["vtsls"] = {
+    { "vtsls", "--stdio" },
     filetypes = {
         "javascript",
         "javascriptreact",
@@ -11,6 +12,10 @@ vim.lsp.config["vtsls"] = {
         refactor_auto_rename = true,
         typescript = {
             tsserver = { maxTsServerMemory = 8192 },
+            suggest = {
+                enabled = true,
+                completeFunctionCalls = true,
+            },
             inlayHints = {
                 variableTypes = { enabled = true },
                 parameterTypes = { enabled = true },

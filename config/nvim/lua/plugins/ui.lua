@@ -33,20 +33,6 @@ return {
         end,
     },
     {
-        "tzachar/highlight-undo.nvim",
-        opts = { duration = 150, hlgroup = "IncSearch" },
-        config = function(_, opts)
-            require("highlight-undo").setup(opts)
-            vim.api.nvim_create_autocmd("TextYankPost", {
-                desc = "Highlight yanked text",
-                pattern = "*",
-                callback = function()
-                    (vim.hl or vim.highlight).on_yank()
-                end,
-            })
-        end,
-    },
-    {
         "petertriho/nvim-scrollbar",
         opts = {
             handlers = { gitsigns = true, ale = true, search = true },
@@ -111,7 +97,7 @@ return {
                     gitsigns = true,
                     markdown = true,
                     blink_cmp = true,
-                    diffview = false,
+                    diffview = true,
                     treesitter = true,
                     render_markdown = true,
                     semantic_tokens = true,
@@ -122,6 +108,7 @@ return {
                     indent_blankline = { enabled = true, scope_color = "blue", colored_indent_levels = false },
                     native_lsp = {
                         enabled = true,
+                        inlay_hints = { background = true },
                         virtual_text = {
                             errors = { "italic" },
                             hints = { "italic" },
@@ -135,9 +122,6 @@ return {
                             warnings = { "underline" },
                             information = { "underline" },
                             ok = { "underline" },
-                        },
-                        inlay_hints = {
-                            background = true,
                         },
                     },
                 },

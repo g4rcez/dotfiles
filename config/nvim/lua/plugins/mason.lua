@@ -88,7 +88,8 @@ return {
                         })
                     end
                     map("<leader>ch", function()
-                        vim.lsp.inlay_hint.enable(event.buf, true)
+                        vim.lsp.inlay_hint.enable(false)
+                        Snacks.toggle.inlay_hints()
                     end, "[c]ode [h]ints")
                     local lspconfig_defaults = require("lspconfig").util.default_config
                     lspconfig_defaults.capabilities = vim.tbl_deep_extend(

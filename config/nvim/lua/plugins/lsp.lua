@@ -1,22 +1,48 @@
 return {
     "kabouzeid/nvim-lspinstall",
     {
-        "nvimdev/lspsaga.nvim",
-        enable = false,
+        "ThePrimeagen/refactoring.nvim",
         dependencies = {
+            "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
-            "nvim-tree/nvim-web-devicons",
         },
+        lazy = false,
+        opts = {},
+    },
+    {
+        "rachartier/tiny-code-action.nvim",
+        dependencies = {
+            { "nvim-lua/plenary.nvim" },
+            { "folke/snacks.nvim" },
+        },
+        event = "LspAttach",
         opts = {
-            breadcrumbs = { enable = false },
-            winbar = { enable = false },
-            symbol_in_winbar = { enable = false },
-            ui = { enable = false, code_action = "" },
-            hover = {
-                max_width = 0.9,
-                max_height = 0.9,
-                open_link = "gx",
-                open_browser = "!chrome",
+            backend = "delta",
+            picker = "snacks",
+            backend_opts = {
+                diffsofancy = { header_lines_to_remove = 4 },
+                delta = { header_lines_to_remove = 4, args = { "--line-numbers" } },
+                difftastic = {
+                    header_lines_to_remove = 1,
+                    args = {
+                        "--color=always",
+                        "--display=inline",
+                        "--syntax-highlight=on",
+                    },
+                },
+            },
+            resolve_timeout = 100,
+            signs = {
+                quickfix = { "", { link = "DiagnosticWarning" } },
+                others = { "", { link = "DiagnosticWarning" } },
+                refactor = { "", { link = "DiagnosticInfo" } },
+                ["refactor.move"] = { "󰪹", { link = "DiagnosticInfo" } },
+                ["refactor.extract"] = { "", { link = "DiagnosticError" } },
+                ["source.organizeImports"] = { "", { link = "DiagnosticWarning" } },
+                ["source.fixAll"] = { "󰃢", { link = "DiagnosticError" } },
+                ["source"] = { "", { link = "DiagnosticError" } },
+                ["rename"] = { "󰑕", { link = "DiagnosticWarning" } },
+                ["codeAction"] = { "", { link = "DiagnosticWarning" } },
             },
         },
     },
