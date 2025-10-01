@@ -101,7 +101,7 @@ return {
                     enabled = true,
                     auto_show = true,
                     border = "rounded",
-                    auto_show_delay_ms = 100,
+                    auto_show_delay_ms = 300,
                     winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                     draw = {
                         treesitter = { "lsp" },
@@ -150,35 +150,16 @@ return {
             },
             keymap = {
                 preset = "enter",
-                ["<C-/>"] = { "show_signature", "fallback" },
-                ["<C-k>"] = { "select_prev", "fallback" },
-                ["<C-j>"] = { "select_next", "fallback" },
                 ["<C-c>"] = { "hide", "fallback" },
-                ["<Esc>"] = { "cancel", "fallback" },
-                ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
                 ["<C-y>"] = { "select_and_accept" },
+                ["<Esc>"] = { "cancel", "fallback" },
+                ["<C-j>"] = { "select_next", "fallback" },
+                ["<C-k>"] = { "select_prev", "fallback" },
+                ["<C-/>"] = { "show_signature", "fallback" },
+                ["<CR>"] = { "select_and_accept", "fallback" },
+                ["<Tab>"] = { "select_and_accept", "fallback" },
                 ["<S-Tab>"] = { "snippet_backward", "fallback" },
-                ["<Tab>"] = {
-                    function(cmp)
-                        if cmp.snippet_active() then
-                            return cmp.accept()
-                        else
-                            return cmp.select_and_accept()
-                        end
-                    end,
-                    "snippet_forward",
-                    "fallback",
-                },
-                ["<CR>"] = {
-                    function(cmp)
-                        if cmp.snippet_active() then
-                            return cmp.cancel()
-                        else
-                            return cmp.select_and_accept()
-                        end
-                    end,
-                    "fallback",
-                },
+                ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
                 default = {

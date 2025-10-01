@@ -72,6 +72,21 @@ return {
                 MiniFiles.reveal_cwd()
             end
 
+            local function bookmarks()
+                bind.normal("<leader>ba", function()
+                    _G.Bookmarks.add()
+                end, { desc = "[b]ookmark [a]dd" })
+                bind.normal("<leader>bt", function()
+                    _G.Bookmarks.toggle()
+                end, { desc = "[b]ookmark [t]oggle" })
+                bind.normal("<leader>bl", function()
+                    _G.Bookmarks.list()
+                end, { desc = "[b]ookmark [l]ist" })
+                bind.normal("<leader>bc", function()
+                    _G.Bookmarks.clear()
+                end, { desc = "[b]ookmark [c]lear" })
+            end
+
             local function code()
                 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
                 vim.keymap.set("n", "<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
@@ -149,7 +164,7 @@ return {
                 timeout = 30000,
             }
 
-            local keymaps = { groups, defaults = motions.defaults(), buffers = motions.buffers(), code }
+            local keymaps = { groups, defaults = motions.defaults(), buffers = motions.buffers(), bookmarks, code }
             for _, func in ipairs(keymaps) do
                 func()
             end
