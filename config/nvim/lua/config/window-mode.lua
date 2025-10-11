@@ -48,6 +48,12 @@ end
 
 function M.create_window_mappings()
     local window_commands = {
+        -- ["?"] = {
+        --     cmd = function()
+        --         require("which-key").show()
+        --     end,
+        --     desc = "Help keys"
+        -- },
         h = { cmd = "h", desc = "Window left" },
         j = { cmd = "j", desc = "Window down" },
         k = { cmd = "k", desc = "Window up" },

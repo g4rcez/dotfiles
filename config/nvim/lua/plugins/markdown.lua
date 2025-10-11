@@ -1,11 +1,23 @@
 return {
     {
-        "3rd/image.nvim",
-        build = false,
+        "bngarren/checkmate.nvim",
+        ft = "markdown", -- Lazy loads for Markdown files matching patterns in 'files'
         opts = {
-            processor = "magick_cli",
+            files = {
+                "*.md",
+                "todo",
+                "TODO",
+                "tasks",
+                "*.plan",
+                "*.todo",
+                "todo.md",
+                "TODO.md",
+                "*.todo.md",
+                "project/**/todo.md",
+            },
         },
     },
+    -- { "3rd/image.nvim", build = false, opts = { processor = "magick_cli" } },
     {
         "bullets-vim/bullets.vim",
         config = function()
@@ -13,6 +25,7 @@ return {
         end,
     },
     {
+        enabled = false,
         "HakonHarnes/img-clip.nvim",
         opts = {
             default = {

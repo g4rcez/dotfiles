@@ -153,7 +153,6 @@ function vivid-update() {
 
 function updateAll() {
     vivid-update
-    antidote update
     nodeUpdatePackages
     brew update; brew upgrade
 }

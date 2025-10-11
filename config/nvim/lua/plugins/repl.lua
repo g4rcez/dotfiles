@@ -22,7 +22,7 @@ return {
         config = function()
             require("twoslash-queries").setup {
                 multi_line = true,
-                is_enabled = false,
+                is_enabled = true,
                 highlight = "Type",
             }
         end,

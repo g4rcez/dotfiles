@@ -56,4 +56,8 @@ export FZF_COLORS="
 --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc'
 --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'"
 
-
+function safeImport() {
+    if [[ -e "$1" ]]; then
+        source "$1";
+    fi
+}

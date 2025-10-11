@@ -75,6 +75,7 @@ opt.foldexpr = "0"
 opt.foldenable = true
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+opt.conceallevel = 0
 
 opt.smoothscroll = true
 opt.foldmethod = "expr"
@@ -90,3 +91,5 @@ vim.diagnostic.config {
         },
     },
 }
+
+vim.filetype.add { extension = { ["http"] = "http" } }

@@ -1,10 +1,16 @@
 return {
-    "mistweaverco/kulala.nvim",
-    keys = {
-        { "<leader>hs", desc = "Send request" },
-        { "<leader>he", desc = "Send everything" },
-        { "<leader>hb", desc = "Open scratchpad" },
+    {
+        "mistweaverco/kulala.nvim",
+        ft = { "http", "rest" },
+        keys = {
+            { "<leader>Rs", desc = "Send request" },
+            { "<leader>Ra", desc = "Send all requests" },
+            { "<leader>Rb", desc = "Open scratchpad" },
+        },
+        opts = {
+            global_keymaps = true,
+            kulala_keymaps_prefix = "",
+            global_keymaps_prefix = "<leader>R",
+        },
     },
-    ft = { "http", "rest" },
-    opts = { global_keymaps = true },
 }

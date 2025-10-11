@@ -12,7 +12,7 @@ return {
             restore = true,
             follow = true,
             indent_guides = true,
-            max_items = 200,
+            max_items = 300,
             multiline = true,
             pinned = false,
             warn_no_results = true,
@@ -27,7 +27,7 @@ return {
                 update = 10,
                 render = 10,
                 follow = 100,
-                preview = { ms = 100, debounce = true }, -- shows the preview for the current item
+                preview = { ms = 100, debounce = true },
             },
             -- Key mappings can be set to the name of a builtin action,
             -- or you can define your own custom action.

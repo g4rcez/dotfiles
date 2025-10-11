@@ -5,22 +5,32 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
     { "smjonas/inc-rename.nvim", opts = {} },
-    { enabled = false, "windwp/nvim-ts-autotag", config = true },
+    { "dmmulroy/ts-error-translator.nvim" },
+    { "stevearc/quicker.nvim", event = "FileType qf", opts = {} },
+    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
+    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
+    { "fladson/vim-kitty", ft = "kitty" },
+    {
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
+        config = true,
+        opts = { check_ts = true },
+    },
+    {
+        opts = {},
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+    },
     {
         "tronikelis/ts-autotag.nvim",
         opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } },
     },
-    { "dmmulroy/ts-error-translator.nvim" },
-    { "stevearc/quicker.nvim", event = "FileType qf", opts = {} },
-    { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
-    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
         "zeioth/garbage-day.nvim",
         dependencies = "neovim/nvim-lspconfig",
         event = "VeryLazy",
         opts = {},
     },
-    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
     {
         "stevearc/aerial.nvim",
         opts = {},
@@ -29,12 +39,9 @@ return {
     {
         "olrtg/nvim-emmet",
         config = function()
-            vim.keymap.set(
-                { "n", "v" },
-                "<leader>ce",
-                require("nvim-emmet").wrap_with_abbreviation,
-                { desc = "[e]mmet" }
-            )
+            vim.keymap.set({ "n", "v" }, "<leader>ce", function()
+                require("nvim-emmet").wrap_with_abbreviation()
+            end, { desc = "[e]mmet" })
         end,
     },
     {
@@ -91,18 +98,5 @@ return {
             virtual_symbol_suffix = " ",
             virtual_symbol_position = "inline",
         },
-    },
-    {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-        opts = { check_ts = true },
-    },
-    {
-        enabled = false,
-        "rachartier/tiny-inline-diagnostic.nvim",
-        event = "VeryLazy",
-        priority = 1000,
-        opts = { preset = "minimal" },
     },
 }

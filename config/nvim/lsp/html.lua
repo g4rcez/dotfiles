@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
             cmd = { "emmet-language-server", "--stdio" },
             root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1]),
             init_options = {
-                showSuggestionsAsSnippets = false,
+                showSuggestionsAsSnippets = true,
                 showAbbreviationSuggestions = true,
                 showExpandedAbbreviation = "inMarkupAndStylesheetFilesOnly",
             },

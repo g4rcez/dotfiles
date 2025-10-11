@@ -140,6 +140,7 @@ return {
                 },
                 documentation = {
                     auto_show = true,
+                    update_delay_ms = 60,
                     auto_show_delay_ms = 300,
                     treesitter_highlighting = true,
                     window = {
@@ -189,12 +190,6 @@ return {
                             search_extensions = { ".js", ".ts", ".jsx", ".tsx" },
                         },
                     },
-                    snippets = {
-                        opts = {
-                            friendly_snippets = true,
-                            extended_filetypes = { markdown = { "jekyll" }, sh = { "shelldoc" } },
-                        },
-                    },
                     lsp = {
                         name = "LSP",
                         async = false,
@@ -209,40 +204,6 @@ return {
                         should_show_items = true,
                         module = "blink.cmp.sources.lsp",
                     },
-                },
-            },
-        },
-    },
-    {
-        "ph1losof/ecolog.nvim",
-        keys = {
-            { "<leader>cE", "<cmd>EcologGoto<cr>", desc = "[c]ode [E]env" },
-            { "<leader>cp", "<cmd>EcologPeek<cr>", desc = "[c]ode [p]eek env" },
-        },
-        lazy = false,
-        opts = {
-            types = true,
-            path = vim.fn.getcwd(),
-            provider_patterns = true,
-            integrations = { blink_cmp = true },
-            preferred_environment = "development",
-            shelter = {
-                configuration = {
-                    partial_mode = { show_start = 3, show_end = 3, min_mask = 3 },
-                    mask_char = "*", -- Character used for masking
-                    mask_length = nil, -- Optional: fixed length for masked portion (defaults to value length)
-                    skip_comments = false, -- Skip masking comment lines in environment files (default: false)
-                },
-                modules = {
-                    cmp = true, -- Enabled to mask values in completion
-                    peek = false, -- Enable to mask values in peek view
-                    files = true, -- Enabled to mask values in file buffers
-                    telescope = false, -- Enable to mask values in telescope integration
-                    telescope_previewer = false, -- Enable to mask values in telescope preview buffers
-                    fzf = false, -- Enable to mask values in fzf picker
-                    fzf_previewer = true, -- Enable to mask values in fzf preview buffers
-                    snacks_previewer = false, -- Enable to mask values in snacks previewer
-                    snacks = false, -- Enable to mask values in snacks picker
                 },
             },
         },

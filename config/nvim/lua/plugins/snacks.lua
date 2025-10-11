@@ -82,7 +82,7 @@ return {
 ██████╗ ██████╗  █████╗ ██████╗  ██████╗     ██╗   ██╗██╗███╗   ███╗
 ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔═══██╗    ██║   ██║██║████╗ ████║
 ██████╔╝██████╔╝███████║██████╔╝██║   ██║    ██║   ██║██║██╔████╔██║
-██╔══██╗██╔══██╗██╔══██║██╔══██╗██║   ██║    ╚██╗ ██╔╝██║██║╚██╔╝██║
+██═══██╗██╔══██╗██╔══██║██╔══██╗██║   ██║    ╚██╗ ██╔╝██║██║╚██╔╝██║
 ██████╔╝██║  ██║██║  ██║██████╔╝╚██████╔╝     ╚████╔╝ ██║██║ ╚═╝ ██║
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ╚═════╝       ╚═══╝  ╚═╝╚═╝     ╚═╝
  ]],
@@ -115,10 +115,10 @@ return {
                             layout = {
                                 backdrop = true,
                                 row = 1,
-                                width = 0.5,
+                                width = 0.9,
                                 min_width = 80,
                                 height = 0.9,
-                                border = "none",
+                                border = "double",
                                 box = "vertical",
                                 {
                                     win = "input",
@@ -127,7 +127,7 @@ return {
                                     title = "{title} {live} {flags}",
                                     title_pos = "center",
                                 },
-                                { win = "list", border = "hpad" },
+                                { win = "list",    border = "none" },
                                 { win = "preview", title = "{preview}", border = "rounded" },
                             },
                         },
@@ -164,19 +164,12 @@ return {
                         files = {},
                         explorer = {
                             layout = {
-                                height = 0.9,
+                                height = 1,
                                 preview = true,
                                 backdrop = true,
-                                border = "none",
+                                border = "double",
                                 box = "vertical",
-                                preset = "vscode",
-                            },
-                        },
-                        lines = {
-                            layout = {
-                                preset = function()
-                                    return "telescope"
-                                end,
+                                preset = "telescope",
                             },
                         },
                     },
@@ -262,7 +255,7 @@ return {
                 desc = "[t]reesitter picker",
             },
             {
-                "<leader>n",
+                "<leader>nh",
                 function()
                     Snacks.picker.notifications()
                 end,
@@ -271,7 +264,11 @@ return {
             {
                 "<leader>fe",
                 function()
-                    Snacks.explorer()
+                    Snacks.explorer {
+                        git_status = true,
+                        git_untracked = true,
+                        include = { ".env*", ".env" },
+                    }
                 end,
                 desc = "File Explorer",
             },
@@ -525,7 +522,7 @@ return {
             {
                 "<leader>sR",
                 function()
-                    Snacks.picker.resume()
+                    Snacks.picker.ressume()
                 end,
                 desc = "Resume",
             },
@@ -547,7 +544,10 @@ return {
             {
                 "gd",
                 function()
-                    Snacks.picker.lsp_definitions()
+                    Snacks.picker.lsp_definitions {
+                        supports_live = true,
+                        unique_lines = true,
+                    }
                 end,
                 desc = "Goto Definition",
             },
@@ -575,7 +575,7 @@ return {
             },
             {
                 "gy",
-                function()
+                function ()
                     Snacks.picker.lsp_type_definitions()
                 end,
                 desc = "Goto T[y]pe Definition",
@@ -594,7 +594,6 @@ return {
                 end,
                 desc = "LSP Workspace Symbols",
             },
-            -- Other
             {
                 "<leader>z",
                 function()
@@ -695,13 +694,6 @@ return {
                     Snacks.picker.todo_comments()
                 end,
                 desc = "Todo",
-            },
-            {
-                "<leader>sT",
-                function()
-                    Snacks.picker.todo_comments { keywords = { "TODO", "FIX", "FIXME" } }
-                end,
-                desc = "Todo/Fix/Fixme",
             },
         },
         init = function()

@@ -9,15 +9,12 @@
 ---@class BookmarksPlugin
 local M = {}
 
--- Configuration
 local config = {
     save_path = vim.fn.stdpath "state" .. "/bookmarks",
 }
 
--- Internal state
 local bookmarks = {} ---@type table<string, BookmarkItem[]>
 
--- Utility functions
 local function get_project_key()
     local cwd = vim.fn.getcwd()
     local git_dir = vim.fn.finddir(".git", cwd .. ";")
@@ -53,7 +50,6 @@ local function save_bookmarks()
     ensure_storage_dir()
     local file = get_storage_file()
     local project_key = get_project_key()
-
     local data = vim.fn.json_encode(bookmarks[project_key] or {})
     local f = io.open(file, "w")
     if f then
@@ -65,20 +61,17 @@ end
 local function load_bookmarks()
     local file = get_storage_file()
     local project_key = get_project_key()
-
     if vim.fn.filereadable(file) == 1 then
         local f = io.open(file, "r")
         if f then
             local data = f:read "*all"
             f:close()
-
             local ok, decoded = pcall(vim.fn.json_decode, data)
             if ok and decoded then
                 bookmarks[project_key] = decoded
             end
         end
     end
-
     if not bookmarks[project_key] then
         bookmarks[project_key] = {}
     end
@@ -356,11 +349,8 @@ function M.list()
 end
 
 function M.clear()
-    vim.ui.input({ prompt = "Clear all bookmarks? (y/N): " }, function(input)
-        if input and input:lower() == "y" then
-            M.clear_bookmarks()
-        end
-    end)
+    M.clear_bookmarks()
+    vim.notify("All bookmarks cleared", vim.log.levels.INFO)
 end
 
 -- Get bookmark count for statusline integration
@@ -369,24 +359,14 @@ function M.count()
     return #current_bookmarks
 end
 
--- Get bookmarks for external use
 function M.get_bookmarks()
     return get_current_bookmarks()
 end
 
--- Initialize the plugin
 function M.setup(opts)
     opts = opts or {}
     config = vim.tbl_deep_extend("force", config, opts)
-
-    -- Load bookmarks for current project on startup
     load_bookmarks()
 end
 
--- Make module globally accessible
-_G.Bookmarks = M
-
--- Setup the plugin
-M.setup()
-
-return {}
+return M

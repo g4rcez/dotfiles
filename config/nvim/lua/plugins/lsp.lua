@@ -1,6 +1,23 @@
 return {
     "kabouzeid/nvim-lspinstall",
     {
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        opts = {
+            settings = {
+                tsserver_file_preferences = {
+                    includeInlayParameterNameHints = "all",
+                    includeCompletionsForModuleExports = true,
+                    quotePreference = "auto",
+                },
+                tsserver_format_options = {
+                    allowIncompleteCompletions = false,
+                    allowRenameOfImportPath = false,
+                },
+            },
+        },
+    },
+    {
         "ThePrimeagen/refactoring.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -52,7 +69,8 @@ return {
         opts = {
             library = {
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                { path = "lazy.nvim", words = { "Lazy" } },
+                "lazy.nvim",
+                words = { "Lazy" },
             },
         },
     },

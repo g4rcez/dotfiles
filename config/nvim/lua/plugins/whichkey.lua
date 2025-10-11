@@ -6,14 +6,18 @@ return {
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = function(_, defaultOpts)
             defaultOpts.preset = "helix"
+            defaultOpts.sort = { "local", "case", "order", "manual", "alphanum", "mod", "group" }
+            defaultOpts.expand = 2
             local wk = require "which-key"
             local createKeyMap = require "config.keymap"
             local keymap = createKeyMap(wk)
             local bind = keymap.bind
             local function groups()
+                wk.add { "<leader>R", group = "[R]equests", icon = "" }
                 wk.add { "]", group = "]move", icon = "" }
+                wk.add { "<leader>D", group = "[D]atabase", icon = "󱦞" }
                 wk.add { "<leader>a", group = "[a]i", icon = "󱦞" }
-                wk.add { "<leader>b", group = "[b]uffer", icon = "󱦞" }
+                wk.add { "<leader>b", group = "[b]uffer/ookmarks", icon = "󱦞" }
                 wk.add { "<leader>c", group = "[c]ode", icon = "" }
                 wk.add { "<leader>f", group = "[f]ind", icon = "󱡴" }
                 wk.add { "<leader>g", group = "[g]it", icon = "" }
@@ -73,28 +77,33 @@ return {
             end
 
             local function bookmarks()
+                local Bookmarks = require "config.bookmarks"
+                Bookmarks.setup()
                 bind.normal("<leader>ba", function()
-                    _G.Bookmarks.add()
+                    Bookmarks.add()
                 end, { desc = "[b]ookmark [a]dd" })
                 bind.normal("<leader>bt", function()
-                    _G.Bookmarks.toggle()
+                    Bookmarks.toggle()
                 end, { desc = "[b]ookmark [t]oggle" })
                 bind.normal("<leader>bl", function()
-                    _G.Bookmarks.list()
+                    Bookmarks.list()
                 end, { desc = "[b]ookmark [l]ist" })
+                bind.normal("<leader>bb", function()
+                    Bookmarks.list()
+                end, { desc = "[bb]ookmark" })
                 bind.normal("<leader>bc", function()
-                    _G.Bookmarks.clear()
+                    Bookmarks.clear()
                 end, { desc = "[b]ookmark [c]lear" })
             end
 
             local function code()
                 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
-                vim.keymap.set("n", "<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
-                vim.keymap.set("n", "<leader>so", openMiniFiles, { desc = "MiniFiles" })
-                vim.keymap.set("n", "<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
-                vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-                vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-                vim.keymap.set("n", "zm", require("ufo").closeFoldsWith)
+                bind.normal("<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
+                bind.normal( "<leader>so", openMiniFiles, { desc = "MiniFiles" })
+                bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
+                bind.normal("zR", require("ufo").openAllFolds)
+                bind.normal("zM", require("ufo").closeAllFolds)
+                bind.normal("zm", require("ufo").closeFoldsWith)
                 bind.normal("zo", function()
                     local line = vim.fn.line "."
                     if vim.fn.foldclosed(line) == -1 then
@@ -132,12 +141,6 @@ return {
                     vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
                 end, { desc = "Goto previous error" })
 
-                bind.normal("]g", function()
-                    vim.diagnostic.goto_next {}
-                end, { desc = "Goto next error" })
-                bind.normal("[g", function()
-                    vim.diagnostic.goto_prev {}
-                end, { desc = "Goto previous error" })
                 vim.keymap.set({ "n", "x" }, "<leader>rr", function()
                     require("refactoring").select_refactor()
                 end, { desc = "[r]efacto[r]ing" })

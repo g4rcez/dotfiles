@@ -11,6 +11,7 @@ return {
             require("mini.cursorword").setup()
             require("mini.map").setup()
             require("mini.hipatterns").setup()
+            require("mini.bufremove").setup()
             local miniFiles = require "mini.files"
             miniFiles.setup {
                 options = {
@@ -45,14 +46,21 @@ return {
                 callback = function(args)
                     local buf_id = args.data.buf_id
                     local mini_files = require "mini.files"
+                    local setArgs = function(desc)
+                        return { buffer = buf_id, noremap = true, silent = true, desc = desc }
+                    end
                     vim.keymap.set("n", "q", function()
                         mini_files.close()
-                    end, {
-                        buffer = buf_id,
-                        noremap = true,
-                        silent = true,
-                        desc = "[q]uit minifiles",
-                    })
+                    end, setArgs "[q]uit minifiles")
+                    vim.keymap.set("n", "<C-s>", function()
+                        mini_files.synchronize()
+                    end, setArgs "Sync")
+                    vim.keymap.set("n", "l", function()
+                        mini_files.go_in { close_on_file = true }
+                    end, setArgs "Open file + close mini")
+                    vim.keymap.set("n", "<CR>", function()
+                        mini_files.go_in { close_on_file = true }
+                    end, setArgs "Open file + close mini")
                     vim.keymap.set("n", "<leader>p", function()
                         if not mini_files then
                             vim.notify("mini.files module not loaded.", vim.log.levels.ERROR)
@@ -96,38 +104,26 @@ return {
                         end
                         mini_files.synchronize()
                         vim.notify("Pasted successfully.", vim.log.levels.INFO)
-                    end, {
-                        buffer = buf_id,
-                        noremap = true,
-                        silent = true,
-                        desc = "[P]Paste from clipboard",
-                    })
-                    vim.keymap.set(
-                        "n",
-                        "<leader>y",
-                        function()
-                            -- Get the current entry (file or directory)
-                            local curr_entry = mini_files.get_fs_entry()
-                            if curr_entry then
-                                local path = curr_entry.path
-                                local cmd =
-                                    string.format([[osascript -e 'set the clipboard to POSIX file "%s"' ]], path)
-                                local result = vim.fn.system(cmd)
-                                if vim.v.shell_error ~= 0 then
-                                    vim.notify("Copy failed: " .. result, vim.log.levels.ERROR)
-                                else
-                                    vim.notify(vim.fn.fnamemodify(path, ":t"), vim.log.levels.INFO)
-                                    vim.notify("Copied to system clipboard", vim.log.levels.INFO)
-                                end
+                    end, setArgs "[P]Paste from clipboard")
+                    vim.keymap.set("n", "<leader>y", function()
+                        -- Get the current entry (file or directory)
+                        local curr_entry = mini_files.get_fs_entry()
+                        if curr_entry then
+                            local path = curr_entry.path
+                            local cmd = string.format([[osascript -e 'set the clipboard to POSIX file "%s"' ]], path)
+                            local result = vim.fn.system(cmd)
+                            if vim.v.shell_error ~= 0 then
+                                vim.notify("Copy failed: " .. result, vim.log.levels.ERROR)
                             else
-                                vim.notify("No file or directory selected", vim.log.levels.WARN)
+                                vim.notify(vim.fn.fnamemodify(path, ":t"), vim.log.levels.INFO)
+                                vim.notify("Copied to system clipboard", vim.log.levels.INFO)
                             end
-                        end,
-                        { buffer = buf_id, noremap = true, silent = true, desc = "[P]Copy file/directory to clipboard" }
-                    )
+                        else
+                            vim.notify("No file or directory selected", vim.log.levels.WARN)
+                        end
+                    end, setArgs "[P]Copy file/directory to clipboard")
                 end,
             })
-            require("mini.bufremove").setup()
             require("mini.bracketed").setup {
                 buffer = { suffix = "b", options = {} },
                 comment = { suffix = "c", options = {} },

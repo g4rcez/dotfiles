@@ -10,9 +10,7 @@ function SmartPick.picker()
     if _G.MiniPick == nil then
         _G.MiniPick = require "mini.pick"
     end
-
     local picker_items = { items = {} }
-
     MiniPick.builtin.cli({
         command = {
             "sh",
@@ -58,14 +56,11 @@ H.GENERIC_FILENAMES = {
 
 function H.get_recent_buffers()
     local buffers = vim.fn.getbufinfo { buflisted = 1 }
-
     buffers = vim.tbl_filter(function(buf)
         local buftype = vim.bo[buf.bufnr].buftype
-
         if buftype == "quickfix" or buftype == "prompt" then
             return false
         end
-
         if buftype == "" then
             if buf.name == "" then
                 return true

@@ -1,18 +1,10 @@
-export UID=$(id -u)
-export GID=$(id -g)
-if [[ $INTELLIJ_ENVIRONMENT_READER ]]; then
-    return
-fi
-
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
 LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
-if [[ -e "$LOCAL_VARIABLES_EXPORTS" ]]; then 
-    source "$LOCAL_VARIABLES_EXPORTS" 
-fi
+safeImport "$LOCAL_VARIABLES_EXPORTS"
 
 ##############################################################################################################
 ## znap
@@ -24,17 +16,16 @@ ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
-
 znap eval starship 'starship init zsh --print-full-init'
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
 PLUGINS=(
-    MichaelAquilina/zsh-auto-notify
-    hlissner/zsh-autopair
-    wfxr/forgit
-    zsh-users/zsh-autosuggestions
-    zsh-users/zsh-completions
-    zsh-users/zsh-history-substring-search
-    zsh-users/zsh-syntax-highlighting
+    "MichaelAquilina/zsh-auto-notify"
+    "hlissner/zsh-autopair"
+    "wfxr/forgit"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "zsh-users/zsh-history-substring-search"
+    "zsh-users/zsh-syntax-highlighting"
 )
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 1
@@ -57,11 +48,9 @@ eval "$(fzf --zsh)"
 eval "$(atuin init zsh --disable-up-arrow)"
 
 local -a SOURCE=(
-  "$HOME/tools/google-cloud-sdk/path.zsh.inc"
-  "$HOME/.cargo/env"
-  "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
-  "$HOME/.fzf.zsh"
   "$HOME/.secrets.sh"
+  "$HOME/.cargo/env"
+  "$HOME/.fzf.zsh"
   "$HOME/.fzf/shell/key-bindings.zsh"
   "$DOTFILES/zsh/alias.sh"
   "$DOTFILES/zsh/zstyle.sh"
@@ -71,6 +60,8 @@ local -a SOURCE=(
   "$DOTFILES/zsh/git.sh"
   "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
+  "$HOME/tools/google-cloud-sdk/path.zsh.inc"
+  "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
 )
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
@@ -85,10 +76,9 @@ znap fpath _n        "source $HOME/dotfiles/zsh/completion/node-completion.sh"  
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
-
+znap fpath _atuin    "atuin gen-completions --shell zsh"
 
 WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
-. "$HOME/.cargo/env"

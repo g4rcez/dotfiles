@@ -1,11 +1,20 @@
 # vim: ft=ghostty
-theme = Catppuccin Mocha
-font-family = "JetBrainsMono Nerd Font"
 font-size = 17
+background-blur = 50
+window-padding-x = 4
+bold-is-bright = true
+shell-integration = zsh
 adjust-cell-height = 50%
-
-background = #181826
-foreground = #efefef
+theme = Catppuccin Mocha
+window-decoration = none
+scrollback-limit = 100000
+macos-option-as-alt = true
+mouse-hide-while-typing = true
+window-colorspace = display-p3
+custom-shader-animation = always
+macos-titlebar-style = transparent
+font-family = "JetBrainsMono Nerd Font"
+quick-terminal-animation-duration = 0.4
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal
@@ -18,3 +27,27 @@ keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
 
+background = #181826
+cursor-color = #f5e0dc
+cursor-invert-fg-bg = true
+cursor-text = #1e1e2e
+foreground = #cdd6f4
+foreground = #efefef
+palette = 0=#45475a
+palette = 10=#89d88b
+palette = 11=#ebd391
+palette = 12=#74a8fc
+palette = 13=#f2aede
+palette = 14=#6bd7ca
+palette = 15=#bac2de
+palette = 1=#f38ba8
+palette = 2=#a6e3a1
+palette = 3=#f9e2af
+palette = 4=#89b4fa
+palette = 5=#f5c2e7
+palette = 6=#94e2d5
+palette = 7=#a6adc8
+palette = 8=#585b70
+palette = 9=#f37799
+selection-background = #585b70
+selection-foreground = #cdd6f4
