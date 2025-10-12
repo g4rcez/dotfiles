@@ -1,261 +1,136 @@
 return {
-    { "kevinhwang91/nvim-hlslens" },
-    { "MunifTanjim/nui.nvim", lazy = true },
-    {
-        "max397574/colortils.nvim",
-        cmd = { "Colortils" },
-        opts = {},
+  { "akinsho/bufferline.nvim", enabled = false },
+  { "rcarriga/nvim-notify", enabled = false },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
+  { "folke/noice.nvim", opts = { notify = { enabled = false } } },
+  {
+    "Bekaboo/dropbar.nvim",
+    event = "UIEnter",
+    opts = {
+      bar = { padding = { left = 8, right = 2 } },
     },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = function(opts)
-            opts.style = "night"
-            return opts
+    config = function()
+      local dropbar_api = require("dropbar.api")
+      vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
+      vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
+      vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
+    end,
+  },
+  {
+    "rebelot/heirline.nvim",
+    lazy = false,
+    dependencies = { "Zeioth/heirline-components.nvim", "nvim-mini/mini.bufremove" },
+    opts = function()
+      local lib = require("heirline-components.all")
+      local component = lib.component
+      local colors = require("catppuccin.palettes").get_palette("mocha")
+      require("heirline").load_colors(colors)
+      vim.o.showtabline = 2
+      vim.opt.showcmdloc = "statusline"
+      local ViMode = {
+        init = function(self)
+          self.mode = vim.fn.mode(1)
         end,
-    },
-    {
-        "echasnovski/mini.icons",
-        lazy = true,
-        opts = {
-            file = {
-                [".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
-                ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
-            },
-            filetype = { dotenv = { glyph = "", hl = "MiniIconsYellow" } },
+        static = {
+          mode_names = {
+            n = "Normal",
+            no = "N?",
+            nov = "N?",
+            noV = "N?",
+            ["no\22"] = "N?",
+            niI = "Ni",
+            niR = "Nr",
+            niV = "Nv",
+            nt = "Nt",
+            v = "Visual",
+            vs = "Vs",
+            V = "V_",
+            Vs = "Vs",
+            ["\22"] = "^V",
+            ["\22s"] = "^V",
+            s = "S",
+            S = "S_",
+            ["\19"] = "^S",
+            i = "Insert",
+            ic = "Ic",
+            ix = "Ix",
+            R = "R",
+            Rc = "Rc",
+            Rx = "Rx",
+            Rv = "Rv",
+            Rvc = "Rv",
+            Rvx = "Rv",
+            c = "Cmd",
+            cv = "Ex",
+            r = "...",
+            rm = "M",
+            ["r?"] = "?",
+            ["!"] = "!",
+            t = "T",
+          },
+          mode_colors = {
+            n = "#ffffff",
+            i = "green",
+            v = "cyan",
+            V = "cyan",
+            ["\22"] = "cyan",
+            c = "orange",
+            s = "purple",
+            S = "purple",
+            ["\19"] = "purple",
+            R = "orange",
+            r = "orange",
+            ["!"] = "red",
+            t = "red",
+          },
         },
-        init = function()
-            package.preload["nvim-web-devicons"] = function()
-                require("mini.icons").mock_nvim_web_devicons()
-                return package.loaded["nvim-web-devicons"]
-            end
+        provider = function(self)
+          return "  %2(" .. self.mode_names[self.mode] .. "%) "
         end,
-    },
-    {
-        "petertriho/nvim-scrollbar",
-        opts = {
-            handlers = { gitsigns = true, ale = true, search = true },
-            excluded_filetypes = {
-                "cmp_docs",
-                "cmp_menu",
-                "noice",
-                "prompt",
-                "TelescopePrompt",
-                "alpha",
-            },
+        hl = function(self)
+          return { fg = self.mode_colors[self.mode], bold = true }
+        end,
+        update = {
+          "ModeChanged",
+          pattern = "*:*",
+          callback = vim.schedule_wrap(function()
+            vim.cmd("redrawstatus")
+          end),
         },
-    },
-    {
-        "folke/noice.nvim",
-        event = "VeryLazy",
-        dependencies = { "MunifTanjim/nui.nvim" },
-        config = function()
-            require("noice").setup {
-                lsp = {
-                    override = {
-                        ["vim.lsp.util.stylize_markdown"] = true,
-                        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                    },
-                },
-                presets = {
-                    inc_rename = true,
-                    bottom_search = true,
-                    command_palette = true,
-                    lsp_doc_border = true,
-                    long_message_to_split = true,
-                },
-            }
-        end,
-    },
-    {
-        "catppuccin/nvim",
-        lazy = false,
-        name = "catppuccin",
-        priority = 1000,
-        config = function()
-            require("catppuccin").setup {
-                flavour = "mocha",
-                float = { solid = true, transparent = false },
-                transparent_background = false,
-                show_end_of_buffer = false,
-                term_colors = true,
-                dim_inactive = { enabled = true, shade = "dark", percentage = 0.15 },
-                no_italic = false,
-                no_bold = false,
-                no_underline = false,
-                styles = { comments = { "italic" }, conditionals = { "italic" } },
-                default_integrations = false,
-                integrations = {
-                    cmp = true,
-                    dap = true,
-                    fzf = true,
-                    ufo = false,
-                    alpha = true,
-                    dap_ui = true,
-                    neogit = true,
-                    gitsigns = true,
-                    markdown = true,
-                    blink_cmp = true,
-                    diffview = true,
-                    treesitter = true,
-                    render_markdown = true,
-                    semantic_tokens = true,
-                    rainbow_delimiters = true,
-                    treesitter_context = true,
-                    colorful_winsep = { enabled = false, color = "red" },
-                    mini = { enabled = true, indentscope_color = "overlay2" },
-                    indent_blankline = { enabled = true, scope_color = "blue", colored_indent_levels = false },
-                    native_lsp = {
-                        enabled = true,
-                        inlay_hints = { background = true },
-                        virtual_text = {
-                            errors = { "italic" },
-                            hints = { "italic" },
-                            warnings = { "italic" },
-                            information = { "italic" },
-                            ok = { "italic" },
-                        },
-                        underlines = {
-                            errors = { "underline" },
-                            hints = { "underline" },
-                            warnings = { "underline" },
-                            information = { "underline" },
-                            ok = { "underline" },
-                        },
-                    },
-                },
-            }
-            vim.cmd "colorscheme catppuccin"
-        end,
-    },
-    {
-        "Bekaboo/dropbar.nvim",
-        event = "UIEnter",
+      }
+      return {
         opts = {
-            bar = { padding = { left = 8, right = 2 } },
+          disable_winbar_cb = function()
+            return false
+          end,
         },
-        config = function()
-            local dropbar_api = require "dropbar.api"
-            vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
-            vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
-            vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
-        end,
-    },
-    {
-        "rebelot/heirline.nvim",
-        lazy = false,
-        dependencies = { "Zeioth/heirline-components.nvim", "echasnovski/mini.bufremove" },
-        opts = function()
-            local lib = require "heirline-components.all"
-            local component = lib.component
-            local colors = require("catppuccin.palettes").get_palette "mocha"
-            require("heirline").load_colors(colors)
-            vim.o.showtabline = 2
-            vim.opt.showcmdloc = "statusline"
-            local ViMode = {
-                init = function(self)
-                    self.mode = vim.fn.mode(1)
-                end,
-                static = {
-                    mode_names = {
-                        n = "Normal",
-                        no = "N?",
-                        nov = "N?",
-                        noV = "N?",
-                        ["no\22"] = "N?",
-                        niI = "Ni",
-                        niR = "Nr",
-                        niV = "Nv",
-                        nt = "Nt",
-                        v = "Visual",
-                        vs = "Vs",
-                        V = "V_",
-                        Vs = "Vs",
-                        ["\22"] = "^V",
-                        ["\22s"] = "^V",
-                        s = "S",
-                        S = "S_",
-                        ["\19"] = "^S",
-                        i = "Insert",
-                        ic = "Ic",
-                        ix = "Ix",
-                        R = "R",
-                        Rc = "Rc",
-                        Rx = "Rx",
-                        Rv = "Rv",
-                        Rvc = "Rv",
-                        Rvx = "Rv",
-                        c = "Cmd",
-                        cv = "Ex",
-                        r = "...",
-                        rm = "M",
-                        ["r?"] = "?",
-                        ["!"] = "!",
-                        t = "T",
-                    },
-                    mode_colors = {
-                        n = "#ffffff",
-                        i = "green",
-                        v = "cyan",
-                        V = "cyan",
-                        ["\22"] = "cyan",
-                        c = "orange",
-                        s = "purple",
-                        S = "purple",
-                        ["\19"] = "purple",
-                        R = "orange",
-                        r = "orange",
-                        ["!"] = "red",
-                        t = "red",
-                    },
-                },
-                provider = function(self)
-                    return "  %2(" .. self.mode_names[self.mode] .. "%) "
-                end,
-                hl = function(self)
-                    return { fg = self.mode_colors[self.mode], bold = true }
-                end,
-                update = {
-                    "ModeChanged",
-                    pattern = "*:*",
-                    callback = vim.schedule_wrap(function()
-                        vim.cmd "redrawstatus"
-                    end),
-                },
-            }
-            return {
-                opts = {
-                    disable_winbar_cb = function()
-                        return false
-                    end,
-                },
-                tabline = {
-                    component.tabline_conditional_padding { filename = {} },
-                    component.tabline_buffers { filename = {} },
-                    component.tabline_tabpages {},
-                },
-                winbar = nil,
-                statusline = {
-                    hl = { fg = "fg", bg = "bg" },
-                    ViMode,
-                    component.diagnostics(),
-                    component.git_branch(),
-                    component.file_info(),
-                    component.git_diff(),
-                    component.fill(),
-                    component.cmd_info(),
-                    component.lsp(),
-                    component.nav(),
-                },
-            }
-        end,
-        config = function(_, opts)
-            local heirline = require "heirline"
-            local components = require "heirline-components.all"
-            components.init.subscribe_to_events()
-            heirline.load_colors(components.hl.get_colors())
-            heirline.setup(opts)
-        end,
-    },
+        tabline = {
+          component.tabline_conditional_padding({ filename = {} }),
+          component.tabline_buffers({ filename = {} }),
+          component.tabline_tabpages({}),
+        },
+        winbar = nil,
+        statusline = {
+          hl = { fg = "fg", bg = "bg" },
+          ViMode,
+          component.diagnostics(),
+          component.git_branch(),
+          component.file_info(),
+          component.git_diff(),
+          component.fill(),
+          component.cmd_info(),
+          component.lsp(),
+          component.nav(),
+        },
+      }
+    end,
+    config = function(_, opts)
+      local heirline = require("heirline")
+      local components = require("heirline-components.all")
+      components.init.subscribe_to_events()
+      heirline.load_colors(components.hl.get_colors())
+      heirline.setup(opts)
+    end,
+  },
 }

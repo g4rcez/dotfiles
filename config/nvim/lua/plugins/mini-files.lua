@@ -1,6 +1,6 @@
 return {
     {
-        "echasnovski/mini.nvim",
+        "nvim-mini/mini.nvim",
         config = function()
             local diff = require "mini.diff"
             diff.setup { source = diff.gen_source.none() }
@@ -14,10 +14,7 @@ return {
             require("mini.bufremove").setup()
             local miniFiles = require "mini.files"
             miniFiles.setup {
-                options = {
-                    permanent_delete = false,
-                    use_as_default_explorer = true,
-                },
+                options = { permanent_delete = false, use_as_default_explorer = true },
                 windows = {
                     max_number = math.huge,
                     preview = true,
@@ -52,6 +49,9 @@ return {
                     vim.keymap.set("n", "q", function()
                         mini_files.close()
                     end, setArgs "[q]uit minifiles")
+                    vim.keymap.set("i", "<C-s>", function()
+                        mini_files.synchronize()
+                    end, setArgs "Sync")
                     vim.keymap.set("n", "<C-s>", function()
                         mini_files.synchronize()
                     end, setArgs "Sync")
@@ -94,10 +94,12 @@ return {
                             vim.notify("Clipboard is empty or invalid.", vim.log.levels.WARN)
                             return
                         end
-                        local dest_path = curr_dir .. "/" .. vim.fn.fnamemodify(source_path, ":t") -- Destination path in current directory
+                        local dest_path = curr_dir ..
+                            "/" ..
+                            vim.fn.fnamemodify(source_path, ":t") -- Destination path in current directory
                         local copy_cmd = vim.fn.isdirectory(source_path) == 1 and { "cp", "-R", source_path, dest_path }
-                            or { "cp", source_path, dest_path } -- Construct copy command
-                        local result = vim.fn.system(copy_cmd) -- Execute the copy command
+                            or { "cp", source_path, dest_path }   -- Construct copy command
+                        local result = vim.fn.system(copy_cmd)    -- Execute the copy command
                         if vim.v.shell_error ~= 0 then
                             vim.notify("Paste operation failed: " .. result, vim.log.levels.ERROR)
                             return
