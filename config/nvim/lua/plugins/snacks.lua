@@ -31,8 +31,6 @@ return {
                 layout = { enabled = true },
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
-                notify = { enabled = false },
-                notifier = { enabled = false },
                 explorer = { enabled = true },
                 terminal = { enabled = true },
                 dashboard = {
@@ -91,7 +89,7 @@ return {
                     },
                     sections = {
                         { section = "header" },
-                        { section = "keys",   gap = 1, padding = 1 },
+                        { section = "keys", gap = 1, padding = 1 },
                         { section = "startup" },
                     },
                 },
@@ -145,7 +143,7 @@ return {
                                     box = "vertical",
                                     {
                                         win = "input",
-                                        height = 1,
+                                        height = 2,
                                         border = "none",
                                         title_pos = "center",
                                         title = "{title} {live} {flags}",
@@ -438,13 +436,6 @@ return {
                 desc = "Diagnostics",
             },
             {
-                "<leader>xd",
-                function()
-                    Snacks.picker.diagnostics_buffer()
-                end,
-                desc = "Buffer Diagnostics",
-            },
-            {
                 "<leader>sD",
                 function()
                     Snacks.picker.diagnostics_buffer()
@@ -531,7 +522,7 @@ return {
             {
                 "<leader>sR",
                 function()
-                    Snacks.picker.resume()
+                    Snacks.picker.ressume()
                 end,
                 desc = "Resume",
             },
@@ -584,7 +575,7 @@ return {
             },
             {
                 "gy",
-                function()
+                function ()
                     Snacks.picker.lsp_type_definitions()
                 end,
                 desc = "Goto T[y]pe Definition",
@@ -696,6 +687,13 @@ return {
                 end,
                 desc = "Prev Reference",
                 mode = { "n", "t" },
+            },
+            {
+                "<leader>st",
+                function()
+                    Snacks.picker.todo_comments()
+                end,
+                desc = "Todo",
             },
         },
         init = function()
