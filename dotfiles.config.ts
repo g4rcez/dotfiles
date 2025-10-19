@@ -31,6 +31,7 @@ export default dotfiles({
             "lsd",
             "mise",
             "nvim",
+            "lazy",
             "posting",
             "starship.toml",
             "tmux",

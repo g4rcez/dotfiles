@@ -1,22 +1,9 @@
 return {
     { "kevinhwang91/nvim-hlslens" },
     { "MunifTanjim/nui.nvim", lazy = true },
+    { "max397574/colortils.nvim", cmd = { "Colortils" }, opts = {} },
     {
-        "max397574/colortils.nvim",
-        cmd = { "Colortils" },
-        opts = {},
-    },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = function(opts)
-            opts.style = "night"
-            return opts
-        end,
-    },
-    {
-        "echasnovski/mini.icons",
+        "nvim-mini/mini.icons",
         lazy = true,
         opts = {
             file = {

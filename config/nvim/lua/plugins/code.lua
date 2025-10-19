@@ -9,7 +9,6 @@ return {
     { "stevearc/quicker.nvim", event = "FileType qf", opts = {} },
     { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
-    { "fladson/vim-kitty", ft = "kitty" },
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
@@ -74,7 +73,7 @@ return {
     },
     {
         "Wansmer/treesj",
-        opts = { use_default_keymaps = false, max_join_length = 1000 },
+        opts = { use_default_keymaps = false, max_join_length = 180 },
         keys = {
             { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
             { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },

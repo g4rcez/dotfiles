@@ -60,10 +60,16 @@ M.setup = function(control)
     bind.normal("<leader>bb", function()
         Bookmarks.list()
     end, { desc = "[bb]ookmark" })
+    bind.normal("<Tab><Tab>", function()
+        Bookmarks.list()
+    end, { desc = "[bb]ookmark" })
     bind.normal("<leader>bc", function()
         Bookmarks.clear()
     end, { desc = "[b]ookmark [c]lear" })
 
+    bind.normal("<leader>g=", function()
+        require("mini.diff").toggle_overlay(0)
+    end, { desc = "Git diff" })
     bind.normal("<leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "[g]it [D]iff" })
     bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
     bind.normal("<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
@@ -131,8 +137,9 @@ M.setup = function(control)
         SmartPick.picker()
     end, { desc = "[p]ick smart" })
 
-    local createMotions = require "config.motions"
-    local motions = createMotions(control)
+    local motions = require "config.motions"(control)
+    motions.defaults()
+    motions.buffers()
     require("config.switch").setup()
     require("config.window-mode").setup {
         timeout = 30000,

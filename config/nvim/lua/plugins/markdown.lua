@@ -1,7 +1,7 @@
 return {
     {
         "bngarren/checkmate.nvim",
-        ft = "markdown", -- Lazy loads for Markdown files matching patterns in 'files'
+        ft = "markdown",
         opts = {
             files = {
                 "*.md",
@@ -17,31 +17,11 @@ return {
             },
         },
     },
-    -- { "3rd/image.nvim", build = false, opts = { processor = "magick_cli" } },
     {
         "bullets-vim/bullets.vim",
         config = function()
             vim.g.bullets_delete_last_bullet_if_empty = 2
         end,
-    },
-    {
-        enabled = false,
-        "HakonHarnes/img-clip.nvim",
-        opts = {
-            default = {
-                use_absolute_path = true,
-                prompt_for_file_name = false,
-                embed_image_as_base64 = false,
-                drag_and_drop = { insert_mode = true },
-            },
-            filetypes = {
-                codecompanion = {
-                    prompt_for_file_name = false,
-                    template = "[Image]($FILE_PATH)",
-                    use_absolute_path = true,
-                },
-            },
-        },
     },
     {
         lazy = false,
@@ -85,26 +65,6 @@ return {
             link = {
                 image = vim.g.neovim_mode == "skitty" and "" or "󰥶 ",
                 custom = { youtu = { pattern = "youtu%.be", icon = "󰗃 " } },
-            },
-            heading = {
-                sign = true,
-                icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
-                backgrounds = {
-                    "Headline1Bg",
-                    "Headline2Bg",
-                    "Headline3Bg",
-                    "Headline4Bg",
-                    "Headline5Bg",
-                    "Headline6Bg",
-                },
-                foregrounds = {
-                    "Headline1Fg",
-                    "Headline2Fg",
-                    "Headline3Fg",
-                    "Headline4Fg",
-                    "Headline5Fg",
-                    "Headline6Fg",
-                },
             },
         },
     },
