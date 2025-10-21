@@ -1,5 +1,19 @@
 return {
     {
+        "folke/lazydev.nvim",
+        lazy = false,
+        ft = "lua",
+        cmd = "LazyDev",
+        opts = {
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                { path = "LazyVim", words = { "LazyVim" } },
+                { path = "snacks.nvim", words = { "Snacks" } },
+                { path = "lazy.nvim", words = { "LazyVim" } },
+            },
+        },
+    },
+    {
         opts = {},
         lazy = false,
         "ThePrimeagen/refactoring.nvim",
@@ -39,17 +53,6 @@ return {
                 ["source"] = { "", { link = "DiagnosticError" } },
                 ["rename"] = { "󰑕", { link = "DiagnosticWarning" } },
                 ["codeAction"] = { "", { link = "DiagnosticWarning" } },
-            },
-        },
-    },
-    {
-        "folke/lazydev.nvim",
-        ft = "lua",
-        opts = {
-            library = {
-                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                "lazy.nvim",
-                words = { "Lazy" },
             },
         },
     },

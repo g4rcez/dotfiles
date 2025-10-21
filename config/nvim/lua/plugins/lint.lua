@@ -5,6 +5,8 @@ return {
         events = { "BufWritePost", "BufReadPost", "InsertLeave" },
         linters = {},
         linters_by_ft = {
+            lua = { "luacheck" },
+            python = { "pylint" },
             javascript = { "eslint" },
             typescript = { "eslint" },
             javascriptreact = { "eslint" },

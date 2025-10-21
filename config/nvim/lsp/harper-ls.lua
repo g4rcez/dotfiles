@@ -1,13 +1,13 @@
-vim.lsp.config("harper_ls", {
-    settings = {
-        ["harper-ls"] = {
-            userDictPath = "~/dict.txt",
-            codeActions = {
-                ForceStable = false,
-            },
-            markdown = {
-                IgnoreLinkTitle = false,
-            },
-        },
-    },
-})
+-- vim.lsp.config("harper_ls", {
+--     settings = {
+--         ["harper-ls"] = {
+--             userDictPath = "~/dict.txt",
+--             codeActions = {
+--                 ForceStable = false,
+--             },
+--             markdown = {
+--                 IgnoreLinkTitle = false,
+--             },
+--         },
+--     },
+-- })

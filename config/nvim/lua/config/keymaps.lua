@@ -108,10 +108,10 @@ M.setup = function(control)
     end, { desc = "Replace with grug-far astgrep" })
 
     bind.normal("]d", function()
-        vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
+        vim.diagnostic.goto_next { min = vim.diagnostic.severity.WARN }
     end, { desc = "Goto next error" })
     bind.normal("[d", function()
-        vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
+        vim.diagnostic.goto_prev { min = vim.diagnostic.severity.WARN }
     end, { desc = "Goto previous error" })
 
     vim.keymap.set({ "n", "x" }, "<leader>rr", function()

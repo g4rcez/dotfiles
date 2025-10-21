@@ -93,3 +93,5 @@ vim.diagnostic.config {
 }
 
 vim.filetype.add { extension = { ["http"] = "http" } }
+-- only with conform.nvim
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"

@@ -14,7 +14,7 @@ vim.lsp.enable {
     "docker_compose_language_service",
     "docker_language_server",
     "lua_ls",
-    "harper_ls",
+    -- "harper_ls",
     -- npm i -g oxlint
     "oxlint",
     "rust_analyzer",
