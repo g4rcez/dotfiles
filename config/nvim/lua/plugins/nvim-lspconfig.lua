@@ -7,6 +7,67 @@ return {
         { "mason-org/mason.nvim", opts = {} },
         "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
+    opts = {
+        folds = { enabled = true },
+        codelens = { enabled = true },
+        inlay_hints = { enabled = true, exclude = { "vue" } },
+        servers = {
+            stylua = { enabled = false },
+            cssls = {
+                filetypes = { "css", "scss", "less" },
+                settings = {
+                    css = {
+                        validate = true,
+                        hover = { documentation = true, references = true },
+                    },
+                    scss = {
+                        validate = true,
+                        hover = { documentation = true, references = true },
+                    },
+                },
+            },
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        workspace = { checkThirdParty = false },
+                        codeLens = { enable = true },
+                        completion = { callSnippet = "Replace" },
+                        doc = { privateName = { "^_" } },
+                        diagnostics = { globals = { "vim" } },
+                        hint = {
+                            enable = true,
+                            setType = false,
+                            paramType = true,
+                            paramName = "Disable",
+                            semicolon = "Disable",
+                            arrayIndex = "Disable",
+                        },
+                    },
+                },
+            },
+            vtsls = {
+                filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+                settings = {
+                    refactor_auto_rename = true,
+                    typescript = {
+                        tsserver = { maxTsServerMemory = 12000 },
+                        suggest = {
+                            enabled = true,
+                            completeFunctionCalls = true,
+                        },
+                        inlayHints = {
+                            variableTypes = { enabled = true },
+                            parameterTypes = { enabled = true },
+                            enumMemberValues = { enabled = true },
+                            parameterNames = { enabled = "literals" },
+                            functionLikeReturnTypes = { enabled = true },
+                            propertyDeclarationTypes = { enabled = true },
+                        },
+                    },
+                },
+            },
+        },
+    },
     config = function()
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),

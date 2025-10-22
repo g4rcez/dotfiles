@@ -1,12 +1,6 @@
 vim.lsp.config["vtsls"] = {
     { "vtsls", "--stdio" },
-    filetypes = {
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "vue",
-    },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
     root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" },
     settings = {
         refactor_auto_rename = true,

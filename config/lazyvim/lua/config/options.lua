@@ -1,3 +1,14 @@
+-- lazy overwrite
+vim.g.autoformat = false
+vim.g.lazyvim_check_order = false
+vim.g.lazyvim_blink_main = false
+vim.g.lazyvim_eslint_auto_format = false
+vim.g.lazyvim_prettier_needs_config = false
+vim.g.snacks_animate = false
+vim.o.number = true
+vim.o.relativenumber = true
+
+-- own custom config
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 local opt = vim.opt
 local g = vim.g
@@ -12,19 +23,10 @@ opt.autowrite = true
 opt.breakindent = true
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 opt.cmdheight = 0
-vim.opt.completeopt = { "menu", "fuzzy", "menuone", "noselect", "popup" }
 opt.conceallevel = 0
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
-opt.fillchars = {
-    foldopen = "",
-    foldclose = "",
-    fold = " ",
-    foldsep = " ",
-    diff = "╱",
-    eob = " ",
-}
 opt.formatoptions = "jcroqlnt"
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
@@ -43,7 +45,6 @@ opt.relativenumber = true
 opt.ruler = true
 opt.scrolloff = 10
 opt.scrolloff = 4
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 opt.shiftround = true
 opt.shiftwidth = 2
 opt.shortmess:append { W = true, I = true, c = true, C = true }
@@ -57,7 +58,6 @@ opt.spelllang = { "en" }
 opt.splitbelow = true
 opt.splitkeep = "screen"
 opt.splitright = true
-opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 opt.tabstop = 4
 opt.termguicolors = true
 opt.timeout = true
@@ -95,3 +95,4 @@ vim.diagnostic.config {
 vim.filetype.add { extension = { ["http"] = "http" } }
 -- only with conform.nvim
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
