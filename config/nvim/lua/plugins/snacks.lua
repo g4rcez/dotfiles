@@ -31,6 +31,8 @@ return {
                 layout = { enabled = true },
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
+                notify = { enabled = false },
+                notifier = { enabled = false },
                 explorer = { enabled = true },
                 terminal = { enabled = true },
                 dashboard = {
@@ -89,7 +91,7 @@ return {
                     },
                     sections = {
                         { section = "header" },
-                        { section = "keys", gap = 1, padding = 1 },
+                        { section = "keys",   gap = 1, padding = 1 },
                         { section = "startup" },
                     },
                 },
@@ -127,7 +129,7 @@ return {
                                     title = "{title} {live} {flags}",
                                     title_pos = "center",
                                 },
-                                { win = "list", border = "none" },
+                                { win = "list",    border = "none" },
                                 { win = "preview", title = "{preview}", border = "rounded" },
                             },
                         },
@@ -143,7 +145,7 @@ return {
                                     box = "vertical",
                                     {
                                         win = "input",
-                                        height = 2,
+                                        height = 1,
                                         border = "none",
                                         title_pos = "center",
                                         title = "{title} {live} {flags}",
@@ -273,6 +275,11 @@ return {
                 desc = "File Explorer",
             },
             {
+                "<Tab><Tab>",
+                require("snacks").picker.buffers,
+                desc = "Buffers",
+            },
+            {
                 "<leader><Tab>",
                 require("snacks").picker.buffers,
                 desc = "Buffers",
@@ -286,6 +293,11 @@ return {
                 "<leader>ff",
                 require("snacks").picker.files,
                 desc = "Find Files",
+            },
+            {
+                "<leader>fp",
+                require("snacks").picker.projects,
+                desc = "Projects",
             },
             {
                 "<leader>fr",
@@ -426,6 +438,13 @@ return {
                 desc = "Diagnostics",
             },
             {
+                "<leader>xd",
+                function()
+                    Snacks.picker.diagnostics_buffer()
+                end,
+                desc = "Buffer Diagnostics",
+            },
+            {
                 "<leader>sD",
                 function()
                     Snacks.picker.diagnostics_buffer()
@@ -512,7 +531,7 @@ return {
             {
                 "<leader>sR",
                 function()
-                    Snacks.picker.ressume()
+                    Snacks.picker.resume()
                 end,
                 desc = "Resume",
             },
@@ -677,13 +696,6 @@ return {
                 end,
                 desc = "Prev Reference",
                 mode = { "n", "t" },
-            },
-            {
-                "<leader>st",
-                function()
-                    Snacks.picker.todo_comments()
-                end,
-                desc = "Todo",
             },
         },
         init = function()

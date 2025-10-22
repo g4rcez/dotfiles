@@ -2,8 +2,7 @@ return {
     {
         "nvim-mini/mini.nvim",
         config = function()
-            local diff = require "mini.diff"
-            diff.setup { source = diff.gen_source.none() }
+            require("mini.diff").setup()
             require("mini.ai").setup { n_lines = 500 }
             require("mini.surround").setup()
             require("mini.git").setup()
@@ -49,9 +48,6 @@ return {
                     vim.keymap.set("n", "q", function()
                         mini_files.close()
                     end, setArgs "[q]uit minifiles")
-                    vim.keymap.set("i", "<C-s>", function()
-                        mini_files.synchronize()
-                    end, setArgs "Sync")
                     vim.keymap.set("n", "<C-s>", function()
                         mini_files.synchronize()
                     end, setArgs "Sync")
@@ -74,16 +70,16 @@ return {
                         local curr_dir = curr_entry.fs_type == "directory" and curr_entry.path
                             or vim.fn.fnamemodify(curr_entry.path, ":h")
                         local script = [[
-            tell application "System Events"
-              try
-                set theFile to the clipboard as alias
-                set posixPath to POSIX path of theFile
-                return posixPath
-              on error
-                return "error"
-              end try
-            end tell
-          ]]
+                            tell application "System Events"
+                            try
+                                set theFile to the clipboard as alias
+                                set posixPath to POSIX path of theFile
+                                return posixPath
+                            on error
+                                return "error"
+                            end try
+                            end tell
+                        ]]
                         local output = vim.fn.system("osascript -e " .. vim.fn.shellescape(script)) -- Execute AppleScript command
                         if vim.v.shell_error ~= 0 or output:find "error" then
                             vim.notify("Clipboard does not contain a valid file or directory.", vim.log.levels.WARN)
