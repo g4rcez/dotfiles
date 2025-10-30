@@ -1,8 +1,4 @@
-# neovim
+# 💤 LazyVim
 
-My own vim configuration based on https://github.com/nvim-lua/kickstart.nvim
-
-# Plugins
-
-- oil.nvim
-- snacks.nvim
+A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
+Refer to the [documentation](https://lazyvim.github.io/installation) to get started.

@@ -1,3 +1,4 @@
+brew "act"
 brew "alacrity"
 brew "ast-grep"
 brew "atuin"

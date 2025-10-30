@@ -4,24 +4,22 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    { "nmac427/guess-indent.nvim",  opts = { auto_cmd = true, override_editorconfig = false } },
-    { enabled = false,              "windwp/nvim-ts-autotag",                                                     event = "LazyFile", opts = {}, },
-    { "folke/ts-comments.nvim",     event = "VeryLazy",                                                           opts = {} },
-    { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } }, },
+    { "smjonas/inc-rename.nvim", opts = {} },
+    { "dmmulroy/ts-error-translator.nvim" },
     {
-        "zeioth/garbage-day.nvim",
-        dependencies = "neovim/nvim-lspconfig",
-        event = "VeryLazy",
-        opts = {},
+        "stevearc/quicker.nvim",
+        event = "FileType qf",
+        opts = {
+            wrap = false,
+            number = true,
+            buflisted = true,
+            signcolumn = "auto",
+            winfixheight = true,
+            relativenumber = true,
+        },
     },
-    {
-        "olrtg/nvim-emmet",
-        config = function()
-            vim.keymap.set({ "n", "v" }, "<leader>ce", function()
-                require("nvim-emmet").wrap_with_abbreviation()
-            end, { desc = "[e]mmet" })
-        end,
-    },
+    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
+    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
@@ -34,27 +32,53 @@ return {
         dependencies = { "kevinhwang91/promise-async" },
     },
     {
-        "axelvc/template-string.nvim",
-        ft = fileTypes,
-        event = "InsertEnter",
+        "tronikelis/ts-autotag.nvim",
+        opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } },
+    },
+    {
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        event = "VeryLazy",
+        opts = {},
+    },
+    {
+        "stevearc/aerial.nvim",
+        opts = {},
+        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    },
+    {
+        "olrtg/nvim-emmet",
+        config = function()
+            vim.keymap.set({ "n", "v" }, "<leader>ce", function()
+                require("nvim-emmet").wrap_with_abbreviation()
+            end, { desc = "[e]mmet" })
+        end,
+    },
+    {
+        "folke/todo-comments.nvim",
+        event = "VimEnter",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = { signs = true },
+    },
+    {
+        "folke/lazydev.nvim",
+        ft = "lua",
+        cmd = "LazyDev",
         opts = {
-            filetypes = fileTypes,
-            remove_template_string = true,
-            restore_quotes = {
-                normal = [[']],
-                jsx = [["]],
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                { path = "LazyVim", words = { "LazyVim" } },
+                { path = "snacks.nvim", words = { "Snacks" } },
+                { path = "lazy.nvim", words = { "LazyVim" } },
             },
         },
     },
     {
-        "Wansmer/treesj",
-        opts = { use_default_keymaps = false, max_join_length = 180 },
-        keys = {
-            { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
-            { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
-        },
+        opts = {},
+        lazy = false,
+        "ThePrimeagen/refactoring.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
     },
-
     {
         "rachartier/tiny-code-action.nvim",
         dependencies = { { "nvim-lua/plenary.nvim" }, { "folke/snacks.nvim" } },
@@ -90,6 +114,36 @@ return {
         },
     },
     {
+        "axelvc/template-string.nvim",
+        ft = fileTypes,
+        event = "InsertEnter",
+        opts = {
+            filetypes = fileTypes,
+            remove_template_string = true,
+            restore_quotes = {
+                normal = [[']],
+                jsx = [["]],
+            },
+        },
+    },
+    {
+        "andymass/vim-matchup",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        opts = function(_, opts)
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+            require("nvim-treesitter.configs").setup { matchup = { enable = true } }
+            return opts
+        end,
+    },
+    {
+        "Wansmer/treesj",
+        opts = { use_default_keymaps = false, max_join_length = 180 },
+        keys = {
+            { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
+            { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
+        },
+    },
+    {
         "brenoprata10/nvim-highlight-colors",
         opts = {
             enable_hex = true,
@@ -106,38 +160,6 @@ return {
             virtual_symbol_prefix = "",
             virtual_symbol_suffix = " ",
             virtual_symbol_position = "inline",
-        },
-    },
-    {
-        "neovim/nvim-lspconfig",
-        ---@class PluginLspOpts
-        opts = {
-            ---@type lspconfig.options
-            inlay_hints = { enabled = false },
-            servers = {
-                ["cspell-lsp"] = {},
-                dockerls = {},
-                docker_compose_language_service = {},
-                vstls = {
-                    settings = {
-                        typescript = {
-                            tsserver = { maxTsServerMemory = 12000 },
-                            suggest = {
-                                enabled = true,
-                                completeFunctionCalls = true,
-                            },
-                            inlayHints = {
-                                parameterNames = { enabled = "literals" },
-                                parameterTypes = { enabled = true },
-                                variableTypes = { enabled = true },
-                                propertyDeclarationTypes = { enabled = true },
-                                functionLikeReturnTypes = { enabled = true },
-                                enumMemberValues = { enabled = true },
-                            }
-                        },
-                    }
-                }
-            },
         },
     },
 }

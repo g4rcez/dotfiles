@@ -1,8 +1,8 @@
 return {
-    "nvim-treesitter/nvim-treesitter-textobjects",
     {
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+        build = ':TSUpdate',
         opts = {
             enable = true,
             multiwindow = true,
@@ -15,65 +15,16 @@ return {
             separator = nil,
             zindex = 20,
             on_attach = nil,
+            ensure_installed = { "dockerfile" }
         },
     },
     {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
-        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects", "nvim-treesitter/nvim-treesitter-context" },
-        opts = {
-            auto_install = true,
-            sync_install = true,
-            folds = { enable = true },
-            indent = { enable = true },
-            highlight = { enable = true },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    scope_incremental = false,
-                    node_incremental = "<Enter>",
-                    node_decremental = "<Backspace>",
-                    init_selection = "<Enter>",
-                },
-            },
-            ensure_installed = {
-                "bash",
-                "c",
-                "c_sharp",
-                "css",
-                "csv",
-                "diff",
-                "dockerfile",
-                "git_config",
-                "git_rebase",
-                "gitattributes",
-                "gitcommit",
-                "gitignore",
-                "html",
-                "http",
-                "javascript",
-                "jq",
-                "jsdoc",
-                "json",
-                "json5",
-                "kdl",
-                "lua",
-                "luadoc",
-                "markdown",
-                "markdown_inline",
-                "prisma",
-                "query",
-                "regex",
-                "styled",
-                "sql",
-                "tsx",
-                "typescript",
-                "vim",
-                "vimdoc",
-                "yaml",
-                "zig",
-            },
-        },
+        "andymass/vim-matchup",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        opts = function(_, opts)
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+            -- require("nvim-treesitter.configs").setup { matchup = { enable = true } }
+            return opts
+        end,
     },
 }
