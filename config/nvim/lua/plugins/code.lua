@@ -4,10 +4,19 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
-    { "nmac427/guess-indent.nvim",  opts = { auto_cmd = true, override_editorconfig = false } },
-    { enabled = false,              "windwp/nvim-ts-autotag",                                                     event = "LazyFile", opts = {}, },
-    { "folke/ts-comments.nvim",     event = "VeryLazy",                                                           opts = {} },
-    { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } }, },
+    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
+    {
+        enabled = false,
+        "windwp/nvim-ts-autotag",
+        event = "LazyFile",
+        opts = {},
+    },
+    {
+        "folke/ts-comments.nvim",
+        event = "VeryLazy",
+        opts = {},
+    },
+    { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } } },
     {
         "zeioth/garbage-day.nvim",
         dependencies = "neovim/nvim-lspconfig",
@@ -122,21 +131,18 @@ return {
                     settings = {
                         typescript = {
                             tsserver = { maxTsServerMemory = 12000 },
-                            suggest = {
-                                enabled = true,
-                                completeFunctionCalls = true,
-                            },
+                            suggest = { enabled = true, completeFunctionCalls = true },
                             inlayHints = {
-                                parameterNames = { enabled = "literals" },
-                                parameterTypes = { enabled = true },
                                 variableTypes = { enabled = true },
-                                propertyDeclarationTypes = { enabled = true },
-                                functionLikeReturnTypes = { enabled = true },
+                                parameterTypes = { enabled = true },
                                 enumMemberValues = { enabled = true },
-                            }
+                                parameterNames = { enabled = "literals" },
+                                functionLikeReturnTypes = { enabled = true },
+                                propertyDeclarationTypes = { enabled = true },
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
     },
