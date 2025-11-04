@@ -4,7 +4,6 @@ M.pairs = {
     { "(", ")" },
     { "[", "]" },
     { "{", "}" },
-    { "<", ">" },
 }
 
 local namespace = vim.api.nvim_create_namespace("missing_pairs")
