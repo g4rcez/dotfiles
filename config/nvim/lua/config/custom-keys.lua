@@ -1,19 +1,21 @@
 local M = {}
 
 M.setup = function(control)
+    local set = vim.keymap.set
+    local mc = require("multicursor-nvim")
     local bind = control.bind
     local function rename_once()
-        local clients = vim.lsp.get_clients { bufnr = 0 }
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
         local client_id_to_use = nil
         for _, client in ipairs(clients) do
-            if client.supports_method "textDocument/rename" then
+            if client.supports_method("textDocument/rename") then
                 client_id_to_use = client.id
                 break
             end
         end
         if client_id_to_use then
             local params = vim.lsp.util.make_position_params()
-            vim.ui.input({ prompt = "New Name: ", default = vim.fn.expand "<cword>" }, function(new_name)
+            vim.ui.input({ prompt = "New Name: ", default = vim.fn.expand("<cword>") }, function(new_name)
                 if not new_name or new_name == "" then
                     return
                 end
@@ -35,18 +37,19 @@ M.setup = function(control)
     end
 
     function openMiniFiles()
-        local MiniFiles = require "mini.files"
+        local MiniFiles = require("mini.files")
         local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
         MiniFiles.reveal_cwd()
     end
 
     function openMiniFilesRootDir()
-        local MiniFiles = require "mini.files"
+        local MiniFiles = require("mini.files")
         local _ = MiniFiles.close() or MiniFiles.open()
         MiniFiles.reveal_cwd()
     end
 
-    local Bookmarks = require "config.bookmarks"
+    local Bookmarks = require("config.bookmarks")
+    mc.setup({})
     Bookmarks.setup()
     bind.normal("<leader>ba", function()
         Bookmarks.add()
@@ -79,11 +82,11 @@ M.setup = function(control)
     bind.normal("zM", require("ufo").closeAllFolds)
     bind.normal("zm", require("ufo").closeFoldsWith)
     bind.normal("zo", function()
-        local line = vim.fn.line "."
+        local line = vim.fn.line(".")
         if vim.fn.foldclosed(line) == -1 then
-            vim.cmd "normal! zc"
+            vim.cmd("normal! zc")
         else
-            vim.cmd "normal! zo"
+            vim.cmd("normal! zo")
         end
     end, { desc = "Fold" })
     bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
@@ -93,25 +96,25 @@ M.setup = function(control)
     end, { desc = "[c]ode [d]iagnostics" })
 
     bind.normal("<leader>co", function()
-        vim.lsp.buf.code_action {
+        vim.lsp.buf.code_action({
             apply = true,
             context = { only = { "source.organizeImports" } },
-        }
+        })
     end, { desc = "[c]ode [o]rganizeImports" })
 
     bind.normal("<sc-f>", function()
-        require("grug-far").open { engine = "astgrep" }
+        require("grug-far").open({ engine = "astgrep" })
     end, { desc = "Replace with grug-far astgrep" })
 
     bind.normal("<leader>rr", function()
-        require("grug-far").open { engine = "astgrep" }
+        require("grug-far").open({ engine = "astgrep" })
     end, { desc = "Replace with grug-far astgrep" })
 
     bind.normal("]d", function()
-        vim.diagnostic.goto_next { min = vim.diagnostic.severity.WARN }
+        vim.diagnostic.goto_next({ min = vim.diagnostic.severity.WARN })
     end, { desc = "Goto next error" })
     bind.normal("[d", function()
-        vim.diagnostic.goto_prev { min = vim.diagnostic.severity.WARN }
+        vim.diagnostic.goto_prev({ min = vim.diagnostic.severity.WARN })
     end, { desc = "Goto previous error" })
 
     vim.keymap.set({ "n", "x" }, "<leader>rr", function()
@@ -123,14 +126,14 @@ M.setup = function(control)
     bind.normal("<leader>cr", rename_once, { desc = "[c]ode [r]ename" })
     bind.normal("<leader>cf", function()
         --- vim.lsp.buf.format()
-        require('conform').format({ async = true, quiet = true })
+        require("conform").format({ async = true, quiet = true })
     end, { desc = "[c]ode [f]ormat" })
 
     bind.normal("<leader>cF", function()
-        require("aerial").snacks_picker {
+        require("aerial").snacks_picker({
             format = "text",
             layout = { preset = "vscode" },
-        }
+        })
     end, { desc = "[c]ode [F]ind aerial" })
 
     bind.normal("<leader>fp", function()
@@ -138,13 +141,51 @@ M.setup = function(control)
         SmartPick.picker()
     end, { desc = "[p]ick smart" })
 
-    local motions = require "config.motions" (control)
+    set({ "n", "x" }, "<C-k>", function()
+        mc.lineAddCursor(-1)
+    end, { desc = "Multicursor above", noremap = true })
+    set({ "n", "x" }, "<C-j>", function()
+        mc.lineAddCursor(1)
+    end, { desc = "Multicursor bellow", noremap = true })
+
+    set({ "n", "x" }, "<leader>nn", function()
+        mc.matchAddCursor(1)
+    end, { desc = "[n]ew match" })
+    set({ "n", "x" }, "<C-n>", function()
+        mc.matchAddCursor(1)
+    end, { desc = "[n]ew match" })
+    set({ "n", "x" }, "<leader>ns", function()
+        mc.matchSkipCursor(1)
+    end, { desc = "[s]kip match" })
+    set({ "n", "x" }, "<leader>nN", function()
+        mc.matchAddCursor(-1)
+    end, { desc = "[N]ew prev match" })
+    set({ "n", "x" }, "<leader>nS", function()
+        mc.matchSkipCursor(-1)
+    end, { desc = "[S]kip prev match" })
+    set("n", "<c-leftmouse>", mc.handleMouse)
+    set("n", "<c-leftdrag>", mc.handleMouseDrag)
+    set("n", "<c-leftrelease>", mc.handleMouseRelease)
+    mc.addKeymapLayer(function(layer)
+        layer({ "n", "x" }, "<left>", mc.prevCursor)
+        layer({ "n", "x" }, "<right>", mc.nextCursor)
+        layer({ "n", "x" }, "<leader>x", mc.deleteCursor)
+        layer("n", "<esc>", function()
+            if not mc.cursorsEnabled() then
+                mc.enableCursors()
+            else
+                mc.clearCursors()
+            end
+        end)
+    end)
+
+    local motions = require("config.motions")(control)
     motions.defaults()
     motions.buffers()
     require("config.switch").setup()
-    require("config.window-mode").setup {
+    require("config.window-mode").setup({
         timeout = 30000,
-    }
+    })
 end
 
 return M
