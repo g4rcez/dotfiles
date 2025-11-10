@@ -9,5 +9,7 @@ local function clear(mode, items)
 end
 
 clear("n", { "<leader>e", "H", "L", "<A-j>", "<A-k>", "<C-k>", "<C-j>" })
+clear("i", { "<A-j>", "<A-k>" })
+clear("v", { "<A-j>", "<A-k>" })
 
-require("config/custom-keys").setup(require("config.create-keybind")(wk))
+require("config/usermaps").setup(require("config.keybind")(wk))

@@ -74,7 +74,7 @@ export default createEspansoConfig(
             espanso.insert("ishell", "", "Nerd font: shell/terminal"),
             espanso.insert("idotnet", "", "Nerd font: dotnet"),
             espanso.insert("inode", "", "Nerd font: nodejs"),
-            espanso.insert("itmux","","Nerd font: tmux"),
+            espanso.insert("itmux", "", "Nerd font: tmux"),
             // emojis 👍🏾
             espanso.insert("eyes", "👀", "Emoji: Eyes"),
             espanso.insert("s2", "❤️", "Emoji: Heart"),
@@ -174,7 +174,7 @@ export default createEspansoConfig(
             espanso.shell(
                 "dd",
                 "Get date in ISO format",
-                runMain('dates --value=isod'),
+                runMain("dates --value=isod"),
             ),
             espanso.shell(
                 "iso",

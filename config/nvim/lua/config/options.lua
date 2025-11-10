@@ -1,10 +1,7 @@
--- own custom config
-vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
--- globals
 local opt = vim.opt
+vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
--- lazy overwrite
 vim.g.autoformat = false
 vim.g.lazyvim_blink_main = false
 vim.g.lazyvim_eslint_auto_format = false
@@ -13,10 +10,19 @@ vim.g.snacks_animate = false
 vim.o.number = true
 vim.o.relativenumber = true
 vim.g.have_nerd_font = true
+vim.filetype.add({ extension = { ["http"] = "http" } })
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 opt.cmdheight = 0
 opt.conceallevel = 0
+opt.foldcolumn = "1"
+opt.foldenable = true
+opt.foldexpr = "0"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldmethod = "expr"
+opt.foldtext = ">"
 opt.number = true
 opt.relativenumber = true
 opt.ruler = true
@@ -31,6 +37,7 @@ opt.sidescrolloff = 8
 opt.signcolumn = "yes"
 opt.smartcase = true
 opt.smartindent = true
+opt.smoothscroll = true
 opt.spelllang = { "en" }
 opt.splitbelow = true
 opt.splitkeep = "screen"
@@ -47,17 +54,6 @@ opt.wildmode = "longest:full,full"
 opt.winminwidth = 5
 opt.wrap = false
 
-opt.foldcolumn = "1"
-opt.foldexpr = "0"
-opt.foldenable = true
-opt.foldlevel = 99
-opt.foldlevelstart = 99
-opt.conceallevel = 0
-
-opt.smoothscroll = true
-opt.foldmethod = "expr"
-opt.foldtext = ">"
-
 vim.diagnostic.config({
     severity_sort = true,
     signs = {
@@ -69,6 +65,3 @@ vim.diagnostic.config({
         },
     },
 })
-
-vim.filetype.add({ extension = { ["http"] = "http" } })
-vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
