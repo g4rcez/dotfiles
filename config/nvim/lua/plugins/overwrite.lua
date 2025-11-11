@@ -1,6 +1,5 @@
 return {
-    { "nvim-lualine/lualine.nvim", enabled = false,    event = "VeryLazy", },
-    { "folke/flash.nvim",          event = "VeryLazy", enabled = false, },
+    { "folke/flash.nvim", event = "VeryLazy", enabled = false },
     {
         "mason-org/mason.nvim",
         opts = {
