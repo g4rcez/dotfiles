@@ -2,11 +2,13 @@ export UID=$(id -u)
 export GID=$(id -g)
 #####################################################################################
 ## PATH
+export GOPATH=$HOME/go
 PATH2="$PATH"
 LOCAL_SOURCE_FILES=(
     "/usr/local/bin"
     "/opt/homebrew/bin"
     "$PNPM_HOME"
+    "$GOPATH/bin"
     "$HOME/.cargo/env"
     "$HOME/.local/bin"
     "$HOME/.local/share"

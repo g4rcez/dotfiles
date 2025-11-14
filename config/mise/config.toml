@@ -5,7 +5,7 @@ bun = "1.1.38"
 deno = "2.4.5"
 java = "corretto-23.0.1.8.1"
 python = "3.13.0"
-dotnet = "9.0.304"
+dotnet = "10.0.100"
 uv = "0.8.18"
 
 [settings]

@@ -1,9 +1,8 @@
-local function createMotions(mapper)
-  local M = {}
-  local bind = mapper.bind
-  local DEFAULT_OPTS = mapper.DEFAULT_OPTS
+local M = {}
 
-  M.defaults = function()
+local DEFAULT_OPTS = { noremap = true, silent = true }
+
+M.setup = function(bind)
     bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
     bind.normal("<leader>J", "v%J", { desc = "Join next match" })
     bind.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
@@ -33,35 +32,18 @@ local function createMotions(mapper)
     bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
     bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
     bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
-  end
 
-  local function navigate(n)
-    local current = vim.api.nvim_get_current_buf()
-    for i, v in ipairs(vim.t.bufs) do
-      if current == v then
-        local new_buf = vim.t.bufs[(i + n - 1) % #vim.t.bufs + 1]
-        if new_buf ~= current then
-          vim.api.nvim_set_current_buf(new_buf)
+    bind.normal("zR", require("ufo").openAllFolds)
+    bind.normal("zM", require("ufo").closeAllFolds)
+    bind.normal("zm", require("ufo").closeFoldsWith)
+    bind.normal("zo", function()
+        local line = vim.fn.line(".")
+        if vim.fn.foldclosed(line) == -1 then
+            vim.cmd("normal! zc")
+        else
+            vim.cmd("normal! zo")
         end
-        return
-      end
-    end
-  end
-
-  M.buffers = function()
-    mapper.bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
-    mapper.bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
-    mapper.bind.normal("<C-h>", "<cmd>bprevious<cr>", DEFAULT_OPTS)
-    mapper.bind.normal("<C-l>", "<cmd>bnext<cr>", DEFAULT_OPTS)
-    mapper.bind.normal("<leader>br", "<CMD>e #<CR>", { desc = "Close all except current", icon = "" })
-    mapper.bind.normal("<leader>bo", function()
-      require("snacks.bufdelete").other()
-    end, { desc = "Close all except current", icon = "" })
-    mapper.bind.normal("<leader>bh", function()
-      require("treesitter-context").go_to_context(vim.v.count1)
-    end, { silent = true, desc = "[h]eader of context" })
-  end
-  return M
+    end, { desc = "Fold" })
 end
 
-return createMotions
+return M
