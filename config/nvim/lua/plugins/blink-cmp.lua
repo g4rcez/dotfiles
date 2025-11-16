@@ -4,9 +4,9 @@ return {
         "newtoallofthis123/blink-cmp-fuzzy-path",
         dependencies = { "saghen/blink.cmp" },
         opts = {
-            filetypes = { "markdown", "json" },
+            max_results = 10,
             trigger_char = "@",
-            max_results = 5,
+            filetypes = { "markdown", "json", "commitmsg", "gitcommit" },
         },
     },
     {

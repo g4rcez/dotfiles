@@ -15,10 +15,10 @@ clear("v", { "<A-j>", "<A-k>" })
 local control = require("config.mappings/keybind")(wk)
 local bind = control.bind
 
+require("config.mappings/window-mode").setup({ timeout = 30000 })
+require("config.mappings/switch").setup()
 require("config.mappings/multicursor-nvim").setup(bind)
 require("config.mappings/defaults").setup(bind)
 require("config.mappings/code").setup(bind)
 require("config.mappings/bookmarks").setup(bind)
 require("config.mappings/buffers").setup(bind)
-require("config.mappings/switch").setup()
-require("config.mappings/window-mode").setup({ timeout = 30000 })

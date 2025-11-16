@@ -1,5 +1,17 @@
 return {
     {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        opts = {
+            direction = "tab",
+            float_opts = {
+                border = "single",
+                winblend = 3,
+                title_pos = "center",
+            },
+        },
+    },
+    {
         "akinsho/bufferline.nvim",
         opts = {
             options = {

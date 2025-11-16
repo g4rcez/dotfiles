@@ -63,7 +63,25 @@ return {
             { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
         },
     },
-
+    {
+        {
+            "rachartier/tiny-inline-diagnostic.nvim",
+            event = "VeryLazy",
+            priority = 1000,
+            opts = {
+                preset = "minimal",
+                transparent_bg = false,
+                transparent_cursorline = true,
+                options = {
+                    multilines = { enabled = true },
+                },
+            },
+        },
+        {
+            "neovim/nvim-lspconfig",
+            opts = { diagnostics = { virtual_text = false } },
+        },
+    },
     {
         "rachartier/tiny-code-action.nvim",
         dependencies = { { "nvim-lua/plenary.nvim" }, { "folke/snacks.nvim" } },

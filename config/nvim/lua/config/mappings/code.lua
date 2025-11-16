@@ -54,6 +54,11 @@ M.setup = function(bind)
         local SmartPick = require("config.smart-pick").setup()
         SmartPick.picker()
     end, { desc = "[p]ick smart" })
+
+    bind.normal("<leader>Db", function()
+        require("dbee").toggle()
+    end, { desc = "[D]atabase" })
+    vim.keymap.set("n", "<leader>xD", "<cmd>TinyInlineDiag toggle<cr>", { desc = "Toggle diagnostics" })
 end
 
 return M
