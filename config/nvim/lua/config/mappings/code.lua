@@ -59,6 +59,10 @@ M.setup = function(bind)
         require("dbee").toggle()
     end, { desc = "[D]atabase" })
     vim.keymap.set("n", "<leader>xD", "<cmd>TinyInlineDiag toggle<cr>", { desc = "Toggle diagnostics" })
+
+    vim.keymap.set("n", "<leader>cb", function()
+        require("menu").open("default")
+    end, {})
 end
 
 return M

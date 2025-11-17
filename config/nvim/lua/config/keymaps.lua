@@ -17,6 +17,7 @@ local bind = control.bind
 
 require("config.mappings/window-mode").setup({ timeout = 30000 })
 require("config.mappings/switch").setup()
+require("config.terminal").setup({ auto_insert = true, direction = "buffer" })
 require("config.mappings/multicursor-nvim").setup(bind)
 require("config.mappings/defaults").setup(bind)
 require("config.mappings/code").setup(bind)
