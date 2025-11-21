@@ -78,7 +78,7 @@ znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
 znap fpath _atuin    "atuin gen-completions --shell zsh"
 
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
+

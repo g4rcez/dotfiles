@@ -112,8 +112,8 @@ return {
                     mode_colors = {
                         n = "#ffffff",
                         i = "green",
-                        v = "cyan",
-                        V = "cyan",
+                        v = "blue",
+                        V = "blue",
                         ["\22"] = "cyan",
                         c = "orange",
                         s = "purple",

@@ -25,13 +25,20 @@ M.setup = function(bind)
     bind.normal("j", "gj", DEFAULT_OPTS)
     bind.normal("k", "gk", DEFAULT_OPTS)
     bind.visual("<", "<gv", DEFAULT_OPTS)
-    bind.visual("<leader>sr", "<cmd>!tail -r<CR>", { desc = "Reverse sort lines" })
-    bind.visual("<leader>ss", "<cmd>sort<CR>", { desc = "Sort lines" })
     bind.visual(">", ">gv", DEFAULT_OPTS)
     bind.x("p", [["_dP]], DEFAULT_OPTS)
     bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
     bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
     bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
+
+    bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
+    bind.visual("<leader>sn", ":sort<CR>", { desc = "[s]ort numbers" })
+    bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
+    bind.visual(
+        "<leader>ss",
+        ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>",
+        { desc = "[s]ort size" }
+    )
 
     bind.normal("zR", require("ufo").openAllFolds)
     bind.normal("zM", require("ufo").closeAllFolds)

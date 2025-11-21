@@ -1,5 +1,4 @@
 return {
-    { "folke/flash.nvim", event = "VeryLazy", enabled = false },
     {
         "mason-org/mason.nvim",
         opts = {

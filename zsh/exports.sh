@@ -1,5 +1,6 @@
-export UID=$(id -u)
-export GID=$(id -g)
+export UID="$(id -u)"
+export GID="$(id -g)"
+export WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 #####################################################################################
 ## PATH
 export GOPATH=$HOME/go

@@ -44,6 +44,7 @@ return {
     {
         "saghen/blink.cmp",
         opts_extend = { "sources.default" },
+        dependencies = { "fang2hou/blink-copilot" },
         opts = {
             signature = { enabled = true },
             completion = {

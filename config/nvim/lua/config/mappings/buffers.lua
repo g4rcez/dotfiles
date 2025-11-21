@@ -15,6 +15,7 @@ local function openMiniFilesRootDir()
 end
 
 M.setup = function(bind)
+    bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
     bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
     bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
     bind.normal("<C-h>", "<cmd>bprevious<cr>", DEFAULT_OPTS)
