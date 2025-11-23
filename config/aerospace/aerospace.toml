@@ -9,55 +9,63 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 [key-mapping]
-    preset = 'qwerty'
+preset = 'qwerty'
 
 [mode.main.binding]
-    alt-shift-c = 'reload-config'
-    alt-shift-w = 'mode windows'
+alt-shift-c = 'reload-config'
+alt-shift-w = 'mode windows'
 
-    alt-shift-h = 'focus --boundaries-action wrap-around-the-workspace left'
-    alt-shift-l = 'focus --boundaries-action wrap-around-the-workspace right'
+alt-shift-h = 'focus --boundaries-action wrap-around-the-workspace left'
+alt-shift-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
-    alt-7 = 'workspace 7'
-    alt-8 = 'workspace 8'
-    alt-9 = 'workspace 9'
-    alt-0 = 'workspace 0'
-    cmd-h = []
-    cmd-alt-h = []
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 0'
+cmd-h = []
+cmd-alt-h = []
 
-    shift-alt-1 = 'move-node-to-workspace --focus-follows-window 1'
-    shift-alt-2 = 'move-node-to-workspace --focus-follows-window 2'
-    shift-alt-3 = 'move-node-to-workspace --focus-follows-window 3'
-    shift-alt-4 = 'move-node-to-workspace --focus-follows-window 4'
-    shift-alt-5 = 'move-node-to-workspace --focus-follows-window 5'
-    shift-alt-6 = 'move-node-to-workspace --focus-follows-window 6'
-    shift-alt-7 = 'move-node-to-workspace --focus-follows-window 7'
-    shift-alt-8 = 'move-node-to-workspace --focus-follows-window 8'
-    shift-alt-9 = 'move-node-to-workspace --focus-follows-window 9'
-    shift-alt-0 = 'move-node-to-workspace --focus-follows-window 0'
+shift-alt-1 = 'move-node-to-workspace --focus-follows-window 1'
+shift-alt-2 = 'move-node-to-workspace --focus-follows-window 2'
+shift-alt-3 = 'move-node-to-workspace --focus-follows-window 3'
+shift-alt-4 = 'move-node-to-workspace --focus-follows-window 4'
+shift-alt-5 = 'move-node-to-workspace --focus-follows-window 5'
+shift-alt-6 = 'move-node-to-workspace --focus-follows-window 6'
+shift-alt-7 = 'move-node-to-workspace --focus-follows-window 7'
+shift-alt-8 = 'move-node-to-workspace --focus-follows-window 8'
+shift-alt-9 = 'move-node-to-workspace --focus-follows-window 9'
+shift-alt-0 = 'move-node-to-workspace --focus-follows-window 0'
 
 [mode.windows.binding]
-    esc = 'mode main'
+esc = 'mode main'
 
-    h = 'focus --boundaries-action wrap-around-the-workspace left'
-    j = 'focus --boundaries-action wrap-around-the-workspace down'
-    k = 'focus --boundaries-action wrap-around-the-workspace up'
-    l = 'focus --boundaries-action wrap-around-the-workspace right'
-    minus = 'resize smart -50'
-    equal = 'resize smart +50'
-    b = "balance-sizes"
+h = 'focus --boundaries-action wrap-around-the-workspace left'
+j = 'focus --boundaries-action wrap-around-the-workspace down'
+k = 'focus --boundaries-action wrap-around-the-workspace up'
+l = 'focus --boundaries-action wrap-around-the-workspace right'
+minus = 'resize smart -50'
+equal = 'resize smart +50'
+b = "balance-sizes"
 
-    alt-h = 'move left'
-    alt-j = 'move down'
-    alt-k = 'move up'
-    alt-l = 'move right'
+alt-h = 'move left'
+alt-j = 'move down'
+alt-k = 'move up'
+alt-l = 'move right'
 
 [[on-window-detected]]
-    if.app-id =  'org.alacritty'
-    run = 'layout floating'
+if.app-id = 'org.alacritty'
+if.app-name-regex-substring = 'alacritty'
+check-further-callbacks = true
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+check-further-callbacks = true
+run = ['layout floating']
+

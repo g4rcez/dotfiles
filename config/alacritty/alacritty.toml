@@ -5,13 +5,12 @@ TERM = "xterm-256color"
 opacity = 1
 padding.x = 2
 padding.y = 1
-decorations = "Buttonless"
 decorations_theme_variant = "Dark"
 blur = true
 resize_increments = true
 option_as_alt = "Both"
 startup_mode = "Windowed"
-
+dimensions = { columns = 80, lines = 50 }
 
 [font]
 normal.family = "JetBrainsMono Nerd Font"

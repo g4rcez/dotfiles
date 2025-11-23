@@ -1,0 +1,6 @@
+#!/bin/bash
+
+TODAY_NOTE=$(date +%Y-%m-%d)
+
+mkdir -p $HOME/Documents/notes
+nvim "$HOME/Documents/notes/$TODAY_NOTE.md"

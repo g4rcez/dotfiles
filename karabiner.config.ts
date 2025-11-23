@@ -1,4 +1,9 @@
-import { createKarabinerConfig, karabiner, KarabinerRule, Manipulator } from "@dotfiles/plugins";
+import {
+    createKarabinerConfig,
+    karabiner,
+    KarabinerRule,
+    Manipulator,
+} from "@dotfiles/plugins";
 
 const modKeys = karabiner.createHyperSubLayers({
     k: { to: [{ key_code: "up_arrow" }], description: "Up arrow" },
@@ -48,6 +53,22 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         b: karabiner.browser("Default", "Personal profile", ""),
         w: karabiner.app("Spotify"),
         t: karabiner.app("Telegram"),
+        m: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop",
+            "Monitoring with htop",
+        ),
+        j: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect",
+            "Inspect json",
+        ),
+        n: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
+            "Temporary notes",
+        ),
+        c: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
+            "CLI math expressions",
+        ),
     },
     m: {
         "1": karabiner.aerospace(
@@ -251,24 +272,6 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         m: karabiner.app("Telegram"),
         w: karabiner.app("Webstorm"),
         b: karabiner.browser("Default", "Open default profile"),
-    },
-    a: {
-        m: karabiner.shell(
-            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop",
-            "Monitoring with htop",
-        ),
-        j: karabiner.shell(
-            "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect",
-            "Inspect json",
-        ),
-        n: karabiner.shell(
-            "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
-            "Temporary notes",
-        ),
-        c: karabiner.shell(
-            "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
-            "CLI math expressions",
-        ),
     },
 });
 

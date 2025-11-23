@@ -20,7 +20,7 @@ const shell = (cmd: string, description: string = ""): LayerCommand => ({
     to: [{ shell_command: cmd }],
 });
 
-export const BROWSER = "Microsoft Edge";
+export const BROWSER = "Google Chrome";
 
 const browser = (
     profile: "Profile 1" | "Default",

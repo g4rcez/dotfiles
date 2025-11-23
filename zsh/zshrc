@@ -1,5 +1,6 @@
 ##############################################################################################################
 ## exports
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
@@ -17,6 +18,7 @@ zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 znap eval starship 'starship init zsh --print-full-init'
+# source "$HOME/Documents/g4rcez/moonshell/moonshell.zsh"
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
 PLUGINS=(
     "MichaelAquilina/zsh-auto-notify"

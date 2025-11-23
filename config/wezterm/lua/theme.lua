@@ -21,7 +21,7 @@ Config.show_tabs_in_tab_bar = false
 Config.use_fancy_tab_bar = false
 Config.window_background_opacity = 1
 Config.window_decorations = "RESIZE"
-Config.window_padding = { top = 0, bottom = 0, left = 5, right = 5 }
+Config.window_padding = { top = 1, bottom = 1, left = 5, right = 5 }
 Config.color_schemes = { ["catppuccin-custom"] = theme }
 Config.color_scheme = "catppuccin-custom"
 
