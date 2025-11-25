@@ -5,24 +5,12 @@ return {
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
     { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
-    {
-        enabled = false,
-        "windwp/nvim-ts-autotag",
-        event = "LazyFile",
-        opts = {},
-    },
-    {
-        "folke/ts-comments.nvim",
-        event = "VeryLazy",
-        opts = {},
-    },
+    { enabled = false, "windwp/nvim-ts-autotag" },
+    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } } },
-    {
-        "zeioth/garbage-day.nvim",
-        dependencies = "neovim/nvim-lspconfig",
-        event = "VeryLazy",
-        opts = {},
-    },
+    { "zeioth/garbage-day.nvim", dependencies = "neovim/nvim-lspconfig", event = "VeryLazy", opts = {} },
+    { "windwp/nvim-autopairs", event = "InsertEnter", config = true, opts = { check_ts = true } },
+    { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
     {
         "olrtg/nvim-emmet",
         config = function()
@@ -30,17 +18,6 @@ return {
                 require("nvim-emmet").wrap_with_abbreviation()
             end, { desc = "[e]mmet" })
         end,
-    },
-    {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-        opts = { check_ts = true },
-    },
-    {
-        opts = {},
-        "kevinhwang91/nvim-ufo",
-        dependencies = { "kevinhwang91/promise-async" },
     },
     {
         "axelvc/template-string.nvim",
@@ -56,30 +33,16 @@ return {
         },
     },
     {
-        "Wansmer/treesj",
-        opts = { use_default_keymaps = false, max_join_length = 180 },
-        keys = {
-            { "<leader>cJ", "<cmd>TSJToggle<cr>", desc = "[J]oin Toggle" },
-            { "<leader>cj", "<cmd>TSJToggle<cr>", desc = "[j]oin Toggle" },
-        },
-    },
-    {
-        {
-            "rachartier/tiny-inline-diagnostic.nvim",
-            event = "VeryLazy",
-            priority = 1000,
-            opts = {
-                preset = "minimal",
-                transparent_bg = false,
-                transparent_cursorline = true,
-                options = {
-                    multilines = { enabled = true },
-                },
+        "rachartier/tiny-inline-diagnostic.nvim",
+        event = "VeryLazy",
+        priority = 1000,
+        opts = {
+            preset = "minimal",
+            transparent_bg = false,
+            transparent_cursorline = true,
+            options = {
+                multilines = { enabled = true },
             },
-        },
-        {
-            "neovim/nvim-lspconfig",
-            opts = { diagnostics = { virtual_text = false } },
         },
     },
     {
@@ -140,6 +103,7 @@ return {
         ---@class PluginLspOpts
         opts = {
             ---@type lspconfig.options
+            diagnostics = { virtual_text = false },
             inlay_hints = { enabled = false },
             servers = {
                 ["cspell-lsp"] = {},

@@ -1,14 +1,12 @@
 local M = {}
 
--- Store terminal buffer numbers
 M.terminals = {}
 
--- Configuration
 M.config = {
+    size = 30,
     shell = nil,
     auto_insert = true,
     direction = "buffer",
-    size = 30,
     float_opts = { relative = "editor", width = 0.8, height = 0.8, row = 0.1, col = 0.1, border = "rounded" },
 }
 

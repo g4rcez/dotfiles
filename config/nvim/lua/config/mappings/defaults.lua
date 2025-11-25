@@ -32,7 +32,8 @@ M.setup = function(bind)
     bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
 
     bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
-    bind.visual("<leader>sn", ":sort<CR>", { desc = "[s]ort numbers" })
+    bind.visual("<leader>su", ":sort u<CR>", { desc = "[s]ort unique" })
+    bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
     bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
     bind.visual(
         "<leader>ss",
