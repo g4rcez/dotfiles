@@ -1,4 +1,8 @@
-local wk = require("which-key")
+local wk = { add = function() end }
+
+if not vim.g.vscode then
+    wk = require("which-key")
+end
 
 ---@param mode string|string[]
 ---@param items string[]
