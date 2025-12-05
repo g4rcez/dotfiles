@@ -58,11 +58,18 @@ M.setup = function(bind)
     bind.normal("<leader>Db", function()
         require("dbee").toggle()
     end, { desc = "[D]atabase" })
-    vim.keymap.set("n", "<leader>xD", "<cmd>TinyInlineDiag toggle<cr>", { desc = "Toggle diagnostics" })
 
-    vim.keymap.set("n", "<leader>cb", function()
+    bind.normal("<leader>xD", "<cmd>TinyInlineDiag toggle<cr>", { desc = "Toggle diagnostics" })
+
+    bind.normal("<leader>cb", function()
         require("menu").open("default")
     end, {})
+
+    bind.normal("<leader>uh", function()
+        local diag = require("tiny-inline-diagnostic")
+        diag.toggle()
+        vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+    end, { desc = "Disable inline hints" })
 end
 
 return M

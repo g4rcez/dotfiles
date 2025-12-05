@@ -220,6 +220,6 @@ function tmux-start() {
 
 ### AI commands
 function aicommit(){
-     git diff -U5 | pbcopy && open "raycast://ai-commands/git-commit?arguments='{{.Form.Explain | quote}}'"
+     git diff HEAD -U5 | pbcopy && open "raycast://ai-commands/git-commit?arguments='{{.Form.Explain | quote}}'"
 }
 

@@ -2,18 +2,6 @@ local M = {}
 
 local DEFAULT_OPTS = { noremap = true, silent = true }
 
-local function openMiniFiles()
-    local MiniFiles = require("mini.files")
-    local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-    MiniFiles.reveal_cwd()
-end
-
-local function openMiniFilesRootDir()
-    local MiniFiles = require("mini.files")
-    local _ = MiniFiles.close() or MiniFiles.open()
-    MiniFiles.reveal_cwd()
-end
-
 M.setup = function(bind)
     bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
     bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
@@ -32,9 +20,8 @@ M.setup = function(bind)
     bind.normal("<leader>g=", function()
         require("mini.diff").toggle_overlay(0)
     end, { desc = "Git diff" })
-    bind.normal("<leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "[g]it [D]iff" })
+    bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
     bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
-    -- bind.normal("<leader>ee", openMiniFilesRootDir, { desc = "MiniFilesExplorer" })
     bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "MiniFiles" })
     bind.normal("<leader>sO", "<CMD>Fyler kind=float<CR>", { desc = "Fyler float" })
     bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })

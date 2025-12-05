@@ -55,6 +55,7 @@ opt.winminwidth = 5
 opt.wrap = false
 
 vim.diagnostic.config({
+    virtual_text = false,
     severity_sort = true,
     signs = {
         text = {
