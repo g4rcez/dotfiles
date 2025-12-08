@@ -61,3 +61,9 @@ function safeImport() {
         source "$1";
     fi
 }
+
+function clearNvim() {
+    rm -rf "$HOME/.cache/nvim"
+    rm -rf "$HOME/.local/share/nvim"
+    rm -rf "$HOME/.local/state/nvim"
+}
