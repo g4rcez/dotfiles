@@ -17,7 +17,7 @@ FG="#89b4fa"
 DISABLED="#64748b"
 HIGHLIGHT="#89b4fa"
 G04=#141621
-BG="#181825"
+BG="#1A1B26"
 
 # Status options
 tmux_set status-interval 1

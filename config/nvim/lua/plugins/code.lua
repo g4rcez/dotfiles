@@ -4,14 +4,60 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "editorconfig/editorconfig-vim",
+    {
+        cond = not require("config.vscode").isVscode(),
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            },
+        },
+    },
     { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
-    { enabled = false, "windwp/nvim-ts-autotag" },
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } } },
-    { "zeioth/garbage-day.nvim", dependencies = "neovim/nvim-lspconfig", event = "VeryLazy", opts = {} },
-    { "windwp/nvim-autopairs", event = "InsertEnter", config = true, opts = { check_ts = true } },
-    { opts = {}, "kevinhwang91/nvim-ufo", dependencies = { "kevinhwang91/promise-async" } },
     {
+        "folke/todo-comments.nvim",
+        optional = true,
+        keys = {
+            {
+                "<leader>st",
+                function()
+                    require("snacks").picker.todo_comments()
+                end,
+                desc = "Todo",
+            },
+            {
+                "<leader>sT",
+                function()
+                    require("snacks").picker.todo_comments { keywords = { "TODO", "FIX", "FIXME" } }
+                end,
+                desc = "Todo/Fix/Fixme",
+            },
+        },
+    },
+    {
+        cond = not require("config.vscode").isVscode(),
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        event = "VeryLazy",
+        opts = {},
+    },
+    {
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
+        config = true,
+        opts = { check_ts = true },
+    },
+    {
+        cond = not require("config.vscode").isVscode(),
+        opts = {},
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+    },
+    {
+        cond = not require("config.vscode").isVscode(),
         "olrtg/nvim-emmet",
         config = function()
             vim.keymap.set({ "n", "v" }, "<leader>ce", function()
@@ -33,53 +79,6 @@ return {
         },
     },
     {
-        "rachartier/tiny-inline-diagnostic.nvim",
-        event = "VeryLazy",
-        priority = 1000,
-        opts = {
-            preset = "minimal",
-            transparent_bg = false,
-            transparent_cursorline = true,
-            options = {
-                multilines = { enabled = true },
-            },
-        },
-    },
-    {
-        "rachartier/tiny-code-action.nvim",
-        dependencies = { { "nvim-lua/plenary.nvim" }, { "folke/snacks.nvim" } },
-        event = "LspAttach",
-        opts = {
-            backend = "delta",
-            picker = "snacks",
-            resolve_timeout = 100,
-            backend_opts = {
-                diffsofancy = { header_lines_to_remove = 4 },
-                delta = { header_lines_to_remove = 4, args = { "--line-numbers" } },
-                difftastic = {
-                    header_lines_to_remove = 1,
-                    args = {
-                        "--color=always",
-                        "--display=inline",
-                        "--syntax-highlight=on",
-                    },
-                },
-            },
-            signs = {
-                quickfix = { "", { link = "DiagnosticWarning" } },
-                others = { "", { link = "DiagnosticWarning" } },
-                refactor = { "", { link = "DiagnosticInfo" } },
-                ["refactor.move"] = { "󰪹", { link = "DiagnosticInfo" } },
-                ["refactor.extract"] = { "", { link = "DiagnosticError" } },
-                ["source.organizeImports"] = { "", { link = "DiagnosticWarning" } },
-                ["source.fixAll"] = { "󰃢", { link = "DiagnosticError" } },
-                ["source"] = { "", { link = "DiagnosticError" } },
-                ["rename"] = { "󰑕", { link = "DiagnosticWarning" } },
-                ["codeAction"] = { "", { link = "DiagnosticWarning" } },
-            },
-        },
-    },
-    {
         "brenoprata10/nvim-highlight-colors",
         opts = {
             enable_hex = true,
@@ -96,36 +95,6 @@ return {
             virtual_symbol_prefix = "",
             virtual_symbol_suffix = " ",
             virtual_symbol_position = "inline",
-        },
-    },
-    {
-        "neovim/nvim-lspconfig",
-        ---@class PluginLspOpts
-        opts = {
-            ---@type lspconfig.options
-            diagnostics = { virtual_text = false },
-            inlay_hints = { enabled = false },
-            servers = {
-                ["cspell-lsp"] = {},
-                dockerls = {},
-                docker_compose_language_service = {},
-                vstls = {
-                    settings = {
-                        typescript = {
-                            tsserver = { maxTsServerMemory = 12000 },
-                            suggest = { enabled = true, completeFunctionCalls = true },
-                            inlayHints = {
-                                variableTypes = { enabled = true },
-                                parameterTypes = { enabled = true },
-                                enumMemberValues = { enabled = true },
-                                parameterNames = { enabled = "literals" },
-                                functionLikeReturnTypes = { enabled = true },
-                                propertyDeclarationTypes = { enabled = true },
-                            },
-                        },
-                    },
-                },
-            },
         },
     },
 }

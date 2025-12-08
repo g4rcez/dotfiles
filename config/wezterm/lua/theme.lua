@@ -1,28 +1,24 @@
 local wezterm = require("wezterm")
-local theme = wezterm.color.get_builtin_schemes()["Catppuccin Mocha"]
-theme.background = "#181826"
 
-local Config = {}
+local M = {}
 
-Config.adjust_window_size_when_changing_font_size = false
-Config.animation_fps = 120
-Config.audible_bell = "Disabled"
-Config.color_scheme = "Catppuccin Mocha"
-Config.cursor_blink_ease_out = "EaseInOut"
-Config.cursor_blink_rate = 0
-Config.default_cursor_style = "SteadyBlock"
-Config.enable_scroll_bar = false
-Config.enable_tab_bar = false
-Config.hide_tab_bar_if_only_one_tab = false
-Config.macos_window_background_blur = 0
-Config.max_fps = 120
-Config.scrollback_lines = 1000000
-Config.show_tabs_in_tab_bar = false
-Config.use_fancy_tab_bar = false
-Config.window_background_opacity = 1
-Config.window_decorations = "RESIZE"
-Config.window_padding = { top = 1, bottom = 1, left = 5, right = 5 }
-Config.color_schemes = { ["catppuccin-custom"] = theme }
-Config.color_scheme = "catppuccin-custom"
+M.adjust_window_size_when_changing_font_size = false
+M.animation_fps = 120
+M.audible_bell = "Disabled"
+M.cursor_blink_ease_out = "EaseInOut"
+M.cursor_blink_rate = 0
+M.default_cursor_style = "SteadyBlock"
+M.enable_scroll_bar = false
+M.enable_tab_bar = false
+M.hide_tab_bar_if_only_one_tab = false
+M.macos_window_background_blur = 0
+M.max_fps = 120
+M.scrollback_lines = 1000000
+M.show_tabs_in_tab_bar = false
+M.use_fancy_tab_bar = false
+M.window_background_opacity = 1
+M.window_decorations = "RESIZE"
+M.window_padding = { top = 1, bottom = 1, left = 5, right = 5 }
+M.color_scheme = "tokyonight"
 
-return Config
+return M

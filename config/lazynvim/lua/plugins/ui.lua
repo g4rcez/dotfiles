@@ -1,48 +1,40 @@
 return {
-    {
-        "folke/tokyonight.nvim",
-        priority = 1000,
-        ---@class tokyonight.Config
-        ---@field on_colors fun(colors: ColorScheme)
-        ---@field on_highlights fun(highlights: tokyonight.Highlights, colors: ColorScheme)
-        opts = {
-            style = "night",
-        },
-        config = function()
-            vim.cmd.colorscheme "tokyonight-night"
-        end,
-    },
-    {
-        "folke/noice.nvim",
-        event = "VeryLazy",
-        dependencies = { "MunifTanjim/nui.nvim" },
-        cond = not require("config.vscode").isVscode(),
-        opts = {
-            lsp = {
-                override = {
-                    ["vim.lsp.util.stylize_markdown"] = true,
-                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                },
-            },
-            presets = {
-                inc_rename = false,
-                bottom_search = false,
-                command_palette = true,
-                lsp_doc_border = false,
-                long_message_to_split = true,
-            },
-        },
-    },
+    { "rcarriga/nvim-notify", enabled = false },
+    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+    { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
+    { "folke/noice.nvim", opts = { notify = { enabled = false } } },
     {
         "2kabhishek/nerdy.nvim",
-        cmd = "Nerdy",
         dependencies = { "folke/snacks.nvim" },
+        cmd = "Nerdy",
         opts = { max_recents = 30, add_default_keybindings = true, copy_to_clipboard = false, copy_register = "+" },
     },
     {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
+        "akinsho/bufferline.nvim",
+        opts = {
+            options = {
+                themable = true,
+                mode = "buffers",
+                numbers = "none",
+                color_icons = true,
+                truncate_names = true,
+                show_close_icon = true,
+                diagnostics = "nvim_lsp",
+                show_buffer_icons = true,
+                persist_buffer_sort = true,
+                show_tab_indicators = true,
+                show_duplicate_prefix = true,
+                always_show_bufferline = true,
+                auto_toggle_bufferline = true,
+                close_command = "bdelete! %d",
+                show_buffer_close_icons = true,
+                duplicates_across_groups = true,
+                left_mouse_command = "buffer %d",
+                diagnostics_update_on_event = true,
+                right_mouse_command = "bdelete! %d",
+                hover = { enabled = true, delay = 200, reveal = { "close" } },
+            },
+        },
     },
     {
         "Bekaboo/dropbar.nvim",
@@ -51,20 +43,21 @@ return {
             bar = { padding = { left = 8, right = 2 } },
         },
         config = function()
-            local dropbar_api = require "dropbar.api"
+            local dropbar_api = require("dropbar.api")
             vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
             vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
             vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
         end,
     },
     {
+        enabled = false,
         "rebelot/heirline.nvim",
         lazy = false,
         dependencies = { "Zeioth/heirline-components.nvim", "nvim-mini/mini.bufremove" },
         opts = function()
-            local lib = require "heirline-components.all"
+            local lib = require("heirline-components.all")
             local component = lib.component
-            local colors = require("catppuccin.palettes").get_palette "mocha"
+            local colors = require("catppuccin.palettes").get_palette("mocha")
             require("heirline").load_colors(colors)
             vim.o.showtabline = 2
             vim.opt.showcmdloc = "statusline"
@@ -135,7 +128,7 @@ return {
                     "ModeChanged",
                     pattern = "*:*",
                     callback = vim.schedule_wrap(function()
-                        vim.cmd "redrawstatus"
+                        vim.cmd("redrawstatus")
                     end),
                 },
             }
@@ -146,9 +139,9 @@ return {
                     end,
                 },
                 tabline = {
-                    component.tabline_conditional_padding { filename = {} },
-                    component.tabline_buffers { filename = {} },
-                    component.tabline_tabpages {},
+                    component.tabline_conditional_padding({ filename = {} }),
+                    component.tabline_buffers({ filename = {} }),
+                    component.tabline_tabpages({}),
                 },
                 winbar = nil,
                 statusline = {
@@ -166,8 +159,8 @@ return {
             }
         end,
         config = function(_, opts)
-            local heirline = require "heirline"
-            local components = require "heirline-components.all"
+            local heirline = require("heirline")
+            local components = require("heirline-components.all")
             components.init.subscribe_to_events()
             heirline.load_colors(components.hl.get_colors())
             heirline.setup(opts)

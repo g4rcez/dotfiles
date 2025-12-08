@@ -3,7 +3,6 @@ return {
         "folke/snacks.nvim",
         priority = 1000,
         lazy = false,
-        cond = not require("config.vscode").isVscode(),
         ---@type snacks.Config
         opts = function(_, opts)
             vim.g.snacks_animate = false
@@ -32,10 +31,72 @@ return {
                 layout = { enabled = true },
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
-                rename = { enabled = true },
-                dashboard = { enabled = true },
+                notify = { enabled = false },
+                notifier = { enabled = false },
                 explorer = { enabled = true },
                 terminal = { enabled = true },
+                dashboard = {
+                    width = 40,
+                    row = nil,
+                    col = nil,
+                    pane_gap = 1,
+                    autokeys = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", -- autokey sequence
+                    preset = {
+                        pick = nil,
+                        ---@type snacks.dashboard.Item[]
+                        keys = {
+                            {
+                                icon = " ",
+                                key = "f",
+                                desc = "Find File",
+                                action = ":lua Snacks.dashboard.pick('files')",
+                            },
+                            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                            {
+                                icon = " ",
+                                key = "g",
+                                desc = "Find Text",
+                                action = ":lua Snacks.dashboard.pick('live_grep')",
+                            },
+                            {
+                                icon = " ",
+                                key = "r",
+                                desc = "Recent Files",
+                                action = ":lua Snacks.dashboard.pick('oldfiles')",
+                            },
+                            {
+                                icon = " ",
+                                key = "c",
+                                desc = "Config",
+                                action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+                            },
+                            { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                            {
+                                icon = "󰒲 ",
+                                key = "L",
+                                desc = "Lazy",
+                                action = ":Lazy",
+                                enabled = package.loaded.lazy ~= nil,
+                            },
+                            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                        },
+                        header = [[
+    █████████  █████   █████ █████ ██████   ██████
+  ███░░░░░███░░███   ░░███ ░░███ ░░██████ ██████
+ ███     ░░░  ░███    ░███  ░███  ░███░█████░███
+░███          ░███    ░███  ░███  ░███░░███ ░███
+░███    █████ ░░███   ███   ░███  ░███ ░░░  ░███
+░░███  ░░███   ░░░█████░    ░███  ░███      ░███
+ ░░█████████     ░░███      █████ █████     █████
+  ░░░░░░░░░       ░░░      ░░░░░ ░░░░░     ░░░░░
+ ]],
+                    },
+                    sections = {
+                        { section = "header" },
+                        { section = "keys",   gap = 0, padding = 0 },
+                        { section = "startup" },
+                    },
+                },
                 quickfile = { enabled = true },
                 statuscolumn = { enabled = true },
                 picker = {
@@ -70,18 +131,18 @@ return {
                                     title = "{title} {live} {flags}",
                                     title_pos = "center",
                                 },
-                                { win = "list", border = "none" },
+                                { win = "list",    border = "none" },
                                 { win = "preview", title = "{preview}", border = "rounded" },
                             },
                         },
                         telescope = {
                             reverse = false,
                             layout = {
-                                backdrop = true,
                                 box = "horizontal",
+                                backdrop = 50,
                                 height = 0.95,
                                 width = 0.95,
-                                border = "solid",
+                                border = "rounded",
                                 {
                                     box = "vertical",
                                     {
@@ -96,7 +157,7 @@ return {
                                 {
                                     win = "preview",
                                     title = "{preview:Preview}",
-                                    width = 0.65,
+                                    width = 0.60,
                                     border = "none",
                                     title_pos = "center",
                                 },
@@ -221,6 +282,11 @@ return {
                 desc = "Buffers",
             },
             {
+                "<leader><Tab>",
+                require("snacks").picker.buffers,
+                desc = "Buffers",
+            },
+            {
                 "<leader>fb",
                 require("snacks").picker.buffers,
                 desc = "Buffers",
@@ -231,15 +297,19 @@ return {
                 desc = "Find Files",
             },
             {
+                "<leader>fp",
+                require("snacks").picker.projects,
+                desc = "Projects",
+            },
+            {
                 "<leader>fr",
                 require("snacks").picker.recent,
                 desc = "Recent",
             },
+            -- git
             {
                 "<leader>gb",
-                function()
-                    require("snacks").picker.git_branches()
-                end,
+                Snacks.picker.git_branches,
                 desc = "Git Branches",
             },
             {
@@ -278,7 +348,7 @@ return {
             {
                 "<leader>gd",
                 function()
-                    require("snacks").picker.git_diff()
+                    Snacks.picker.git_diff()
                 end,
                 desc = "Git Diff (Hunks)",
             },
@@ -370,6 +440,13 @@ return {
                 desc = "Diagnostics",
             },
             {
+                "<leader>xd",
+                function()
+                    Snacks.picker.diagnostics_buffer()
+                end,
+                desc = "Buffer Diagnostics",
+            },
+            {
                 "<leader>sD",
                 function()
                     Snacks.picker.diagnostics_buffer()
@@ -456,7 +533,7 @@ return {
             {
                 "<leader>sR",
                 function()
-                    Snacks.picker.ressume()
+                    Snacks.picker.resume()
                 end,
                 desc = "Resume",
             },
@@ -559,13 +636,7 @@ return {
             {
                 "<leader>fd",
                 function()
-                    require("snacks").picker.diagnostics_buffer {
-                        format = "diagnostic",
-                        finder = "diagnostics",
-                        filter = { buf = true },
-                        matcher = { sort_empty = true },
-                        sort = { fields = { "severity", "file", "lnum" } },
-                    }
+                    Snacks.picker.diagnostics_buffer()
                 end,
                 desc = "Diagnostics",
             },
@@ -579,9 +650,9 @@ return {
             {
                 "<leader>cR",
                 function()
-                    require("snacks").rename.rename_file()
+                    Snacks.rename.rename_file()
                 end,
-                desc = "[c]ode [R]ename file",
+                desc = "Rename File",
             },
             {
                 "<leader>gB",
@@ -623,38 +694,10 @@ return {
             {
                 "[[",
                 function()
-                    require("snacks").words.jump(-vim.v.count1)
+                    Snacks.words.jump(-vim.v.count1)
                 end,
                 desc = "Prev Reference",
                 mode = { "n", "t" },
-            },
-            {
-                "<leader>gi",
-                function()
-                    Snacks.picker.gh_issue()
-                end,
-                desc = "GitHub Issues (open)",
-            },
-            {
-                "<leader>gI",
-                function()
-                    Snacks.picker.gh_issue { state = "all" }
-                end,
-                desc = "GitHub Issues (all)",
-            },
-            {
-                "<leader>gp",
-                function()
-                    Snacks.picker.gh_pr()
-                end,
-                desc = "GitHub Pull Requests (open)",
-            },
-            {
-                "<leader>gP",
-                function()
-                    Snacks.picker.gh_pr { state = "all" }
-                end,
-                desc = "GitHub Pull Requests (all)",
             },
         },
         init = function()
