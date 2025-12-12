@@ -5,12 +5,7 @@ return {
         ---@class tokyonight.Config
         ---@field on_colors fun(colors: ColorScheme)
         ---@field on_highlights fun(highlights: tokyonight.Highlights, colors: ColorScheme)
-        opts = {
-            style = "night",
-        },
-        config = function()
-            vim.cmd.colorscheme "tokyonight-night"
-        end,
+        opts = { style = "night" },
     },
     {
         "folke/noice.nvim",
@@ -43,9 +38,11 @@ return {
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,
+        cond = not require("config.vscode").isVscode(),
     },
     {
         "Bekaboo/dropbar.nvim",
+        cond = not require("config.vscode").isVscode(),
         event = "UIEnter",
         opts = {
             bar = { padding = { left = 8, right = 2 } },
@@ -60,6 +57,7 @@ return {
     {
         "rebelot/heirline.nvim",
         lazy = false,
+        cond = not require("config.vscode").isVscode(),
         dependencies = { "Zeioth/heirline-components.nvim", "nvim-mini/mini.bufremove" },
         opts = function()
             local lib = require "heirline-components.all"

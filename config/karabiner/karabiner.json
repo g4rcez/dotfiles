@@ -1446,7 +1446,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions"
+                      "text": "Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions\nr: Node REPL"
                     }
                   }
                 ],
@@ -1461,7 +1461,7 @@
                   {
                     "set_notification_message": {
                       "id": "dev.garcez.vim_mode",
-                      "text": "Persistent mode - Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions"
+                      "text": "Persistent mode - Layer \"return_or_enter\" Tmux leader\n\nbackslash: Window: right-half\nreturn_or_enter: Open Wezterm\nb: Personal profile\nw: Open Spotify\nt: Open Telegram\nm: Monitoring with htop\nj: Inspect json\nn: Temporary notes\nc: CLI math expressions\nr: Node REPL"
                     }
                   }
                 ],
@@ -1967,6 +1967,62 @@
                 "to": [
                   {
                     "shell_command": "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "leader + return_or_enter + r - Node REPL",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_SINGLE",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + return_or_enter + r - Node REPL",
+                "from": {
+                  "key_code": "r"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e '~/.local/share/mise/installs/node/lts/bin/node'"
+                  },
+                  {
+                    "halt": true,
+                    "set_variable": {
+                      "name": "VIM_MODE_return_or_enter_SINGLE",
+                      "value": "off"
+                    }
+                  },
+                  {
+                    "set_notification_message": {
+                      "id": "dev.garcez.vim_mode",
+                      "text": ""
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "VIM_MODE_return_or_enter_HOLD",
+                    "value": "on"
+                  }
+                ],
+                "description": "leader + return_or_enter + r - Node REPL",
+                "from": {
+                  "key_code": "r"
+                },
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/alacritty -e '~/.local/share/mise/installs/node/lts/bin/node'"
                   }
                 ],
                 "type": "basic"

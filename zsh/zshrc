@@ -84,3 +84,10 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
+# BEGIN LUCIUS
+source "/Users/garcez/.config/lucius/env.sh"
+# END LUCIUS
+
+# BEGIN BUNSEN
+source "/Users/garcez/.config/lucius/env.sh"
+# END BUNSEN

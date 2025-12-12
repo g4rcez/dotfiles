@@ -11,6 +11,19 @@ vim.lsp.config("html", {
     cmd = { "vscode-html-language-server", "--stdio" },
 })
 
+vim.lsp.config("jsonls", {
+    before_init = function(_, newConfig)
+        newConfig.settings.json.schemas = newConfig.settings.json.schemas or {}
+        vim.list_extend(newConfig.settings.json.schemas, require("schemastore").json.schemas())
+    end,
+    settings = {
+        json = {
+            format = { enable = true },
+            validate = { enable = true },
+        },
+    },
+})
+
 vim.lsp.config("denols", {
     filetypes = { "ts" },
     capabilities = capabilities,
@@ -210,12 +223,28 @@ vim.lsp.config("lua_ls", {
     },
 })
 
+vim.filetype.add {
+    extension = { rasi = "rasi", rofi = "rasi", wofi = "rasi" },
+    filename = {
+        ["vifmrc"] = "vim",
+    },
+    pattern = {
+        [".*/waybar/config"] = "jsonc",
+        [".*/mako/config"] = "dosini",
+        [".*/kitty/.+%.conf"] = "kitty",
+        [".*/hypr/.+%.conf"] = "hyprlang",
+        ["%.env%.[%w_.-]+"] = "sh",
+    },
+}
+vim.treesitter.language.register("bash", "kitty")
+
 vim.lsp.enable {
     "html",
     -- npm i -g bash-language-server
     "bashls",
     -- npm i -g vscode-langservers-extracted
     "cssls",
+    "jsonls",
     -- npm i -g css-variables-language-server
     "css_variables",
     "denols",

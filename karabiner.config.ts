@@ -69,6 +69,10 @@ const withLeaderKeys = karabiner.createLeaderLayers({
             "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
             "CLI math expressions",
         ),
+        r: karabiner.shell(
+            "/opt/homebrew/bin/alacritty -e '~/.local/share/mise/installs/node/lts/bin/node'",
+            "Node REPL",
+        ),
     },
     m: {
         "1": karabiner.aerospace(

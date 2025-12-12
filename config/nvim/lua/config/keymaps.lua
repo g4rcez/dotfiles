@@ -14,7 +14,6 @@ local function createMapper()
             local o = opts or {}
             local desc = o.desc or ""
             M.keymap(modes, from, action, { desc = desc })
-            -- wk.add { from, action, desc = desc or "", mode = modes, icon = o.icon }
         end
         return fn
     end
@@ -63,8 +62,7 @@ bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
 bind.visual("<leader>su", ":sort u<CR>", { desc = "[s]ort unique" })
 bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
 bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
-bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>",
-    { desc = "[s]ort size" })
+bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>", { desc = "[s]ort size" })
 
 bind.normal("]d", function()
     vim.diagnostic.goto_next { min = vim.diagnostic.severity.WARN }
@@ -85,7 +83,7 @@ bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "�
 bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
 bind.normal("<C-h>", "<cmd>bprevious<cr>", bind.DEFAULT_OPTS)
 bind.normal("<C-l>", "<cmd>bnext<cr>", bind.DEFAULT_OPTS)
-bind.normal("<leader>br", "<CMD>e #<CR>", { desc = "Close all except current", icon = "" })
+bind.normal("<leader>br", "<CMD>e#<CR>", { desc = "Buffer reopen last", icon = "" })
 bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
 bind.normal("<leader>bo", function()
     require("snacks.bufdelete").other()
@@ -108,6 +106,14 @@ bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics"
 local function buf_abs()
     return vim.api.nvim_buf_get_name(0)
 end
+
+bind.normal("<leader>um", function()
+    Snacks.dim.disable()
+end, { desc = "Disable dim" })
+
+bind.normal("<leader>uf", function()
+    Snacks.dim.enable()
+end, { desc = "Enable dim" })
 
 bind.normal("<leader>cy", function()
     local rel = vim.fn.fnamemodify(buf_abs(), ":.")
@@ -132,3 +138,4 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
+

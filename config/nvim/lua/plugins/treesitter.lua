@@ -1,5 +1,10 @@
 return {
     {
+        "b0o/SchemaStore.nvim",
+        lazy = true,
+        version = false,
+    },
+    {
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         build = ":TSUpdate",

@@ -3,6 +3,7 @@ local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptre
 return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
+    "tpope/vim-repeat",
     "editorconfig/editorconfig-vim",
     {
         cond = not require("config.vscode").isVscode(),
@@ -10,6 +11,7 @@ return {
         ft = "lua",
         opts = {
             library = {
+                "nvim-dap-ui",
                 { path = "${3rd}/luv/library", words = { "vim%.uv" } },
             },
         },

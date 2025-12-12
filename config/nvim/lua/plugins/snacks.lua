@@ -25,17 +25,20 @@ return {
             set(0, "SnacksPickerListTitle", { fg = bg, bg = bg })
             -- @type snacks.Config
             return vim.tbl_deep_extend("force", opts, {
+                gh = { enabled = true },
+                git = { enabled = true },
                 input = { enabled = true },
                 scope = { enabled = true },
                 words = { enabled = true },
                 indent = { enabled = true },
                 layout = { enabled = true },
+                rename = { enabled = true },
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
-                rename = { enabled = true },
-                dashboard = { enabled = true },
                 explorer = { enabled = true },
                 terminal = { enabled = true },
+                dashboard = { enabled = true },
+                gitbrowse = { enabled = true },
                 quickfile = { enabled = true },
                 statuscolumn = { enabled = true },
                 picker = {
@@ -112,7 +115,7 @@ return {
                                 backdrop = true,
                                 border = "double",
                                 box = "vertical",
-                                preset = "telescope",
+                                preset = "vscode",
                             },
                         },
                     },
