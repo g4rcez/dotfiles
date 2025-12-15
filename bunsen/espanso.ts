@@ -1,202 +1,201 @@
-import { dotbot } from "@dotfiles/core";
-import {
-    createEspansoConfig,
-    runMain,
-    snippetsPlugin,
-} from "@dotfiles/plugins";
+import { createEspansoConfig } from "@g4rcez/bunsen";
+
+const DENO_BIN = "deno run --allow-read";
+
+const MAIN_SCRIPT = '"$HOME/dotfiles/espanso/main.ts"';
+
+const runMain = (cmd: string) => `${DENO_BIN} ${MAIN_SCRIPT} ${cmd}`;
 
 const withParam = (x: string) => `${x}\\[(?P<N>.*)\\]`;
 
-export default createEspansoConfig(
-    {
-        trigger: ";",
-        snippets: dotbot.dotfiles("snippets"),
-    },
-    (espanso) => {
+export const espansoConfig = createEspansoConfig(
+    { trigger: ";", snippets: "~/.config/espanso/match/base.yml" },
+    (config) => {
         const simpleTriggers = [
-            espanso.insert("blog", "https://garcez.dev", "My blog"),
-            espanso.insert("git", "https://github.com/g4rcez/", "My github"),
-            espanso.insert(
+            config.insert("blog", "https://garcez.dev", "My blog"),
+            config.insert("git", "https://github.com/g4rcez/", "My github"),
+            config.insert(
                 "twitter",
                 "https://x.com/garcez_allan",
-                "My twitter",
+                "My twitter"
             ),
-            espanso.insert(
+            config.insert(
                 "dotfiles",
                 "https://github.com/g4rcez/dotfiles",
-                "My dotfiles",
+                "My dotfiles"
             ),
-            espanso.insert(
+            config.insert(
                 "youtube",
                 "https://www.youtube.com/@allangarcez",
-                "My youtube channel",
+                "My youtube channel"
             ),
-            espanso.insert(
+            config.insert(
                 "linkedin",
                 "https://www.linkedin.com/in/allan-garcez/",
-                "My Linkedin",
+                "My Linkedin"
             ),
 
-            espanso.format("date", "date", "%d/%m/%Y", "Date in DD/MM/YYYY"),
-            espanso.format("time", "date", "%H:%M", "Time in HH:MM"),
-            espanso.format("now", "date", "%d/%m/%Y %H:%M", "Datetime"),
-            espanso.clipboard(
+            config.format("date", "date", "%d/%m/%Y", "Date in DD/MM/YYYY"),
+            config.format("time", "date", "%H:%M", "Time in HH:MM"),
+            config.format("now", "date", "%d/%m/%Y %H:%M", "Datetime"),
+            config.clipboard(
                 "mdl",
                 "link",
                 "[$|$]({{link}})",
-                "Clipboard to Markdown link",
+                "Clipboard to Markdown link"
             ),
-            espanso.form(
+            config.form(
                 "hex",
                 "{{hex}}",
                 runMain(`colors --mode=hex --value="{{form.input}}"`),
-                "Color to HEX",
+                "Color to HEX"
             ),
-            espanso.form(
+            config.form(
                 "hsl",
                 "{{hsl}}",
                 runMain(`colors --mode=hsl --value="{{form.input}}"`),
-                "Color to HSL",
+                "Color to HSL"
             ),
-            espanso.form(
+            config.form(
                 "rgb",
                 "{{rgb}}",
                 runMain(`colors --mode=rgb --value="{{form.input}}"`),
-                "Color to RGB",
+                "Color to RGB"
             ),
-            espanso.insert(
+            config.insert(
                 "sort",
                 `! awk '{ print length(), $0 | "sort -n | cut -d\\\\  -f2-" }'`,
-                "Vim order by line length",
+                "Vim order by line length"
             ),
             // nerd fonts
-            espanso.insert("ivim", "", "Nerd font: neovim"),
-            espanso.insert("ishell", "", "Nerd font: shell/terminal"),
-            espanso.insert("idotnet", "", "Nerd font: dotnet"),
-            espanso.insert("inode", "", "Nerd font: nodejs"),
-            espanso.insert("itmux", "", "Nerd font: tmux"),
+            config.insert("ivim", "", "Nerd font: neovim"),
+            config.insert("ishell", "", "Nerd font: shell/terminal"),
+            config.insert("idotnet", "", "Nerd font: dotnet"),
+            config.insert("inode", "", "Nerd font: nodejs"),
+            config.insert("itmux", "", "Nerd font: tmux"),
+
             // emojis 👍🏾
-            espanso.insert("eyes", "👀", "Emoji: Eyes"),
-            espanso.insert("s2", "❤️", "Emoji: Heart"),
-            espanso.insert("angry", "😡", "Emoji: Heart"),
-            espanso.insert("respect", "🫡", "Emoji: Eyes"),
-            espanso.insert("cold", "🥶", "Emoji: Cold face"),
-            espanso.insert("blz", "👍🏾", "Emoji: Thumbs up"),
-            espanso.insert("deal", "🤝🏾", "Emoji: Handshake"),
-            espanso.insert("boom", "🤯", "Emoji: Exploding head"),
-            espanso.insert("party", "🥳", "Emoji: Partying face"),
-            espanso.insert("up", "🙌🏾", "Emoji: Raising hands"),
-            espanso.insert("pray", "🙏🏾", "Emoji: Folded hands"),
-            espanso.insert("cry", "😭", "Emoji: Loudly crying face"),
-            espanso.insert("think", "🤔", "Emoji: Thinking face"),
-            espanso.insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug"),
-            espanso.insert(
+            config.insert("eyes", "👀", "Emoji: Eyes"),
+            config.insert("s2", "❤️", "Emoji: Heart"),
+            config.insert("angry", "😡", "Emoji: Heart"),
+            config.insert("respect", "🫡", "Emoji: Eyes"),
+            config.insert("cold", "🥶", "Emoji: Cold face"),
+            config.insert("blz", "👍🏾", "Emoji: Thumbs up"),
+            config.insert("deal", "🤝🏾", "Emoji: Handshake"),
+            config.insert("boom", "🤯", "Emoji: Exploding head"),
+            config.insert("party", "🥳", "Emoji: Partying face"),
+            config.insert("up", "🙌🏾", "Emoji: Raising hands"),
+            config.insert("pray", "🙏🏾", "Emoji: Folded hands"),
+            config.insert("cry", "😭", "Emoji: Loudly crying face"),
+            config.insert("think", "🤔", "Emoji: Thinking face"),
+            config.insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug"),
+            config.insert(
                 "tnc",
                 "$|$\n\u2026\u2026..\u2026../\u00B4\u00AF/)\u2026\u2026\u2026.. (\\\u00AF`\\\r\n\u2026\u2026\u2026\u2026/\u2026.//\u2026\u2026\u2026.. \u2026\\\\\u2026.\\\r\n\u2026\u2026\u2026../\u2026.//\u2026\u2026\u2026\u2026 \u2026.\\\\\u2026.\\\r\n\u2026../\u00B4\u00AF/\u2026./\u00B4\u00AF\\\u2026\u2026\u2026../\u00AF `\\\u2026.\\\u00AF`\\\r\n.././\u2026/\u2026./\u2026./.|_\u2026\u2026_| .\\\u2026.\\\u2026.\\\u2026\\.\\..\r\n(.(\u2026.(\u2026.(\u2026./.)..)..(..(. \\\u2026.)\u2026.)\u2026.).)\r\n.\\\u2026\u2026\u2026\u2026\u2026.\\/\u2026/\u2026.\\. ..\\/\u2026\u2026\u2026",
-                "Emoji: TNC",
+                "Emoji: TNC"
             ),
         ];
 
         const shellTriggers = [
-            espanso.shell(
+            config.shell(
                 "url",
                 "Sanitize URL in clipboard",
-                runMain(`url --value "$ESPANSO_CLIPBOARD"`),
+                runMain(`url --value "$ESPANSO_CLIPBOARD"`)
             ),
-            espanso.shell(
+            config.shell(
                 "cnpj",
                 "Generate random and valid CNPJ",
-                runMain("cnpj"),
+                runMain("cnpj")
             ),
-            espanso.shell(
+            config.shell(
                 "cpf",
                 "Generate random and valid CPF",
-                runMain("cpf"),
+                runMain("cpf")
             ),
-            espanso.shell(
+            config.shell(
                 "master",
                 "Generate valid mastercard number",
-                runMain("card --brand=master"),
+                runMain("card --brand=master")
             ),
-            espanso.shell(
+            config.shell(
                 "cvvmaster",
                 "Generate valid CVV for mastercard",
-                runMain("card --brand=master --cvv"),
+                runMain("card --brand=master --cvv")
             ),
-            espanso.shell(
+            config.shell(
                 "visa",
                 "Generate valid visacard number",
-                runMain("card --brand=visa"),
+                runMain("card --brand=visa")
             ),
-            espanso.shell(
+            config.shell(
                 "cvvvisa",
                 "Generate valid CVV visacard",
-                runMain("card --brand=visa --cvv"),
+                runMain("card --brand=visa --cvv")
             ),
-            espanso.shell(
+            config.shell(
                 "amex",
                 "Generate valid amexcard number",
-                runMain("card --brand=amex"),
+                runMain("card --brand=amex")
             ),
-            espanso.shell(
+            config.shell(
                 "cvvamex",
                 "Generate valid CVV amexcard",
-                runMain("card --brand=amex --cvv"),
+                runMain("card --brand=amex --cvv")
             ),
-            espanso.shell("uuid", "Generate UUIDv7", runMain("uuid")),
-            espanso.shell(
+            config.shell("uuid", "Generate UUIDv7", runMain("uuid")),
+            config.shell(
                 "pass",
                 "Generate randomic safe password",
                 runMain("password --length $ESPANSO_N"),
-                withParam("pass"),
+                withParam("pass")
             ),
-            espanso.shell(
+            config.shell(
                 "cellphone",
                 "Generate cellphone number",
-                runMain("phone --mode=cellphone"),
+                runMain("phone --mode=cellphone")
             ),
-            espanso.shell(
+            config.shell(
                 "telephone",
                 "Generate telephone number",
-                runMain("phone --mode=telephone"),
+                runMain("phone --mode=telephone")
             ),
-            espanso.shell("email", "FakerJS email", runMain("email")),
-            espanso.shell(
+            config.shell("email", "FakerJS email", runMain("email")),
+            config.shell(
                 "yesterday",
                 "Get yesterday date",
-                runMain(`dates --value=yesterday`),
+                runMain(`dates --value=yesterday`)
             ),
-            espanso.shell(
+            config.shell(
                 "tomorrow",
                 "Get tomorrow date",
-                runMain(`dates --value=tomorrow`),
+                runMain(`dates --value=tomorrow`)
             ),
-            espanso.shell(
+            config.shell(
                 "dd",
                 "Get date in ISO format",
-                runMain("dates --value=isod"),
+                runMain("dates --value=isod")
             ),
-            espanso.shell(
+            config.shell(
                 "iso",
                 "Get date in ISO format",
-                runMain(`dates --value=iso`),
+                runMain(`dates --value=iso`)
             ),
-            espanso.shell(
+            config.shell(
                 "r",
                 "Repeat string N times",
                 runMain("repeat --value=$ESPANSO_N"),
-                withParam("r"),
+                withParam("r")
             ),
-            espanso.shell(
+            config.shell(
                 "d",
                 "Sum/Subtract days",
                 runMain("dates --value=$ESPANSO_N"),
-                withParam("d"),
+                withParam("d")
             ),
         ];
 
         const randomTriggers = [
-            espanso.random(
+            config.random(
                 "cep",
                 [
                     "04538-133",
@@ -208,9 +207,9 @@ export default createEspansoConfig(
                     "30260-070",
                     "70040-010",
                 ],
-                "Get random CEP from list",
+                "Get random CEP from list"
             ),
-            espanso.random(
+            config.random(
                 "lorem",
                 [
                     "Lorem ipsum dolor sit amet",
@@ -218,15 +217,10 @@ export default createEspansoConfig(
                     "Vivamus scelerisque eros volutpat, dictum nulla in, posuere felis.",
                     "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.",
                 ],
-                "Lero lero generate - LoremIpsum",
+                "Lero lero generate - LoremIpsum"
             ),
         ];
-
-        return {
-            ...espanso,
-            tasks: [snippetsPlugin],
-            imports: [dotbot.home(".shortcuts.yml")],
-            matches: shellTriggers.concat(randomTriggers, simpleTriggers),
-        };
-    },
+        const matches = shellTriggers.concat(randomTriggers, simpleTriggers);
+        return { matches };
+    }
 );

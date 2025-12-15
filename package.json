@@ -1,5 +1,7 @@
 {
-  "dependencies": {
-    "@g4rcez/bunsen": "0.0.1"
-  }
+    "name": "@g4rcez/dotfiles",
+    "private": true,
+    "dependencies": {
+        "@g4rcez/bunsen": "^0.0.2"
+    }
 }

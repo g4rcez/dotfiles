@@ -1,9 +1,4 @@
-import {
-    createKarabinerConfig,
-    karabiner,
-    KarabinerRule,
-    Manipulator,
-} from "@dotfiles/plugins";
+import { karabiner, KarabinerRule, Manipulator } from "./karabiner.plugin";
 
 const modKeys = karabiner.createHyperSubLayers({
     k: { to: [{ key_code: "up_arrow" }], description: "Up arrow" },
@@ -13,12 +8,12 @@ const modKeys = karabiner.createHyperSubLayers({
     open_bracket: karabiner.open(
         "raycast://extensions/g4rcez/whichkey/whichkey",
         "",
-        "Snippets",
+        "Snippets"
     ),
     close_bracket: karabiner.open(
         "raycast://extensions/g4rcez/snippets/snippets",
         "",
-        "Snippets",
+        "Snippets"
     ),
     4: {
         to: [{ key_code: "right_arrow", modifiers: ["left_command"] }],
@@ -27,7 +22,7 @@ const modKeys = karabiner.createHyperSubLayers({
     e: karabiner.open(
         "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
         "",
-        "Open emojis",
+        "Open emojis"
     ),
     0: {
         to: [{ key_code: "left_arrow", modifiers: ["left_command"] }],
@@ -36,7 +31,7 @@ const modKeys = karabiner.createHyperSubLayers({
     tab: karabiner.open(
         "raycast://extensions/raycast/navigation/switch-windows",
         "",
-        "Switch windows with raycast",
+        "Switch windows with raycast"
     ),
 });
 
@@ -55,55 +50,55 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         t: karabiner.app("Telegram"),
         m: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop",
-            "Monitoring with htop",
+            "Monitoring with htop"
         ),
         j: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect",
-            "Inspect json",
+            "Inspect json"
         ),
         n: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
-            "Temporary notes",
+            "Temporary notes"
         ),
         c: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
-            "CLI math expressions",
+            "CLI math expressions"
         ),
         r: karabiner.shell(
             "/opt/homebrew/bin/alacritty -e '~/.local/share/mise/installs/node/lts/bin/node'",
-            "Node REPL",
+            "Node REPL"
         ),
     },
     m: {
         "1": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 1",
+            "move-node-to-workspace --focus-follows-window 1"
         ),
         "2": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 2",
+            "move-node-to-workspace --focus-follows-window 2"
         ),
         "3": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 3",
+            "move-node-to-workspace --focus-follows-window 3"
         ),
         "4": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 4",
+            "move-node-to-workspace --focus-follows-window 4"
         ),
         "5": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 5",
+            "move-node-to-workspace --focus-follows-window 5"
         ),
         "6": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 6",
+            "move-node-to-workspace --focus-follows-window 6"
         ),
         "7": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 7",
+            "move-node-to-workspace --focus-follows-window 7"
         ),
         "8": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 8",
+            "move-node-to-workspace --focus-follows-window 8"
         ),
         "9": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 9",
+            "move-node-to-workspace --focus-follows-window 9"
         ),
         "0": karabiner.aerospace(
-            "move-node-to-workspace --focus-follows-window 0",
+            "move-node-to-workspace --focus-follows-window 0"
         ),
     },
     w: {
@@ -119,16 +114,16 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         "9": karabiner.aerospace("workspace 9"),
         "0": karabiner.aerospace("workspace 0"),
         a: karabiner.aerospace(
-            "focus --boundaries-action wrap-around-the-workspace left",
+            "focus --boundaries-action wrap-around-the-workspace left"
         ),
         d: karabiner.aerospace(
-            "focus --boundaries-action wrap-around-the-workspace right",
+            "focus --boundaries-action wrap-around-the-workspace right"
         ),
         h: karabiner.aerospace(
-            "focus --boundaries-action wrap-around-the-workspace left",
+            "focus --boundaries-action wrap-around-the-workspace left"
         ),
         l: karabiner.aerospace(
-            "focus --boundaries-action wrap-around-the-workspace right",
+            "focus --boundaries-action wrap-around-the-workspace right"
         ),
         r: karabiner.aerospace("move --boundaries workspace right"),
         f: karabiner.aerospace("fullscreen"),
@@ -159,7 +154,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         },
         n: karabiner.shell(
             "osascript $HOME/dotfiles/bin/clear-notifications",
-            "Clear notifications",
+            "Clear notifications"
         ),
         hyphen: {
             to: [{ key_code: "volume_decrement" }],
@@ -212,52 +207,52 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         description: "Raycast layer",
         i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
         q: karabiner.open(
-            "raycast://extensions/raycast/raycast-ai/search-ai-chat-presets",
+            "raycast://extensions/raycast/raycast-ai/search-ai-chat-presets"
         ),
         t: karabiner.open(
             "raycast://extensions/g4rcez/snippets/snippets",
             "",
-            "Open my personal snippets gallery",
+            "Open my personal snippets gallery"
         ),
         m: karabiner.open(
             "raycast://extensions/raycast/navigation/search-menu-items",
             "",
-            "Search menu of current app",
+            "Search menu of current app"
         ),
         w: karabiner.open(
             "raycast://extensions/raycast/navigation/switch-windows",
             "",
-            "Switch windows with raycast",
+            "Switch windows with raycast"
         ),
         c: karabiner.open(
             "raycast://extensions/raycast/raycast/confetti",
             "",
-            "Confetti",
+            "Confetti"
         ),
         d: karabiner.open(
             `raycast://extensions/yakitrak/do-not-disturb/toggle`,
             "",
-            "Do not disturb",
+            "Do not disturb"
         ),
         e: karabiner.open(
             "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
             "",
-            "Emoji finder",
+            "Emoji finder"
         ),
         p: karabiner.open(
             "raycast://extensions/thomas/color-picker/pick-color",
             "",
-            "Raycast color picker",
+            "Raycast color picker"
         ),
         s: karabiner.open(
             "raycast://extensions/mattisssa/spotify-player/yourLibrary",
             "",
-            "My spotify library",
+            "My spotify library"
         ),
         o: karabiner.open(
             "raycast://extensions/huzef44/screenocr/recognize-text",
             "",
-            "OCR screen area",
+            "OCR screen area"
         ),
     },
     b: {
@@ -267,7 +262,7 @@ const withLeaderKeys = karabiner.createLeaderLayers({
         t: karabiner.open(
             "raycast://extensions/koinzhang/browser-tabs/index",
             "",
-            "Search tabs",
+            "Search tabs"
         ),
     },
     o: {
@@ -299,9 +294,9 @@ const hyperKey: KarabinerRule = {
     ],
 } as const;
 
-export default createKarabinerConfig(
+export const karabinerConfig = karabiner.compile(
     [...modKeys.whichKey, ...withLeaderKeys.whichKey],
     hyperKey,
     modKeys.layers,
-    withLeaderKeys.layers,
+    withLeaderKeys.layers
 );

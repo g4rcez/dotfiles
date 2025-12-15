@@ -35,3 +35,5 @@ nvim/bookmarks.db.json.backup
 nvim/lazy-lock.json
 passwords.txt
 shortcuts.yml
+node_modules/
+/*/node_modules

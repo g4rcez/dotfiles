@@ -1,6 +1,5 @@
 ##############################################################################################################
 ## exports
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
 
@@ -84,10 +83,8 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
-# BEGIN LUCIUS
-source "/Users/garcez/.config/lucius/env.sh"
-# END LUCIUS
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 
 # BEGIN BUNSEN
-source "/Users/garcez/.config/lucius/env.sh"
+source "/Users/garcez/.config/bunsen/env.sh"
 # END BUNSEN

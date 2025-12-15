@@ -9,6 +9,7 @@ LOCAL_SOURCE_FILES=(
     "/opt/homebrew/bin"
     "$PNPM_HOME"
     "$GOPATH/bin"
+    "$HOME/.antigravity/antigravity/bin"
     "$HOME/.cargo/env"
     "$HOME/.local/bin"
     "$HOME/.local/share"
