@@ -1,5 +1,5 @@
 import { Script } from "../script.ts";
-import { add, format, sub } from "npm:date-fns";
+import { add, format, sub } from "date-fns";
 
 const dateFormatPtBR = Intl.DateTimeFormat("pt-BR", {
     day: "numeric",

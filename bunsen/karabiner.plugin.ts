@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 
+const HOME = process.env.HOME || "";
+
 const devices = [
     {
         disable_built_in_keyboard_if_exists: false,
@@ -92,9 +94,7 @@ const devices = [
     },
 ];
 
-const HOME = process.env.HOME || "";
-
-const dotbot = {
+const utils = {
     keys: Object.keys,
     replaceHomedir: (str: string, symbol: string = "~") =>
         str.replace(symbol, HOME),
@@ -114,12 +114,12 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                     hold: leaderHold = false,
                     ...motions
                 },
-            ]
+            ],
         ) => {
             const modal = `Layer "${key}" ${leaderDescription}` as const;
             keys.push(key);
             const whichKeyModal = Object.entries(motions).map(
-                ([key, motion]) => `${key}: ${motion.description || ""}`
+                ([key, motion]) => `${key}: ${motion.description || ""}`,
             );
             const fromModifiers = ["any"];
             if (key === key.toUpperCase()) {
@@ -140,15 +140,15 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                         to_if_alone: [
                             karabiner.vim.on(key, leaderHold),
                             karabiner.notify(
-                                `${modal}\n\n${whichKeyModal.join("\n")}`
+                                `${modal}\n\n${whichKeyModal.join("\n")}`,
                             ),
                         ],
                         to_if_held_down: [
                             karabiner.vim.on(key, true),
                             karabiner.notify(
                                 `Persistent mode - ${modal}\n\n${whichKeyModal.join(
-                                    "\n"
-                                )}`
+                                    "\n",
+                                )}`,
                             ),
                         ],
                         type: "basic",
@@ -229,7 +229,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                     const description = `leader + ${key} + ${subKey} - ${subMotion.description}`;
                     whichKey.push({
                         key: `<Leader>${karabiner.replaceWhichKeys(
-                            key as KeyCode
+                            key as KeyCode,
                         )}${karabiner.replaceWhichKeys(subKey as KeyCode)}`,
                         command: createWhichCommand(subMotion),
                         description: subMotion.description!,
@@ -249,7 +249,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                                 from: { key_code: subKey as KeyCode },
                                 to: subMotion.to!.concat(
                                     karabiner.vim.off(key, false),
-                                    karabiner.notify()
+                                    karabiner.notify(),
                                 ),
                                 type: "basic",
                             },
@@ -268,7 +268,7 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                             },
                         ],
                     };
-                }
+                },
             );
             return [
                 ...acc,
@@ -279,14 +279,14 @@ export const createLeaderLayers = (config: Config): WhichMods => {
                 ...ownMotions,
             ];
         },
-        []
+        [],
     );
     return { layers: allLayers, whichKey, keys: Array.from(new Set(keys)) };
 };
 
 export const createLeaderDisable = (
     key: string,
-    hold: boolean
+    hold: boolean,
 ): Manipulator => ({
     description: `Caps Lock -> Hyper Key(${key}_single)`,
     type: "basic",
@@ -883,7 +883,7 @@ type WhichKey = { key: string; description: string; command: string };
 const open = (
     what: string,
     params: string = "",
-    description: string = ""
+    description: string = "",
 ): LayerCommand => ({
     to: [{ shell_command: `open ${params} ${what}` }],
     description: description || `Open ${what}`,
@@ -899,7 +899,7 @@ const BROWSER = "Google Chrome";
 const browser = (
     profile: "Profile 1" | "Default",
     description: string,
-    append: string = "-n"
+    append: string = "-n",
 ): LayerCommand => ({
     description: description || `Open ${BROWSER} ${profile}`,
     to: [
@@ -935,10 +935,10 @@ const createHyperSubLayer = (
     subLayer: KeyCode,
     commands: HyperKeySublayer,
     variables: string[],
-    addWhichKey: (item: WhichKey) => void
+    addWhichKey: (item: WhichKey) => void,
 ): Manipulator[] => {
     const subLayerName = createSubLayerName(subLayer);
-    const cmds = dotbot.keys(commands);
+    const cmds = utils.keys(commands);
     const conditions = variables.filter((x) => x !== subLayerName);
     return [
         {
@@ -1000,9 +1000,11 @@ const hasTo = (str: object | string): str is LayerCommand => {
 };
 
 const createHyperSubLayers = (
-    modKeys: SubLayers
+    modKeys: SubLayers,
 ): { layers: KarabinerRule[]; hyper: string[]; whichKey: WhichKey[] } => {
-    const allSubLayerVariables = dotbot.keys(modKeys).map(createSubLayerName);
+    const allSubLayerVariables = utils
+        .keys(modKeys)
+        .map((x) => createSubLayerName(x as KeyCode));
     const whichKeyMap: WhichKey[] = [];
     const modSubLayers: KarabinerRule[] = Object.entries(modKeys).map(
         ([key, value]) => {
@@ -1039,10 +1041,10 @@ const createHyperSubLayers = (
                     key as KeyCode,
                     value as HyperKeySublayer,
                     allSubLayerVariables,
-                    (item) => whichKeyMap.push(item)
+                    (item) => whichKeyMap.push(item),
                 ),
             };
-        }
+        },
     );
     return {
         layers: modSubLayers,
@@ -1091,11 +1093,11 @@ export const createKarabinerConfig = async (
     rules: KarabinerRule[],
     whichKey: WhichKey[],
     whichKeyFile: string,
-    configFile: string
+    configFile: string,
 ) => {
     const args = { rules, whichKey, whichKeyFile, configFile };
-    whichKeyFile = dotbot.replaceHomedir(whichKeyFile);
-    configFile = dotbot.replaceHomedir(configFile);
+    whichKeyFile = utils.replaceHomedir(whichKeyFile);
+    configFile = utils.replaceHomedir(configFile);
     const dirname = path.dirname(whichKeyFile);
     const dirExist = fs.existsSync(dirname);
     if (!dirExist) {
@@ -1104,7 +1106,7 @@ export const createKarabinerConfig = async (
     fs.writeFileSync(
         whichKeyFile,
         JSON.stringify({ items: args.whichKey }),
-        "utf-8"
+        "utf-8",
     );
     fs.writeFileSync(
         configFile,
@@ -1136,21 +1138,21 @@ export const createKarabinerConfig = async (
                 ],
             },
             null,
-            2
+            2,
         ),
-        "utf-8"
+        "utf-8",
     );
     console.log(
-        `%c[karabiner] %c${dotbot.replaceHomedir(configFile)} was created`,
+        `%c[karabiner] %c${utils.replaceHomedir(configFile)} was created`,
         "color: purple",
-        ""
+        "",
     );
     console.log(
-        `%c[karabiner] %cwhichkey: ${dotbot.replaceHomedir(
-            whichKeyFile
+        `%c[karabiner] %cwhichkey: ${utils.replaceHomedir(
+            whichKeyFile,
         )} was created`,
         "color: purple",
-        ""
+        "",
     );
 };
 

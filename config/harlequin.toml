@@ -1,0 +1,7 @@
+default_profile = "default"
+
+[profiles.default]
+adapter = "postgres"
+theme = "catppuccin-mocha"
+limit = 1000
+keymap_name = ["vscode"]

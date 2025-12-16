@@ -1,15 +1,15 @@
-import { defineConfig } from "@g4rcez/bunsen";
-import { karabinerConfig } from "./bunsen/karabiner";
-import { createKarabinerConfig } from "./bunsen/karabiner.plugin";
-import path from "node:path";
+import { defineConfig, Espanso } from "@g4rcez/bunsen";
 import os from "node:os";
-import { espansoConfig } from "./bunsen/espanso";
+import path from "node:path";
+import { espanso } from "./bunsen/espanso";
+import { karabiner } from "./bunsen/karabiner";
 
 const file = (...strings: string[]) =>
     path.resolve(os.homedir(), "dotfiles", ...strings);
 
 export default defineConfig({
-    espanso: espansoConfig,
+    espanso,
+    karabiner,
     env: {
         shells: ["zsh"],
         exportFile: "~/.config/bunsen/env.sh",
@@ -42,15 +42,5 @@ export default defineConfig({
         "~/.gitconfig": file("git/gitconfig"),
         "~/.ideavimrc": file("idea/.ideavimrc"),
         "~/.zshrc": file("zsh/zshrc"),
-    },
-    hooks: {
-        beforeApply: () => {
-            createKarabinerConfig(
-                karabinerConfig.map,
-                karabinerConfig.whichKey,
-                "~/.config/karabiner/karabiner.json",
-                "~/.config/karabiner/karabiner-whichkey.json"
-            );
-        },
     },
 });

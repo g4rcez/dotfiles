@@ -1,4 +1,3 @@
-import { crypto } from "@std/crypto";
 import { Script } from "../script.ts";
 
 const numbers = "0123456789";

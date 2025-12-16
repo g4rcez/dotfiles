@@ -1,12 +1,14 @@
-#!/bin/env deno
-import * as PATH from "@std/path";
+#!/usr/bin/env bun
+import { sep } from "node:path";
 
-const HOME = Deno.env.get("HOME") || ""
+const HOME = process.env.HOME || "";
 
 async function main(): Promise<string> {
-    const paths = Deno.cwd().replace(HOME, "~").split(PATH.SEPARATOR);
-    const path = paths.map((x, i) => i === paths.length - 1 ? x : x.substring(0, 1));
-    return path.join(PATH.SEPARATOR);
+    const paths = process.cwd().replace(HOME, "~").split(sep);
+    const path = paths.map((x, i) =>
+        i === paths.length - 1 ? x : x.substring(0, 1)
+    );
+    return path.join(sep);
 }
 
 main().then((x) => console.log(x));

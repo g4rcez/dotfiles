@@ -85,6 +85,8 @@ zstyle ':zle:*' word-style unspecified
 
 WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 
+. "$HOME/.local/share/../bin/env"
+
 # BEGIN BUNSEN
 source "/Users/garcez/.config/bunsen/env.sh"
 # END BUNSEN

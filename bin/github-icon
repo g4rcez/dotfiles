@@ -1,26 +1,33 @@
-#!/bin/env deno
+#!/usr/bin/env bun
+import { execFileSync } from "node:child_process";
+
 const iconMap = {
     github: "",
-    gitlab: "",
-    bitbucket: "",
-    kernel: "",
-    archlinux: "",
+    gitlab: "",
+    bitbucket: "",
+    kernel: "",
+    archlinux: "󰣇",
     gnu: "",
-    git: "",
+    git: "󰊢",
     default: "󰊠",
 };
 
 type Icons = keyof typeof iconMap;
 
 async function main() {
-    const command = new Deno.Command("git", { cwd: Deno.cwd(), args: ["ls-remote", "--get-url"] });
-    const result = await command.output();
-    const stdout = new TextDecoder().decode(result.stdout).toString().trim();
-    const url = stdout.startsWith("git@") ? stdout.replace(/^git@/, "") : stdout.replace(/^https:\/\@/, "");
+    const stdout = execFileSync("git", ["ls-remote", "--get-url"], {
+        cwd: process.cwd(),
+        encoding: "utf-8",
+    })
+        .toString()
+        .trim();
+    const url = stdout.startsWith("git@")
+        ? stdout.replace(/^git@/, "")
+        : stdout.replace(/^https:\/\@/, "");
 
     const [resource, ...parts] = url.split(":");
 
-    const key = resource.split(".")[0];
+    const key = resource.split(".")[0]?.trim().toLowerCase();
     const icon = iconMap[key as Icons] || iconMap.default;
     const repoName = parts
         .join("")
@@ -28,7 +35,7 @@ async function main() {
         .replace(/\n/g, "")
         .replace(/\.git$/g, "")
         .trim();
-    return (`${icon} ${repoName}\r`);
+    return `${icon} ${repoName}\r`;
 }
 
 main().then((x) => console.log(x));

@@ -1,4 +1,4 @@
-import convert from "npm:color-convert";
+import convert from "color-convert";
 import { Script } from "../script.ts";
 
 const identify = (s: string) => {
