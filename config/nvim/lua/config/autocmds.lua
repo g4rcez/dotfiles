@@ -101,18 +101,3 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
 })
-
--- switch deno/ts
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        local is_node_project = vim.fn.filereadable "package.json" == 1
-        local is_deno_project = vim.fn.filereadable "deno.json" == 1
-        if client.name == "denols" and is_node_project then
-            client.stop()
-        end
-        if client.name == "vtsls" and is_deno_project then
-            client.stop()
-        end
-    end,
-})

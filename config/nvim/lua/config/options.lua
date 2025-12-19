@@ -32,6 +32,7 @@ vim.opt.autowrite = true
 vim.opt.breakindent = true
 vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
 vim.opt.cmdheight = 0
+vim.opt.showtabline = 0
 vim.opt.completeopt = { 'menu', 'fuzzy', 'menuone', 'noselect', 'popup' }
 vim.opt.conceallevel = 0
 vim.opt.confirm = true

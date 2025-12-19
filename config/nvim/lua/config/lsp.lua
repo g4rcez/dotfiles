@@ -165,28 +165,28 @@ vim.lsp.config("tailwindcss", {
     init_options = { userLanguages = {} },
 })
 
-vim.lsp.config("vtsls", {
-    capabilities = capabilities,
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-    settings = {
-        refactor_auto_rename = true,
-        typescript = {
-            tsserver = { maxTsServerMemory = 12000 },
-            suggest = {
-                enabled = true,
-                completeFunctionCalls = true,
-            },
-            inlayHints = {
-                variableTypes = { enabled = true },
-                parameterTypes = { enabled = true },
-                enumMemberValues = { enabled = true },
-                parameterNames = { enabled = "literals" },
-                functionLikeReturnTypes = { enabled = true },
-                propertyDeclarationTypes = { enabled = true },
-            },
-        },
-    },
-})
+-- vim.lsp.config("vtsls", {
+--     capabilities = capabilities,
+--     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+--     settings = {
+--         refactor_auto_rename = true,
+--         typescript = {
+--             tsserver = { maxTsServerMemory = 12000 },
+--             suggest = {
+--                 enabled = true,
+--                 completeFunctionCalls = true,
+--             },
+--             inlayHints = {
+--                 variableTypes = { enabled = true },
+--                 parameterTypes = { enabled = true },
+--                 enumMemberValues = { enabled = true },
+--                 parameterNames = { enabled = "literals" },
+--                 functionLikeReturnTypes = { enabled = true },
+--                 propertyDeclarationTypes = { enabled = true },
+--             },
+--         },
+--     },
+-- })
 
 vim.lsp.config("yamlls", {
     capabilities = capabilities,
@@ -260,6 +260,6 @@ vim.lsp.enable {
     "oxlint",
     "rust_analyzer",
     "tailwindcss",
-    "vtsls",
+    -- "vtsls",
     "yamlls",
 }
