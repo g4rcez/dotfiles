@@ -1,5 +1,6 @@
 return {
     {
+        enabled = false,
         "rebelot/heirline.nvim",
         lazy = false,
         cond = not require("config.vscode").isVscode(),
@@ -9,7 +10,7 @@ return {
             local component = lib.component
             local colors = require("catppuccin.palettes").get_palette "mocha"
             require("heirline").load_colors(colors)
-            vim.o.showtabline = 2
+            vim.o.showtabline = 0
             vim.opt.showcmdloc = "statusline"
             local ViMode = {
                 init = function(self)
@@ -54,9 +55,9 @@ return {
                     },
                     mode_colors = {
                         n = "#ffffff",
-                        i = "green",
-                        v = "blue",
-                        V = "blue",
+                        i = "#a6e3a1",
+                        v = "#b4befe",
+                        V = "#b4befe",
                         ["\22"] = "cyan",
                         c = "orange",
                         s = "purple",
@@ -82,26 +83,46 @@ return {
                     end),
                 },
             }
+
+            -- Filename component with file icon
+            local FileName = {
+                init = function(self)
+                    self.filename = vim.api.nvim_buf_get_name(0)
+                end,
+                provider = function(self)
+                    local filename = vim.fn.fnamemodify(self.filename, ":t")
+                    if filename == "" then
+                        return " 󰈚 [No Name] "
+                    end
+
+                    -- Get file icon from nvim-web-devicons
+                    local ok, devicons = pcall(require, "nvim-web-devicons")
+                    if ok then
+                        local icon, icon_color = devicons.get_icon(filename, nil, { default = true })
+                        if icon then
+                            return " " .. icon .. " " .. filename .. " "
+                        end
+                    end
+
+                    return " " .. filename .. " "
+                end,
+                hl = { bold = true, fg = "fg" },
+            }
             return {
                 opts = {
                     disable_winbar_cb = function()
                         return false
                     end,
                 },
-                tabline = {
-                    component.tabline_conditional_padding { filename = {} },
-                    component.tabline_buffers { filename = {} },
-                    component.tabline_tabpages {},
-                    component.tabline_conditional_padding { filename = {} },
-                },
+                tabline = nil,  -- Disabled: was showing buffers at the top
                 winbar = nil,
                 statusline = {
                     hl = { fg = "fg", bg = "bg" },
                     ViMode,
                     component.diagnostics(),
                     component.git_branch(),
-                    component.file_info(),
                     component.git_diff(),
+                    FileName,
                     component.fill(),
                     component.cmd_info(),
                     component.lsp(),

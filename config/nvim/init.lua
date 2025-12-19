@@ -13,5 +13,4 @@ require("lazy").setup {
     install = { colorscheme = { "catppuccin", "tokyonight" } },
 }
 
-vim.cmd.colorscheme "catppuccin-mocha"
 

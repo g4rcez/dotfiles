@@ -18,7 +18,7 @@ return {
             trim_scope = "outer",
             mode = "cursor",
             separator = nil,
-            zindex = 20,
+            zindex = 10,
             on_attach = nil,
         },
     },
