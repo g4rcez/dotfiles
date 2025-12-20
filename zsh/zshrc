@@ -1,4 +1,3 @@
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
@@ -81,9 +80,4 @@ znap fpath _atuin    "atuin gen-completions --shell zsh"
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
-
-# BEGIN BUNSEN
 source "$HOME/.config/bunsen/env.sh"
-# END BUNSEN
-
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '

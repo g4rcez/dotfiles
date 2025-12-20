@@ -1,7 +1,7 @@
 #!/bin/zsh
-WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
-export WORDCHARS="${WORDCHARS/\//}"
 zmodload -i zsh/complist
+WORDCHARS="*?_-.[]~=&;!#$%^(){}<> "
+export WORDCHARS="${WORDCHARS/\//}"
 
 ############################## setops #################################
 # history
