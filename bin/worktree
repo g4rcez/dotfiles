@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+WORKTREE_BASE="$HOME/.tmp/git"
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command> [options]
+
+Commands:
+    add <branch> [base]    Create a worktree for <branch> (optionally from <base>)
+    list                   List all worktrees for current repo
+    remove <branch>        Remove a worktree
+    cd <branch>            Print the path (use: cd \$(gwt cd <branch>))
+    clean                  Remove all worktrees for current repo
+
+Examples:
+    gwt add feature/new-login
+    gwt add feature/hotfix main
+    gwt add feature/experiment origin/develop
+    gwt remove feature/new-login
+    cd \$(gwt cd feature/new-login)
+EOF
+    exit 1
+}
+
+get_repo_name() {
+    basename "$(git rev-parse --show-toplevel 2>/dev/null)" || {
+        echo "Error: not in a git repository" >&2
+        exit 1
+    }
+}
+
+get_worktree_path() {
+    local repo_name="$1"
+    local branch="$2"
+    local safe_branch="${branch//\//-}"
+    echo "$WORKTREE_BASE/$repo_name/$safe_branch"
+}
+
+cmd_add() {
+    local branch="${1:-}"
+    local base="${2:-}"
+
+    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; usage; }
+
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local worktree_path
+    worktree_path="$(get_worktree_path "$repo_name" "$branch")"
+
+    mkdir -p "$(dirname "$worktree_path")"
+
+    if git show-ref --verify --quiet "refs/heads/$branch" 2>/dev/null; then
+        git worktree add "$worktree_path" "$branch"
+    elif git show-ref --verify --quiet "refs/remotes/origin/$branch" 2>/dev/null; then
+        git worktree add "$worktree_path" "$branch"
+    elif [[ -n "$base" ]]; then
+        git worktree add -b "$branch" "$worktree_path" "$base"
+    else
+        git worktree add -b "$branch" "$worktree_path"
+    fi
+
+    echo ""
+    echo "Worktree created at: $worktree_path"
+    echo "Run: cd $worktree_path"
+}
+
+cmd_list() {
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local repo_base="$WORKTREE_BASE/$repo_name"
+
+    echo "Worktrees for $repo_name:"
+    echo ""
+    git worktree list | while read -r line; do
+        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$(git rev-parse --show-toplevel)"* ]]; then
+            echo "  $line"
+        fi
+    done
+}
+
+cmd_remove() {
+    local branch="${1:-}"
+
+    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; usage; }
+
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local worktree_path
+    worktree_path="$(get_worktree_path "$repo_name" "$branch")"
+
+    if [[ -d "$worktree_path" ]]; then
+        git worktree remove "$worktree_path"
+        echo "Removed worktree: $worktree_path"
+    else
+        echo "Error: worktree not found at $worktree_path" >&2
+        exit 1
+    fi
+}
+
+cmd_cd() {
+    local branch="${1:-}"
+    
+    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; exit 1; }
+    
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local worktree_path
+    worktree_path="$(get_worktree_path "$repo_name" "$branch")"
+    
+    if [[ -d "$worktree_path" ]]; then
+        echo "$worktree_path"
+    else
+        echo "Error: worktree not found at $worktree_path" >&2
+        exit 1
+    fi
+}
+
+cmd_clean() {
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local repo_base="$WORKTREE_BASE/$repo_name"
+
+    if [[ ! -d "$repo_base" ]]; then
+        echo "No worktrees found for $repo_name"
+        exit 0
+    fi
+
+    echo "Removing all worktrees for $repo_name..."
+
+    for dir in "$repo_base"/*; do
+        [[ -d "$dir" ]] || continue
+        git worktree remove "$dir" 2>/dev/null && echo "Removed: $dir" || true
+    done
+
+    git worktree prune
+    rmdir "$repo_base" 2>/dev/null || true
+
+    echo "Done"
+}
+
+main() {
+    local cmd="${1:-}"
+    shift || true
+    
+    case "$cmd" in
+        add)    cmd_add "$@" ;;
+        list|ls) cmd_list "$@" ;;
+        remove|rm) cmd_remove "$@" ;;
+        cd)     cmd_cd "$@" ;;
+        clean)  cmd_clean "$@" ;;
+        *)      usage ;;
+    esac
+}
+
+main "$@"

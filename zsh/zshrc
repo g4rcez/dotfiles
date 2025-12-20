@@ -1,11 +1,10 @@
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 ##############################################################################################################
 ## exports
 source $HOME/dotfiles/zsh/exports.sh
 source $HOME/dotfiles/zsh/utils.sh
-
 LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
 safeImport "$LOCAL_VARIABLES_EXPORTS"
-
 ##############################################################################################################
 ## znap
 ZNAP_DIR="$HOME/.znap/"
@@ -83,10 +82,8 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
-
-. "$HOME/.local/share/../bin/env"
-
 # BEGIN BUNSEN
-source "/Users/garcez/.config/bunsen/env.sh"
+source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
+
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
