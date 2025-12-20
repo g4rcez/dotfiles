@@ -61,10 +61,10 @@ cmd_add() {
     else
         git worktree add -b "$branch" "$worktree_path"
     fi
-
     echo ""
     echo "Worktree created at: $worktree_path"
-    echo "Run: cd $worktree_path"
+    echo "cd $worktree_path"
+    cd "$worktree_path"
 }
 
 cmd_list() {
@@ -141,6 +141,10 @@ cmd_clean() {
     echo "Done"
 }
 
+origin () {
+    cd "$(git worktree list | awk '{print $1}' | head -1)"
+}
+
 main() {
     local cmd="${1:-}"
     shift || true
@@ -151,6 +155,7 @@ main() {
         remove|rm) cmd_remove "$@" ;;
         cd)     cmd_cd "$@" ;;
         clean)  cmd_clean "$@" ;;
+        clean)  origin "$@" ;;
         *)      usage ;;
     esac
 }
