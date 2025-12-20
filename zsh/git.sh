@@ -175,6 +175,11 @@ function commit () {
     fi
 }
 
+function acommit() {
+    git add .
+    commit $@
+}
+
 function lastcommit() {
     git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1
 }
