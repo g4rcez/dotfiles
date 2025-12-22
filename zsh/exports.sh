@@ -19,6 +19,7 @@ LOCAL_SOURCE_FILES=(
     "$HOME/tools"
     "$HOME/tools/google-cloud-sdk/bin"
     "$HOME/dotfiles/bin"
+    "$HOME/.bun/bin"
     "$HOME/.opencode/bin"
 )
 

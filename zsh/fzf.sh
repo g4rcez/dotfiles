@@ -17,6 +17,8 @@ export FZF_COMPLETION_TRIGGER="**"
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
 --ansi
 --bind 'ctrl-/:toggle-preview'
+--bind 'ctrl-d:preview-up'
+--bind 'ctrl-u:preview-down'
 --bind 'ctrl-y:execute-silent(printf {} | cut -f 2- | pbcopy)'
 --border
 $FZF_COLORS

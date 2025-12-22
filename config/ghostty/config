@@ -1,10 +1,12 @@
 # vim: ft=ghostty
-font-size = 17
-background-blur = 50
-window-padding-x = 4
+font-size = 17.3
+font-thicken = true
+font-thicken-strength = 120
+window-padding-x = 2
 bold-is-bright = true
 shell-integration = zsh
-adjust-cell-height = 50%
+adjust-cell-height = 75%
+adjust-cell-width = 5%
 theme = Catppuccin Mocha
 window-decoration = none
 scrollback-limit = 100000
@@ -27,7 +29,7 @@ keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
 
-background = #181826
+background = #1A1B27
 cursor-color = #f5e0dc
 cursor-invert-fg-bg = true
 cursor-text = #1e1e2e
