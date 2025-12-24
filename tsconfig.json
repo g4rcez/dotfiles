@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "types": [
+            "node"
+        ],
+        "jsx": "react-jsx",
+        "sourceMap": false,
+        "target": "esnext",
+        "declaration": false,
+        "module": "nodenext",
+        "skipLibCheck": true,
+        "declarationMap": false,
+        "isolatedModules": true,
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "moduleDetection": "force",
+        "noUncheckedIndexedAccess": true,
+        "allowImportingTsExtensions": true,
+        "exactOptionalPropertyTypes": true,
+        "noUncheckedSideEffectImports": true
+    }
+}

@@ -58,7 +58,7 @@ const keys = [
                 "Temporary notes"
             ),
             c: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e ''",
+                "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
                 "CLI math expressions"
             ),
             r: karabiner.shell(

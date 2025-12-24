@@ -107,6 +107,8 @@
     bye = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
     # List contributors with number of commits.
     contributors = shortlog --summary --numbered
+    # remove all changes, untracked files too
+    nuke = !git reset --hard && git clean -f -d
 
 [delta "catppuccin-mocha"]
     blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"

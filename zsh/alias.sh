@@ -77,7 +77,7 @@ if [[ "$(uname)" != "Darwin" ]]; then
 fi
 ############################################################################
 ## network
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
@@ -204,10 +204,6 @@ function karabiner-reset() {
     launchctl stop org.pqrs.karabiner.karabiner_console_user_server
     sleep 0.5
     launchctl start org.pqrs.karabiner.karabiner_console_user_server
-}
-
-function jarvis () {
-    deno task -q --config "$DOTFILES/deno.json" dotfiles --config "$DOTFILES/dotfiles.config.ts" $@
 }
 
 function brewfix() {

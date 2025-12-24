@@ -1,10 +1,8 @@
 import { Espanso } from "@g4rcez/bunsen";
 
-const MAIN_SCRIPT = '"$HOME/dotfiles/espanso/main.ts"';
+const run = (cmd: string) => `bun run "$HOME/dotfiles/espanso/main.ts" ${cmd}`;
 
-const runMain = (cmd: string) => `bun run ${MAIN_SCRIPT} ${cmd}`;
-
-const withParam = (x: string) => `${x}\\[(?P<N>.*)\\]`;
+const regex = (x: string) => `${x}\\[(?P<N>.*)\\]`;
 
 export const espanso = new Espanso(";");
 
@@ -21,19 +19,19 @@ espanso
     .form(
         "hex",
         "{{hex}}",
-        runMain(`colors --mode=hex --value="{{form.input}}"`),
+        run(`colors --mode=hex --value="{{form.input}}"`),
         "Color to HEX",
     )
     .form(
         "hsl",
         "{{hsl}}",
-        runMain(`colors --mode=hsl --value="{{form.input}}"`),
+        run(`colors --mode=hsl --value="{{form.input}}"`),
         "Color to HSL",
     )
     .form(
         "rgb",
         "{{rgb}}",
-        runMain(`colors --mode=rgb --value="{{form.input}}"`),
+        run(`colors --mode=rgb --value="{{form.input}}"`),
         "Color to RGB",
     )
     .insert(
@@ -59,6 +57,7 @@ espanso
     .insert("pray", "🙏🏾", "Emoji: Folded hands")
     .insert("cry", "😭", "Emoji: Loudly crying face")
     .insert("think", "🤔", "Emoji: Thinking face")
+    .insert("money", "🤑", "Emoji: Money face")
     .insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug")
     .insert(
         "tnc",
@@ -68,77 +67,65 @@ espanso
     .shell(
         "url",
         "Sanitize URL in clipboard",
-        runMain(`url --value "$ESPANSO_CLIPBOARD"`),
+        run(`url --value "$ESPANSO_CLIPBOARD"`),
     )
-    .shell("cnpj", "Generate random and valid CNPJ", runMain("cnpj"))
-    .shell("cpf", "Generate random and valid CPF", runMain("cpf"))
+    .shell("cnpj", "Generate random and valid CNPJ", run("cnpj"))
+    .shell("cpf", "Generate random and valid CPF", run("cpf"))
     .shell(
         "master",
         "Generate valid mastercard number",
-        runMain("card --brand=master"),
+        run("card --brand=master"),
     )
     .shell(
         "cvvmaster",
         "Generate valid CVV for mastercard",
-        runMain("card --brand=master --cvv"),
+        run("card --brand=master --cvv"),
     )
-    .shell(
-        "visa",
-        "Generate valid visacard number",
-        runMain("card --brand=visa"),
-    )
+    .shell("visa", "Generate valid visacard number", run("card --brand=visa"))
     .shell(
         "cvvvisa",
         "Generate valid CVV visacard",
-        runMain("card --brand=visa --cvv"),
+        run("card --brand=visa --cvv"),
     )
-    .shell(
-        "amex",
-        "Generate valid amexcard number",
-        runMain("card --brand=amex"),
-    )
+    .shell("amex", "Generate valid amexcard number", run("card --brand=amex"))
     .shell(
         "cvvamex",
         "Generate valid CVV amexcard",
-        runMain("card --brand=amex --cvv"),
+        run("card --brand=amex --cvv"),
     )
-    .shell("uuid", "Generate UUIDv7", runMain("uuid"))
+    .shell("uuid", "Generate UUIDv7", run("uuid"))
     .shell(
         "pass",
         "Generate randomic safe password",
-        runMain("password --length $ESPANSO_N"),
-        withParam("pass"),
+        run("password --length $ESPANSO_N"),
+        regex("pass"),
     )
     .shell(
         "cellphone",
         "Generate cellphone number",
-        runMain("phone --mode=cellphone"),
+        run("phone --mode=cellphone"),
     )
     .shell(
         "telephone",
         "Generate telephone number",
-        runMain("phone --mode=telephone"),
+        run("phone --mode=telephone"),
     )
-    .shell("email", "FakerJS email", runMain("email"))
-    .shell(
-        "yesterday",
-        "Get yesterday date",
-        runMain(`dates --value=yesterday`),
-    )
-    .shell("tomorrow", "Get tomorrow date", runMain(`dates --value=tomorrow`))
-    .shell("dd", "Get date in ISO format", runMain("dates --value=isod"))
-    .shell("iso", "Get date in ISO format", runMain(`dates --value=iso`))
+    .shell("email", "FakerJS email", run("email"))
+    .shell("yesterday", "Get yesterday date", run(`dates --value=yesterday`))
+    .shell("tomorrow", "Get tomorrow date", run(`dates --value=tomorrow`))
+    .shell("dd", "Get date in ISO format", run("dates --value=isod"))
+    .shell("iso", "Get date in ISO format", run(`dates --value=iso`))
     .shell(
         "r",
         "Repeat string N times",
-        runMain("repeat --value=$ESPANSO_N"),
-        withParam("r"),
+        run("repeat --value=$ESPANSO_N"),
+        regex("r"),
     )
     .shell(
         "d",
         "Sum/Subtract days",
-        runMain("dates --value=$ESPANSO_N"),
-        withParam("d"),
+        run("dates --value=$ESPANSO_N"),
+        regex("d"),
     )
     .random(
         "cep",

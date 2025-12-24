@@ -110,39 +110,7 @@ return {
                     enabled = true,
                     auto_show = true,
                     border = "solid",
-                    draw = {
-                        treesitter = { "lsp" },
-                        columns = {
-                            { "kind_icon", "label", "label_description", gap = 1 },
-                            { "kind", gap = 1 },
-                        },
-                        components = {
-                            kind_icon = {
-                                text = function(ctx)
-                                    local icon = ctx.kind_icon
-                                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                                        local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-                                        if dev_icon then
-                                            icon = dev_icon
-                                        end
-                                    else
-                                        icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
-                                    end
-                                    return icon .. ctx.icon_gap
-                                end,
-                                highlight = function(ctx)
-                                    local hl = ctx.kind_hl
-                                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                                        local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                                        if dev_icon then
-                                            hl = dev_hl
-                                        end
-                                    end
-                                    return hl
-                                end,
-                            },
-                        },
-                    },
+                    draw = { treesitter = { "lsp" }, padding = 2 },
                 },
                 documentation = {
                     auto_show = true,

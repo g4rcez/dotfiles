@@ -24,12 +24,6 @@ vim.lsp.config("jsonls", {
     },
 })
 
-vim.lsp.config("denols", {
-    filetypes = { "ts" },
-    capabilities = capabilities,
-    root_markers = { "deno.json" },
-})
-
 vim.lsp.config("dockerls", {
     capabilities = capabilities,
     root_markers = { "Dockerfile" },
