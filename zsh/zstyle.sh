@@ -1,6 +1,6 @@
 #!/bin/zsh
 zmodload -i zsh/complist
-WORDCHARS="*?_-.[]~=&;!#$%^(){}<> "
+WORDCHARS=""
 export WORDCHARS="${WORDCHARS/\//}"
 
 ############################## setops #################################
@@ -35,13 +35,19 @@ setopt COMBINING_CHARS
 setopt CORRECT
 
 ############################## key Bind #################################
+function copy-command() { 
+    echo -n $BUFFER | pbcopy
+    zle -m 'Copied to clipboard'
+}
+zle -N copy-command
 bindkey '^[OH' beginning-of-line
 bindkey '^[OF' end-of-line
-# zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 bindkey '^Xa' alias-expension
+bindkey "^Xc" copy-command
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
+
 
 ############################## zstyle #################################
 zstyle ':completion:*' cache-path $ZSH_CACHE_DIR

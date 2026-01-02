@@ -3,6 +3,8 @@ export GID="$(id -g)"
 #####################################################################################
 ## PATH
 export GOPATH=$HOME/go
+export GOROOT=$(go env GOROOT)
+export GOBIN=$GOPATH/bin
 PATH2="$PATH"
 LOCAL_SOURCE_FILES=(
     "/usr/local/bin"
@@ -104,3 +106,5 @@ source "$DOTFILES/zsh/ls.sh"
 #####################################################################################
 ## ai
 unset ANTHROPIC_API_KEY
+export ENABLE_LSP_TOOL=1
+

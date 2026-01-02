@@ -2,6 +2,8 @@ import { Karabiner, Manipulator } from "@g4rcez/bunsen";
 
 export const karabiner = new Karabiner();
 
+const TERM = "/Applications/Ghostty.app/Contents/MacOS/ghostty";
+
 const keys = [
     karabiner.createHyperSubLayers({
         k: { to: [{ key_code: "up_arrow" }], description: "Up arrow" },
@@ -46,23 +48,23 @@ const keys = [
             w: karabiner.app("Spotify"),
             t: karabiner.app("Telegram"),
             m: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/htop",
+                `${TERM} -e /opt/homebrew/bin/htop`,
                 "Monitoring with htop"
             ),
             j: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e . $HOME/dotfiles/bin/json-inspect",
+                `${TERM} -e . $HOME/dotfiles/bin/json-inspect`,
                 "Inspect json"
             ),
             n: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e /opt/homebrew/bin/nvim -- /tmp/notes.md",
+                `${TERM} -e /opt/homebrew/bin/nvim -- /tmp/notes.md`,
                 "Temporary notes"
             ),
             c: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e '/opt/homebrew/bin/eva'",
+                `${TERM} -e '/opt/homebrew/bin/eva'`,
                 "CLI math expressions"
             ),
             r: karabiner.shell(
-                "/opt/homebrew/bin/alacritty -e '~/.local/share/mise/installs/node/lts/bin/node'",
+                `${TERM} -e '~/.local/share/mise/installs/node/lts/bin/node'`,
                 "Node REPL"
             ),
         },

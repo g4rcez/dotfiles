@@ -15,7 +15,6 @@ zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 znap eval starship 'starship init zsh --print-full-init'
-# source "$HOME/Documents/g4rcez/moonshell/moonshell.zsh"
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
 PLUGINS=(
     "MichaelAquilina/zsh-auto-notify"
@@ -36,6 +35,14 @@ for plugin in $PLUGINS; do
   fi
 done
 
+##############################################################################################################
+## Pastry - Type-safe shell prompt
+# pastry_precmd() {
+#     export PASTRY_EXIT_CODE=$?
+#     eval "$(bun run $HOME/Documents/g4rcez/pastry/src/cli.ts)"
+# }
+# autoload -Uz add-zsh-hook
+# add-zsh-hook precmd pastry_precmd
 ##############################################################################################################
 ## source files
 znap prompt

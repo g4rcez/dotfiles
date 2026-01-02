@@ -12,6 +12,7 @@ if [ -d "$TARGET_PATH" ]; then
     lsd --git --color=always "$TARGET_PATH"
 elif [ "$category" = "image" ]; then
     echo "$PWD/$1"
+    chafa -f sixel -s 40 "$TARGET_PATH"
     exiftool "$TARGET_PATH"
 elif [ "$kind" = "vnd.openxmlformats-officedocument.spreadsheetml.sheet" ] ||
     [ "$kind" = "vnd.ms-excel" ]; then

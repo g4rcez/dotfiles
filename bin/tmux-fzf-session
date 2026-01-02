@@ -57,9 +57,9 @@ function getSessionName() {
 }
 
 selected=$(selectProject)
-echo "SELECTED $selected"
 if [ -z "$selected" ]; then
-    exit 0
+    selected="localhost"
+    echo "SELECTED '$selected'"
 fi
 
 is_session=$(isSelected "$selected")
@@ -69,7 +69,13 @@ session_name=$(getSessionName "$(homename "$selected_name")")
 if [[ -n "$is_session" ]]; then
     tmux switch -t "$session_name"
 else
-    cd $(zoxide query "$selected")
-    tmux new-session -ds "$session_name"
-    tmux -S "$HOME/.tmp/socket" switch -t "$session_name"
+    FULL_PATH="$(zoxide query "$selected")"
+    if [[ -d "$FULL_PATH" ]]; then
+        cd "$FULL_PATH"
+        tmux new-session -ds "$session_name"
+        tmux -S "$HOME/.tmp/socket" switch -t "$session_name"
+    else
+        tmux new-session -ds "$selected"
+        tmux -S "$HOME/.tmp/socket" switch -t "$selected"
+    fi
 fi

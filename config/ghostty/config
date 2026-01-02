@@ -28,6 +28,7 @@ keybind = super+p>l=next_tab
 keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
+keybind = super+p>p=toggle_command_palette
 
 background = #1A1B27
 cursor-color = #f5e0dc
