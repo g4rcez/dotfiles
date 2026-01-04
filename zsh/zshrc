@@ -1,9 +1,8 @@
 ##############################################################################################################
 ## exports
-source $HOME/dotfiles/zsh/exports.sh
-source $HOME/dotfiles/zsh/utils.sh
-LOCAL_VARIABLES_EXPORTS="$HOME/.local-exports.sh"
-safeImport "$LOCAL_VARIABLES_EXPORTS"
+source "$HOME/dotfiles/zsh/exports.sh"
+source "$HOME/dotfiles/zsh/utils.sh"
+safeImport "$HOME/.local-exports.sh"
 ##############################################################################################################
 ## znap
 ZNAP_DIR="$HOME/.znap/"
@@ -25,8 +24,6 @@ PLUGINS=(
     "zsh-users/zsh-history-substring-search"
     "zsh-users/zsh-syntax-highlighting"
 )
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 1
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
     znap source $plugin || echo "failed -> $plugin"
@@ -34,24 +31,14 @@ for plugin in $PLUGINS; do
     znap clone $plugin
   fi
 done
-
-##############################################################################################################
-## Pastry - Type-safe shell prompt
-# pastry_precmd() {
-#     export PASTRY_EXIT_CODE=$?
-#     eval "$(bun run $HOME/Documents/g4rcez/pastry/src/cli.ts)"
-# }
-# autoload -Uz add-zsh-hook
-# add-zsh-hook precmd pastry_precmd
+znap prompt
 ##############################################################################################################
 ## source files
-znap prompt
+eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
 eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"
 eval "$(gh completion -s zsh)"
-eval "$(fzf --zsh)"
-eval "$(atuin init zsh --disable-up-arrow)"
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -90,5 +77,5 @@ zstyle ':zle:*' word-style unspecified
 source "$HOME/.config/bunsen/env.sh"
 
 # BEGIN BUNSEN
-source "/Users/garcez/.config/bunsen/env.sh"
+source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN

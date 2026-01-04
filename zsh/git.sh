@@ -207,6 +207,9 @@ function ghaction() {
     gh workflow run "${1}.yml" --ref "${2}"
 }
 
-function aicommit(){
-    git diff HEAD -U5 | claude --print "Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown text. Don't use the backticks around the message and only output the commit message, nothing more."
+function aicommit() {
+    git diff HEAD -U5 | claude \ 
+        --model claude-haiku-4-5 \ 
+        --print "Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown text. Don't use the backticks around the message and only output the commit message, nothing more. ${1}"
 }
+

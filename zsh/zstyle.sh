@@ -1,6 +1,6 @@
 #!/bin/zsh
 zmodload -i zsh/complist
-WORDCHARS=""
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
 export WORDCHARS="${WORDCHARS/\//}"
 
 ############################## setops #################################
@@ -11,15 +11,12 @@ setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt share_history          # share command history data
-
 unsetopt FLOW_CONTROL
-
 ## directories
 setopt auto_cd
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
-
 ############################## setops #################################
 # Reference: https://zsh.sourceforge.io/Doc/Release/Options.html
 setopt ALWAYS_TO_END

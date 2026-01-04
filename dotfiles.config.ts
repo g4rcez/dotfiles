@@ -7,6 +7,8 @@ import { karabiner } from "./bunsen/karabiner";
 const file = (...strings: string[]) =>
     path.resolve(os.homedir(), "dotfiles", ...strings);
 
+const EDITOR = "nvim";
+
 export default defineConfig({
     espanso,
     karabiner,
@@ -14,11 +16,11 @@ export default defineConfig({
         shells: ["zsh"],
         exportFile: "~/.config/bunsen/env.sh",
         variables: {
-            PAGER: "nvim",
-            VISUAL: "nvim",
-            EDITOR: "nvim",
+            PAGER: EDITOR,
+            VISUAL: EDITOR,
+            EDITOR: EDITOR,
             TERM: "tmux-256color",
-            MANPAGER: "nvim +Man!",
+            MANPAGER: `${EDITOR} +Man!`,
         },
     },
     symlinks: {

@@ -1,0 +1,243 @@
+;; Kanata configuration - migrated from Karabiner/bunsen
+;; Run with: kanata -c ~/.config/kanata/kanata.kbd
+
+(defcfg
+  ;; Enable shell command execution
+  danger-enable-cmd yes
+
+  ;; Sequence configuration for leader keys
+  sequence-timeout 1000
+  sequence-input-mode hidden-suppressed
+
+  ;; Process keys not explicitly mapped
+  process-unmapped-keys yes
+)
+
+;; Define physical keyboard layout (standard ANSI)
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; ============================================================================
+;; ALIASES - Reusable key definitions
+;; ============================================================================
+
+(defalias
+  ;; ---------------------------------------------------------------------------
+  ;; Hyper Key: Caps Lock -> Escape (tap) / Hyper Layer (hold)
+  ;; ---------------------------------------------------------------------------
+  hyper (tap-hold-press 200 200 esc (layer-while-held hyper-layer))
+
+  ;; ---------------------------------------------------------------------------
+  ;; V Leader: Vim navigation (HOLD mode, not sequence)
+  ;; ---------------------------------------------------------------------------
+  vim (tap-hold-press 200 200 v (layer-while-held vim-layer))
+
+  ;; ---------------------------------------------------------------------------
+  ;; Leader keys for sequences
+  ;; ---------------------------------------------------------------------------
+  ldr-ret (tap-hold-press 200 200 ret (layer-while-held leader-enter))
+  ldr-m   (tap-hold-press 200 200 m   (layer-while-held leader-m))
+  ldr-w   (tap-hold-press 200 200 w   (layer-while-held leader-w))
+  ldr-s   (tap-hold-press 200 200 s   (layer-while-held leader-s))
+  ldr-r   (tap-hold-press 200 200 r   (layer-while-held leader-r))
+  ldr-b   (tap-hold-press 200 200 b   (layer-while-held leader-b))
+  ldr-o   (tap-hold-press 200 200 o   (layer-while-held leader-o))
+
+  ;; ---------------------------------------------------------------------------
+  ;; Hyper sublayer shortcuts
+  ;; ---------------------------------------------------------------------------
+  ;; Line navigation
+  line-end   M-right
+  line-start M-left
+
+  ;; Raycast shortcuts (hyper layer)
+  rc-whichkey (cmd open "raycast://extensions/g4rcez/whichkey/whichkey")
+  rc-snippets (cmd open "raycast://extensions/g4rcez/snippets/snippets")
+  rc-emoji    (cmd open "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols")
+  rc-windows  (cmd open "raycast://extensions/raycast/navigation/switch-windows")
+
+  ;; ---------------------------------------------------------------------------
+  ;; Enter Leader - Terminal/Apps
+  ;; ---------------------------------------------------------------------------
+  rect-right (cmd open -g "rectangle://execute-action?name=right-half")
+  app-wezterm (cmd open -a WezTerm)
+  app-spotify (cmd open -a Spotify)
+  app-telegram (cmd open -a Telegram)
+  browser-default (cmd open -a "Microsoft Edge")
+
+  ;; Shell commands in Ghostty
+  term-htop (cmd /Applications/Ghostty.app/Contents/MacOS/ghostty -e /opt/homebrew/bin/htop)
+  term-json (cmd /Applications/Ghostty.app/Contents/MacOS/ghostty -e bash -c ". $HOME/dotfiles/bin/json-inspect")
+  term-notes (cmd /Applications/Ghostty.app/Contents/MacOS/ghostty -e /opt/homebrew/bin/nvim -- /tmp/notes.md)
+  term-eva (cmd /Applications/Ghostty.app/Contents/MacOS/ghostty -e /opt/homebrew/bin/eva)
+  term-node (cmd /Applications/Ghostty.app/Contents/MacOS/ghostty -e ~/.local/share/mise/installs/node/lts/bin/node)
+
+  ;; ---------------------------------------------------------------------------
+  ;; M Leader - Move window to workspace (aerospace)
+  ;; ---------------------------------------------------------------------------
+  mv-ws-1 (cmd aerospace move-node-to-workspace --focus-follows-window 1)
+  mv-ws-2 (cmd aerospace move-node-to-workspace --focus-follows-window 2)
+  mv-ws-3 (cmd aerospace move-node-to-workspace --focus-follows-window 3)
+  mv-ws-4 (cmd aerospace move-node-to-workspace --focus-follows-window 4)
+  mv-ws-5 (cmd aerospace move-node-to-workspace --focus-follows-window 5)
+  mv-ws-6 (cmd aerospace move-node-to-workspace --focus-follows-window 6)
+  mv-ws-7 (cmd aerospace move-node-to-workspace --focus-follows-window 7)
+  mv-ws-8 (cmd aerospace move-node-to-workspace --focus-follows-window 8)
+  mv-ws-9 (cmd aerospace move-node-to-workspace --focus-follows-window 9)
+  mv-ws-0 (cmd aerospace move-node-to-workspace --focus-follows-window 0)
+
+  ;; ---------------------------------------------------------------------------
+  ;; W Leader - Window management (aerospace)
+  ;; ---------------------------------------------------------------------------
+  ws-1 (cmd aerospace workspace 1)
+  ws-2 (cmd aerospace workspace 2)
+  ws-3 (cmd aerospace workspace 3)
+  ws-4 (cmd aerospace workspace 4)
+  ws-5 (cmd aerospace workspace 5)
+  ws-6 (cmd aerospace workspace 6)
+  ws-7 (cmd aerospace workspace 7)
+  ws-8 (cmd aerospace workspace 8)
+  ws-9 (cmd aerospace workspace 9)
+  ws-0 (cmd aerospace workspace 0)
+
+  aero-left   (cmd aerospace focus --boundaries-action wrap-around-the-workspace left)
+  aero-right  (cmd aerospace focus --boundaries-action wrap-around-the-workspace right)
+  aero-mv-r   (cmd aerospace move --boundaries workspace right)
+  aero-full   (cmd aerospace fullscreen)
+  aero-bal    (cmd aerospace balance-sizes)
+  aero-shrink (cmd aerospace resize smart -50)
+  aero-grow   (cmd aerospace resize smart +50)
+  aero-layout (cmd aerospace layout tiles accordion)
+  aero-back   (cmd aerospace focus-back-and-forth)
+  aero-float  (cmd aerospace layout floating tiling)
+
+  ;; ---------------------------------------------------------------------------
+  ;; S Leader - System controls
+  ;; ---------------------------------------------------------------------------
+  clear-notif (cmd osascript $HOME/dotfiles/bin/clear-notifications)
+
+  ;; ---------------------------------------------------------------------------
+  ;; R Leader - Raycast shortcuts
+  ;; ---------------------------------------------------------------------------
+  rc-ai       (cmd open "raycast://extensions/raycast/raycast-ai/ai-chat")
+  rc-ai-pre   (cmd open "raycast://extensions/raycast/raycast-ai/search-ai-chat-presets")
+  rc-snip     (cmd open "raycast://extensions/g4rcez/snippets/snippets")
+  rc-menu     (cmd open "raycast://extensions/raycast/navigation/search-menu-items")
+  rc-win      (cmd open "raycast://extensions/raycast/navigation/switch-windows")
+  rc-confetti (cmd open "raycast://extensions/raycast/raycast/confetti")
+  rc-dnd      (cmd open "raycast://extensions/yakitrak/do-not-disturb/toggle")
+  rc-em       (cmd open "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols")
+  rc-color    (cmd open "raycast://extensions/thomas/color-picker/pick-color")
+  rc-spot     (cmd open "raycast://extensions/mattisssa/spotify-player/yourLibrary")
+  rc-ocr      (cmd open "raycast://extensions/huzef44/screenocr/recognize-text")
+
+  ;; ---------------------------------------------------------------------------
+  ;; B Leader - Browser profiles
+  ;; ---------------------------------------------------------------------------
+  browser-work (cmd open -a "Microsoft Edge" --args --profile-directory="Profile 1")
+  browser-tabs (cmd open "raycast://extensions/koinzhang/browser-tabs/index")
+
+  ;; ---------------------------------------------------------------------------
+  ;; O Leader - Open apps
+  ;; ---------------------------------------------------------------------------
+  app-webstorm (cmd open -a WebStorm)
+)
+
+;; ============================================================================
+;; LAYERS
+;; ============================================================================
+
+;; Base layer - default keyboard with leader keys
+(deflayer base
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    @ldr-w e  @ldr-r t  y    u    i    @ldr-o p  [    ]    \
+  @hyper a  @ldr-s d  f    g    h    j    k    l    ;    '    @ldr-ret
+  lsft z    x    c    @vim @ldr-b n  @ldr-m ,  .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; Hyper layer - when Caps Lock is held
+(deflayer hyper-layer
+  _    _    _    _    @line-end _ _  _    _    _    @line-start _ _ _
+  @rc-windows _ _ @rc-emoji _ _ _ _ _ _ _ @rc-whichkey @rc-snippets _
+  _    _    _    _    _    _    left down up   right _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; Vim navigation layer - when V is held
+(deflayer vim-layer
+  _    _    _    _    @line-end _ _  _    _    _    @line-start _ _ _
+  _    _    A-right _ _  _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    left down up   right _    _    _
+  _    _    _    _    _    A-left _ _  _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; Enter leader layer
+(deflayer leader-enter
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @app-spotify _ @term-node @app-telegram _ _ _ _ _ _ _ @rect-right
+  _    _    _    _    _    _    _    @term-json _ _  _    _    @app-wezterm
+  _    _    _    @term-eva _ @browser-default @term-notes @term-htop _ _ _ _
+  _    _    _              _              _    _    _
+)
+
+;; M leader layer - move to workspace
+(deflayer leader-m
+  _    @mv-ws-1 @mv-ws-2 @mv-ws-3 @mv-ws-4 @mv-ws-5 @mv-ws-6 @mv-ws-7 @mv-ws-8 @mv-ws-9 @mv-ws-0 _ _ _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; W leader layer - window management
+(deflayer leader-w
+  _    @ws-1 @ws-2 @ws-3 @ws-4 @ws-5 @ws-6 @ws-7 @ws-8 @ws-9 @ws-0 @aero-shrink @aero-grow _
+  _    _    @aero-layout _ @aero-mv-r _ _ _ _ _ _ _ _ _
+  _    @aero-left _ @aero-right @aero-full _ @aero-left _ _ @aero-right _ _ _
+  _    _    _    _    _    @aero-bal _  _    _    _    _    _
+  _    _    _              @aero-float            _    _    _
+)
+
+;; S leader layer - system controls
+(deflayer leader-s
+  _    _    _    _    _    _    _    _    _    _    _    vold volu _
+  _    _    _    _    _    _    _    _    _    _    pp   _    _    _
+  _    _    _    _    _    _    prev brdn brup next _    _    _
+  _    _    _    _    _    _    @clear-notif _ _ _  _    _
+  _    _    _              _              _    _    _
+)
+
+;; R leader layer - Raycast shortcuts
+(deflayer leader-r
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @rc-ai-pre @rc-win @rc-em _ @rc-snip _ _ @rc-ai @rc-ocr @rc-color _ _ _
+  _    _    @rc-spot @rc-dnd _ _ _ _ _ _ _ _ _
+  _    _    _    @rc-confetti _ _ _ @rc-menu _ _ _ _
+  _    _    _              _              _    _    _
+)
+
+;; B leader layer - browser profiles
+(deflayer leader-b
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @browser-work _ _ @browser-tabs _ _ _ _ _ _ _ _
+  _    _    _    _    _    _    _    _    _    _    _    _    @browser-default
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; O leader layer - open apps
+(deflayer leader-o
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @app-webstorm _ _ @app-wezterm _ _ _ _ _ _ _ _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    @browser-default _ @app-telegram _ _ _ _
+  _    _    _              _              _    _    _
+)
