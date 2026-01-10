@@ -10,8 +10,9 @@ const file = (...strings: string[]) =>
 const EDITOR = "nvim";
 
 export default defineConfig({
-    espanso,
-    karabiner,
+    profiles: {
+        osx: { espanso, karabiner }
+    },
     env: {
         shells: ["zsh"],
         exportFile: "~/.config/bunsen/env.sh",

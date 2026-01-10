@@ -208,8 +208,6 @@ function ghaction() {
 }
 
 function aicommit() {
-    git diff HEAD -U5 | claude \ 
-        --model claude-haiku-4-5 \ 
-        --print "Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown text. Don't use the backticks around the message and only output the commit message, nothing more. ${1}"
+    git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown text. Don't use the backticks around the message and only output the commit message, nothing more. ${1}"
 }
 

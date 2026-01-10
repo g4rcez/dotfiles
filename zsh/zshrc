@@ -75,7 +75,3 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 source "$HOME/.config/bunsen/env.sh"
-
-# BEGIN BUNSEN
-source "$HOME/.config/bunsen/env.sh"
-# END BUNSEN
