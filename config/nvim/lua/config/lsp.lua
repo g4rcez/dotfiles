@@ -254,6 +254,6 @@ vim.lsp.enable {
     "oxlint",
     "rust_analyzer",
     "tailwindcss",
-    -- "vtsls",
+    "vtsls",
     "yamlls",
 }

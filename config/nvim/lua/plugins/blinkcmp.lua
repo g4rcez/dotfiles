@@ -85,6 +85,9 @@ return {
             signature = { enabled = true },
             snippets = { preset = "luasnip" },
             appearance = { nerd_font_variant = "mono" },
+            enabled = function()
+                return true
+            end,
             cmdline = {
                 keymap = { preset = "default" },
                 completion = {
@@ -104,12 +107,12 @@ return {
                     selection = { preselect = false, auto_insert = true },
                 },
                 keyword = { range = "full" },
-                ghost_text = { enabled = true, show_with_menu = false },
+                ghost_text = { enabled = true },
                 accept = { create_undo_point = true, auto_brackets = { enabled = true } },
                 menu = {
                     enabled = true,
                     auto_show = true,
-                    border = "solid",
+                    border = "single",
                     draw = { treesitter = { "lsp" }, padding = 2 },
                 },
                 documentation = {
@@ -132,6 +135,7 @@ return {
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
+                compat = {},
                 default = {
                     "lazydev",
                     "lsp",

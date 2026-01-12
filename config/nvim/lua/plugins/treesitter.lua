@@ -5,6 +5,15 @@ return {
         version = false,
     },
     {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+        init = function()
+            vim.g.no_plugin_maps = true
+        end,
+        config = function()
+        end,
+    },
+    {
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         build = ":TSUpdate",
@@ -25,7 +34,6 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
         lazy = false,
         opts = {
             auto_install = true,

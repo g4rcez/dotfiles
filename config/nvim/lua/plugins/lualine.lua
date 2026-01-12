@@ -11,6 +11,7 @@ return {
                 section_separators = " ",
                 disabled_filetypes = { statusline = {}, winbar = {} },
             },
+            extensions = { "quickfix", "oil", "lazy" },
             sections = {
                 lualine_a = { "mode" },
                 lualine_b = {},
@@ -26,10 +27,10 @@ return {
                                 table.insert(parts, "%#DiffAdd# " .. gitsigns.added)
                             end
                             if gitsigns.changed and gitsigns.changed > 0 then
-                                table.insert(parts, "%#DiffChange#  " .. gitsigns.changed)
+                                table.insert(parts, "%#DiffChange# " .. gitsigns.changed)
                             end
                             if gitsigns.removed and gitsigns.removed > 0 then
-                                table.insert(parts, " %#DiffDelete# " .. gitsigns.removed)
+                                table.insert(parts, "%#DiffDelete# " .. gitsigns.removed)
                             end
                             if #parts > 0 then
                                 return table.concat(parts, " ") .. "%*"
@@ -67,16 +68,7 @@ return {
                 },
                 lualine_y = {},
                 lualine_z = {},
-            },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = { "filename" },
-                lualine_x = {},
-                lualine_y = {},
-                lualine_z = {},
-            },
-            extensions = { "quickfix", "oil" },
+            }
         },
     },
 }
