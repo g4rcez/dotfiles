@@ -5,6 +5,7 @@ require "config.lazy"
 require "config.autocmds"
 require "config.lsp"
 require "config.keymaps"
+require "config.diagnostics"
 
 require("lazy").setup {
     spec = { { import = "plugins" } },

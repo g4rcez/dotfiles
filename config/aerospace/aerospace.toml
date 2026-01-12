@@ -59,10 +59,9 @@ alt-k = 'move up'
 alt-l = 'move right'
 
 [[on-window-detected]]
-if.app-id = 'org.alacritty'
-if.app-name-regex-substring = 'alacritty'
+if.app-id = 'net.kovidgoyal.kitty'
 check-further-callbacks = true
-run = 'layout floating'
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'

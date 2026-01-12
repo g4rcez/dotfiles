@@ -99,7 +99,6 @@ end, { desc = "Git diff" })
 bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
 bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
-bind.normal("<leader>sO", "<CMD>Fyler kind=float<CR>", { desc = "Fyler float" })
 bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
 

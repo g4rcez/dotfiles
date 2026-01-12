@@ -1,11 +1,11 @@
 return {
+    { "nvim-mini/mini.diff", version = false },
+    { "nvim-mini/mini.surround", version = false },
+    { "nvim-mini/mini.git", version = false },
     {
-        "echasnovski/mini.nvim",
+        "nvim-mini/mini.nvim",
         config = function()
-            require("mini.diff").setup()
             require("mini.ai").setup { n_lines = 500 }
-            require("mini.surround").setup()
-            require("mini.git").setup()
             require("mini.colors").setup()
             require("mini.cursorword").setup()
             require("mini.map").setup()

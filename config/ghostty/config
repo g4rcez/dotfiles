@@ -16,7 +16,7 @@ window-colorspace = display-p3
 custom-shader-animation = always
 macos-titlebar-style = transparent
 font-family = "JetBrainsMono Nerd Font"
-quick-terminal-animation-duration = 0.4
+quick-terminal-animation-duration = 0.5
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal

@@ -1,5 +1,16 @@
 return {
     {
+        "newtoallofthis123/blink-cmp-fuzzy-path",
+        dependencies = { "saghen/blink.cmp" },
+        opts = {
+            max_results = 20,
+            trigger_char = "@",
+            search_hidden = true,
+            relative_paths = true,
+            filetypes = { "markdown", "json", "text" },
+        },
+    },
+    {
         cond = not require("config.vscode").isVscode(),
         "ray-x/lsp_signature.nvim",
         event = "InsertEnter",
@@ -74,6 +85,7 @@ return {
             "nvim-lua/plenary.nvim",
             "Kaiser-Yang/blink-cmp-git",
             "rafamadriz/friendly-snippets",
+            "Kaiser-Yang/blink-cmp-dictionary",
             "kristijanhusak/vim-dadbod-completion",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
             "disrupted/blink-cmp-conventional-commits",
@@ -137,6 +149,7 @@ return {
             sources = {
                 compat = {},
                 default = {
+                    "fuzzy-path",
                     "lazydev",
                     "lsp",
                     "git",
@@ -145,11 +158,14 @@ return {
                     "conventional_commits",
                     "dadbod",
                     "buffer",
+                    "dictionary",
                 },
                 providers = {
                     dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
+                    ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
+                    dictionary = { name = "Dict", min_keyword_length = 3, module = "blink-cmp-dictionary" },
                     conventional_commits = {
                         name = "Conventional Commits",
                         module = "blink-cmp-conventional-commits",
