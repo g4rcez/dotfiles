@@ -1,0 +1,2 @@
+Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown, descriptions must use bullet lists. Only use text without bullet lists if the change it's a breaking change. Output as plain markdown without code fences around the entire output.
+

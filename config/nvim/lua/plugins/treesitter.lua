@@ -7,11 +7,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
-        init = function()
-            vim.g.no_plugin_maps = true
-        end,
-        config = function()
-        end,
+        config = function() end,
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
@@ -37,22 +33,17 @@ return {
         lazy = false,
         opts = {
             auto_install = true,
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = { "ruby" },
-            },
-            indent = { enable = true, disable = { "ruby" } },
+            indent = { enable = true },
+            highlight = { enable = true },
             ensure_installed = {
                 "bash",
                 "c_sharp",
-                "diff",
                 "diff",
                 "dockerfile",
                 "editorconfig",
                 "git_config",
                 "git_rebase",
                 "gitcommit",
-                "gitignore",
                 "gitignore",
                 "html",
                 "javascript",
@@ -64,11 +55,11 @@ return {
                 "markdown",
                 "markdown_inline",
                 "query",
+                "regex",
                 "tsx",
                 "typescript",
                 "vim",
                 "vimdoc",
-                "regex",
             },
         },
     },

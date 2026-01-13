@@ -1,0 +1,5 @@
+Generate a clear and concise pull request description based on this diff. Include: 
+1) A brief summary of what the PR does
+2) Key changes made
+3) Any notable implementation details. 
+4) Output as plain markdown without code fences around the entire output.

@@ -123,12 +123,15 @@ end, { desc = "[c]ode [y]ank path" })
 bind.normal("zR", function()
     require("ufo").openAllFolds()
 end)
+
 bind.normal("zM", function()
     require("ufo").closeAllFolds()
 end)
+
 bind.normal("zm", function()
     require("ufo").closeFoldsWith()
 end)
+
 bind.normal("zo", function()
     local line = vim.fn.line "."
     if vim.fn.foldclosed(line) == -1 then

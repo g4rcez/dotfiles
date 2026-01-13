@@ -30,6 +30,9 @@
 [color]
     ui = true
 
+[rerere]
+    enabled = true
+
 [pull]
     rebase = true
 

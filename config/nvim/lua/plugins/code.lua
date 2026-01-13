@@ -4,7 +4,9 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "tpope/vim-repeat",
+    "mattn/emmet-vim",
     "editorconfig/editorconfig-vim",
+    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
         cond = not require("config.vscode").isVscode(),
         "folke/lazydev.nvim",
@@ -16,9 +18,15 @@ return {
             },
         },
     },
-    { "nmac427/guess-indent.nvim", opts = { auto_cmd = true, override_editorconfig = false } },
-    { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
-    { "tronikelis/ts-autotag.nvim", opts = { auto_close = { enabled = true }, auto_rename = { enabled = true } } },
+    {
+        lazy = false,
+        "tronikelis/ts-autotag.nvim",
+        opts = {
+            disable_in_macro = true,
+            auto_close = { enabled = true },
+            auto_rename = { enabled = true },
+        },
+    },
     {
         "folke/todo-comments.nvim",
         optional = true,

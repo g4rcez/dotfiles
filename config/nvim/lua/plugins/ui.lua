@@ -6,6 +6,9 @@ return {
         ---@field on_colors fun(colors: ColorScheme)
         ---@field on_highlights fun(highlights: tokyonight.Highlights, colors: ColorScheme)
         opts = { style = "night" },
+        config = function()
+            vim.cmd.colorscheme "tokyonight-night"
+        end,
     },
     {
         "folke/noice.nvim",
@@ -38,9 +41,6 @@ return {
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,
-        config = function()
-            vim.cmd.colorscheme "catppuccin"
-        end,
         opts = {
             auto_integrations = true,
             integrations = {

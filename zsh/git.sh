@@ -208,6 +208,15 @@ function ghaction() {
 }
 
 function aicommit() {
-    git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "Following the rules of https://www.conventionalcommits.org/en/v1.0.0, create a commit message with the diff that you receive. Output the text as plain text with markdown text. Don't use the backticks around the message and only output the commit message, nothing more. ${1}"
+    COMMIT_MESSAGE=$(git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}");
+    echo $COMMIT_MESSAGE | pbcopy
+    echo $COMMIT_MESSAGE
+}
+
+function prdesc() {
+    local pr_ref="${1:-}"
+    PR_MESSAGE=$(gh pr diff $pr_ref | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
+    echo $PR_MESSAGE | pbcopy
+    echo $PR_MESSAGE
 }
 
