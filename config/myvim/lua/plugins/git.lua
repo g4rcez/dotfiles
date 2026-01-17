@@ -1,9 +1,8 @@
 return {
     {
-        cmd = "CodeDiff",
-        "esmuellert/vscode-diff.nvim",
+        "esmuellert/codediff.nvim",
         dependencies = { "MunifTanjim/nui.nvim" },
-        cond = not require("config.vscode").isVscode(),
+        cmd = "CodeDiff",
     },
     {
         "lewis6991/gitsigns.nvim",

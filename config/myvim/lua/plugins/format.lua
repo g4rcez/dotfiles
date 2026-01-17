@@ -1,4 +1,8 @@
-local keys =         {
+return {
+    {
+        cond = not require("config.vscode").isVscode(),
+        "nvimtools/none-ls.nvim",
+        keys = {
             {
                 "<leader>cr",
                 function()
@@ -15,14 +19,7 @@ local keys =         {
                 mode = "n",
                 desc = "[c]ode [F]ormat",
             },
-        }
-
-return {
-    {
-        enabled = false,
-        cond = not require("config.vscode").isVscode(),
-        "nvimtools/none-ls.nvim",
-        keys = keys,
+        },
         opts = function(_, opts)
             local null_ls = require "null-ls"
             local action = null_ls.builtins.code_actions
@@ -59,10 +56,20 @@ return {
         end,
     },
     {
+        enabled = false,
         "stevearc/conform.nvim",
         event = { "BufWritePre" },
         cmd = { "ConformInfo" },
-        keys = keys,
+        keys = {
+            {
+                "<leader>cf",
+                function()
+                    require("conform").format { async = true, lsp_format = "fallback" }
+                end,
+                mode = "",
+                desc = "[F]ormat buffer",
+            },
+        },
         opts = {
             format_on_save = false,
             notify_on_error = false,
@@ -70,7 +77,6 @@ return {
                 lua = { "stylua" },
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 typescript = { "prettierd", "prettier", stop_after_first = true },
-                typescriptreact = { "prettierd", "prettier", stop_after_first = true },
             },
         },
     },
