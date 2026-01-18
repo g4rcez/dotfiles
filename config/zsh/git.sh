@@ -65,6 +65,7 @@ alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
 alias gundo='git reset --soft HEAD~1'
+
 function gtv() {
     git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | grep --color=never '.'
 }
@@ -86,7 +87,7 @@ function clone() {
 function wip() {
   git add -A .;
   COMMIT_MESSAGE=$(aicommit);
-  NOW=$(date);
+  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
   git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}";
   git push;
 }

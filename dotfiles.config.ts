@@ -42,8 +42,8 @@ export default defineConfig({
         "~/.config/wezterm": file("config/wezterm"),
         "~/.config/yazi": file("config/yazi"),
         "~/.config/zellij": file("config/zellij"),
-        "~/.gitconfig": file("git/gitconfig"),
-        "~/.ideavimrc": file("idea/.ideavimrc"),
-        "~/.zshrc": file("zsh/zshrc"),
+        "~/.gitconfig": file("config/git/gitconfig"),
+        "~/.ideavimrc": file("config/idea/.ideavimrc"),
+        "~/.zshrc": file("config/zsh/zshrc"),
     },
 });

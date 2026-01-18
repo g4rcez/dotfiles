@@ -77,3 +77,7 @@ select-word-style normal
 zstyle ':zle:*' word-style unspecified
 source "$HOME/.config/bunsen/env.sh"
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
+
+# BEGIN BUNSEN
+source "/Users/garcez/.config/bunsen/env.sh"
+# END BUNSEN
