@@ -2,12 +2,13 @@ local vscode = require "config.vscode"
 
 return {
     {
+        enabled = false,
         "neovim/nvim-lspconfig",
         dependencies = {
-            { "mason-org/mason.nvim", opts = {} },
+            { "j-hui/fidget.nvim" },
+            { "mason-org/mason.nvim" },
             "mason-org/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
-            { "j-hui/fidget.nvim", opts = {} },
             { cond = not require("config.vscode").isVscode(), "saghen/blink.cmp" },
         },
         config = function()

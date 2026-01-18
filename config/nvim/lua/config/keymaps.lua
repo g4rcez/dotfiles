@@ -1,45 +1,34 @@
----@param mode string|string[]
----@param items string[]
-local function clear(mode, items)
-  for _, bind in pairs(items) do
-    vim.keymap.del(mode, bind)
-  end
-end
-
 local function createMapper()
-  local M = {}
-  M.DEFAULT_OPTS = { noremap = true, silent = true }
+    local M = {}
+    M.DEFAULT_OPTS = { noremap = true, silent = true }
 
-  M.keymap = function(mode, from, to, opts)
-    opts = opts or {}
-    opts.silent = opts.silent ~= true
-    opts.noremap = opts.noremap ~= true
-    vim.keymap.set(mode, from, to, opts)
-  end
-
-  local function bind(modes)
-    local fn = function(from, action, opts)
-      local o = opts or {}
-      local desc = o.desc or ""
-      M.keymap(modes, from, action, { desc = desc })
+    M.keymap = function(mode, from, to, opts)
+        opts = opts or {}
+        opts.silent = opts.silent ~= true
+        opts.noremap = opts.noremap ~= true
+        vim.keymap.set(mode, from, to, opts)
     end
-    return fn
-  end
 
-  return {
-    normal = bind({ "n" }),
-    x = bind({ "x" }),
-    cmd = bind({ "c" }),
-    insert = bind({ "i" }),
-    visual = bind({ "v" }),
-    nx = bind({ "n", "v" }),
-  }
+    local function bind(modes)
+        local fn = function(from, action, opts)
+            local o = opts or {}
+            local desc = o.desc or ""
+            M.keymap(modes, from, action, { desc = desc })
+        end
+        return fn
+    end
+
+    return {
+        normal = bind { "n" },
+        x = bind { "x" },
+        cmd = bind { "c" },
+        insert = bind { "i" },
+        visual = bind { "v" },
+        nx = bind { "n", "v" },
+    }
 end
 
 local bind = createMapper()
-clear("n", { "<leader>e", "H", "L", "<A-j>", "<A-k>", "<C-k>", "<C-j>", "<leader>uh" })
-clear("i", { "<A-j>", "<A-k>" })
-clear("v", { "<A-j>", "<A-k>" })
 
 bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
 bind.normal("<leader>J", "v%J", { desc = "Join next match" })
@@ -73,24 +62,20 @@ bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
 bind.visual("<leader>su", ":sort u<CR>", { desc = "[s]ort unique" })
 bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
 bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
-bind.visual(
-  "<leader>ss",
-  ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>",
-  { desc = "[s]ort size" }
-)
+bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>", { desc = "[s]ort size" })
 
 bind.normal("]d", function()
-  vim.diagnostic.goto_next({ min = vim.diagnostic.severity.WARN })
+    vim.diagnostic.goto_next { min = vim.diagnostic.severity.WARN }
 end, { desc = "Goto next error" })
 bind.normal("[d", function()
-  vim.diagnostic.goto_prev({ min = vim.diagnostic.severity.WARN })
+    vim.diagnostic.goto_prev { min = vim.diagnostic.severity.WARN }
 end, { desc = "Goto previous error" })
 
 bind.normal("<leader>co", function()
-  vim.lsp.buf.code_action({
-    apply = true,
-    context = { only = { "source.organizeImports" } },
-  })
+    vim.lsp.buf.code_action {
+        apply = true,
+        context = { only = { "source.organizeImports" } },
+    }
 end, { desc = "[c]ode [o]rganizeImports" })
 
 bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
@@ -101,55 +86,58 @@ bind.normal("<C-l>", "<cmd>bnext<cr>", bind.DEFAULT_OPTS)
 bind.normal("<leader>br", "<CMD>e#<CR>", { desc = "Buffer reopen last", icon = "" })
 bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
 bind.normal("<leader>bo", function()
-  require("snacks.bufdelete").other()
+    require("snacks.bufdelete").other()
 end, { desc = "Close all except current", icon = "" })
 bind.normal("<leader>bh", function()
-  require("treesitter-context").go_to_context(vim.v.count1)
+    require("treesitter-context").go_to_context(vim.v.count1)
 end, { silent = true, desc = "[h]eader of context" })
 
 bind.normal("<leader>g=", function()
-  require("mini.diff").toggle_overlay(0)
+    require("mini.diff").toggle_overlay(0)
 end, { desc = "Git diff" })
 
 bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
 bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
-bind.normal("<leader>sO", "<CMD>Fyler kind=float<CR>", { desc = "Fyler float" })
 bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
 
 local function buf_abs()
-  return vim.api.nvim_buf_get_name(0)
+    return vim.api.nvim_buf_get_name(0)
 end
 
 bind.normal("<leader>um", function()
-  Snacks.dim.disable()
+    Snacks.dim.disable()
 end, { desc = "Disable dim" })
 
 bind.normal("<leader>uf", function()
-  Snacks.dim.enable()
+    Snacks.dim.enable()
 end, { desc = "Enable dim" })
 
 bind.normal("<leader>cy", function()
-  local rel = vim.fn.fnamemodify(buf_abs(), ":.")
-  vim.fn.setreg("+", rel)
-  vim.notify("Yanked (relative): " .. rel)
+    local rel = vim.fn.fnamemodify(buf_abs(), ":.")
+    vim.fn.setreg("+", rel)
+    vim.notify("Yanked (relative): " .. rel)
 end, { desc = "[c]ode [y]ank path" })
 
 bind.normal("zR", function()
-  require("ufo").openAllFolds()
+    require("ufo").openAllFolds()
 end)
+
 bind.normal("zM", function()
-  require("ufo").closeAllFolds()
+    require("ufo").closeAllFolds()
 end)
+
 bind.normal("zm", function()
-  require("ufo").closeFoldsWith()
+    require("ufo").closeFoldsWith()
 end)
+
 bind.normal("zo", function()
-  local line = vim.fn.line(".")
-  if vim.fn.foldclosed(line) == -1 then
-    vim.cmd("normal! zc")
-  else
-    vim.cmd("normal! zo")
-  end
+    local line = vim.fn.line "."
+    if vim.fn.foldclosed(line) == -1 then
+        vim.cmd "normal! zc"
+    else
+        vim.cmd "normal! zo"
+    end
 end, { desc = "Fold" })
+

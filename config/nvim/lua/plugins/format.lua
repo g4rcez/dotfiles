@@ -1,26 +1,25 @@
-local keys =         {
-            {
-                "<leader>cr",
-                function()
-                    vim.lsp.buf.rename()
-                end,
-                mode = "n",
-                desc = "[c]ode [r]ename",
-            },
-            {
-                "<leader>cf",
-                function()
-                    vim.lsp.buf.format()
-                end,
-                mode = "n",
-                desc = "[c]ode [F]ormat",
-            },
-        }
+local keys = {
+    {
+        "<leader>cr",
+        function()
+            vim.lsp.buf.rename()
+        end,
+        mode = "n",
+        desc = "[c]ode [r]ename",
+    },
+    {
+        "<leader>cf",
+        function()
+            vim.lsp.buf.format()
+        end,
+        mode = "n",
+        desc = "[c]ode [F]ormat",
+    },
+}
 
 return {
     {
         enabled = false,
-        cond = not require("config.vscode").isVscode(),
         "nvimtools/none-ls.nvim",
         keys = keys,
         opts = function(_, opts)
@@ -60,17 +59,27 @@ return {
     },
     {
         "stevearc/conform.nvim",
-        event = { "BufWritePre" },
+        event = { "BufWritePre", "BufNewFile" },
         cmd = { "ConformInfo" },
         keys = keys,
         opts = {
             format_on_save = false,
             notify_on_error = false,
             formatters_by_ft = {
-                lua = { "stylua" },
+                css = { "prettier" },
+                graphql = { "prettier" },
+                html = { "prettier" },
                 javascript = { "prettierd", "prettier", stop_after_first = true },
+                javascriptreact = { "prettier" },
+                json = { "prettier" },
+                liquid = { "prettier" },
+                lua = { "stylua" },
+                markdown = { "prettier" },
+                python = { "isort", "black" },
+                svelte = { "prettier" },
                 typescript = { "prettierd", "prettier", stop_after_first = true },
-                typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+                typescriptreact = { "prettier" },
+                yaml = { "prettier" },
             },
         },
     },
