@@ -42,6 +42,7 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 
 ############################################################################
 ## vim
@@ -213,3 +214,17 @@ function brewfix() {
 function tmux-start() {
     tmux -S "$HOME/.tmp/socket" new-session -A -s localhost
 }
+
+function killport() {
+    lsof -ti:$1 | xargs kill -9 2>/dev/null && echo "killed $1" 
+}
+
+function psgrep() {
+    ps aux | grep -i "$1" | grep -v grep 
+}
+
+function killnodemodules() {
+  find . -name 'node_modules' -type d -prune -exec rm -rf {} + 2>/dev/null
+  echo "cleaned node_modules"
+}
+

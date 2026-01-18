@@ -64,6 +64,7 @@ alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
+alias gundo='git reset --soft HEAD~1'
 function gtv() {
     git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | grep --color=never '.'
 }
@@ -84,8 +85,9 @@ function clone() {
 
 function wip() {
   git add -A .;
-  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
-  git commit --no-verify -S -m "wip: checkpoint at $NOW";
+  COMMIT_MESSAGE=$(aicommit);
+  NOW=$(date);
+  git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}";
   git push;
 }
 
@@ -95,15 +97,15 @@ function pullb() {
 }
 
 PRS_TMP_FILE="/tmp/fzf-gitcli"
-function parseprs() { 
+function parseprs() {
     if [[ "$(jq length $PRS_TMP_FILE)" == 0 ]]; then
         echo "No pull requests available"
         return;
     fi
-    jq -c '.[] | .title' "$PRS_TMP_FILE"\
+    jq -r '.[] | "#\(.number) \(.title)"' "$PRS_TMP_FILE"\
         | fzf --ansi --info inline\
-        --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' /tmp/fzf-gitcli | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
-        --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' /tmp/fzf-gitcli | xargs -n 1 gh pr checkout)"
+        --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" /tmp/fzf-gitcli | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
+        --bind "enter:become(echo {} | cut -d' ' -f1 | tr -d '#' | xargs -n 1 gh pr checkout)"
 }
 
 function prs() {

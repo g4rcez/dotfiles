@@ -93,5 +93,6 @@
   "notebook.insertFinalNewline": true,
   "notebook.stickyScroll.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
-  "redhat.telemetry.enabled": false
+  "redhat.telemetry.enabled": false,
+  "git.autofetch": true
 }

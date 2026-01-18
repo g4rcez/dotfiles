@@ -33,12 +33,12 @@ for plugin in $PLUGINS; do
 done
 znap prompt
 ##############################################################################################################
-## source files
-eval "$(fzf --zsh)"
-eval "$(zoxide init zsh)"
-eval "$(mise activate zsh)"
-eval "$(direnv hook zsh)"
-eval "$(gh completion -s zsh)"
+## source files (cached with znap eval for faster startup)
+znap eval fzf     'fzf --zsh'
+znap eval zoxide  'zoxide init zsh'
+znap eval mise    'mise activate zsh'
+znap eval direnv  'direnv hook zsh'
+znap eval gh      'gh completion -s zsh'
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -53,6 +53,7 @@ local -a SOURCE=(
   "$DOTFILES/zsh/git.sh"
   "$DOTFILES/zsh/node.sh"
   "$DOTFILES/zsh/zellij.sh"
+  "$DOTFILES/zsh/extras.sh"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
 )
