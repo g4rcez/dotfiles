@@ -4,7 +4,6 @@ return {
     "tpope/vim-sensible",
     "tpope/vim-surround",
     "tpope/vim-repeat",
-    "mattn/emmet-vim",
     "editorconfig/editorconfig-vim",
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {

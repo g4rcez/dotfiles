@@ -93,13 +93,22 @@ return {
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
-            fuzzy = { implementation = "prefer_rust" },
+            fuzzy = {
+                implementation = "prefer_rust",
+                sorts = {
+                    function(a, b)
+                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then return end
+                        return b.client_name == "emmet_ls"
+                    end,
+                    "exact",
+                    "score",
+                    "sort_text",
+                    "label",
+                },
+            },
             signature = { enabled = true },
             snippets = { preset = "luasnip" },
             appearance = { nerd_font_variant = "mono" },
-            enabled = function()
-                return true
-            end,
             cmdline = {
                 keymap = { preset = "super-tab" },
                 completion = {
@@ -113,14 +122,23 @@ return {
                 },
             },
             completion = {
-                trigger = { show_in_snippet = true, prefetch_on_insert = true, show_on_insert = true },
+                trigger = { show_in_snippet = false, prefetch_on_insert = true, show_on_insert = true },
                 list = {
                     cycle = { from_bottom = true, from_top = true },
                     selection = { preselect = false, auto_insert = true },
                 },
                 keyword = { range = "full" },
                 ghost_text = { enabled = true },
-                accept = { create_undo_point = true, auto_brackets = { enabled = true } },
+                accept = {
+                    create_undo_point = true,
+                    auto_brackets = {
+                        enabled = true,
+                        kind_resolution = {
+                            enabled = true,
+                            blocked_filetypes = { "typescriptreact", "vue", "javascriptreact" },
+                        },
+                    },
+                },
                 menu = {
                     enabled = true,
                     auto_show = true,
@@ -134,7 +152,8 @@ return {
                 },
             },
             keymap = {
-                preset = "enter",
+                preset = "default",
+                ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
                 ["<C-c>"] = { "hide", "fallback" },
                 ["<C-y>"] = { "select_and_accept" },
                 ["<Esc>"] = { "cancel", "fallback" },
@@ -142,11 +161,11 @@ return {
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-/>"] = { "show_signature", "fallback" },
                 ["<CR>"] = { "select_and_accept", "fallback" },
-                ["<Tab>"] = { "select_and_accept", "fallback" },
                 ["<S-Tab>"] = { "snippet_backward", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
+                show_in_snippet = true,
                 default = {
                     "snippets",
                     "fuzzy-path",

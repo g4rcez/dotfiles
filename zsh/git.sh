@@ -208,7 +208,7 @@ function ghaction() {
 }
 
 function aicommit() {
-    COMMIT_MESSAGE=$(git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}");
+    COMMIT_MESSAGE=$(git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1');
     echo $COMMIT_MESSAGE | pbcopy
     echo $COMMIT_MESSAGE
 }

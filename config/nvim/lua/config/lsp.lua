@@ -87,12 +87,16 @@ vim.lsp.config("html", {
     cmd = { "vscode-html-language-server", "--stdio" },
 })
 
-vim.lsp.config.emmet_ls = {
+vim.lsp.config("emmet_ls", {
     capabilities = capabilities,
     cmd = { "emmet-ls", "--stdio" },
     root_markers = { "package.json", ".git" },
     filetypes = { "html", "css", "scss", "erb", "javascriptreact", "typescriptreact" },
-}
+    init_options = {
+        includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
+        html = { options = { ["jsx.enabled"] = true } },
+    },
+})
 
 vim.lsp.config("jsonls", {
     before_init = function(_, newConfig)
