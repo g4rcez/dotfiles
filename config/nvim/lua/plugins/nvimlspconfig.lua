@@ -2,7 +2,6 @@ local vscode = require "config.vscode"
 
 return {
     {
-        enabled = false,
         "neovim/nvim-lspconfig",
         dependencies = {
             { "j-hui/fidget.nvim" },
@@ -68,7 +67,6 @@ return {
                     end
                 end,
             })
-
             vim.diagnostic.config {
                 severity_sort = true,
                 float = { border = "rounded", source = "if_many" },
@@ -99,11 +97,11 @@ return {
             if not vscode.isVscode() then
                 local capabilities = require("blink.cmp").get_lsp_capabilities()
                 local servers = {}
-                local ensure_installed = vim.tbl_keys(servers or {})
+                local ensure_installed = vim.tbl_keys( {})
                 vim.list_extend(ensure_installed, { "stylua" })
                 require("mason-tool-installer").setup { ensure_installed = ensure_installed }
                 require("mason-lspconfig").setup {
-                    ensure_installed = {},
+                    ensure_installed = require('config.ensure-installed').lsp,
                     automatic_installation = true,
                     handlers = {
                         function(server_name)

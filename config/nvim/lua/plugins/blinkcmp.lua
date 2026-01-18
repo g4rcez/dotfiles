@@ -101,15 +101,15 @@ return {
                 return true
             end,
             cmdline = {
-                keymap = { preset = "default" },
+                keymap = { preset = "super-tab" },
                 completion = {
+                    ghost_text = { enabled = true },
                     list = { selection = { preselect = false } },
                     menu = {
                         auto_show = function()
                             return vim.fn.getcmdtype() == ":"
                         end,
                     },
-                    ghost_text = { enabled = true },
                 },
             },
             completion = {
@@ -148,23 +148,23 @@ return {
             },
             sources = {
                 default = {
+                    "snippets",
                     "fuzzy-path",
                     "lazydev",
                     "lsp",
                     "git",
                     "path",
-                    "snippets",
                     "conventional_commits",
                     "dadbod",
                     "buffer",
                     "dictionary",
                 },
                 providers = {
-                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-                    lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
-                    ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
+                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                     dictionary = { name = "Dict", min_keyword_length = 3, module = "blink-cmp-dictionary" },
+                    lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+                    ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
                     conventional_commits = {
                         name = "Conventional Commits",
                         module = "blink-cmp-conventional-commits",
