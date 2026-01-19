@@ -123,12 +123,12 @@ return {
             },
             completion = {
                 trigger = { show_in_snippet = false, prefetch_on_insert = true, show_on_insert = true },
-                list = {
-                    cycle = { from_bottom = true, from_top = true },
-                    selection = { preselect = false, auto_insert = true },
-                },
                 keyword = { range = "full" },
                 ghost_text = { enabled = true },
+                list = {
+                    cycle = { from_bottom = true, from_top = true },
+                    selection = { preselect = false, auto_insert = false },
+                },
                 accept = {
                     create_undo_point = true,
                     auto_brackets = {

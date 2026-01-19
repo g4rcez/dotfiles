@@ -2,9 +2,6 @@ export UID="$(id -u)"
 export GID="$(id -g)"
 #####################################################################################
 ## PATH
-export GOPATH=$HOME/go
-export GOROOT=$(go env GOROOT)
-export GOBIN=$GOPATH/bin
 PATH2="$PATH"
 LOCAL_SOURCE_FILES=(
     "/usr/local/bin"
@@ -24,6 +21,10 @@ LOCAL_SOURCE_FILES=(
     "$HOME/.bun/bin"
     "$HOME/.opencode/bin"
 )
+
+export GOPATH="$HOME/go"
+export GOROOT="$(go env GOROOT)"
+export GOBIN="$GOPATH/bin"
 
 for SOURCE_FILE in "${LOCAL_SOURCE_FILES[@]}"; do
   if [[ -d "$SOURCE_FILE" ]]; then 
@@ -101,7 +102,7 @@ export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
-source "$DOTFILES/zsh/ls.sh"
+source "$DOTFILES/config/zsh/ls.sh"
 
 #####################################################################################
 ## ai

@@ -7,29 +7,26 @@ vim.api.nvim_create_autocmd("LspAttach", {
         opts.desc = "Show LSP references"
         keymap.set("n", "gR", function()
             Snacks.picker.lsp_references()
-        end, opts) -- show definition, references
+        end, opts)
 
         opts.desc = "Go to declaration"
-        keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
+        keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
         opts.desc = "Show LSP definition"
-        keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definition
+        keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
         opts.desc = "Show LSP implementations"
         keymap.set("n", "gi", function()
             Snacks.picker.lsp_implementations()
-        end, opts) -- show lsp implementations
+        end, opts)
 
         opts.desc = "Show LSP type definitions"
         keymap.set("n", "gt", function()
             Snacks.picker.lsp_type_definitions()
-        end, opts) -- show lsp type definitions
+        end, opts)
 
         opts.desc = "See available code actions"
         keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-
-        -- opts.desc = "Smart rename"
-        -- keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
         opts.desc = "Show buffer diagnostics"
         keymap.set("n", "<leader>D", function()

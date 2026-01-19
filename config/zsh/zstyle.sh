@@ -75,4 +75,4 @@ zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
 
 ############################## syntax-highlighting #################################
-source $DOTFILES/zsh/syntax-highlighting.zsh
+source $DOTFILES/config/zsh/syntax-highlighting.zsh

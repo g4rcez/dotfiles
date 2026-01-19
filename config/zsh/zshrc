@@ -1,7 +1,7 @@
 ##############################################################################################################
 ## exports
-source "$HOME/dotfiles/zsh/exports.sh"
-source "$HOME/dotfiles/zsh/utils.sh"
+source "$HOME/dotfiles/config/zsh/exports.sh"
+source "$HOME/dotfiles/config/zsh/utils.sh"
 safeImport "$HOME/.local-exports.sh"
 ##############################################################################################################
 ## znap
@@ -45,15 +45,15 @@ local -a SOURCE=(
   "$HOME/.cargo/env"
   "$HOME/.fzf.zsh"
   "$HOME/.fzf/shell/key-bindings.zsh"
-  "$DOTFILES/zsh/alias.sh"
-  "$DOTFILES/zsh/zstyle.sh"
-  "$DOTFILES/zsh/history.sh"
-  "$DOTFILES/zsh/fzf.sh"
   "$DOTFILES/bin/fzf-git"
-  "$DOTFILES/zsh/git.sh"
-  "$DOTFILES/zsh/node.sh"
-  "$DOTFILES/zsh/zellij.sh"
-  "$DOTFILES/zsh/extras.sh"
+  "$DOTFILES/config/zsh/alias.sh"
+  "$DOTFILES/config/zsh/zstyle.sh"
+  "$DOTFILES/config/zsh/history.sh"
+  "$DOTFILES/config/zsh/fzf.sh"
+  "$DOTFILES/config/zsh/git.sh"
+  "$DOTFILES/config/zsh/node.sh"
+  "$DOTFILES/config/zsh/zellij.sh"
+  "$DOTFILES/config/zsh/extras.sh"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
   "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
 )
@@ -76,8 +76,4 @@ autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 source "$HOME/.config/bunsen/env.sh"
-alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
-# BEGIN BUNSEN
-source "/Users/garcez/.config/bunsen/env.sh"
-# END BUNSEN

@@ -19,7 +19,6 @@ local keys = {
 
 return {
     {
-        enabled = false,
         "nvimtools/none-ls.nvim",
         keys = keys,
         opts = function(_, opts)
@@ -58,6 +57,7 @@ return {
         end,
     },
     {
+        enabled = false,
         "stevearc/conform.nvim",
         event = { "BufWritePre", "BufNewFile" },
         cmd = { "ConformInfo" },

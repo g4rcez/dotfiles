@@ -54,10 +54,6 @@ function zshrc() {
     nvim "$HOME/dotfiles/zsh/zshrc"
 }
 
-function fvim() {
-    nvim "$(fzf)"
-}
-
 function codi() {
     local syntax="${1:-typescript}"
     shift
@@ -148,14 +144,15 @@ function listening() {
 }
 
 function vivid-update() {
-    echo "export LS_COLORS='$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)'" >$DOTFILES/zsh/ls.sh
+    echo "export LS_COLORS='$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)'" >$DOTFILES/config/zsh/ls.sh
     echo "🚀 Vivid updated...New LS_COLORS are enabled"
 }
 
 function updateAll() {
     vivid-update
     nodeUpdatePackages
-    brew update; brew upgrade
+    brew update
+    brew upgrade
 }
 
 function secretuuid() {
@@ -216,15 +213,14 @@ function tmux-start() {
 }
 
 function killport() {
-    lsof -ti:$1 | xargs kill -9 2>/dev/null && echo "killed $1" 
+    lsof -ti:"$1" | xargs kill -9 2>/dev/null && echo "killed $1"
 }
 
 function psgrep() {
-    ps aux | grep -i "$1" | grep -v grep 
+    ps aux | grep -i "$1" | grep -v grep
 }
 
 function killnodemodules() {
-  find . -name 'node_modules' -type d -prune -exec rm -rf {} + 2>/dev/null
-  echo "cleaned node_modules"
+    find . -name 'node_modules' -type d -prune -exec rm -rf {} + 2>/dev/null
+    echo "cleaned node_modules"
 }
-
