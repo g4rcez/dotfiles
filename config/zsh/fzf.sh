@@ -95,6 +95,8 @@ function st() {
     local selected
     selected=$(git -c color.status=always status --short |
         fzf --no-height --cycle "$@" --border -m --ansi --nth 2..,.. \
+            --bind 'ctrl-d:preview-up' \
+            --bind 'ctrl-u:preview-down' \
             --preview '(if [ -d {-1} ];then lsd -l {-1}; else git diff --color=always -- {-1} | delta --side-by-side -w "$(tput cols)-45" | sed 1,4d; cat {-1}; fi)' |
         cut -c4- | sed 's/.* -> //')
     if [[ $selected ]]; then

@@ -2,21 +2,22 @@
 TERM = "xterm-256color"
 
 [window]
-opacity = 1
+opacity = 0.9
 padding.x = 2
-padding.y = 1
+padding.y = 2
 decorations_theme_variant = "Dark"
 blur = true
 resize_increments = true
 option_as_alt = "Both"
 startup_mode = "Windowed"
+decorations = "None"
 dimensions = { columns = 80, lines = 50 }
 
 [font]
 normal.family = "JetBrainsMono Nerd Font"
 bold.style = "Regular"
 builtin_box_drawing = true
-offset.y = 15
+offset.y = 19
 offset.x = 1
 size = 17
 

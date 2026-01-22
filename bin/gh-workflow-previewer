@@ -1,0 +1,14 @@
+#!/bin/bash
+NAME="$1"
+FILE="$2"
+
+echo "# $NAME"
+echo "---"
+
+SPEC=$(jq -a --arg NAME "$NAME" '.[] | select(.name == $NAME)' "$FILE")
+FILEPATH=$(echo $SPEC | jq -c '.path' | sed 's/^"//' | sed 's/"$//')
+if [ -f "$FILEPATH" ]; then
+    cat "$FILEPATH"
+else
+    echo "$FILEPATH"
+fi

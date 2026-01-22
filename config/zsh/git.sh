@@ -84,7 +84,14 @@ function clone() {
   git clone "git@github.com:$1"
 }
 
-function wip() {
+function wip.ai() {
+  git add -A .;
+  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
+  git commit --no-verify -S -m "${NOW}";
+  git push;
+}
+
+function wip.ai() {
   git add -A .;
   COMMIT_MESSAGE=$(aicommit);
   NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
@@ -206,20 +213,29 @@ function draft() {
     createpr "$1" "--draft"
 }
 
-function ghaction() {
+function gh.action() {
     gh workflow run "${1}.yml" --ref "${2}"
 }
 
-function aicommit() {
+function gh.workflow() {
+    local tmpfile="$(mktemp)"
+    gh workflow list --json id,name,path,state > "$tmpfile"
+    jq -r '.[] | .name' "$tmpfile" | \
+        fzf --ansi --info inline \
+        --preview "$DOTFILES/bin/gh-workflow-previewer {} $tmpfile" --bind "enter:become(echo {} | pbcopy && echo {})"
+    rm -f "$tmpfile"
+}
+
+function aicommit {
     COMMIT_MESSAGE=$(git diff HEAD -U5 | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1');
-    echo $COMMIT_MESSAGE | pbcopy
-    echo $COMMIT_MESSAGE
+    echo "$COMMIT_MESSAGE" | pbcopy
+    echo "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
     local pr_ref="${1:-}"
     PR_MESSAGE=$(gh pr diff $pr_ref | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
-    echo $PR_MESSAGE | pbcopy
-    echo $PR_MESSAGE
+    echo "$PR_MESSAGE"| pbcopy
+    echo "$PR_MESSAGE"
 }
 

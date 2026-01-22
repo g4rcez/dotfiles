@@ -224,3 +224,13 @@ function killnodemodules() {
     find . -name 'node_modules' -type d -prune -exec rm -rf {} + 2>/dev/null
     echo "cleaned node_modules"
 }
+
+function npm.kill () {
+    killnodemodules
+}
+
+function ask_ai() {
+    "$AI_CLI_NAME" --model "$AI_CLI_MODEL" "$@"
+}
+alias '??'="ask_ai"
+

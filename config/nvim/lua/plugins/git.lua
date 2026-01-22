@@ -1,4 +1,6 @@
 return {
+    "tpope/vim-fugitive",
+    { "StackInTheWild/headhunter.nvim", opts = {} },
     {
         "esmuellert/codediff.nvim",
         dependencies = { "MunifTanjim/nui.nvim" },
