@@ -211,14 +211,14 @@ function ghaction() {
 }
 
 function aicommit() {
-    COMMIT_MESSAGE=$(git diff HEAD -U5 | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1');
+    COMMIT_MESSAGE=$(git diff HEAD -U5 | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1');
     echo $COMMIT_MESSAGE | pbcopy
     echo $COMMIT_MESSAGE
 }
 
 function prdesc() {
     local pr_ref="${1:-}"
-    PR_MESSAGE=$(gh pr diff $pr_ref | claude --model claude-haiku-4-5 --print "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
+    PR_MESSAGE=$(gh pr diff $pr_ref | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
     echo $PR_MESSAGE | pbcopy
     echo $PR_MESSAGE
 }

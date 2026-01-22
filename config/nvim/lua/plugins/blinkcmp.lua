@@ -152,7 +152,7 @@ return {
                 },
             },
             keymap = {
-                preset = "default",
+                preset = "super-tab",
                 ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
                 ["<C-c>"] = { "hide", "fallback" },
                 ["<C-y>"] = { "select_and_accept" },

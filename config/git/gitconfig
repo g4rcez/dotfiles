@@ -1,6 +1,6 @@
 [commit]
 	gpgsign = true
-    template = ~/dotfiles/git/gitmessage
+    template = ~/dotfiles/config/git/gitmessage
 
 [github]
   user = g4rcez
