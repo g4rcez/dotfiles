@@ -2,12 +2,16 @@ export UID="$(id -u)"
 export GID="$(id -g)"
 #####################################################################################
 ## PATH
+export GOROOT="$(brew --prefix go)/libexec"
+export GOPATH="$HOME/go"
+
 PATH2="$PATH"
 LOCAL_SOURCE_FILES=(
     "/usr/local/bin"
     "/opt/homebrew/bin"
     "$PNPM_HOME"
     "$GOPATH/bin"
+    "$GOROOT/bin"
     "$HOME/.antigravity/antigravity/bin"
     "$HOME/.cargo/env"
     "$HOME/.local/bin"
@@ -22,9 +26,6 @@ LOCAL_SOURCE_FILES=(
     "$HOME/.opencode/bin"
 )
 
-export GOPATH="$HOME/go"
-export GOROOT="$(go env GOROOT)"
-export GOBIN="$GOPATH/bin"
 
 for SOURCE_FILE in "${LOCAL_SOURCE_FILES[@]}"; do
   if [[ -d "$SOURCE_FILE" ]]; then 
@@ -103,7 +104,6 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
 source "$DOTFILES/config/zsh/ls.sh"
-
 #####################################################################################
 ## ai
 unset ANTHROPIC_API_KEY

@@ -1,15 +1,13 @@
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 
-vim.schedule(function()
-    vim.o.clipboard = "unnamedplus"
-end)
-
 vim.g.have_nerd_font = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.snacks_animate = false
+vim.g.lsp_buf_big_file_threshold = 1024 * 1024
 
 vim.o.breakindent = true
+vim.o.breakindentopt = "list:-1"
 vim.o.confirm = true
 vim.o.cursorline = true
 vim.o.ignorecase = true
@@ -20,13 +18,14 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.scrolloff = 10
 vim.o.showmode = false
+vim.o.winborder = "single"
 vim.o.signcolumn = "yes"
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 500
 vim.o.undofile = true
-vim.o.updatetime = 250
+vim.o.updatetime = 1000
 
 vim.opt.autowrite = true
 vim.opt.breakindent = true
@@ -68,6 +67,7 @@ vim.opt.shiftround = true
 vim.opt.shiftwidth = 2
 vim.opt.shortmess:append { W = true, I = true, c = true, C = true }
 vim.opt.showcmd = false
+vim.opt.shadafile = "NONE"
 vim.opt.showmode = false
 vim.opt.sidescrolloff = 8
 vim.opt.signcolumn = "yes"
@@ -84,21 +84,20 @@ vim.opt.timeout = true
 vim.opt.timeoutlen = 300
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
-vim.opt.updatetime = 200
 vim.opt.virtualedit = "block"
 vim.opt.wildmode = "longest:full,full"
 vim.opt.winminwidth = 5
 vim.opt.wrap = false
 vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.lazyredraw = true
+vim.opt.ttyfast = true
+vim.opt.regexpengine = 1
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath "data" .. "/undo"
+vim.o.switchbuf = "usetab"
 
-vim.filetype.add { extension = { ["http"] = "http" } }
-vim.diagnostic.config {
-    signs = {
-        text = {
-            [vim.diagnostic.severity.ERROR] = "✘",
-            [vim.diagnostic.severity.WARN] = "▲",
-            [vim.diagnostic.severity.HINT] = "⚑",
-            [vim.diagnostic.severity.INFO] = "»",
-        },
-    },
-}
+-- Undercurl
+vim.cmd [[let &t_Cs = "\e[4:3m"]]
+vim.cmd [[let &t_Ce = "\e[4:0m"]]

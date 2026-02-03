@@ -78,7 +78,6 @@ return {
     {
         cond = not require("config.vscode").isVscode(),
         "saghen/blink.cmp",
-        version = "1.*",
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             "onsails/lspkind.nvim",
@@ -110,10 +109,10 @@ return {
             snippets = { preset = "luasnip" },
             appearance = { nerd_font_variant = "mono" },
             cmdline = {
-                keymap = { preset = "super-tab" },
+                keymap = { preset = "default" },
                 completion = {
                     ghost_text = { enabled = true },
-                    list = { selection = { preselect = false } },
+                    list = { selection = { preselect = true } },
                     menu = {
                         auto_show = function()
                             return vim.fn.getcmdtype() == ":"
@@ -127,7 +126,7 @@ return {
                 ghost_text = { enabled = true },
                 list = {
                     cycle = { from_bottom = true, from_top = true },
-                    selection = { preselect = false, auto_insert = false },
+                    selection = { preselect = true, auto_insert = true },
                 },
                 accept = {
                     create_undo_point = true,
@@ -153,7 +152,7 @@ return {
             },
             keymap = {
                 preset = "super-tab",
-                ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+                ["<Tab>"] = { "select_and_accept", "fallback" },
                 ["<C-c>"] = { "hide", "fallback" },
                 ["<C-y>"] = { "select_and_accept" },
                 ["<Esc>"] = { "cancel", "fallback" },
@@ -167,15 +166,15 @@ return {
             sources = {
                 show_in_snippet = true,
                 default = {
-                    "snippets",
                     "fuzzy-path",
                     "lazydev",
                     "lsp",
-                    "git",
+                    "snippets",
+                    -- "git",
                     "path",
                     "conventional_commits",
                     "dadbod",
-                    "buffer",
+                    -- "buffer",
                     "dictionary",
                 },
                 providers = {
@@ -194,7 +193,7 @@ return {
                     },
                     lsp = {
                         name = "LSP",
-                        async = false,
+                        async = true,
                         enabled = true,
                         fallbacks = {},
                         override = nil,

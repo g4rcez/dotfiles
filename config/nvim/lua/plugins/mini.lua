@@ -1,18 +1,46 @@
 return {
     {
         "nvim-mini/mini.pairs",
-        event = "VeryLazy",
         opts = {
-            modes = { insert = true, command = true, terminal = false },
-            skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+            markdown = true,
             skip_ts = { "string" },
             skip_unbalanced = true,
-            markdown = true,
-        }
+            skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+            modes = { insert = true, command = true, terminal = false },
+            mappings = {
+                ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+                ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+                ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+                [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+                ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+                ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+                ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
+                ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+                ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
+            },
+        },
+    },
+    {
+        "nvim-mini/mini.bracketed",
+        opts = {
+            buffer = { suffix = "b", options = {} },
+            comment = { suffix = "c", options = {} },
+            conflict = { suffix = "x", options = {} },
+            diagnostic = { suffix = "d", options = {} },
+            file = { suffix = "f", options = {} },
+            indent = { suffix = "i", options = {} },
+            jump = { suffix = "j", options = {} },
+            location = { suffix = "l", options = {} },
+            oldfile = { suffix = "r", options = {} },
+            quickfix = { suffix = "q", options = {} },
+            treesitter = { suffix = "n", options = {} },
+            undo = { suffix = "u", options = {} },
+            window = { suffix = "w", options = {} },
+            yank = { suffix = "y", options = {} },
+        },
     },
     {
         "nvim-mini/mini.nvim",
-        cond = require("config.vscode").isVscode(),
         config = function()
             require("mini.diff").setup()
             require("mini.ai").setup { n_lines = 500 }
@@ -23,6 +51,7 @@ return {
             require("mini.map").setup()
             require("mini.hipatterns").setup()
             require("mini.bufremove").setup()
+            require("mini.files").setup { windows = { preview = true } }
             vim.keymap.set("n", "<leader>g=", function()
                 require("mini.diff").toggle_overlay(0)
             end, { desc = "Git diff" })
@@ -108,40 +137,6 @@ return {
                     end, setArgs "[P]Copy file/directory to clipboard")
                 end,
             })
-            require("mini.bracketed").setup {
-                buffer = { suffix = "b", options = {} },
-                comment = { suffix = "c", options = {} },
-                conflict = { suffix = "x", options = {} },
-                diagnostic = { suffix = "d", options = {} },
-                file = { suffix = "f", options = {} },
-                indent = { suffix = "i", options = {} },
-                jump = { suffix = "j", options = {} },
-                location = { suffix = "l", options = {} },
-                oldfile = { suffix = "r", options = {} },
-                quickfix = { suffix = "q", options = {} },
-                treesitter = { suffix = "n", options = {} },
-                undo = { suffix = "u", options = {} },
-                window = { suffix = "w", options = {} },
-                yank = { suffix = "y", options = {} },
-            }
-            require("mini.pairs").setup {
-                markdown = true,
-                skip_ts = { "string" },
-                skip_unbalanced = true,
-                skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
-                modes = { insert = true, command = true, terminal = false },
-                mappings = {
-                    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-                    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-                    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
-                    [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
-                    ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
-                    ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
-                    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
-                    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
-                    ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
-                },
-            }
         end,
     },
 }

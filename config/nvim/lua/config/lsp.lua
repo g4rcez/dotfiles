@@ -1,5 +1,24 @@
 local keymap = vim.keymap
 
+vim.filetype.add { extension = {} }
+vim.filetype.add {
+    extension = {
+        mdx = "mdx",
+        http = "http",
+        rasi = "rasi",
+        rofi = "rasi",
+        wofi = "rasi",
+        vifmrc = "vim",
+    },
+    pattern = {
+        [".*/waybar/config"] = "jsonc",
+        [".*/mako/config"] = "dosini",
+        [".*/kitty/.+%.conf"] = "kitty",
+        [".*/hypr/.+%.conf"] = "hyprlang",
+        ["%.env%.[%w_.-]+"] = "sh",
+    },
+}
+
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
@@ -58,10 +77,9 @@ local severity = vim.diagnostic.severity
 
 vim.diagnostic.config {
     severity_sort = true,
-    diagnostics = {
-        underline = true,
-        update_in_insert = true,
-    },
+    float = { border = "rounded", source = "if_many" },
+    underline = { severity = vim.diagnostic.severity.WARN },
+    diagnostics = { underline = true, update_in_insert = true },
     signs = {
         text = {
             [severity.ERROR] = " ",
@@ -69,6 +87,19 @@ vim.diagnostic.config {
             [severity.HINT] = "󰠠 ",
             [severity.INFO] = " ",
         },
+    },
+    virtual_text = {
+        spacing = 2,
+        source = true,
+        format = function(diagnostic)
+            local diagnostic_message = {
+                [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                [vim.diagnostic.severity.WARN] = diagnostic.message,
+                [vim.diagnostic.severity.INFO] = diagnostic.message,
+                [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+        end,
     },
 }
 
@@ -248,12 +279,10 @@ vim.lsp.config("vtsls", {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
     settings = {
         refactor_auto_rename = true,
+        experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
         typescript = {
-            tsserver = { maxTsServerMemory = 12000 },
-            suggest = {
-                enabled = true,
-                completeFunctionCalls = true,
-            },
+            tsserver = { maxTsServerMemory = 13000 },
+            suggest = { enabled = true, completeFunctionCalls = true },
             inlayHints = {
                 variableTypes = { enabled = true },
                 parameterTypes = { enabled = true },
@@ -301,19 +330,6 @@ vim.lsp.config("lua_ls", {
     },
 })
 
-vim.filetype.add {
-    extension = { rasi = "rasi", rofi = "rasi", wofi = "rasi" },
-    filename = {
-        ["vifmrc"] = "vim",
-    },
-    pattern = {
-        [".*/waybar/config"] = "jsonc",
-        [".*/mako/config"] = "dosini",
-        [".*/kitty/.+%.conf"] = "kitty",
-        [".*/hypr/.+%.conf"] = "hyprlang",
-        ["%.env%.[%w_.-]+"] = "sh",
-    },
-}
 vim.treesitter.language.register("bash", "kitty")
 vim.treesitter.language.register("bash", "zsh")
 

@@ -99,6 +99,9 @@ end, { desc = "Git diff" })
 bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
 bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
 bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
+bind.normal("<leader>se", function()
+    require("mini.files").open(vim.api.nvim_buf_get_name(0))
+end, { desc = "Mini files" })
 bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
 
@@ -140,4 +143,3 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
-
