@@ -10,9 +10,7 @@ const file = (...strings: string[]) =>
 const EDITOR = "nvim";
 
 export default defineConfig({
-    profiles: {
-        osx: { espanso, karabiner }
-    },
+    profiles: { osx: { espanso, karabiner } },
     env: {
         shells: ["zsh"],
         exportFile: "~/.config/bunsen/env.sh",
@@ -45,5 +43,7 @@ export default defineConfig({
         "~/.gitconfig": file("config/git/gitconfig"),
         "~/.ideavimrc": file("config/idea/.ideavimrc"),
         "~/.zshrc": file("config/zsh/zshrc"),
+        "~/Library/Application Support/Code/User/keybindings.json": file("./config/vscode/keybindings.json"),
+        "~/Library/Application Support/Code/User/settings.json": file("./config/vscode/settings.json"),
     },
 });

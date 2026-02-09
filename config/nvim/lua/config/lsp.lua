@@ -279,9 +279,9 @@ vim.lsp.config("vtsls", {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
     settings = {
         refactor_auto_rename = true,
-        experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
+        -- experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
         typescript = {
-            tsserver = { maxTsServerMemory = 13000 },
+            -- tsserver = { maxTsServerMemory = 13000 },
             suggest = { enabled = true, completeFunctionCalls = true },
             inlayHints = {
                 variableTypes = { enabled = true },

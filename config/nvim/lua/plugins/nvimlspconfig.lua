@@ -69,7 +69,25 @@ return {
             })
             if not vscode.isVscode() then
                 local capabilities = require("blink.cmp").get_lsp_capabilities()
-                local servers = {}
+                local servers = {
+                    eslint = {
+                        on_new_config = function(config, root_dir)
+                            local has_config = #vim.fs.find({
+                                "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs",
+                                ".eslintrc", ".eslintrc.js", ".eslintrc.cjs",
+                                ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml",
+                            }, { path = root_dir, upward = true, limit = 1 }) > 0
+                            if not has_config then
+                                config.enabled = false
+                            end
+                        end,
+                        settings = {
+                            eslint = {
+                                experimental = { useFlatConfig = true },
+                            },
+                        },
+                    },
+                }
                 local ensure_installed = vim.tbl_keys( {})
                 vim.list_extend(ensure_installed, { "stylua" })
                 require("mason-tool-installer").setup { ensure_installed = ensure_installed }

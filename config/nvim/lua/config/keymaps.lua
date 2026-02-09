@@ -3,9 +3,7 @@ local function createMapper()
     M.DEFAULT_OPTS = { noremap = true, silent = true }
 
     M.keymap = function(mode, from, to, opts)
-        opts = opts or {}
-        opts.silent = opts.silent ~= true
-        opts.noremap = opts.noremap ~= true
+        opts = vim.tbl_extend("keep", opts or {}, M.DEFAULT_OPTS)
         vim.keymap.set(mode, from, to, opts)
     end
 

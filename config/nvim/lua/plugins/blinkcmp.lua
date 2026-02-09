@@ -7,7 +7,7 @@ return {
             trigger_char = "@",
             search_hidden = true,
             relative_paths = true,
-            filetypes = { "markdown", "json", "text" },
+            filetypes = { "markdown", "json", "text", "txt", "gitcommit" },
         },
     },
     {
@@ -16,9 +16,7 @@ return {
         event = "InsertEnter",
         opts = {
             bind = true,
-            handler_opts = {
-                border = "rounded",
-            },
+            handler_opts = { border = "rounded" },
         },
     },
     {
@@ -78,13 +76,13 @@ return {
     {
         cond = not require("config.vscode").isVscode(),
         "saghen/blink.cmp",
+        version = "1.*",
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             "onsails/lspkind.nvim",
             "nvim-lua/plenary.nvim",
             "Kaiser-Yang/blink-cmp-git",
             "rafamadriz/friendly-snippets",
-            "Kaiser-Yang/blink-cmp-dictionary",
             "kristijanhusak/vim-dadbod-completion",
             { "L3MON4D3/LuaSnip", version = "v2.*" },
             "disrupted/blink-cmp-conventional-commits",
@@ -96,7 +94,9 @@ return {
                 implementation = "prefer_rust",
                 sorts = {
                     function(a, b)
-                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then return end
+                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+                            return
+                        end
                         return b.client_name == "emmet_ls"
                     end,
                     "exact",
@@ -121,9 +121,9 @@ return {
                 },
             },
             completion = {
-                trigger = { show_in_snippet = false, prefetch_on_insert = true, show_on_insert = true },
                 keyword = { range = "full" },
                 ghost_text = { enabled = true },
+                trigger = { show_in_snippet = false, prefetch_on_insert = true, show_on_insert = true },
                 list = {
                     cycle = { from_bottom = true, from_top = true },
                     selection = { preselect = true, auto_insert = true },
@@ -140,12 +140,12 @@ return {
                 },
                 menu = {
                     enabled = true,
-                    auto_show = true,
+                    -- auto_show = true,
                     border = "single",
-                    draw = { treesitter = { "lsp" }, padding = 2 },
+                    draw = { treesitter = { "lsp" }, padding = 1 },
                 },
                 documentation = {
-                    auto_show = true,
+                    -- auto_show = true,
                     treesitter_highlighting = true,
                     window = { border = "single" },
                 },
@@ -173,14 +173,12 @@ return {
                     -- "git",
                     "path",
                     "conventional_commits",
-                    "dadbod",
+                    -- "dadbod",
                     -- "buffer",
-                    "dictionary",
                 },
                 providers = {
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
                     dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-                    dictionary = { name = "Dict", min_keyword_length = 3, module = "blink-cmp-dictionary" },
                     lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                     ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
                     conventional_commits = {
@@ -193,13 +191,13 @@ return {
                     },
                     lsp = {
                         name = "LSP",
-                        async = true,
+                        async = false,
                         enabled = true,
                         fallbacks = {},
                         override = nil,
                         max_items = nil,
                         score_offset = 10,
-                        timeout_ms = 2000,
+                        timeout_ms = 1000,
                         transform_items = nil,
                         min_keyword_length = 0,
                         should_show_items = true,
