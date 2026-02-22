@@ -4,7 +4,7 @@
   "html-css-class-completion.JavaScriptLanguages": [
     "javascript",
     "javascriptreact",
-    "typescriptreact"
+    "typescriptreact",
   ],
   "cSpell.language": "en,pt,pt_BR",
   "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
@@ -48,12 +48,12 @@
     "links.ts": "http",
     "types.ts": "typescript-def",
     "*.types.ts": "typescript-def",
-    "*.step.tsx": "sublime"
+    "*.step.tsx": "sublime",
   },
   "material-icon-theme.folders.associations": {
     "notification": "messages",
     "http-client": "functions",
-    "dom": "views"
+    "dom": "views",
   },
   "nxConsole.showNodeVersionOnStartup": false,
   "outline.showNumbers": true,
@@ -69,14 +69,14 @@
   "window.titleBarStyle": "native",
   "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "catppuccin-mocha",
-  "workbench.layoutControl.enabled": true,
+  "workbench.layoutControl.enabled": false,
   "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
   "workbench.settings.editor": "json",
   "workbench.settings.useSplitJSON": true,
   "workbench.sideBar.location": "right",
   "workbench.statusBar.visible": true,
   "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "git.openRepositoryInParentFolders": "never",
   "tailwindCSS.hovers": true,
@@ -87,11 +87,11 @@
     "ngClass",
     "class:list",
     "cva",
-    "container"
+    "container",
   ],
   "notebook.insertFinalNewline": true,
   "notebook.stickyScroll.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
   "redhat.telemetry.enabled": false,
-  "git.autofetch": true
+  "git.autofetch": true,
 }

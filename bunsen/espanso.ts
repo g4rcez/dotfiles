@@ -10,6 +10,7 @@ espanso.imports.push("~/.shortcuts.yml");
 
 espanso
     .insert("blog", "https://garcez.dev", "My blog")
+    .insert("linkedin", "https://www.linkedin.com/in/allan-garcez/", "My LinkedIn")
     .insert("git", "https://github.com/g4rcez/", "My github")
     .insert("twitter", "https://x.com/garcez_allan", "My twitter")
     .format("date", "date", "%d/%m/%Y", "Date in DD/MM/YYYY")

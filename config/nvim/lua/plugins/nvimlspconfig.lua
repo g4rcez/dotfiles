@@ -22,7 +22,7 @@ return {
                     map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
                     map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
                     map("K", function()
-                        vim.lsp.buf.hover { border = "rounded", focusable = true, wrap = true }
+                        vim.lsp.buf.hover { border = "single", focusable = true, wrap = true }
                     end, "Hover")
                     ---@param client vim.lsp.Client
                     ---@param method vim.lsp.protocol.Method
@@ -69,25 +69,7 @@ return {
             })
             if not vscode.isVscode() then
                 local capabilities = require("blink.cmp").get_lsp_capabilities()
-                local servers = {
-                    eslint = {
-                        on_new_config = function(config, root_dir)
-                            local has_config = #vim.fs.find({
-                                "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs",
-                                ".eslintrc", ".eslintrc.js", ".eslintrc.cjs",
-                                ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml",
-                            }, { path = root_dir, upward = true, limit = 1 }) > 0
-                            if not has_config then
-                                config.enabled = false
-                            end
-                        end,
-                        settings = {
-                            eslint = {
-                                experimental = { useFlatConfig = true },
-                            },
-                        },
-                    },
-                }
+                local servers = {}
                 local ensure_installed = vim.tbl_keys( {})
                 vim.list_extend(ensure_installed, { "stylua" })
                 require("mason-tool-installer").setup { ensure_installed = ensure_installed }

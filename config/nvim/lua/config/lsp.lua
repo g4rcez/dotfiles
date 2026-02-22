@@ -1,5 +1,38 @@
 local keymap = vim.keymap
 
+vim.lsp.inlay_hint.enable(true, { 0 })
+vim.g.inlay_hints_visible = true
+
+local severity = vim.diagnostic.severity
+
+vim.diagnostic.config {
+    severity_sort = true,
+    float = { border = border, source = "if_many" },
+    underline = { severity = vim.diagnostic.severity.WARN },
+    diagnostics = { underline = true, update_in_insert = true },
+    signs = {
+        text = {
+            [severity.ERROR] = " ",
+            [severity.WARN] = " ",
+            [severity.HINT] = "󰠠 ",
+            [severity.INFO] = " ",
+        },
+    },
+    virtual_text = {
+        spacing = 2,
+        source = true,
+        format = function(diagnostic)
+            local diagnostic_message = {
+                [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                [vim.diagnostic.severity.WARN] = diagnostic.message,
+                [vim.diagnostic.severity.INFO] = diagnostic.message,
+                [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+        end,
+    },
+}
+
 vim.filetype.add { extension = {} }
 vim.filetype.add {
     extension = {
@@ -58,50 +91,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
         opts.desc = "Go to previous diagnostic"
         keymap.set("n", "[d", function()
             vim.diagnostic.jump { count = -1, float = true }
-        end, opts) -- jump to previous diagnostic in buffer
-        --
+        end, opts)
+
         opts.desc = "Go to next diagnostic"
         keymap.set("n", "]d", function()
             vim.diagnostic.jump { count = 1, float = true }
-        end, opts) -- jump to next diagnostic in buffer
+        end, opts)
 
         opts.desc = "Show documentation for what is under cursor"
-        keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+        keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
         opts.desc = "Restart LSP"
         keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
     end,
 })
-
-local severity = vim.diagnostic.severity
-
-vim.diagnostic.config {
-    severity_sort = true,
-    float = { border = "rounded", source = "if_many" },
-    underline = { severity = vim.diagnostic.severity.WARN },
-    diagnostics = { underline = true, update_in_insert = true },
-    signs = {
-        text = {
-            [severity.ERROR] = " ",
-            [severity.WARN] = " ",
-            [severity.HINT] = "󰠠 ",
-            [severity.INFO] = " ",
-        },
-    },
-    virtual_text = {
-        spacing = 2,
-        source = true,
-        format = function(diagnostic)
-            local diagnostic_message = {
-                [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                [vim.diagnostic.severity.WARN] = diagnostic.message,
-                [vim.diagnostic.severity.INFO] = diagnostic.message,
-                [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-        end,
-    },
-}
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -123,6 +126,7 @@ vim.lsp.config("emmet_ls", {
     init_options = {
         includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
         html = { options = { ["jsx.enabled"] = true } },
+        showSuggestionsAsSnippets = false,
     },
 })
 

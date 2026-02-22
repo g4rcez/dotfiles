@@ -84,7 +84,7 @@ function clone() {
   git clone "git@github.com:$1"
 }
 
-function wip.ai() {
+function wip() {
   git add -A .;
   NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
   git commit --no-verify -S -m "${NOW}";

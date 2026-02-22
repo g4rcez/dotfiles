@@ -3,7 +3,7 @@ return {
         "newtoallofthis123/blink-cmp-fuzzy-path",
         dependencies = { "saghen/blink.cmp" },
         opts = {
-            max_results = 20,
+            max_results = 5,
             trigger_char = "@",
             search_hidden = true,
             relative_paths = true,
@@ -20,6 +20,7 @@ return {
         },
     },
     {
+        enabled = false,
         cond = not require("config.vscode").isVscode(),
         "L3MON4D3/LuaSnip",
         dependencies = { "rafamadriz/friendly-snippets" },
@@ -87,26 +88,19 @@ return {
             { "L3MON4D3/LuaSnip", version = "v2.*" },
             "disrupted/blink-cmp-conventional-commits",
         },
+        opts_extend = {
+            "sources.completion.enabled_providers",
+            "sources.compat",
+            "sources.default",
+        },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
             fuzzy = {
-                implementation = "prefer_rust",
-                sorts = {
-                    function(a, b)
-                        if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-                            return
-                        end
-                        return b.client_name == "emmet_ls"
-                    end,
-                    "exact",
-                    "score",
-                    "sort_text",
-                    "label",
-                },
+                implementation = "rust",
+                sorts = { "score", "exact", "sort_text", "label" },
             },
-            signature = { enabled = true },
-            snippets = { preset = "luasnip" },
+            signature = { enabled = true, window = { border = "single" } },
             appearance = { nerd_font_variant = "mono" },
             cmdline = {
                 keymap = { preset = "default" },
@@ -139,13 +133,12 @@ return {
                     },
                 },
                 menu = {
-                    enabled = true,
-                    -- auto_show = true,
                     border = "single",
                     draw = { treesitter = { "lsp" }, padding = 1 },
                 },
                 documentation = {
-                    -- auto_show = true,
+                    auto_show = true,
+                    auto_show_delay_ms = 500,
                     treesitter_highlighting = true,
                     window = { border = "single" },
                 },
@@ -164,44 +157,37 @@ return {
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
-                show_in_snippet = true,
+                compat = {},
+                per_filetype = {
+                    lua = { inherit_defaults = true, "lazydev" },
+                    markdown = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    json = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    text = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    txt = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    gitcommit = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                },
                 default = {
-                    "fuzzy-path",
-                    "lazydev",
                     "lsp",
                     "snippets",
-                    -- "git",
                     "path",
-                    "conventional_commits",
-                    -- "dadbod",
-                    -- "buffer",
+                    "dadbod",
+                    "buffer",
                 },
                 providers = {
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
                     dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-                    lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
                     ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
+                    buffer = { min_keyword_length = 4 },
+                    snippets = { min_keyword_length = 3, score_offset = -100 },
+                    lazydev = {
+                        name = "LazyDev",
+                        module = "lazydev.integrations.blink",
+                        score_offset = 100,
+                    },
                     conventional_commits = {
                         name = "Conventional Commits",
                         module = "blink-cmp-conventional-commits",
-                        enabled = function()
-                            return vim.bo.filetype == "gitcommit"
-                        end,
                         opts = {},
-                    },
-                    lsp = {
-                        name = "LSP",
-                        async = false,
-                        enabled = true,
-                        fallbacks = {},
-                        override = nil,
-                        max_items = nil,
-                        score_offset = 10,
-                        timeout_ms = 1000,
-                        transform_items = nil,
-                        min_keyword_length = 0,
-                        should_show_items = true,
-                        module = "blink.cmp.sources.lsp",
                     },
                 },
             },
