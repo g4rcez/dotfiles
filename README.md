@@ -19,6 +19,7 @@
 
 | Tool | Purpose | Configuration |
 |------|---------|--------------|
+| **Writeme** | Text editor for notes | [`writeme.dev`](https://app.writeme.dev/) |
 | **Karabiner Elements** | Keyboard remapping & shortcuts | [`karabiner.config.ts`](karabiner.config.ts) |
 | **Espanso** | Text expansion & snippets | [`espanso.config.ts`](espanso.config.ts) |
 | **Deno** | Configuration management | [`dotfiles.config.ts`](dotfiles.config.ts) |
