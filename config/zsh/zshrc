@@ -39,6 +39,7 @@ znap eval zoxide  'zoxide init zsh'
 znap eval mise    'mise activate zsh'
 znap eval direnv  'direnv hook zsh'
 znap eval gh      'gh completion -s zsh'
+znap eval tv      'tv init zsh'
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -52,6 +53,7 @@ local -a SOURCE=(
   "$DOTFILES/config/zsh/fzf.sh"
   "$DOTFILES/config/zsh/git.sh"
   "$DOTFILES/config/zsh/node.sh"
+  "$DOTFILES/config/zsh/completion/node-completion.sh"
   "$DOTFILES/config/zsh/zellij.sh"
   "$DOTFILES/config/zsh/extras.sh"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"
@@ -66,7 +68,6 @@ done
 znap fpath _cargo    "rustup completions zsh cargo"
 znap fpath _deno     "deno completions zsh"
 znap fpath _mise     "mise completion zsh"
-znap fpath _n        "source $HOME/dotfiles/zsh/completion/node-completion.sh"  > /dev/null 2>&1 
 znap fpath _npm      "npm completion"
 znap fpath _pnpm     "pnpm completion zsh"
 znap fpath _rustup   "rustup completions zsh"
@@ -79,4 +80,3 @@ zstyle ':zle:*' word-style unspecified
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
-eval "$(tv init zsh)"

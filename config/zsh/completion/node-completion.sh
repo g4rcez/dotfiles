@@ -1,6 +1,4 @@
-local _plugin_path=$0
-local _PWD=`echo $_plugin_path | sed -e 's/\/node-completion\.sh//'`
-__zna_pwd="$_PWD"
+__zna_pwd="${DOTFILES}/config/zsh/completion"
 
 function __znsaGetScripts() {
   local pkgJson="$1"

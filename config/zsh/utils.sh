@@ -58,7 +58,7 @@ export FZF_COLORS="
 
 function safeImport() {
     if [[ -e "$1" ]]; then
-        source "$1";
+        source "$1"
     fi
 }
 
@@ -67,3 +67,5 @@ function clearNvim() {
     rm -rf "$HOME/.local/share/nvim"
     rm -rf "$HOME/.local/state/nvim"
 }
+
+chpwd_functions+=(_postcd)

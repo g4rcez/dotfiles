@@ -1,10 +1,9 @@
 #############################################################################################################################
 ## Functions
 autoload -Uz is-at-least
-git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
-function _git_log_prettily(){
-    if ! [ -z $1 ]; then
+function _git_log_prettily() {
+    if ! [ -z "$1" ]; then
         git log --pretty="$1"
     fi
 }
@@ -36,21 +35,18 @@ function git_develop_branch() {
 }
 
 function getBranchFzf() {
-    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g'| grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
+    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g' | grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
 }
 
 function countCommits() {
     gh pr view --json commits | jq '.commits|length' | tr -d "\n"
 }
 
-unset git_version
-
 #############################################################################################################################
 ## alias
 alias pushf="git push --force-with-lease"
 alias add='git add'
 alias checkout='git switch'
-alias gcb='git checkout -b'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
 alias gcm='git checkout $(git_main_branch)'
@@ -77,52 +73,51 @@ alias gdash="gh dash"
 #############################################################################################################################
 ## git functions
 function gco() {
-  _fzf_git_each_ref --no-multi | xargs git checkout
+    _fzf_git_each_ref --no-multi | xargs git checkout
 }
 
 function clone() {
-  git clone "git@github.com:$1"
+    git clone "git@github.com:$1"
 }
 
 function wip() {
-  git add -A .;
-  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
-  git commit --no-verify -S -m "${NOW}";
-  git push;
+    git add -A .
+    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
+    git commit --no-verify -S -m "${NOW}"
+    git push
 }
 
 function wip.ai() {
-  git add -A .;
-  COMMIT_MESSAGE=$(aicommit);
-  NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)");
-  git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}";
-  git push;
+    git add -A .
+    COMMIT_MESSAGE=$(aicommit)
+    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
+    git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}"
+    git push
 }
 
 function pullb() {
-    git fetch;
-    git pull --rebase origin "$(git branch --show-current)";
+    git fetch
+    git pull --rebase origin "$(git branch --show-current)"
 }
 
 PRS_TMP_FILE="/tmp/fzf-gitcli"
 function parseprs() {
     if [[ "$(jq length $PRS_TMP_FILE)" == 0 ]]; then
         echo "No pull requests available"
-        return;
+        return
     fi
-    jq -r '.[] | "#\(.number) \(.title)"' "$PRS_TMP_FILE"\
-        | fzf --ansi --info inline\
-        --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" /tmp/fzf-gitcli | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
-        --bind "enter:become(echo {} | cut -d' ' -f1 | tr -d '#' | xargs -n 1 gh pr checkout)"
+    jq -r '.[] | "#\(.number) \(.title)"' "$PRS_TMP_FILE" |
+        fzf --ansi --info inline --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" /tmp/fzf-gitcli | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
+            --bind "enter:become(echo {} | cut -d' ' -f1 | tr -d '#' | xargs -n 1 gh pr checkout)"
 }
 
 function prs() {
-    gh pr list --json 'body,number,id,title' > $PRS_TMP_FILE
+    gh pr list --json 'body,number,id,title' >$PRS_TMP_FILE
     parseprs
 }
 
 function myprs() {
-    gh pr list --author "@me" --json 'body,number,id,title' > $PRS_TMP_FILE
+    gh pr list --author "@me" --json 'body,number,id,title' >$PRS_TMP_FILE
     parseprs
 }
 
@@ -153,7 +148,7 @@ function rebasewith() {
 }
 
 function squash() {
-  git rebase -i "HEAD~${1}"
+    git rebase -i "HEAD~${1}"
 }
 
 # squash branch commits based in N commits of current pull request
@@ -166,18 +161,18 @@ function squashbranch() {
 
 function switch() {
     BRANCH_TARGET=$(test -z "$1" && echo $(getBranchFzf) || echo "$1")
-    git switch "$BRANCH_TARGET";
+    git switch "$BRANCH_TARGET"
 }
 
 function gitignore() {
-  forgit::ignore >> ".gitignore"
+    forgit::ignore >>".gitignore"
 }
 
 function git-graph() {
-  git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+    git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
-function commit () {
+function commit() {
     if [[ "$1" == "" ]]; then
         git commit -S
     else
@@ -187,7 +182,7 @@ function commit () {
 
 function acommit() {
     git add .
-    commit $@
+    commit "$@"
 }
 
 function lastcommit() {
@@ -201,8 +196,8 @@ function gtag() {
 #############################################################################################################################
 ## github functions
 function createpr() {
-    BRANCH_TARGET=$(test -z "$1" && echo $(getBranchFzf) || echo "$1")
-    gh pr create --base "$BRANCH_TARGET" -a "@me" ${@:2}
+    BRANCH_TARGET=$(test -z "$1" && echo "$(getBranchFzf)" || echo "$1")
+    gh pr create --base "$BRANCH_TARGET" -a "@me" "${@:2}"
 }
 
 function newpr() {
@@ -219,15 +214,15 @@ function gh.action() {
 
 function gh.workflow() {
     local tmpfile="$(mktemp)"
-    gh workflow list --json id,name,path,state > "$tmpfile"
-    jq -r '.[] | .name' "$tmpfile" | \
+    gh workflow list --json id,name,path,state >"$tmpfile"
+    jq -r '.[] | .name' "$tmpfile" |
         fzf --ansi --info inline \
-        --preview "$DOTFILES/bin/gh-workflow-previewer {} $tmpfile" --bind "enter:become(echo {} | pbcopy && echo {})"
+            --preview "$DOTFILES/bin/gh-workflow-previewer {} $tmpfile" --bind "enter:become(echo {} | pbcopy && echo {})"
     rm -f "$tmpfile"
 }
 
 function aicommit {
-    COMMIT_MESSAGE=$(git diff HEAD -U5 | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1');
+    COMMIT_MESSAGE=$(git diff HEAD -U5 | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1')
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
@@ -235,7 +230,19 @@ function aicommit {
 function prdesc() {
     local pr_ref="${1:-}"
     PR_MESSAGE=$(gh pr diff $pr_ref | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
-    echo "$PR_MESSAGE"| pbcopy
+    echo "$PR_MESSAGE" | pbcopy
     echo "$PR_MESSAGE"
 }
 
+function gcb() {
+    # Previous was -> alias gcb='git checkout -b'
+    if [ -z "$1" ]; then
+        echo "Usage: gcb <branch-name>"
+        return 1
+    fi
+    if git show-ref --verify --quiet "refs/heads/$1"; then
+        git switch "$1"
+    else
+        git checkout -b "$1"
+    fi
+}

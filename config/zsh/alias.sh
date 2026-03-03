@@ -51,7 +51,7 @@ if [ -x "$(command -v nvim)" ]; then
 fi
 
 function zshrc() {
-    nvim "$HOME/dotfiles/zsh/zshrc"
+    nvim "$HOME/dotfiles/config/zsh/zshrc"
 }
 
 function codi() {

@@ -10,15 +10,16 @@ local keys = {
     {
         "<leader>cf",
         function()
-            vim.lsp.buf.format()
+            require("conform").format { lsp_fallback = true }
         end,
-        mode = "n",
+        mode = { "n", "v" },
         desc = "[c]ode [F]ormat",
     },
 }
 
 return {
     {
+        enabled = false,
         "nvimtools/none-ls.nvim",
         keys = keys,
         opts = function(_, opts)
@@ -57,7 +58,6 @@ return {
         end,
     },
     {
-        enabled = false,
         "stevearc/conform.nvim",
         event = { "BufWritePre", "BufNewFile" },
         cmd = { "ConformInfo" },
@@ -66,21 +66,45 @@ return {
             format_on_save = false,
             notify_on_error = false,
             formatters_by_ft = {
-                css = { "prettier" },
-                graphql = { "prettier" },
-                html = { "prettier" },
-                javascript = { "prettierd", "prettier", stop_after_first = true },
-                javascriptreact = { "prettier" },
-                json = { "prettier" },
-                liquid = { "prettier" },
+                sh = { "shfmt" },
+                zsh = { "shfmt" },
+                bash = { "shfmt" },
                 lua = { "stylua" },
+                css = { "prettier" },
+                html = { "prettier" },
+                json = { "prettier" },
+                yaml = { "prettier" },
+                liquid = { "prettier" },
+                svelte = { "prettier" },
+                graphql = { "prettier" },
                 markdown = { "prettier" },
                 python = { "isort", "black" },
-                svelte = { "prettier" },
-                typescript = { "prettierd", "prettier", stop_after_first = true },
+                javascriptreact = { "prettier" },
                 typescriptreact = { "prettier" },
-                yaml = { "prettier" },
+                javascript = { "prettierd", "prettier", stop_after_first = true },
+                typescript = { "prettierd", "prettier", stop_after_first = true },
             },
         },
+    },
+    {
+        "mfussenegger/nvim-lint",
+        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        opts = {
+            linters_by_ft = {
+                dockerfile = { "hadolint" },
+                yaml = { "yamllint" },
+                css = { "stylelint" },
+                scss = { "stylelint" },
+            },
+        },
+        config = function(_, opts)
+            local lint = require "lint"
+            lint.linters_by_ft = opts.linters_by_ft
+            vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+                callback = function()
+                    lint.try_lint()
+                end,
+            })
+        end,
     },
 }
