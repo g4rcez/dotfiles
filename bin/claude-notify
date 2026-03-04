@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+type="${1:-Notification}"
+
+if [ -n "$TMUX" ]; then
+  session=$(tmux display-message -p '#S' 2>/dev/null)
+  window=$(tmux display-message -p '#W' 2>/dev/null)
+  message="[${session}:${window}] ${type}"
+else
+  message="$type"
+fi
+
+case "$(uname)" in
+  Darwin)
+    if command -v terminal-notifier >/dev/null 2>&1; then
+      terminal-notifier -message "$message" -title "Claude Code" -timeout 10
+    else
+      osascript -e "display notification \"$message\" with title \"Claude Code\""
+    fi
+    ;;
+  Linux)
+    if command -v notify-send >/dev/null 2>&1; then
+      notify-send -t 10000 "Claude Code" "$message"
+    fi
+    ;;
+esac
+

@@ -16,13 +16,15 @@ export default defineConfig({
         exportFile: "~/.config/bunsen/env.sh",
         variables: {
             PAGER: EDITOR,
-            VISUAL: EDITOR,
             EDITOR: EDITOR,
+            VISUAL: EDITOR,
             TERM: "tmux-256color",
+            ENABLE_TOOL_SEARCH: "true",
             MANPAGER: `${EDITOR} +Man!`,
         },
     },
     symlinks: {
+        "~/.claude/hooks/notify.sh": file("bin/claude-notify"),
         "~/.config/aerospace": file("config/aerospace"),
         "~/.config/alacritty": file("config/alacritty"),
         "~/.config/bat": file("config/bat"),

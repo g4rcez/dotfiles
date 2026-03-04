@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Resolve script location (follow symlinks)
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+while [ -L "$SCRIPT_PATH" ]; do
+  SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")" && pwd)"
+  SCRIPT_PATH="$(readlink "$SCRIPT_PATH")"
+  [[ "$SCRIPT_PATH" != /* ]] && SCRIPT_PATH="$SCRIPT_DIR/$SCRIPT_PATH"
+done
+DOTFILES_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+
+CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
+PROVIDER="${AI_PROVIDER:-claude}"
+
+# Check dependencies
+if ! command -v jq &>/dev/null; then
+  echo "error: jq not found" >&2
+  exit 1
+fi
+
+save_project() {
+  local path="$1"
+  local provider="$2"
+  mkdir -p "$(dirname "$CONFIG_FILE")"
+  if [ ! -f "$CONFIG_FILE" ]; then
+    echo '{"projects":[]}' > "$CONFIG_FILE"
+  fi
+  local updated
+  updated="$(jq --arg path "$path" --arg provider "$provider" \
+    'if (.projects | map(.path) | index($path)) != null
+     then .projects |= map(if .path == $path then {path: $path, provider: $provider} else . end)
+     else .projects += [{path: $path, provider: $provider}]
+     end' "$CONFIG_FILE")"
+  echo "$updated" > "$CONFIG_FILE"
+}
+
+cmd_agents() {
+  local src="$DOTFILES_DIR/.ai/guidelines"
+  if [ ! -d "$src" ]; then
+    echo "error: no guidelines dir" >&2
+    exit 1
+  fi
+  find "$src" -maxdepth 1 -type f -exec cp {} . \;
+  save_project "$PWD" "$PROVIDER"
+  echo "agents: ok"
+}
+
+cmd_subagents() {
+  local src="$DOTFILES_DIR/.ai/agents"
+  if [ ! -d "$src" ]; then
+    return 0
+  fi
+  local dest="./$PROVIDER/agents"
+  mkdir -p "$dest"
+  for agent_dir in "$src"/*/; do
+    [ -d "$agent_dir" ] || continue
+    cp -r "$agent_dir" "$dest/"
+  done
+  save_project "$PWD" "$PROVIDER"
+  echo "subagents: ok"
+}
+
+cmd_skills() {
+  local skill_name="${1:-}"
+  local src="$DOTFILES_DIR/.ai/skills"
+  if [ ! -d "$src" ]; then
+    echo "error: no skills dir" >&2
+    exit 1
+  fi
+  local dest="./.$PROVIDER/skills"
+
+  if [ -z "$skill_name" ]; then
+    if ! command -v fzf &>/dev/null; then
+      echo "error: fzf not found" >&2
+      exit 1
+    fi
+    skill_name="$(find "$src" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort | fzf --prompt='Select skill: ')"
+    if [ -z "$skill_name" ]; then
+      echo "error: no skill selected" >&2
+      exit 1
+    fi
+  fi
+
+  if [ ! -d "$src/$skill_name" ]; then
+    echo "error: unknown skill '$skill_name'" >&2
+    exit 1
+  fi
+
+  mkdir -p "$dest"
+  cp -r "$src/$skill_name" "$dest/"
+  save_project "$PWD" "$PROVIDER"
+  echo "skills: ok ($skill_name)"
+}
+
+cmd_update() {
+  if [ ! -f "$CONFIG_FILE" ]; then
+    echo "no projects tracked"
+    return 0
+  fi
+  local length
+  length="$(jq '.projects | length' "$CONFIG_FILE")"
+  for i in $(seq 0 $((length - 1))); do
+    local path provider
+    path="$(jq -r ".projects[$i].path" "$CONFIG_FILE")"
+    provider="$(jq -r ".projects[$i].provider" "$CONFIG_FILE")"
+    if [ ! -d "$path" ]; then
+      echo "warn: $path not found, skipping" >&2
+      continue
+    fi
+    echo "update: $path"
+    (
+      cd "$path"
+      PROVIDER="$provider"
+      # Run commands without re-saving (paths already tracked)
+      local src_guidelines="$DOTFILES_DIR/.ai/guidelines"
+      if [ -d "$src_guidelines" ]; then
+        find "$src_guidelines" -maxdepth 1 -type f -exec cp {} . \;
+      fi
+      local src_agents="$DOTFILES_DIR/.ai/agents"
+      if [ -d "$src_agents" ]; then
+        local dest_agents="./$PROVIDER/agents"
+        mkdir -p "$dest_agents"
+        for agent_dir in "$src_agents"/*/; do
+          [ -d "$agent_dir" ] || continue
+          cp -r "$agent_dir" "$dest_agents/"
+        done
+      fi
+      local src_skills="$DOTFILES_DIR/.ai/skills"
+      if [ -d "$src_skills" ]; then
+        local dest_skills="./$PROVIDER/skills"
+        mkdir -p "$dest_skills"
+        for skill_dir in "$src_skills"/*/; do
+          [ -d "$skill_dir" ] || continue
+          cp -r "$skill_dir" "$dest_skills/"
+        done
+      fi
+    )
+  done
+  echo "done"
+}
+
+cmd_list() {
+  if ! command -v fzf &>/dev/null; then
+    echo "error: fzf not found" >&2
+    exit 1
+  fi
+  local entries=()
+  local skills_dir="$DOTFILES_DIR/.ai/skills"
+  local agents_dir="$DOTFILES_DIR/.ai/agents"
+  local subagents_dir="$DOTFILES_DIR/.ai/subagents"
+  local guidelines_dir="$DOTFILES_DIR/.ai/guidelines"
+  if [ -d "$skills_dir" ]; then
+    for d in "$skills_dir"/*/; do
+      [ -d "$d" ] || continue
+      entries+=("[skill] $(basename "$d")")
+    done
+  fi
+  if [ -d "$subagents_dir" ]; then
+    for d in "$subagents_dir"/*/; do
+      [ -d "$d" ] || continue
+      entries+=("[subagent] $(basename "$d")")
+    done
+  fi
+  if [ -d "$agents_dir" ]; then
+    for d in "$agents_dir"/*/; do
+      [ -d "$d" ] || continue
+      entries+=("[agent] $(basename "$d")")
+    done
+  fi
+  if [ -d "$guidelines_dir" ]; then
+    for f in "$guidelines_dir"/*; do
+      [ -f "$f" ] || continue
+      entries+=("[guideline] $(basename "$f")")
+    done
+  fi
+  if [ ${#entries[@]} -eq 0 ]; then
+    echo "nothing found"
+    return 0
+  fi
+  printf '%s\n' "${entries[@]}" | fzf --ansi --preview-window=right:70% \
+    --height 95%\
+    --info=inline\
+    --layout=reverse\
+    --preview-window right,75%\
+    --preview "
+      entry={}
+      name=\"\${entry#*\] }\"
+      if [[ \"\$entry\" == \[skill\]* ]]; then
+        bat --theme OneHalfDark --color=always \"$skills_dir/\$name/SKILL.md\" 2>/dev/null || echo 'No SKILL.md found'
+      elif [[ \"\$entry\" == \[subagent\]* ]]; then
+        first_file=\$(ls \"$subagents_dir/\$name/\" 2>/dev/null | head -1)
+        if [ -n \"\$first_file\" ]; then
+          bat --theme OneHalfDark --color=always \"$subagents_dir/\$name/\$first_file\"
+        else
+          echo 'No files found'
+        fi
+      elif [[ \"\$entry\" == \[agent\]* ]]; then
+        first_file=\$(ls \"$agents_dir/\$name/\" 2>/dev/null | head -1)
+        if [ -n \"\$first_file\" ]; then
+          bat --theme OneHalfDark --color=always \"$agents_dir/\$name/\$first_file\"
+        else
+          echo 'No files found'
+        fi
+      elif [[ \"\$entry\" == \[guideline\]* ]]; then
+        bat --theme OneHalfDark --color=always \"$guidelines_dir/\$name\" 2>/dev/null || echo 'No file found'
+      fi
+    "
+}
+
+usage() {
+  cat >&2 <<EOF
+Usage: ai [--provider <name>] <command>
+
+Commands:
+  agents      deploy guidelines to cwd
+  subagents   deploy agents to ./<provider>/agents/
+  skills      deploy a skill to ./<provider>/skills/
+  update      re-sync all tracked projects
+  list        browse available items with fzf
+
+Options:
+  --provider  AI provider (default: claude, or \$AI_PROVIDER)
+EOF
+  exit 1
+}
+
+# Parse args
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --provider)
+      shift
+      PROVIDER="$1"
+      shift
+      ;;
+    agents)    shift; cmd_agents "$@"; exit 0 ;;
+    subagents) shift; cmd_subagents "$@"; exit 0 ;;
+    skills)    shift; cmd_skills "$@"; exit 0 ;;
+    update)    shift; cmd_update "$@"; exit 0 ;;
+    list)      shift; cmd_list "$@"; exit 0 ;;
+    *)         usage ;;
+  esac
+done
+
+usage
