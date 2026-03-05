@@ -121,6 +121,21 @@ bind.normal("<leader>cy", function()
     vim.notify("Yanked (relative): " .. rel)
 end, { desc = "[c]ode [y]ank path" })
 
+local function pick_and_insert_file_ref()
+    Snacks.picker.files {
+        confirm = function(picker, item)
+            picker:close()
+            if item then
+                local rel = vim.fn.fnamemodify(item._path or item.file or item.text, ":.")
+                vim.api.nvim_put({ "@" .. rel }, "c", true, true)
+            end
+        end,
+    }
+end
+
+bind.normal("<leader>@", pick_and_insert_file_ref, { desc = "Insert @file path at cursor" })
+bind.insert("@@", pick_and_insert_file_ref, { desc = "Insert @file path at cursor" })
+
 bind.normal("zR", function()
     require("ufo").openAllFolds()
 end)

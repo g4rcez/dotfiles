@@ -285,7 +285,7 @@ cd $HOME/dotfiles
 bash install
 ```
 
-2. Install language servers:
+1. Install language servers:
 
 ```bash
 # JavaScript/TypeScript ecosystem
@@ -305,7 +305,7 @@ npm i -g oxlint
 brew install stylua
 ```
 
-3. Launch Neovim:
+1. Launch Neovim:
 
 ```bash
 nvim
@@ -313,7 +313,7 @@ nvim
 
 Lazy.nvim will automatically install all plugins on first launch.
 
-4. LSP servers will be installed automatically via Mason.
+1. LSP servers will be installed automatically via Mason.
 
 ## Configuration Structure
 

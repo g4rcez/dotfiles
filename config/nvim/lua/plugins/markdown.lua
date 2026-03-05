@@ -1,31 +1,29 @@
 return {
-    {
-        "yousefhadder/markdown-plus.nvim",
-        ft = "markdown",
+    { --nice markdown inline rendering
+        "MeanderingProgrammer/render-markdown.nvim",
+        event = "VeryLazy",
+        priority = 1000,
+        ft = { "markdown" },
+        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+        keys = {
+            { "<leader>mr", ":RenderMarkdown toggle<CR>", desc = "Markdown Render Toggle" },
+        },
         opts = {
-            enabled = true,
-            toc = { initial_depth = 2 },
-            keymaps = { enabled = true },
-            filetypes = { "markdown", "gitcommit" },
-            callouts = { default_type = "NOTE", custom_types = {} },
-            footnotes = { section_header = "Footnotes", confirm_delete = true },
-            features = {
-                links = true,
-                table = true,
-                images = true,
-                quotes = true,
-                callouts = true,
-                footnotes = true,
-                code_block = true,
-                headers_toc = true,
-                list_management = true,
-                text_formatting = true,
+            file_types = { "markdown", "plaintext", "text" },
+            bullet = { right_pad = 2 },
+            heading = {
+                left_pad = 2,
+                sign = false,
+                right_pad = 4,
+                width = "block",
+                position = "inline",
+                icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
             },
-            table = {
-                auto_format = true,
-                default_alignment = "left",
-                confirm_destructive = true,
-                keymaps = { enabled = true, prefix = "<leader>t", insert_mode_navigation = true },
+            code = {
+                sign = false,
+                left_pad = 2,
+                right_pad = 4,
+                border = "thick",
             },
         },
     },

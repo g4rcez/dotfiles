@@ -89,7 +89,7 @@ function wip() {
 
 function wip.ai() {
     git add -A .
-    COMMIT_MESSAGE=$(aicommit)
+    COMMIT_MESSAGE="$(aicommit)"
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
     git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}"
     git push

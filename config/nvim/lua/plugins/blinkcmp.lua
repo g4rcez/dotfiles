@@ -3,7 +3,8 @@ return {
         "newtoallofthis123/blink-cmp-fuzzy-path",
         dependencies = { "saghen/blink.cmp" },
         opts = {
-            max_results = 5,
+            max_results = 10,
+            search_tool = "fd",
             trigger_char = "@",
             search_hidden = true,
             relative_paths = true,
