@@ -111,3 +111,10 @@ export ENABLE_LSP_TOOL=1
 export AI_CLI_NAME="gemini"
 export AI_CLI_MODEL="gemini-3-flash-preview"
 
+export AICOMMIT_EXCLUDES=(
+    "package-lock.json"
+    "pnpm-lock.yaml"
+    "yarn.lock"
+    "*.lock"
+)
+

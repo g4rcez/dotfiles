@@ -50,7 +50,6 @@ alias checkout='git switch'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcf='git config --list'
 alias gcm='git checkout $(git_main_branch)'
-alias gd='git diff'
 alias gitree='git log --oneline --graph --decorate --all'
 alias gitree='git-graph'
 alias gittree='git-graph'
@@ -221,8 +220,13 @@ function gh.workflow() {
     rm -f "$tmpfile"
 }
 
+
 function aicommit {
-    COMMIT_MESSAGE=$(git diff HEAD -U5 | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1')
+    local EXCLUDE_ARGS=()
+    for f in "${AICOMMIT_EXCLUDES[@]}"; do
+        EXCLUDE_ARGS+=(":(exclude)$f")
+    done
+    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1')
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }

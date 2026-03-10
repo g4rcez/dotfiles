@@ -281,11 +281,27 @@ vim.lsp.config("tailwindcss", {
 vim.lsp.config("vtsls", {
     capabilities = capabilities,
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+    before_init = function(_, config)
+        -- Prefer yarn v4 PnP SDK, fall back to node_modules
+        local root = config.root_dir
+        if root then
+            local yarn_sdk = root .. "/.yarn/sdks/typescript/lib"
+            local node_ts = root .. "/node_modules/typescript/lib"
+            local tsdk = vim.fn.isdirectory(yarn_sdk) == 1 and yarn_sdk or vim.fn.isdirectory(node_ts) == 1 and node_ts or nil
+            if tsdk then
+                config.settings = config.settings or {}
+                config.settings.typescript = config.settings.typescript or {}
+                config.settings.typescript.tsdk = tsdk
+            end
+        end
+    end,
     settings = {
         refactor_auto_rename = true,
-        -- experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
+        init_options = { hostInfo = "neovim" },
+        vtsls = { autoUseWorkspaceTsdk = true },
+        experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
         typescript = {
-            -- tsserver = { maxTsServerMemory = 13000 },
+            tsserver = { maxTsServerMemory = 13000 },
             suggest = { enabled = true, completeFunctionCalls = true },
             inlayHints = {
                 variableTypes = { enabled = true },

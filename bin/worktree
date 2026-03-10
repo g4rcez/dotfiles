@@ -12,15 +12,16 @@ Commands:
     add <branch> [base]    Create a worktree for <branch> (optionally from <base>)
     list                   List all worktrees for current repo
     remove <branch>        Remove a worktree
-    cd <branch>            Print the path (use: cd \$(gwt cd <branch>))
+    cd <branch>            Print the path (use: cd \$(worktree cd <branch>))
     clean                  Remove all worktrees for current repo
+    mux                    Pick a worktree with fzf and open/attach a tmux session
 
 Examples:
-    gwt add feature/new-login
-    gwt add feature/hotfix main
-    gwt add feature/experiment origin/develop
-    gwt remove feature/new-login
-    cd \$(gwt cd feature/new-login)
+    worktree add feature/new-login
+    worktree add feature/hotfix main
+    worktree add feature/experiment origin/develop
+    worktree remove feature/new-login
+    cd \$(worktree cd feature/new-login)
 EOF
     exit 1
 }
@@ -141,6 +142,47 @@ cmd_clean() {
     echo "Done"
 }
 
+cmd_mux() {
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local repo_base="$WORKTREE_BASE/$repo_name"
+    local main_path
+    main_path="$(git rev-parse --show-toplevel)"
+
+    local selected
+    selected="$(git worktree list | while read -r line; do
+        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
+            local wt_path branch_raw branch display
+            wt_path="$(echo "$line" | awk '{print $1}')"
+            branch_raw="$(echo "$line" | grep -oP '\[\K[^\]]+' || true)"
+            if [[ -n "$branch_raw" ]]; then
+                branch="$branch_raw"
+            else
+                branch="$(basename "$wt_path")"
+            fi
+            printf "%-40s  %s\n" "$branch" "$wt_path"
+        fi
+    done | fzf --prompt='worktree> ')"
+
+    [[ -z "$selected" ]] && return 0
+
+    local selected_path branch_field session_name
+    selected_path="$(echo "$selected" | awk '{print $NF}')"
+    branch_field="$(echo "$selected" | awk '{print $1}')"
+    session_name="${branch_field//\//-}"
+    session_name="${session_name#-}"
+
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -d -s "$session_name" -c "$selected_path"
+    fi
+
+    if [[ -n "${TMUX:-}" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach-session -t "$session_name"
+    fi
+}
+
 origin () {
     cd "$(git worktree list | awk '{print $1}' | head -1)"
 }
@@ -155,7 +197,8 @@ main() {
         remove|rm) cmd_remove "$@" ;;
         cd)     cmd_cd "$@" ;;
         clean)  cmd_clean "$@" ;;
-        clean)  origin "$@" ;;
+        origin) origin "$@" ;;
+        mux)    cmd_mux "$@" ;;
         *)      usage ;;
     esac
 }
