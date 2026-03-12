@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$DOTFILES/bin"
+QUERY="$*"
+
+preview_cmd() {
+    echo "$SCRIPT_DIR/cambridge-cli {q} | bat --style=plain --language=markdown --color=always --paging=never"
+}
+
+echo "Type a word to search..." | fzf -q "$QUERY" \
+    --disabled \
+    --preview "$(preview_cmd)" \
+    --bind "ctrl-a:execute-silent($SCRIPT_DIR/cambridge-cli {q} --play)" \
+    --preview-window 'right,75%,wrap,border-left' \
+    --no-sort \
+    --header "Press CTRL-a to play pronunciation"

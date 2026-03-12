@@ -88,7 +88,7 @@ function wip() {
 
 function wip.ai() {
     git add -A .
-    COMMIT_MESSAGE="$(aicommit)"
+    COMMIT_MESSAGE="$(aicommit "$*")"
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
     git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}"
     git push
@@ -220,20 +220,19 @@ function gh.workflow() {
     rm -f "$tmpfile"
 }
 
-
 function aicommit {
     local EXCLUDE_ARGS=()
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         EXCLUDE_ARGS+=(":(exclude)$f")
     done
-    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${1}" | sed 's/# //1')
+    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | $AI_QUERY_COMMAND "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${*}" | sed 's/# //1')
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
     local pr_ref="${1:-}"
-    PR_MESSAGE=$(gh pr diff $pr_ref | "$AI_CLI_NAME" --model "$AI_CLI_MODEL" -p "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
+    PR_MESSAGE=$(gh pr diff $pr_ref | $AI_QUERY_COMMAND "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
     echo "$PR_MESSAGE" | pbcopy
     echo "$PR_MESSAGE"
 }

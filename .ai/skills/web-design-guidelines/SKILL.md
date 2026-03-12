@@ -47,7 +47,7 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### File Upload
 
-- Visible `<label>` for `<input type="file">` — don't style the button alone
+- Visible `<label>` for `<input type="file">`
 - `accept` attribute limits file types; always validate server-side too
 - Drag-drop zone needs keyboard fallback via the `<input>` itself
 - Announce upload progress and completion with `aria-live="polite"`
@@ -121,7 +121,7 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Touch & Interaction
 
-- `touch-action: manipulation` (prevents double-tap zoom delay)
+- `touch-action: manipulation`
 - `-webkit-tap-highlight-color` set intentionally
 - `overscroll-behavior: contain` in modals/drawers/sheets
 - During drag: disable text selection, `inert` on dragged elements
@@ -198,25 +198,13 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Anti-patterns (flag these)
 
-- `user-scalable=no` or `maximum-scale=1` disabling zoom
-- `onPaste` with `preventDefault`
-- `transition: all`
-- `outline-none` without focus-visible replacement
-- Inline `onClick` navigation without `<a>`
-- `<div>` or `<span>` with click handlers (should be `<button>`)
-- Images without dimensions
-- Large arrays `.map()` without virtualization
-- Form inputs without labels
-- Icon buttons without `aria-label`
-- Hardcoded date/number formats (use `Intl.*`)
-- `autoFocus` without clear justification
-- Dialog without focus trap
-- Tooltip only on hover (no focus trigger)
-- `dangerouslySetInnerHTML` without sanitization
-- `<th>` without `scope` attribute
-- `scroll-behavior: smooth` without `prefers-reduced-motion` check
-- `target="_blank"` without `rel="noopener noreferrer"`
-- Drag-drop zone without keyboard fallback (`<input type="file">`)
+- `user-scalable=no` · `onPaste+preventDefault` · `transition: all` · `outline-none` without focus-visible
+- `<div onClick>` / `<span onClick>` · images without dimensions · large `.map()` without virtualization
+- Inputs without labels · icon buttons without `aria-label` · hardcoded date/number formats
+- `autoFocus` without justification · dialog without focus trap · tooltip only on hover
+- Unescaped user HTML rendered without sanitization
+- `<th>` without `scope` · `scroll-behavior: smooth` without reduced-motion check
+- `target="_blank"` without `rel="noopener noreferrer"` · drag-drop without `<input type="file">` fallback
 - Combobox without ARIA roles (`role="combobox"`, `role="listbox"`, `role="option"`) or keyboard nav
 
 ## Output Format

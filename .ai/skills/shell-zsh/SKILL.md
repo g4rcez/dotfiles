@@ -84,15 +84,10 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Anti-patterns
 
-- Unquoted `$var` in any context that could word-split or glob
-- `ls | grep` or `ls | awk` — use globs or `find`
-- `cat file | cmd` — use `cmd < file` or `cmd file`
-- `cd dir && do_thing` without error handling
-- `[[ ]]` with `-a`/`-o` — use `&&`/`||` instead
-- Nested backticks
-- Hardcoded `#!/bin/sh` when using bash/zsh features
-- `local var=$(cmd)` — masks exit code
-- `source script` without checking if it exists
+- Unquoted `$var` · `ls | grep` / `ls | awk` · `cat file | cmd`
+- `cd dir && do_thing` without error handling · `[[ ]]` with `-a`/`-o`
+- Nested backticks · hardcoded `#!/bin/sh` with bash/zsh features
+- `local var=$(cmd)` (masks exit code) · `source script` without existence check
 
 ## Output Format
 

@@ -111,3 +111,4 @@ function _fzf_compgen_path() {
 function _fzf_compgen_dir() {
     bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
 }
+

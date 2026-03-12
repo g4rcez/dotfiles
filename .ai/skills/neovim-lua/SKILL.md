@@ -58,8 +58,7 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Modules & Require
 
-- Module results are cached after first `require` — no performance cost to call multiple times
-- Avoid `require` inside hot paths (tight loops, frequent callbacks) — cache at module level
+- Module results are cached after first `require`; avoid in hot paths — cache at module level
 - `pcall(require, "module")` for optional dependencies
 - Return tables from modules; avoid side effects at require time
 - File → module mapping: `lua/myplugin/init.lua` → `require("myplugin")`
@@ -80,16 +79,10 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Anti-patterns
 
-- `require("plugin")` without `pcall` for optional plugins
-- `vim.cmd("set ...")` for options
-- `vim.cmd("autocmd ...")` for autocmds
-- `vim.api.nvim_set_keymap` (deprecated)
-- `lazy = false` on plugins that could be lazy-loaded
-- `opts` callback that calls `require` — use `dependencies` instead
-- Hardcoded colorscheme without pcall fallback
-- `require` in `config` body without caching when called frequently
-- Missing `{ clear = true }` on augroup — causes duplicate autocmds on re-source
-- `vim.o.xxx` when `vim.opt.xxx` would scope correctly
+- `require("plugin")` without `pcall` · `vim.cmd("set ...")` · `vim.cmd("autocmd ...")`
+- `vim.api.nvim_set_keymap` (deprecated) · `vim.o.xxx` instead of `vim.opt.xxx`
+- `lazy = false` on lazy-loadable plugins · `opts` callback calling `require` (use `dependencies`)
+- Hardcoded colorscheme without pcall · missing `{ clear = true }` on augroup
 
 ## Output Format
 

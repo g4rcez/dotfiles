@@ -1,70 +1,23 @@
 ---
 name: react-typescript-frontend
-description: >
-  Comprehensive guide for building React + TypeScript frontend applications with community best practices.
-  Use this skill whenever the user asks to create, refactor, or review React components, hooks, pages,
-  or any frontend code involving React and TypeScript. Also trigger when the user mentions: component architecture,
-  React patterns, TypeScript typing for React, state management setup, frontend project structure,
-  TailwindCSS component styling, frontend testing, accessibility in React, or asks to scaffold a new feature.
-  This skill adapts to the project's existing conventions by reading config files before applying rules.
-  Even if the user doesn't explicitly say "React" — if they mention components, hooks, pages, forms, modals,
-  or frontend features, use this skill.
+description: Guide for React + TypeScript frontend development. Use when creating, refactoring, or reviewing components, hooks, pages, or any frontend code. Triggers on: component architecture, React patterns, state management, frontend structure, TailwindCSS, testing, accessibility, or scaffolding features.
 ---
 
 # React + TypeScript Frontend Skill
 
-A guide for writing production-grade React + TypeScript code that follows community best practices. This skill is adaptive — it reads the project's configuration before applying rules, so it works across different setups and conventions.
+## Before Writing Code
 
-## First Things First: Read the Project
+Check for project-specific AI instructions (`CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`) — their rules override this skill's defaults.
 
-Before writing any code, understand the project you're working in. This is non-negotiable — the project's existing conventions always take precedence over the defaults in this skill.
+From `package.json`, detect what's installed and use it:
+- State: Zustand, Jotai, Redux/RTK, use-typed-reducer
+- Server state: TanStack Query
+- Test runner: Vitest or Jest
+- Routing: TanStack Router, React Router, Next.js
+- Forms: React Hook Form, Formik
+- Utilities: clsx, cn, tailwind-merge, cva
 
-### Step 1: Check for project-level instructions
-
-Look for these files in the project root (in order of priority):
-
-```bash
-# Check for project-specific AI instructions
-cat CLAUDE.md 2>/dev/null || cat .cursorrules 2>/dev/null || cat .github/copilot-instructions.md 2>/dev/null
-```
-
-If any of these exist, their rules override this skill's defaults. Read them fully before proceeding.
-
-### Step 2: Understand the project's stack
-
-```bash
-# Read package.json to detect libraries, test runner, and state management
-cat package.json | head -80
-
-# Check TypeScript config
-cat tsconfig.json 2>/dev/null || cat tsconfig.app.json 2>/dev/null
-
-# Check Tailwind config for design tokens
-cat tailwind.config.ts 2>/dev/null || cat tailwind.config.js 2>/dev/null
-
-# Check path aliases
-grep -r "paths" tsconfig.json 2>/dev/null
-```
-
-From `package.json`, detect:
-- **State management**: Zustand, Jotai, Redux/RTK, use-typed-reducer, or others
-- **Server state**: TanStack Query (@tanstack/react-query)
-- **Test runner**: Vitest or Jest (check `devDependencies`)
-- **Routing**: TanStack Router, React Router, Next.js file-based routing
-- **Form handling**: React Hook Form, Formik, or custom
-- **Utility libraries**: clsx, cn, tailwind-merge, cva
-
-Use whatever the project already has. Never introduce a new state management library or test runner unless explicitly asked.
-
-### Step 3: Understand the existing file structure
-
-```bash
-# Get a feel for the project layout
-find src -type f -name "*.tsx" -o -name "*.ts" | head -30
-ls -la src/
-```
-
-Adapt to the existing patterns. If the project uses `features/` folders, follow that. If it uses `pages/` with co-located components, follow that.
+Check `tsconfig.json` for path aliases. Adapt to existing file structure (`features/`, `pages/`, etc.). Never introduce a new library unless explicitly asked.
 
 ---
 
@@ -94,8 +47,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ name, email }) => { ... }
 const UserProfile = ({ name, email }: UserProfileProps) => { ... }
 ```
 
-Arrow functions are fine for inline callbacks, event handlers, and small utility functions — just not as the primary component declaration.
-
 ### Props: Use `type` for Props, `interface` for Contracts
 
 ```typescript
@@ -113,24 +64,9 @@ interface Repository {
 }
 ```
 
-Extend native HTML props to keep components flexible:
-
-```typescript
-// ✅ Extends native button — users can pass onClick, disabled, etc.
-type ButtonProps = {
-  variant?: "primary" | "secondary";
-} & React.ComponentPropsWithoutRef<"button">;
-
-// ✅ For components that accept refs
-type InputProps = {
-  label: string;
-  error?: string;
-} & React.ComponentPropsWithRef<"input">;
-```
-
 ### Composition Over Prop Drilling
 
-When data needs to travel through multiple layers, restructure the component tree instead of passing props through intermediaries. This is the most important architectural principle in React.
+When data needs to travel through multiple layers, restructure the component tree instead of passing props through intermediaries.
 
 ```typescript
 // ❌ Prop drilling — Header doesn't use `user`, just forwards it
@@ -171,7 +107,7 @@ Card.Header = CardHeader;
 
 ### forwardRef — Only for Reusable/Library Components
 
-Use `forwardRef` when building reusable components that wrap native elements (inputs, buttons, etc.) that consumers might need to attach a ref to. Don't use it on every component.
+Use only for reusable components wrapping native elements where consumers need a ref.
 
 ```typescript
 import { forwardRef } from "react";
@@ -241,11 +177,7 @@ Don't reach for global state by default. Most state is local.
 3. **Shared client state** (theme, auth, cart) → Use whatever the project has installed (Zustand, Jotai, Redux/RTK)
 4. **Avoid React Context for frequently changing values** — it re-renders all consumers on every change
 
-Always check `package.json` first. Use what's already there. If the project has Zustand, use Zustand. If it has Jotai, use Jotai. Never introduce a new state library without explicit instruction.
-
 ### Server State with TanStack Query
-
-When the project uses TanStack Query, follow these patterns:
 
 ```typescript
 // ✅ Use queryOptions for type-safe, reusable query configuration
@@ -276,7 +208,7 @@ Never use `useEffect` to fetch data. That's what TanStack Query (or your server 
 
 ### Naming: kebab-case Everything
 
-Files, folders, everything uses kebab-case. This is the standard in frontend and avoids case-sensitivity issues across operating systems.
+Files and folders use kebab-case.
 
 ```
 src/
@@ -308,7 +240,7 @@ src/
 - **Feature-specific code** lives inside the feature: `features/checkout/checkout.hooks.ts`
 - **Generic/shared utilities** go in top-level folders: `hooks/`, `utils/`, `types/`, `services/`
 - **Naming pattern for feature files**: `feature-name.{hooks,utils,types,services}.ts`
-- **No barrel files** (`index.ts` re-exports). They break tree-shaking and make import tracing harder. Import directly from the source file.
+- **No barrel files** (`index.ts` re-exports) — break tree-shaking. Import directly from source.
 - **Pages and routes** follow whatever pattern the routing library uses. Analyze the existing structure.
 
 ```typescript
@@ -321,16 +253,6 @@ import { formatCurrency } from "@/utils/format-currency";
 import { Button } from "@/components";
 import { useDebounce } from "@/hooks";
 ```
-
-### Analyze Config for Path Aliases
-
-Check `tsconfig.json` for path aliases before importing:
-
-```bash
-grep -A 5 '"paths"' tsconfig.json 2>/dev/null
-```
-
-Use whatever alias the project defines (`@/`, `~/`, `#/`, etc.).
 
 ---
 
@@ -366,19 +288,7 @@ Follow this order for readability: **layout → spacing → sizing → visual �
 
 ## Testing
 
-### Detect the Stack First
-
-```bash
-# What test runner?
-grep -E "vitest|jest" package.json | head -5
-
-# What testing utilities?
-grep -E "@testing-library" package.json | head -5
-```
-
 ### Core Testing Principles
-
-Regardless of the test runner (Vitest or Jest), follow these principles:
 
 1. **Test behavior, not implementation** — interact with the component like a user would
 2. **Use accessible queries** — `getByRole`, `getByLabelText`, `getByText` over `getByTestId`
@@ -432,8 +342,6 @@ describe("LoginForm", () => {
 
 ## Accessibility (a11y)
 
-Accessibility is not optional. Build it in from the start.
-
 ### Every Component Should
 
 - Use **semantic HTML** (`button` not `div onClick`, `nav` not `div`, `main` not `div`)
@@ -471,15 +379,13 @@ Accessibility is not optional. Build it in from the start.
 
 ---
 
-## Anti-Patterns — Quick Reference
+## Anti-Patterns
 
-These are actively prevented by this skill. Each is covered in detail above, but here's the checklist:
-
-1. **`useEffect` for data fetching** → Use TanStack Query or the project's server state lib
-2. **`any` type / type assertions (`as`)** → Use `unknown` + type guards, or fix the types
-3. **`React.FC`** → Plain function declarations
-4. **Prop drilling** → Composition (children, render props, compound components) before Context/state libs
-5. **Barrel files** (`index.ts` re-exports) → Direct imports from source files
-6. **Inline styles** → TailwindCSS utilities
-7. **`<div onClick>`** → Semantic HTML (`<button>`, `<a>`)
-8. **Hardcoded color/spacing values** → Design tokens from tailwind config
+- `useEffect` for data fetching → TanStack Query
+- `any` / `as` assertions → `unknown` + type guards
+- `React.FC` → plain function declarations
+- Prop drilling → composition before Context/state
+- Barrel files → direct source imports
+- Inline styles → TailwindCSS utilities
+- `<div onClick>` → `<button>` / `<a>`
+- Hardcoded colors/spacing → design tokens

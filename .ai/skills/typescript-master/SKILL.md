@@ -13,17 +13,17 @@ Read files, check against rules below. Output concise but comprehensive—sacrif
 
 ### Type Primitives
 
-- Never use `any` — always replaceable with a constrained generic or precise literal type
-- Never use `unknown` as a parameter — use constrained generics instead
-- Never use `never` as a workaround — if reached unexpectedly, restructure the types; it signals a type logic flaw
-- Prefer `type` over `interface` for all declarations
-- Use `satisfies` to validate a value matches a type without widening its literal types
+- Never `any` — use constrained generics or precise literal types
+- Never `unknown` as parameter — use constrained generics
+- Never `never` as workaround — restructure the types
+- `type` over `interface` for all declarations
+- `satisfies` to validate a value without widening its literal types
 
 ### Functions
 
-- Always `const` arrow functions — never `function` keyword for utilities/helpers
-- Generic functions must constrain every type parameter: `<T extends SomeType>` — never bare `<T>`
-- Use `infer` inside conditional types to extract and reuse subtypes from generic shapes
+- Always `const` arrow functions — never `function` keyword
+- Constrain every type parameter: `<T extends SomeType>` — never bare `<T>`
+- Use `infer` inside conditional types to extract subtypes from generic shapes
 
 ```ts
 // Constrained generics
@@ -36,9 +36,8 @@ type Awaited<T> = T extends Promise<infer U> ? U : T
 
 ### Conditional Types
 
-- Use for type-level if/else branching instead of overloads or `any`
-- `T extends Foo ? A : B` distributes over unions by default
-- Use `[T] extends [Foo]` to prevent distribution when needed
+- Type-level if/else branching instead of overloads or `any`
+- `T extends Foo ? A : B` distributes over unions by default; use `[T] extends [Foo]` to prevent
 - Combine `infer` + conditional types to extract shaped subtypes
 
 ```ts
@@ -56,8 +55,7 @@ type Flatten<T> =
 
 ### Template Literal Types
 
-- Any string manipulation at type level → template literal types
-- Combine with `Capitalize<T>`, `Uppercase<T>`, `Lowercase<T>`, `Uncapitalize<T>` intrinsics
+- String manipulation at type level → template literal types; use `Capitalize<T>`, `Uppercase<T>`, etc.
 - Use `infer` to extract segments from literal string patterns
 
 ```ts
@@ -99,26 +97,21 @@ const config = {
 
 ### Error Diagnosis
 
-- Read errors bottom-up — root cause is at the bottom of the chain
-- `Type 'X' is not assignable to 'Y'` → missing props, incompatible types, or literal vs widened — check `as const`
-- `Property 'X' does not exist on type 'Y'` → wrong type; add `in` / `typeof` type guard
-- `Type 'X' cannot be used to index type 'Y'` → constrain with `K extends keyof T`
+- Read errors bottom-up — root cause is at the bottom
+- `Type 'X' is not assignable to 'Y'` → missing props, incompatible types, or literal vs widened (`as const`)
+- `Property 'X' does not exist on 'Y'` → add `in` / `typeof` type guard
+- `Type 'X' cannot index 'Y'` → constrain with `K extends keyof T`
 - Generic constraint errors → add `T extends SomeType`
-- Break complex chains into intermediate type aliases to isolate mismatches
+- Break complex chains into intermediate aliases to isolate mismatches
 - `// @ts-expect-error` to confirm expected errors (unused directive = valid code)
 
 ### Anti-patterns
 
-- `any` — never acceptable
-- `unknown` parameter — use constrained generic instead
-- `never` as a workaround — restructure types
-- Bare unconstrained `<T>` generic
-- `interface` — use `type`
-- `function` keyword for utilities — use `const` arrow
+- `any` · `unknown` parameter · `never` as workaround
+- Bare `<T>` generic · `interface` · `function` keyword
 - Unguarded index access without `K extends keyof T`
 - String branching without template literal types
-- `as SomeType` assertion to silence errors — fix the types
-- Mutable arrays when `as const` readonly would preserve literals
+- `as SomeType` to silence errors · mutable arrays where `as const` preserves literals
 
 ## Output Format
 

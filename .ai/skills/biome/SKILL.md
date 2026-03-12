@@ -14,8 +14,8 @@ Read `biome.json` and any referenced config files. Output concise but comprehens
 ### biome.json Structure
 
 - Top-level keys: `$schema`, `formatter`, `linter`, `javascript`, `json`, `organizeImports`, `files`, `overrides`
-- Always include `"$schema": "https://biomejs.dev/schemas/VERSION/schema.json"` — enables IDE validation
-- `vcs.enabled = true` + `vcs.useIgnoreFile = true` to respect `.gitignore`
+- Always include `"$schema": "https://biomejs.dev/schemas/VERSION/schema.json"`
+- `vcs.enabled = true` + `vcs.useIgnoreFile = true`
 
 ### Formatter
 
@@ -35,8 +35,7 @@ Read `biome.json` and any referenced config files. Output concise but comprehens
 
 ### organizeImports
 
-- `"organizeImports": { "enabled": true }` — sort and deduplicate imports on format
-- Runs automatically with `biome format --write` and `biome check --write`
+- `"organizeImports": { "enabled": true }` — runs automatically with `biome format --write` / `biome check --write`
 
 ### Files & Ignores
 
@@ -46,22 +45,15 @@ Read `biome.json` and any referenced config files. Output concise but comprehens
 
 ### overrides
 
-- Use `overrides` to relax rules for test files:
+- Use `overrides` to relax rules for test files or generated files:
 ```json
 {
-  "overrides": [
-    {
-      "include": ["**/*.test.ts", "**/*.spec.ts", "**/__tests__/**"],
-      "linter": {
-        "rules": {
-          "suspicious": { "noExplicitAny": "off" }
-        }
-      }
-    }
-  ]
+  "overrides": [{
+    "include": ["**/*.test.ts", "**/*.spec.ts"],
+    "linter": { "rules": { "suspicious": { "noExplicitAny": "off" } } }
+  }]
 }
 ```
-- Use `overrides` for generated files with different formatting needs
 
 ### CI Integration
 
@@ -80,12 +72,10 @@ Read `biome.json` and any referenced config files. Output concise but comprehens
 
 ### Replacing ESLint + Prettier
 
-- Remove `eslint`, `eslint-config-*`, `prettier`, `@prettier/*` from `package.json`
-- Remove `.eslintrc.*`, `.prettierrc.*`, `.eslintignore`, `.prettierignore`
-- Copy ignore patterns from `.eslintignore`/`.prettierignore` → `biome.json` `files.ignore`
-- Map ESLint rules to Biome equivalents; check [biomejs.dev/linter/rules](https://biomejs.dev/linter/rules)
-- `biome migrate eslint` — auto-converts `.eslintrc` to Biome config (Biome 1.5+)
-- `biome migrate prettier` — auto-converts `.prettierrc` to Biome formatter config
+- Remove `eslint`, `eslint-config-*`, `prettier`, `@prettier/*` and their config files
+- Copy ignore patterns → `biome.json` `files.ignore`
+- `biome migrate eslint` — auto-converts `.eslintrc` (Biome 1.5+)
+- `biome migrate prettier` — auto-converts `.prettierrc`
 
 ### Anti-patterns
 

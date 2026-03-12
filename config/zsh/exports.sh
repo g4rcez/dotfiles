@@ -26,11 +26,10 @@ LOCAL_SOURCE_FILES=(
     "$HOME/.opencode/bin"
 )
 
-
 for SOURCE_FILE in "${LOCAL_SOURCE_FILES[@]}"; do
-  if [[ -d "$SOURCE_FILE" ]]; then 
-      PATH2="$PATH2:$SOURCE_FILE";
-  fi
+    if [[ -d "$SOURCE_FILE" ]]; then
+        PATH2="$PATH2:$SOURCE_FILE"
+    fi
 done
 
 PATH="$PATH2"
@@ -110,6 +109,7 @@ unset ANTHROPIC_API_KEY
 export ENABLE_LSP_TOOL=1
 export AI_CLI_NAME="gemini"
 export AI_CLI_MODEL="gemini-3-flash-preview"
+export AI_QUERY_COMMAND="gemini --model gemini-3-flash-preview -p"
 
 export AICOMMIT_EXCLUDES=(
     "package-lock.json"
@@ -118,3 +118,4 @@ export AICOMMIT_EXCLUDES=(
     "*.lock"
 )
 
+export FZF_COLORS="--color=dark,bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
