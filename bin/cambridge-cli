@@ -1,0 +1,195 @@
+#!/usr/bin/env bun
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
+
+const CACHE_DIR = "/tmp/cambridge";
+if (!existsSync(CACHE_DIR)) {
+  mkdirSync(CACHE_DIR, { recursive: true });
+}
+
+function stripTags(html: string): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]+>/g, "")
+    .trim()
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function getCachePath(word: string): string {
+  return join(CACHE_DIR, `${word.toLowerCase().replace(/\s+/g, "-")}.md`);
+}
+
+async function playPronunciation(word: string) {
+  const cachePath = getCachePath(word);
+  if (!existsSync(cachePath)) {
+    await fetchAndCache(word);
+  }
+
+  if (existsSync(cachePath)) {
+    const content = readFileSync(cachePath, "utf8");
+    const ukAudioMatch = content.match(/<!-- AUDIO_UK: (.*?) -->/);
+    const usAudioMatch = content.match(/<!-- AUDIO_US: (.*?) -->/);
+    const audioUrl = ukAudioMatch?.[1] || usAudioMatch?.[1];
+
+    if (audioUrl && audioUrl.trim()) {
+      const player = process.platform === "darwin" ? "afplay" : "mpv";
+      const checkPlayer = spawnSync("which", [player]);
+      
+      if (checkPlayer.status !== 0) {
+        if (process.platform !== "darwin") {
+          for (const alt of ["ffplay", "mpg123", "aplay"]) {
+            if (spawnSync("which", [alt]).status === 0) {
+              await streamAudio(alt, audioUrl);
+              return;
+            }
+          }
+        }
+        console.error(`Error: ${player} not found. Please install it to play pronunciation.`);
+        return;
+      }
+      
+      await streamAudio(player, audioUrl);
+    } else {
+      console.error("No pronunciation audio found for this word.");
+    }
+  }
+}
+
+async function streamAudio(player: string, url: string) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch audio");
+    
+    const arrayBuffer = await response.arrayBuffer();
+    const tempFile = join(tmpdir(), `cambridge-${Date.now()}.mp3`);
+    writeFileSync(tempFile, Buffer.from(arrayBuffer));
+    
+    spawnSync(player, [tempFile], { stdio: "ignore" });
+    // Cleanup happens in the background (or not at all for speed, it's tmp)
+    try {
+      // Small delay to allow player to start if needed, though spawnSync is blocking
+      // We don't want to delete it BEFORE it's played.
+    } catch {}
+  } catch (error) {
+    console.error("Audio playback error:", error);
+  }
+}
+
+async function fetchAndCache(word: string): Promise<string | null> {
+  const formattedWord = word.toLowerCase().trim().replace(/\s+/g, "-");
+  const url = `https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(formattedWord)}`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      },
+    });
+
+    if (!response.ok) return null;
+
+    const html = await response.text();
+    
+    const headwordMatch = html.match(/<span[^>]+class="[^"]*hw dhw[^"]*"[^>]*>([^<]+)<\/span>/);
+    const headword = headwordMatch ? headwordMatch[1] : word;
+    
+    const ukIPAMatch = html.match(/<span[^>]+class="[^"]*uk dpron-i[^"]*"[^>]*>.*?<span[^>]+class="[^"]*ipa dipa[^"]*"[^>]*>([^<]+)<\/span>/s);
+    const usIPAMatch = html.match(/<span[^>]+class="[^"]*us dpron-i[^"]*"[^>]*>.*?<span[^>]+class="[^"]*ipa dipa[^"]*"[^>]*>([^<]+)<\/span>/s);
+    const ukAudioMatch = html.match(/<span[^>]+class="[^"]*uk dpron-i[^"]*"[^>]*>.*?<source[^>]+type="audio\/mpeg"[^>]+src="([^"]+)"/s);
+    const usAudioMatch = html.match(/<span[^>]+class="[^"]*us dpron-i[^"]*"[^>]*>.*?<source[^>]+type="audio\/mpeg"[^>]+src="([^"]+)"/s);
+
+    const ukIPA = ukIPAMatch ? ukIPAMatch[1] : "";
+    const usIPA = usIPAMatch ? usIPAMatch[1] : "";
+    const ukAudio = ukAudioMatch ? `https://dictionary.cambridge.org${ukAudioMatch[1]}` : "";
+    const usAudio = usAudioMatch ? `https://dictionary.cambridge.org${usAudioMatch[1]}` : "";
+
+    let markdown = `# 📖 ${headword.toUpperCase()}\n\n`;
+    
+    if (ukIPA || usIPA) {
+      markdown += `🇬🇧 UK: \`/${ukIPA}/\`  🇺🇸 US: \`/${usIPA}/\`\n\n`;
+      markdown += "---\n\n";
+    }
+
+    const entryBlocks = html.split(/class="[^"]*entry-body__el[^"]*"/).slice(1);
+    
+    for (const block of entryBlocks) {
+      const posMatch = block.match(/<span[^>]+class="[^"]*pos dpos[^"]*"[^>]*>([^<]+)<\/span>/);
+      const pos = posMatch ? posMatch[1] : "";
+      
+      if (pos) {
+        markdown += `### 🏷️ ${pos.toUpperCase()}\n\n`;
+      }
+      
+      const senseBlocks = block.split(/class="[^"]*def-block ddef_block[^"]*"/).slice(1);
+      for (const sense of senseBlocks) {
+        const defMatch = sense.match(/<div[^>]+class="[^"]*def ddef_d db[^"]*"[^>]*>(.*?)<\/div>/s);
+        if (defMatch) {
+          markdown += `> 💡 **${stripTags(defMatch[1])}**\n\n`;
+          
+          const exampleMatches = Array.from(sense.matchAll(/<span[^>]+class="[^"]*eg deg[^"]*"[^>]*>(.*?)<\/span>/gs));
+          if (exampleMatches.length > 0) {
+            markdown += `   *Examples:*\n`;
+            for (const example of exampleMatches) {
+              markdown += `   - 📝 _${stripTags(example[1])}_\n`;
+            }
+          }
+          markdown += "\n---\n\n";
+        }
+      }
+    }
+
+    markdown += `\n<!-- AUDIO_UK: ${ukAudio} -->\n`;
+    markdown += `<!-- AUDIO_US: ${usAudio} -->\n`;
+
+    const cachePath = getCachePath(word);
+    writeFileSync(cachePath, markdown);
+    return markdown;
+  } catch (error) {
+    console.error(`Error fetching word "${word}":`, error);
+    return null;
+  }
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  let playMode = false;
+  let wordArg = "";
+
+  for (const arg of args) {
+    if (arg === "--play") {
+      playMode = true;
+    } else if (!wordArg) {
+      wordArg = arg;
+    }
+  }
+
+  if (!wordArg || wordArg.trim() === "") {
+    process.exit(0);
+  }
+
+  if (playMode) {
+    await playPronunciation(wordArg);
+    process.exit(0);
+  }
+
+  const cachePath = getCachePath(wordArg);
+  if (existsSync(cachePath)) {
+    process.stdout.write(readFileSync(cachePath, "utf8"));
+  } else {
+    const markdown = await fetchAndCache(wordArg);
+    if (markdown) {
+      process.stdout.write(markdown);
+    } else {
+      console.error(`Word "${wordArg}" not found in Cambridge Dictionary.`);
+      process.exit(1);
+    }
+  }
+}
+
+main();

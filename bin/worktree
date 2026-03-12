@@ -44,7 +44,10 @@ cmd_add() {
     local branch="${1:-}"
     local base="${2:-}"
 
-    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; usage; }
+    [[ -z "$branch" ]] && {
+        echo "Error: branch name required" >&2
+        usage
+    }
 
     local repo_name
     repo_name="$(get_repo_name)"
@@ -68,24 +71,120 @@ cmd_add() {
     cd "$worktree_path"
 }
 
+# Internal: emit fzf-ready lines (path TAB display)
+_cmd_list_lines() {
+    local repo_name repo_base main_path
+    repo_name="$(get_repo_name)"
+    repo_base="$WORKTREE_BASE/$repo_name"
+    main_path="$(git rev-parse --show-toplevel)"
+
+    git worktree list | while read -r line; do
+        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
+            local wt_path branch_raw branch display_path
+            wt_path="$(echo "$line" | awk '{print $1}')"
+            branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
+            [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
+            display_path="${wt_path/#$HOME/\~}"
+            printf '%s\t%-35s  %s\n' "$wt_path" "$branch" "$display_path"
+        fi
+    done
+}
+
+_cmd_preview_wt() {
+    local wt_path="$1"
+    local session_name
+    session_name="$(tmux list-sessions -F '#{session_name} #{pane_current_path}' 2>/dev/null |
+        awk -v p="$wt_path" '$2 == p {print $1; exit}' || true)"
+
+    # Catppuccin Mocha colors
+    local pink=$'\e[38;2;243;139;168m'
+    local mauve=$'\e[38;2;203;166;247m'
+    local blue=$'\e[38;2;137;180;250m'
+    local reset=$'\e[0m'
+    local bold=$'\e[1m'
+
+    _section_header() {
+        local color="$1" label="$2"
+        printf '%s%s══════ %s ══════%s\n' "$color" "$bold" "$label" "$reset"
+    }
+
+    if [[ -n "$session_name" ]]; then
+        _section_header "$pink" "tmux: $session_name"
+        tmux capture-pane -t "$session_name" -p -e 2>/dev/null || true
+    else
+        _section_header "$mauve" "git log"
+        git -C "$wt_path" log --color=always \
+            --pretty=format:"%C(yellow)%h%C(reset) %C(blue)%ad%C(reset) %C(dim white)%an%C(reset) %s%C(red)%d%C(reset)" \
+            --date=short -10 2>/dev/null || true
+        echo ""
+        echo ""
+        _section_header "$pink" "git status"
+        git -C "$wt_path" status --short --branch --color=always 2>/dev/null || true
+        echo ""
+        _section_header "$blue" "directory"
+        ls -laG "$wt_path" 2>/dev/null || true
+    fi
+}
+
+_cmd_remove_wt() {
+    local wt_path="$1"
+    git worktree remove --force "$wt_path" 2>/dev/null || true
+}
+
 cmd_list() {
     local repo_name
     repo_name="$(get_repo_name)"
-    local repo_base="$WORKTREE_BASE/$repo_name"
 
-    echo "Worktrees for $repo_name:"
-    echo ""
-    git worktree list | while read -r line; do
-        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$(git rev-parse --show-toplevel)"* ]]; then
-            echo "  $line"
-        fi
-    done
+    local fzf_input
+    fzf_input="$(_cmd_list_lines)"
+
+    if [[ -z "$fzf_input" ]]; then
+        echo "No worktrees found for $repo_name"
+        return
+    fi
+
+    local selected
+    selected="$(echo "$fzf_input" | fzf \
+        $FZF_COLORS \
+        --prompt="worktree> " \
+        --border=sharp \
+        --reverse \
+        --height=100% \
+        --border-label="worktrees: $repo_name" \
+        --header="Enter: switch  Ctrl-D: delete" \
+        --with-nth=2.. \
+        --delimiter=$'\t' \
+        --preview "bash $HOME/dotfiles/bin/worktree _preview {1}" \
+        --preview-window right:70%:wrap \
+        --bind "ctrl-d:execute-silent(bash $HOME/dotfiles/bin/worktree _remove {1})+reload(bash $HOME/dotfiles/bin/worktree _list_lines)" \
+        2>/dev/null)" || return 0
+
+    [[ -z "$selected" ]] && return 0
+
+    local wt_path branch session_name
+    wt_path="$(echo "$selected" | cut -f1)"
+    branch="$(echo "$selected" | cut -f2 | awk '{print $1}')"
+    session_name="${branch//\//-}"
+    session_name="${session_name#-}"
+
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -d -s "$session_name" -c "$wt_path"
+    fi
+
+    if [[ -n "${TMUX:-}" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach-session -t "$session_name"
+    fi
 }
 
 cmd_remove() {
     local branch="${1:-}"
 
-    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; usage; }
+    [[ -z "$branch" ]] && {
+        echo "Error: branch name required" >&2
+        usage
+    }
 
     local repo_name
     repo_name="$(get_repo_name)"
@@ -103,14 +202,17 @@ cmd_remove() {
 
 cmd_cd() {
     local branch="${1:-}"
-    
-    [[ -z "$branch" ]] && { echo "Error: branch name required" >&2; exit 1; }
-    
+
+    [[ -z "$branch" ]] && {
+        echo "Error: branch name required" >&2
+        exit 1
+    }
+
     local repo_name
     repo_name="$(get_repo_name)"
     local worktree_path
     worktree_path="$(get_worktree_path "$repo_name" "$branch")"
-    
+
     if [[ -d "$worktree_path" ]]; then
         echo "$worktree_path"
     else
@@ -154,7 +256,7 @@ cmd_mux() {
         if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
             local wt_path branch_raw branch display
             wt_path="$(echo "$line" | awk '{print $1}')"
-            branch_raw="$(echo "$line" | grep -oP '\[\K[^\]]+' || true)"
+            branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
             if [[ -n "$branch_raw" ]]; then
                 branch="$branch_raw"
             else
@@ -183,23 +285,26 @@ cmd_mux() {
     fi
 }
 
-origin () {
+origin() {
     cd "$(git worktree list | awk '{print $1}' | head -1)"
 }
 
 main() {
     local cmd="${1:-}"
     shift || true
-    
+
     case "$cmd" in
-        add)    cmd_add "$@" ;;
-        list|ls) cmd_list "$@" ;;
-        remove|rm) cmd_remove "$@" ;;
-        cd)     cmd_cd "$@" ;;
-        clean)  cmd_clean "$@" ;;
-        origin) origin "$@" ;;
-        mux)    cmd_mux "$@" ;;
-        *)      usage ;;
+    add) cmd_add "$@" ;;
+    list | ls) cmd_list "$@" ;;
+    remove | rm) cmd_remove "$@" ;;
+    cd) cmd_cd "$@" ;;
+    clean) cmd_clean "$@" ;;
+    origin) origin "$@" ;;
+    mux) cmd_mux "$@" ;;
+    _preview) _cmd_preview_wt "$@" ;;
+    _remove) _cmd_remove_wt "$@" ;;
+    _list_lines) _cmd_list_lines "$@" ;;
+    *) usage ;;
     esac
 }
 
