@@ -225,14 +225,14 @@ function aicommit {
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         EXCLUDE_ARGS+=(":(exclude)$f")
     done
-    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | $AI_QUERY_COMMAND "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${*}" | sed 's/# //1')
+    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | ${=AI_QUERY_COMMAND} "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${*}" | sed 's/# //1')
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
     local pr_ref="${1:-}"
-    PR_MESSAGE=$(gh pr diff $pr_ref | $AI_QUERY_COMMAND "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
+    PR_MESSAGE=$(gh pr diff $pr_ref | ${=AI_QUERY_COMMAND} "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
     echo "$PR_MESSAGE" | pbcopy
     echo "$PR_MESSAGE"
 }
