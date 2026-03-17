@@ -3,6 +3,7 @@ add_newline = true
 palette = "catppuccin"
 format = """
 $status\
+${custom.worktree}\
 ${custom.git_host}\
 ${custom.dir}\
 $git_branch\
@@ -164,6 +165,14 @@ format = "[$output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 style = "white"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
+
+[custom.worktree]
+command = "echo "
+description = "Show icon when inside a git worktree"
+format = "[$output]($style) "
+shell = ["bash", "--norc", "--noprofile"]
+style = "green"
+when = '[ "$(git rev-parse --git-dir 2>/dev/null)" != "$(git rev-parse --git-common-dir 2>/dev/null)" ]'
 
 [custom.dir]
 command = """bun run $HOME/dotfiles/bin/fishfy-path"""
