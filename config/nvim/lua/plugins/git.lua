@@ -1,6 +1,14 @@
 return {
     "tpope/vim-fugitive",
     { "StackInTheWild/headhunter.nvim", opts = {} },
+    { "cvlmtg/inline-diff.nvim", opts = {} },
+    {
+        "kokusenz/deltaview.nvim",
+        dependencies = { "kokusenz/delta.lua" },
+        opts = {
+            use_nerdfonts = false,
+        },
+    },
     {
         "esmuellert/codediff.nvim",
         dependencies = { "MunifTanjim/nui.nvim" },
