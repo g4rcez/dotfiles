@@ -179,6 +179,10 @@ function commit() {
     fi
 }
 
+function fakecommit() {
+    GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git commit -S -m "$2"
+}
+
 function acommit() {
     git add .
     commit "$@"
@@ -248,4 +252,11 @@ function gcb() {
     else
         git checkout -b "$1"
     fi
+}
+
+branch() {
+    local b
+    b=$(git branch --show-current)
+    echo "$b"
+    echo -n "$b" | pbcopy
 }

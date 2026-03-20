@@ -7,6 +7,11 @@ return {
     "editorconfig/editorconfig-vim",
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
+        "Sang-it/fluoride",
+        opts = {},
+        keys = { { "<leader>cO", "<cmd>Fluoride<cr>", desc = "Fluoride" } },
+    },
+    {
         cond = not require("config.vscode").isVscode(),
         "folke/lazydev.nvim",
         ft = "lua",
