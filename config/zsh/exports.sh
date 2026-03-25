@@ -61,7 +61,7 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/libpq/lib/pkgconfig"
 
 #####################################################################################
 ## ZELLIJ_CONFIG
-export ZELLIJ_AUTO_ATTACH=true
+export ZELLIJ_AUTO_ATTACH=false
 export ZELLIJ_AUTO_EXIT=false
 export ZELLIJ_DEFAULT_SESSION="localhost"
 

@@ -12,7 +12,8 @@ Commands:
     add <branch> [base]    Create a worktree for <branch> (optionally from <base>)
     list                   List all worktrees for current repo
     remove <branch>        Remove a worktree
-    cd <branch>            Print the path (use: cd \$(worktree cd <branch>))
+    prune                  Remove all worktrees for merged branches
+    cd <branch>            Print the path (use: cd $(worktree cd <branch>))
     clean                  Remove all worktrees for current repo
     mux                    Pick a worktree with fzf and open/attach a tmux session
     overview               Show all worktrees with session status and git info
@@ -81,12 +82,21 @@ _cmd_list_lines() {
 
     git worktree list | while read -r line; do
         if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
-            local wt_path branch_raw branch display_path
+            local wt_path branch_raw branch display_path session_icon
             wt_path="$(echo "$line" | awk '{print $1}')"
             branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
             [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
+            
+            local session_name="${branch//\//-}"
+            session_name="${session_name#-}"
+            if tmux has-session -t "$session_name" 2>/dev/null; then
+                session_icon="● "
+            else
+                session_icon="○ "
+            fi
+
             display_path="${wt_path/#$HOME/\~}"
-            printf '%s\t%-35s  %s\n' "$wt_path" "$branch" "$display_path"
+            printf '%s\t%s%-35s  %s\n' "$wt_path" "$session_icon" "$branch" "$display_path"
         fi
     done
 }
@@ -177,6 +187,47 @@ cmd_list() {
     else
         tmux attach-session -t "$session_name"
     fi
+}
+
+cmd_prune() {
+    local repo_name
+    repo_name="$(get_repo_name)"
+    local repo_base="$WORKTREE_BASE/$repo_name"
+
+    echo "Fetching merged pull requests..."
+    local merged_branches
+    merged_branches=$(gh pr list --state merged --json headRefName --jq '.[].headRefName' 2>/dev/null || echo "")
+
+    if [[ -z "$merged_branches" ]]; then
+        echo "No merged branches found."
+        return
+    fi
+
+    git worktree list | while read -r line; do
+        local wt_path branch_raw branch
+        wt_path="$(echo "$line" | awk '{print $1}')"
+        [[ "$wt_path" != *"$repo_base"* ]] && continue
+
+        branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
+        [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
+
+        if echo "$merged_branches" | grep -q "^$branch$"; then
+            echo -n "Worktree for merged branch '$branch' found. Remove? [y/N] "
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                git worktree remove "$wt_path"
+                local session_name="${branch//\//-}"
+                session_name="${session_name#-}"
+                if tmux has-session -t "$session_name" 2>/dev/null; then
+                    tmux kill-session -t "$session_name"
+                    echo "Removed worktree and killed tmux session: $session_name"
+                else
+                    echo "Removed worktree: $wt_path"
+                fi
+            fi
+        fi
+    done
+    git worktree prune
 }
 
 cmd_remove() {
@@ -336,6 +387,7 @@ main() {
     add) cmd_add "$@" ;;
     list | ls) cmd_list "$@" ;;
     remove | rm) cmd_remove "$@" ;;
+    prune) cmd_prune "$@" ;;
     cd) cmd_cd "$@" ;;
     clean) cmd_clean "$@" ;;
     origin) origin "$@" ;;

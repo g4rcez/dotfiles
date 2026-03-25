@@ -47,7 +47,8 @@ tmux_set status-left " #{prefix_highlight} "
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$FG"
 tmux_set status-right-length 200
-# tmux_set status-right "  #(basename \"#{pane_current_path}\")"
+# Dir: tmux_set status-right "  #(basename \"#{pane_current_path}\")"
+# AI: tmux_set status-right "#($DOTFILES/.ai/statusline.sh --compact) #[fg=$FG,bg=$BG] #S "
 tmux_set status-right " #S "
 
 # Window status format

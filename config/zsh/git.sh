@@ -82,13 +82,13 @@ function clone() {
 function wip() {
     git add -A .
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
-    git commit --no-verify -S -m "${NOW}"
+    git commit --no-verify -S -m "wip: ${NOW}"
     git push
 }
 
 function wip.ai() {
     git add -A .
-    COMMIT_MESSAGE="$(aicommit "$*")"
+    COMMIT_MESSAGE="$(commitwithai "$*")"
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
     git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}"
     git push
@@ -135,26 +135,25 @@ function actionWith() {
     git switch "$TARGET_BRANCH"
     git pull origin "$TARGET_BRANCH"
     git switch "$CURRENT_BRANCH"
-    git $1 "$TARGET_BRANCH"
+    git "$1" "$TARGET_BRANCH"
 }
 
 function mergewith() {
-    actionWith "merge" $1
+    actionWith "merge" "$1"
 }
 
 function rebasewith() {
-    actionWith "rebase" $1
+    actionWith "rebase" "$1"
 }
 
 function squash() {
     git rebase -i "HEAD~${1}"
 }
 
-# squash branch commits based in N commits of current pull request
 function squashbranch() {
     COMMITS=$(test -z "$1" && echo $(countCommits) || echo "$1")
     echo "Rebase '$COMMITS' behind...Press ENTER to continue"
-    read
+    read -r
     squash "$COMMITS"
 }
 
@@ -183,9 +182,10 @@ function fakecommit() {
     GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git commit -S -m "$2"
 }
 
-function acommit() {
+function aicommit() {
     git add .
-    commit "$@"
+    commitwithai "$@"
+    push
 }
 
 function lastcommit() {
@@ -224,12 +224,19 @@ function gh.workflow() {
     rm -f "$tmpfile"
 }
 
-function aicommit {
+function commitwithai {
     local EXCLUDE_ARGS=()
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         EXCLUDE_ARGS+=(":(exclude)$f")
     done
-    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | ${=AI_QUERY_COMMAND} "$(cat $DOTFILES/prompts/aicommit-script.txt).\n ${*}" | sed 's/# //1')
+    
+    local HINT="${*}"
+    local PROMPT="$(cat $DOTFILES/prompts/aicommit-script.txt)"
+    if [[ -n "$HINT" ]]; then
+        PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
+    fi
+
+    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
@@ -242,7 +249,6 @@ function prdesc() {
 }
 
 function gcb() {
-    # Previous was -> alias gcb='git checkout -b'
     if [ -z "$1" ]; then
         echo "Usage: gcb <branch-name>"
         return 1
@@ -253,6 +259,13 @@ function gcb() {
         git checkout -b "$1"
     fi
 }
+_gcb() {
+    local -a branches
+    branches=($(git branch --format='%(refname:short)' 2>/dev/null))
+    branches+=($(git branch -r --format='%(refname:short)' 2>/dev/null | sed 's|^origin/||'))
+    _values 'branch' $branches
+}
+compdef _gcb gcb
 
 branch() {
     local b

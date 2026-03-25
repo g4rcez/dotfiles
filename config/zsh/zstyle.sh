@@ -1,6 +1,6 @@
 #!/bin/zsh
 zmodload -i zsh/complist
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\ '
+WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\//[\/]/ '
 export WORDCHARS="${WORDCHARS/\//}"
 
 ############################## setops #################################
