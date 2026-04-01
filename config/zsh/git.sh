@@ -229,7 +229,6 @@ function commitwithai {
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         EXCLUDE_ARGS+=(":(exclude)$f")
     done
-    
     local HINT="${*}"
     local PROMPT="$(cat $DOTFILES/prompts/aicommit-script.txt)"
     if [[ -n "$HINT" ]]; then

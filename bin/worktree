@@ -13,7 +13,7 @@ Commands:
     list                   List all worktrees for current repo
     remove <branch>        Remove a worktree
     prune                  Remove all worktrees for merged branches
-    cd <branch>            Print the path (use: cd $(worktree cd <branch>))
+    cd <branch>            Print the path (use: cd \$(worktree cd <branch>))
     clean                  Remove all worktrees for current repo
     mux                    Pick a worktree with fzf and open/attach a tmux session
     overview               Show all worktrees with session status and git info
