@@ -7,7 +7,7 @@ local severity = vim.diagnostic.severity
 
 vim.diagnostic.config {
     severity_sort = true,
-    float = { border = border, source = "if_many" },
+    float = { border = "single", source = "if_many" },
     underline = { severity = vim.diagnostic.severity.WARN },
     diagnostics = { underline = true, update_in_insert = true },
     signs = {
@@ -33,16 +33,8 @@ vim.diagnostic.config {
     },
 }
 
-vim.filetype.add { extension = {} }
 vim.filetype.add {
-    extension = {
-        mdx = "mdx",
-        http = "http",
-        rasi = "rasi",
-        rofi = "rasi",
-        wofi = "rasi",
-        vifmrc = "vim",
-    },
+    extension = { mdx = "mdx", http = "http", rasi = "rasi", rofi = "rasi", wofi = "rasi", vifmrc = "vim" },
     pattern = {
         [".*/waybar/config"] = "jsonc",
         [".*/mako/config"] = "dosini",
