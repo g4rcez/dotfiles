@@ -49,6 +49,26 @@ fmt_datetime() {
   date -r "$epoch" "+%b %e, %l:%M%p" | tr 'A-Z' 'a-z' | sed 's/  */ /g; s/^ //'
 }
 
+# Fish-style shortened path: /Users/garcez/foo/bar/baz -> ~/f/b/baz
+fish_dir() {
+  local dir="${1/#"$HOME"/~}"
+  IFS='/' read -ra parts <<< "$dir"
+  local last=$(( ${#parts[@]} - 1 ))
+  local result=""
+  for ((i = 0; i <= last; i++)); do
+    local part="${parts[i]}"
+    if (( i == last )); then
+      result+="$part"
+    elif [[ "$part" == "~" || -z "$part" ]]; then
+      result+="$part"
+    else
+      result+="${part:0:1}"
+    fi
+    (( i < last )) && result+="/"
+  done
+  echo "$result"
+}
+
 # Parse JSON fields
 current_dir=$(echo "$json" | jq -r '.workspace.current_dir // ""')
 model=$(echo "$json" | jq -r '.model.display_name // "Claude"')
@@ -61,8 +81,8 @@ seven_day_reset=$(echo "$json" | jq -r '.rate_limits.seven_day.resets_at // 0')
 # Strip "Claude " prefix
 model="${model#Claude }"
 
-# Project name
-project=$(basename "$current_dir")
+# Project name (fish-style shortened path)
+project=$(fish_dir "$current_dir")
 
 # Worktree detection
 worktree_json=$(echo "$json" | jq -r '.worktree // "null"')
@@ -97,5 +117,5 @@ else
   bar_weekly=$(dot_bar "$seven_day_pct" "$RESET")
   reset_weekly=$(fmt_datetime "$seven_day_reset")
 
-  echo "${model} ${GRAY}|${RESET} ${context_pct}% ${GRAY}|${RESET} ${project} (${branch})${worktree_suffix} ${GRAY}|${RESET} current ${bar_current} ${five_hr_pct}% ${GRAY}↻ ${reset_current}${RESET} ${GRAY}|${RESET} weekly ${bar_weekly} ${seven_day_pct}% ${GRAY}↻ ${reset_weekly}${RESET}"
+  echo "${model} ${GRAY}|${RESET} ${context_pct}% ${GRAY}|${RESET} ${project} - ${branch}${worktree_suffix} ${GRAY}|${RESET} current ${bar_current} ${five_hr_pct}% ${GRAY}↻ ${reset_current}${RESET} ${GRAY}|${RESET} weekly ${bar_weekly} ${seven_day_pct}% ${GRAY}↻ ${reset_weekly}${RESET}"
 fi

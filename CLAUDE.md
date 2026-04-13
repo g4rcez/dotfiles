@@ -10,6 +10,7 @@
 ## Zsh
 
 - Any variable that holds a shell command string (e.g. `AI_QUERY_COMMAND`) must be expanded with `${=VAR}` in zsh, not `$VAR`, to force word splitting.
+- Some `bin/` scripts use bash (`#!/usr/bin/env bash`), not zsh. Check the shebang before using zsh-isms like `${=VAR}` — for bash, use `eval exec "$cmd"` instead.
 - New `bin/` tools should have a matching zsh completion file in `config/zsh/completion/` following the `_ai.zsh` pattern.
 
 ## Terminal / Image Rendering
