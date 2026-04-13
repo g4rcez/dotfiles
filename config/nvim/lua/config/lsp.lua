@@ -53,9 +53,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
             Snacks.picker.lsp_references()
         end, opts)
 
-        opts.desc = "Go to declaration"
-        keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-
         opts.desc = "Show LSP definition"
         keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
@@ -82,19 +79,48 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         opts.desc = "Go to previous diagnostic"
         keymap.set("n", "[d", function()
-            vim.diagnostic.jump { count = -1, float = true }
+            vim.diagnostic.jump { count = -1, severity = { min = vim.diagnostic.severity.WARN } }
         end, opts)
 
         opts.desc = "Go to next diagnostic"
         keymap.set("n", "]d", function()
-            vim.diagnostic.jump { count = 1, float = true }
+            vim.diagnostic.jump { count = 1, severity = { min = vim.diagnostic.severity.WARN } }
         end, opts)
 
         opts.desc = "Show documentation for what is under cursor"
-        keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        keymap.set("n", "K", function()
+            vim.lsp.buf.hover { border = "single", focusable = true, wrap = true }
+        end, opts)
 
         opts.desc = "Restart LSP"
-        keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+        keymap.set("n", "<leader>rs", ":lsp restart<CR>", opts)
+
+        opts.desc = "Toggle inlay hints"
+        keymap.set("n", "<leader>th", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = ev.buf })
+        end, opts)
+
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, ev.buf) then
+            local highlight_augroup = vim.api.nvim_create_augroup("lsp-document-highlight", { clear = false })
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                buffer = ev.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.document_highlight,
+            })
+            vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+                buffer = ev.buf,
+                group = highlight_augroup,
+                callback = vim.lsp.buf.clear_references,
+            })
+            vim.api.nvim_create_autocmd("LspDetach", {
+                group = vim.api.nvim_create_augroup("lsp-document-detach", { clear = true }),
+                callback = function(ev2)
+                    vim.lsp.buf.clear_references()
+                    vim.api.nvim_clear_autocmds { group = "lsp-document-highlight", buffer = ev2.buf }
+                end,
+            })
+        end
     end,
 })
 

@@ -13,6 +13,10 @@ return {
         "esmuellert/codediff.nvim",
         dependencies = { "MunifTanjim/nui.nvim" },
         cmd = "CodeDiff",
+        opts = {
+            explorer = { width = 20, initial_focus = "original" },
+            history = { initial_focus = "original" },
+        },
     },
     {
         "lewis6991/gitsigns.nvim",

@@ -1,5 +1,5 @@
 # vim: ft=ghostty
-font-size = 17.3
+font-size = 16
 font-thicken = true
 font-thicken-strength = 120
 window-padding-x = 2

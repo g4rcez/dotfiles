@@ -208,11 +208,17 @@ cmd_list() {
     "
 }
 
+cmd_open() {
+  local cmd="${AI_COMMAND_PROMPT:-claude --dangerously-skip-permissions}"
+  eval exec "$cmd" "$@"
+}
+
 usage() {
   cat >&2 <<EOF
-Usage: ai [--provider <name>] <command>
+Usage: ai [--provider <name>] [command]
 
 Commands:
+  (none)      open the AI for the current provider
   agents      deploy guidelines to cwd
   subagents   deploy agents to ./<provider>/agents/
   skills      deploy a skill to ./<provider>/skills/
@@ -238,8 +244,8 @@ while [[ $# -gt 0 ]]; do
     skills)    shift; cmd_skills "$@"; exit 0 ;;
     update)    shift; cmd_update "$@"; exit 0 ;;
     list)      shift; cmd_list "$@"; exit 0 ;;
-    *)         usage ;;
+    *)         break ;;
   esac
 done
 
-usage
+cmd_open "$@"

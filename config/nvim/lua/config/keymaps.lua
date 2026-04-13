@@ -62,13 +62,6 @@ bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
 bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
 bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>", { desc = "[s]ort size" })
 
-bind.normal("]d", function()
-    vim.diagnostic.goto_next { min = vim.diagnostic.severity.WARN }
-end, { desc = "Goto next error" })
-bind.normal("[d", function()
-    vim.diagnostic.goto_prev { min = vim.diagnostic.severity.WARN }
-end, { desc = "Goto previous error" })
-
 bind.normal("<leader>co", function()
     vim.lsp.buf.code_action {
         apply = true,
@@ -157,3 +150,4 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
+

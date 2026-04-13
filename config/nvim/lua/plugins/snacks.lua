@@ -82,8 +82,8 @@ return {
                             layout = {
                                 backdrop = true,
                                 box = "horizontal",
-                                height = 0.95,
-                                width = 0.95,
+                                height = 0.99,
+                                width = 0.99,
                                 border = "solid",
                                 {
                                     box = "vertical",
@@ -281,7 +281,19 @@ return {
             {
                 "<leader>gd",
                 function()
-                    require("snacks").picker.git_diff()
+                    require("snacks").picker.git_diff {
+                        layout = {
+                            layout = {
+                                width = 0.99,
+                                height = 0.99,
+                                border = "solid",
+                                box = "vertical",
+                                { win = "input", height = 1, border = "none" },
+                                { win = "list", height = 0.2, border = "none" },
+                                { win = "preview", border = "none", title = "" },
+                            },
+                        },
+                    }
                 end,
                 desc = "Git Diff (Hunks)",
             },

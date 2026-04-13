@@ -11,81 +11,91 @@ fi
 # Cache for 10 seconds to avoid excessive processing
 CACHE_FILE="/tmp/claude_statusline_cache"
 if [[ ! -t 0 ]]; then
-  # JSON on stdin
   json=$(cat)
   echo "$json" > "$CACHE_FILE"
 elif [[ -f "$CACHE_FILE" ]]; then
-  # Use cache if stdin is terminal (like when tmux calls it)
   json=$(cat "$CACHE_FILE")
 else
-  # No data
   exit 0
 fi
 
-# Fish-style directory shortening: shorten all components except last to first char
-fish_dir() {
-  local dir="$1"
-  # Replace $HOME with ~
-  dir="${dir/#$HOME/~}"
-  # Split by / and shorten all but last component
-  IFS='/' read -ra parts <<< "$dir"
-  local result=""
-  local count="${#parts[@]}"
-  for ((i = 0; i < count; i++)); do
-    if [[ -z "${parts[$i]}" ]]; then
-      result+="/"
-    elif ((i == count - 1)); then
-      result+="${parts[$i]}"
-    else
-      result+="${parts[$i]:0:1}/"
-    fi
-  done
-  echo "$result"
+# ANSI colors (actual escape chars)
+GREEN=$'\033[32m'
+GRAY=$'\033[90m'
+RESET=$'\033[0m'
+
+# dot_bar <pct> <filled_color>
+dot_bar() {
+  local pct=$1
+  local filled_color=$2
+  local filled=$(( (pct + 5) / 10 ))
+  [[ $filled -gt 10 ]] && filled=10
+  local empty=$(( 10 - filled ))
+  local bar=""
+  for ((i = 0; i < filled; i++)); do bar+="${filled_color}●${RESET}"; done
+  for ((i = 0; i < empty; i++)); do bar+="${GRAY}○${RESET}"; done
+  printf '%s' "$bar"
 }
 
+# Format epoch as "H:MMam/pm" (e.g. "7:00pm")
+fmt_time() {
+  local epoch=$1
+  date -r "$epoch" "+%l:%M%p" | tr 'A-Z' 'a-z' | sed 's/^ //'
+}
+
+# Format epoch as "mon DD, H:MMam/pm" (e.g. "mar 10, 10:00am")
+fmt_datetime() {
+  local epoch=$1
+  date -r "$epoch" "+%b %e, %l:%M%p" | tr 'A-Z' 'a-z' | sed 's/  */ /g; s/^ //'
+}
+
+# Parse JSON fields
 current_dir=$(echo "$json" | jq -r '.workspace.current_dir // ""')
 model=$(echo "$json" | jq -r '.model.display_name // "Claude"')
-cost=$(echo "$json" | jq -r '.cost.total_cost_usd // 0')
-context_pct=$(echo "$json" | jq -r '.context_window.used_percentage // 0')
-worktree=$(echo "$json" | jq -r '.worktree // "null"')
+context_pct=$(echo "$json" | jq -r '.context_window.used_percentage // 0 | floor')
+five_hr_pct=$(echo "$json" | jq -r '.rate_limits.five_hour.used_percentage // 0 | floor')
+five_hr_reset=$(echo "$json" | jq -r '.rate_limits.five_hour.resets_at // 0')
+seven_day_pct=$(echo "$json" | jq -r '.rate_limits.seven_day.used_percentage // 0 | floor')
+seven_day_reset=$(echo "$json" | jq -r '.rate_limits.seven_day.resets_at // 0')
 
-# Fish-style dir
-dir=$(fish_dir "$current_dir")
+# Strip "Claude " prefix
+model="${model#Claude }"
 
-# Worktree icon and branch
-if [[ "$worktree" != "null" ]]; then
-  icon=""
+# Project name
+project=$(basename "$current_dir")
+
+# Worktree detection
+worktree_json=$(echo "$json" | jq -r '.worktree // "null"')
+is_worktree=false
+if [[ "$worktree_json" != "null" ]]; then
+  is_worktree=true
   branch=$(echo "$json" | jq -r '.worktree.branch // ""')
 else
-  icon=""
+  git_dir=$(git -C "$current_dir" rev-parse --git-dir 2>/dev/null)
+  git_common_dir=$(git -C "$current_dir" rev-parse --git-common-dir 2>/dev/null)
+  if [[ -n "$git_dir" && "$git_dir" != "$git_common_dir" ]]; then
+    is_worktree=true
+  fi
   branch=$(git -C "$current_dir" branch --show-current 2>/dev/null)
 fi
 
-# PR number
-pr=$(gh pr view --json number -q .number "$current_dir" 2>/dev/null)
-
-# Model: strip "Claude " prefix
-model="${model#Claude }"
-
-# Cost: format as $X.XX
-cost_fmt=$(printf '$%.2f' "$cost")
-
-# Context%
-ctx_fmt="${context_pct}%"
+# Dirty check: append * to branch if working tree is dirty
+dirty=$(git -C "$current_dir" status --porcelain 2>/dev/null)
+[[ -n "$dirty" ]] && branch="${branch}*"
 
 if $COMPACT; then
-  # Single line for tmux status bar
-  # We skip the dir and branch to keep it short in tmux
-  # Format: "Model $Cost Ctx%"
-  echo " $model $cost_fmt $ctx_fmt"
+  echo "${model} ${context_pct}%"
 else
-  # Line 1
-  line1="$dir $icon $branch"
-  if [[ -n "$pr" ]]; then
-    line1="$line1 - PR: #$pr"
+  # Line 1: model | context% | project (branch) [worktree icon]
+  if $is_worktree; then
+    worktree_suffix=" ${GREEN}${RESET}"
+  else
+    worktree_suffix=""
   fi
-  # Line 2
-  line2="$model - $cost_fmt - $ctx_fmt"
-  echo "$line1"
-  echo "$line2"
+  bar_current=$(dot_bar "$five_hr_pct" "$RESET")
+  reset_current=$(fmt_time "$five_hr_reset")
+  bar_weekly=$(dot_bar "$seven_day_pct" "$RESET")
+  reset_weekly=$(fmt_datetime "$seven_day_reset")
+
+  echo "${model} ${GRAY}|${RESET} ${context_pct}% ${GRAY}|${RESET} ${project} (${branch})${worktree_suffix} ${GRAY}|${RESET} current ${bar_current} ${five_hr_pct}% ${GRAY}↻ ${reset_current}${RESET} ${GRAY}|${RESET} weekly ${bar_weekly} ${seven_day_pct}% ${GRAY}↻ ${reset_weekly}${RESET}"
 fi
