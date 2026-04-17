@@ -213,6 +213,99 @@ cmd_open() {
   eval exec "$cmd" "$@"
 }
 
+_ai_find_ai_proc() {
+  local root="$1"
+  local snap="$2"
+  local -a frontier=("$root")
+  local depth=0
+  local p cpid argv0 argv1 b0 b1
+  local -a nxt=()
+  while [ "${#frontier[@]}" -gt 0 ] && [ "$depth" -lt 4 ]; do
+    nxt=()
+    for p in "${frontier[@]}"; do
+      while read -r cpid _ argv0 argv1 _rest; do
+        [ -z "$cpid" ] && continue
+        b0="${argv0##*/}"; b1="${argv1##*/}"
+        if [[ "$b0" =~ ^(claude|gemini|codex|opencode)$ ]]; then
+          printf '%s' "$b0"; return
+        fi
+        if [[ "$b1" =~ ^(claude|gemini|codex|opencode)$ ]]; then
+          printf '%s' "$b1"; return
+        fi
+        nxt+=("$cpid")
+      done < <(awk -v p="$p" '$2==p{print $0}' <<< "$snap")
+    done
+    if (( ${#nxt[@]} == 0 )); then break; fi
+    frontier=("${nxt[@]}")
+    (( depth++ ))
+  done
+}
+
+cmd_sessions_rows() {
+  local current_pane="${TMUX_PANE:-}"
+  local ps_snap
+  ps_snap=$(ps -A -o pid=,ppid=,args= 2>/dev/null)
+  while IFS='|' read -r pane_id sess win pane win_name path pid; do
+    [ "$pane_id" = "$current_pane" ] && continue
+    local found
+    found=$(_ai_find_ai_proc "$pid" "$ps_snap")
+    [ -z "$found" ] && continue
+    local short_path="${path/#$HOME/~}"
+    printf '%s\t%s\t%s\t%s\t%s\n' \
+      "$pane_id" "$sess:$win.$pane" "$found" "$short_path" "$win_name"
+  done < <(tmux list-panes -a -F \
+    '#{pane_id}|#{session_name}|#{window_index}|#{pane_index}|#{window_name}|#{pane_current_path}|#{pane_pid}')
+}
+
+cmd_sessions() {
+  if ! command -v tmux &>/dev/null; then
+    echo "error: tmux not found" >&2; exit 1
+  fi
+  if ! command -v fzf &>/dev/null; then
+    echo "error: fzf not found" >&2; exit 1
+  fi
+  local rows
+  rows=$(cmd_sessions_rows)
+  if [ -z "$rows" ]; then
+    echo "no ai sessions"
+    return 0
+  fi
+  local self="$0"
+  local selection
+  selection=$(
+    printf '%s\n' "$rows" \
+      | fzf \
+          --cycle \
+          --border "sharp" \
+          --border-label "ai sessions" \
+          --reverse \
+          --no-sort \
+          --info inline \
+          --height 100% \
+          --color=dark \
+          --color='bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8' \
+          --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc' \
+          --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8' \
+          --prompt "AI sessions > " \
+          --header "ctrl-d: kill pane" \
+          --delimiter $'\t' \
+          --with-nth '2..' \
+          --preview "tmux capture-pane -ep -t {1} -S -200" \
+          --preview-window right,60% \
+          --bind "ctrl-d:execute-silent(tmux kill-pane -t {1})+reload($self --_sessions-rows)"
+  )
+  [ -z "$selection" ] && return 0
+  local target
+  target=$(cut -f1 <<< "$selection")
+  if [ -n "${TMUX:-}" ]; then
+    tmux switch-client -t "$target"
+  else
+    local sess
+    sess=$(tmux display -t "$target" -p '#{session_name}')
+    tmux attach -t "$sess" \; select-pane -t "$target"
+  fi
+}
+
 usage() {
   cat >&2 <<EOF
 Usage: ai [--provider <name>] [command]
@@ -224,6 +317,7 @@ Commands:
   skills      deploy a skill to ./<provider>/skills/
   update      re-sync all tracked projects
   list        browse available items with fzf
+  sessions    switch to a tmux pane running an AI CLI
 
 Options:
   --provider  AI provider (default: claude, or \$AI_PROVIDER)
@@ -239,11 +333,13 @@ while [[ $# -gt 0 ]]; do
       PROVIDER="$1"
       shift
       ;;
-    agents)    shift; cmd_agents "$@"; exit 0 ;;
-    subagents) shift; cmd_subagents "$@"; exit 0 ;;
-    skills)    shift; cmd_skills "$@"; exit 0 ;;
-    update)    shift; cmd_update "$@"; exit 0 ;;
-    list)      shift; cmd_list "$@"; exit 0 ;;
+    agents)           shift; cmd_agents "$@"; exit 0 ;;
+    subagents)        shift; cmd_subagents "$@"; exit 0 ;;
+    skills)           shift; cmd_skills "$@"; exit 0 ;;
+    update)           shift; cmd_update "$@"; exit 0 ;;
+    list)             shift; cmd_list "$@"; exit 0 ;;
+    sessions)         shift; cmd_sessions "$@"; exit 0 ;;
+    --_sessions-rows) cmd_sessions_rows; exit 0 ;;
     *)         break ;;
   esac
 done

@@ -56,6 +56,7 @@ local -a SOURCE=(
   "$DOTFILES/config/zsh/completion/node-completion.sh"
   "$DOTFILES/config/zsh/completion/_ai.zsh"
   "$DOTFILES/config/zsh/completion/_worktree.zsh"
+  "$DOTFILES/config/zsh/completion/_commit.zsh"
   "$DOTFILES/config/zsh/zellij.sh"
   "$DOTFILES/config/zsh/extras.sh"
   "$HOME/tools/google-cloud-sdk/path.zsh.inc"

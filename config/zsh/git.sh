@@ -170,14 +170,6 @@ function git-graph() {
     git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
 }
 
-function commit() {
-    if [[ "$1" == "" ]]; then
-        git commit -S
-    else
-        git commit -S -m "$1"
-    fi
-}
-
 function fakecommit() {
     GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git commit -S -m "$2"
 }

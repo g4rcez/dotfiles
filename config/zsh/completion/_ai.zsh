@@ -19,6 +19,7 @@ _ai() {
         'skills:copy skill subdirs to ./<provider>/skills/'
         'update:re-sync all tracked projects'
         'list:browse skills and agents with fzf'
+        'sessions:switch to a tmux pane running an AI CLI'
       )
       _describe 'command' cmds
       ;;

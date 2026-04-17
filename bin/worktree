@@ -174,7 +174,7 @@ cmd_list() {
 
     local wt_path branch session_name
     wt_path="$(echo "$selected" | cut -f1)"
-    branch="$(echo "$selected" | cut -f2 | awk '{print $1}')"
+    branch="$(echo "$selected" | cut -f2 | awk '{print $2}')"
     session_name="${branch//\//-}"
     session_name="${session_name#-}"
 

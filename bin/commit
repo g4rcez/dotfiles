@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<EOF
+Usage: commit [options] [message]
+
+Options:
+  -s, --skip, --no-verify   skip pre-commit and commit-msg hooks
+  -b, --branch              prefix commit message with current branch name
+  -h, --help                show this help
+
+Examples:
+  commit                    open editor
+  commit "my message"       commit with message
+  commit -s "my message"    commit, skipping hooks
+  commit -b "my message"    commit with subject "BRANCH my message"
+  commit -b                 open editor with branch name pre-seeded
+  commit -b -s "msg"        skip hooks and prefix branch
+EOF
+    exit 0
+}
+
+main() {
+    local NO_VERIFY=0
+    local PREFIX_BRANCH=0
+    local POSITIONALS=()
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -s | --skip | --no-verify) NO_VERIFY=1 ;;
+        -b | --branch) PREFIX_BRANCH=1 ;;
+        -h | --help) usage ;;
+        --) shift; POSITIONALS+=("$@"); break ;;
+        -*) echo "commit: unknown option: $1" >&2; exit 2 ;;
+        *) POSITIONALS+=("$1") ;;
+        esac
+        shift
+    done
+
+    if [[ ${#POSITIONALS[@]} -gt 1 ]]; then
+        echo "commit: only one message argument is allowed" >&2
+        exit 2
+    fi
+
+    local MSG="${POSITIONALS[0]:-}"
+
+    local BRANCH=""
+    if [[ $PREFIX_BRANCH -eq 1 ]]; then
+        BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || {
+            echo "commit: cannot resolve branch (detached HEAD?)" >&2
+            exit 1
+        }
+        if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
+            echo "commit: cannot resolve branch (detached HEAD?)" >&2
+            exit 1
+        fi
+    fi
+
+    local -a ARGS=(-S)
+    [[ $NO_VERIFY -eq 1 ]] && ARGS+=(--no-verify)
+
+    if [[ $PREFIX_BRANCH -eq 1 && -n "$MSG" ]]; then
+        ARGS+=(-m "$BRANCH $MSG")
+    elif [[ $PREFIX_BRANCH -eq 1 ]]; then
+        ARGS+=(-e -m "$BRANCH ")
+    elif [[ -n "$MSG" ]]; then
+        ARGS+=(-m "$MSG")
+    fi
+
+    exec git commit "${ARGS[@]}"
+}
+
+main "$@"
