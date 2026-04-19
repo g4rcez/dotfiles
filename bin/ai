@@ -307,6 +307,7 @@ cmd_sessions() {
 }
 
 usage() {
+  local exit_code="${1:-1}"
   cat >&2 <<EOF
 Usage: ai [--provider <name>] [command]
 
@@ -321,8 +322,9 @@ Commands:
 
 Options:
   --provider  AI provider (default: claude, or \$AI_PROVIDER)
+  -h, --help  show this help
 EOF
-  exit 1
+  exit "$exit_code"
 }
 
 # Parse args
@@ -333,6 +335,7 @@ while [[ $# -gt 0 ]]; do
       PROVIDER="$1"
       shift
       ;;
+    -h|--help)        usage 0 ;;
     agents)           shift; cmd_agents "$@"; exit 0 ;;
     subagents)        shift; cmd_subagents "$@"; exit 0 ;;
     skills)           shift; cmd_skills "$@"; exit 0 ;;

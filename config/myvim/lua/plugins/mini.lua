@@ -12,7 +12,7 @@ return {
     },
     {
         "nvim-mini/mini.nvim",
-        cond = require("config.vscode").isVscode(),
+        cond = not require("config.vscode").isVscode(),
         config = function()
             require("mini.diff").setup()
             require("mini.ai").setup { n_lines = 500 }

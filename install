@@ -7,14 +7,14 @@
 #### ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
 #### ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ########################################################################################################################
-set -xe
+set -euo pipefail
 HOME_CONFIG_DIR="$HOME/.config"
 DOTFILES_CONFIG_DIR="$HOME/dotfiles/config"
-mkdir -p "$HOME/tools" 
-mkdir -p "$HOME/.tmp" 
+mkdir -p "$HOME/tools"
+mkdir -p "$HOME/.tmp"
 mkdir -p "$HOME/.config"
-source "$HOME/dotfiles/zsh/utils.sh"
-ln -sf $PWD/zsh/zshrc $HOME/.zshrc
+source "$HOME/dotfiles/config/zsh/utils.sh"
+ln -sf "$PWD/config/zsh/zshrc" "$HOME/.zshrc"
 
 ########################################################################################################################
 ##### mise config
@@ -31,4 +31,3 @@ function installmise() {
     ~/.local/bin/mise doctor
 }
 checkcommand "mise" installmise
-jarvis sync

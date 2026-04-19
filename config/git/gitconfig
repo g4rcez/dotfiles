@@ -12,7 +12,7 @@
 
 [core]
     pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
-    excludesFile = ~/dotfiles/git/global_gitignore
+    excludesFile = ~/dotfiles/config/git/global_gitignore
     ignoreCase = false
 
 [apply]
@@ -90,7 +90,7 @@
 
 [push]
     autoSetupRemote = true
-    autoSetupRemove = true
+    autoSetupRemote = true
 
 [alias]
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

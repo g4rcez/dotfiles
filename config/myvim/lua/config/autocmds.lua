@@ -100,6 +100,29 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- Deno/Node LSP mutex: disable vtsls in Deno projects, disable denols in Node projects
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = augroup "ts_deno_mutex",
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if not client then
+            return
+        end
+        local buf = args.buf
+        local root = vim.fs.root(buf, { "deno.json", "deno.jsonc", "package.json" })
+        if not root then
+            return
+        end
+        local is_deno = vim.fs.find({ "deno.json", "deno.jsonc" }, { path = root, upward = false })[1] ~= nil
+        local is_node = vim.fs.find({ "package.json" }, { path = root, upward = false })[1] ~= nil
+        if client.name == "vtsls" and is_deno and not is_node then
+            vim.lsp.stop_client(client.id)
+        elseif client.name == "denols" and is_node and not is_deno then
+            vim.lsp.stop_client(client.id)
+        end
+    end,
+})
+
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     group = augroup "auto_create_dir",

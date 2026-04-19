@@ -12,17 +12,6 @@ return {
     },
     {
         cond = not require("config.vscode").isVscode(),
-        "ray-x/lsp_signature.nvim",
-        event = "InsertEnter",
-        opts = {
-            bind = true,
-            handler_opts = {
-                border = "rounded",
-            },
-        },
-    },
-    {
-        cond = not require("config.vscode").isVscode(),
         "L3MON4D3/LuaSnip",
         dependencies = { "rafamadriz/friendly-snippets" },
         keys = {

@@ -55,12 +55,6 @@ return {
         opts = {},
     },
     {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-        opts = { check_ts = true },
-    },
-    {
         cond = not require("config.vscode").isVscode(),
         opts = {},
         "kevinhwang91/nvim-ufo",

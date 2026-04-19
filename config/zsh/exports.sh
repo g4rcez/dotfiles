@@ -2,7 +2,12 @@ export UID="$(id -u)"
 export GID="$(id -g)"
 #####################################################################################
 ## PATH
-export GOROOT="$(brew --prefix go)/libexec"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+if [[ -d "/opt/homebrew/opt/go/libexec" ]]; then
+    export GOROOT="/opt/homebrew/opt/go/libexec"
+else
+    export GOROOT="$(brew --prefix go 2>/dev/null)/libexec"
+fi
 export GOPATH="$HOME/go"
 
 PATH2="$PATH"
@@ -99,7 +104,6 @@ fi
 ## other utils stuff
 export BUN_INSTALL="$HOME/.bun"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
-export PNPM_HOME="$HOME/.local/share/pnpm"
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
 source "$DOTFILES/config/zsh/ls.sh"
@@ -117,5 +121,3 @@ export AICOMMIT_EXCLUDES=(
     "yarn.lock"
     "*.lock"
 )
-
-export FZF_COLORS="--color=dark,bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"

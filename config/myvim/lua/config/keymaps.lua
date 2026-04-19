@@ -4,8 +4,8 @@ local function createMapper()
 
     M.keymap = function(mode, from, to, opts)
         opts = opts or {}
-        opts.silent = opts.silent ~= true
-        opts.noremap = opts.noremap ~= true
+        opts.silent = opts.silent ~= false
+        opts.noremap = opts.noremap ~= false
         vim.keymap.set(mode, from, to, opts)
     end
 

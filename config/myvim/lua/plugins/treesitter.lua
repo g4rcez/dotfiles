@@ -45,7 +45,6 @@ return {
         branch = "main",
         version = false,
         lazy = false,
-        event = { "VeryLazy" },
         cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
         opts_extend = { "ensure_installed" },
         opts = {
