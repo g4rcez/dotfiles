@@ -1,147 +1,51 @@
-# Project Guidelines
+# Dotfiles Project Guidelines
 
-## Stack
+This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `bin/` scripts. It is not a frontend project — do not assume React/TS/Node conventions.
 
-React
-- TailwindCSS
-- Zustand/Jotai/React Context
-- TanStack Query
-- Vite
-- Vitest
-- Eslint
-- Prettier
+## Layout
 
-## Commands
+- `bin/` — standalone CLI scripts (mixed bash/zsh, check shebang per file)
+- `config/zsh/` — zsh configuration; entrypoint is `config/zsh/zshrc`
+  - `config/zsh/completion/` — per-command completion files
+- `config/nvim/lua/` — Neovim config
+  - `plugins/` — plugin specs (lazy.nvim)
+  - `options.lua`, `keymaps.lua`, `config/`, `nvconfig.lua`
+- `config/tmux/`, `config/zellij/`, `config/starship/`, etc.
 
-```sh
-pnpm dev          # start dev server
-pnpm build        # production build
-pnpm test         # run tests
-pnpm test:watch   # watch mode
-pnpm lint         # biome lint
-pnpm format       # biome format
-```
+## Shell Scripts
 
-## Project Structure
+- Always read the shebang before writing shell-expansion code. `bin/` scripts are a mix of `#!/usr/bin/env bash` and zsh.
+- zsh: multi-word command strings must use `${=VAR}` (explicit word splitting). Bare `$VAR` in zsh does not split on spaces.
+- bash: use `eval exec "$cmd"` for multi-word command strings. `${=VAR}` is zsh-only.
+- A script cannot change its parent shell's cwd. Any `bin/` command that needs to `cd` after running must be wrapped with a zsh function in `config/zsh/alias.sh`.
+- `config/zsh/alias.sh` starts with `#!/bin/bash` but is sourced by zsh — treat it as zsh (the shebang is wrong/ignored).
 
-```
-src/
-  pages/     # domain-scoped modules (auth/, cart/, products/…)
-  components/   # shared, reusable UI components
-  hooks/        # shared custom hooks
-  stores/       # stage manager stores - zustand/jotai/context
-  services/     # API layer + query options
-  lib/          # utilities, helpers, cn()
-tests/
-  # reflect the stucture of src
-```
+## Zsh Completions — Registration Required
 
-## General Rules
+- New completion files under `config/zsh/completion/` MUST be added to the `SOURCE` array in `config/zsh/zshrc` in the same task. A file that is never sourced has zero effect.
+- When modifying/moving/removing a completion file, update the `SOURCE` array in the same task.
+- Short completions for git aliases can live directly in `config/zsh/git.sh` rather than as separate files.
 
-- `pnpm` only
-- kebab-case for all filenames (`user-card.tsx`, `use-auth.ts`)
-- No barrel files — no `index.ts` that re-exports siblings
-- Always import directly from source (`../../components/button`, not `../../components`)
-- Check if the `tsconfig.json` has configuration about the imports like `@/components`
+## Neovim (Lua)
 
-## TypeScript
+- Read `plugins/`, `options.lua`, and `keymaps.lua` before editing any one of them — changes often interact.
+- Plugin specs use lazy.nvim conventions; co-locate plugin options inside the spec's `opts` or `config`.
+- Snacks picker: layout keys are `layout.preview`, `layout.list`, `layout.input`. These interact — inspect current state before editing.
 
-- No `any` — use `unknown` + type narrowing, only when necessary
-- No `as` type assertions — fix the types instead
-- Let inference work; only annotate `useState<T>` when the initial value is ambiguous
-- Prefer `satisfies` over casting when validating object shapes
-- Use `as const` to arrays and objects used as configuration or map
-- `type` for component props and local shapes; `interface` for contracts and extensible shapes
+## Starship
 
-## React
+- When writing `[custom.*]` `when` conditions that compare git paths (e.g. `git rev-parse --show-toplevel` vs a target dir), resolve both sides to absolute paths before comparing. Relative vs absolute paths cause false matches in subdirectories.
 
-- Function declarations for components, not arrow functions
-  ```tsx
-  // good
-  export function UserCard({ name }: UserCardProps) { … }
+## Claude Code Hooks and Skills
 
-  // bad
-  export const UserCard = ({ name }: UserCardProps) => { … }
-  ```
-- Never use `React.FC` or `React.FunctionComponent`, prefer `PropsWithChildren<T>` or simple props when don't need a children
-- Extend native HTML props via `ComponentProps<"button">` when wrapping elements
-- To library elements, always expose as forwardRef
-- Composition over prop drilling
-- No class components
+- When creating a Claude Code hook script, update `~/.claude/settings.json` in the same task to register it.
+- Before editing `~/.claude/settings.json`, read the full file first — don't clobber existing entries.
 
-## TailwindCSS
+## Claude Tool Environment Quirks
 
-- Use `cn()` (clsx + tailwind-merge) for all conditional class logic
-- Mobile-first: base classes target mobile, `lg:` and up target larger screens
-- No arbitrary values (`w-[347px]`) unless truly unavoidable — use design tokens
-- No inline `style` props for layout or visual properties
-- Class order: layout → spacing → sizing → visual → typography → responsive → conditional
-- Design tokens only — no hardcoded colors or sizes outside `tailwind.config`
+- `cat` is aliased to `bat` in this shell and mangles paths and emits OSC-8 hyperlinks when called via Bash. Use the `Read` tool (or `command cat`) instead of `cat`.
+- `ls` output is colorized and can include hyperlink escapes; use `command ls` or the `Glob` tool when parsing.
 
-  ```tsx
-  // good
-  <div className={cn("flex gap-4 w-full bg-surface text-sm md:gap-6", isActive && "ring-2")} />
-  ```
+## Commit Style
 
-
-## State manager - Zustand
-
-- One store per domain: `useAuthStore`, `useCartStore`, etc.
-- Export granular selectors — never subscribe to the entire store object
-  ```ts
-  // good
-  const user = useAuthStore((s) => s.user)
-
-  // bad
-  const { user, logout } = useAuthStore()
-  ```
-- Wrap all mutations in named actions defined inside the store
-- Enable devtools in development:
-  ```ts
-  import { devtools } from "zustand/middleware"
-  export const useAuthStore = create<AuthStore>()(devtools(…, { name: "auth" }))
-  ```
-- Use `set` for simple updates, `get()` to read current state inside actions
-- Do not store server state in Zustand — use React Query for data that comes from an API
-
-## React Query (TanStack Query)
-
-- Always create the query as separated hooks
-- Use `queryOptions()` factory for all queries — enables type-safe reuse across components
-  ```ts
-  // src/services/users.ts
-  export const userQueries = {
-    detail: (id: string) =>
-      queryOptions({
-        queryKey: ["users", id],
-        queryFn: () => fetchUser(id),
-        staleTime: 5 * 60 * 1000,
-      }),
-  }
-  ```
-- Query key structure: `[resource, id?, filters?]` — e.g. `["users", userId]`, `["products", { category }]`
-- Co-locate query options with the service/API layer in `src/services/`
-- Never `useEffect` to fetch data — always `useQuery` or `useInfiniteQuery`
-- Set `staleTime` explicitly per query — do not rely on the default `0`
-- Mutations use `useMutation` with `onSuccess` invalidation:
-  ```ts
-  const { mutate } = useMutation({
-    mutationFn: updateUser,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
-  })
-  ```
-- Handle loading/error states at the query level — no manual `isLoading` boolean state
-
-## Anti-Patterns
-
-Avoid these at all times:
-
-- `useEffect` for data fetching — use `useQuery`
-- `any` or `as` type assertions — fix the types
-- `React.FC` — use plain function declarations
-- Barrel files (`index.ts` re-exports) — import directly
-- `<div onClick={…}>` — use `<button>` or the appropriate semantic element
-- Prop drilling past 2 levels — restructure, lift state, or use a store/context
-- Storing server state in Zustand — that belongs in React Query cache
-- Hardcoded colors or spacing values outside of `tailwind.config`
-- `useEffect` for derived state — compute inline or with `useMemo`
+- Follow existing commit style in `git log` (prefix like `chore:`, `feat:`, `feat(bin):`, etc.). Focus on the "why" not the "what".

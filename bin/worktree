@@ -13,7 +13,7 @@ Commands:
     list                   List all worktrees for current repo
     remove <branch>        Remove a worktree
     prune                  Remove all worktrees for merged branches
-    cd <branch>            Print the path (use: cd \$(worktree cd <branch>))
+    cd <branch>            Print the path to a worktree
     clean                  Remove all worktrees for current repo
     mux                    Pick a worktree with fzf and open/attach a tmux session
     overview               Show all worktrees with session status and git info
@@ -23,7 +23,7 @@ Examples:
     worktree add feature/hotfix main
     worktree add feature/experiment origin/develop
     worktree remove feature/new-login
-    cd \$(worktree cd feature/new-login)
+    worktree cd feature/new-login
 EOF
     exit 1
 }
@@ -69,8 +69,6 @@ cmd_add() {
     fi
     echo ""
     echo "Worktree created at: $worktree_path"
-    echo "cd $worktree_path"
-    cd "$worktree_path"
 }
 
 # Internal: emit fzf-ready lines (path TAB display)
@@ -255,10 +253,10 @@ cmd_remove() {
 cmd_cd() {
     local branch="${1:-}"
 
-    [[ -z "$branch" ]] && {
-        echo "Error: branch name required" >&2
-        exit 1
-    }
+    if [[ -z "$branch" ]]; then
+        git worktree list | awk '{print $1}' | head -1
+        return
+    fi
 
     local repo_name
     repo_name="$(get_repo_name)"

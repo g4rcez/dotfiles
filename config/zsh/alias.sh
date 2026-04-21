@@ -234,3 +234,23 @@ function ask_ai() {
 }
 alias '??'="ask_ai"
 
+function worktree() {
+    case "${1:-}" in
+        add)
+            command worktree "$@" || return $?
+            [[ -n "${2:-}" ]] || return 0
+            local p
+            p="$(command worktree cd "$2" 2>/dev/null)" || return 0
+            [[ -d "$p" ]] && cd "$p"
+            ;;
+        cd)
+            local p
+            p="$(command worktree cd "${2:-}")" || return $?
+            [[ -d "$p" ]] && cd "$p"
+            ;;
+        *)
+            command worktree "$@"
+            ;;
+    esac
+}
+
