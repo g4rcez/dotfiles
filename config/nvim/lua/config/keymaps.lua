@@ -241,7 +241,13 @@ bind.normal("<leader>wq", function()
     vim.cmd("qa")
 end, { desc = "[w]orkspace [q]uit all" })
 bind.normal("<leader>wt", function()
-    Snacks.terminal.toggle(nil, { cwd = vim.fn.getcwd(-1, vim.fn.tabpagenr()) })
+    Snacks.terminal.toggle(nil, {
+        cwd = vim.fn.getcwd(-1, vim.fn.tabpagenr()),
+        win = {
+            position = "right",
+            bo = { buflisted = true },
+        },
+    })
 end, { desc = "[w]orkspace [t]erminal" })
 
 for i = 1, 9 do
