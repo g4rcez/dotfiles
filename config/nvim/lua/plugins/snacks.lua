@@ -37,7 +37,25 @@ return {
                 bigfile = { enabled = true },
                 explorer = { enabled = true },
                 terminal = { enabled = true },
-                dashboard = { enabled = true },
+                dashboard = {
+                    enabled = true,
+                    keys = {
+                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.picker.files()" },
+                        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                        { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.picker.recent()" },
+                        { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.picker.grep()" },
+                        {
+                            icon = " ",
+                            key = "S",
+                            desc = "Restore Session",
+                            action = function()
+                                require("resession").load("last", { silence_errors = true })
+                            end,
+                        },
+                        { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy" },
+                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                    },
+                },
                 gitbrowse = { enabled = true },
                 quickfile = { enabled = true },
                 statuscolumn = { enabled = true },
