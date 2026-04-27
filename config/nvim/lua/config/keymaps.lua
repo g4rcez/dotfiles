@@ -241,13 +241,20 @@ bind.normal("<leader>wq", function()
     vim.cmd("qa")
 end, { desc = "[w]orkspace [q]uit all" })
 bind.normal("<leader>wt", function()
-    Snacks.terminal.toggle(nil, {
-        cwd = vim.fn.getcwd(-1, vim.fn.tabpagenr()),
-        win = {
-            position = "right",
-            bo = { buflisted = true },
-        },
-    })
+    -- Reuse the existing terminal buffer for this workspace if one exists,
+    -- otherwise open a new one in the current window (like switching to any file).
+    local tab = tostring(vim.api.nvim_get_current_tabpage())
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_valid(buf)
+            and vim.bo[buf].buftype == "terminal"
+            and (vim.b[buf].workspace_tabs or {})[tab] then
+            vim.api.nvim_set_current_buf(buf)
+            vim.cmd("startinsert")
+            return
+        end
+    end
+    vim.cmd("terminal")
+    vim.cmd("startinsert")
 end, { desc = "[w]orkspace [t]erminal" })
 
 for i = 1, 9 do
