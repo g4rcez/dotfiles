@@ -192,7 +192,7 @@ local function workspace_open()
 
     Snacks.picker({
         title = "Workspace",
-        finder = items,
+        items = items,
         format = function(item, _)
             local hl = item.kind == "workspace" and "Special" or "Directory"
             return { { item.text, hl } }
