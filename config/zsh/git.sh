@@ -2,6 +2,10 @@
 ## Functions
 autoload -Uz is-at-least
 
+if [[ -n "$NVIM" ]] && command -v nvr &>/dev/null; then
+    export GIT_EDITOR="nvr --remote-tab-wait"
+fi
+
 function _git_log_prettily() {
     if ! [ -z "$1" ]; then
         git log --pretty="$1"
