@@ -154,3 +154,57 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
+
+-- Workspace (tab page) management — replaces tmux sessions
+local function workspace_session_name(dir)
+    dir = dir or vim.fn.getcwd(-1, vim.fn.tabpagenr())
+    return vim.fn.fnamemodify(dir, ":~"):gsub("[/\\: ]", "_")
+end
+
+local function workspace_open()
+    local dir = vim.fn.input("Workspace path: ", vim.fn.expand("~") .. "/", "dir")
+    if dir == "" then return end
+    dir = vim.fn.fnamemodify(dir, ":p")
+    if vim.fn.isdirectory(dir) == 0 then
+        vim.notify("Not a directory: " .. dir, vim.log.levels.ERROR)
+        return
+    end
+    vim.cmd("tabnew")
+    vim.cmd("tcd " .. vim.fn.fnameescape(dir))
+    local name = workspace_session_name(dir)
+    pcall(require("resession").load, name, { silence_errors = true })
+end
+
+local function workspace_close()
+    local dir = vim.fn.getcwd(-1, vim.fn.tabpagenr())
+    local name = workspace_session_name(dir)
+    pcall(require("resession").save, name, { notify = false })
+    if vim.fn.tabpagenr("$") > 1 then
+        vim.cmd("tabclose")
+    else
+        vim.cmd("%bd")
+        vim.notify("Last workspace — buffers cleared")
+    end
+end
+
+local function workspace_save()
+    local dir = vim.fn.getcwd(-1, vim.fn.tabpagenr())
+    local name = workspace_session_name(dir)
+    require("resession").save(name)
+end
+
+bind.normal("<leader>wo", workspace_open, { desc = "[w]orkspace [o]pen" })
+bind.normal("<leader>wc", workspace_close, { desc = "[w]orkspace [c]lose" })
+bind.normal("<leader>ws", workspace_save, { desc = "[w]orkspace [s]ave session" })
+bind.normal("<leader>wt", function()
+    Snacks.terminal.toggle(nil, { cwd = vim.fn.getcwd(-1, vim.fn.tabpagenr()) })
+end, { desc = "[w]orkspace [t]erminal" })
+
+for i = 1, 9 do
+    bind.normal("<leader>" .. i, function()
+        local ok, err = pcall(vim.cmd, "tabnext " .. i)
+        if not ok then
+            vim.notify("No workspace " .. i, vim.log.levels.WARN)
+        end
+    end, { desc = "Workspace " .. i })
+end
