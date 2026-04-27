@@ -23,6 +23,7 @@ local function createMapper()
         insert = bind { "i" },
         visual = bind { "v" },
         nx = bind { "n", "v" },
+        term = bind { "t" },
     }
 end
 
@@ -54,6 +55,7 @@ bind.visual(">", ">gv", bind.DEFAULT_OPTS)
 bind.x("p", [["_dP]], bind.DEFAULT_OPTS)
 bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
 bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
+bind.term("<esc><esc>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
 bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
 
 bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })

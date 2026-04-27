@@ -100,3 +100,25 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- OSC 7: track terminal buffer cwd from shell via \e]7;file://host/path sequences.
+-- Stores vim.b[buf].term_cwd; does NOT change the workspace tcd.
+vim.api.nvim_create_autocmd("TermRequest", {
+    group = augroup "term_osc7",
+    callback = function(ev)
+        local seq = ev.data and ev.data.sequence or ""
+        local pwd = seq:match("\027%]7;file://[^/]*(/[^\027]*)")
+        if not pwd or vim.fn.isdirectory(pwd) == 0 then return end
+        vim.b[ev.buf].term_cwd = pwd
+    end,
+})
+
+-- Install buffer-local gx in terminal buffers: file:line:col → file → URL fallback.
+vim.api.nvim_create_autocmd("TermOpen", {
+    group = augroup "term_smart_open",
+    callback = function(ev)
+        vim.keymap.set("n", "gx", function()
+            require("config.terminal").smart_open()
+        end, { buffer = ev.buf, desc = "Smart open file/URL under cursor" })
+    end,
+})
+

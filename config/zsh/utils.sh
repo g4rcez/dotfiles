@@ -65,3 +65,9 @@ function clearNvim() {
 }
 
 chpwd_functions+=(_postcd)
+
+function _osc7_cwd() {
+    printf '\033]7;file://%s%s\033\\' "${HOST:-localhost}" "$PWD"
+}
+chpwd_functions+=(_osc7_cwd)
+_osc7_cwd
