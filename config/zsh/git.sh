@@ -174,6 +174,80 @@ function fakecommit() {
     GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git commit -S -m "$2"
 }
 
+function scopecommit() {
+    local NO_VERIFY=0
+    local POSITIONALS=()
+
+    local usage="Usage: scopecommit [-s] \"type: message\"
+
+Rewrites a conventional commit subject to include the current branch as scope.
+  feat: msg  ->  feat(BRANCH): msg
+
+Accepted types: feat, fix, build, chore, ci, docs, style, refactor, perf, test
+If the message already contains a scope (e.g. feat(foo): ...) it is left untouched.
+When no message is given, opens the git editor without a pre-seeded subject.
+
+Options:
+  -s, --skip, --no-verify   skip pre-commit and commit-msg hooks
+  -h, --help                show this help"
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -s | --skip | --no-verify) NO_VERIFY=1 ;;
+        -h | --help) echo "$usage"; return 0 ;;
+        --) shift; POSITIONALS+=("$@"); break ;;
+        -*) echo "scopecommit: unknown option: $1" >&2; return 2 ;;
+        *) POSITIONALS+=("$1") ;;
+        esac
+        shift
+    done
+
+    if [[ ${#POSITIONALS[@]} -gt 1 ]]; then
+        echo "scopecommit: only one message argument is allowed" >&2
+        return 2
+    fi
+
+    local MSG="${POSITIONALS[0]:-}"
+
+    local BRANCH
+    BRANCH="$(command git rev-parse --abbrev-ref HEAD 2>/dev/null)" || {
+        echo "scopecommit: cannot resolve branch (detached HEAD?)" >&2
+        return 1
+    }
+    if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
+        echo "scopecommit: cannot resolve branch (detached HEAD?)" >&2
+        return 1
+    fi
+
+    local -a ARGS=(-S)
+    [[ $NO_VERIFY -eq 1 ]] && ARGS+=(--no-verify)
+
+    local TYPES_ALT='feat|fix|build|chore|ci|docs|style|refactor|perf|test'
+    local MSG_OUT
+
+    if [[ -n "$MSG" ]]; then
+        if [[ "$MSG" =~ "^(${TYPES_ALT})\([^\)]+\):" ]]; then
+            MSG_OUT="$MSG"
+        elif [[ "$MSG" =~ "^(${TYPES_ALT}):[[:space:]]*(.*)" ]]; then
+            MSG_OUT="${match[1]}(${BRANCH}): ${match[2]}"
+        else
+            echo "scopecommit: message must start with one of: feat, fix, build, chore, ci, docs, style, refactor, perf, test" >&2
+            return 2
+        fi
+        command git commit "${ARGS[@]}" -m "$MSG_OUT"
+    else
+        command git commit "${ARGS[@]}"
+    fi
+}
+
+_scopecommit() {
+    _arguments -s \
+        '(-s --skip --no-verify)'{-s,--skip,--no-verify}'[skip pre-commit and commit-msg hooks]' \
+        '(-h --help)'{-h,--help}'[show help]' \
+        '::commit message (type: msg):'
+}
+compdef _scopecommit scopecommit
+
 function aicommit() {
     git add .
     commitwithai "$@"

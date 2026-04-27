@@ -14,7 +14,6 @@ idiomatic_version_file_enable_tools = ['node']
 always_keep_download = false # deleted after install by default
 always_keep_install = false  # deleted on failure by default
 asdf_compat = true # set to true to ensure .tool-versions will be compatible with asdf, see `MISE_ASDF_COMPAT`
-disable_default_shorthands = false                 # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
 env_file = '.env'
 experimental = true # enable experimental features
 http_timeout = "30"  # set the timeout for http requests in seconds, see `MISE_HTTP_TIMEOUT`

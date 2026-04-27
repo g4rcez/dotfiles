@@ -108,6 +108,10 @@ bind.normal("<leader>uf", function()
     Snacks.dim.enable()
 end, { desc = "Enable dim" })
 
+bind.normal("<leader>uh", function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "Toggle inlay hints" })
+
 bind.normal("<leader>cy", function()
     local rel = vim.fn.fnamemodify(buf_abs(), ":.")
     vim.fn.setreg("+", rel)
@@ -150,4 +154,3 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
-

@@ -1,7 +1,7 @@
 local keymap = vim.keymap
 
-vim.lsp.inlay_hint.enable(true, { 0 })
-vim.g.inlay_hints_visible = true
+vim.lsp.inlay_hint.enable(false, { 0 })
+vim.g.inlay_hints_visible = false
 
 local severity = vim.diagnostic.severity
 
