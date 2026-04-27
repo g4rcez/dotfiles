@@ -162,17 +162,51 @@ local function workspace_session_name(dir)
 end
 
 local function workspace_open()
-    local dir = vim.fn.input("Workspace path: ", vim.fn.expand("~") .. "/", "dir")
-    if dir == "" then return end
-    dir = vim.fn.fnamemodify(dir, ":p")
-    if vim.fn.isdirectory(dir) == 0 then
-        vim.notify("Not a directory: " .. dir, vim.log.levels.ERROR)
-        return
+    local items = {}
+
+    -- Current open workspaces
+    for i = 1, vim.fn.tabpagenr("$") do
+        local cwd = vim.fn.getcwd(-1, i)
+        table.insert(items, {
+            text = "[w] " .. vim.fn.fnamemodify(cwd, ":~"),
+            tab = i,
+            cwd = cwd,
+            kind = "workspace",
+        })
     end
-    vim.cmd("tabnew")
-    vim.cmd("tcd " .. vim.fn.fnameescape(dir))
-    local name = workspace_session_name(dir)
-    pcall(require("resession").load, name, { silence_errors = true })
+
+    -- Directories in ~/Documents (2 levels deep, mirroring tmux-fzf-session)
+    local dirs = vim.fn.systemlist("fd -p -t directory -a -d 2 . ~/Documents 2>/dev/null")
+    for _, dir in ipairs(dirs) do
+        dir = vim.fn.trim(dir)
+        if dir ~= "" and vim.fn.isdirectory(dir) == 1 then
+            table.insert(items, {
+                text = "[d] " .. vim.fn.fnamemodify(dir, ":~"),
+                cwd = dir,
+                kind = "dir",
+            })
+        end
+    end
+
+    Snacks.picker({
+        title = "Workspace",
+        finder = items,
+        format = function(item, _)
+            local hl = item.kind == "workspace" and "Special" or "Directory"
+            return { { item.text, hl } }
+        end,
+        confirm = function(picker, item)
+            picker:close()
+            if item.kind == "workspace" then
+                vim.cmd("tabnext " .. item.tab)
+            elseif item.kind == "dir" then
+                vim.cmd("tabnew")
+                vim.cmd("tcd " .. vim.fn.fnameescape(item.cwd))
+                local name = workspace_session_name(item.cwd)
+                pcall(require("resession").load, name, { silence_errors = true })
+            end
+        end,
+    })
 end
 
 local function workspace_close()
@@ -196,6 +230,14 @@ end
 bind.normal("<leader>wo", workspace_open, { desc = "[w]orkspace [o]pen" })
 bind.normal("<leader>wc", workspace_close, { desc = "[w]orkspace [c]lose" })
 bind.normal("<leader>ws", workspace_save, { desc = "[w]orkspace [s]ave session" })
+bind.normal("<leader>wq", function()
+    for i = 1, vim.fn.tabpagenr("$") do
+        local dir = vim.fn.getcwd(-1, i)
+        local name = workspace_session_name(dir)
+        pcall(require("resession").save, name, { notify = false })
+    end
+    vim.cmd("qa")
+end, { desc = "[w]orkspace [q]uit all" })
 bind.normal("<leader>wt", function()
     Snacks.terminal.toggle(nil, { cwd = vim.fn.getcwd(-1, vim.fn.tabpagenr()) })
 end, { desc = "[w]orkspace [t]erminal" })
