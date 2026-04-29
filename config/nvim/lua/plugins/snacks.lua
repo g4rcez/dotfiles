@@ -49,7 +49,7 @@ return {
                             key = "S",
                             desc = "Restore Session",
                             action = function()
-                                require("resession").load("last", { silence_errors = true })
+                                require("persistence").load()
                             end,
                         },
                         { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy" },
