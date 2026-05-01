@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 ## directories
 alias -g ...='../..'
 alias -g ....='../../..'

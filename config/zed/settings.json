@@ -1,0 +1,72 @@
+{
+    "ui_font_size": 16,
+    "buffer_font_size": 16,
+    "current_line_highlight": "gutter",
+    "use_system_window_tabs": true,
+    "linked_edits": true,
+    "relative_line_numbers": "enabled",
+    "sticky_scroll": { "enabled": true },
+    "autosave": { "after_delay": { "milliseconds": 1000 } },
+    "vim_mode": true,
+    "prettier": { "allowed": true },
+    "buffer_font_family": "JetBrainsMono Nerd Font",
+    "bottom_dock_layout": "full",
+    "which_key": {
+        "enabled": true,
+        "delay_ms": 400,
+    },
+    "diagnostics": {
+        "inline": { "enabled": true },
+        "lsp_pull_diagnostics": {
+            "enabled": true,
+        },
+    },
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false,
+    },
+    "status_bar": {
+        "experimental.show": true,
+    },
+    "gutter": {
+        "line_numbers": true,
+    },
+    "minimap": {
+        "show": "auto",
+    },
+    "file_types": {
+        "tailwindcss": ["*.css"],
+    },
+    "agent_servers": {
+        "claude-acp": {
+            "type": "registry",
+        },
+    },
+    "project_panel": {
+        "auto_fold_dirs": false,
+        "dock": "right",
+    },
+    "git_panel": {
+        "dock": "left",
+    },
+    "buffer_line_height": {
+        "custom": 1.75,
+    },
+    "inlay_hints": {
+        "enabled": true,
+    },
+    "icon_theme": {
+        "mode": "dark",
+        "light": "Zed (Default)",
+        "dark": "Zed (Default)",
+    },
+    "theme": {
+        "mode": "system",
+        "light": "One Light",
+        "dark": "Catppuccin Mocha - No Italics",
+    },
+    "vim": {
+        "use_system_clipboard": "on_yank",
+        "use_smartcase_find": true,
+    },
+}

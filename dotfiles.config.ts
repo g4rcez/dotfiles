@@ -34,6 +34,7 @@ export default defineConfig({
         "~/.config/lazygit": file("config/lazygit"),
         "~/.config/lsd": file("config/lsd"),
         "~/.config/mise": file("config/mise"),
+        "~/.config/zed": file("config/zed"),
         "~/.config/nvim": file("config/nvim"),
         "~/.config/posting": file("config/posting"),
         "~/.config/starship.toml": file("config/starship.toml"),
