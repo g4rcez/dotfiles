@@ -278,9 +278,42 @@ return {
             {
                 "<leader>fs",
                 function()
-                    Snacks.picker.git_status()
+                    Snacks.picker.treesitter {
+                        filter = {
+                            default = {
+                                "Class",
+                                "Constant",
+                                "Function",
+                                "Interface",
+                                "Method",
+                                "Struct",
+                                "TypeParameter",
+                                "Variable",
+                            },
+                        },
+                    }
                 end,
-                desc = "Git Status",
+                desc = "Symbols (file)",
+            },
+            {
+                "<leader>fS",
+                function()
+                    Snacks.picker.lsp_workspace_symbols {
+                        filter = {
+                            default = {
+                                "Class",
+                                "Constant",
+                                "Function",
+                                "Interface",
+                                "Method",
+                                "Struct",
+                                "TypeParameter",
+                                "Variable",
+                            },
+                        },
+                    }
+                end,
+                desc = "Symbols (project)",
             },
             {
                 "<leader>gs",

@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 set -euo pipefail
 
 input=$(cat)
@@ -12,41 +12,53 @@ session_id=$(echo "$input" | jq -r '.session_id // empty')
 plans_dir="$PWD/.ai/plans"
 mkdir -p "$plans_dir"
 
-# Track which message indexes were already saved in this session
-saved_index="$plans_dir/.session-${session_id}"
-touch "$saved_index"
+session_short="${session_id:0:8}"
 
-jq -c 'to_entries[] | select(.value.role == "assistant") | {
-  idx: .key,
-  text: (
-    .value.content
-    | if type == "array" then
-        map(select(type == "object" and .type == "text") | .text) | join("")
-      elif type == "string" then .
-      else ""
-      end
-  )
-}' "$transcript" | while IFS= read -r entry; do
-  idx=$(echo "$entry" | jq -r '.idx')
-  text=$(echo "$entry" | jq -r '.text')
+extract_text() {
+  local role="$1" pos="$2"
+  jq -rs "
+    [.[] | select(.type == \"$role\") |
+      .message.content |
+      if type == \"array\" then
+        [.[] | select(type == \"object\" and .type == \"text\") | .text] | join(\"\")
+      elif type == \"string\" then .
+      else \"\"
+      end |
+      select(length > 0) |
+      select(test(\"^\\\\[.*\\\\]$\") | not)
+    ] | $pos // \"\"
+  " "$transcript"
+}
 
-  # skip already persisted messages
-  grep -qxF "$idx" "$saved_index" 2>/dev/null && continue
+first_user=$(extract_text "user" "first")
+first_asst=$(extract_text "assistant" "first")
+last_asst=$(extract_text "assistant" "last")
 
-  # only messages that open with a markdown heading qualify as plans
-  echo "$text" | grep -qE '^#{1,3} ' || continue
+[[ -z "$first_user" ]] && exit 0
 
-  title=$(echo "$text" | grep -m1 -E '^#{1,3} ' | sed 's/^#\+ *//')
-  [[ -z "$title" ]] && continue
+title_line=$(echo "$first_user" | head -1 | cut -c1-80)
+slug=$(echo "$title_line" \
+  | tr '[:upper:]' '[:lower:]' \
+  | tr -cs 'a-z0-9' '-' \
+  | sed 's/-\+/-/g;s/^-//;s/-$//' \
+  | cut -c1-50)
+[[ -z "$slug" ]] && slug="session"
 
-  slug=$(echo "$title" \
-    | tr '[:upper:]' '[:lower:]' \
-    | tr -cs 'a-z0-9' '-' \
-    | sed 's/-\+/-/g;s/^-//;s/-$//')
+existing=$(find "$plans_dir" -maxdepth 1 -name "*_${session_short}_*.md" -type f 2>/dev/null | sort | head -1)
 
-  timestamp=$(date +"%Y-%m-%dT%H-%M-%S")
-  outfile="$plans_dir/${timestamp}-${slug}.md"
+if [[ -n "$existing" ]]; then
+  outfile="$existing"
+else
+  date_prefix=$(date +"%Y%m%d")
+  outfile="$plans_dir/${date_prefix}_${session_short}_${slug}.md"
+fi
 
-  printf '# %s\n\n_Saved: %s_\n\n%s\n' "$title" "$(date '+%Y-%m-%d %H:%M:%S')" "$text" > "$outfile"
-  echo "$idx" >> "$saved_index"
-done
+{
+  printf '# %s\n\n' "$title_line"
+  printf '_Session: %s | Saved: %s_\n\n' "$session_id" "$(date '+%Y-%m-%d %H:%M:%S')"
+  printf '## Prompt\n\n%s\n\n' "$first_user"
+  printf '## Plan\n\n%s\n\n' "$first_asst"
+  if [[ "$last_asst" != "$first_asst" ]]; then
+    printf '## Resolution\n\n%s\n' "$last_asst"
+  fi
+} > "$outfile"
