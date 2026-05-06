@@ -114,6 +114,7 @@ export ENABLE_LSP_TOOL=1
 export AI_CLI_NAME="gemini"
 export AI_CLI_MODEL="gemini-3-flash-preview"
 export AI_QUERY_COMMAND="gemini --model gemini-3-flash-preview -p"
+export USE_BUILTIN_RIPGREP=0
 
 export AICOMMIT_EXCLUDES=(
     "package-lock.json"

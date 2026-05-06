@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CACHE="/tmp/gh-workflows-${UID}.json"
+
+fetch() {
+    local a b
+    a=$(gh run list --status in_progress --json databaseId,name,headBranch,status,createdAt 2>/dev/null || echo '[]')
+    b=$(gh run list --status queued      --json databaseId,name,headBranch,status,createdAt 2>/dev/null || echo '[]')
+    jq -n --argjson a "$a" --argjson b "$b" '$a + $b' > "$CACHE"
+}
+
+list_lines() {
+    local esc
+    esc=$'\033'
+    jq -r --arg yellow "${esc}[33m" --arg cyan "${esc}[36m" --arg reset "${esc}[0m" '
+        .[] | [
+            (.databaseId | tostring),
+            (if .status == "in_progress" then ($yellow + .status + $reset)
+             else ($cyan + .status + $reset) end),
+            .headBranch,
+            .name
+        ] | join("\t")
+    ' "$CACHE"
+}
+
+epoch_from_iso() {
+    date -jf "%Y-%m-%dT%H:%M:%SZ" "$1" +%s 2>/dev/null \
+        || date -d "$1" +%s
+}
+
+human_date() {
+    date -jf "%Y-%m-%dT%H:%M:%SZ" "$1" "+%Y-%m-%d %H:%M" 2>/dev/null \
+        || date -d "$1" "+%Y-%m-%d %H:%M"
+}
+
+preview_run() {
+    local id="$1"
+    local created_at now created elapsed mins secs
+    created_at=$(jq -r --argjson id "$id" '.[] | select(.databaseId == $id) | .createdAt' "$CACHE")
+    now=$(date +%s)
+    created=$(epoch_from_iso "$created_at")
+    elapsed=$(( now - created ))
+    mins=$(( elapsed / 60 ))
+    secs=$(( elapsed % 60 ))
+    echo "Created : $(human_date "$created_at")"
+    echo "Elapsed : ${mins}m ${secs}s"
+    echo "─────────────────────────────────────"
+    PAGER=cat gh run view "$id"
+}
+
+main() {
+    fetch
+
+    if [[ "$(jq length "$CACHE")" == "0" ]]; then
+        echo "No in-progress or queued workflows"
+        exit 0
+    fi
+
+    list_lines | fzf \
+        --ansi \
+        --delimiter $'\t' \
+        --with-nth 2.. \
+        --preview "$0 --preview {1}" \
+        --preview-window 'right:60%' \
+        --bind "ctrl-r:reload($0 --list-lines)" \
+        --bind "ctrl-b:execute(gh run view --web {1})" \
+        --bind "ctrl-t:execute(gh run watch {1})" \
+        --bind "ctrl-x:execute(gh run cancel {1})+reload($0 --list-lines)" \
+        --header $'ctrl-r: refresh  ctrl-b: browser  ctrl-t: watch  ctrl-x: cancel'
+}
+
+usage() {
+    cat <<EOF
+Usage: workflows [subcommand]
+
+Subcommands:
+  (none)   open fzf picker for in-progress and queued workflow runs
+  web      open the Actions tab for the current repo in the browser
+  help     show this help
+
+Picker keybindings:
+  ctrl-r   refresh run list
+  ctrl-b   open selected run in browser
+  ctrl-t   stream logs for selected run in terminal
+  ctrl-x   cancel selected run
+EOF
+}
+
+open_web() {
+    local url
+    url=$(gh repo view --json url -q .url)
+    open "${url}/actions"
+}
+
+case "${1:-}" in
+    --preview)    preview_run "$2" ;;
+    --list-lines) fetch; list_lines ;;
+    help)         usage ;;
+    web)          open_web ;;
+    *)            main ;;
+esac
