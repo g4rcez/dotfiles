@@ -342,3 +342,28 @@ branch() {
     echo "$b"
     echo -n "$b" | pbcopy
 }
+
+function prcommits() {
+    local pr="${1:?Usage: prcommits <PR_NUMBER> [author_filter]}"
+    local author="${2:-}"
+
+    local repo
+    repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null) || {
+        echo "prcommits: could not determine repo (not in a GitHub repo?)" >&2
+        return 1
+    }
+
+    local jq_filter
+    if [[ -n "$author" ]]; then
+        local author_lower="${author:l}"
+        jq_filter=".[] | select(
+            ((.author.login // \"\") | ascii_downcase | contains(\"${author_lower}\")) or
+            ((.commit.author.name // \"\") | ascii_downcase | contains(\"${author_lower}\"))
+        ) | \"\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // \"?\")):  \(.commit.message | split(\"\n\")[0])\""
+    else
+        jq_filter='.[] | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"'
+    fi
+
+    gh api "repos/${repo}/pulls/${pr}/commits" --paginate --jq "$jq_filter"
+}
+
