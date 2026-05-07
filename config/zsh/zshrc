@@ -44,8 +44,6 @@ znap eval tv      'tv init zsh'
 local -a SOURCE=(
   "$HOME/.secrets.sh"
   "$HOME/.cargo/env"
-  "$HOME/.fzf.zsh"
-  "$HOME/.fzf/shell/key-bindings.zsh"
   "$DOTFILES/bin/fzf-git"
   "$DOTFILES/config/zsh/alias.sh"
   "$DOTFILES/config/zsh/zstyle.sh"
@@ -58,9 +56,6 @@ local -a SOURCE=(
   "$DOTFILES/config/zsh/completion/_worktree.zsh"
   "$DOTFILES/config/zsh/completion/_commit.zsh"
   "$DOTFILES/config/zsh/zellij.sh"
-  "$DOTFILES/config/zsh/extras.sh"
-  "$HOME/tools/google-cloud-sdk/path.zsh.inc"
-  "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
 )
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
@@ -83,3 +78,6 @@ zstyle ':zle:*' word-style unspecified
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
+
+# sentry
+fpath=("/Users/garcez/.local/share/zsh/site-functions" $fpath)

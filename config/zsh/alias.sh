@@ -54,18 +54,6 @@ function zshrc() {
     nvim "$HOME/dotfiles/config/zsh/zshrc"
 }
 
-function codi() {
-    local syntax="${1:-typescript}"
-    shift
-    nvim -c \
-        "let g:startify_disable_at_vimenter = 1 |\
-    set bt=nofile ls=0 noru nonu nornu |\
-    hi ColorColumn ctermbg=NONE |\
-    hi VertSplit ctermbg=NONE |\
-    hi NonText ctermfg=0 |\
-    Codi $syntax" "$@"
-}
-
 ############################################################################
 ## linux
 if [[ "$(uname)" != "Darwin" ]]; then
@@ -182,7 +170,7 @@ function dotenv() {
 }
 
 function memory() {
-    ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f MB ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+    ps -eo pid,rss,comm -m | awk 'NR==1{printf "%6s %10s  %s\n",$1,$2,$3} NR>1{printf "%6d %8.2f MB  %s\n",$1,$2/1024,$3}' | head -30
 }
 
 function cdm() {

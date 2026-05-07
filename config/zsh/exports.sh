@@ -1,5 +1,3 @@
-export UID="$(id -u)"
-export GID="$(id -g)"
 #####################################################################################
 ## PATH
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -49,7 +47,7 @@ export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
 export SNAP_DIR="$PLUGINS_DIR/znap"
 export BROWSER=""
-export GPG_TTY="$(tty)"
+export GPG_TTY=$TTY
 export CASE_SENSITIVE="false"
 export HIST_STAMPS="yyyy-mm-dd"
 export DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -94,7 +92,7 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=""
-if [ -x "$(command -v nvim)" ]; then
+if (( $+commands[nvim] )); then
     export EDITOR="nvim"
     export MANPAGER="nvim +Man!"
     export PAGER="nvim"

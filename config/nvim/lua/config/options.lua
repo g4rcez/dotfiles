@@ -3,6 +3,7 @@ vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 vim.g.have_nerd_font = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+-- vim.g.maplocalleader = "\\"
 vim.g.snacks_animate = false
 vim.g.lsp_buf_big_file_threshold = 1024 * 1024
 

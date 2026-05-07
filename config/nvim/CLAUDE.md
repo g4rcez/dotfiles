@@ -119,7 +119,7 @@ null-ls is configured with the following tools (ensure they're installed):
 
 1. Uses Snacks picker instead of Telescope for fuzzy finding
 2. Uses blink.cmp instead of nvim-cmp for completion
-3. Uses heirline for statusline instead of lualine
+3. Uses lualine for statusline (heirline.lua exists in plugins/ but is disabled via `enabled = false`)
 4. Custom LSP configuration using vim.lsp.config/enable pattern
 5. null-ls enabled (conform.nvim disabled)
 6. Custom keybind helper function instead of direct vim.keymap.set
