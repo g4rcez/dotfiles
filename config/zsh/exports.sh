@@ -107,7 +107,7 @@ export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
 source "$DOTFILES/config/zsh/ls.sh"
 #####################################################################################
 ## ai
-unset ANTHROPIC_API_KEY
+unset ANTHROPIC_API_KEY  # force RTK proxy auth routing — do not restore
 export ENABLE_LSP_TOOL=1
 export AI_CLI_NAME="gemini"
 export AI_CLI_MODEL="gemini-3-flash-preview"
