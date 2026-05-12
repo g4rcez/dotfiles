@@ -1,6 +1,19 @@
 #!/bin/bash
 
-TODAY_NOTE=$(date +%Y-%m-%d)
+NOTES_DIR="$HOME/Documents/notes"
+mkdir -p "$NOTES_DIR"
 
-mkdir -p $HOME/Documents/notes
-nvim "$HOME/Documents/notes/$TODAY_NOTE.md"
+case "${1:-}" in
+    -1)
+        NOTE=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
+        nvim "$NOTES_DIR/$NOTE.md"
+        ;;
+    list)
+        NOTE=$(ls "$NOTES_DIR"/*.md 2>/dev/null | xargs -I{} basename {} .md | sort -r | fzf --no-height)
+        [[ -n "$NOTE" ]] && nvim "$NOTES_DIR/$NOTE.md"
+        ;;
+    *)
+        NOTE=$(date +%Y-%m-%d)
+        nvim "$NOTES_DIR/$NOTE.md"
+        ;;
+esac
