@@ -83,7 +83,10 @@
 
 [diff]
     colorMoved = default
-    tool = delta
+    tool = difftastic
+
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
 
 [gpg "ssh"]
     allowedSignersFile = ~/.ssh/allowed_signers
@@ -92,7 +95,8 @@
     autoSetupRemote = true
 
 [alias]
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    dift = difftool -y
+    lg =log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     s = status -s
     shame = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
     alias = config --get-regexp alias
