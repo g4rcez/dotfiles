@@ -7,9 +7,9 @@ function checkcommand() {
 }
 
 function _postcd() {
-    dotenv ".env"
-    dotenv ".env.local"
-    dotenv "./src/.env"
+    [[ -f ".env" ]] && dotenv ".env" && echo "[env loaded: .env]"
+    [[ -f ".env.local" ]] && dotenv ".env.local" && echo "[env loaded: .env.local]"
+    [[ -f "./src/.env" ]] && dotenv "./src/.env" && echo "[env loaded: src/.env]"
 }
 
 function isGitDir() {
