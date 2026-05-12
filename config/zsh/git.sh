@@ -97,6 +97,12 @@ function wip.ai() {
     git push
 }
 
+function wip.staged() {
+    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
+    git commit --no-verify -S -m "wip: ${NOW}"
+    git push
+}
+
 function pullb() {
     git fetch
     git pull --rebase origin "$(git branch --show-current)"
