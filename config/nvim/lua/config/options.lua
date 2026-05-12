@@ -47,7 +47,7 @@ vim.opt.shiftround = true
 vim.opt.shiftwidth = 2
 vim.opt.shortmess:append { W = true, I = true, c = true, C = true }
 vim.opt.showcmd = false
-vim.opt.shadafile = "NONE"
+vim.opt.shada = "!,'100,<50,s10,h"
 vim.opt.showmode = false
 vim.opt.sidescrolloff = 8
 vim.opt.signcolumn = "yes"
@@ -73,7 +73,6 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.lazyredraw = false
 vim.opt.ttyfast = true
-vim.opt.regexpengine = 1
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath "data" .. "/undo"
 vim.o.switchbuf = "usetab"
