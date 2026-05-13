@@ -368,6 +368,15 @@ vim.lsp.config("lua_ls", {
     },
 })
 
+vim.lsp.config("oxlint", {
+    root_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" },
+})
+
+vim.lsp.config("eslint", {
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+    root_markers = { ".eslintrc", ".eslintrc.json", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.yaml", ".eslintrc.yml", "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "eslint.config.ts" },
+})
+
 vim.treesitter.language.register("bash", "kitty")
 vim.treesitter.language.register("bash", "zsh")
 
@@ -392,6 +401,7 @@ vim.lsp.enable {
     -- "harper_ls",
     -- npm i -g oxlint
     "oxlint",
+    "eslint",
     "rust_analyzer",
     "tailwindcss",
     "vtsls",

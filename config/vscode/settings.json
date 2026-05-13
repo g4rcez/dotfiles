@@ -94,4 +94,5 @@
   "terminal.integrated.shellIntegration.decorationsEnabled": "gutter",
   "redhat.telemetry.enabled": false,
   "git.autofetch": true,
+  "typescript.experimental.useTsgo": true,
 }

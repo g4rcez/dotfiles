@@ -1,3 +1,9 @@
+local oxc_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" }
+
+local function has_oxc(bufnr)
+    return vim.fs.root(bufnr, oxc_markers) ~= nil
+end
+
 local keys = {
     {
         "<leader>cr",
@@ -72,17 +78,42 @@ return {
                 lua = { "stylua" },
                 css = { "prettier" },
                 html = { "prettier" },
-                json = { "prettier" },
+                json = function(bufnr)
+                    if has_oxc(bufnr) then
+                        return { "oxfmt" }
+                    end
+                    return { "prettier" }
+                end,
                 yaml = { "prettier" },
                 liquid = { "prettier" },
                 svelte = { "prettier" },
                 graphql = { "prettier" },
                 markdown = { "prettier" },
                 python = { "isort", "black" },
-                javascriptreact = { "prettier" },
-                typescriptreact = { "prettier" },
-                javascript = { "prettierd", "prettier", stop_after_first = true },
-                typescript = { "prettierd", "prettier", stop_after_first = true },
+                javascriptreact = function(bufnr)
+                    if has_oxc(bufnr) then
+                        return { "oxfmt" }
+                    end
+                    return { "prettier" }
+                end,
+                typescriptreact = function(bufnr)
+                    if has_oxc(bufnr) then
+                        return { "oxfmt" }
+                    end
+                    return { "prettier" }
+                end,
+                javascript = function(bufnr)
+                    if has_oxc(bufnr) then
+                        return { "oxfmt" }
+                    end
+                    return { "prettierd", "prettier", stop_after_first = true }
+                end,
+                typescript = function(bufnr)
+                    if has_oxc(bufnr) then
+                        return { "oxfmt" }
+                    end
+                    return { "prettierd", "prettier", stop_after_first = true }
+                end,
             },
         },
     },
