@@ -5,6 +5,7 @@ source "$HOME/dotfiles/config/zsh/utils.sh"
 safeImport "$HOME/.local-exports.sh"
 ##############################################################################################################
 ## znap
+eval "$(mise activate zsh)"
 ZNAP_DIR="$HOME/.znap/"
 ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 [[ -r "$ZNAP_ENTRYPOINT" ]] ||
@@ -13,8 +14,8 @@ ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
-znap eval starship 'starship init zsh --print-full-init'
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
+eval "$(starship init zsh)"
 PLUGINS=(
     "MichaelAquilina/zsh-auto-notify"
     "hlissner/zsh-autopair"
@@ -34,12 +35,12 @@ done
 znap prompt
 ##############################################################################################################
 ## source files (cached with znap eval for faster startup)
-znap eval fzf     'fzf --zsh'
-znap eval zoxide  'zoxide init zsh'
-znap eval mise    'mise activate zsh'
-znap eval direnv  'direnv hook zsh'
-znap eval gh      'gh completion -s zsh'
-znap eval tv      'tv init zsh'
+fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+eval "$(gh completion -s zsh)"
+eval "$(zoxide init zsh)"
+eval "$(direnv hook zsh)"
+eval "$(tv init zsh)"
+eval "$(fzf --zsh)"
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -51,12 +52,13 @@ local -a SOURCE=(
   "$DOTFILES/config/zsh/fzf.sh"
   "$DOTFILES/config/zsh/git.sh"
   "$DOTFILES/config/zsh/node.sh"
+  "$DOTFILES/config/zsh/zellij.sh"
   "$DOTFILES/config/zsh/completion/node-completion.sh"
   "$DOTFILES/config/zsh/completion/_ai.zsh"
   "$DOTFILES/config/zsh/completion/_worktree.zsh"
   "$DOTFILES/config/zsh/completion/_commit.zsh"
-  "$DOTFILES/config/zsh/zellij.sh"
 )
+
 for config in $SOURCE; do
   if [[ -f "$config" ]]; then source "$config"; fi
 done
@@ -77,6 +79,3 @@ zstyle ':zle:*' word-style unspecified
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
-
-# sentry
-fpath=("/Users/garcez/.local/share/zsh/site-functions" $fpath)

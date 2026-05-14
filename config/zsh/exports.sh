@@ -9,7 +9,7 @@ fi
 export GOPATH="$HOME/go"
 
 PATH2="$PATH"
-LOCAL_SOURCE_FILES=(
+PATH_FILES=(
     "/usr/local/bin"
     "/opt/homebrew/bin"
     "$PNPM_HOME"
@@ -29,7 +29,7 @@ LOCAL_SOURCE_FILES=(
     "$HOME/.opencode/bin"
 )
 
-for SOURCE_FILE in "${LOCAL_SOURCE_FILES[@]}"; do
+for SOURCE_FILE in "${PATH_FILES[@]}"; do
     if [[ -d "$SOURCE_FILE" ]]; then
         PATH2="$PATH2:$SOURCE_FILE"
     fi
@@ -42,6 +42,7 @@ export PATH="$PATH2"
 ## Important exports
 export LISTMAX=10000
 export DOTFILES="$HOME/dotfiles"
+export DOTFILES_DIR="$HOME/dotfiles"
 export TS_SCRIPTS="$HOME/dotfiles/bin"
 export ZSH="$HOME/.zsh/plugins/ohmyzsh/ohmyzsh"
 export PLUGINS_DIR="$HOME/.zsh/plugins"
@@ -104,7 +105,7 @@ export BUN_INSTALL="$HOME/.bun"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
-source "$DOTFILES/config/zsh/ls.sh"
+export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
 #####################################################################################
 ## ai
 unset ANTHROPIC_API_KEY  # force RTK proxy auth routing — do not restore
@@ -120,3 +121,6 @@ export AICOMMIT_EXCLUDES=(
     "yarn.lock"
     "*.lock"
 )
+
+source "$DOTFILES/config/zsh/ls.sh"
+
