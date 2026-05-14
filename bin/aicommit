@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Generate a conventional commit message from staged changes using the
+# configured AI provider (AI_QUERY_COMMAND + prompts/aicommit-script.txt).
+#
+# Usage:
+#   aicommit          print generated message to stdout
+#   aicommit -e       open git commit editor pre-seeded with generated message
+#   aicommit -c       commit directly (no editor)
+set -euo pipefail
+
+DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+PROMPT_FILE="$DOTFILES/prompts/aicommit-script.txt"
+
+if [[ -z "${AI_QUERY_COMMAND:-}" ]]; then
+  echo "aicommit: AI_QUERY_COMMAND is not set" >&2
+  exit 1
+fi
+
+if [[ ! -f "$PROMPT_FILE" ]]; then
+  echo "aicommit: prompt file not found: $PROMPT_FILE" >&2
+  exit 1
+fi
+
+diff=$(git diff --staged)
+if [[ -z "$diff" ]]; then
+  echo "aicommit: nothing staged" >&2
+  exit 1
+fi
+
+prompt="$(< "$PROMPT_FILE")"
+
+# Split AI_QUERY_COMMAND on whitespace — handles "gemini --model x -p" style vars
+read -ra _cmd <<< "$AI_QUERY_COMMAND"
+msg=$(printf '%s\n\n%s' "$prompt" "$diff" | "${_cmd[@]}")
+
+case "${1:-}" in
+  -e|--edit)
+    exec git commit -S -e -m "$msg"
+    ;;
+  -c|--commit)
+    exec git commit -S -m "$msg"
+    ;;
+  *)
+    printf '%s\n' "$msg"
+    ;;
+esac
