@@ -218,7 +218,7 @@ function npm.kill () {
 }
 
 function ask_ai() {
-    "$AI_CLI_NAME" --model "$AI_CLI_MODEL" "$@"
+    ${=AI_QUERY_COMMAND} "$@"
 }
 alias '??'="ask_ai"
 

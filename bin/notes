@@ -3,17 +3,25 @@
 NOTES_DIR="$HOME/Documents/notes"
 mkdir -p "$NOTES_DIR"
 
+_open() {
+    if [[ -n "${NVIM:-}" ]]; then
+        nvr --remote-tab-wait "$1"
+    else
+        nvim "$1"
+    fi
+}
+
 case "${1:-}" in
     -1)
         NOTE=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
-        nvim "$NOTES_DIR/$NOTE.md"
+        _open "$NOTES_DIR/$NOTE.md"
         ;;
     list)
         NOTE=$(ls "$NOTES_DIR"/*.md 2>/dev/null | xargs -I{} basename {} .md | sort -r | fzf --no-height)
-        [[ -n "$NOTE" ]] && nvim "$NOTES_DIR/$NOTE.md"
+        [[ -n "$NOTE" ]] && _open "$NOTES_DIR/$NOTE.md"
         ;;
     *)
         NOTE=$(date +%Y-%m-%d)
-        nvim "$NOTES_DIR/$NOTE.md"
+        _open "$NOTES_DIR/$NOTE.md"
         ;;
 esac

@@ -69,39 +69,55 @@ fish_dir() {
   echo "$result"
 }
 
-# Parse JSON fields
-current_dir=$(echo "$json" | jq -r '.workspace.current_dir // ""')
-model=$(echo "$json" | jq -r '.model.display_name // "Claude"')
-context_pct=$(echo "$json" | jq -r '.context_window.used_percentage // 0 | floor')
-five_hr_pct=$(echo "$json" | jq -r '.rate_limits.five_hour.used_percentage // 0 | floor')
-five_hr_reset=$(echo "$json" | jq -r '.rate_limits.five_hour.resets_at // 0')
-seven_day_pct=$(echo "$json" | jq -r '.rate_limits.seven_day.used_percentage // 0 | floor')
-seven_day_reset=$(echo "$json" | jq -r '.rate_limits.seven_day.resets_at // 0')
+# Parse all JSON fields in one jq call (tab-separated; none of these values contain tabs)
+IFS=$'\t' read -r current_dir model context_pct five_hr_pct five_hr_reset seven_day_pct seven_day_reset wt_branch < <(
+  jq -r '[
+    (.workspace.current_dir // ""),
+    (.model.display_name // "Claude"),
+    ((.context_window.used_percentage // 0) | floor | tostring),
+    ((.rate_limits.five_hour.used_percentage // 0) | floor | tostring),
+    ((.rate_limits.five_hour.resets_at // 0) | tostring),
+    ((.rate_limits.seven_day.used_percentage // 0) | floor | tostring),
+    ((.rate_limits.seven_day.resets_at // 0) | tostring),
+    (.worktree.branch // "")
+  ] | join("\t")' <<< "$json"
+)
 
-# Strip "Claude " prefix
 model="${model#Claude }"
-
-# Project name (fish-style shortened path)
 project=$(fish_dir "$current_dir")
 
-# Worktree detection
-worktree_json=$(echo "$json" | jq -r '.worktree // "null"')
-is_worktree=false
-if [[ "$worktree_json" != "null" ]]; then
-  is_worktree=true
-  branch=$(echo "$json" | jq -r '.worktree.branch // ""')
-else
-  git_dir=$(git -C "$current_dir" rev-parse --git-dir 2>/dev/null)
-  git_common_dir=$(git -C "$current_dir" rev-parse --git-common-dir 2>/dev/null)
-  if [[ -n "$git_dir" && "$git_dir" != "$git_common_dir" ]]; then
-    is_worktree=true
-  fi
-  branch=$(git -C "$current_dir" branch --show-current 2>/dev/null)
+# Git state — cache for 5 s to avoid 4 forks on every status-bar render
+_ck=$(printf '%s' "$current_dir" | shasum 2>/dev/null | cut -c1-16 \
+      || printf '%s' "$current_dir" | md5 -q 2>/dev/null \
+      || printf '%s' "$current_dir" | md5sum 2>/dev/null | cut -c1-16)
+_cf="/tmp/.claude_sl_git_${_ck}"
+_use_cache=0
+if [[ -f "$_cf" ]]; then
+  _mtime=$(stat -f '%m' "$_cf" 2>/dev/null || stat -c '%Y' "$_cf" 2>/dev/null || echo 0)
+  _age=$(( $(date +%s) - _mtime ))
+  (( _age < 5 )) && _use_cache=1
 fi
 
-# Dirty check: append * to branch if working tree is dirty
-dirty=$(git -C "$current_dir" status --porcelain 2>/dev/null)
-[[ -n "$dirty" ]] && branch="${branch}*"
+is_worktree=false
+if (( _use_cache )); then
+  IFS=$'\t' read -r _gd _gcd branch _dflag < "$_cf"
+else
+  _gd=$(git -C "$current_dir" rev-parse --git-dir 2>/dev/null || echo "")
+  _gcd=$(git -C "$current_dir" rev-parse --git-common-dir 2>/dev/null || echo "")
+  branch=$(git -C "$current_dir" branch --show-current 2>/dev/null || echo "")
+  _dirty=$(git -C "$current_dir" status --porcelain 2>/dev/null || echo "")
+  _dflag="0"; [[ -n "$_dirty" ]] && _dflag="1"
+  printf '%s\t%s\t%s\t%s\n' "$_gd" "$_gcd" "$branch" "$_dflag" > "$_cf"
+fi
+
+# Worktree: prefer branch from JSON (already resolved); fall back to git detection
+if [[ -n "$wt_branch" ]]; then
+  is_worktree=true
+  branch="$wt_branch"
+elif [[ -n "$_gd" && "$_gd" != "$_gcd" ]]; then
+  is_worktree=true
+fi
+[[ "${_dflag:-0}" == "1" ]] && branch="${branch}*"
 
 if $COMPACT; then
   echo "${model} ${context_pct}%"

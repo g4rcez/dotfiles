@@ -8,15 +8,23 @@ fi
 
 # Determine if this is a Notification event (JSON with notification_type field)
 NOTIFICATION_TYPE=""
+TITLE="Claude Code"
+MESSAGE=""
 if [[ -n "$INPUT" ]]; then
-    NOTIFICATION_TYPE=$(echo "$INPUT" | jq -r '.notification_type // empty' 2>/dev/null || true)
+    # Single jq call extracts all three fields using SOH (U+0001) as delimiter
+    # to avoid collisions with notification message content
+    IFS=$'\001' read -r NOTIFICATION_TYPE TITLE MESSAGE < <(
+        jq -r '[
+            (.notification_type // ""),
+            (.title // "Claude Code"),
+            (.message // "")
+        ] | join("")' <<< "$INPUT" 2>/dev/null
+    ) || true
+    [[ -z "$TITLE" ]] && TITLE="Claude Code"
 fi
 
 if [[ -n "$NOTIFICATION_TYPE" ]]; then
     # JSON path: Notification event
-    TITLE=$(echo "$INPUT" | jq -r '.title // "Claude Code"' 2>/dev/null)
-    MESSAGE=$(echo "$INPUT" | jq -r '.message // ""' 2>/dev/null)
-    [[ -z "$TITLE" ]] && TITLE="Claude Code"
 
     case "$NOTIFICATION_TYPE" in
         permission_prompt)
