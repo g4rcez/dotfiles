@@ -78,10 +78,9 @@ cmd_subagents() {
     echo "error: fzf not found" >&2; exit 1
   fi
   local entries=()
-  for d in "$src"/*/; do
-    [ -d "$d" ] || continue
-    entries+=("$(basename "${d%/}")"$'\t'"${d%/}")
-  done
+  while IFS= read -r -d '' f; do
+    entries+=("$(basename "$f")"$'\t'"$f")
+  done < <(find "$src" -maxdepth 1 -type f -name '*.md' -print0 | sort -z)
   if [ ${#entries[@]} -eq 0 ]; then
     echo "no agents found"; return 0
   fi
@@ -90,18 +89,18 @@ cmd_subagents() {
     --prompt='agent: ' \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview 'first=$(ls {2}/*.md 2>/dev/null | head -1 || ls {2}/ 2>/dev/null | head -1); [ -n "$first" ] && bat --theme OneHalfDark --color=always "$first" 2>/dev/null || cat "$first"' \
+    --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
     --preview-window 'right,65%')
   [ -z "$selected" ] && return 0
-  local dir; dir=$(cut -f2 <<< "$selected")
-  local aname; aname="$(basename "$dir")"
+  local file; file=$(cut -f2 <<< "$selected")
+  local aname; aname="$(basename "$file")"
   local dest="./$PROVIDER/agents"
   mkdir -p "$dest"
-  if [[ -d "$dest/$aname" ]]; then
+  if [[ -f "$dest/$aname" ]]; then
     echo "subagents: skip $aname — already exists (delete it first to replace)" >&2
     return 1
   fi
-  cp -r "$dir" "$dest/"
+  cp "$file" "$dest/"
   save_project "$PWD" "$PROVIDER"
   echo "subagents: ok ($aname)"
 }
@@ -198,11 +197,10 @@ cmd_update() {
       if [ -d "$src_agents" ]; then
         local dest_agents="./$PROVIDER/agents"
         if [ -d "$dest_agents" ]; then
-          for agent_dir in "$src_agents"/*/; do
-            [ -d "$agent_dir" ] || continue
-            local aname; aname="$(basename "$agent_dir")"
-            [ -d "$dest_agents/$aname" ] && cp -r "$agent_dir" "$dest_agents/"
-          done
+          while IFS= read -r -d '' f; do
+            local aname; aname="$(basename "$f")"
+            [ -f "$dest_agents/$aname" ] && cp "$f" "$dest_agents/"
+          done < <(find "$src_agents" -maxdepth 1 -type f -name '*.md' -print0)
         fi
       fi
       local src_skills="$DOTFILES_DIR/.ai/skills"
@@ -265,10 +263,9 @@ cmd_list() {
     done
   fi
   if [ -d "$agents_dir" ]; then
-    for d in "$agents_dir"/*/; do
-      [ -d "$d" ] || continue
-      entries+=("[agent] $(basename "$d")"$'\t'"${d%/}")
-    done
+    while IFS= read -r -d '' f; do
+      entries+=("[agent] $(basename "$f" .md)"$'\t'"$f")
+    done < <(find "$agents_dir" -maxdepth 1 -type f -name '*.md' -print0 | sort -z)
   fi
   if [ -d "$guidelines_dir" ]; then
     for f in "$guidelines_dir"/*; do
@@ -295,13 +292,9 @@ cmd_list() {
           || cat \"\$path/SKILL.md\" 2>/dev/null \
           || echo 'No SKILL.md found'
       elif [[ \"\$entry\" == \[subagent\]* ]] || [[ \"\$entry\" == \[agent\]* ]]; then
-        first_file=\$(ls \"\$path/\"*.md 2>/dev/null | head -1 || ls \"\$path/\" 2>/dev/null | head -1)
-        if [ -n \"\$first_file\" ]; then
-          bat --theme OneHalfDark --color=always \"\$first_file\" 2>/dev/null \
-            || cat \"\$first_file\"
-        else
-          echo 'No files found'
-        fi
+        bat --theme OneHalfDark --color=always \"\$path\" 2>/dev/null \
+          || cat \"\$path\" 2>/dev/null \
+          || echo 'No file found'
       elif [[ \"\$entry\" == \[guideline\]* ]]; then
         bat --theme OneHalfDark --color=always \"\$path\" 2>/dev/null \
           || cat \"\$path\" 2>/dev/null \
