@@ -38,36 +38,72 @@ save_project() {
 cmd_agents() {
   local src="$DOTFILES_DIR/.ai/guidelines"
   if [ ! -d "$src" ]; then
-    echo "error: no guidelines dir" >&2
-    exit 1
+    echo "error: no guidelines dir" >&2; exit 1
   fi
-  local skipped=0
+  if ! command -v fzf &>/dev/null; then
+    echo "error: fzf not found" >&2; exit 1
+  fi
+  local entries=()
   while IFS= read -r -d '' f; do
-    local dest="./$(basename "$f")"
-    if [[ -f "$dest" ]]; then
-      echo "agents: skip $(basename "$f") — already exists (delete it first to replace)" >&2
-      skipped=1
-      continue
-    fi
-    cp "$f" .
-  done < <(find "$src" -maxdepth 1 -type f -print0)
+    entries+=("$(basename "$f")"$'\t'"$f")
+  done < <(find "$src" -maxdepth 1 -type f -print0 | sort -z)
+  if [ ${#entries[@]} -eq 0 ]; then
+    echo "no guidelines found"; return 0
+  fi
+  local selected
+  selected=$(printf '%s\n' "${entries[@]}" | fzf \
+    --prompt='guideline: ' \
+    --delimiter $'\t' \
+    --with-nth 1 \
+    --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
+    --preview-window 'right,65%')
+  [ -z "$selected" ] && return 0
+  local file; file=$(cut -f2 <<< "$selected")
+  local dest="./$(basename "$file")"
+  if [[ -f "$dest" ]]; then
+    echo "agents: skip $(basename "$file") — already exists (delete it first to replace)" >&2
+    return 1
+  fi
+  cp "$file" .
   save_project "$PWD" "$PROVIDER"
-  (( skipped == 0 )) && echo "agents: ok"
+  echo "agents: ok ($(basename "$file"))"
 }
 
 cmd_subagents() {
   local src="$DOTFILES_DIR/.ai/agents"
   if [ ! -d "$src" ]; then
-    return 0
+    echo "error: no agents dir" >&2; exit 1
   fi
+  if ! command -v fzf &>/dev/null; then
+    echo "error: fzf not found" >&2; exit 1
+  fi
+  local entries=()
+  for d in "$src"/*/; do
+    [ -d "$d" ] || continue
+    entries+=("$(basename "${d%/}")"$'\t'"${d%/}")
+  done
+  if [ ${#entries[@]} -eq 0 ]; then
+    echo "no agents found"; return 0
+  fi
+  local selected
+  selected=$(printf '%s\n' "${entries[@]}" | fzf \
+    --prompt='agent: ' \
+    --delimiter $'\t' \
+    --with-nth 1 \
+    --preview 'first=$(ls {2}/*.md 2>/dev/null | head -1 || ls {2}/ 2>/dev/null | head -1); [ -n "$first" ] && bat --theme OneHalfDark --color=always "$first" 2>/dev/null || cat "$first"' \
+    --preview-window 'right,65%')
+  [ -z "$selected" ] && return 0
+  local dir; dir=$(cut -f2 <<< "$selected")
+  local aname; aname="$(basename "$dir")"
   local dest="./$PROVIDER/agents"
   mkdir -p "$dest"
-  for agent_dir in "$src"/*/; do
-    [ -d "$agent_dir" ] || continue
-    cp -r "$agent_dir" "$dest/"
-  done
+  if [[ -d "$dest/$aname" ]]; then
+    echo "subagents: skip $aname — already exists (delete it first to replace)" >&2
+    return 1
+  fi
+  cp -r "$dir" "$dest/"
   save_project "$PWD" "$PROVIDER"
-  echo "subagents: ok"
+  echo "subagents: ok ($aname)"
 }
 
 cmd_skills() {
@@ -94,11 +130,23 @@ cmd_skills() {
       echo "error: fzf not found" >&2
       exit 1
     fi
-    local preview="$DOTFILES_DIR/bin/lessfilter.sh {}/SKILL.md"
+    local entries=()
+    while IFS= read -r d; do
+      entries+=("$(basename "$d")"$'\t'"$d")
+    done < <(find "${sources[@]}" -mindepth 1 -maxdepth 1 -type d | sort -u)
+    if [ ${#entries[@]} -eq 0 ]; then
+      echo "no skills found"; return 0
+    fi
     local selected
-    selected="$(find "${sources[@]}" -mindepth 1 -maxdepth 1 -type d | sort -u | fzf --prompt='skill: ' --preview "$preview" --preview-window 'right,65%')"
-    skill_path="$selected"
-    skill_name="$(basename "$selected")"
+    selected="$(printf '%s\n' "${entries[@]}" | fzf \
+      --prompt='skill: ' \
+      --delimiter $'\t' \
+      --with-nth 1 \
+      --preview "$DOTFILES_DIR/bin/lessfilter.sh {2}/SKILL.md" \
+      --preview-window 'right,65%')"
+    [ -z "$selected" ] && return 0
+    skill_path="$(cut -f2 <<< "$selected")"
+    skill_name="$(basename "$skill_path")"
   else
     for s in "$PWD/.claude/skills" "$HOME/.claude/skills" "$DOTFILES_DIR/.ai/skills"; do
       if [[ -d "$s/$skill_name" ]]; then
