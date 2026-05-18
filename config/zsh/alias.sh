@@ -42,6 +42,9 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+if [ -x "$(command -v podman)" ]; then
+    alias docker='podman'
+fi
 alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 
 ############################################################################
@@ -213,7 +216,7 @@ function killnodemodules() {
     echo "cleaned node_modules"
 }
 
-function npm.kill () {
+function npm.kill() {
     killnodemodules
 }
 
@@ -224,21 +227,20 @@ alias '??'="ask_ai"
 
 function worktree() {
     case "${1:-}" in
-        add)
-            command worktree "$@" || return $?
-            [[ -n "${2:-}" ]] || return 0
-            local p
-            p="$(command worktree cd "$2" 2>/dev/null)" || return 0
-            [[ -d "$p" ]] && cd "$p"
-            ;;
-        cd)
-            local p
-            p="$(command worktree cd "${2:-}")" || return $?
-            [[ -d "$p" ]] && cd "$p"
-            ;;
-        *)
-            command worktree "$@"
-            ;;
+    add)
+        command worktree "$@" || return $?
+        [[ -n "${2:-}" ]] || return 0
+        local p
+        p="$(command worktree cd "$2" 2>/dev/null)" || return 0
+        [[ -d "$p" ]] && cd "$p"
+        ;;
+    cd)
+        local p
+        p="$(command worktree cd "${2:-}")" || return $?
+        [[ -d "$p" ]] && cd "$p"
+        ;;
+    *)
+        command worktree "$@"
+        ;;
     esac
 }
-

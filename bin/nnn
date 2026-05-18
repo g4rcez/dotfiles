@@ -14,9 +14,19 @@ if [[ -f "package-lock.json" ]]; then
 fi
 if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
 if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
+if [[ -f "bun.lockb" ]] || [[ -f "bun.lock" ]]; then COMMAND="bun"; fi
+if [[ -f "deno.json" ]] || [[ -f "deno.jsonc" ]]; then
+  COMMAND="deno"
+  INSTALL_COMMAND="add"
+  _deno_cfg="deno.json"; [[ -f "deno.jsonc" ]] && _deno_cfg="deno.jsonc"
+  SCRIPT_KEY="$(jq -r '(.tasks // {}) | keys[]' "$_deno_cfg" | grep -Ew "^${SUBCOMMAND}\$")"
+  if [[ "${SCRIPT_KEY}" != "" ]]; then PRE="task"; fi
+fi
 if [[ "$#" == "0" ]]; then
   ARGUMENTS=""
 fi
+[[ "$COMMAND" == "bun"  && -n "$ARGUMENTS" ]] && ARGUMENTS="--exact"
+[[ "$COMMAND" == "deno" ]] && ARGUMENTS=""
 
 case $SUBCOMMAND in
   "add") NODE_ENV=development "$COMMAND" $INSTALL_COMMAND $ARGUMENTS $@ ;;

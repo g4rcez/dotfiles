@@ -1,9 +1,10 @@
 local keymap = vim.keymap
-
-vim.lsp.inlay_hint.enable(false, { 0 })
-vim.g.inlay_hints_visible = false
-
 local severity = vim.diagnostic.severity
+
+if vim.lsp.inlay_hint.is_enabled() then
+    vim.lsp.inlay_hint.enable(false, { 0 })
+    vim.g.inlay_hints_visible = false
+end
 
 vim.diagnostic.config {
     severity_sort = true,
@@ -374,7 +375,18 @@ vim.lsp.config("oxlint", {
 
 vim.lsp.config("eslint", {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-    root_markers = { ".eslintrc", ".eslintrc.json", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.yaml", ".eslintrc.yml", "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "eslint.config.ts" },
+    root_markers = {
+        ".eslintrc",
+        ".eslintrc.json",
+        ".eslintrc.js",
+        ".eslintrc.cjs",
+        ".eslintrc.yaml",
+        ".eslintrc.yml",
+        "eslint.config.js",
+        "eslint.config.mjs",
+        "eslint.config.cjs",
+        "eslint.config.ts",
+    },
 })
 
 vim.treesitter.language.register("bash", "kitty")

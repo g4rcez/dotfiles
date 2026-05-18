@@ -1,4 +1,20 @@
+local enabledFtMarkdown = { "markdown", "json", "text", "txt", "gitcommit" }
+
 return {
+    {
+        "not-manu/filemention.nvim",
+        event = "InsertEnter",
+        opts = {
+            trigger = "@",
+            root = "git",
+            respect_gitignore = true,
+            include_hidden = false,
+            format = "bare",
+            filetypes = enabledFtMarkdown,
+            max_items = 500,
+            finder = "auto",
+        },
+    },
     {
         "newtoallofthis123/blink-cmp-fuzzy-path",
         dependencies = { "saghen/blink.cmp" },
@@ -8,7 +24,7 @@ return {
             trigger_char = "@",
             search_hidden = true,
             relative_paths = true,
-            filetypes = { "markdown", "json", "text", "txt", "gitcommit" },
+            filetypes = enabledFtMarkdown,
         },
     },
     {
@@ -149,38 +165,24 @@ return {
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
-                compat = {},
+                default = { "lsp", "snippets", "path", "dadbod", "buffer" },
                 per_filetype = {
                     lua = { inherit_defaults = true, "lazydev" },
-                    markdown = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    txt = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
                     json = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
                     text = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
-                    txt = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    markdown = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
                     gitcommit = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
                 },
-                default = {
-                    "lsp",
-                    "snippets",
-                    "path",
-                    "dadbod",
-                    "buffer",
-                },
                 providers = {
-                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
-                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-                    ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
                     buffer = { min_keyword_length = 4 },
                     snippets = { min_keyword_length = 3, score_offset = -100 },
-                    lazydev = {
-                        name = "LazyDev",
-                        module = "lazydev.integrations.blink",
-                        score_offset = 100,
-                    },
-                    conventional_commits = {
-                        name = "Conventional Commits",
-                        module = "blink-cmp-conventional-commits",
-                        opts = {},
-                    },
+                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
+                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+                    filemention = { name = "filemention", module = "filemention.sources.blink" },
+                    lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+                    ["fuzzy-path"] = { name = "Fuzzy Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
+                    conventional_commits = { name = "Conventional Commits", module = "blink-cmp-conventional-commits", opts = {} },
                 },
             },
         },

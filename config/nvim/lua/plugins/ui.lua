@@ -87,6 +87,7 @@ return {
                 illuminate = true,
                 lsp_trouble = true,
                 treesitter_context = true,
+                bufferline = true,
                 indent_blankline = { enabled = true },
                 navic = { enabled = true, custom_bg = "lualine" },
             },

@@ -15,6 +15,7 @@ local Config = wezterm.config_builder()
 Config.front_end = "WebGpu"
 Config.webgpu_power_preference = 'LowPower'
 Config.enable_wayland = false
+Config.enable_kitty_keyboard = true
 
 local theme = require("./lua/theme")
 local font = require("./lua/font")
