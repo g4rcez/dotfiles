@@ -35,7 +35,7 @@ save_project() {
   echo "$updated" > "$CONFIG_FILE"
 }
 
-cmd_agents() {
+cmd_guidelines() {
   local src="$DOTFILES_DIR/.ai/guidelines"
   if [ ! -d "$src" ]; then
     echo "error: no guidelines dir" >&2; exit 1
@@ -61,16 +61,20 @@ cmd_agents() {
   local file; file=$(cut -f2 <<< "$selected")
   local dest="./$(basename "$file")"
   if [[ -f "$dest" ]]; then
-    echo "agents: skip $(basename "$file") — already exists (delete it first to replace)" >&2
+    echo "guidelines: skip $(basename "$file") — already exists (delete it first to replace)" >&2
     return 1
   fi
   cp "$file" .
   save_project "$PWD" "$PROVIDER"
-  echo "agents: ok ($(basename "$file"))"
+  echo "guidelines: ok ($(basename "$file"))"
 }
 
-cmd_subagents() {
-  local src="$DOTFILES_DIR/.ai/agents"
+_agents_src() {
+  printf '%s' "$DOTFILES_DIR/.ai/agents"
+}
+
+cmd_agents_list() {
+  local src; src="$(_agents_src)"
   if [ ! -d "$src" ]; then
     echo "error: no agents dir" >&2; exit 1
   fi
@@ -97,12 +101,74 @@ cmd_subagents() {
   local dest="./$PROVIDER/agents"
   mkdir -p "$dest"
   if [[ -f "$dest/$aname" ]]; then
-    echo "subagents: skip $aname — already exists (delete it first to replace)" >&2
+    echo "agents list: skip $aname — already exists (delete it first to replace)" >&2
     return 1
   fi
   cp "$file" "$dest/"
   save_project "$PWD" "$PROVIDER"
-  echo "subagents: ok ($aname)"
+  echo "agents list: ok ($aname)"
+}
+
+cmd_agents_copy() {
+  local agent_name="${1:-}"
+  local src; src="$(_agents_src)"
+  if [ ! -d "$src" ]; then
+    echo "error: no agents dir" >&2; exit 1
+  fi
+  local file=""
+  if [[ -n "$agent_name" ]]; then
+    # strip .md suffix so both "foo" and "foo.md" work
+    local aname="${agent_name%.md}.md"
+    file="$src/$aname"
+    if [[ ! -f "$file" ]]; then
+      echo "error: agent '$agent_name' not found" >&2; exit 1
+    fi
+  else
+    if ! command -v fzf &>/dev/null; then
+      echo "error: fzf not found" >&2; exit 1
+    fi
+    local entries=()
+    while IFS= read -r -d '' f; do
+      entries+=("$(basename "$f")"$'\t'"$f")
+    done < <(find "$src" -maxdepth 1 -type f -name '*.md' -print0 | sort -z)
+    if [ ${#entries[@]} -eq 0 ]; then
+      echo "no agents found"; return 0
+    fi
+    local selected
+    selected=$(printf '%s\n' "${entries[@]}" | fzf \
+      --prompt='agent: ' \
+      --delimiter $'\t' \
+      --with-nth 1 \
+      --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
+      --preview-window 'right,65%')
+    [ -z "$selected" ] && return 0
+    file=$(cut -f2 <<< "$selected")
+  fi
+  local aname; aname="$(basename "$file")"
+  local dest="./$PROVIDER/agents"
+  mkdir -p "$dest"
+  if [[ -f "$dest/$aname" ]]; then
+    echo "agents copy: skip $aname — already exists (delete it first to replace)" >&2
+    return 1
+  fi
+  cp "$file" "$dest/"
+  save_project "$PWD" "$PROVIDER"
+  echo "agents copy: ok ($aname)"
+}
+
+_agents_usage() {
+  printf 'Usage: ai agents [subcommand]\n\nSubcommands:\n  list   browse and deploy agents (default)\n  copy   deploy an agent to ./<provider>/agents/\n'
+}
+
+cmd_agents() {
+  local subcmd="${1:-}"
+  case "$subcmd" in
+    '')           cmd_agents_list "$@" ;;
+    list)         shift; cmd_agents_list "$@" ;;
+    copy)         shift; cmd_agents_copy "$@" ;;
+    -h|--help)    _agents_usage; exit 0 ;;
+    *)            _agents_usage >&2; exit 1 ;;
+  esac
 }
 
 cmd_skills() {
@@ -448,14 +514,15 @@ usage() {
 Usage: ai [--provider <name>] [command]
 
 Commands:
-  (none)      open the AI for the current provider
-  agents      deploy guidelines to cwd
-  subagents   deploy agents to ./<provider>/agents/
-  skills      deploy a skill to ./<provider>/skills/
-  update      re-sync all tracked projects
-  list        browse available items with fzf
-  sessions    switch to a tmux pane running an AI CLI
-  help        show this help
+  (none)         open the AI for the current provider
+  agents list    browse available agents
+  agents copy    deploy an agent to ./<provider>/agents/
+  guidelines     deploy a guideline file to cwd
+  skills         deploy a skill to ./<provider>/skills/
+  update         re-sync all tracked projects
+  list           browse available items with fzf
+  sessions       switch to a tmux pane running an AI CLI
+  help           show this help
 
 Options:
   --provider  AI provider (default: claude, or \$AI_PROVIDER)
@@ -474,7 +541,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     -h|--help|help)   usage 0 ;;
     agents)           shift; cmd_agents "$@"; exit 0 ;;
-    subagents)        shift; cmd_subagents "$@"; exit 0 ;;
+    guidelines)       shift; cmd_guidelines "$@"; exit 0 ;;
     skills)           shift; cmd_skills "$@"; exit 0 ;;
     update)           shift; cmd_update "$@"; exit 0 ;;
     list)             shift; cmd_list "$@"; exit 0 ;;

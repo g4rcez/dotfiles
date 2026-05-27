@@ -61,7 +61,7 @@ alt-l = 'move right'
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 check-further-callbacks = true
-run = ['layout floating']
+run = ['layout floating', 'exec-and-forget $HOME/.config/aerospace/center-kitty.sh']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'

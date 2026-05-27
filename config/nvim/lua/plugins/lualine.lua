@@ -1,12 +1,12 @@
 local mode_icons = {
-    NORMAL = "󰋜 ",
-    INSERT = " ",
+    NORMAL = " ",
+    INSERT = "󰗧 ",
     VISUAL = "󰈈 ",
     ["V-LINE"] = "󰈈 ",
     ["V-BLOCK"] = "󰈈 ",
     REPLACE = " ",
     ["V-REPLACE"] = " ",
-    COMMAND = " ",
+    COMMAND = " ",
     TERMINAL = " ",
     SELECT = "󰒅 ",
     ["S-LINE"] = "󰒅 ",
@@ -32,7 +32,7 @@ return {
                     {
                         "mode",
                         fmt = function(m)
-                            return (mode_icons[m] or "  ") .. m
+                            return (mode_icons[m] or "  ")
                         end,
                     },
                 },

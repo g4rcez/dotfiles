@@ -15,17 +15,17 @@ PATH_FILES=(
     "$PNPM_HOME"
     "$GOPATH/bin"
     "$GOROOT/bin"
-    "$HOME/.antigravity/antigravity/bin"
+    "$HOME/.bun/bin"
     "$HOME/.cargo/env"
+    "$HOME/.dotnet"
+    "$HOME/.dotnet/tools"
     "$HOME/.local/bin"
     "$HOME/.local/share"
     "$HOME/.local/share/bin"
-    "$HOME/.dotnet"
-    "$HOME/.dotnet/tools"
     "$HOME/tools"
-    "$HOME/tools/google-cloud-sdk/bin"
     "$HOME/dotfiles/bin"
-    "$HOME/.bun/bin"
+    "$HOME/tools/google-cloud-sdk/bin"
+    "$HOME/.antigravity/antigravity/bin"
     "$HOME/.opencode/bin"
 )
 
@@ -71,7 +71,15 @@ export ZELLIJ_DEFAULT_SESSION="localhost"
 
 #####################################################################################
 ## ZSH_PLUGINS
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# `zsh-autosuggestions`' completion strategy toggles tty line-discipline while
+# it probes completions. That can leave Kitty/Ghostty outside tmux with output
+# no longer returning to column 0 after Enter, so only enable the completion
+# strategy when we're already inside tmux.
+if [[ -n "$TMUX" ]]; then
+    export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+else
+    export ZSH_AUTOSUGGEST_STRATEGY=(history)
+fi
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line regexp)
 export ZSH_TMUX_AUTOSTART="true"
 export ZSH_TMUX_CONFIG="$DOTFILES/config/tmux/tmux.conf"
@@ -123,4 +131,3 @@ export AICOMMIT_EXCLUDES=(
 )
 
 source "$DOTFILES/config/zsh/ls.sh"
-

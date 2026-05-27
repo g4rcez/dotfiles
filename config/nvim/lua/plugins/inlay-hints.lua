@@ -1,9 +1,9 @@
 return {
     "MysticalDevil/inlay-hints.nvim",
     event = "LspAttach",
-    dependencies = { "neovim/nvim-lspconfig" }, -- optional
+    dependencies = { "neovim/nvim-lspconfig" },
     opts = {
         commands = { enable = true },
-        autocmd = { enable = true },
+        autocmd = { enable = false },
     },
 }

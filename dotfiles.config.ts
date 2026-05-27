@@ -18,7 +18,6 @@ export default defineConfig({
             PAGER: EDITOR,
             EDITOR: EDITOR,
             VISUAL: EDITOR,
-            TERM: "tmux-256color",
             ENABLE_TOOL_SEARCH: "true",
             MANPAGER: `${EDITOR} +Man!`,
         },

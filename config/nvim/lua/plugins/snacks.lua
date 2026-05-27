@@ -148,29 +148,29 @@ return {
                 end,
                 desc = "Buffers",
             },
-            {
-                "<leader><space>",
-                function()
-                    require("snacks").picker.files {
-                        hidden = true,
-                        ignored = false,
-                        follow = true,
-                        supports_live = true,
-                        matcher = {
-                            fuzzy = true,
-                            file_pos = true,
-                            frecency = true,
-                            cwd_bonus = true,
-                            smartcase = true,
-                            ignorecase = true,
-                            sort_empty = false,
-                            history_bonus = true,
-                            filename_bonus = true,
-                        },
-                    }
-                end,
-                desc = "Find Files",
-            },
+            -- {
+            --     "<leader><space>",
+            --     function()
+            --         require("snacks").picker.files {
+            --             hidden = true,
+            --             ignored = false,
+            --             follow = true,
+            --             supports_live = true,
+            --             matcher = {
+            --                 fuzzy = true,
+            --                 file_pos = true,
+            --                 frecency = true,
+            --                 cwd_bonus = true,
+            --                 smartcase = true,
+            --                 ignorecase = true,
+            --                 sort_empty = false,
+            --                 history_bonus = true,
+            --                 filename_bonus = true,
+            --             },
+            --         }
+            --     end,
+            --     desc = "Find Files",
+            -- },
             {
                 "<C-S-f>",
                 function()
@@ -246,11 +246,11 @@ return {
                 require("snacks").picker.buffers,
                 desc = "Buffers",
             },
-            {
-                "<leader>ff",
-                require("snacks").picker.files,
-                desc = "Find Files",
-            },
+            -- {
+            --     "<leader>ff",
+            --     require("snacks").picker.files,
+            --     desc = "Find Files",
+            -- },
             {
                 "<leader>fr",
                 require("snacks").picker.recent,

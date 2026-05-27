@@ -1,11 +1,6 @@
 local keymap = vim.keymap
 local severity = vim.diagnostic.severity
 
-if vim.lsp.inlay_hint.is_enabled() then
-    vim.lsp.inlay_hint.enable(false, { 0 })
-    vim.g.inlay_hints_visible = false
-end
-
 vim.diagnostic.config {
     severity_sort = true,
     float = { border = "single", source = "if_many" },

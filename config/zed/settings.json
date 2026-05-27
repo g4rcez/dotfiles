@@ -48,7 +48,7 @@
     "dock": "right",
   },
   "git_panel": {
-    "dock": "left",
+    "dock": "right",
   },
   "buffer_line_height": {
     "custom": 1.75,

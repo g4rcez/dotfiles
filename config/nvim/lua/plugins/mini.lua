@@ -48,7 +48,15 @@ return {
             require("mini.git").setup()
             require("mini.colors").setup()
             require("mini.cursorword").setup()
-            require("mini.map").setup()
+            require("mini.map").setup {
+                window = {
+                    focusable = false,
+                    side = "right",
+                    width = 15,
+                    winblend = 0,
+                    zindex = 1,
+                },
+            }
             require("mini.hipatterns").setup()
             require("mini.bufremove").setup()
             require("mini.files").setup { windows = { preview = true } }

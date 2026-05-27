@@ -67,7 +67,6 @@
   "vscode-neovim.logPath": null,
   "window.commandCenter": false,
   "window.titleBarStyle": "native",
-  "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "catppuccin-mocha",
   "workbench.layoutControl.enabled": false,
   "workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
@@ -95,4 +94,5 @@
   "redhat.telemetry.enabled": false,
   "git.autofetch": true,
   "typescript.experimental.useTsgo": true,
+  "workbench.colorTheme": "Catppuccin Mocha",
 }

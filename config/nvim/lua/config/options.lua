@@ -7,29 +7,35 @@ vim.g.maplocalleader = " "
 vim.g.snacks_animate = false
 vim.g.lsp_buf_big_file_threshold = 1024 * 1024
 
-vim.opt.autowrite = true
-vim.opt.breakindent = true
-vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
-vim.opt.cmdheight = 0
-vim.opt.showtabline = 0
-vim.opt.completeopt = { "menu", "fuzzy", "menuone", "noselect", "popup" }
-vim.opt.conceallevel = 0
-vim.opt.confirm = true
+-- clipboard
+vim.opt.clipboard:append "unnamedplus"
+vim.opt.isfname:append "@-@"
+
+-- cursor
 vim.opt.cursorline = true
-vim.opt.expandtab = true
-vim.opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
+
+-- fold
 vim.opt.foldcolumn = "1"
 vim.opt.foldenable = true
 vim.opt.foldexpr = "0"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+
+vim.opt.autowrite = true
+vim.opt.breakindent = true
+vim.opt.cmdheight = 0
+vim.opt.showtabline = 0
+vim.opt.completeopt = { "menu", "fuzzy", "menuone", "noselect", "popup" }
+vim.opt.conceallevel = 0
+vim.opt.confirm = true
+vim.opt.expandtab = true
+vim.opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
 vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ">"
 vim.opt.formatoptions = "jcroqlnt"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.ignorecase = true
-vim.opt.inccommand = "nosplit"
 vim.opt.jumpoptions = "view"
 vim.opt.laststatus = 3
 vim.opt.linebreak = true
@@ -55,13 +61,11 @@ vim.opt.smartcase = true
 vim.opt.smartindent = true
 vim.opt.smoothscroll = true
 vim.opt.spelllang = { "en" }
-vim.opt.splitbelow = true
 vim.opt.splitkeep = "screen"
-vim.opt.splitright = true
 vim.opt.tabstop = 4
 vim.opt.termguicolors = true
 vim.opt.timeout = true
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 150
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.virtualedit = "block"
@@ -73,12 +77,20 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.lazyredraw = false
 vim.opt.ttyfast = true
+vim.o.switchbuf = "usetab"
+
+-- undo
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath "data" .. "/undo"
-vim.o.switchbuf = "usetab"
 
 vim.opt.path = ".,**"
 
 -- Undercurl
 vim.cmd [[let &t_Cs = "\e[4:3m"]]
 vim.cmd [[let &t_Ce = "\e[4:0m"]]
+
+-- split view
+vim.opt.inccommand = "split"
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
