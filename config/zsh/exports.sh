@@ -113,7 +113,9 @@ export BUN_INSTALL="$HOME/.bun"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
-export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
+if [ -x "$(command -v podman)" ]; then
+    export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
+fi
 #####################################################################################
 ## ai
 unset ANTHROPIC_API_KEY  # force RTK proxy auth routing — do not restore
