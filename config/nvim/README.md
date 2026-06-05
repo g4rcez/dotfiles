@@ -60,10 +60,11 @@ Located in `lua/config/lsp.lua`:
 8. **docker_compose_language_service** - Docker Compose YAML
 9. **docker_language_server** - Docker (Go-based)
 10. **lua_ls** - Lua with third-party checks disabled
-11. **oxlint** - Fast JavaScript/TypeScript linter
-12. **rust_analyzer** - Rust
-13. **tailwindcss** - Tailwind CSS with 50+ template types
-14. **yamlls** - YAML with GitHub Actions schemas
+11. **harper_ls** - Grammar/spell checker for supported filetypes, enabled broadly
+12. **oxlint** - Fast JavaScript/TypeScript linter
+13. **rust_analyzer** - Rust
+14. **tailwindcss** - Tailwind CSS with 50+ template types
+15. **yamlls** - YAML with GitHub Actions schemas
 
 ### ⌨️ Completion
 

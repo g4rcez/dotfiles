@@ -10,7 +10,7 @@
 - 📝 **Text Expansion** - Espanso integration with dynamic snippets and clipboard management
 - 🔗 **Automated Symlinks** - Smart dotfiles synchronization with custom Deno-based management system
 - 🐚 **Enhanced Shell** - Zsh with modern plugins, fzf integration, and custom functions
-- 🚀 **Modern Terminal** - Ghostty/Wezterm + Zellij/Tmux with session management and layouts
+- 🚀 **Modern Terminal** - Ghostty/Wezterm with an Option+P leader for splits/tabs, plus tmux for legacy session tools
 - ⚡ **Neovim IDE** - Comprehensive Lua configuration with LSP, treesitter, and custom keybindings
 - 📦 **Package Management** - Automated Homebrew package installation and management
 - 🎨 **Consistent Theming** - Catppuccin theme across all applications
@@ -79,7 +79,8 @@ Trigger: `;` prefix
 
 - **Ghostty** - Fast, feature-rich terminal emulator (primary)
 - **Wezterm** - GPU-accelerated terminal with Lua config
-- **Tmux** - Traditional terminal multiplexer with custom session management
+- **Shared leader** - `Option+P` for tab, split, picker, and reload workflows
+- **Tmux** - Legacy terminal multiplexer / session tooling
 - **Zellij** - Modern Rust-based terminal multiplexer
 - **Integrated file manager** - Yazi with Catppuccin theme
 
@@ -274,7 +275,7 @@ Located in [`bin/`](bin/) - 40+ utilities:
 - `release-cli` - Release management tool
 
 **Session Management**:
-- `tmux-fzf-session`, `tmux-fzf-windows` - Tmux with fzf
+- `tmux-fzf-session`, `tmux-fzf-windows` - Legacy tmux + fzf session/window pickers
 - `zellij-sessionx*` - Zellij session management suite (create, kill, rename, preview)
 
 **System Utilities**:
@@ -299,7 +300,7 @@ Located in [`bin/`](bin/) - 40+ utilities:
 ### Terminal
 - **Ghostty** - Primary terminal emulator
 - **Wezterm** - Alternative GPU-accelerated terminal
-- **Tmux** - Traditional terminal multiplexer with custom keybindings
+- **Tmux** - Legacy terminal multiplexer; core window/pane workflows now live in Ghostty/WezTerm
 - **Zellij** - Modern alternative to tmux
 - **Starship** - Cross-shell prompt with git integration
 

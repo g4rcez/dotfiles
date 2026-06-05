@@ -2,13 +2,18 @@ return {
     {
         "nvim-neotest/neotest",
         dependencies = {
-            "nvim-neotest/nvim-nio",
+            "arthur944/neotest-bun",
             "nvim-lua/plenary.nvim",
+            "nvim-neotest/nvim-nio",
+            "marilari88/neotest-vitest",
             "antoinemadec/FixCursorHold.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
         opts = {
-            adapters = {},
+            adapters = {
+                ["neotest-vitest"] = {},
+                ["neotest-bun"] = {},
+            },
         },
     },
 }

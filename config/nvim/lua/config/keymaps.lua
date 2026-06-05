@@ -104,7 +104,6 @@ bind.normal("<leader>se", function()
 end, { desc = "Mini files" })
 bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
-bind.normal("<CR><CR>", ":", { desc = "Cmdline" })
 
 local function buf_abs()
     return vim.api.nvim_buf_get_name(0)

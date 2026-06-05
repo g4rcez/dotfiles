@@ -8,18 +8,20 @@ shell-integration = detect
 adjust-cell-height = 60%
 adjust-cell-width = 2%
 theme = Catppuccin Mocha
-window-decoration = none
 scrollback-limit = 100000
 macos-option-as-alt = true
 mouse-hide-while-typing = true
 window-colorspace = display-p3
 custom-shader-animation = always
-macos-titlebar-style = transparent
+macos-titlebar-style = tabs
 font-family = "JetBrainsMono Nerd Font"
 quick-terminal-animation-duration = 0.5
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal
+keybind = super+t=new_tab
+keybind = super+shift+[=previous_tab
+keybind = super+shift+]=next_tab
 keybind = super+p>-=new_split:down
 keybind = super+p>\=new_split:right
 keybind = super+p>equal=equalize_splits

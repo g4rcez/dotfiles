@@ -54,7 +54,7 @@
     "custom": 1.75,
   },
   "inlay_hints": {
-    "enabled": true,
+    "enabled": false,
   },
   "icon_theme": {
     "mode": "dark",
@@ -71,4 +71,5 @@
     "use_smartcase_find": true,
     "use_regex_search": true,
   },
+  "scroll_beyond_last_line": "off"
 }

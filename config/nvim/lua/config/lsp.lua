@@ -364,6 +364,48 @@ vim.lsp.config("lua_ls", {
     },
 })
 
+vim.lsp.config("harper_ls", {
+    capabilities = capabilities,
+    cmd = { "harper-ls", "--stdio" },
+    root_markers = { ".git" },
+    filetypes = {
+        "asciidoc",
+        "c",
+        "cpp",
+        "cs",
+        "gitcommit",
+        "go",
+        "html",
+        "java",
+        "javascript",
+        "lua",
+        "markdown",
+        "nix",
+        "python",
+        "ruby",
+        "rust",
+        "swift",
+        "toml",
+        "typescript",
+        "typescriptreact",
+        "haskell",
+        "cmake",
+        "typst",
+        "php",
+        "dart",
+        "clojure",
+        "sh",
+        "text",
+        "plaintext",
+        "tex",
+    },
+    settings = {
+        ["harper-ls"] = {
+            diagnosticSeverity = "hint",
+        },
+    },
+})
+
 vim.lsp.config("oxlint", {
     root_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" },
 })
@@ -405,7 +447,7 @@ vim.lsp.enable {
     "docker_compose_language_service",
     "docker_language_server",
     "lua_ls",
-    -- "harper_ls",
+    "harper_ls",
     -- npm i -g oxlint
     "oxlint",
     "eslint",

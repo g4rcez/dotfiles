@@ -9,10 +9,12 @@ fi
 export GOPATH="$HOME/go"
 
 PATH2="$PATH"
+
 PATH_FILES=(
     "/usr/local/bin"
     "/opt/homebrew/bin"
     "$PNPM_HOME"
+    "$PNPM_HOME/bin"
     "$GOPATH/bin"
     "$GOROOT/bin"
     "$HOME/.bun/bin"

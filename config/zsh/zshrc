@@ -5,35 +5,35 @@ source "$HOME/dotfiles/config/zsh/utils.sh"
 safeImport "$HOME/.local-exports.sh"
 
 if [[ -o interactive && -t 1 ]]; then
-    _zsh_restore_tty_output() {
-        stty opost onlcr 2>/dev/null || true
-    }
-    autoload -Uz add-zsh-hook
-    add-zsh-hook preexec _zsh_restore_tty_output
-    add-zsh-hook precmd _zsh_restore_tty_output
-    _zsh_restore_tty_output
+  _zsh_restore_tty_output() {
+    stty opost onlcr 2>/dev/null || true
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook preexec _zsh_restore_tty_output
+  add-zsh-hook precmd _zsh_restore_tty_output
+  _zsh_restore_tty_output
 fi
 ##############################################################################################################
 ## znap
- (( $+commands[mise] )) && eval "$(mise activate zsh)"
+(($+commands[mise])) && eval "$(mise activate zsh)"
 ZNAP_DIR="$HOME/.znap/"
 ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 [[ -r "$ZNAP_ENTRYPOINT" ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
+  git clone --depth 1 -- \
+    https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
- (( $+commands[starship] )) && eval "$(starship init zsh)"
+(($+commands[starship])) && eval "$(starship init zsh)"
 PLUGINS=(
-    "MichaelAquilina/zsh-auto-notify"
-    "hlissner/zsh-autopair"
-    "wfxr/forgit"
-    "zsh-users/zsh-autosuggestions"
-    "zsh-users/zsh-completions"
-    "zsh-users/zsh-history-substring-search"
-    "zsh-users/zsh-syntax-highlighting"
+  "MichaelAquilina/zsh-auto-notify"
+  "hlissner/zsh-autopair"
+  "wfxr/forgit"
+  "zsh-users/zsh-autosuggestions"
+  "zsh-users/zsh-completions"
+  "zsh-users/zsh-history-substring-search"
+  "zsh-users/zsh-syntax-highlighting"
 )
 for plugin in $PLUGINS; do
   if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
@@ -46,11 +46,12 @@ znap prompt
 ##############################################################################################################
 ## source files (cached with znap eval for faster startup)
 fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
- (( $+commands[gh] )) && eval "$(gh completion -s zsh)"
- (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
- (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
- (( $+commands[tv] )) && eval "$(tv init zsh)"
- (( $+commands[fzf] )) && eval "$(fzf --zsh)"
+(($+commands[gh])) && eval "$(gh completion -s zsh)"
+(($+commands[zoxide])) && eval "$(zoxide init zsh)"
+(($+commands[direnv])) && eval "$(direnv hook zsh)"
+(($+commands[tv])) && eval "$(tv init zsh)"
+(($+commands[fzf])) && eval "$(fzf --zsh)"
+(($+commands[omp])) && eval "$(omp completions zsh)"
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -75,27 +76,19 @@ done
 
 ##############################################################################################################
 ## fpath hooks
-znap fpath _cargo    "rustup completions zsh cargo"
-znap fpath _deno     "deno completions zsh"
-znap fpath _mise     "mise completion zsh"
-znap fpath _npm      "npm completion"
-znap fpath _pnpm     "pnpm completion zsh"
-znap fpath _rustup   "rustup completions zsh"
-znap fpath _opencode   "opencode completion"
+znap fpath _cargo "rustup completions zsh cargo"
+znap fpath _deno "deno completions zsh"
+znap fpath _mise "mise completion zsh"
+znap fpath _npm "npm completion"
+znap fpath _pnpm "pnpm completion zsh"
+znap fpath _rustup "rustup completions zsh"
+znap fpath _opencode "opencode completion"
 
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified
 
-
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
 
-# pnpm
-export PNPM_HOME="/Users/allangarcez/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
