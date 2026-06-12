@@ -1,7 +1,9 @@
-default_profile = "default"
+default_profile = "profile"
 
-[profiles.default]
-adapter = "postgres"
+[profiles.profile]
+adapter = "duckdb"
 theme = "catppuccin-mocha"
-limit = 1000
+limit = 100000
 keymap_name = ["vscode"]
+init_path = "None"
+extension = [""]

@@ -89,7 +89,11 @@ function wip() {
     git push
 }
 
-function wip.ai() {
+function commit.write() {
+    commitwithai "$@"
+}
+
+function commit.ai() {
     git add -A .
     COMMIT_MESSAGE="$(commitwithai "$*")"
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
@@ -256,12 +260,6 @@ _scopecommit() {
         '::commit message (type: msg):'
 }
 compdef _scopecommit scopecommit
-
-function aicommit() {
-    git add .
-    commitwithai "$@"
-    push
-}
 
 function lastcommit() {
     git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1

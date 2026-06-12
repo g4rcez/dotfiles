@@ -9,6 +9,7 @@ python = "3.13.0"
 dotnet = "10.0.300"
 java = "corretto-23.0.1.8.1"
 "pipx:neovim-remote" = "2.5.1"
+"github:akitaonrails/ai-jail" = "1.5.0"
 
 [settings]
 jobs = 16

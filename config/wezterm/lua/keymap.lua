@@ -4,7 +4,7 @@ local M = {}
 M.disable_default_key_bindings = false
 M.send_composed_key_when_left_alt_is_pressed = false
 M.send_composed_key_when_right_alt_is_pressed = false
-M.leader = { key = "p", mods = "ALT", timeout_milliseconds = 1000 }
+M.leader = { key = "p", mods = "CMD", timeout_milliseconds = 1000 }
 
 M.mouse_bindings = {
     {
@@ -15,64 +15,55 @@ M.mouse_bindings = {
 }
 
 local function rename_tab_action()
-    return wezterm.action.PromptInputLine {
+    return wezterm.action.PromptInputLine({
         description = "Enter new tab title",
-        action = wezterm.action_callback(function(window, pane, line)
+        action = wezterm.action_callback(function(window, _, line)
             if line and line ~= "" then
                 window:active_tab():set_title(line)
             end
         end),
-    }
+    })
 end
 
 local function launcher_action(flags, title)
-    return wezterm.action.ShowLauncherArgs {
-        flags = flags,
-        title = title,
-    }
+    return wezterm.action.ShowLauncherArgs({ flags = flags, title = title })
 end
 
 M.keys = {
-    { key = "t", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
-    { key = "f", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
-    { key = "m", mods = "CMD", action = wezterm.action.DisableDefaultAssignment },
-    { key = "f", mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
-    { key = "p", mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
-
     { key = "p", mods = "LEADER", action = wezterm.action.ActivateCommandPalette },
     { key = "b", mods = "LEADER", action = launcher_action("FUZZY|TABS", "Tabs") },
-    { key = "o", mods = "LEADER", action = launcher_action("FUZZY|TABS|COMMANDS", "Tabs + commands") },
+    { key = "o", mods = "LEADER", action = launcher_action("FUZZY|TABS", "Tabs + commands") },
 
     { key = "r", mods = "LEADER", action = wezterm.action.ReloadConfiguration },
     { key = "R", mods = "LEADER", action = wezterm.action.ReloadConfiguration },
-    { key = "t", mods = "LEADER", action = wezterm.action.SpawnTab "CurrentPaneDomain" },
+    { key = "t", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
     { key = "n", mods = "LEADER", action = wezterm.action.SpawnWindow },
     { key = "w", mods = "LEADER", action = rename_tab_action() },
-    { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentTab { confirm = false } },
+    { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentTab({ confirm = false }) },
     { key = "v", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
 
-    { key = "-", mods = "LEADER", action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" } },
-    { key = "\\", mods = "LEADER", action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" } },
+    { key = "-", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+    { key = "\\", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 
-    { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Left" },
-    { key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Down" },
-    { key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Up" },
-    { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection "Right" },
+    { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
+    { key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Down") },
+    { key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Up") },
+    { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Right") },
 
-    { key = "LeftArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Left" },
-    { key = "RightArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Right" },
-    { key = "UpArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Up" },
-    { key = "DownArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Down" },
+    { key = "LeftArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection("Left") },
+    { key = "RightArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection("Right") },
+    { key = "UpArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection("Up") },
+    { key = "DownArrow", mods = "ALT", action = wezterm.action.ActivatePaneDirection("Down") },
 
-    { key = "LeftArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Left", 5 } },
-    { key = "RightArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Right", 5 } },
-    { key = "UpArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Up", 5 } },
-    { key = "DownArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Down", 5 } },
+    { key = "LeftArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Left", 5 }) },
+    { key = "RightArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Right", 5 }) },
+    { key = "UpArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Up", 5 }) },
+    { key = "DownArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Down", 5 }) },
 
-    { key = "H", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Left", 5 } },
-    { key = "J", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Down", 5 } },
-    { key = "K", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Up", 5 } },
-    { key = "L", mods = "LEADER", action = wezterm.action.AdjustPaneSize { "Right", 5 } },
+    { key = "H", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Left", 5 }) },
+    { key = "J", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Down", 5 }) },
+    { key = "K", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Up", 5 }) },
+    { key = "L", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Right", 5 }) },
 
     { key = "Tab", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
     { key = "Tab", mods = "LEADER|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },

@@ -10,6 +10,7 @@ M.cursor_blink_rate = 0
 M.default_cursor_style = "SteadyBlock"
 M.enable_scroll_bar = false
 M.enable_tab_bar = true
+M.tab_bar_at_bottom = true
 M.hide_tab_bar_if_only_one_tab = false
 M.macos_window_background_blur = 0
 M.max_fps = 120
