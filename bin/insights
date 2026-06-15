@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function insights() {
+  local out="$HOME/notes/insights/insights-$(date +%Y-%m-%d-%H%M).md"
+  mkdir -p "$(dirname "$out")"
+
+  bash "$HOME/.pi/agent/skills/insights/scripts/collect-insights.sh" \
+    --since "yesterday" \
+    --roots "$HOME/dotfiles,$HOME/Documents" \
+    --top-repos 10 \
+    >"$out"
+
+  echo "Saved insights report: $out"
+}
+
+insights

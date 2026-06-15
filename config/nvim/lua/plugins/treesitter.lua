@@ -196,6 +196,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
+        event = { "BufReadPost", "BufNewFile" },
         dependencies = { "nvim-treesitter/nvim-treesitter", branch = "main" },
         config = function()
             require("nvim-treesitter-textobjects").setup {
@@ -302,6 +303,7 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
+        event = { "BufReadPost", "BufNewFile" },
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         build = ":TSUpdate",
         opts = {
@@ -317,11 +319,10 @@ return {
         },
     },
     {
-        lazy = false,
         branch = "main",
         version = false,
         build = ":TSUpdate",
-        event = { "VeryLazy" },
+        event = { "BufReadPost", "BufNewFile" },
         "nvim-treesitter/nvim-treesitter",
         opts = {
             folds = { enable = true },

@@ -78,11 +78,11 @@ function gco() {
     _fzf_git_each_ref --no-multi | xargs git checkout
 }
 
-function clone() {
+function git.clone() {
     git clone "git@github.com:$1"
 }
 
-function wip() {
+function commit.wip() {
     git add -A .
     NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
     git commit --no-verify -S -m "wip: ${NOW}"

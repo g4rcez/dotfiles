@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="${DOTFILES:-$HOME/dotfiles}"
+cd "$repo"
+
+failures=0
+warnings=0
+
+ok() { printf 'ok   %s\n' "$*"; }
+warn() { printf 'warn %s\n' "$*"; warnings=$((warnings + 1)); }
+fail() { printf 'fail %s\n' "$*"; failures=$((failures + 1)); }
+
+section() { printf '\n%s\n' "$*"; }
+
+section "dotfiles doctor"
+printf 'repo %s\n' "$repo"
+
+section "zsh completion registration"
+if [[ ! -f config/zsh/zshrc ]]; then
+  fail "config/zsh/zshrc missing"
+else
+  while IFS= read -r completion; do
+    rel="${completion#./}"
+    if grep -Fq "\$DOTFILES/$rel" config/zsh/zshrc || grep -Fq "\$HOME/dotfiles/$rel" config/zsh/zshrc; then
+      ok "$rel is sourced"
+    else
+      fail "$rel is not in config/zsh/zshrc SOURCE"
+    fi
+  done < <(find config/zsh/completion -maxdepth 1 -type f \( -name '*.sh' -o -name '*.zsh' \) -print | sort)
+fi
+
+section "bunsen symlinks"
+if [[ ! -f dotfiles.config.ts ]]; then
+  fail "dotfiles.config.ts missing"
+else
+  while IFS=$'\t' read -r target source; do
+    expanded_target="${target/#\~/$HOME}"
+    source_path="$repo/${source#./}"
+    if [[ ! -e "$source_path" ]]; then
+      fail "$target source missing: ${source#./}"
+      continue
+    fi
+    if [[ -L "$expanded_target" ]]; then
+      actual="$(readlink "$expanded_target")"
+      expected="$source_path"
+      if [[ "$actual" == "$expected" ]]; then
+        ok "$target -> ${source#./}"
+      else
+        warn "$target points to $actual; expected $expected"
+      fi
+    elif [[ -e "$expanded_target" ]]; then
+      warn "$target exists but is not a symlink"
+    else
+      warn "$target is not linked"
+    fi
+  done < <(python3 - <<'PY'
+import re
+from pathlib import Path
+text = Path('dotfiles.config.ts').read_text()
+for target, src in re.findall(r'"(~[^"]+)"\s*:\s*file\("([^"]+)"\)', text):
+    print(target + "\t" + src)
+PY
+)
+fi
+
+section "mise pins"
+if [[ ! -f config/mise/config.toml ]]; then
+  fail "config/mise/config.toml missing"
+elif grep -nE '=\s*"(latest|lts|stable|system)"' config/mise/config.toml; then
+  fail "mise tools must be explicitly pinned"
+else
+  ok "mise tools are explicitly pinned"
+fi
+
+section "summary"
+printf '%d failure(s), %d warning(s)\n' "$failures" "$warnings"
+exit "$((failures > 0 ? 1 : 0))"

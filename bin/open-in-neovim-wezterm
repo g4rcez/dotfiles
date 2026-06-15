@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HOME}/.local/share/mise/shims:${PATH:-}"
+
+fail() {
+  /usr/bin/osascript -e "display alert \"Open in Neovim failed\" message \"$1\" as critical" >/dev/null 2>&1 || true
+  printf 'open-in-neovim-wezterm: %s\n' "$1" >&2
+  exit 1
+}
+
+wezterm_bin=${WEZTERM_BIN:-$(command -v wezterm || true)}
+nvim_bin=${NVIM_BIN:-$(command -v nvim || true)}
+
+[[ -n "$wezterm_bin" ]] || fail "wezterm was not found in PATH."
+[[ -n "$nvim_bin" ]] || fail "nvim was not found in PATH."
+
+cwd=$HOME
+if [[ $# -gt 0 ]]; then
+  first=$1
+  if [[ -d "$first" ]]; then
+    cwd=$first
+  else
+    cwd=$(dirname "$first")
+  fi
+fi
+
+exec "$wezterm_bin" start --cwd "$cwd" -- "$nvim_bin" "$@"

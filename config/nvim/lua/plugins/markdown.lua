@@ -2,7 +2,7 @@ local ft = { "markdown", "plaintext", "text" }
 return {
     {
         "OXY2DEV/markview.nvim",
-        lazy = false,
+        ft = ft,
         dependencies = { "saghen/blink.cmp" },
     },
     {

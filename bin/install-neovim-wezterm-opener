@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo=${DOTFILES_DIR:-"$HOME/dotfiles"}
+source_script="$repo/config/macos/open-in-neovim.applescript"
+app_dir="$HOME/Applications/Open in Neovim.app"
+info_plist="$app_dir/Contents/Info.plist"
+lsregister="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+
+[[ -f "$source_script" ]] || {
+  printf 'Missing AppleScript source: %s\n' "$source_script" >&2
+  exit 1
+}
+
+set_plist_string() {
+  local key=$1
+  local value=$2
+  if /usr/libexec/PlistBuddy -c "Print :$key" "$info_plist" >/dev/null 2>&1; then
+    /usr/libexec/PlistBuddy -c "Set :$key $value" "$info_plist"
+  else
+    /usr/libexec/PlistBuddy -c "Add :$key string $value" "$info_plist"
+  fi
+}
+
+mkdir -p "$HOME/Applications"
+rm -rf "$app_dir"
+/usr/bin/osacompile -o "$app_dir" "$source_script"
+
+set_plist_string CFBundleIdentifier com.g4rcez.open-in-neovim
+set_plist_string CFBundleName "Open in Neovim"
+set_plist_string CFBundleDisplayName "Open in Neovim"
+/usr/libexec/PlistBuddy -c 'Delete :CFBundleDocumentTypes' "$info_plist" >/dev/null 2>&1 || true
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes array' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0 dict' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:CFBundleTypeName string Text Files' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:CFBundleTypeRole string Editor' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSHandlerRank string Alternate' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSItemContentTypes array' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSItemContentTypes:0 string public.text' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSItemContentTypes:1 string public.plain-text' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSItemContentTypes:2 string public.source-code' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :CFBundleDocumentTypes:0:LSItemContentTypes:3 string net.daringfireball.markdown' "$info_plist"
+/usr/libexec/PlistBuddy -c 'Add :NSHighResolutionCapable bool true' "$info_plist" >/dev/null 2>&1 || true
+
+if [[ -x "$lsregister" ]]; then
+  "$lsregister" -f "$app_dir"
+fi
+
+printf 'Installed %s\n' "$app_dir"
+printf 'To make it the default for a file type: Finder → Get Info → Open with → Open in Neovim → Change All.\n'

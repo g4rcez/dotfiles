@@ -38,6 +38,10 @@ tests/
 
 ## General Rules
 
+- For the first failing test, build, lint, or log-inspection command in an AI session, use `ctx_execute` and print a concise failure summary instead of rerunning manually or pasting raw output.
+- Use context-mode by default for long command output, logs, dependency trees, test output, and build output so errors are summarized and searchable.
+- For cleanup work, prefer dry-run/trash flows before permanent deletion. In this dotfiles repo, use `rm:dry-run`, `rm:trash`, or a repo-local cleanup script before `command rm -rf`.
+- After zsh, bunsen symlink, or mise config edits, run `dotfiles-doctor` before closing the task.
 - `pnpm` only
 - kebab-case for all filenames (`user-card.tsx`, `use-auth.ts`)
 - No barrel files — no `index.ts` that re-exports siblings

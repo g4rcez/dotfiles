@@ -1,12 +1,36 @@
 return {
-    "tpope/vim-fugitive",
-    { "StackInTheWild/headhunter.nvim", opts = {} },
-    { "cvlmtg/inline-diff.nvim", opts = {} },
+    { "tpope/vim-fugitive", cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit", "Gread", "Gwrite" } },
+    {
+        "StackInTheWild/headhunter.nvim",
+        cmd = {
+            "HeadhunterPrevious",
+            "HeadhunterNext",
+            "HeadhunterTakeHead",
+            "HeadhunterTakeOrigin",
+            "HeadhunterTakeBoth",
+            "HeadhunterQuickfix",
+            "HeadhunterReload",
+        },
+        opts = {},
+    },
+    { "cvlmtg/inline-diff.nvim", cmd = { "InlineDiff", "InlineDiffEnable", "InlineDiffDisable" }, opts = {} },
     {
         "kokusenz/deltaview.nvim",
+        cmd = { "DeltaView", "DeltaMenu", "Delta" },
         dependencies = { "kokusenz/delta.lua" },
         opts = {
             use_nerdfonts = false,
+        },
+    },
+    {
+        "dlyongemallo/diffview-plus.nvim",
+        version = "*",
+        cmd = {
+            "DiffviewOpen",
+            "DiffviewToggle",
+            "DiffviewFileHistory",
+            "DiffviewDiffFiles",
+            "DiffviewLog",
         },
     },
     {
@@ -20,6 +44,7 @@ return {
     },
     {
         "lewis6991/gitsigns.nvim",
+        event = { "BufReadPre", "BufNewFile" },
         opts = {
             signs = {
                 add = { text = " " },

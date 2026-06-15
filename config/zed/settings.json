@@ -67,7 +67,9 @@
     "dark": "Catppuccin Mocha",
   },
   "vim": {
-    "use_system_clipboard": "on_yank",
+    "show_edit_predictions_in_normal_mode": true,
+    "toggle_relative_line_numbers": true,
+    "use_system_clipboard": "always",
     "use_smartcase_find": true,
     "use_regex_search": true,
   },

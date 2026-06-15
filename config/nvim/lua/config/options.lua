@@ -1,9 +1,8 @@
-vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
+vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin:" .. vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 
 vim.g.have_nerd_font = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
--- vim.g.maplocalleader = "\\"
 vim.g.snacks_animate = false
 vim.g.lsp_buf_big_file_threshold = 1024 * 1024
 
@@ -80,7 +79,6 @@ vim.opt.ttyfast = true
 vim.o.switchbuf = "usetab"
 
 -- undo
-vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath "data" .. "/undo"
 
 vim.opt.path = ".,**"
@@ -93,4 +91,3 @@ vim.cmd [[let &t_Ce = "\e[4:0m"]]
 vim.opt.inccommand = "split"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-

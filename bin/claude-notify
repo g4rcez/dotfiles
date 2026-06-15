@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+title="${1:-Claude Code}"
+message="${2:-Task needs attention}"
+
+if command -v terminal-notifier >/dev/null 2>&1; then
+  terminal-notifier -title "$title" -message "$message"
+elif command -v osascript >/dev/null 2>&1; then
+  osascript -e "display notification \"${message//"/\\"}\" with title \"${title//"/\\"}\""
+else
+  printf '%s: %s\n' "$title" "$message"
+fi

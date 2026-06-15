@@ -28,6 +28,7 @@ alias ls="lsd"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
+alias dotfiles.doctor='dotfiles-doctor'
 alias vdir='vdir --color=auto'
 alias wtf='pwd'
 alias ll="ls -l"
@@ -157,7 +158,7 @@ function fs() {
     else
         local arg=-sh
     fi
-    if [[ -n "$@" ]]; then
+    if (($# > 0)); then
         du $arg -- "$@"
     else
         du $arg .[^.]* ./*
@@ -211,9 +212,75 @@ function psgrep() {
     ps aux | grep -i "$1" | grep -v grep
 }
 
+function rm:dry-run() {
+    emulate -L zsh
+    if (($# == 0)); then
+        print -u2 -r -- "Usage: rm:dry-run PATH [...]"
+        return 2
+    fi
+
+    local target
+    for target in "$@"; do
+        if [[ -e "$target" || -L "$target" ]]; then
+            print -r -- "would remove: $target"
+        else
+            print -r -- "missing: $target"
+        fi
+    done
+}
+
+function rm:trash() {
+    emulate -L zsh
+    if (($# == 0)); then
+        print -u2 -r -- "Usage: rm:trash PATH [...]"
+        return 2
+    fi
+
+    if (($ + commands[trash])); then
+        command trash "$@"
+    else
+        local trash_dir="$HOME/.Trash"
+        [[ -d "$trash_dir" ]] || mkdir -p "$trash_dir"
+        command mv -v -- "$@" "$trash_dir/"
+    fi
+}
+
+function rm:safe() {
+    emulate -L zsh
+    if (($# == 0)); then
+        print -u2 -r -- "Usage: rm:safe PATH [...]"
+        return 2
+    fi
+
+    rm:dry-run "$@"
+    print -r -- "Use rm:trash to move these paths to Trash, or command rm to delete permanently."
+}
+
+function _rm_safety_prompt() {
+    emulate -L zsh
+    [[ -o interactive ]] || return 0
+    [[ "$1" == rm\ * || "$1" == rm || "$1" == command\ rm\ * ]] || return 0
+
+    local state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
+    local today
+    today="$(date +%F)"
+    local state_file="$state_dir/rm-count-$today"
+    mkdir -p "$state_dir"
+
+    local count=0
+    [[ -f "$state_file" ]] && count="$(<"$state_file")"
+    count=$((count + 1))
+    print -r -- "$count" >|"$state_file"
+
+    if ((count == 5)); then
+        print -P "%F{yellow}rm used $count times today. Consider rm:dry-run, rm:trash, or a repo-local cleanup script.%f"
+    fi
+}
+preexec_functions+=_rm_safety_prompt
+
 function killnodemodules() {
-    find . -name 'node_modules' -type d -prune -exec rm -rf {} + 2>/dev/null
-    echo "cleaned node_modules"
+    find . -name 'node_modules' -type d -prune -print
+    print -r -- "Use rm:trash on selected paths, or run: find . -name 'node_modules' -type d -prune -exec command rm -rf {} +"
 }
 
 function npm.kill() {

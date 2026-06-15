@@ -357,13 +357,6 @@ return {
             },
             -- Grep
             {
-                "<leader>sb",
-                function()
-                    Snacks.picker.lines()
-                end,
-                desc = "Buffer Lines",
-            },
-            {
                 "<leader>sB",
                 function()
                     Snacks.picker.grep_buffers()
@@ -522,7 +515,7 @@ return {
             {
                 "<leader>sR",
                 function()
-                    Snacks.picker.ressume()
+                    Snacks.picker.resume()
                 end,
                 desc = "Resume",
             },

@@ -44,7 +44,6 @@ export default defineConfig({
         "~/.config/aerospace": file("config/aerospace"),
         "~/.config/alacritty": file("config/alacritty"),
         "~/.config/flameshot": file("config/flameshot"),
-        "~/.claude/hooks/notify.sh": file("bin/claude-notify"),
         "~/.config/starship.toml": file("config/starship.toml"),
         "~/Library/Application Support/Code/User/keybindings.json": file(
             "./config/vscode/keybindings.json",

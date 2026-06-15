@@ -1,10 +1,10 @@
 return {
-    { "nvim-neotest/nvim-nio" },
-    { opts = {}, "theHamsta/nvim-dap-virtual-text" },
-    { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
+    { "nvim-neotest/nvim-nio", lazy = true },
+    { opts = {}, "theHamsta/nvim-dap-virtual-text", lazy = true },
+    { "rcarriga/nvim-dap-ui", lazy = true, dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
     {
         "jay-babu/mason-nvim-dap.nvim",
-        dependencies = "mason.nvim",
+        dependencies = "mason-org/mason.nvim",
         cmd = { "DapInstall", "DapUninstall" },
         opts = { handlers = {}, ensure_installed = {}, automatic_installation = true },
         config = function() end,

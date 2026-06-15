@@ -1,6 +1,38 @@
 local keymap = vim.keymap
 local severity = vim.diagnostic.severity
 
+local function restart_lsp_clients(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_clients { bufnr = bufnr }
+    if vim.tbl_isempty(clients) then
+        vim.notify("No LSP clients attached to this buffer", vim.log.levels.WARN)
+        return
+    end
+
+    for _, client in ipairs(clients) do
+        vim.lsp.stop_client(client.id, true)
+    end
+
+    vim.defer_fn(function()
+        if vim.api.nvim_buf_is_valid(bufnr) then
+            vim.cmd "silent! edit"
+        end
+    end, 300)
+end
+
+local function lsp_client_names(bufnr)
+    return vim
+        .iter(vim.lsp.get_clients { bufnr = bufnr or vim.api.nvim_get_current_buf() })
+        :map(function(client)
+            return client.name
+        end)
+        :totable()
+end
+
+if vim.lsp.log and vim.lsp.log.set_level then
+    vim.lsp.log.set_level(vim.log.levels.WARN)
+end
+
 vim.diagnostic.config {
     severity_sort = true,
     float = { border = "single", source = "if_many" },
@@ -40,8 +72,31 @@ vim.filetype.add {
     },
 }
 
+vim.api.nvim_create_user_command("LspRestartBuffer", function()
+    restart_lsp_clients()
+end, { desc = "Restart LSP clients attached to the current buffer" })
+
+vim.api.nvim_create_user_command("LspClients", function()
+    local names = lsp_client_names()
+    vim.notify(vim.tbl_isempty(names) and "No LSP clients attached" or ("LSP clients: " .. table.concat(names, ", ")))
+end, { desc = "Show LSP clients attached to the current buffer" })
+
+vim.api.nvim_create_user_command("LspLog", function()
+    vim.cmd("tabedit " .. vim.fn.fnameescape(vim.lsp.get_log_path()))
+end, { desc = "Open the Neovim LSP log" })
+
+vim.api.nvim_create_autocmd("LspDetach", {
+    group = vim.api.nvim_create_augroup("UserLspDetach", { clear = true }),
+    callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if client then
+            vim.notify(("LSP detached: %s"):format(client.name), vim.log.levels.INFO)
+        end
+    end,
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+    group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
     callback = function(ev)
         local opts = { buffer = ev.buf, silent = true }
         opts.desc = "Show LSP references"
@@ -88,8 +143,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
             vim.lsp.buf.hover { border = "single", focusable = true, wrap = true }
         end, opts)
 
-        opts.desc = "Restart LSP"
-        keymap.set("n", "<leader>rs", ":lsp restart<CR>", opts)
+        opts.desc = "Restart buffer LSP clients"
+        keymap.set("n", "<leader>rs", function()
+            restart_lsp_clients(ev.buf)
+        end, opts)
+
+        opts.desc = "Show attached LSP clients"
+        keymap.set("n", "<leader>ci", "<cmd>LspClients<cr>", opts)
+
+        opts.desc = "Open LSP log"
+        keymap.set("n", "<leader>cl", "<cmd>LspLog<cr>", opts)
 
         opts.desc = "Toggle inlay hints"
         keymap.set("n", "<leader>th", function()
@@ -97,7 +160,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, opts)
 
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, ev.buf) then
+        if
+            client
+            and not vim.b[ev.buf].lsp_document_highlight_enabled
+            and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, ev.buf)
+        then
+            vim.b[ev.buf].lsp_document_highlight_enabled = true
             local highlight_augroup = vim.api.nvim_create_augroup("lsp-document-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
                 buffer = ev.buf,
@@ -110,8 +178,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 callback = vim.lsp.buf.clear_references,
             })
             vim.api.nvim_create_autocmd("LspDetach", {
-                group = vim.api.nvim_create_augroup("lsp-document-detach", { clear = true }),
+                group = vim.api.nvim_create_augroup("lsp-document-detach", { clear = false }),
+                buffer = ev.buf,
+                once = true,
                 callback = function(ev2)
+                    vim.b[ev2.buf].lsp_document_highlight_enabled = false
                     vim.lsp.buf.clear_references()
                     vim.api.nvim_clear_autocmds { group = "lsp-document-highlight", buffer = ev2.buf }
                 end,
@@ -123,9 +194,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+local has_blink, blink = pcall(require, "blink.cmp")
+if has_blink then
+    capabilities = blink.get_lsp_capabilities(capabilities)
+end
+
+-- Load nvim-lspconfig's built-in server definitions before enabling servers.
+pcall(require, "lspconfig")
+
 vim.lsp.config("kulala_ls", { capabilities = capabilities })
 vim.lsp.config("css_variables", { capabilities = capabilities })
 vim.lsp.config("docker_compose_language_service", { capabilities = capabilities })
+vim.lsp.config("denols", {
+    capabilities = capabilities,
+    root_markers = { "deno.json", "deno.jsonc" },
+})
 vim.lsp.config("html", {
     filetypes = { "html" },
     capabilities = capabilities,
@@ -200,7 +283,7 @@ vim.lsp.config("tailwindcss", {
         "svelte",
         "astro",
     },
-    root_dir = vim.fs.dirname(vim.fs.find({
+    root_markers = {
         "tailwind.config.js",
         "tailwind.config.cjs",
         "tailwind.config.mjs",
@@ -211,7 +294,7 @@ vim.lsp.config("tailwindcss", {
         "postcss.config.ts",
         "package.json",
         ".git",
-    }, { upward = true })[1]),
+    },
     filetypes = {
         "astro",
         "astro-markdown",
@@ -295,6 +378,8 @@ vim.lsp.config("tailwindcss", {
 vim.lsp.config("vtsls", {
     capabilities = capabilities,
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+    root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+    init_options = { hostInfo = "neovim" },
     before_init = function(_, config)
         -- Prefer yarn v4 PnP SDK, fall back to node_modules
         local root = config.root_dir
@@ -311,7 +396,6 @@ vim.lsp.config("vtsls", {
     end,
     settings = {
         refactor_auto_rename = true,
-        init_options = { hostInfo = "neovim" },
         vtsls = { autoUseWorkspaceTsdk = true },
         experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
         typescript = {

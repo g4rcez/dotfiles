@@ -1,9 +1,6 @@
 local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" }
 
 return {
-    "tpope/vim-sensible",
-    "tpope/vim-surround",
-    "tpope/vim-repeat",
     "editorconfig/editorconfig-vim",
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
@@ -23,8 +20,8 @@ return {
         },
     },
     {
-        lazy = false,
         "tronikelis/ts-autotag.nvim",
+        ft = fileTypes,
         opts = {
             disable_in_macro = true,
             auto_close = { enabled = true },
@@ -58,25 +55,25 @@ return {
         opts = {},
     },
     {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-        opts = { check_ts = true },
-    },
-    {
         cond = not require("config.vscode").isVscode(),
         opts = {},
+        event = { "BufReadPost", "BufNewFile" },
         "kevinhwang91/nvim-ufo",
         dependencies = { "kevinhwang91/promise-async" },
     },
     {
         cond = not require("config.vscode").isVscode(),
         "olrtg/nvim-emmet",
-        config = function()
-            vim.keymap.set({ "n", "v" }, "<leader>ce", function()
-                require("nvim-emmet").wrap_with_abbreviation()
-            end, { desc = "[e]mmet" })
-        end,
+        keys = {
+            {
+                "<leader>ce",
+                function()
+                    require("nvim-emmet").wrap_with_abbreviation()
+                end,
+                mode = { "n", "v" },
+                desc = "[e]mmet",
+            },
+        },
     },
     {
         "axelvc/template-string.nvim",
@@ -93,6 +90,7 @@ return {
     },
     {
         "brenoprata10/nvim-highlight-colors",
+        event = { "BufReadPost", "BufNewFile" },
         opts = {
             enable_hex = true,
             enable_hsl = true,

@@ -2,7 +2,7 @@ return {
     "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     cond = not require("config.vscode").isVscode(),
-    lazy = false,
+    cmd = "Oil",
     ---@module 'oil'
     ---@type oil.SetupOpts
     opts = {
