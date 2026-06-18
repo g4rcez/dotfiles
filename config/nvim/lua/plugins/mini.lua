@@ -1,6 +1,9 @@
+local is_vscode = require("config.vscode").isVscode()
+
 return {
     {
         "nvim-mini/mini.pairs",
+        enabled = not is_vscode,
         opts = {
             markdown = true,
             skip_ts = { "string" },
@@ -42,9 +45,14 @@ return {
     {
         "nvim-mini/mini.nvim",
         config = function()
-            require("mini.diff").setup()
             require("mini.ai").setup { n_lines = 500 }
             require("mini.surround").setup()
+
+            if is_vscode then
+                return
+            end
+
+            require("mini.diff").setup()
             require("mini.git").setup()
             require("mini.colors").setup()
             require("mini.cursorword").setup()

@@ -1,3 +1,5 @@
+local vscode = require "config.vscode"
+
 local function createMapper()
     local M = {}
     M.DEFAULT_OPTS = { noremap = true, silent = true }
@@ -74,9 +76,11 @@ bind.normal("<leader>co", function()
     }
 end, { desc = "[c]ode [o]rganizeImports" })
 
-bind.normal("<leader>tm", function()
-    require("mini.map").toggle()
-end, { desc = "[t]oggle [m]inimap", icon = "" })
+if not vscode.isVscode() then
+    bind.normal("<leader>tm", function()
+        require("mini.map").toggle()
+    end, { desc = "[t]oggle [m]inimap", icon = "" })
+end
 
 bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
 bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
@@ -84,38 +88,42 @@ bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", 
 bind.normal("<C-h>", "<cmd>bprevious<cr>", bind.DEFAULT_OPTS)
 bind.normal("<C-l>", "<cmd>bnext<cr>", bind.DEFAULT_OPTS)
 bind.normal("<leader>br", "<CMD>e#<CR>", { desc = "Buffer reopen last", icon = "" })
-bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
-bind.normal("<leader>bo", function()
-    require("snacks.bufdelete").other()
-end, { desc = "Close all except current", icon = "" })
-bind.normal("<leader>bh", function()
-    require("treesitter-context").go_to_context(vim.v.count1)
-end, { silent = true, desc = "[h]eader of context" })
+if not vscode.isVscode() then
+    bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
+    bind.normal("<leader>bo", function()
+        require("snacks.bufdelete").other()
+    end, { desc = "Close all except current", icon = "" })
+    bind.normal("<leader>bh", function()
+        require("treesitter-context").go_to_context(vim.v.count1)
+    end, { silent = true, desc = "[h]eader of context" })
 
-bind.normal("<leader>g=", function()
-    require("mini.diff").toggle_overlay(0)
-end, { desc = "Git diff" })
+    bind.normal("<leader>g=", function()
+        require("mini.diff").toggle_overlay(0)
+    end, { desc = "Git diff" })
 
-bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
-bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
-bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
-bind.normal("<leader>se", function()
-    require("mini.files").open(vim.api.nvim_buf_get_name(0))
-end, { desc = "Mini files" })
-bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
+    bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
+    bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
+    bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
+    bind.normal("<leader>se", function()
+        require("mini.files").open(vim.api.nvim_buf_get_name(0))
+    end, { desc = "Mini files" })
+    bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
+end
 bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
 
 local function buf_abs()
     return vim.api.nvim_buf_get_name(0)
 end
 
-bind.normal("<leader>um", function()
-    Snacks.dim.disable()
-end, { desc = "Disable dim" })
+if not vscode.isVscode() then
+    bind.normal("<leader>um", function()
+        Snacks.dim.disable()
+    end, { desc = "Disable dim" })
 
-bind.normal("<leader>uf", function()
-    Snacks.dim.enable()
-end, { desc = "Enable dim" })
+    bind.normal("<leader>uf", function()
+        Snacks.dim.enable()
+    end, { desc = "Enable dim" })
+end
 
 bind.normal("<leader>uh", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
@@ -143,17 +151,19 @@ end, { desc = "[c]ode [y]ank path" })
 --     }
 -- end, { desc = "Insert @file path at cursor" })
 
-bind.normal("zR", function()
-    require("ufo").openAllFolds()
-end)
+if not vscode.isVscode() then
+    bind.normal("zR", function()
+        require("ufo").openAllFolds()
+    end)
 
-bind.normal("zM", function()
-    require("ufo").closeAllFolds()
-end)
+    bind.normal("zM", function()
+        require("ufo").closeAllFolds()
+    end)
 
-bind.normal("zm", function()
-    require("ufo").closeFoldsWith()
-end)
+    bind.normal("zm", function()
+        require("ufo").closeFoldsWith()
+    end)
+end
 
 bind.normal("zo", function()
     local line = vim.fn.line "."

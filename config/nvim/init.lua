@@ -1,4 +1,6 @@
 vim.loader.enable(true)
+local vscode = require "config.vscode"
+
 require "config.performance"
 require "config.options"
 require "config.lazy"
@@ -27,6 +29,9 @@ require("lazy").setup {
 }
 
 require "config.autocmds"
-require "config.lsp"
 require "config.keymaps"
-require "config.diagnostics"
+
+if not vscode.isVscode() then
+    require "config.lsp"
+    require "config.diagnostics"
+end
