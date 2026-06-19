@@ -8,8 +8,8 @@ return {
                 options = {
                     mode = "buffers",
                     diagnostics = "nvim_lsp",
-                    separator_style = "slant",
-                    indicator = { style = "icon", icon = "▎" },
+                    separator_style = "thin",
+                    indicator = { style = "icon", icon = " " },
                     diagnostics_indicator = function(count, level)
                         local icons = { error = " ", warning = " " }
                         return (icons[level] or "") .. count

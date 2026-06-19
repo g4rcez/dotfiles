@@ -1,21 +1,23 @@
 # vim: ft=ghostty
-font-size = 16
+font-size = 17
+adjust-cell-height = 60%
 font-thicken = true
 font-thicken-strength = 120
 window-padding-x = 2
 bold-is-bright = true
 shell-integration = detect
-adjust-cell-height = 60%
 adjust-cell-width = 2%
 theme = Catppuccin Mocha
 scrollback-limit = 100000
 macos-option-as-alt = true
 mouse-hide-while-typing = true
-window-colorspace = display-p3
-custom-shader-animation = always
 macos-titlebar-style = tabs
 font-family = "JetBrainsMono Nerd Font"
 quick-terminal-animation-duration = 0.5
+window-decoration = auto
+window-theme = ghostty
+window-colorspace = display-p3
+macos-titlebar-style = transparent
 
 # keybind
 keybind = global:super+shift+zero=toggle_quick_terminal

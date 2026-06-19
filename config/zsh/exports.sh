@@ -103,7 +103,7 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=""
-if (( $+commands[nvim] )); then
+if (($+commands[nvim])); then
     export EDITOR="nvim"
     export MANPAGER="nvim +Man!"
     export PAGER="nvim"
@@ -120,11 +120,11 @@ if [ -x "$(command -v podman)" ]; then
 fi
 #####################################################################################
 ## ai
-unset ANTHROPIC_API_KEY  # force RTK proxy auth routing — do not restore
+unset ANTHROPIC_API_KEY # force RTK proxy auth routing — do not restore
 export ENABLE_LSP_TOOL=1
-export AI_CLI_NAME="gemini"
-export AI_CLI_MODEL="gemini-3-flash-preview"
-export AI_QUERY_COMMAND="gemini --model gemini-3-flash-preview -p"
+export AI_CLI_NAME="codex"
+export AI_CLI_MODEL="gpt-5.3-codex-spark"
+export AI_QUERY_COMMAND="codex -m gpt-5.3-codex-spark"
 export USE_BUILTIN_RIPGREP=0
 
 export AICOMMIT_EXCLUDES=(

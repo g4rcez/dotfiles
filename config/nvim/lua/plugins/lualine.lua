@@ -50,9 +50,9 @@ return {
                         end,
                     },
                     {
-                        "filename",
-                        path = 1,
-                        symbols = { modified = " ●", readonly = "  ", unnamed = " 󰈚", newfile = " 󰎔" },
+                        require("config.breadcrumbs").statusline,
+                        color = "Normal",
+                        padding = { left = 0, right = 0 },
                     },
                     {
                         function()
