@@ -302,13 +302,36 @@ function commitwithai {
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         EXCLUDE_ARGS+=(":(exclude)$f")
     done
+
     local HINT="${*}"
-    local PROMPT="$(cat $DOTFILES/prompts/aicommit-script.txt)"
+    local PROMPT
+    PROMPT="$(<"$DOTFILES/prompts/aicommit-script.txt")"
     if [[ -n "$HINT" ]]; then
         PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
     fi
 
-    COMMIT_MESSAGE=$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
+    local DIFF
+    DIFF="$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")"
+
+    if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
+        local OUT_FILE ERR_FILE RC
+        OUT_FILE="$(mktemp)"
+        ERR_FILE="$(mktemp)"
+        printf '%s\n\n%s\n' "$PROMPT" "$DIFF" \
+            | codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
+        RC=$?
+        if (( RC != 0 )); then
+            cat "$ERR_FILE" >&2
+            rm -f "$OUT_FILE" "$ERR_FILE"
+            return "$RC"
+        fi
+        COMMIT_MESSAGE="$(<"$OUT_FILE")"
+        rm -f "$OUT_FILE" "$ERR_FILE"
+    else
+        COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
+    fi
+
+    COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | sed 's/# //1')"
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
