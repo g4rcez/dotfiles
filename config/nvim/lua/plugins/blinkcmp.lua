@@ -33,6 +33,7 @@ return {
         version = "1.*",
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
+            "saghen/blink.lib",
             "onsails/lspkind.nvim",
             "nvim-lua/plenary.nvim",
             "Kaiser-Yang/blink-cmp-git",
@@ -53,7 +54,7 @@ return {
                 implementation = "rust",
                 sorts = { "score", "exact", "sort_text", "label" },
             },
-            signature = { enabled = true, window = { border = "single" } },
+            signature = { enabled = false, window = { border = "single" } },
             appearance = { nerd_font_variant = "mono" },
             cmdline = {
                 keymap = { preset = "default" },
@@ -86,7 +87,10 @@ return {
                     },
                 },
                 menu = {
-                    border = "single",
+                    min_width = 40,
+                    auto_show = true,
+                    border = "rounded",
+                    auto_show_delay_ms = 200,
                     draw = { treesitter = { "lsp" }, padding = 1 },
                 },
                 documentation = {
@@ -110,7 +114,7 @@ return {
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
-                default = { "lsp", "snippets", "path", "dadbod", "buffer" },
+                default = { "lsp", "path", "dadbod", "buffer" },
                 per_filetype = {
                     lua = { inherit_defaults = true, "lazydev" },
                     txt = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },

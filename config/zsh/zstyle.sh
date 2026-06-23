@@ -20,19 +20,19 @@ setopt pushdminus
 ############################## setops #################################
 # Reference: https://zsh.sourceforge.io/Doc/Release/Options.html
 setopt ALWAYS_TO_END
-setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
-setopt AUTO_MENU            # Automatically list choices on ambiguous completion.
+setopt AUTO_LIST # Automatically list choices on ambiguous completion.
+setopt AUTO_MENU # Automatically list choices on ambiguous completion.
 setopt AUTO_PARAM_SLASH
 setopt COMPLETE_IN_WORD
-setopt MENU_COMPLETE        # Automatically highlight first element of completion menu
+setopt MENU_COMPLETE # Automatically highlight first element of completion menu
 setopt PROMPT_SUBST
-setopt CDABLE_VARS        # Like AUTO_CD, but for named directories
+setopt CDABLE_VARS # Like AUTO_CD, but for named directories
 setopt INTERACTIVE_COMMENTS
 setopt COMBINING_CHARS
 setopt CORRECT
 
 ############################## key Bind #################################
-function copy-command() { 
+function copy-command() {
     echo -n $BUFFER | pbcopy
     zle -m 'Copied to clipboard'
 }
@@ -44,7 +44,6 @@ bindkey "^Xc" copy-command
 color_prompt=yes
 force_color_prompt=yes
 _comp_options+=(globdots)
-
 
 ############################## zstyle #################################
 zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
@@ -73,6 +72,3 @@ zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:alias-expension:*' completer _expand_alias
 zstyle ':completion:complete:*:options' sort false
-
-############################## syntax-highlighting #################################
-source $DOTFILES/config/zsh/syntax-highlighting.zsh

@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="${1:-.}"
+dry_run=0
+full=0
+
+usage() {
+  cat <<'EOF'
+Usage: repo-check [options] [repo]
+
+Run the smallest canonical validation checklist for a repository.
+
+Options:
+  --dry-run     Print detected commands without running them
+  --full        Include heavier checks when available, such as build and e2e tests
+  -h, --help    Show this help
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run)
+      dry_run=1
+      shift
+      ;;
+    --full)
+      full=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --*)
+      echo "repo-check: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      repo="$1"
+      shift
+      ;;
+  esac
+done
+
+if [[ ! -d "$repo" ]]; then
+  echo "repo-check: not a directory: $repo" >&2
+  exit 1
+fi
+
+repo="$(cd "$repo" && pwd)"
+cd "$repo"
+
+if git rev-parse --show-toplevel >/dev/null 2>&1; then
+  repo="$(git rev-parse --show-toplevel)"
+  cd "$repo"
+fi
+
+commands=()
+
+add_cmd() {
+  commands+=("$1")
+}
+
+has_command() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+package_manager() {
+  if [[ -f pnpm-lock.yaml ]]; then
+    echo pnpm
+  elif [[ -f bun.lockb || -f bun.lock ]]; then
+    echo bun
+  elif [[ -f yarn.lock ]]; then
+    echo yarn
+  else
+    echo npm
+  fi
+}
+
+package_scripts() {
+  node -e '
+const fs = require("fs");
+try {
+  const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+  for (const script of Object.keys(pkg.scripts || {})) console.log(script);
+} catch {
+  process.exit(1);
+}
+' 2>/dev/null || true
+}
+
+has_script() {
+  local script="$1"
+  printf '%s\n' "$scripts" | grep -Fxq "$script"
+}
+
+add_package_script() {
+  local script="$1"
+  has_script "$script" || return 0
+  add_cmd "$pm run $script"
+}
+
+if [[ -f package.json ]]; then
+  if ! has_command node; then
+    echo "repo-check: package.json found, but node is unavailable" >&2
+    exit 1
+  fi
+
+  pm="$(package_manager)"
+  if ! has_command "$pm"; then
+    echo "repo-check: package manager '$pm' not found" >&2
+    exit 1
+  fi
+
+  scripts="$(package_scripts)"
+  if has_script check; then
+    add_package_script check
+  else
+    add_package_script format:check
+    add_package_script lint
+    add_package_script typecheck
+    add_package_script test
+    if [[ "$full" == "1" ]]; then
+      add_package_script build
+      add_package_script test:e2e
+    elif ! has_script typecheck; then
+      add_package_script build
+    fi
+  fi
+fi
+
+if [[ -f Cargo.toml ]] && has_command cargo; then
+  add_cmd "cargo fmt --check"
+  if has_command rustup && rustup component list --installed 2>/dev/null | grep -Eq '^clippy'; then
+    add_cmd "cargo clippy --all-targets --all-features -- -D warnings"
+  fi
+  add_cmd "cargo test"
+fi
+
+if [[ -f go.mod ]] && has_command go; then
+  add_cmd "go test ./..."
+fi
+
+if [[ -f pyproject.toml ]]; then
+  if has_command uv && [[ -f uv.lock ]]; then
+    add_cmd "uv run ruff check ."
+    add_cmd "uv run pytest"
+  elif has_command poetry; then
+    add_cmd "poetry run pytest"
+  elif has_command pytest; then
+    add_cmd "pytest"
+  fi
+fi
+
+if [[ -f config/zsh/zshrc && -x bin/dotfiles-doctor ]]; then
+  add_cmd "bash bin/dotfiles-doctor"
+  add_cmd "zsh -n config/zsh/zshrc config/zsh/alias.sh config/zsh/exports.sh config/zsh/git.sh config/zsh/zstyle.sh"
+fi
+
+printf 'repo-check: %s\n' "$repo"
+
+if [[ "${#commands[@]}" -eq 0 ]]; then
+  echo "repo-check: no known checks detected"
+  exit 1
+fi
+
+for cmd in "${commands[@]}"; do
+  if [[ "$dry_run" == "1" ]]; then
+    printf 'dry-run: %s\n' "$cmd"
+  else
+    printf '\n> %s\n' "$cmd"
+    bash -lc "$cmd"
+  fi
+done

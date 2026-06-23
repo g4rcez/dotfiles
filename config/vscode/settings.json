@@ -15,9 +15,9 @@
     "[nginx]": { "editor.defaultFormatter": "raynigon.nginx-formatter" },
     "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "editor.accessibilitySupport": "off",
     "editor.defaultColorDecorators": "auto",

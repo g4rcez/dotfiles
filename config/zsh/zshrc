@@ -26,10 +26,9 @@ zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
 znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
 (($+commands[starship])) && eval "$(starship init zsh)"
+source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
 PLUGINS=(
   "MichaelAquilina/zsh-auto-notify"
-  "hlissner/zsh-autopair"
-  "wfxr/forgit"
   "zsh-users/zsh-autosuggestions"
   "zsh-users/zsh-completions"
   "zsh-users/zsh-history-substring-search"
@@ -42,16 +41,35 @@ for plugin in $PLUGINS; do
     znap clone $plugin
   fi
 done
-znap prompt
+
+function _zsh_lazy_znap_source() {
+  local plugin="$1"
+  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+    znap source "$plugin"
+  else
+    znap clone "$plugin" && znap source "$plugin"
+  fi
+}
+
+if [[ -o interactive && -t 0 && -t 1 ]]; then
+  autoload -Uz add-zle-hook-widget
+  function _zsh_lazy_load_autopair() {
+    add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
+    _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
+  }
+  add-zle-hook-widget line-init _zsh_lazy_load_autopair
+fi
 ##############################################################################################################
 ## source files (cached with znap eval for faster startup)
 fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
-(($+commands[gh])) && eval "$(gh completion -s zsh)"
-(($+commands[zoxide])) && eval "$(zoxide init zsh)"
-(($+commands[direnv])) && eval "$(direnv hook zsh)"
-(($+commands[tv])) && eval "$(tv init zsh)"
-(($+commands[fzf])) && eval "$(fzf --zsh)"
-(($+commands[omp])) && eval "$(omp completions zsh)"
+(($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
+(($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
+(($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
+(($+commands[tv])) && znap eval tv-init 'tv init zsh'
+if [[ -o interactive && -t 0 && -t 1 ]]; then
+  (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
+fi
+(($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 
 local -a SOURCE=(
   "$HOME/.secrets.sh"
@@ -76,14 +94,6 @@ done
 
 ##############################################################################################################
 ## fpath hooks
-znap fpath _cargo "rustup completions zsh cargo"
-znap fpath _deno "deno completions zsh"
-znap fpath _mise "mise completion zsh"
-znap fpath _npm "npm completion"
-znap fpath _pnpm "pnpm completion zsh"
-znap fpath _rustup "rustup completions zsh"
-znap fpath _opencode "opencode completion"
-
 autoload -Uz select-word-style
 select-word-style normal
 zstyle ':zle:*' word-style unspecified

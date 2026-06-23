@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+roots="$HOME/dotfiles,$HOME/Documents,$HOME/code,$HOME/projects,$HOME/work,$HOME/dev,$HOME/src"
+limit=20
+max_depth=4
+show_all=0
+
+usage() {
+  cat <<'EOF'
+Usage: workstate [options]
+
+Print dirty git repos ranked by changed-file count.
+
+Options:
+  --roots "dir1,dir2"  Comma-separated roots to scan
+  --limit N            Max repos to print (default: 20)
+  --max-depth N        Directory depth for repo discovery (default: 4)
+  --all                Include clean repos
+  -h, --help           Show this help
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --roots)
+      roots="${2:-}"
+      shift 2
+      ;;
+    --limit)
+      limit="${2:-}"
+      shift 2
+      ;;
+    --max-depth)
+      max_depth="${2:-}"
+      shift 2
+      ;;
+    --all)
+      show_all=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "workstate: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ ! "$limit" =~ ^[0-9]+$ || "$limit" -lt 1 ]]; then
+  echo "workstate: --limit must be a positive integer" >&2
+  exit 2
+fi
+
+if [[ ! "$max_depth" =~ ^[0-9]+$ || "$max_depth" -lt 1 ]]; then
+  echo "workstate: --max-depth must be a positive integer" >&2
+  exit 2
+fi
+
+csv_to_lines() {
+  local value="$1"
+  local item
+  IFS=',' read -r -a items <<<"$value"
+  for item in "${items[@]}"; do
+    item="${item/#\~/$HOME}"
+    [[ -n "$item" ]] && printf '%s\n' "$item"
+  done
+}
+
+sanitize_field() {
+  tr '\t\n' '  ' | sed 's/[[:space:]][[:space:]]*/ /g; s/^ //; s/ $//'
+}
+
+branch_name() {
+  local repo="$1"
+  local branch
+  branch="$(git -C "$repo" branch --show-current 2>/dev/null || true)"
+  if [[ -z "$branch" ]]; then
+    branch="detached:$(git -C "$repo" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+  fi
+  printf '%s' "$branch" | sanitize_field
+}
+
+repo_rows() {
+  local repos_file="$1"
+  local repo status changed last_ts branch last_commit clean_marker
+
+  while IFS= read -r repo; do
+    [[ -d "$repo" ]] || continue
+    status="$(git -C "$repo" status --short --untracked-files=normal 2>/dev/null || true)"
+    changed="$(printf '%s\n' "$status" | sed '/^$/d' | wc -l | tr -d ' ')"
+    [[ "$show_all" == "1" || "$changed" != "0" ]] || continue
+
+    last_ts="$(git -C "$repo" log -1 --format='%ct' 2>/dev/null || echo 0)"
+    branch="$(branch_name "$repo")"
+    last_commit="$(git -C "$repo" log -1 --format='%cr %h %s' 2>/dev/null | sanitize_field || true)"
+    clean_marker="dirty"
+    [[ "$changed" == "0" ]] && clean_marker="clean"
+
+    printf '%08d\t%010d\t%s\t%s\t%s\t%s\n' \
+      "$changed" "$last_ts" "$repo" "$branch" "${last_commit:-no commits}" "$clean_marker"
+  done <"$repos_file"
+}
+
+tmp_repos="$(mktemp)"
+tmp_rows="$(mktemp)"
+trap 'rm -f "$tmp_repos" "$tmp_rows"' EXIT
+
+while IFS= read -r root; do
+  [[ -d "$root" ]] || continue
+  find "$root" -maxdepth "$max_depth" \
+    \( -path '*/.cache' -o -path '*/.next' -o -path '*/.turbo' -o -path '*/dist' -o -path '*/node_modules' \) -prune -o \
+    \( \( -type d -name .git \) -o \( -type f -name .git \) \) -print 2>/dev/null |
+    while IFS= read -r git_marker; do
+      repo="$(dirname "$git_marker")"
+      git -C "$repo" rev-parse --show-toplevel 2>/dev/null || true
+    done
+done < <(csv_to_lines "$roots") | sort -u >"$tmp_repos"
+
+repo_rows "$tmp_repos" | sort -t $'\t' -k1,1nr -k2,2nr | head -n "$limit" >"$tmp_rows"
+
+if [[ ! -s "$tmp_rows" ]]; then
+  echo "No dirty repositories found."
+  exit 0
+fi
+
+printf '%-7s %-28s %-56s %s\n' "CHANGED" "BRANCH" "REPO" "LAST COMMIT"
+printf '%-7s %-28s %-56s %s\n' "-------" "------" "----" "-----------"
+while IFS=$'\t' read -r changed _last_ts repo branch last_commit clean_marker; do
+  display_repo="$repo"
+  [[ "$repo" == "$HOME"* ]] && display_repo="~${repo#$HOME}"
+  if [[ "$clean_marker" == "clean" ]]; then
+    changed="0"
+  else
+    changed="$((10#$changed))"
+  fi
+  printf '%-7s %-28.28s %-56.56s %s\n' "$changed" "$branch" "$display_repo" "$last_commit"
+done <"$tmp_rows"

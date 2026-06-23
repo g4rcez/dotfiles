@@ -311,3 +311,32 @@ function worktree() {
         ;;
     esac
 }
+
+_killport() {
+    local -a ports=()
+    local port
+    while IFS= read -r port; do
+        [[ -n "$port" ]] && ports+=("$port")
+    done < <(lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | awk 'NR > 1 { n = split($9, a, ":"); if (a[n] ~ /^[0-9]+$/) print a[n] ":" $1 }' | sort -u)
+
+    _describe 'listening port' ports
+}
+
+_process_names() {
+    local -a processes=()
+    local process
+    while IFS= read -r process; do
+        [[ -n "$process" ]] && processes+=("$process:$process")
+    done < <(ps -axo comm= 2>/dev/null | sed 's#.*/##' | sort -u)
+
+    _describe 'process' processes
+}
+
+_cdm() {
+    _arguments '1:directory:_directories'
+}
+
+compdef _files extract fs dotenv cpv rm:dry-run rm:trash rm:safe
+compdef _cdm cdm
+compdef _killport killport
+compdef _process_names listening psgrep

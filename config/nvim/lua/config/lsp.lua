@@ -21,8 +21,7 @@ local function restart_lsp_clients(bufnr)
 end
 
 local function lsp_client_names(bufnr)
-    return vim
-        .iter(vim.lsp.get_clients { bufnr = bufnr or vim.api.nvim_get_current_buf() })
+    return vim.iter(vim.lsp.get_clients { bufnr = bufnr or vim.api.nvim_get_current_buf() })
         :map(function(client)
             return client.name
         end)
@@ -36,8 +35,9 @@ end
 vim.diagnostic.config {
     severity_sort = true,
     float = { border = "single", source = "if_many" },
-    underline = { severity = vim.diagnostic.severity.WARN },
+    underline = true, -- { severity = vim.diagnostic.severity.WARN },
     diagnostics = { underline = true, update_in_insert = true },
+    update_in_insert = true,
     signs = {
         text = {
             [severity.ERROR] = " ",
@@ -47,7 +47,7 @@ vim.diagnostic.config {
         },
     },
     virtual_text = {
-        spacing = 2,
+        spacing = 4,
         source = true,
         format = function(diagnostic)
             local diagnostic_message = {
@@ -346,6 +346,12 @@ vim.lsp.config("tailwindcss", {
     },
     settings = {
         tailwindCSS = {
+            hovers = true,
+            validate = true,
+            completion = true,
+            codeActions = true,
+            suggestions = true,
+            colorDecorators = true,
             classAttributes = {
                 "class",
                 "className",
@@ -364,15 +370,8 @@ vim.lsp.config("tailwindcss", {
                 invalidTailwindDirective = "error",
                 recommendedVariantOrder = "warning",
             },
-            validate = true,
-            colorDecorators = true,
-            suggestions = true,
-            hovers = true,
-            codeActions = true,
-            completion = true,
         },
     },
-    init_options = { userLanguages = {} },
 })
 
 vim.lsp.config("vtsls", {

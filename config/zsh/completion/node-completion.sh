@@ -1,63 +1,76 @@
 __zna_pwd="${DOTFILES}/config/zsh/completion"
 
 function __znsaGetScripts() {
-  local pkgJson="$1"
-  node "$__zna_pwd/node-scripts.js" "$pkgJson" 2>/dev/null
+    local pkgJson="$1"
+    node "$__zna_pwd/node-scripts.js" "$pkgJson" 2>/dev/null
 }
 
 function __znsaFindFile() {
-  local filename="$1"
-  local dir=$PWD
-  while [ ! -e "$dir/$filename" ]; do
-    dir=${dir%/*}
-    [[ "$dir" = "" ]] && break
-  done
-  [[ ! "$dir" = "" ]] && echo "$dir/$filename"
+    local filename="$1"
+    local dir=$PWD
+    while [ ! -e "$dir/$filename" ]; do
+        dir=${dir%/*}
+        [[ "$dir" = "" ]] && break
+    done
+    [[ ! "$dir" = "" ]] && echo "$dir/$filename"
 }
 
 function __znsaArgsLength() {
-  echo "$#words"
+    echo "$#words"
 }
 
 function __znsaYarnRunCompletion() {
-  [[ ! "$(__znsaArgsLength)" = "2" ]] && return
-  local pkgJson="$(__znsaFindFile package.json)"
-  [[ "$pkgJson" = "" ]] && return
-  local -a options
-  options=(${(f)"$(__znsaGetScripts $pkgJson)"})
-  [[ "$#options" = 0 ]] && return
-  _describe 'values' options
+    [[ ! "$(__znsaArgsLength)" = "2" ]] && return
+    local pkgJson="$(__znsaFindFile package.json)"
+    [[ "$pkgJson" = "" ]] && return
+    local -a options=()
+    local script
+    while IFS= read -r script; do
+        [[ -n "$script" ]] && options+=("$script")
+    done < <(__znsaGetScripts "$pkgJson")
+    ((${#options[@]} == 0)) && return
+    _describe 'values' options
 }
 
 ## to lazy to handler different number of arguments
 ## just copy and paste it
 __znsaNpmRunCompletion() {
-  [[ ! "$(__znsaArgsLength)" = "3" ]] && return
-  local pkgJson="$(__znsaFindFile package.json)"
-  [[ "$pkgJson" = "" ]] && return
-  local -a options
-  options=(${(f)"$(__znsaGetScripts $pkgJson)"})
-  [[ "$#options" = 0 ]] && return
-  _describe 'values' options
+    [[ ! "$(__znsaArgsLength)" = "3" ]] && return
+    local pkgJson="$(__znsaFindFile package.json)"
+    [[ "$pkgJson" = "" ]] && return
+    local -a options=()
+    local script
+    while IFS= read -r script; do
+        [[ -n "$script" ]] && options+=("$script")
+    done < <(__znsaGetScripts "$pkgJson")
+    ((${#options[@]} == 0)) && return
+    _describe 'values' options
 }
 
-__znsaHandleYarn() {
-  __znsaYarnRunCompletion
-}
-
-__znsaHandleNpm(){
-  case "${words[2]}" in
+__znsaHandleRunOrScript() {
+    case "${words[2]}" in
     run)
-      __znsaNpmRunCompletion
-      ;;
-  esac
+        __znsaNpmRunCompletion
+        ;;
+    *)
+        __znsaYarnRunCompletion
+        ;;
+    esac
+}
+
+__znsaHandleNpm() {
+    case "${words[2]}" in
+    run)
+        __znsaNpmRunCompletion
+        ;;
+    esac
 }
 
 alias nr="npm run"
 alias pnpmr="pnpm run"
-compdef __znsaYarnRunCompletion yarn
+compdef __znsaHandleRunOrScript yarn
 compdef __znsaYarnRunCompletion nr
-compdef __znsaYarnRunCompletion pnpm
+compdef __znsaHandleRunOrScript pnpm
 compdef __znsaYarnRunCompletion pnpmr
 compdef __znsaYarnRunCompletion n
 compdef __znsaHandleNpm npm

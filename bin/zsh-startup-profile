@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+runs=5
+threshold_ms=300
+top=20
+zshrc="${DOTFILES:-$HOME/dotfiles}/config/zsh/zshrc"
+
+usage() {
+  cat <<'EOF'
+Usage: zsh-startup-profile [options]
+
+Profile interactive zsh startup with zprof and guard against regressions.
+
+Options:
+  --runs N          Number of timed runs (default: 5)
+  --threshold-ms N  Median startup budget in ms (default: 300)
+  --top N           Number of zprof rows to print (default: 20)
+  --zshrc PATH      zshrc entrypoint to source
+  -h, --help        Show this help
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --runs)
+      runs="${2:-}"
+      shift 2
+      ;;
+    --threshold-ms)
+      threshold_ms="${2:-}"
+      shift 2
+      ;;
+    --top)
+      top="${2:-}"
+      shift 2
+      ;;
+    --zshrc)
+      zshrc="${2:-}"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "zsh-startup-profile: unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+for value_name in runs threshold_ms top; do
+  value="${!value_name}"
+  if [[ ! "$value" =~ ^[0-9]+$ || "$value" -lt 1 ]]; then
+    echo "zsh-startup-profile: --${value_name//_/-} must be a positive integer" >&2
+    exit 2
+  fi
+done
+
+if [[ ! -r "$zshrc" ]]; then
+  echo "zsh-startup-profile: zshrc not readable: $zshrc" >&2
+  exit 1
+fi
+
+if ! command -v zsh >/dev/null 2>&1; then
+  echo "zsh-startup-profile: zsh not found" >&2
+  exit 1
+fi
+
+tmpdir="$(mktemp -d)"
+profile_dir="$tmpdir/profile"
+time_dir="$tmpdir/time"
+profile_out="$tmpdir/zprof.out"
+time_out="$tmpdir/time.out"
+times_file="$tmpdir/times.txt"
+trap 'rm -rf "$tmpdir"' EXIT
+
+mkdir -p "$profile_dir" "$time_dir"
+escaped_zshrc="${zshrc//\'/\'\\\'\'}"
+cat >"$profile_dir/.zshrc" <<EOF
+zmodload zsh/zprof
+source '$escaped_zshrc'
+zprof
+EOF
+cat >"$time_dir/.zshrc" <<EOF
+source '$escaped_zshrc'
+EOF
+
+printf 'zsh startup profile\n'
+printf 'zshrc: %s\n' "$zshrc"
+printf 'runs: %s, threshold: %sms\n\n' "$runs" "$threshold_ms"
+
+for ((i = 1; i <= runs; i++)); do
+  /usr/bin/time -p env ZDOTDIR="$time_dir" zsh -i -c 'exit 0' >/dev/null 2>"$time_out"
+  real_secs="$(awk '/^real / { print $2 }' "$time_out")"
+  real_ms="$(awk -v sec="$real_secs" 'BEGIN { printf "%d", (sec * 1000) + 0.5 }')"
+  printf '%s\n' "$real_ms" >>"$times_file"
+  printf 'run %d: %sms\n' "$i" "$real_ms"
+done
+
+/usr/bin/time -p env ZDOTDIR="$profile_dir" zsh -i -c 'exit 0' >"$profile_out" 2>/dev/null
+
+stats="$(sort -n "$times_file" | awk -v count="$runs" '
+  { values[NR] = $1; sum += $1 }
+  END {
+    mid = int((count + 1) / 2)
+    if (count % 2 == 0) median = int((values[count / 2] + values[count / 2 + 1]) / 2)
+    else median = values[mid]
+    printf "min=%sms median=%sms max=%sms avg=%sms", values[1], median, values[count], int(sum / count)
+  }
+')"
+median_ms="$(printf '%s\n' "$stats" | sed -E 's/.*median=([0-9]+)ms.*/\1/')"
+
+printf '\n%s\n\n' "$stats"
+printf 'top zprof entries:\n'
+awk -v max_rows="$top" '
+  /^num[[:space:]]+calls/ || /^-+$/ { print; next }
+  /^[[:space:]]*[0-9]+\)/ { print; rows++; if (rows >= max_rows) exit }
+' "$profile_out"
+
+if (( median_ms > threshold_ms )); then
+  printf '\nfail: median startup %sms exceeds %sms threshold\n' "$median_ms" "$threshold_ms" >&2
+  exit 1
+fi
+
+printf '\nok: median startup %sms is within %sms threshold\n' "$median_ms" "$threshold_ms"

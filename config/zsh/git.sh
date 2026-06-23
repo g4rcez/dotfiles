@@ -39,7 +39,9 @@ function git_develop_branch() {
 }
 
 function getBranchFzf() {
-    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g' | grep -v $(git branch --show-current) | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
+    local current
+    current="$(git branch --show-current)"
+    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g' | grep -vxF -- "$current" | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
 }
 
 function countCommits() {
@@ -57,7 +59,15 @@ alias gcm='git checkout $(git_main_branch)'
 alias gitree='git-graph'
 alias gittree='git-graph'
 alias gst='git status'
-alias logs='forgit::log'
+function _forgit_lazy_load() {
+    [[ -n "${functions[forgit::log]:-}" ]] && return 0
+    _zsh_lazy_znap_source "wfxr/forgit"
+}
+
+function git.log() {
+    _forgit_lazy_load && forgit::log "$@"
+}
+
 alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
@@ -95,9 +105,8 @@ function commit.write() {
 
 function commit.ai() {
     git add -A .
-    COMMIT_MESSAGE="$(commitwithai "$*")"
-    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
-    git commit --no-verify -S -m "${COMMIT_MESSAGE}"$'\n\n'"${NOW}"
+    COMMIT_MESSAGE="$(commitwithai "$*")" || return $?
+    git commit --no-verify -S -m "${COMMIT_MESSAGE}"
     git push
 }
 
@@ -176,7 +185,11 @@ function switch() {
 }
 
 function gitignore() {
-    forgit::ignore >>".gitignore"
+    _forgit_lazy_load && forgit::ignore >>".gitignore"
+}
+
+function git.ignore() {
+    gitignore
 }
 
 function git-graph() {
@@ -318,10 +331,10 @@ function commitwithai {
         OUT_FILE="$(mktemp)"
         ERR_FILE="$(mktemp)"
         printf '%s\n\n%s\n' "$PROMPT" "$DIFF" \
-            | codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
+            | codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
         RC=$?
         if (( RC != 0 )); then
-            cat "$ERR_FILE" >&2
+            command cat "$ERR_FILE" >&2
             rm -f "$OUT_FILE" "$ERR_FILE"
             return "$RC"
         fi
@@ -331,14 +344,32 @@ function commitwithai {
         COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
     fi
 
-    COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | sed 's/# //1')"
+    COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | awk '
+        /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: / { found = 1 }
+        found && /^\[[^]]+ [0-9a-f]{7,}\] / { next }
+        found && /^(\/var\/folders\/.*\/T\/tmp\.|\/tmp\/tmp\.)/ { next }
+        found { print }
+    ' | sed 's/# //1')"
+
+    if [[ -z "$COMMIT_MESSAGE" ]] || ! printf '%s\n' "$COMMIT_MESSAGE" | head -n 1 | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
+        echo "commitwithai: AI did not return a valid Conventional Commit message" >&2
+        return 1
+    fi
+
     echo "$COMMIT_MESSAGE" | pbcopy
     echo "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
     local pr_ref="${1:-}"
-    PR_MESSAGE=$(gh pr diff $pr_ref | ${=AI_QUERY_COMMAND} "$(cat $DOTFILES/prompts/prdesc-script.txt).\n ${1}")
+    local -a diff_args=()
+    [[ -n "$pr_ref" ]] && diff_args=("$pr_ref")
+
+    local prompt
+    prompt="$(<"$DOTFILES/prompts/prdesc-script.txt")"
+
+    local PR_MESSAGE
+    PR_MESSAGE=$(gh pr diff "${diff_args[@]}" | ${=AI_QUERY_COMMAND} "${prompt}.\n ${pr_ref}")
     echo "$PR_MESSAGE" | pbcopy
     echo "$PR_MESSAGE"
 }
@@ -354,13 +385,67 @@ function gcb() {
         git checkout -b "$1"
     fi
 }
+_git_local_and_remote_branches() {
+    (( $+commands[git] )) || return 1
+
+    local -a branches=()
+    local branch
+    while IFS= read -r branch; do
+        [[ -n "$branch" ]] && branches+=("$branch")
+    done < <(git branch --format='%(refname:short)' 2>/dev/null)
+    while IFS= read -r branch; do
+        [[ -n "$branch" && "$branch" != HEAD ]] && branches+=("$branch")
+    done < <(git branch -r --format='%(refname:short)' 2>/dev/null | sed 's|^origin/||')
+
+    _values 'branch' "${branches[@]}"
+}
+
+_git_branch_arg() {
+    _arguments '1:branch:_git_local_and_remote_branches'
+}
+
+_git_pr_numbers() {
+    (( $+commands[gh] )) || return 1
+
+    local -a prs=()
+    local pr
+    while IFS= read -r pr; do
+        [[ -n "$pr" ]] && prs+=("$pr")
+    done < <(gh pr list --json number,title --jq '.[] | "\(.number):#\(.number) \(.title)"' 2>/dev/null)
+    _describe 'pull request' prs
+}
+
+_git_pr_arg() {
+    _arguments \
+        '1:pull request:_git_pr_numbers' \
+        '2:author filter:'
+}
+
+_gh_workflow_files() {
+    (( $+commands[gh] )) || return 1
+
+    local -a workflows=()
+    local workflow
+    while IFS= read -r workflow; do
+        [[ -n "$workflow" ]] && workflows+=("$workflow")
+    done < <(gh workflow list --json path --jq '.[] | .path | sub("^.github/workflows/"; "") | sub("\\.ya?ml$"; "")' 2>/dev/null)
+    _values 'workflow' "${workflows[@]}"
+}
+
+_gh_action() {
+    _arguments \
+        '1:workflow:_gh_workflow_files' \
+        '2:ref:_git_local_and_remote_branches'
+}
+
 _gcb() {
-    local -a branches
-    branches=($(git branch --format='%(refname:short)' 2>/dev/null))
-    branches+=($(git branch -r --format='%(refname:short)' 2>/dev/null | sed 's|^origin/||'))
-    _values 'branch' $branches
+    _git_local_and_remote_branches
 }
 compdef _gcb gcb
+compdef _git_branch_arg switch mergewith rebasewith createpr newpr draft
+compdef _git_pr_arg prcommits prdesc
+compdef _gh_action gh.action
+compdef _git add=git-add checkout=git-switch pull=git-pull push=git-push pushf=git-push rebase=git-rebase gcf=git-config gundo=git-reset logs=git-log git-graph=git-log gitree=git-log gittree=git-log tags=git-tag gtv=git-tag
 
 branch() {
     local b
