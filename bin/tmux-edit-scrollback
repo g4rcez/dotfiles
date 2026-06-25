@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+pane_id="${1:?pane id is required}"
+pane_path="${2:-$HOME}"
+
+scrollback_file="$(mktemp "${TMPDIR:-/tmp}/tmux-scrollback.${pane_id#%}.XXXXXX")"
+
+tmux capture-pane -pJS - -t "$pane_id" > "$scrollback_file"
+tmux new-window -c "$pane_path" -n scrollback "nvim + '$scrollback_file'"

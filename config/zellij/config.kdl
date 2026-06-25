@@ -138,24 +138,24 @@ themes {
     }
 }
 
+load_plugins {}
 plugins {
     tab-bar location="zellij:tab-bar"
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
     compact-bar location="zellij:compact-bar"
     session-manager location="zellij:session-manager"
+    configuration location="zellij:configuration"
+    plugin-manager location="zellij:plugin-manager"
+    about location="zellij:about"
     welcome-screen location="zellij:session-manager" {
-        welcome_screen true
+        welcome_screen false
     }
     filepicker location="zellij:strider" {
         cwd "/"
     }
-    configuration location="zellij:configuration"
-    plugin-manager location="zellij:plugin-manager"
-    about location="zellij:about"
 }
 
-load_plugins {}
 
 keybinds clear-defaults=true {
     normal {
