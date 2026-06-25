@@ -1,39 +1,67 @@
 layout {
-    pane size=1 borderless=true {
-        borderless true
-        plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
-            format_left   "{mode}"
-            format_center "#[bg=#181820]{tabs}"
-            format_right  "#[bg=#181820,fg=#89b4fa] {session} "
-            format_space  "#[bg=#181820]"
+    default_tab_template {
+        pane size=2 borderless=true {
+            plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
+                color_bg      "#11111b"
+                color_bar     "#313244"
+                color_fg      "#cdd6f4"
+                color_muted   "#6c7086"
+                color_blue    "#89b4fa"
+                color_teal    "#94e2d5"
+                color_green   "#74c7ec"
+                color_yellow  "#f9e2af"
+                color_red     "#f38ba8"
+                color_mauve   "#b4befe"
+                color_orange  "#fab387"
 
-            border_position "top"
+                format_left   " {mode}{tabs}"
+                format_center ""
+                format_right  "#[bg=$bar,fg=$mauve,bold]♡ #[bg=$bar,fg=$muted,bold]{datetime}#[bg=$bar,fg=$green,bold] ↖ "
+                format_space  "#[bg=$bar]"
 
-            mode_normal        "#[bg=#181820,fg=#89b4fa]  #[bg=#181820,fg=#181820]█"
-            mode_locked        "#[bg=#6e738d,fg=#181820]  #[bg=#181820,fg=#6e738d]█"
-            mode_resize        "#[bg=#f38ba8,fg=#181820]  #[bg=#181820,fg=#f38ba8]█"
-            mode_pane          "#[bg=#89b4fa,fg=#181820]  #[bg=#181820,fg=#89b4fa]█"
-            mode_tab           "#[bg=#b4befe,fg=#181820]  #[bg=#181820,fg=#b4befe]█"
-            mode_scroll        "#[bg=#f9e2af,fg=#181820] scroll#[bg=#181820,fg=#f9e2af]█"
-            mode_enter_search  "#[bg=#8aadf4,fg=#181820] ent-search#[bg=#181820,fg=#8aadf4]█"
-            mode_search        "#[bg=#8aadf4,fg=#181820] SEARCH#[bg=#181820,fg=#8aadf4]█"
-            mode_rename_tab    "#[bg=#b4befe,fg=#181820] rename-tab#[bg=#181820,fg=#b4befe]█"
-            mode_rename_pane   "#[bg=#89b4fa,fg=#181820] rename-pane#[bg=#181820,fg=#89b4fa]█"
-            mode_session       "#[bg=#74c7ec,fg=#181820] session#[bg=#181820,fg=#74c7ec]█"
-            mode_move          "#[bg=#f5c2e7,fg=#181820] move#[bg=#181820,fg=#f5c2e7]█"
-            mode_prompt        "#[bg=#8aadf4,fg=#181820] prompt#[bg=#181820,fg=#8aadf4]█"
-            mode_tmux          "#[bg=#f5a97f,fg=#181820]  #[bg=#181820,fg=#f5a97f]█"
+                border_enabled  "true"
+                border_char     "─"
+                border_format   "#[fg=$teal,bg=$bg]{char}"
+                border_position "top"
 
-            tab_normal              "#[bg=#181820,fg=#6C7086]{index}.{name}{floating_indicator}"
-            tab_active              "#[bg=#181820,fg=#89b4fa]{index}.{name}{fullscreen_indicator}{sync_indicator}{floating_indicator}"
-            tab_floating_indicator   "󰉈 "
-            tab_fullscreen_indicator " 󰊓 "
-            tab_separator           "#[bg=#181820,fg=#6C7086] ⋮ "
-            tab_sync_indicator       "  "
+                hide_frame_for_single_pane "true"
+                format_hide_on_overlength  "true"
+                format_precedence          "lcr"
+
+                mode_normal        "#[bg=$bar,fg=$yellow,bold] ☺ "
+                mode_locked        "#[bg=$bar,fg=$red,bold] 󰚌 "
+                mode_resize        "#[bg=$bar,fg=$red,bold]  "
+                mode_pane          "#[bg=$bar,fg=$blue,bold]  "
+                mode_tab           "#[bg=$bar,fg=$mauve,bold]  "
+                mode_scroll        "#[bg=$bar,fg=$yellow,bold] 󰹹 "
+                mode_enter_search  "#[bg=$bar,fg=$blue,bold] / "
+                mode_search        "#[bg=$bar,fg=$blue,bold]  "
+                mode_rename_tab    "#[bg=$bar,fg=$mauve,bold]  "
+                mode_rename_pane   "#[bg=$bar,fg=$blue,bold]  "
+                mode_session       "#[bg=$bar,fg=$green,bold]  "
+                mode_move          "#[bg=$bar,fg=$mauve,bold] 󰆾 "
+                mode_prompt        "#[bg=$bar,fg=$blue,bold]  "
+                mode_tmux          "#[bg=$bar,fg=$orange,bold]  "
+
+                tab_normal              "#[bg=$bar,fg=$muted,bold]{index}"
+                tab_active              "#[bg=$bar,fg=$blue,bold]{index}"
+                tab_floating_indicator  " 󰉈"
+                tab_fullscreen_indicator " 󰊓"
+                tab_sync_indicator      " "
+                tab_separator           "#[bg=$bar,fg=$teal,bold] ⋮ "
+
+                datetime          "{format} "
+                datetime_format   "%A, %d %b %Y %H:%M"
+                datetime_timezone "America/Sao_Paulo"
+            }
         }
+        children
     }
-    pane {
-        borderless true
-        focus true
+
+    tab {
+        pane {
+            borderless true
+            focus true
+        }
     }
 }

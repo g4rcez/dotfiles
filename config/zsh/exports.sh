@@ -122,6 +122,7 @@ fi
 ## ai
 unset ANTHROPIC_API_KEY # force RTK proxy auth routing — do not restore
 export ENABLE_LSP_TOOL=1
+export AI_COMMAND_PROMPT="pi"
 export AI_CLI_NAME="codex"
 export AI_CLI_MODEL="gpt-5.3-codex-spark"
 export AI_QUERY_COMMAND="codex -m gpt-5.3-codex-spark exec"

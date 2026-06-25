@@ -57,6 +57,8 @@ espanso
     .insert("up", "🙌🏾", "Emoji: Raising hands")
     .insert("pray", "🙏🏾", "Emoji: Folded hands")
     .insert("cry", "😭", "Emoji: Loudly crying face")
+    .insert("sad", "😔", "Emoji: Pensive face")
+    .insert("crazy", "🤪", "Emoji: Pensive face")
     .insert("think", "🤔", "Emoji: Thinking face")
     .insert("money", "🤑", "Emoji: Money face")
     .insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug")

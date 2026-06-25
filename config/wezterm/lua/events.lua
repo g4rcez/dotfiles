@@ -12,7 +12,8 @@ local function process_basename(path)
 end
 
 local function pane_is_tmux(pane)
-    return process_basename(pane:get_foreground_process_name()) == "tmux"
+    local process = process_basename(pane:get_foreground_process_name())
+    return process == "tmux" or process == "zellij" or process == "herdr"
 end
 
 local function set_tab_bar_visibility(window, pane)
@@ -67,7 +68,7 @@ function Array.find(tbl, predicate)
 end
 
 local function font_size_overrides(window)
-    local screens = wezterm.gui.screens();
+    local screens = wezterm.gui.screens()
     local screen = Array.find(workstations, function(v)
         return v.name == screens.active.name
     end)
@@ -79,7 +80,7 @@ local function font_size_overrides(window)
     window:set_config_overrides(overrides)
 end
 
-wezterm.on('window-resized', function(window)
+wezterm.on("window-resized", function(window)
     font_size_overrides(window)
 end)
 

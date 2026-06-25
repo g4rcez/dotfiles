@@ -327,6 +327,7 @@ keybinds clear-defaults=true {
         bind "7" { GoToTab 7; SwitchToMode "normal"; }
         bind "8" { GoToTab 8; SwitchToMode "normal"; }
         bind "9" { GoToTab 9; SwitchToMode "normal"; }
+        bind "0" { GoToTab 10; SwitchToMode "normal"; }
         bind "t" { NewTab; SwitchToMode "normal"; }
         bind "tab" { ToggleTab; }
     }
@@ -363,34 +364,49 @@ keybinds clear-defaults=true {
         bind "esc" { UndoRenamePane; SwitchToMode "pane"; }
     }
     tmux {
-        bind "," { SwitchToMode "renametab"; TabNameInput 0; }
+        bind "," "w" { SwitchToMode "renametab"; TabNameInput 0; }
         bind "-" { NewPane "down"; SwitchToMode "normal"; }
-        bind "0" { SwitchToMode "pane"; }
-        bind "[" { SwitchToMode "scroll"; }
-        bind "h" { MoveFocus "left";SwitchToMode "normal"; }
-        bind "l" { MoveFocus "right";SwitchToMode "normal"; }
+        bind "[" "v" { SwitchToMode "scroll"; }
         bind "\\" { NewPane "right"; SwitchToMode "normal"; }
+        bind "h" { MoveFocus "left"; SwitchToMode "normal"; }
+        bind "j" { MoveFocus "down"; SwitchToMode "normal"; }
+        bind "k" { MoveFocus "up"; SwitchToMode "normal"; }
+        bind "l" { MoveFocus "right"; SwitchToMode "normal"; }
+        bind "left" { MoveFocus "left"; SwitchToMode "normal"; }
+        bind "down" { MoveFocus "down"; SwitchToMode "normal"; }
+        bind "up" { MoveFocus "up"; SwitchToMode "normal"; }
+        bind "right" { MoveFocus "right"; SwitchToMode "normal"; }
         bind "f" { ToggleFloatingPanes; SwitchToMode "normal"; }
         bind "g" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "k" {
+        bind "x" { CloseTab; SwitchToMode "normal"; }
+        bind "b" "o" "p" "s" "tab" {
             SwitchToMode "normal"
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx-kill" {
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "5%" "--height" "90%" "--width" "90%" "--close-on-exit" "--" "zellij-sessionx" {
                 hold_on_close false
             }
         }
-        bind "p" {
+        bind "K" {
             SwitchToMode "normal"
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "5%" "--height" "90%" "--width" "90%" "--close-on-exit" "--" "zellij-sessionx-kill" {
                 hold_on_close false
             }
         }
-        bind "r" { SwitchToMode "resize"; }
-        bind "s" {
+        bind "r" {
             SwitchToMode "normal"
-            Run "zellij" "run" "--floating" "--y" "5%" "--x" "0" "--height" "100%" "--width" "100%" "--close-on-exit" "--" "zellij-sessionx" {
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "5%" "--height" "90%" "--width" "90%" "--close-on-exit" "--" "zsh" "-ic" "printf 'Session name: '; read name; [[ -n $name ]] && zellij action rename-session \"$name\"" {
                 hold_on_close false
             }
         }
+        bind "R" {
+            SwitchToMode "normal"
+            Run "zellij" "run" "--floating" "--y" "5%" "--x" "5%" "--height" "90%" "--width" "90%" "--close-on-exit" "--" "zsh" "-ic" "ZELLIJ_CONFIG_FILE=$HOME/dotfiles/config/zellij/config.kdl zellij setup --check; printf '\nPress enter to close '; read" {
+                hold_on_close false
+            }
+        }
+        bind "Alt left" "Alt h" { Resize "Increase left"; }
+        bind "Alt down" "Alt j" { Resize "Increase down"; }
+        bind "Alt up" "Alt k" { Resize "Increase up"; }
+        bind "Alt right" "Alt l" { Resize "Increase right"; }
     }
 }
 
