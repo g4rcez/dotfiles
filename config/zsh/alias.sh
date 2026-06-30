@@ -204,6 +204,39 @@ function tmux-start() {
     tmux -S "$HOME/.tmp/socket" new-session -A -s localhost
 }
 
+function _tmux_preexec_command_name() {
+    emulate -L zsh
+    [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || return 0
+
+    local line="${1:-}"
+    local word cmd=""
+    while [[ -n "$line" ]]; do
+        line="${line#${line%%[![:space:]]*}}"
+        word="${line%%[[:space:]]*}"
+        line="${line#"$word"}"
+
+        case "$word" in
+        "" | *=* | -* | command | exec | noglob | builtin | time | sudo | env) continue ;;
+        *)
+            cmd="${word:t}"
+            break
+            ;;
+        esac
+    done
+
+    [[ -n "$cmd" ]] || return 0
+    tmux set-option -pq -t "$TMUX_PANE" @zsh_current_command "$cmd" 2>/dev/null || true
+    tmux refresh-client -S 2>/dev/null || true
+}
+preexec_functions+=_tmux_preexec_command_name
+
+function _tmux_precmd_clear_command_name() {
+    emulate -L zsh
+    [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || return 0
+    tmux set-option -pqu -t "$TMUX_PANE" @zsh_current_command 2>/dev/null || true
+}
+precmd_functions+=_tmux_precmd_clear_command_name
+
 function killport() {
     lsof -ti:"$1" | xargs kill -9 2>/dev/null && echo "killed $1"
 }

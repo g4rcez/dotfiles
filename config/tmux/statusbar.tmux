@@ -1,34 +1,32 @@
-#!/bin/bash
-source "$HOME/dotfiles/zsh/utils.sh";
-# SCRIPTS_PATH="$HOME/dotfiles/bin"
+#!/usr/bin/env bash
 
-tmux_get() {
-    local value="$(tmux show -gqv "$1")"
-    [ -n "$value" ] && echo "$value" || echo "$2"
-}
+# Applies the visual theme for tmux's status bar and pane/message styles.
+source "$HOME/dotfiles/zsh/utils.sh"
 
+# Read a tmux option with a fallback. Kept for quick theme tweaks.
+# Quiet global option setter used below to keep the theme lines compact.
 tmux_set() {
     tmux set-option -gq "$1" "$2"
 }
 
-# short for Theme-Colour
-TC="#89b4fa"
-FG="#89b4fa"
-DISABLED="#64748b"
-HIGHLIGHT="#89b4fa"
-G04=#141621
-BG="#1A1B26"
+# Theme colors.
+TC="#89b4fa"        # primary accent
+FG="#89b4fa"        # default foreground
+DISABLED="#64748b"  # inactive window text/separators
+HIGHLIGHT="#89b4fa" # active/prefix highlight
+G04=#141621          # darker status-left background
+BG="#1A1B26"        # main status background
 
-# Status options
+# Refresh the status bar every second so dynamic segments stay current.
 tmux_set status-interval 1
 tmux_set status on
 
-# Basic status bar colors
+# Base status bar colors.
 tmux_set status-fg "$FG"
 tmux_set status-bg "$BG"
 tmux_set status-attr none
 
-# tmux-prefix-highlight
+# tmux-prefix-highlight: shows whether prefix/copy-mode is active.
 tmux_set @prefix_highlight_fg "$HIGHLIGHT"
 tmux_set @prefix_highlight_bg "$TC"
 tmux_set @prefix_highlight_show_copy_mode 'on'
@@ -36,14 +34,13 @@ tmux_set @prefix_highlight_copy_mode_attr "fg=$TC,bg=$BG"
 tmux_set @prefix_highlight_output_prefix "#[fg=$HIGHLIGHT]#[bg=$BG]"
 tmux_set @prefix_highlight_output_suffix "#[fg=$HIGHLIGHT]#[bg=$BG]"
 
-# Left side of status bar
+# Left status segment: git branch for the active pane, then prefix/copy-mode indicator.
 tmux_set status-left-bg "$G04"
 tmux_set status-left-fg "$FG"
 tmux_set status-left-length 150
-tmux_set status-left " #{prefix_highlight} "
-# tmux_set status-left "#[fg=$FG,bg=$BG] $session_icon #S #{prefix_highlight} "
+tmux_set status-left " #{prefix_highlight} #(bash $HOME/dotfiles/bin/git-branch.sh #{q:pane_current_path} icon 2>/dev/null) #[fg=$FG,bg=$BG]"
 
-# Right side of status bar
+# Right status segment: current session name. Other useful segments are left as examples.
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$FG"
 tmux_set status-right-length 200
@@ -51,33 +48,29 @@ tmux_set status-right-length 200
 # AI: tmux_set status-right "#($DOTFILES/.ai/statusline.sh --compact) #[fg=$FG,bg=$BG] #S "
 tmux_set status-right " #S "
 
-# Window status format
+# Inactive and active window labels in the center of the status bar.
 tmux_set window-status-format "#[fg=$DISABLED,bg=$BG] #I:#W "
 tmux_set window-status-current-format "#[fg=$HIGHLIGHT,bg=$BG] #I:#W "
 
-# Window status style
+# Window label styling for normal, last-used, and activity states.
 tmux_set window-status-style "fg=$FG,bg=$BG,none"
 tmux_set window-status-last-style "fg=$TC,bg=$BG"
 tmux_set window-status-activity-style "fg=$TC,bg=$BG"
 
-# Window separator
+# Separator between window labels.
 tmux_set window-status-separator "#[fg=$DISABLED,bg=$BG]⋮"
 
-# Pane border
+# Pane borders; only the active pane gets the accent color.
 tmux_set pane-border-style "fg=default,bg=default"
-
-# Active pane border
 tmux_set pane-active-border-style "fg=$TC,bg=$BG"
 
-# Pane number indicator
+# Colors for the temporary pane-number overlay shown by prefix + q.
 tmux_set display-panes-colour "$BG"
 tmux_set display-panes-active-colour "$TC"
 
-# Message
+# Command/status message colors.
 tmux_set message-style "fg=$TC,bg=$BG"
-
-# Command message
 tmux_set message-command-style "fg=$TC,bg=$BG"
 
-# Copy mode highlight
+# Copy-mode selection/search highlight.
 tmux_set mode-style "bg=$TC,fg=#000000"

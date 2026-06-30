@@ -22,6 +22,7 @@ local font = require("./lua/font")
 local keymap = require("./lua/keymap")
 local hyperlinks = require("./lua/hyper-links")
 local events = require("./lua/events")
+local weztermline = require("./weztermline")
 local X = require("./lua/helpers")
 
 X.merge(Config, theme)
@@ -29,5 +30,6 @@ X.merge(Config, font)
 X.merge(Config, hyperlinks)
 X.merge(Config, keymap)
 X.merge(Config, events)
+weztermline.apply(Config)
 
 return Config

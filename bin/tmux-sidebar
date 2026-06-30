@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+# Interactive live agent sidebar (runs inside a narrow tmux pane).
+#   j / k (or ↑/↓)  move the cursor
+#   Enter / l       jump to the selected agent's pane
+#   q               close the sidebar
+# Refreshes every 2s. Detection mirrors tmux-agent-menu (Claude panes title "✳ …";
+# a window flagged red by notify-ready.sh is "waiting").
+
+G=$'\033[38;2;122;154;94m'
+R=$'\033[38;2;230;126;128m'
+Y=$'\033[38;2;219;188;127m'
+BL=$'\033[38;2;127;187;183m'
+D=$'\033[2m'
+B=$'\033[1m'
+INV=$'\033[7m'
+X=$'\033[0m'
+HOME_CLR=$'\033[H\033[2J'
+
+cursor=0
+locs=()
+targets=()
+names=()
+metas=()
+states=()
+
+if ! { exec 3</dev/tty; } 2>/dev/null; then
+  printf 'tmux-sidebar: needs a tty\n' >&2
+  exit 1
+fi
+
+printf '\033[?25l' # hide terminal cursor
+trap 'printf "\033[?25h\033[2J\033[H"; exit 0' INT TERM HUP
+
+find_pi_proc() { # $1 root pid  $2 ps snapshot -> pi pid
+  local root="$1" snap="$2" depth=0 p cpid argv0 argv1 b0 b1
+  local -a frontier=("$root") nxt=()
+  while [ "${#frontier[@]}" -gt 0 ] && [ "$depth" -lt 4 ]; do
+    nxt=()
+    for p in "${frontier[@]}"; do
+      while read -r cpid _ argv0 argv1 _rest; do
+        [ -z "$cpid" ] && continue
+        b0="${argv0##*/}"
+        b1="${argv1##*/}"
+        if [[ "$b0" = pi || "$b1" = pi ]]; then
+          printf '%s' "$cpid"
+          return 0
+        fi
+        nxt+=("$cpid")
+      done < <(awk -v p="$p" '$2==p{print $0}' <<< "$snap")
+    done
+    [ "${#nxt[@]}" -eq 0 ] && break
+    frontier=("${nxt[@]}")
+    depth=$((depth + 1))
+  done
+  return 1
+}
+
+pane_agent() { # $1 cmd  $2 title  $3 root pid  $4 ps snapshot -> agent name
+  local cmd="$1" title="$2" root="$3" snap="$4"
+  case "$cmd" in pi) printf 'pi'; return 0 ;; esac
+  case "$title" in π\ -\ * | pi\ -\ *) printf 'pi'; return 0 ;; esac
+  [ -n "$root" ] && find_pi_proc "$root" "$snap" >/dev/null && printf 'pi'
+}
+
+pi_name() { # $1 window name  $2 pane title
+  local wname="$1" title="$2"
+  case "$title" in
+  π\ -\ *) printf 'π %s' "${title#π - }" ;;
+  pi\ -\ *) printf 'pi %s' "${title#pi - }" ;;
+  *) printf '%s' "$wname" ;;
+  esac
+}
+
+pi_state() { # $1 pane -> idle | working
+  tmux capture-pane -t "$1" -p 2>/dev/null | tail -30 | grep -q 'Working\.\.\.' && echo working || echo idle
+}
+
+agent_state() { # $1 pane  $2 loc  $3 title  $4 agent -> idle | working | done
+  local p="$1" loc="$2" title="$3" agent="$4" fmt st="idle"
+  if [ "$agent" = pi ]; then
+    st=$(pi_state "$p")
+  elif [ -f "/tmp/agent-state-$p" ]; then
+    [ "$(cat "/tmp/agent-state-$p" 2>/dev/null)" = working ] && st="working"
+  else
+    case "$title" in ✳*) ;; *) st="working" ;; esac
+    [ "$st" = idle ] && [ -n "$TMUX" ] && tmux capture-pane -t "$p" -p 2>/dev/null | grep -qE '\(([0-9]+m )?[0-9]+s' && st="working"
+  fi
+  if [ "$st" = idle ] && [ -n "$TMUX" ]; then
+    fmt=$(tmux show-options -wv -t "$loc" window-status-format 2>/dev/null)
+    printf '%s' "$fmt" | grep -q 'bg=red' && st="done"
+  fi
+  echo "$st"
+}
+
+build() {
+  locs=()
+  targets=()
+  names=()
+  metas=()
+  states=()
+  local seen="" pane loc wname cmd title teststate root_pid meta st agent ps_snap
+  [ -z "$AGENT_PANES_FILE" ] && ps_snap=$(ps -A -o pid=,ppid=,args= 2>/dev/null)
+  while IFS='|' read -r pane loc wname cmd title teststate root_pid; do
+    [ -z "$pane" ] && continue
+    agent=""
+    if [ -z "$AGENT_PANES_FILE" ]; then
+      case "$cmd" in
+      [0-9]*) ;;
+      *)
+        agent=$(pane_agent "$cmd" "$title" "$root_pid" "$ps_snap")
+        [ -n "$agent" ] || continue
+        ;;
+      esac
+    fi
+    case " $seen " in *" $pane "*) continue ;; esac
+    seen="$seen $pane"
+    [ "$agent" = pi ] && wname=$(pi_name "$wname" "$title")
+    [ ${#wname} -gt 17 ] && wname="${wname:0:16}…"
+    meta=$(awk -F' · ' 'NR==1{print $1 (NF>1?" · "$2:"")}' "/tmp/claude-statusline-$pane" 2>/dev/null)
+    [ -n "$teststate" ] && st="$teststate" || st=$(agent_state "$pane" "$loc" "$title" "$agent")
+    locs+=("$loc")
+    targets+=("$pane")
+    names+=("$wname")
+    metas+=("$meta")
+    states+=("$st")
+  done < <({ [ -n "$AGENT_PANES_FILE" ] && cat "$AGENT_PANES_FILE" || tmux list-panes -a -F '#{pane_id}|#{session_name}:#{window_index}.#{pane_index}|#{window_name}|#{pane_current_command}|#{pane_title}||#{pane_pid}'; } | sort -t'|' -k2)
+  local n=${#locs[@]}
+  [ "$cursor" -ge "$n" ] && cursor=$((n - 1))
+  [ "$cursor" -lt 0 ] && cursor=0
+}
+
+render() {
+  printf '%s%s%s AGENTS%s\n%s%s● idle %s◐ work %s✓ done%s\n%s──────────────%s\n' \
+    "$HOME_CLR" "$G" "$B" "$X" "$G" "" "$Y" "$BL" "$X" "$D" "$X"
+  local n=${#locs[@]} i mark col
+  [ "$n" -eq 0 ] && {
+    printf '%s  (nenhum agente)%s\n' "$D" "$X"
+    return
+  }
+  for i in $(seq 0 $((n - 1))); do
+    case "${states[$i]}" in
+    done)
+      mark="✓"
+      col="$BL"
+      ;;
+    working)
+      mark="◐"
+      col="$Y"
+      ;;
+    *)
+      mark="●"
+      col="$G"
+      ;;
+    esac
+    if [ "$i" -eq "$cursor" ]; then
+      printf '%s %s %-7s %s%s\n' "$INV" "$mark" "${locs[$i]}" "${names[$i]}" "$X"
+    else
+      printf '%s%s%s %s%-7s%s %s\n' "$col" "$mark" "$X" "$D" "${locs[$i]}" "$X" "${names[$i]}"
+    fi
+    [ -n "${metas[$i]}" ] && printf '     %s%s%s\n' "$D" "${metas[$i]}" "$X"
+  done
+}
+
+jump_to_selected() {
+  local pane="${targets[$cursor]}" win
+  win=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index}' 2>/dev/null) || win="${locs[$cursor]%.*}"
+  tmux switch-client -t "$win"
+  tmux select-pane -t "$pane"
+}
+
+build
+render
+while :; do
+  IFS= read -r -s -n 1 -t 2 key <&3
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+    build
+    render
+    [ "$rc" -gt 128 ] || sleep 2
+    continue
+  fi # 2s timeout/EOF -> refresh
+  n=${#locs[@]}
+  case "$key" in
+  j) [ "$cursor" -lt $((n - 1)) ] && cursor=$((cursor + 1)) ;;
+  k) [ "$cursor" -gt 0 ] && cursor=$((cursor - 1)) ;;
+  l | $'\n' | $'\r') [ "$n" -gt 0 ] && jump_to_selected ;;
+  q)
+    printf '\033[?25h'
+    tmux kill-pane
+    exit 0
+    ;;
+  $'\033') # arrow keys: ESC [ A/B
+    IFS= read -r -s -n 2 -t 0.005 seq <&3
+    case "$seq" in
+    '[A') [ "$cursor" -gt 0 ] && cursor=$((cursor - 1)) ;;
+    '[B') [ "$cursor" -lt $((n - 1)) ] && cursor=$((cursor + 1)) ;;
+    esac
+    ;;
+  esac
+  render
+done

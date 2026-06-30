@@ -1,15 +1,37 @@
 #!/usr/bin/env bash
-source "$HOME/dotfiles/zsh/utils.sh"
 
-NAME="$1"
+# Builds the automatic tmux window name used by tmux.conf.
+# Args from tmux:
+#   $1 = pane_current_command, $2 = pane_id, $3 = pane_current_path
+NAME="${1:-}"
+PANE_ID="${2:-}"
+PANE_PATH="${3:-$PWD}"
 USER_CONFIG="$HOME/dotfiles/config/tmux/icons.yml"
+
+fishify() {
+    perl -CS -pe 's|^\Q$ENV{HOME}\E|~|; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g' <<<"$1"
+}
+
+# Prefer zsh's preexec-captured command, so node-based CLIs show as pi/codex/etc.
+if [[ -n "$PANE_ID" ]]; then
+    ZSH_NAME="$(tmux show-option -pqv -t "$PANE_ID" @zsh_current_command 2>/dev/null || true)"
+    NAME="${ZSH_NAME##*/}"
+    NAME="${NAME:-$1}"
+fi
 
 get_config_value() {
     local key=$1
-    local value
-    value="$(yq "$key" "$USER_CONFIG")"
-    echo "${value-$1}"
+    local fallback=$2
+    local value=""
+
+    if command -v yq >/dev/null 2>&1; then
+        value="$(yq -r "$key" "$USER_CONFIG" 2>/dev/null || true)"
+    fi
+
+    [[ -n "$value" && "$value" != "null" ]] && printf '%s\n' "$value" || printf '%s\n' "$fallback"
 }
 
-ICON="$(get_config_value ".icons.\"$NAME\"")"
-echo "$ICON $(fishify ${3})"
+ICON="$(get_config_value ".icons.\"$NAME\"" "$NAME")"
+
+# fishify shortens/prettifies the current path; the final name is "<icon> <path>".
+printf '%s %s\n' "$ICON" "$(fishify "$PANE_PATH")"

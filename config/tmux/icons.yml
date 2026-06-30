@@ -1,3 +1,5 @@
+# Command-to-icon map used by config/tmux/window.
+# Keys match detected command names (tmux pane_current_command or zsh preexec).
 icons:
     apt: ""
     bash: ""
@@ -32,14 +34,14 @@ icons:
     nala: ""
     ni: ""
     node: ""
-    npm: ""
     npm: "󰛷"
     nu: ""
     nvim: ""
     pacman: ""
     parted: ""
     paru: ""
-    pnpm: ""
+    pgcli: ""
+    pi: ""
     pnpm: ""
     python: ""
     ranger: ""
@@ -58,4 +60,3 @@ icons:
     yazi: ""
     yum: ""
     zsh: ""
-    pi: ""

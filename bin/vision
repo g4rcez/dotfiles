@@ -1,0 +1,149 @@
+#!/usr/bin/env swift
+
+import Vision
+import AppKit
+import Foundation
+
+// MARK: - CLI
+
+let args = CommandLine.arguments
+
+func usage() -> Never {
+    print("""
+    vision — OSX Vision OCR, zero deps, Neural Engine powered
+
+    Usage: vision [--lang LANG[,LANG...]] [--fast] [--conf] <image-path>...
+
+    Options:
+      --lang LANG    Languages (comma-separated, default: en,pt)
+      --fast         Use fast recognition (default: accurate)
+      --conf         Show confidence per line
+      --help         This help
+
+    Examples:
+      vision screenshot.png
+      vision --lang en,pt,es --fast *.png
+      vision --conf document.png
+    """)
+    exit(1)
+}
+
+var langs = ["en-US", "pt-BR"]
+var fast = false
+var showConf = false
+var paths: [String] = []
+var i = 1
+
+while i < args.count {
+    switch args[i] {
+    case "--help", "-h":
+        usage()
+    case "--lang":
+        i += 1
+        guard i < args.count else { usage() }
+        langs = args[i].split(separator: ",").map { lang in
+            let l = String(lang).trimmingCharacters(in: .whitespaces)
+            switch l.lowercased() {
+            case "en", "eng": return "en-US"
+            case "pt", "por": return "pt-BR"
+            case "es", "spa": return "es-ES"
+            case "fr", "fra": return "fr-FR"
+            case "de", "ger", "deu": return "de-DE"
+            case "it", "ita": return "it-IT"
+            case "ja", "jpn": return "ja-JP"
+            case "zh", "chi", "zho": return "zh-Hans"
+            case "ko", "kor": return "ko-KR"
+            default: return l
+            }
+        }
+    case "--fast":
+        fast = true
+    case "--conf":
+        showConf = true
+    default:
+        if args[i].hasPrefix("-") { usage() }
+        paths.append(args[i])
+    }
+    i += 1
+}
+
+guard !paths.isEmpty else { usage() }
+
+// MARK: - OCR engine
+
+func ocr(_ imagePath: String) -> String? {
+    guard let img = NSImage(contentsOfFile: imagePath) else {
+        fputs("vision: cannot load image: \(imagePath)\n", stderr)
+        return nil
+    }
+
+    guard let cgImage = img.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+        guard let tiff = img.tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiff),
+              let cg = bitmap.cgImage else {
+            fputs("vision: cannot get pixel data from: \(imagePath)\n", stderr)
+            return nil
+        }
+        return ocrCG(cg)
+    }
+    return ocrCG(cgImage)
+}
+
+func ocrCG(_ cgImage: CGImage) -> String? {
+    let semaphore = DispatchSemaphore(value: 0)
+    var lines: [(text: String, conf: Float)] = []
+
+    let request = VNRecognizeTextRequest { (req, error) in
+        defer { semaphore.signal() }
+        if let error = error {
+            fputs("vision: Vision error: \(error.localizedDescription)\n", stderr)
+            return
+        }
+        guard let observations = req.results as? [VNRecognizedTextObservation] else { return }
+        for obs in observations {
+            if let top = obs.topCandidates(1).first {
+                lines.append((top.string, top.confidence))
+            }
+        }
+    }
+
+    request.recognitionLevel = fast ? VNRequestTextRecognitionLevel.fast : .accurate
+    request.recognitionLanguages = langs
+    request.usesLanguageCorrection = true
+    request.minimumTextHeight = 0.0
+
+    let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+    do {
+        try handler.perform([request])
+    } catch {
+        fputs("vision: Vision request failed: \(error.localizedDescription)\n", stderr)
+        return nil
+    }
+    semaphore.wait()
+
+    guard !lines.isEmpty else { return nil }
+
+    if showConf {
+        return lines.map { "[\(String(format: "%.2f", $0.conf))] \($0.text)" }.joined(separator: "\n")
+    }
+    return lines.map { $0.text }.joined(separator: "\n")
+}
+
+// MARK: - Run
+
+var anyOutput = false
+for path in paths {
+    if paths.count > 1 {
+        if anyOutput { print("") }
+        print("--- \(path) ---")
+    }
+    if let text = ocr(path) {
+        print(text)
+        anyOutput = true
+    }
+}
+
+if !anyOutput {
+    fputs("vision: no text found in any image\n", stderr)
+    exit(1)
+}
