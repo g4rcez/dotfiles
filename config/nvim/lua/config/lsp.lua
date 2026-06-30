@@ -33,9 +33,9 @@ if vim.lsp.log and vim.lsp.log.set_level then
 end
 
 vim.diagnostic.config {
+    underline = true,
     severity_sort = true,
     float = { border = "single", source = "if_many" },
-    underline = true, -- { severity = vim.diagnostic.severity.WARN },
     diagnostics = { underline = true, update_in_insert = true },
     update_in_insert = true,
     signs = {
