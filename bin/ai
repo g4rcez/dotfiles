@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$HOME/dotfiles/config/zsh/utils.sh"
 set -euo pipefail
 
 # Resolve script location (follow symlinks)
@@ -55,7 +56,7 @@ cmd_guidelines() {
     --prompt='guideline: ' \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
+    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
     --preview-window 'right,65%')
   [ -z "$selected" ] && return 0
   local file; file=$(cut -f2 <<< "$selected")
@@ -93,7 +94,7 @@ cmd_agents_list() {
     --prompt='agent: ' \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
+    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
     --preview-window 'right,65%')
   [ -z "$selected" ] && return 0
   local file; file=$(cut -f2 <<< "$selected")
@@ -139,7 +140,7 @@ cmd_agents_copy() {
       --prompt='agent: ' \
       --delimiter $'\t' \
       --with-nth 1 \
-      --preview 'bat --theme OneHalfDark --color=always {2} 2>/dev/null || cat {2}' \
+      --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
       --preview-window 'right,65%')
     [ -z "$selected" ] && return 0
     file=$(cut -f2 <<< "$selected")
@@ -354,15 +355,15 @@ cmd_list() {
       entry={1}
       path={2}
       if [[ \"\$entry\" == \[skill* ]]; then
-        bat --theme OneHalfDark --color=always \"\$path/SKILL.md\" 2>/dev/null \
+        bat --theme="Catppuccin Mocha" --color=always \"\$path/SKILL.md\" 2>/dev/null \
           || cat \"\$path/SKILL.md\" 2>/dev/null \
           || echo 'No SKILL.md found'
       elif [[ \"\$entry\" == \[subagent\]* ]] || [[ \"\$entry\" == \[agent\]* ]]; then
-        bat --theme OneHalfDark --color=always \"\$path\" 2>/dev/null \
+        bat --theme="Catppuccin Mocha" --color=always \"\$path\" 2>/dev/null \
           || cat \"\$path\" 2>/dev/null \
           || echo 'No file found'
       elif [[ \"\$entry\" == \[guideline\]* ]]; then
-        bat --theme OneHalfDark --color=always \"\$path\" 2>/dev/null \
+        bat --theme="Catppuccin Mocha" --color=always \"\$path\" 2>/dev/null \
           || cat \"\$path\" 2>/dev/null \
           || echo 'No file found'
       fi
@@ -458,11 +459,7 @@ cmd_preview() {
 }
 
 _ai_fzf_theme() {
-  printf '%s\n' \
-    "--color=dark" \
-    "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8" \
-    "--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc" \
-    "--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+  printf '%s\n' "$FZF_COLORS"
 }
 
 cmd_switch_to_pane() {

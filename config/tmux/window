@@ -34,4 +34,4 @@ get_config_value() {
 ICON="$(get_config_value ".icons.\"$NAME\"" "$NAME")"
 
 # fishify shortens/prettifies the current path; the final name is "<icon> <path>".
-printf '%s %s\n' "$ICON" "$(fishify "$PANE_PATH")"
+printf '%s %s\n' "$ICON" "$(basename "$PANE_PATH")"

@@ -17,7 +17,7 @@ mime=$(file -bL --mime-type -- "$file")
 category=${mime%%/*}
 kind=${mime##*/}
 
-bat_opts=(--style=plain --theme=OneHalfDark --color=always --pager=never)
+bat_opts=(--style=plain --theme='Catppuccin Mocha' --color=always --pager=never)
 [[ $center -gt 0 ]] && bat_opts+=(--highlight-line="$center")
 
 # Directory
