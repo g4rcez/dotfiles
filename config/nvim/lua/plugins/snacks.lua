@@ -23,7 +23,7 @@ return {
             set(0, "SnacksPickerListBorder", { fg = bg, bg = bg })
             set(0, "SnacksPickerList", { bg = bg })
             set(0, "SnacksPickerListTitle", { fg = bg, bg = bg })
-            -- @type snacks.Config
+            ---@type snacks.Config
             return vim.tbl_deep_extend("force", opts, {
                 gh = { enabled = true },
                 git = { enabled = true },
@@ -64,14 +64,14 @@ return {
                     layout = { preset = "vscode", cycle = true },
                     matcher = {
                         fuzzy = true,
+                        file_pos = true,
+                        frecency = true,
+                        cwd_bonus = true,
                         smartcase = true,
                         ignorecase = true,
                         sort_empty = false,
-                        filename_bonus = true,
-                        file_pos = true,
-                        cwd_bonus = true,
-                        frecency = true,
                         history_bonus = true,
+                        filename_bonus = true,
                     },
                     layouts = {
                         vscode = {
@@ -217,7 +217,7 @@ return {
             {
                 "<C-b>",
                 function()
-                    local explorer = Snacks.picker.get { source = "explorer" }[1]
+                    local explorer = Snacks.picker.get({ source = "explorer" })[1]
                     if explorer then
                         explorer:close()
                     else
