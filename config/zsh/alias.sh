@@ -324,6 +324,7 @@ function ask_ai() {
     ${=AI_QUERY_COMMAND} "$@"
 }
 alias '??'="ask_ai"
+alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 function worktree() {
     case "${1:-}" in
@@ -373,3 +374,4 @@ compdef _files extract fs dotenv cpv rm:dry-run rm:trash rm:safe
 compdef _cdm cdm
 compdef _killport killport
 compdef _process_names listening psgrep
+

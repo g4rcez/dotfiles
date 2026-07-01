@@ -36,7 +36,7 @@ return {
                 toggle = { enabled = true },
                 bigfile = { enabled = true },
                 explorer = { enabled = true },
-                terminal = { enabled = true },
+                terminal = { enabled = true, win = { position = "bottom", height = 0.3, border = "top" } },
                 dashboard = {
                     enabled = true,
                     keys = {
@@ -61,7 +61,7 @@ return {
                 statuscolumn = { enabled = true },
                 picker = {
                     enabled = true,
-                    layout = { preset = "telescope", cycle = true },
+                    layout = { preset = "vscode", cycle = true },
                     matcher = {
                         fuzzy = true,
                         smartcase = true,
@@ -75,24 +75,18 @@ return {
                     },
                     layouts = {
                         vscode = {
-                            preview = true,
+                            hidden = { "preview" },
                             layout = {
-                                backdrop = true,
                                 row = 1,
-                                width = 0.9,
+                                width = 0.6,
+                                height = 0.8,
                                 min_width = 80,
-                                height = 0.9,
-                                border = "double",
+                                backdrop = true,
+                                border = "solid",
                                 box = "vertical",
-                                {
-                                    win = "input",
-                                    height = 1,
-                                    border = "rounded",
-                                    title = "{title} {live} {flags}",
-                                    title_pos = "center",
-                                },
-                                { win = "list", border = "none" },
-                                { win = "preview", title = "{preview}", border = "rounded" },
+                                { win = "input", height = 1, border = true, title = "{title} {live} {flags}", title_pos = "center" },
+                                { win = "list", border = "hpad" },
+                                { win = "preview", title = "{preview}", border = true },
                             },
                         },
                         telescope = {
@@ -127,14 +121,9 @@ return {
                     sources = {
                         files = {},
                         explorer = {
-                            layout = {
-                                height = 1,
-                                preview = true,
-                                backdrop = true,
-                                border = "double",
-                                box = "vertical",
-                                preset = "vscode",
-                            },
+                            follow_file = true,
+                            focus = "list",
+                            layout = { preset = "sidebar", preview = false, layout = { width = 34 } },
                         },
                     },
                 },
@@ -226,6 +215,18 @@ return {
                 desc = "Notification History",
             },
             {
+                "<C-b>",
+                function()
+                    local explorer = Snacks.picker.get { source = "explorer" }[1]
+                    if explorer then
+                        explorer:close()
+                    else
+                        Snacks.explorer()
+                    end
+                end,
+                desc = "Toggle Sidebar",
+            },
+            {
                 "<leader>fe",
                 function()
                     Snacks.explorer {
@@ -245,16 +246,6 @@ return {
                 "<leader>fb",
                 require("snacks").picker.buffers,
                 desc = "Buffers",
-            },
-            -- {
-            --     "<leader>ff",
-            --     require("snacks").picker.files,
-            --     desc = "Find Files",
-            -- },
-            {
-                "<leader>fr",
-                require("snacks").picker.recent,
-                desc = "Recent",
             },
             {
                 "<leader>gb",

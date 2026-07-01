@@ -9,6 +9,9 @@ return {
                     mode = "buffers",
                     diagnostics = "nvim_lsp",
                     separator_style = "thin",
+                    offsets = {
+                        { filetype = "snacks_picker_list", text = "Explorer", text_align = "center", separator = true },
+                    },
                     indicator = { style = "icon", icon = " " },
                     diagnostics_indicator = function(count, level)
                         local icons = { error = " ", warning = " " }

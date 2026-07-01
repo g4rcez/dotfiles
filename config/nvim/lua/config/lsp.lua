@@ -36,7 +36,7 @@ vim.diagnostic.config {
     underline = true,
     severity_sort = true,
     float = { border = "single", source = "if_many" },
-    diagnostics = { underline = true, update_in_insert = true },
+    diagnostics = { underline = false, update_in_insert = true },
     update_in_insert = true,
     signs = {
         text = {
@@ -223,7 +223,7 @@ vim.lsp.config("emmet_ls", {
     init_options = {
         includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
         html = { options = { ["jsx.enabled"] = true } },
-        showSuggestionsAsSnippets = false,
+        showSuggestionsAsSnippets = true,
     },
 })
 

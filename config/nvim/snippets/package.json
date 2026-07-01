@@ -1,0 +1,7 @@
+{
+  "contributes": {
+    "snippets": []
+  },
+  "description": "Personal Neovim snippets.",
+  "name": "nvim-snippets"
+}

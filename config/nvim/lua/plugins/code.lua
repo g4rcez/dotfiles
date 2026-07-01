@@ -76,6 +76,28 @@ return {
         },
     },
     {
+        cond = not require("config.vscode").isVscode(),
+        "chrisgrieser/nvim-scissors",
+        opts = { snippetSelection = { picker = "snacks" } },
+        keys = {
+            {
+                "<leader>cs",
+                function()
+                    require("scissors").addNewSnippet()
+                end,
+                mode = { "n", "x" },
+                desc = "Snippet add",
+            },
+            {
+                "<leader>cS",
+                function()
+                    require("scissors").editSnippet()
+                end,
+                desc = "Snippet edit",
+            },
+        },
+    },
+    {
         "axelvc/template-string.nvim",
         ft = fileTypes,
         event = "InsertEnter",

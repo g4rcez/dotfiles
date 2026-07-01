@@ -9,7 +9,7 @@ local function createMapper()
         vim.keymap.set(mode, from, to, opts)
     end
 
-    local function bind(modes)
+    local function set(modes)
         local fn = function(from, action, opts)
             local o = opts or {}
             local desc = o.desc or ""
@@ -19,18 +19,19 @@ local function createMapper()
     end
 
     return {
-        normal = bind { "n" },
-        x = bind { "x" },
-        cmd = bind { "c" },
-        insert = bind { "i" },
-        visual = bind { "v" },
-        nx = bind { "n", "v" },
-        term = bind { "t" },
+        normal = set { "n" },
+        x = set { "x" },
+        cmd = set { "c" },
+        insert = set { "i" },
+        visual = set { "v" },
+        nx = set { "n", "v" },
+        term = set { "t" },
     }
 end
 
 local bind = createMapper()
 bind.term("<esc><esc>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
+bind.term("<C-[>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
 bind.x("p", [["_dP]], bind.DEFAULT_OPTS)
 
 bind.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
@@ -173,3 +174,11 @@ bind.normal("zo", function()
         vim.cmd "normal! zo"
     end
 end, { desc = "Fold" })
+
+bind.normal("<leader>fr", function()
+    require("grug-far").open { engine = "astgrep" }
+end, { desc = "Find and replace" })
+
+bind.visual("<leader>fr", function()
+    require("grug-far").with_visual_selection { engine = "astgrep" }
+end, { desc = "Find selection" })

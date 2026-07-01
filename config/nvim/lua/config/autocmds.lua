@@ -116,6 +116,8 @@ vim.api.nvim_create_autocmd("TermRequest", {
 vim.api.nvim_create_autocmd("TermOpen", {
     group = augroup "term_smart_open",
     callback = function(ev)
+        vim.opt.number = false
+        vim.opt.relativenumber = false
         vim.keymap.set("n", "gx", function()
             require("config.terminal").smart_open()
         end, { buffer = ev.buf, desc = "Smart open file/URL under cursor" })
