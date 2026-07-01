@@ -24,6 +24,10 @@ return {
             set(0, "SnacksPickerList", { bg = bg })
             set(0, "SnacksPickerListTitle", { fg = bg, bg = bg })
             ---@type snacks.Config
+            ---@class snacks.picker.resume.Opts
+            ---@field source? string
+            ---@field include? string[]
+            ---@field exclude? string[]
             return vim.tbl_deep_extend("force", opts, {
                 gh = { enabled = true },
                 git = { enabled = true },
@@ -121,8 +125,8 @@ return {
                     sources = {
                         files = {},
                         explorer = {
-                            follow_file = true,
                             focus = "list",
+                            follow_file = true,
                             layout = { preset = "sidebar", preview = false, layout = { width = 34 } },
                         },
                     },

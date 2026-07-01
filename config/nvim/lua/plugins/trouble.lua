@@ -25,14 +25,14 @@ return {
                 preview_float = {
                     mode = "diagnostics",
                     preview = {
+                        zindex = 200,
                         type = "float",
-                        relative = "editor",
                         border = "solid",
                         title = "Preview",
-                        title_pos = "center",
+                        relative = "editor",
                         position = { 0, -2 },
+                        title_pos = "center",
                         size = { width = 0.3, height = 0.3 },
-                        zindex = 200,
                     },
                 },
             },
