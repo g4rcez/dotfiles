@@ -9,7 +9,7 @@
     "cSpell.language": "en,pt,pt_BR",
     "[lua]": { "editor.defaultFormatter": "sumneko.lua" },
     "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[nginx]": { "editor.defaultFormatter": "raynigon.nginx-formatter" },

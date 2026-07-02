@@ -1,4 +1,5 @@
 local disabled_built_ins = {
+    "tutor",
     "netrw",
     "netrwPlugin",
     "netrwSettings",

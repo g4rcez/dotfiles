@@ -6,19 +6,33 @@ local function createMapper()
 
     M.keymap = function(mode, from, to, opts)
         opts = vim.tbl_extend("keep", opts or {}, M.DEFAULT_OPTS)
-        vim.keymap.set(mode, from, to, opts)
+
+        local ok, err = pcall(vim.keymap.set, mode, from, to, opts)
+        if ok or opts.icon == nil then
+            if not ok then
+                error(err)
+            end
+            return
+        end
+
+        if not tostring(err):match "invalid key: icon" then
+            error(err)
+        end
+
+        -- ponytail: keep icon metadata out of vim.keymap.set on Neovim builds that do not support it yet.
+        local fallback = vim.deepcopy(opts)
+        fallback.icon = nil
+        vim.keymap.set(mode, from, to, fallback)
     end
 
     local function set(modes)
-        local fn = function(from, action, opts)
-            local o = opts or {}
-            local desc = o.desc or ""
-            M.keymap(modes, from, action, { desc = desc })
+        return function(from, action, opts)
+            M.keymap(modes, from, action, opts)
         end
-        return fn
     end
 
     return {
+        DEFAULT_OPTS = M.DEFAULT_OPTS,
         normal = set { "n" },
         x = set { "x" },
         cmd = set { "c" },
@@ -38,6 +52,8 @@ bind.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
 bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
 bind.normal("j", "gj", bind.DEFAULT_OPTS)
 bind.normal("k", "gk", bind.DEFAULT_OPTS)
+bind.normal("g;", "g;", { desc = "Older change" })
+bind.normal("g,", "g,", { desc = "Newer change" })
 bind.normal("vv", "V", { desc = "Select line" })
 
 bind.normal("0", "^", { desc = "Goto first non-whitespace" })
@@ -126,10 +142,6 @@ if not vscode.isVscode() then
     end, { desc = "Enable dim" })
 end
 
-bind.normal("<leader>uh", function()
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-end, { desc = "Toggle inlay hints" })
-
 bind.normal("<leader>cy", function()
     local rel = vim.fn.fnamemodify(buf_abs(), ":.")
     vim.fn.setreg("+", rel)
@@ -177,8 +189,8 @@ end, { desc = "Fold" })
 
 bind.normal("<leader>fr", function()
     require("grug-far").open { engine = "astgrep" }
-end, { desc = "Find and replace" })
+end, { desc = "Structural find and replace" })
 
 bind.visual("<leader>fr", function()
     require("grug-far").with_visual_selection { engine = "astgrep" }
-end, { desc = "Find selection" })
+end, { desc = "Structural replace selection" })

@@ -22,7 +22,6 @@ return vscode.disable_in_vscode {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     "mason-org/mason.nvim",
     "rachartier/tiny-inline-diagnostic.nvim",
-    "MysticalDevil/inlay-hints.nvim",
     "rachartier/tiny-code-action.nvim",
     "folke/trouble.nvim",
     "stevearc/conform.nvim",

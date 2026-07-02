@@ -12,19 +12,6 @@ require("lazy").setup {
     install = { colorscheme = { "catppuccin" } },
     performance = {
         cache = { enabled = true },
-        rtp = {
-            disabled_plugins = {
-                "gzip",
-                "tutor",
-                "tohtml",
-                "matchit",
-                "rplugin",
-                "tarPlugin",
-                "zipPlugin",
-                "matchparen",
-                "netrwPlugin",
-            },
-        },
     },
 }
 

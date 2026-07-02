@@ -49,7 +49,7 @@ vim.opt.ruler = true
 vim.opt.scrolloff = 10
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 vim.opt.shiftround = true
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 vim.opt.shortmess:append { W = true, I = true, c = true, C = true }
 vim.opt.showcmd = false
 vim.opt.shada = "!,'100,<50,s10,h"
@@ -75,17 +75,10 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.lazyredraw = false
-vim.opt.ttyfast = true
 vim.o.switchbuf = "usetab"
 
 -- undo
 vim.opt.undodir = vim.fn.stdpath "data" .. "/undo"
-
-vim.opt.path = ".,**"
-
--- Undercurl
-vim.cmd [[let &t_Cs = "\e[4:3m"]]
-vim.cmd [[let &t_Ce = "\e[4:0m"]]
 
 -- split view
 vim.opt.inccommand = "split"

@@ -33,7 +33,7 @@ if vim.lsp.log and vim.lsp.log.set_level then
 end
 
 vim.diagnostic.config {
-    underline = true,
+    underline = false,
     severity_sort = true,
     float = { border = "single", source = "if_many" },
     diagnostics = { underline = false, update_in_insert = true },
@@ -120,13 +120,27 @@ vim.api.nvim_create_autocmd("LspAttach", {
         opts.desc = "See available code actions"
         keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 
+        opts.desc = "Extract refactor"
+        keymap.set({ "n", "v" }, "<leader>cx", function()
+            vim.lsp.buf.code_action {
+                context = { only = { "refactor.extract" } },
+            }
+        end, opts)
+
         opts.desc = "Show buffer diagnostics"
         keymap.set("n", "<leader>D", function()
             Snacks.picker.diagnostics_buffer()
         end, opts)
 
-        opts.desc = "Show line diagnostics"
-        keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+        opts.desc = "Show cursor diagnostics"
+        keymap.set("n", "<leader>d", function()
+            vim.diagnostic.open_float {
+                scope = "cursor",
+                source = "if_many",
+                border = "rounded",
+                focusable = false,
+            }
+        end, opts)
 
         opts.desc = "Go to previous diagnostic"
         keymap.set("n", "[d", function()

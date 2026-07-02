@@ -48,6 +48,7 @@ local function set_avante_highlights()
 end
 
 return {
+    enabled = false,
     "yetone/avante.nvim",
     build = vim.fn.has "win32" ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" or "make",
     event = "VeryLazy",
@@ -64,26 +65,6 @@ return {
         "MunifTanjim/nui.nvim",
         "folke/snacks.nvim",
         "nvim-tree/nvim-web-devicons",
-        {
-            "HakonHarnes/img-clip.nvim",
-            event = "VeryLazy",
-            opts = {
-                default = {
-                    use_absolute_path = true,
-                    prompt_for_file_name = false,
-                    embed_image_as_base64 = false,
-                    drag_and_drop = { insert_mode = true },
-                },
-            },
-        },
-        {
-            -- Make sure to set this up properly if you have lazy=true
-            "MeanderingProgrammer/render-markdown.nvim",
-            opts = {
-                file_types = { "markdown", "Avante" },
-            },
-            ft = { "markdown", "Avante" },
-        },
     },
     ---@module 'avante'
     ---@type avante.Config
@@ -127,8 +108,10 @@ return {
             codex = {
                 command = "codex-acp",
                 args = {},
+                auth_method = "chatgpt",
                 env = {
                     NODE_NO_WARNINGS = "1",
+                    OPENAI_API_KEY = "",
                 },
             },
         },

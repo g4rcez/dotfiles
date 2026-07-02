@@ -16,10 +16,8 @@ return {
             focus = true,
             ---@type trouble.Window.opts
             win = {
-                type = "float",
-                border = "solid",
-                position = "top",
-                relative = "editor",
+                type = "split",
+                position = "right",
             },
             modes = {
                 preview_float = {
@@ -42,22 +40,22 @@ return {
             {
                 "<leader>xx",
                 "<cmd>Trouble diagnostics toggle<cr>",
-                desc = "Diagnostics (Trouble)",
+                desc = "Workspace Diagnostics (Trouble)",
             },
             {
                 "<leader>xX",
                 "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-                desc = "Buffer Diagnostics (Trouble)",
+                desc = "Buffer Diagnostics Triage (Trouble)",
             },
             {
-                "<leader>cs",
+                "<leader>xs",
                 "<cmd>Trouble symbols toggle focus=false<cr>",
                 desc = "Symbols (Trouble)",
             },
             {
-                "<leader>cl",
-                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-                desc = "LSP Definitions / references / ... (Trouble)",
+                "<leader>xl",
+                "<cmd>Trouble lsp toggle focus=false<cr>",
+                desc = "LSP Locations (Trouble)",
             },
             {
                 "<leader>xL",

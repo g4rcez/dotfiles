@@ -179,6 +179,20 @@ return {
                 desc = "Grep",
             },
             {
+                "<leader>fR",
+                function()
+                    Snacks.picker.recent()
+                end,
+                desc = "Recent Files",
+            },
+            {
+                "<leader>fj",
+                function()
+                    Snacks.picker.jumps()
+                end,
+                desc = "Recent Locations",
+            },
+            {
                 "<leader>fc",
                 function()
                     Snacks.picker.command_history()
@@ -555,6 +569,20 @@ return {
                     Snacks.picker.lsp_type_definitions()
                 end,
                 desc = "Goto T[y]pe Definition",
+            },
+            {
+                "gai",
+                function()
+                    Snacks.picker.lsp_incoming_calls()
+                end,
+                desc = "Calls Incoming",
+            },
+            {
+                "gao",
+                function()
+                    Snacks.picker.lsp_outgoing_calls()
+                end,
+                desc = "Calls Outgoing",
             },
             {
                 "<leader>ss",

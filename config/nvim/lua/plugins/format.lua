@@ -82,7 +82,7 @@ return {
                 oxfmt = { trailingComma = "none" },
                 prettier = { trailingComma = "none" },
                 prettierd = { trailingComma = "none" },
-                shfmt = { append_args = { "-i", "2" } },
+                shfmt = { append_args = { "-i", "4" } },
             },
             formatters_by_ft = {
                 json = is_oxc,

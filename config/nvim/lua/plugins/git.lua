@@ -84,17 +84,22 @@ return {
                 map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "git [s]tage hunk" })
                 map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
                 map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "git [S]tage buffer" })
-                map("n", "<leader>hu", gitsigns.stage_hunk, { desc = "git [u]ndo stage hunk" })
+                map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
                 map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
                 map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
+                map("n", "<leader>hi", gitsigns.preview_hunk_inline, { desc = "git preview [i]nline" })
                 map("n", "<leader>hb", gitsigns.blame_line, { desc = "git [b]lame line" })
+                map("n", "<leader>hB", function()
+                    gitsigns.blame_line { full = true }
+                end, { desc = "git [B]lame line full" })
                 map("n", "<leader>hd", gitsigns.diffthis, { desc = "git [d]iff against index" })
                 map("n", "<leader>hD", function()
                     gitsigns.diffthis "@"
                 end, { desc = "git [D]iff against last commit" })
                 -- Toggles
                 map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "[T]oggle git show [b]lame line" })
-                map("n", "<leader>tD", gitsigns.preview_hunk_inline, { desc = "[T]oggle git show [D]eleted" })
+                map("n", "<leader>tw", gitsigns.toggle_word_diff, { desc = "[T]oggle git [w]ord diff" })
+                map("n", "<leader>tD", gitsigns.preview_hunk_inline, { desc = "Preview inline [D]iff" })
             end,
         },
     },

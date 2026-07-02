@@ -309,13 +309,13 @@ return {
         opts = {
             zindex = 10,
             enable = true,
-            max_lines = 2,
+            max_lines = 4,
             mode = "cursor",
-            separator = nil,
+            separator = "─",
             multiwindow = true,
             line_numbers = true,
             trim_scope = "outer",
-            multiline_threshold = 2,
+            multiline_threshold = 1,
         },
     },
     {

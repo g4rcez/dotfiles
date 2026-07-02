@@ -15,6 +15,8 @@ return {
             { "<leader>u", group = "[U]i" },
             { "<leader>s", group = "[S]earch" },
             { "<leader>t", group = "[T]oggle" },
+            { "<leader>T", group = "[T]ests" },
+            { "<leader>w", group = "[W]orkspace" },
             { "<leader>b", group = "[B]uffers" },
             { "<leader>m", group = "[M]arkdown" },
             { "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
