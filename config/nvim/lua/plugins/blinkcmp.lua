@@ -119,12 +119,12 @@ return {
                 menu = {
                     min_width = 40,
                     auto_show = true,
-                    border = "rounded",
+                    border = "single",
                     auto_show_delay_ms = 0,
                     draw = {
                         treesitter = { "lsp" },
                         padding = 1,
-                        columns = { { "kind_icon" }, { "label", "label_description", "source_name", gap = 1 } },
+                        columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
                     },
                 },
                 documentation = {

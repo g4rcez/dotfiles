@@ -1,3 +1,168 @@
+local function package_manager(root)
+    for _, lock in ipairs { { "bun.lock", "bun" }, { "bun.lockb", "bun" }, { "pnpm-lock.yaml", "pnpm" }, { "yarn.lock", "yarn" }, { "package-lock.json", "npm" } } do
+        if vim.uv.fs_stat(root .. "/" .. lock[1]) then
+            return lock[2]
+        end
+    end
+    return "npm"
+end
+
+local function package_script_items()
+    local root = vim.fs.root(0, "package.json")
+    if not root then
+        return nil, "No package.json found"
+    end
+
+    local ok, pkg = pcall(vim.json.decode, table.concat(vim.fn.readfile(root .. "/package.json"), "\n"))
+    local scripts = ok and pkg and pkg.scripts or {}
+    local names = vim.tbl_keys(scripts)
+    table.sort(names)
+    if #names == 0 then
+        return nil, "No package scripts found"
+    end
+
+    return vim.tbl_map(function(name)
+        return { text = name .. "  " .. tostring(scripts[name]), script = name, root = root }
+    end, names)
+end
+
+local search_everywhere_modes = {
+    {
+        name = "Files",
+        open = function(opts)
+            Snacks.picker.files(vim.tbl_deep_extend("force", opts,
+                { hidden = true, ignored = false, follow = true, supports_live = true }))
+        end,
+    },
+    {
+        name = "Grep",
+        open = function(opts)
+            Snacks.picker.grep(opts)
+        end,
+    },
+    {
+        name = "Recent",
+        open = function(opts)
+            Snacks.picker.recent(opts)
+        end,
+    },
+    {
+        name = "Symbols",
+        open = function(opts)
+            Snacks.picker.lsp_symbols(opts)
+        end,
+    },
+    {
+        name = "Workspace Symbols",
+        open = function(opts)
+            Snacks.picker.lsp_workspace_symbols(opts)
+        end,
+    },
+    {
+        name = "Commands",
+        open = function(opts)
+            Snacks.picker.commands(opts)
+        end,
+    },
+    {
+        name = "Package Scripts",
+        open = function(opts)
+            local items, err = package_script_items()
+            if not items then
+                vim.notify(err, vim.log.levels.WARN)
+                return
+            end
+            Snacks.picker.pick(vim.tbl_deep_extend("force", opts, {
+                items = items,
+                format = "text",
+                preview = "none",
+                confirm = function(picker, item)
+                    picker:close()
+                    if item then
+                        Snacks.terminal(
+                            { package_manager(item.root), "run", item.script },
+                            { cwd = item.root, win = { position = "bottom", height = 0.3, border = "top" } }
+                        )
+                    end
+                end,
+            }))
+        end,
+    },
+}
+
+local search_everywhere
+
+local function search_everywhere_opts(index, pattern)
+    local function switch(delta)
+        return function(picker)
+            local next_pattern = picker.input and picker.input:get() or pattern
+            picker:close()
+            vim.schedule(function()
+                search_everywhere(index + delta, next_pattern)
+            end)
+        end
+    end
+    local mode = search_everywhere_modes[index]
+    return {
+        title = "Files " .. mode.name .. "  󰁔/󰁍 mode",
+        pattern = pattern,
+        search = pattern,
+        matcher = {
+            fuzzy = true,
+            file_pos = true,
+            frecency = true,
+            cwd_bonus = true,
+            smartcase = true,
+            ignorecase = true,
+            sort_empty = false,
+            history_bonus = true,
+            filename_bonus = true,
+        },
+        actions = { mode_next = switch(1), mode_prev = switch(-1) },
+        on_show = function(picker)
+            for key, delta in pairs { ["<C-Right>"] = 1, ["<C-Down>"] = 1, ["<C-Left>"] = -1, ["<C-Up>"] = -1 } do
+                vim.keymap.set({ "n", "i" }, key, function()
+                    switch(delta)(picker)
+                end, { buffer = picker.input.win.buf, silent = true, desc = "Switch Search Everywhere mode" })
+                vim.keymap.set("n", key, function()
+                    switch(delta)(picker)
+                end, { buffer = picker.list.win.buf, silent = true, desc = "Switch Search Everywhere mode" })
+            end
+        end,
+        win = {
+            input = {
+                keys = {
+                    ["<C-Right>"] = { "mode_next", mode = { "n", "i" } },
+                    ["<C-Down>"] = { "mode_next", mode = { "n", "i" } },
+                    ["<C-Left>"] = { "mode_prev", mode = { "n", "i" } },
+                    ["<C-Up>"] = { "mode_prev", mode = { "n", "i" } },
+                },
+            },
+            list = {
+                keys = {
+                    ["<C-Right>"] = "mode_next",
+                    ["<C-Down>"] = "mode_next",
+                    ["<C-Left>"] = "mode_prev",
+                    ["<C-Up>"] = "mode_prev",
+                },
+            },
+        },
+    }
+end
+
+search_everywhere = function(index, pattern)
+    index = ((index or 1) - 1) % #search_everywhere_modes + 1
+    search_everywhere_modes[index].open(search_everywhere_opts(index, pattern or ""))
+end
+
+local function find_files()
+    search_everywhere_modes[1].open(search_everywhere_opts(1, ""))
+end
+
+local function package_scripts()
+    search_everywhere_modes[#search_everywhere_modes].open(search_everywhere_opts(#search_everywhere_modes, ""))
+end
+
 return {
     {
         "folke/snacks.nvim",
@@ -44,10 +209,10 @@ return {
                 dashboard = {
                     enabled = true,
                     keys = {
-                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.picker.files()" },
-                        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                        { icon = " ", key = "f", desc = "Find File",    action = ":lua Snacks.picker.files()" },
+                        { icon = " ", key = "n", desc = "New File",     action = ":ene | startinsert" },
                         { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.picker.recent()" },
-                        { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.picker.grep()" },
+                        { icon = " ", key = "g", desc = "Find Text",    action = ":lua Snacks.picker.grep()" },
                         {
                             icon = " ",
                             key = "S",
@@ -88,8 +253,8 @@ return {
                                 backdrop = true,
                                 border = "solid",
                                 box = "vertical",
-                                { win = "input", height = 1, border = true, title = "{title} {live} {flags}", title_pos = "center" },
-                                { win = "list", border = "hpad" },
+                                { win = "input",   height = 1,          border = true, title = "{title} {live} {flags}", title_pos = "center" },
+                                { win = "list",    border = "hpad" },
                                 { win = "preview", title = "{preview}", border = true },
                             },
                         },
@@ -127,7 +292,7 @@ return {
                         explorer = {
                             focus = "list",
                             follow_file = true,
-                            layout = { preset = "sidebar", preview = false, layout = { width = 34 } },
+                            layout = { preset = "sidebar", preview = false, layout = { width = 34, position = "right" } },
                         },
                     },
                 },
@@ -163,6 +328,16 @@ return {
                     }
                 end,
                 desc = "Find Files",
+            },
+            {
+                "<leader>ff",
+                find_files,
+                desc = "Find Files",
+            },
+            {
+                "<leader>rr",
+                package_scripts,
+                desc = "Run Package Script",
             },
             {
                 "<C-S-f>",
@@ -681,6 +856,13 @@ return {
                     Snacks.terminal()
                 end,
                 desc = "which_key_ignore",
+            },
+            {
+                "<C-`>",
+                function()
+                    Snacks.terminal()
+                end,
+                desc = "Terminal",
             },
             {
                 "]]",

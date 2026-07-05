@@ -2,6 +2,37 @@ local function augroup(name)
     return vim.api.nvim_create_augroup("autocmd_group_" .. name, { clear = true })
 end
 
+vim.g.code_actions_on_save = vim.g.code_actions_on_save or false
+
+vim.api.nvim_create_user_command("CodeActionsOnSaveToggle", function()
+    vim.g.code_actions_on_save = not vim.g.code_actions_on_save
+    vim.notify("Code actions on save: " .. (vim.g.code_actions_on_save and "enabled" or "disabled"))
+end, { desc = "Toggle format + organize imports on save" })
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup "code_actions_on_save",
+    pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.vue" },
+    callback = function(event)
+        if not vim.g.code_actions_on_save then return end
+
+        local client = vim.lsp.get_clients({ name = "vtsls", bufnr = event.buf })[1]
+        if client then
+            local result = client:request_sync("workspace/executeCommand", {
+                command = "_typescript.organizeImports",
+                arguments = { vim.api.nvim_buf_get_name(event.buf) },
+            }, 1000, event.buf)
+            if result and result.err then vim.notify(result.err.message, vim.log.levels.ERROR) end
+        end
+
+        local ok, conform = pcall(require, "conform")
+        if ok then
+            conform.format { bufnr = event.buf, lsp_fallback = true, timeout_ms = 2000 }
+        else
+            vim.lsp.buf.format { bufnr = event.buf, timeout_ms = 2000 }
+        end
+    end,
+})
+
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
     group = augroup "checktime",

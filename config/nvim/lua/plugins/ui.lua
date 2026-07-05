@@ -51,9 +51,7 @@ return {
                     information = { "underline" },
                     ok = { "underline" },
                 },
-                inlay_hints = {
-                    background = true,
-                },
+                inlay_hints = { background = true },
             },
             integrations = {
                 cmp = true,

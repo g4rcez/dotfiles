@@ -69,8 +69,12 @@ bind.normal("*", "*zz", { desc = "Center next pattern" })
 bind.normal("+", "<C-a>", { desc = "Increment" })
 bind.normal("-", "<C-x>", { desc = "Decrement" })
 bind.normal("<BS>", '"_', { desc = "BlackHole register" })
+bind.normal("dd", function()
+    return vim.api.nvim_get_current_line() == "" and '"_dd' or "dd"
+end, { expr = true, desc = "Delete line" })
 bind.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
 bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
+bind.normal("<leader>uA", "<cmd>CodeActionsOnSaveToggle<CR>", { desc = "Toggle code actions on save" })
 bind.normal("<leader>J", "v%J", { desc = "Join next match" })
 bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
 
@@ -148,21 +152,30 @@ bind.normal("<leader>cy", function()
     vim.notify("Yanked (relative): " .. rel)
 end, { desc = "[c]ode [y]ank path" })
 
--- bind.insert("@@", function()
---     Snacks.picker.files {
---         confirm = function(picker, item)
---             picker:close()
---             if item then
---                 local rel = vim.fn.fnamemodify(item._path or item.file or item.text, ":.")
---                 vim.api.nvim_put({ "@" .. rel }, "c", true, true)
---                 vim.schedule(function()
---                     vim.cmd "normal! a"
---                     vim.cmd "startinsert"
---                 end)
---             end
---         end,
---     }
--- end, { desc = "Insert @file path at cursor" })
+bind.normal("<leader>cd", function()
+    local function dirname(str)
+        return str:match "(.*[/\\])"
+    end
+    local rel = dirname(vim.fn.fnamemodify(buf_abs(), ":."))
+    vim.fn.setreg("+", rel)
+    vim.notify("Yanked (relative): " .. rel)
+end, { desc = "[c]ode yank [d]ir" })
+
+bind.normal("<leader>xc", function()
+    local loc = vim.fn.fnamemodify(buf_abs(), ":.") .. ":" .. vim.fn.line "."
+    vim.fn.setreg("+", loc)
+    vim.notify("Yanked: " .. loc)
+end, { desc = "Copy path:line" })
+
+bind.normal("<leader>xo", function()
+    local loc = vim.fn.getreg("+"):match "^%s*(.-)%s*$"
+    if loc == "" then
+        vim.notify("Clipboard is empty", vim.log.levels.WARN)
+        return
+    end
+
+    vim.cmd.edit(vim.fn.fnameescape(loc))
+end, { desc = "Open copied path:line" })
 
 if not vscode.isVscode() then
     bind.normal("zR", function()
@@ -194,3 +207,7 @@ end, { desc = "Structural find and replace" })
 bind.visual("<leader>fr", function()
     require("grug-far").with_visual_selection { engine = "astgrep" }
 end, { desc = "Structural replace selection" })
+
+bind.x(".", ":norm .<CR>", nosilent)
+bind.x("@", ":norm @q<CR>", nosilent)
+

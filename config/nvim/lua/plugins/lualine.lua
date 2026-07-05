@@ -1,3 +1,8 @@
+local function macro_recording()
+    local reg = vim.fn.reg_recording()
+    return reg ~= "" and "󰑋 @" .. reg or ""
+end
+
 local mode_icons = {
     NORMAL = " ",
     INSERT = "󰗧 ",
@@ -25,6 +30,22 @@ return {
                 component_separators = { left = "", right = "" },
                 section_separators = { left = "", right = "" },
                 disabled_filetypes = { statusline = { "alpha", "dashboard", "snacks_dashboard" }, winbar = {} },
+                refresh = {
+                    events = {
+                        "WinEnter",
+                        "BufEnter",
+                        "BufWritePost",
+                        "SessionLoadPost",
+                        "FileChangedShellPost",
+                        "VimResized",
+                        "Filetype",
+                        "CursorMoved",
+                        "CursorMovedI",
+                        "ModeChanged",
+                        "RecordingEnter",
+                        "RecordingLeave",
+                    },
+                },
             },
             extensions = { "quickfix", "oil", "lazy", "trouble" },
             sections = {
@@ -35,6 +56,7 @@ return {
                             return (mode_icons[m] or "  ")
                         end,
                     },
+                    { macro_recording, color = "WarningMsg" },
                 },
                 lualine_b = {},
                 lualine_c = {

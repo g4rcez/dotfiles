@@ -142,6 +142,7 @@ function vivid-update() {
 
 function updateAll() {
     vivid-update
+    mise self-update
     nodeUpdatePackages
     brew update
     brew upgrade

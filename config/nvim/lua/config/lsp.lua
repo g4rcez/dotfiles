@@ -46,19 +46,7 @@ vim.diagnostic.config {
             [severity.INFO] = " ",
         },
     },
-    virtual_text = {
-        spacing = 4,
-        source = true,
-        format = function(diagnostic)
-            local diagnostic_message = {
-                [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                [vim.diagnostic.severity.WARN] = diagnostic.message,
-                [vim.diagnostic.severity.INFO] = diagnostic.message,
-                [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-        end,
-    },
+    virtual_text = false,
 }
 
 vim.filetype.add {
@@ -168,9 +156,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
         opts.desc = "Open LSP log"
         keymap.set("n", "<leader>cl", "<cmd>LspLog<cr>", opts)
 
-        opts.desc = "Toggle inlay hints"
+        opts.desc = "Toggle hints and diagnostics"
         keymap.set("n", "<leader>th", function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = ev.buf })
+            local hidden = not vim.b[ev.buf].hints_diagnostics_hidden
+            vim.b[ev.buf].hints_diagnostics_hidden = hidden
+            vim.lsp.inlay_hint.enable(not hidden, { bufnr = ev.buf })
+            vim.diagnostic.enable(not hidden, { bufnr = ev.buf })
+            vim.notify((hidden and "Hidden" or "Shown") .. " hints and diagnostics")
         end, opts)
 
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -232,7 +224,7 @@ vim.lsp.config("html", {
 vim.lsp.config("emmet_ls", {
     capabilities = capabilities,
     cmd = { "emmet-ls", "--stdio" },
-    root_markers = { "package.json", ".git" },
+    root_markers = { "package.json" },
     filetypes = { "html", "css", "scss", "erb", "javascriptreact", "typescriptreact" },
     init_options = {
         includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
@@ -307,7 +299,6 @@ vim.lsp.config("tailwindcss", {
         "postcss.config.mjs",
         "postcss.config.ts",
         "package.json",
-        ".git",
     },
     filetypes = {
         "astro",
@@ -371,6 +362,7 @@ vim.lsp.config("tailwindcss", {
                 "className",
                 "class:list",
                 "classList",
+                "cva",
                 "ngClass",
                 "container",
                 "bodyClassName",
@@ -391,7 +383,7 @@ vim.lsp.config("tailwindcss", {
 vim.lsp.config("vtsls", {
     capabilities = capabilities,
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-    root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+    root_markers = { "package.json", "tsconfig.json", "jsconfig.json" },
     init_options = { hostInfo = "neovim" },
     before_init = function(_, config)
         -- Prefer yarn v4 PnP SDK, fall back to node_modules

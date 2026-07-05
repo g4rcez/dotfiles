@@ -46,6 +46,15 @@ return {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPre", "BufNewFile" },
         opts = {
+            current_line_blame = true,
+            current_line_blame_opts = {
+                delay = 500,
+                use_focus = true,
+                virt_text = true,
+                virt_text_pos = "eol",
+                virt_text_priority = 100,
+                ignore_whitespace = false,
+            },
             signs = {
                 add = { text = " " },
                 change = { text = " " },

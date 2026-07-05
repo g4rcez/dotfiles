@@ -73,11 +73,28 @@ return {
                 end,
                 desc = "Test stop",
             },
+            {
+                "<leader>Tj",
+                function()
+                    require("neotest").jump.next { status = "failed" }
+                end,
+                desc = "Next failed test",
+            },
+            {
+                "<leader>Tk",
+                function()
+                    require("neotest").jump.prev { status = "failed" }
+                end,
+                desc = "Previous failed test",
+            },
         },
         opts = {
             adapters = {
                 ["neotest-vitest"] = {},
                 ["neotest-bun"] = {},
+            },
+            summary = {
+                open = "botright vsplit | vertical resize 50",
             },
             output_panel = {
                 open = "botright split | resize 12",
