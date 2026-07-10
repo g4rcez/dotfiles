@@ -298,6 +298,12 @@ return {
                 },
             })
         end,
+        config = function(_, opts)
+            local snacks = require "snacks"
+            snacks.setup(opts)
+            snacks.input.enable()
+            vim.ui.select = snacks.picker.select
+        end,
         keys = {
             {
                 "<leader>,",

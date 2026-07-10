@@ -13,15 +13,24 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     group = augroup "code_actions_on_save",
     pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.vue" },
     callback = function(event)
-        if not vim.g.code_actions_on_save then return end
+        if not vim.g.code_actions_on_save then
+            return
+        end
 
-        local client = vim.lsp.get_clients({ name = "vtsls", bufnr = event.buf })[1]
-        if client then
-            local result = client:request_sync("workspace/executeCommand", {
-                command = "_typescript.organizeImports",
-                arguments = { vim.api.nvim_buf_get_name(event.buf) },
-            }, 1000, event.buf)
-            if result and result.err then vim.notify(result.err.message, vim.log.levels.ERROR) end
+        for _, client in ipairs(vim.lsp.get_clients { bufnr = event.buf, method = "textDocument/codeAction" }) do
+            local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
+            params.context = { only = { "source.organizeImports" }, diagnostics = {} }
+            local result = client:request_sync("textDocument/codeAction", params, 1000, event.buf)
+            local action = result and result.result and result.result[1]
+            if action then
+                if action.edit then
+                    vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+                end
+                if action.command then
+                    client:request_sync("workspace/executeCommand", type(action.command) == "table" and action.command or action, 1000, event.buf)
+                end
+                break
+            end
         end
 
         local ok, conform = pcall(require, "conform")
@@ -154,4 +163,3 @@ vim.api.nvim_create_autocmd("TermOpen", {
         end, { buffer = ev.buf, desc = "Smart open file/URL under cursor" })
     end,
 })
-

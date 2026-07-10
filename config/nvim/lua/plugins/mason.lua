@@ -4,7 +4,7 @@ return {
         event = "VeryLazy",
         dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
         opts = {
-            ensure_installed = require("config.ensure-installed").lsp,
+            ensure_installed = require("config.ensure-installed").mason_lsp,
             automatic_enable = false,
         },
     },

@@ -5,25 +5,13 @@ return {
         "not-manu/filemention.nvim",
         event = "InsertEnter",
         opts = {
-            trigger = "@",
             root = "git",
-            respect_gitignore = true,
-            include_hidden = false,
-            format = "bare",
-            filetypes = enabledFtMarkdown,
-            max_items = 500,
+            trigger = "@",
             finder = "auto",
-        },
-    },
-    {
-        "newtoallofthis123/blink-cmp-fuzzy-path",
-        dependencies = { "saghen/blink.cmp" },
-        opts = {
-            max_results = 10,
-            search_tool = "fd",
-            trigger_char = "@",
-            search_hidden = true,
-            relative_paths = true,
+            format = "bare",
+            max_items = 500,
+            include_hidden = false,
+            respect_gitignore = true,
             filetypes = enabledFtMarkdown,
         },
     },
@@ -50,12 +38,16 @@ return {
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
-            fuzzy = {
-                implementation = "rust",
-                sorts = { "score", "exact", "sort_text", "label" },
-            },
+            snippets = { preset = "default" },
             signature = { enabled = true, window = { border = "single" } },
+            fuzzy = {
+                use_proximity = true,
+                implementation = "rust",
+                frecency = { enabled = true },
+                sorts = { "score", "exact", "label", "sort_text" },
+            },
             appearance = {
+                use_nvim_cmp_as_default = true,
                 nerd_font_variant = "mono",
                 kind_icons = {
                     Text = "",
@@ -85,8 +77,8 @@ return {
                     TypeParameter = "",
                 },
             },
-            snippets = { preset = "default" },
             cmdline = {
+                enabled = true,
                 keymap = { preset = "default" },
                 completion = {
                     ghost_text = { enabled = true },
@@ -99,7 +91,7 @@ return {
                 },
             },
             completion = {
-                keyword = { range = "full" },
+                keyword = { range = "prefix" },
                 ghost_text = { enabled = true },
                 trigger = { show_in_snippet = false, prefetch_on_insert = true, show_on_insert = true },
                 list = {
@@ -107,6 +99,7 @@ return {
                     selection = { preselect = true, auto_insert = false },
                 },
                 accept = {
+                    dot_repeat = false,
                     create_undo_point = true,
                     auto_brackets = {
                         enabled = true,
@@ -122,9 +115,13 @@ return {
                     border = "single",
                     auto_show_delay_ms = 0,
                     draw = {
-                        treesitter = { "lsp" },
                         padding = 1,
-                        columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
+                        treesitter = { "lsp" },
+                        columns = {
+                            { "kind_icon" },
+                            { "label", "label_description", gap = 1 },
+                            { "kind", gap = 1 },
+                        },
                     },
                 },
                 documentation = {
@@ -151,22 +148,21 @@ return {
                 default = { "lsp", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
                     lua = { inherit_defaults = true, "lazydev" },
-                    txt = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
-                    json = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
-                    text = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
-                    markdown = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
-                    gitcommit = { inherit_defaults = true, "git", "conventional_commits", "fuzzy-path" },
+                    json = { inherit_defaults = true, "git", "filemention" },
+                    txt = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
+                    text = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
+                    markdown = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
+                    gitcommit = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
                 },
                 providers = {
                     lsp = { name = "LSP" },
                     path = { name = "Path" },
-                    buffer = { name = "Buf", min_keyword_length = 4, score_offset = -5 },
-                    snippets = { name = "Snip", min_keyword_length = 2, score_offset = 0 },
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
                     dadbod = { name = "DB", module = "vim_dadbod_completion.blink" },
+                    buffer = { name = "Buf", min_keyword_length = 5, score_offset = -5 },
                     filemention = { name = "File", module = "filemention.sources.blink" },
+                    snippets = { name = "Snip", min_keyword_length = 3, score_offset = 0 },
                     lazydev = { name = "Lua", module = "lazydev.integrations.blink", score_offset = 100 },
-                    ["fuzzy-path"] = { name = "Path", module = "blink-cmp-fuzzy-path", score_offset = 0 },
                     conventional_commits = { name = "Commit", module = "blink-cmp-conventional-commits", opts = {} },
                 },
             },

@@ -35,9 +35,10 @@ end
 vim.diagnostic.config {
     underline = false,
     severity_sort = true,
+    virtual_text = false,
+    update_in_insert = true,
     float = { border = "single", source = "if_many" },
     diagnostics = { underline = false, update_in_insert = true },
-    update_in_insert = true,
     signs = {
         text = {
             [severity.ERROR] = " ",
@@ -46,17 +47,16 @@ vim.diagnostic.config {
             [severity.INFO] = " ",
         },
     },
-    virtual_text = false,
 }
 
 vim.filetype.add {
     extension = { mdx = "mdx", http = "http", rasi = "rasi", rofi = "rasi", wofi = "rasi", vifmrc = "vim" },
     pattern = {
-        [".*/waybar/config"] = "jsonc",
+        ["%.env%.[%w_.-]+"] = "sh",
         [".*/mako/config"] = "dosini",
+        [".*/waybar/config"] = "jsonc",
         [".*/kitty/.+%.conf"] = "kitty",
         [".*/hypr/.+%.conf"] = "hyprlang",
-        ["%.env%.[%w_.-]+"] = "sh",
     },
 }
 
@@ -121,7 +121,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, opts)
 
         opts.desc = "Show cursor diagnostics"
-        keymap.set("n", "<leader>d", function()
+        keymap.set("n", "<leader>dd", function()
             vim.diagnostic.open_float {
                 scope = "cursor",
                 source = "if_many",
@@ -205,35 +205,37 @@ if has_blink then
     capabilities = blink.get_lsp_capabilities(capabilities)
 end
 
--- Load nvim-lspconfig's built-in server definitions before enabling servers.
 pcall(require, "lspconfig")
 
-vim.lsp.config("kulala_ls", { capabilities = capabilities })
-vim.lsp.config("css_variables", { capabilities = capabilities })
-vim.lsp.config("docker_compose_language_service", { capabilities = capabilities })
-vim.lsp.config("denols", {
-    capabilities = capabilities,
+local function lsp_config(name, opts)
+    opts = opts or {}
+    opts.capabilities = opts.capabilities or capabilities
+    vim.lsp.config(name, opts)
+end
+
+lsp_config "kulala_ls"
+lsp_config "css_variables"
+lsp_config "docker_compose_language_service"
+lsp_config("denols", {
     root_markers = { "deno.json", "deno.jsonc" },
 })
-vim.lsp.config("html", {
+lsp_config("html", {
     filetypes = { "html" },
-    capabilities = capabilities,
     cmd = { "vscode-html-language-server", "--stdio" },
 })
 
-vim.lsp.config("emmet_ls", {
-    capabilities = capabilities,
+lsp_config("emmet_ls", {
     cmd = { "emmet-ls", "--stdio" },
     root_markers = { "package.json" },
     filetypes = { "html", "css", "scss", "erb", "javascriptreact", "typescriptreact" },
     init_options = {
-        includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
-        html = { options = { ["jsx.enabled"] = true } },
         showSuggestionsAsSnippets = true,
+        html = { options = { ["jsx.enabled"] = true } },
+        includeLanguages = { javascriptreact = "html", typescriptreact = "html" },
     },
 })
 
-vim.lsp.config("jsonls", {
+lsp_config("jsonls", {
     before_init = function(_, newConfig)
         newConfig.settings.json.schemas = newConfig.settings.json.schemas or {}
         vim.list_extend(newConfig.settings.json.schemas, require("schemastore").json.schemas())
@@ -246,8 +248,7 @@ vim.lsp.config("jsonls", {
     },
 })
 
-vim.lsp.config("dockerls", {
-    capabilities = capabilities,
+lsp_config("dockerls", {
     root_markers = { "Dockerfile" },
     cmd = { "docker-langserver", "--stdio" },
     filetypes = { "Dockerfile", "dockerfile" },
@@ -258,8 +259,7 @@ vim.lsp.config("dockerls", {
     },
 })
 
-vim.lsp.config("cssls", {
-    capabilities = capabilities,
+lsp_config("cssls", {
     filetypes = { "css", "scss", "less" },
     settings = {
         css = {
@@ -273,8 +273,7 @@ vim.lsp.config("cssls", {
     },
 })
 
-vim.lsp.config("tailwindcss", {
-    capabilities = capabilities,
+lsp_config("tailwindcss", {
     name = "tailwindcss-language-server",
     cmd = { "tailwindcss-language-server", "--stdio" },
     pattern = {
@@ -380,37 +379,15 @@ vim.lsp.config("tailwindcss", {
     },
 })
 
-vim.lsp.config("vtsls", {
-    capabilities = capabilities,
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-    root_markers = { "package.json", "tsconfig.json", "jsconfig.json" },
+lsp_config("tsgo", {
     init_options = { hostInfo = "neovim" },
-    before_init = function(_, config)
-        -- Prefer yarn v4 PnP SDK, fall back to node_modules
-        local root = config.root_dir
-        if root then
-            local yarn_sdk = root .. "/.yarn/sdks/typescript/lib"
-            local node_ts = root .. "/node_modules/typescript/lib"
-            local tsdk = vim.fn.isdirectory(yarn_sdk) == 1 and yarn_sdk or vim.fn.isdirectory(node_ts) == 1 and node_ts or nil
-            if tsdk then
-                config.settings = config.settings or {}
-                config.settings.typescript = config.settings.typescript or {}
-                config.settings.typescript.tsdk = tsdk
-            end
-        end
-    end,
     settings = {
-        refactor_auto_rename = true,
-        vtsls = { autoUseWorkspaceTsdk = true },
-        experimental = { completion = { entriesLimit = 20, enableServerSideFuzzyMatch = true } },
         typescript = {
-            tsserver = { maxTsServerMemory = 13000 },
-            suggest = { enabled = true, completeFunctionCalls = true },
             inlayHints = {
                 variableTypes = { enabled = true },
                 parameterTypes = { enabled = true },
                 enumMemberValues = { enabled = true },
-                parameterNames = { enabled = "literals" },
+                parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
                 functionLikeReturnTypes = { enabled = true },
                 propertyDeclarationTypes = { enabled = true },
             },
@@ -418,8 +395,7 @@ vim.lsp.config("vtsls", {
     },
 })
 
-vim.lsp.config("yamlls", {
-    capabilities = capabilities,
+lsp_config("yamlls", {
     settings = {
         yaml = {
             schemas = {
@@ -429,8 +405,7 @@ vim.lsp.config("yamlls", {
     },
 })
 
-vim.lsp.config("lua_ls", {
-    capabilities = capabilities,
+lsp_config("lua_ls", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
     root_markers = { ".git", ".luarc.json", ".stylua.toml" },
@@ -453,8 +428,7 @@ vim.lsp.config("lua_ls", {
     },
 })
 
-vim.lsp.config("harper_ls", {
-    capabilities = capabilities,
+lsp_config("harper_ls", {
     cmd = { "harper-ls", "--stdio" },
     root_markers = { ".git" },
     filetypes = {
@@ -495,11 +469,11 @@ vim.lsp.config("harper_ls", {
     },
 })
 
-vim.lsp.config("oxlint", {
+lsp_config("oxlint", {
     root_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" },
 })
 
-vim.lsp.config("eslint", {
+lsp_config("eslint", {
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
     root_markers = {
         ".eslintrc",
@@ -515,33 +489,7 @@ vim.lsp.config("eslint", {
     },
 })
 
+vim.treesitter.language.register("markdown", "vimwiki")
 vim.treesitter.language.register("bash", "kitty")
 vim.treesitter.language.register("bash", "zsh")
-
-vim.lsp.enable {
-    "html",
-    -- npm i -g bash-language-server
-    "bashls",
-    -- npm i -g vscode-langservers-extracted
-    "cssls",
-    "emmet_ls",
-    "jsonls",
-    -- npm i -g css-variables-language-server
-    "css_variables",
-    "denols",
-    -- npm install -g dockerfile-language-server-nodejs
-    "dockerls",
-    -- npm install @microsoft/compose-language-service
-    -- go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
-    "docker_compose_language_service",
-    "docker_language_server",
-    "lua_ls",
-    "harper_ls",
-    -- npm i -g oxlint
-    "oxlint",
-    "eslint",
-    "rust_analyzer",
-    "tailwindcss",
-    "vtsls",
-    "yamlls",
-}
+vim.lsp.enable(require("config.ensure-installed").lsp)

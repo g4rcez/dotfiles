@@ -3,17 +3,16 @@ add_newline = true
 palette = "catppuccin"
 format = """
 $status\
+${custom.dir}\
 ${custom.worktree}\
 ${custom.git_host}\
-${custom.dir}\
 $git_branch\
-$fill\
-${custom.since_last_commit}\
 $git_state\
 $git_commit\
-$git_metrics\
 $git_status\
-$git_commit\
+$git_metrics\
+$fill\
+${custom.since_last_commit}\
 $lua\
 $dotnet\
 $nodejs\
@@ -54,7 +53,7 @@ mantle = "#181825"
 crust = "#11111b"
 
 [docker_context]
-format = '[ $context](sky) '
+format = '[ $context](sky) '
 
 [lua]
 format = '[󰢱 $version](blue) '
@@ -87,9 +86,9 @@ style = "blue"
 truncation_length = 0
 
 [character]
-error_symbol = "[❯](red)"
+error_symbol = "[](red)"
 success_symbol = "[[>_](fg)](fg)"
-vimcmd_symbol = "[❮](green)"
+vimcmd_symbol = "[](green)"
 
 [git_branch]
 format = '[$symbol$branch(:$remote_branch)]($style) '
@@ -98,32 +97,32 @@ symbol = ' '
 
 [git_status]
 ahead = '[⇡${count}](lavender) '
-behind = '😰 ${count}'
-conflicted = '🏳'
-deleted = '󰗨 ${count}(red) '
-diverged = '⇕⇡${ahead_count}⇣${behind_count} '
-format = "[[($conflicted$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
+behind = '[⇣${count}](peach) '
+conflicted = '[ ${count}](red) '
+deleted = '[󰗨 ${count}](red) '
+diverged = '[⇡${ahead_count}⇣${behind_count}](yellow) '
+format = '([$conflicted$staged$modified$renamed$deleted$untracked$stashed$ahead_behind]($style) )'
 modified = '[ ${count}](lavender) '
-renamed = '👅'
-staged = '[+$count](green) '
-stashed = " ${count} "
+renamed = '[󰑕 ${count}](teal) '
+staged = '[󰐕 ${count}](green) '
+stashed = '[ ${count}](mauve) '
 style = "white"
-untracked = "[ ${count}](sapphire) "
+untracked = '[ ${count}](sapphire) '
 up_to_date = ''
 
 [git_state]
-cherry_pick = '[🍒PICK](red)'
+cherry_pick = '[ PICK](red)'
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "fg"
 
 [git_metrics]
 disabled = false
-format = '[+$added](green)[-$deleted](maroon) '
+format = '([+$added](green) )([-$deleted](maroon) )'
 only_nonzero_diffs = true
 
 [cmd_duration]
 disabled = false
-format = "[ ⏰ $duration]($style) "
+format = "[ 󰔛 $duration]($style) "
 min_time = 10_000
 min_time_to_notify = 10000
 show_notifications = false
@@ -138,7 +137,7 @@ symbol = ' '
 detect_files = ['deno.json']
 disabled = false
 format = '[$symbol($version)]($style) '
-symbol = '🦕'
+symbol = ' '
 
 [nodejs]
 detect_extensions = []
@@ -149,16 +148,15 @@ style = "green"
 symbol = ' '
 
 [custom.since_last_commit]
-command = '''
-ts=$(git log -1 --pretty=format:%cr 2>/dev/null) || exit 0
-printf '%s' "${ts% ago}"
-'''
 description = "Show time since last commit"
-directories = [".git"]
 format = "[󰚰 $output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 style = "mauve"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
+command = '''
+ts=$(git log -1 --pretty=format:%cr 2>/dev/null) || exit 0
+printf '%s' "${ts% ago}"
+'''
 
 [custom.git_host]
 command = '''
@@ -166,13 +164,30 @@ url=$(git ls-remote --get-url 2>/dev/null) || exit 0
 repo=${url%.git}
 icon='󰊠'
 
+url_decode() {
+  local input=$1 output= char hex i
+  for ((i = 0; i < ${#input}; i++)); do
+    char=${input:i:1}
+    if [[ $char == '%' && ${input:i+1:2} =~ ^[0-9A-Fa-f]{2}$ ]]; then
+      hex=${input:i+1:2}
+      printf -v char '%b' "\\x$hex"
+      output+=$char
+      ((i += 2))
+    else
+      output+=$char
+    fi
+  done
+  printf '%s' "$output"
+}
+
 case "$repo" in
   git@github.com:*) icon=''; repo=${repo#git@github.com:} ;;
   https://github.com/*) icon=''; repo=${repo#https://github.com/} ;;
   git@gitlab.com:*) icon=''; repo=${repo#git@gitlab.com:} ;;
   https://gitlab.com/*) icon=''; repo=${repo#https://gitlab.com/} ;;
-  git@bitbucket.org:*) icon=''; repo=${repo#git@bitbucket.org:} ;;
-  https://bitbucket.org/*) icon=''; repo=${repo#https://bitbucket.org/} ;;
+  git@bitbucket.org:*) icon=''; repo=${repo#git@bitbucket.org:} ;;
+  https://bitbucket.org/*) icon=''; repo=${repo#https://bitbucket.org/} ;;
+  git@ssh.dev.azure.com:v3/*/*/*) icon=''; repo=${repo#git@ssh.dev.azure.com:v3/}; repo=${repo#*/}; project=${repo%/*}; repo=${repo##*/}; repo="$project/$repo" ;;
   git@archlinux.org:*) icon='󰣇'; repo=${repo#git@archlinux.org:} ;;
   https://archlinux.org/*) icon='󰣇'; repo=${repo#https://archlinux.org/} ;;
   git@gnu.org:*) icon=''; repo=${repo#git@gnu.org:} ;;
@@ -181,10 +196,10 @@ case "$repo" in
   https://*/*) icon='󰊢'; repo=${repo#https://}; repo=${repo#*/} ;;
   *) icon='󰊠' ;;
 esac
+repo=$(url_decode "$repo")
 printf '%s %s' "$icon" "$repo"
 '''
 description = "Show icon of git host platform"
-directories = [".git"]
 format = "[$output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 style = "white"

@@ -14,7 +14,6 @@ return vscode.disable_in_vscode {
     "folke/persistence.nvim",
     "okuuva/auto-save.nvim",
     "not-manu/filemention.nvim",
-    "newtoallofthis123/blink-cmp-fuzzy-path",
     "saghen/blink.cmp",
     "neovim/nvim-lspconfig",
     "j-hui/fidget.nvim",

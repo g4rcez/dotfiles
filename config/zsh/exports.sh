@@ -120,13 +120,13 @@ if [ -x "$(command -v podman)" ]; then
 fi
 #####################################################################################
 ## ai
-unset ANTHROPIC_API_KEY # force RTK proxy auth routing — do not restore
 export ENABLE_LSP_TOOL=1
-export AI_COMMAND_PROMPT="pi --model openai-codex/gpt-5.4-mini --thinking low"
 export AI_CLI_NAME="pi"
-export AI_CLI_MODEL="openai-codex/gpt-5.4-mini"
-export AI_QUERY_COMMAND="pi --model openai-codex/gpt-5.4-mini --thinking low -p"
 export USE_BUILTIN_RIPGREP=0
+export PI_FFF_MODE=override
+export AI_CLI_MODEL="openai-codex/gpt-5.6-terra"
+export AI_COMMAND_PROMPT="pi --model "${AI_CLI_MODEL}" --thinking low"
+export AI_QUERY_COMMAND="${AI_COMMAND_PROMPT} -p"
 
 export AICOMMIT_EXCLUDES=(
     "package-lock.json"
