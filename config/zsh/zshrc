@@ -5,13 +5,13 @@ source "$HOME/dotfiles/config/zsh/utils.sh"
 safeImport "$HOME/.local-exports.sh"
 
 if [[ -o interactive && -t 1 ]]; then
-  _zsh_restore_tty_output() {
-    stty opost onlcr 2>/dev/null || true
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook preexec _zsh_restore_tty_output
-  add-zsh-hook precmd _zsh_restore_tty_output
-  _zsh_restore_tty_output
+    _zsh_restore_tty_output() {
+        stty opost onlcr 2>/dev/null || true
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook preexec _zsh_restore_tty_output
+    add-zsh-hook precmd _zsh_restore_tty_output
+    _zsh_restore_tty_output
 fi
 ##############################################################################################################
 ## znap
@@ -19,8 +19,8 @@ fi
 ZNAP_DIR="$HOME/.znap/"
 ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 [[ -r "$ZNAP_ENTRYPOINT" ]] ||
-  git clone --depth 1 -- \
-    https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
 zstyle ':znap:*' repos-dir $PLUGINS_DIR
 zstyle ':znap:*:*' git-maintenance off
 source "$ZNAP_ENTRYPOINT"
@@ -28,36 +28,36 @@ znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,t
 (($+commands[starship])) && eval "$(starship init zsh)"
 source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
 PLUGINS=(
-  "MichaelAquilina/zsh-auto-notify"
-  "zsh-users/zsh-autosuggestions"
-  "zsh-users/zsh-completions"
-  "zsh-users/zsh-history-substring-search"
-  "zsh-users/zsh-syntax-highlighting"
+    "MichaelAquilina/zsh-auto-notify"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "zsh-users/zsh-history-substring-search"
+    "zsh-users/zsh-syntax-highlighting"
 )
 for plugin in $PLUGINS; do
-  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
-    znap source $plugin || echo "failed -> $plugin"
-  else
-    znap clone $plugin
-  fi
+    if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+        znap source $plugin || echo "failed -> $plugin"
+    else
+        znap clone $plugin
+    fi
 done
 
 function _zsh_lazy_znap_source() {
-  local plugin="$1"
-  if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
-    znap source "$plugin"
-  else
-    znap clone "$plugin" && znap source "$plugin"
-  fi
+    local plugin="$1"
+    if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+        znap source "$plugin"
+    else
+        znap clone "$plugin" && znap source "$plugin"
+    fi
 }
 
 if [[ -o interactive && -t 0 && -t 1 ]]; then
-  autoload -Uz add-zle-hook-widget
-  function _zsh_lazy_load_autopair() {
-    add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
-    _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
-  }
-  add-zle-hook-widget line-init _zsh_lazy_load_autopair
+    autoload -Uz add-zle-hook-widget
+    function _zsh_lazy_load_autopair() {
+        add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
+        _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
+    }
+    add-zle-hook-widget line-init _zsh_lazy_load_autopair
 fi
 ##############################################################################################################
 ## source files (cached with znap eval for faster startup)
@@ -67,29 +67,30 @@ fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
 (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
 (($+commands[tv])) && znap eval tv-init 'tv init zsh'
 if [[ -o interactive && -t 0 && -t 1 ]]; then
-  (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
+    (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
 fi
 (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 
 local -a SOURCE=(
-  "$HOME/.secrets.sh"
-  "$HOME/.cargo/env"
-  "$DOTFILES/bin/fzf-git"
-  "$DOTFILES/config/zsh/alias.sh"
-  "$DOTFILES/config/zsh/zstyle.sh"
-  "$DOTFILES/config/zsh/history.sh"
-  "$DOTFILES/config/zsh/fzf.sh"
-  "$DOTFILES/config/zsh/git.sh"
-  "$DOTFILES/config/zsh/node.sh"
-  "$DOTFILES/config/zsh/zellij.sh"
-  "$DOTFILES/config/zsh/completion/node-completion.sh"
-  "$DOTFILES/config/zsh/completion/_ai.zsh"
-  "$DOTFILES/config/zsh/completion/_worktree.zsh"
-  "$DOTFILES/config/zsh/completion/_commit.zsh"
+    "$HOME/.secrets.sh"
+    "$HOME/.cargo/env"
+    "$HOME/.railway/env"
+    "$DOTFILES/bin/fzf-git"
+    "$DOTFILES/config/zsh/alias.sh"
+    "$DOTFILES/config/zsh/zstyle.sh"
+    "$DOTFILES/config/zsh/history.sh"
+    "$DOTFILES/config/zsh/fzf.sh"
+    "$DOTFILES/config/zsh/git.sh"
+    "$DOTFILES/config/zsh/node.sh"
+    "$DOTFILES/config/zsh/zellij.sh"
+    "$DOTFILES/config/zsh/completion/node-completion.sh"
+    "$DOTFILES/config/zsh/completion/_ai.zsh"
+    "$DOTFILES/config/zsh/completion/_worktree.zsh"
+    "$DOTFILES/config/zsh/completion/_commit.zsh"
 )
 
 for config in $SOURCE; do
-  if [[ -f "$config" ]]; then source "$config"; fi
+    if [[ -f "$config" ]]; then source "$config"; fi
 done
 
 ##############################################################################################################
@@ -101,4 +102,3 @@ zstyle ':zle:*' word-style unspecified
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
-

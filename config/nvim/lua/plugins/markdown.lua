@@ -1,4 +1,4 @@
-local ft = { "markdown", "vimwiki" }
+local ft = { "markdown", "vimwiki", "Avante" }
 
 return {
     {
@@ -19,28 +19,22 @@ return {
         },
     },
     {
-        "MeanderingProgrammer/render-markdown.nvim",
+        "yousefhadder/markdown-plus.nvim",
         ft = ft,
         opts = {
-            completions = { lsp = { enabled = true } },
-            preset = "obsidian",
-            file_types = ft,
-            heading = {
-                foregrounds = {
-                    "RenderMarkdownH1",
-                    "RenderMarkdownH2",
-                    "RenderMarkdownH3",
-                    "RenderMarkdownH4",
-                    "RenderMarkdownH5",
-                    "RenderMarkdownH6",
-                },
-                backgrounds = {
-                    "RenderMarkdownH1Bg",
-                    "RenderMarkdownH2Bg",
-                    "RenderMarkdownH3Bg",
-                    "RenderMarkdownH4Bg",
-                    "RenderMarkdownH5Bg",
-                    "RenderMarkdownH6Bg",
+            filetypes = ft,
+            keymaps = { enabled = true },
+            table = { keymaps = { enabled = true } },
+            list = {
+                smart_outdent = true,
+                whitespace = "single",
+                whitespace_width = 4,
+                checkbox_completion = {
+                    enabled = true,
+                    format = "dataview",
+                    update_existing = true,
+                    date_format = "%Y-%m-%d",
+                    remove_on_uncheck = true,
                 },
             },
         },

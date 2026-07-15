@@ -34,6 +34,7 @@ alias wtf='pwd'
 alias ll="ls -l"
 alias cat="bat -p --pager cat"
 alias dotfiles="cd $HOME/dotfiles"
+alias costs='bun run "$HOME/.pi/costs.ts"'
 alias secrets="ripsecrets"
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
@@ -375,4 +376,3 @@ compdef _files extract fs dotenv cpv rm:dry-run rm:trash rm:safe
 compdef _cdm cdm
 compdef _killport killport
 compdef _process_names listening psgrep
-

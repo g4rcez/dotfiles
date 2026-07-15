@@ -127,12 +127,11 @@ export PI_FFF_MODE=override
 export AI_CLI_MODEL="openai-codex/gpt-5.6-terra"
 export AI_COMMAND_PROMPT="pi --model "${AI_CLI_MODEL}" --thinking low"
 export AI_QUERY_COMMAND="${AI_COMMAND_PROMPT} -p"
-
+unset BUN_CONFIG_VERBOSE_FETCH
 export AICOMMIT_EXCLUDES=(
     "package-lock.json"
     "pnpm-lock.yaml"
     "yarn.lock"
     "*.lock"
 )
-
 source "$DOTFILES/config/zsh/ls.sh"

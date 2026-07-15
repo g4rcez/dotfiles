@@ -27,6 +27,13 @@ return {
         opts = { max_recents = 30, add_default_keybindings = true, copy_to_clipboard = false, copy_register = "+" },
     },
     {
+        "tiagovla/tokyodark.nvim",
+        opts = {},
+        config = function(_, opts)
+            -- vim.cmd [[colorscheme tokyodark]]
+        end,
+    },
+    {
         "catppuccin/nvim",
         name = "catppuccin",
         priority = 1000,

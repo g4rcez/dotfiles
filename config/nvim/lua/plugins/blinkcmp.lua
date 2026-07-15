@@ -156,7 +156,7 @@ return {
                 },
                 providers = {
                     lsp = { name = "LSP" },
-                    path = { name = "Path" },
+                    path = { name = "Path", opts = { show_hidden_files_by_default = true } },
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
                     dadbod = { name = "DB", module = "vim_dadbod_completion.blink" },
                     buffer = { name = "Buf", min_keyword_length = 5, score_offset = -5 },

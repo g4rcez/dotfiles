@@ -437,6 +437,13 @@ return {
                 desc = "File Explorer",
             },
             {
+                "<leader>fo",
+                function()
+                    require("config.snacks_oil").browse()
+                end,
+                desc = "File browser",
+            },
+            {
                 "<Tab><Tab>",
                 require("snacks").picker.buffers,
                 desc = "Buffers",
@@ -916,6 +923,8 @@ return {
             },
         },
         init = function()
+            vim.g.snacks_oil_startup_cwd = vim.fn.getcwd()
+
             vim.api.nvim_create_autocmd("User", {
                 pattern = "VeryLazy",
                 callback = function()
