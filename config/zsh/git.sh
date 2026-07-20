@@ -99,6 +99,58 @@ function commit.wip() {
     git push
 }
 
+function _commit_message() {
+    git commit -S -m "$1"
+}
+
+function commit.lockfile() {
+    _commit_message "chore: sync lockfile"
+}
+
+function commit.deps() {
+    _commit_message "chore: update dependencies"
+}
+
+function commit.format() {
+    _commit_message "style: format source files"
+}
+
+function commit.merge() {
+    _commit_message "chore: resolve merge conflicts"
+}
+
+function commit.cleanup() {
+    _commit_message "chore: clean up unused files"
+}
+
+function commit.remove() {
+    _commit_message "chore: remove obsolete files"
+}
+
+function commit.rename() {
+    _commit_message "refactor: rename files and symbols"
+}
+
+function commit.docs() {
+    _commit_message "docs: update documentation"
+}
+
+function commit.test() {
+    _commit_message "test: update tests"
+}
+
+function commit.ci() {
+    _commit_message "ci: update CI configuration"
+}
+
+function commit.release() {
+    _commit_message "build: prepare release"
+}
+
+function commit.rebase() {
+    _commit_message "chore: resolve rebase conflicts"
+}
+
 function commit.write() {
     commitwithai "$@"
 }

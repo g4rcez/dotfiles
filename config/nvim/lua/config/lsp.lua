@@ -274,88 +274,9 @@ lsp_config("cssls", {
 })
 
 lsp_config("tailwindcss", {
-    name = "tailwindcss-language-server",
-    cmd = { "tailwindcss-language-server", "--stdio" },
-    pattern = {
-        "html",
-        "css",
-        "scss",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "vue",
-        "svelte",
-        "astro",
-    },
-    root_markers = {
-        "tailwind.config.js",
-        "tailwind.config.cjs",
-        "tailwind.config.mjs",
-        "tailwind.config.ts",
-        "postcss.config.js",
-        "postcss.config.cjs",
-        "postcss.config.mjs",
-        "postcss.config.ts",
-        "package.json",
-    },
-    filetypes = {
-        "astro",
-        "astro-markdown",
-        "blade",
-        "clojure",
-        "django-html",
-        "htmldjango",
-        "edge",
-        "eelixir",
-        "ejs",
-        "erb",
-        "eruby",
-        "gohtml",
-        "gohtmltmpl",
-        "haml",
-        "handlebars",
-        "hbs",
-        "html",
-        "html-eex",
-        "heex",
-        "jade",
-        "leaf",
-        "liquid",
-        "markdown",
-        "mdx",
-        "mustache",
-        "njk",
-        "nunjucks",
-        "php",
-        "razor",
-        "slim",
-        "twig",
-        "css",
-        "less",
-        "postcss",
-        "sass",
-        "scss",
-        "stylus",
-        "sugarss",
-        "javascript",
-        "javascriptreact",
-        "reason",
-        "rescript",
-        "typescript",
-        "typescriptreact",
-        "vue",
-        "svelte",
-        "templ",
-    },
     settings = {
         tailwindCSS = {
-            hovers = true,
-            validate = true,
-            completion = true,
-            codeActions = true,
-            suggestions = true,
-            colorDecorators = true,
+            classFunctions = { "css", "cn", "clsx", "cva", "twMerge", "twJoin" },
             classAttributes = {
                 "class",
                 "className",
@@ -366,23 +287,18 @@ lsp_config("tailwindcss", {
                 "container",
                 "bodyClassName",
             },
-            lint = {
-                invalidApply = "error",
-                cssConflict = "warning",
-                invalidScreen = "error",
-                invalidVariant = "error",
-                invalidConfigPath = "error",
-                invalidTailwindDirective = "error",
-                recommendedVariantOrder = "warning",
-            },
         },
     },
 })
 
-lsp_config("tsgo", {
-    init_options = { hostInfo = "neovim" },
+lsp_config("vtsls", {
     settings = {
+        vtsls = { autoUseWorkspaceTsdk = true },
+        javascript = {
+            preferences = { jsxAttributeCompletionStyle = "auto" },
+        },
         typescript = {
+            preferences = { jsxAttributeCompletionStyle = "auto" },
             inlayHints = {
                 variableTypes = { enabled = true },
                 parameterTypes = { enabled = true },
@@ -492,4 +408,13 @@ lsp_config("eslint", {
 vim.treesitter.language.register("markdown", "vimwiki")
 vim.treesitter.language.register("bash", "kitty")
 vim.treesitter.language.register("bash", "zsh")
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("lsp-tailwind", { clear = true }),
+    pattern = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
+    callback = function()
+        vim.lsp.enable "tailwindcss"
+    end,
+})
+
 vim.lsp.enable(require("config.ensure-installed").lsp)

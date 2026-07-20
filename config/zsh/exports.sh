@@ -124,7 +124,7 @@ export ENABLE_LSP_TOOL=1
 export AI_CLI_NAME="pi"
 export USE_BUILTIN_RIPGREP=0
 export PI_FFF_MODE=override
-export AI_CLI_MODEL="openai-codex/gpt-5.6-terra"
+export AI_CLI_MODEL="openai-codex/gpt-5.6-luna"
 export AI_COMMAND_PROMPT="pi --model "${AI_CLI_MODEL}" --thinking low"
 export AI_QUERY_COMMAND="${AI_COMMAND_PROMPT} -p"
 unset BUN_CONFIG_VERBOSE_FETCH

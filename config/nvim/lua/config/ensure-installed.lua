@@ -15,14 +15,14 @@ local lsp = {
     "eslint",
     "rust_analyzer",
     "tailwindcss",
-    "tsgo",
+    "vtsls",
     "yamlls",
     "kulala_ls",
 }
 
 return {
-    fmt = { "prettier", "shfmt", "stylua", "eslint_d", "rustywind", "oxfmt" },
     lsp = lsp,
+    fmt = { "prettier", "shfmt", "stylua", "eslint_d", "rustywind", "oxfmt" },
     mason_lsp = vim.tbl_filter(function(server)
         return server ~= "kulala_ls"
     end, lsp),

@@ -102,3 +102,9 @@ zstyle ':zle:*' word-style unspecified
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
