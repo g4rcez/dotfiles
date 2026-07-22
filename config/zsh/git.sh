@@ -100,7 +100,9 @@ function commit.wip() {
 }
 
 function _commit_message() {
+    git add -A .
     git commit -S -m "$1"
+    git push
 }
 
 function commit.lockfile() {
@@ -121,6 +123,10 @@ function commit.merge() {
 
 function commit.cleanup() {
     _commit_message "chore: clean up unused files"
+}
+
+function commit.refactor() {
+    _commit_message "refactor: code clean up"
 }
 
 function commit.remove() {
@@ -365,7 +371,7 @@ function gh.workflow() {
 function commitwithai {
     local EXCLUDE_ARGS=()
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
-        EXCLUDE_ARGS+=(":(exclude)$f")
+        [[ -n "$f" ]] && EXCLUDE_ARGS+=(":(exclude)$f")
     done
 
     local HINT="${*}"
@@ -392,6 +398,16 @@ function commitwithai {
         fi
         COMMIT_MESSAGE="$(<"$OUT_FILE")"
         rm -f "$OUT_FILE" "$ERR_FILE"
+    elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
+        # Pi's Responses API provider needs a single explicit user message; do
+        # not split the diff into stdin and the instructions into argv.
+        local REQUEST="${PROMPT}"$'\n\n'"${DIFF}"
+        if ! COMMIT_MESSAGE=$(
+            ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files "$REQUEST"
+        ); then
+            echo "commitwithai: AI query failed" >&2
+            return 1
+        fi
     else
         COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
     fi

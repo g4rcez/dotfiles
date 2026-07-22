@@ -3,8 +3,9 @@
 export PNPM_HOME="$HOME/.local/share/pnpm"
 if [[ -d "/opt/homebrew/opt/go/libexec" ]]; then
     export GOROOT="/opt/homebrew/opt/go/libexec"
-else
-    export GOROOT="$(brew --prefix go 2>/dev/null)/libexec"
+elif (($+commands[brew])); then
+    local_go_root="$(brew --prefix go 2>/dev/null)/libexec"
+    [[ -d "$local_go_root" ]] && export GOROOT="$local_go_root"
 fi
 export GOPATH="$HOME/go"
 
@@ -17,18 +18,17 @@ PATH_FILES=(
     "$PNPM_HOME/bin"
     "$GOPATH/bin"
     "$GOROOT/bin"
-    "$HOME/.bun/bin"
-    "$HOME/.cargo/env"
+    "$HOME/tools"
     "$HOME/.dotnet"
     "$HOME/.dotnet/tools"
-    "$HOME/.local/bin"
-    "$HOME/.local/share"
-    "$HOME/.local/share/bin"
-    "$HOME/tools"
+    "$HOME/.bun/bin"
+    "$HOME/.cargo/env"
     "$HOME/dotfiles/bin"
-    "$HOME/tools/google-cloud-sdk/bin"
-    "$HOME/.antigravity/antigravity/bin"
+    "$HOME/.local/bin"
+    "$HOME/.grok/bin"
+    "$HOME/.local/share"
     "$HOME/.opencode/bin"
+    "$HOME/.local/share/bin"
 )
 
 for SOURCE_FILE in "${PATH_FILES[@]}"; do
@@ -103,6 +103,7 @@ export DELTA_PAGER="less -R"
 export EDITOR="nvim"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=""
+
 if (($+commands[nvim])); then
     export EDITOR="nvim"
     export MANPAGER="nvim +Man!"
@@ -115,8 +116,9 @@ export BUN_INSTALL="$HOME/.bun"
 export LESSOPEN='|~/dotfiles/bin/lessfilter.sh %s'
 export YSU_MESSAGE_POSITION="after"
 export MISE_NODE_DEFAULT_PACKAGES_FILE="$DOTFILES/config/mise/defaults/node"
-if [ -x "$(command -v podman)" ]; then
-    export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
+if (($+commands[podman])) && [[ -z "$DOCKER_HOST" ]]; then
+    podman_socket="$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}' 2>/dev/null)"
+    [[ -S "$podman_socket" ]] && export DOCKER_HOST="unix://$podman_socket"
 fi
 #####################################################################################
 ## ai

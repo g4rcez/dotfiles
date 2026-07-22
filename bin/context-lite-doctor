@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+pi_dir="${PI_DIR:-$HOME/.pi}"
+days=14
+sample=100
+record=1
+
+usage() {
+  cat <<'EOF'
+Usage: context-lite-doctor [options]
+
+Summarize recent Context Mode Lite failures without printing stored output.
+
+Options:
+  --days N       Look back N days (default: 14)
+  --sample N     Inspect at most N recent run outputs (default: 100)
+  --no-record    Do not append the aggregate to local history
+  --pi-dir DIR   Pi data directory (default: $PI_DIR or ~/.pi)
+  -h, --help     Show this help
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --days) days="${2:-}"; shift 2 ;;
+    --sample) sample="${2:-}"; shift 2 ;;
+    --no-record) record=0; shift ;;
+    --pi-dir) pi_dir="${2:-}"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "context-lite-doctor: unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if [[ ! "$days" =~ ^[0-9]+$ || "$days" -lt 1 ]]; then
+  echo "context-lite-doctor: --days must be a positive integer" >&2
+  exit 2
+fi
+if [[ ! "$sample" =~ ^[0-9]+$ || "$sample" -lt 1 ]]; then
+  echo "context-lite-doctor: --sample must be a positive integer" >&2
+  exit 2
+fi
+
+runs_dir="$pi_dir/context-mode-lite/runs"
+sessions_dir="$pi_dir/context-mode/sessions"
+if [[ ! -d "$pi_dir" ]]; then
+  echo "context-lite-doctor: Pi directory not found: $pi_dir" >&2
+  exit 1
+fi
+
+# Keep output bounded and classify each run at most once. We inspect only
+# metadata/error-shaped lines, never print stored run contents.
+tmp_files="$(mktemp)"
+trap 'rm -f "$tmp_files"' EXIT
+if [[ -d "$runs_dir" ]]; then
+  find "$runs_dir" -type f -name output.txt -mtime "-$days" -print 2>/dev/null |
+    sort -r | head -n "$sample" >"$tmp_files"
+fi
+
+runs=0
+suspect_runs=0
+permission=0
+timeout=0
+size=0
+malformed=0
+other=0
+
+while IFS= read -r file; do
+  [[ -f "$file" ]] || continue
+  runs=$((runs + 1))
+  if ! grep -Eiq 'error|failed|failure|timeout|timed out|permission denied|malformed|invalid (json|input)|too large|EFBIG|ENOENT' "$file"; then
+    continue
+  fi
+  suspect_runs=$((suspect_runs + 1))
+  if grep -Eiq 'permission denied|operation not permitted|EACCES' "$file"; then
+    permission=$((permission + 1))
+  elif grep -Eiq 'timeout|timed out|ETIMEDOUT' "$file"; then
+    timeout=$((timeout + 1))
+  elif grep -Eiq 'too large|file size|EFBIG|payload.*(large|size)' "$file"; then
+    size=$((size + 1))
+  elif grep -Eiq 'malformed|invalid (json|input)|parse error|unexpected token' "$file"; then
+    malformed=$((malformed + 1))
+  else
+    other=$((other + 1))
+  fi
+done <"$tmp_files"
+
+sqlite_available=0
+sqlite_events=0
+sqlite_retries=0
+sqlite_index_writes=0
+sqlite_errors=0
+if command -v sqlite3 >/dev/null 2>&1 && [[ -d "$sessions_dir" ]]; then
+  sqlite_available=1
+  for db in "$sessions_dir"/*.db; do
+    [[ -f "$db" ]] || continue
+    values="$(sqlite3 -separator ' ' "$db" "
+      SELECT
+        COALESCE(SUM(CASE WHEN type = 'error_tool' THEN 1 ELSE 0 END), 0),
+        COALESCE(SUM(CASE WHEN type = 'retry_detected' THEN 1 ELSE 0 END), 0),
+        COALESCE(SUM(CASE WHEN type = 'index-write' THEN 1 ELSE 0 END), 0),
+        COUNT(*)
+      FROM session_events
+      WHERE created_at >= datetime('now', '-$days days');
+    " 2>/dev/null || echo '0 0 0 0')"
+    read -r errors retries writes events <<<"$values"
+    sqlite_errors=$((sqlite_errors + errors))
+    sqlite_retries=$((sqlite_retries + retries))
+    sqlite_index_writes=$((sqlite_index_writes + writes))
+    sqlite_events=$((sqlite_events + events))
+  done
+fi
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/context-lite-doctor"
+history_file="$state_dir/history.tsv"
+if [[ "$record" == "1" ]]; then
+  mkdir -p "$state_dir"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+    "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$days" "$runs" "$suspect_runs" \
+    "$permission" "$timeout" "$size" "$malformed" >>"$history_file"
+fi
+
+failure_rate="0.0%"
+if [[ "$runs" -gt 0 ]]; then
+  failure_rate="$(awk -v failures="$suspect_runs" -v total="$runs" 'BEGIN { printf "%.1f%%", failures * 100 / total }')"
+fi
+
+printf 'Context Lite doctor (last %s day(s))\n' "$days"
+printf '%-24s %s\n' 'run outputs sampled:' "$runs"
+printf '%-24s %s (%s)\n' 'failure-shaped outputs:' "$suspect_runs" "$failure_rate"
+printf '\nClassification (run-output sample)\n'
+printf '  permission: %s\n  timeout:    %s\n  file size:  %s\n  malformed:  %s\n  other:      %s\n' "$permission" "$timeout" "$size" "$malformed" "$other"
+if [[ "$sqlite_available" == "1" ]]; then
+  printf '\nSession event metadata\n'
+  printf '  events:       %s\n  error_tool:    %s\n  retry_detected: %s\n  index-write:   %s\n' \
+    "$sqlite_events" "$sqlite_errors" "$sqlite_retries" "$sqlite_index_writes"
+else
+  printf '\nSession event metadata: unavailable (sqlite3 or session DBs missing)\n'
+fi
+printf '\nHistory: %s\n' "$history_file"
+printf 'Note: classifications are heuristic and intentionally report counts only.\n'

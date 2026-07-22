@@ -42,6 +42,7 @@ Configured language servers for:
 #### Smart TypeScript/Deno Switching
 
 The configuration automatically detects whether you're in a Node.js or Deno project:
+
 - Projects with `package.json` → uses typescript-tools.nvim (vtsls-based)
 - Projects with `deno.json` → uses denols
 - Prevents conflicts by only running the appropriate server
@@ -83,6 +84,7 @@ Located in `lua/config/lsp.lua`:
 - Automatic documentation popup
 
 **Completion Sources** (priority order):
+
 1. lazydev - Neovim Lua API (score_offset: +100)
 2. lsp - Language server (score_offset: +10)
 3. git - Git branches/commits
@@ -93,6 +95,7 @@ Located in `lua/config/lsp.lua`:
 8. buffer - Current buffer words
 
 **Keybindings**:
+
 - `<Tab>` / `<CR>` - Accept completion
 - `<C-j>` / `<C-k>` - Navigate completions
 - `<C-Space>` - Show/toggle documentation
@@ -127,6 +130,7 @@ Powered by **none-ls** (null-ls fork):
 ### 🔀 Git Integration
 
 **Gitsigns** for inline git decorations:
+
 - `]c` / `[c` - Navigate between hunks
 - `<leader>hs` - Stage hunk
 - `<leader>hr` - Reset hunk
@@ -138,6 +142,7 @@ Powered by **none-ls** (null-ls fork):
 - `<leader>tb` - Toggle blame line
 
 **Snacks.nvim** git pickers:
+
 - `<leader>gs` - Git status
 - `<leader>gb` - Git branches
 - `<leader>gl` - Git log
@@ -148,6 +153,7 @@ Powered by **none-ls** (null-ls fork):
 - `<leader>gg` - Lazygit integration
 
 **Octo.nvim** - GitHub integration:
+
 - `<leader>oi` - List issues
 - `<leader>op` - List pull requests
 - `<leader>od` - List discussions
@@ -159,6 +165,7 @@ Powered by **none-ls** (null-ls fork):
 ### 📝 LSP Features
 
 **Navigation**:
+
 - `gd` - Go to definition (with picker if multiple)
 - `gD` - Go to declaration
 - `gr` - Find references
@@ -170,6 +177,7 @@ Powered by **none-ls** (null-ls fork):
 - `[[` / `]]` - Jump to prev/next reference
 
 **Diagnostics**:
+
 - `]d` / `[d` - Next/previous diagnostic
 - `<leader>xd` - Open diagnostic float
 - `<leader>sd` - Search diagnostics (workspace)
@@ -177,6 +185,7 @@ Powered by **none-ls** (null-ls fork):
 - `<leader>cq` - Quickfix list
 
 **Other**:
+
 - `<leader>th` - Toggle inlay hints
 - `<leader>ss` - LSP document symbols
 - `<leader>sS` - LSP workspace symbols
@@ -184,6 +193,7 @@ Powered by **none-ls** (null-ls fork):
 ### 📦 Buffer & Window Management
 
 **Buffers**:
+
 - `<C-h>` / `<C-l>` - Previous/next buffer
 - `<leader>bd` / `<leader>qq` - Delete buffer
 - `<leader>bo` - Close all buffers except current
@@ -193,6 +203,7 @@ Powered by **none-ls** (null-ls fork):
 - `<Tab><Tab>` - Quick buffer picker
 
 **Windows**:
+
 - `<C-s>` - Save file (normal and insert mode)
 - `<leader>Z` - Zoom toggle (maximize window)
 
@@ -222,6 +233,7 @@ Powered by **none-ls** (null-ls fork):
 ### 🎓 Editor Behavior
 
 **Smart Defaults**:
+
 - Leader key: `Space`
 - Line numbers with relative numbering
 - Smart case-insensitive search
@@ -235,6 +247,7 @@ Powered by **none-ls** (null-ls fork):
 - Conceal level 0 (show everything)
 
 **Folding**:
+
 - Provider: nvim-ufo with expression-based folding
 - Level 99 (open by default)
 - `zo` - Toggle fold
@@ -243,6 +256,7 @@ Powered by **none-ls** (null-ls fork):
 - `zm` - Close folds with depth
 
 **Text Editing**:
+
 - `J` - Join lines (keeps cursor position)
 - `0` - Go to first non-whitespace character
 - `vv` - Select entire line
@@ -252,6 +266,7 @@ Powered by **none-ls** (null-ls fork):
 - `p` in visual mode - Paste without yanking
 
 **Multi-cursor** (visual mode):
+
 - `<C-k>` - Add cursor above
 - `<C-j>` - Add cursor below
 - `<C-n>` - Match next word
@@ -334,10 +349,9 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   └── plugins/
 │       ├── blinkcmp.lua          # Completion engine
 │       ├── nvimlspconfig.lua     # LSP handlers & attach
-│       ├── typescriptools.lua    # TypeScript LSP
 │       ├── mason.lua             # LSP/tool installer
-│       ├── snacks.lua            # Picker, git, terminal, zen mode
-│       ├── format.lua            # none-ls formatters & linters
+│       ├── snacks.lua            # Picker, project palette, git, terminal
+│       ├── format.lua            # Conform formatters and nvim-lint
 │       ├── treesitter.lua        # Syntax highlighting
 │       ├── ui.lua                # Catppuccin, noice, dropbar
 │       ├── lualine.lua           # Statusline
@@ -416,17 +430,20 @@ vim.opt.your_option = value
 ## Key Architectural Patterns
 
 **LSP Configuration**: Uses Neovim's built-in `vim.lsp.config` and `vim.lsp.enable` pattern (not lspconfig) for base server setup. Configuration is split:
+
 - `lua/config/lsp.lua` - Server configs (capabilities, settings, filetypes)
 - `lua/plugins/nvimlspconfig.lua` - LspAttach autocommands and keymaps
 
-**Dual LSP Strategy**: Intelligently switches between typescript-tools.nvim (Node.js projects) and denols (Deno projects) based on project files.
+**Dual LSP Strategy**: Intelligently switches between vtsls (Node.js projects) and denols (Deno projects) based on project files.
 
 **Keymap System**: Custom helper in `keymaps.lua` with mode-specific functions:
+
 - `bind.normal`, `bind.visual`, `bind.insert`, `bind.cmd`, `bind.nx`
 
 **Plugin Organization**: Modular files by function in `lua/plugins/`
 
 **Common Keybind Prefixes**:
+
 - `<leader>f*` - File/find operations
 - `<leader>s*` - Search operations
 - `<leader>g*` - Git operations
@@ -436,6 +453,8 @@ vim.opt.your_option = value
 - `<leader>t*` - Toggle operations
 - `<leader>o*` - Octo (GitHub)
 - `<leader>n*` - Multicursor
+- `<leader>p` - Project command palette
+- `<leader>?` or `<leader>sk` - Leader keymap index
 - `gr*` - LSP goto operations
 
 ## Troubleshooting
@@ -462,6 +481,7 @@ vim.opt.your_option = value
 ## Language-Specific Features
 
 **JavaScript/TypeScript**:
+
 - typescript-tools.nvim with separate diagnostic server
 - Code lens for all constructs
 - JSX auto-close tags
@@ -470,18 +490,22 @@ vim.opt.your_option = value
 - Tailwind CSS completions (50+ filetypes)
 
 **Lua**:
+
 - lua_ls with code lens and inlay hints
 - lazydev.nvim for Neovim API completions
 - stylua formatter
 
 **Rust**:
+
 - rust_analyzer with full features
 
 **Docker**:
+
 - Multiple language servers (dockerls, compose, docker-language-server)
 - hadolint linting
 
 **Web Development**:
+
 - HTML, CSS, Tailwind CSS, CSS Variables
 - Emmet abbreviations
 - Color highlighting (hex, RGB, HSL, Tailwind)
@@ -490,6 +514,7 @@ vim.opt.your_option = value
 ## Credits
 
 Built with:
+
 - [lazy.nvim](https://github.com/folke/lazy.nvim) - Plugin manager
 - [blink.cmp](https://github.com/Saghen/blink.cmp) - Completion
 - [snacks.nvim](https://github.com/folke/snacks.nvim) - Utilities

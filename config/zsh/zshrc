@@ -16,34 +16,36 @@ fi
 ##############################################################################################################
 ## znap
 (($+commands[mise])) && eval "$(mise activate zsh)"
-ZNAP_DIR="$HOME/.znap/"
+ZNAP_DIR="${ZNAP_DIR:-$HOME/.znap}"
 ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
-[[ -r "$ZNAP_ENTRYPOINT" ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git "$ZNAP_DIR"
-zstyle ':znap:*' repos-dir $PLUGINS_DIR
-zstyle ':znap:*:*' git-maintenance off
-source "$ZNAP_ENTRYPOINT"
-znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
+
+if [[ -r "$ZNAP_ENTRYPOINT" ]]; then
+    zstyle ':znap:*' repos-dir "$PLUGINS_DIR"
+    zstyle ':znap:*:*' git-maintenance off
+    source "$ZNAP_ENTRYPOINT"
+    znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
+    PLUGINS=(
+        "MichaelAquilina/zsh-auto-notify"
+        "zsh-users/zsh-autosuggestions"
+        "zsh-users/zsh-completions"
+        "zsh-users/zsh-history-substring-search"
+        "zsh-users/zsh-syntax-highlighting"
+    )
+    for plugin in $PLUGINS; do
+        if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+            znap source "$plugin" || print -u2 -r -- "failed to source $plugin"
+        fi
+    done
+else
+    [[ -o interactive ]] && print -u2 -r -- "zsh: znap is not installed; run zsh:install"
+fi
+
 (($+commands[starship])) && eval "$(starship init zsh)"
-source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
-PLUGINS=(
-    "MichaelAquilina/zsh-auto-notify"
-    "zsh-users/zsh-autosuggestions"
-    "zsh-users/zsh-completions"
-    "zsh-users/zsh-history-substring-search"
-    "zsh-users/zsh-syntax-highlighting"
-)
-for plugin in $PLUGINS; do
-    if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
-        znap source $plugin || echo "failed -> $plugin"
-    else
-        znap clone $plugin
-    fi
-done
+[[ -r "$DOTFILES/config/zsh/syntax-highlighting.zsh" ]] && source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
 
 function _zsh_lazy_znap_source() {
     local plugin="$1"
+    (( $+functions[znap] )) || return 1
     if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
         znap source "$plugin"
     else
@@ -51,7 +53,7 @@ function _zsh_lazy_znap_source() {
     fi
 }
 
-if [[ -o interactive && -t 0 && -t 1 ]]; then
+if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
     autoload -Uz add-zle-hook-widget
     function _zsh_lazy_load_autopair() {
         add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
@@ -62,14 +64,16 @@ fi
 ##############################################################################################################
 ## source files (cached with znap eval for faster startup)
 fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
-(($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
-(($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
-(($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
-(($+commands[tv])) && znap eval tv-init 'tv init zsh'
-if [[ -o interactive && -t 0 && -t 1 ]]; then
-    (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
+if (( $+functions[znap] )); then
+    (($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
+    (($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
+    (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
+    (($+commands[tv])) && znap eval tv-init 'tv init zsh'
+    if [[ -o interactive && -t 0 && -t 1 ]]; then
+        (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
+    fi
+    (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 fi
-(($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 
 local -a SOURCE=(
     "$HOME/.secrets.sh"
@@ -82,12 +86,16 @@ local -a SOURCE=(
     "$DOTFILES/config/zsh/fzf.sh"
     "$DOTFILES/config/zsh/git.sh"
     "$DOTFILES/config/zsh/node.sh"
-    "$DOTFILES/config/zsh/zellij.sh"
+    # Zellij is opt-in; tmux is the active multiplexer.
     "$DOTFILES/config/zsh/completion/node-completion.sh"
     "$DOTFILES/config/zsh/completion/_ai.zsh"
     "$DOTFILES/config/zsh/completion/_worktree.zsh"
     "$DOTFILES/config/zsh/completion/_commit.zsh"
 )
+
+if [[ -z "$TMUX" ]] && (( $+commands[zellij] )); then
+    SOURCE+=("$DOTFILES/config/zsh/zellij.sh")
+fi
 
 for config in $SOURCE; do
     if [[ -f "$config" ]]; then source "$config"; fi
@@ -104,7 +112,6 @@ zstyle ':zle:*' word-style unspecified
 # END BUNSEN
 
 # >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
 fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<

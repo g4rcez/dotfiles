@@ -163,6 +163,60 @@ local function package_scripts()
     search_everywhere_modes[#search_everywhere_modes].open(search_everywhere_opts(#search_everywhere_modes, ""))
 end
 
+local function project_palette()
+    local root = vim.fs.root(0, { ".git", "package.json", "deno.json", "Cargo.toml", "go.mod" }) or vim.fn.getcwd()
+    local items = {
+        { text = "Files  — Snacks picker", action = function() Snacks.picker.files { cwd = root } end },
+        { text = "Grep   — project search", action = function() Snacks.picker.grep { cwd = root } end },
+        { text = "Git status", action = function() Snacks.picker.git_status { cwd = root } end },
+        { text = "Git diff", action = function() Snacks.picker.git_diff { cwd = root } end },
+        { text = "Git branches", action = function() Snacks.picker.git_branches { cwd = root } end },
+        { text = "Format current buffer", action = function() require("conform").format { lsp_fallback = true } end },
+        { text = "LSP code actions", action = function() vim.lsp.buf.code_action() end },
+        { text = "Restart LSP", action = function() vim.cmd "LspRestart" end },
+        {
+            text = "Test nearest",
+            action = function()
+                local ok, neotest = pcall(require, "neotest")
+                if ok then neotest.run.run() else vim.notify("Neotest is not available", vim.log.levels.WARN) end
+            end,
+        },
+        {
+            text = "Test current file",
+            action = function()
+                local ok, neotest = pcall(require, "neotest")
+                if ok then neotest.run.run(vim.fn.expand "%") else vim.notify("Neotest is not available", vim.log.levels.WARN) end
+            end,
+        },
+    }
+
+    local scripts = package_script_items()
+    if scripts then
+        for _, script in ipairs(scripts) do
+            items[#items + 1] = {
+                text = "Script  — " .. script.script .. "  " .. script.text:match("  (.*)$"),
+                action = function()
+                    Snacks.terminal(
+                        { package_manager(script.root), "run", script.script },
+                        { cwd = script.root, win = { position = "bottom", height = 0.3, border = "top" } }
+                    )
+                end,
+            }
+        end
+    end
+
+    Snacks.picker.pick {
+        title = "Project: " .. vim.fn.fnamemodify(root, ":~:t"),
+        items = items,
+        format = "text",
+        preview = "none",
+        confirm = function(picker, item)
+            picker:close()
+            if item and item.action then item.action() end
+        end,
+    }
+end
+
 return {
     {
         "folke/snacks.nvim",
@@ -344,6 +398,11 @@ return {
                 "<leader>rr",
                 package_scripts,
                 desc = "Run Package Script",
+            },
+            {
+                "<leader>p",
+                project_palette,
+                desc = "Project command palette",
             },
             {
                 "<C-S-f>",
@@ -653,7 +712,14 @@ return {
                 function()
                     Snacks.picker.keymaps()
                 end,
-                desc = "Keymaps",
+                desc = "Leader keymap index",
+            },
+            {
+                "<leader>?",
+                function()
+                    Snacks.picker.keymaps()
+                end,
+                desc = "Leader keymap index",
             },
             {
                 "<leader>sl",

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "tool": "bash",
+      "kind": "exact",
+      "value": "chmod +x bin/task-checkpoint bin/context-lite-doctor && zsh -n config/zsh/zshrc config/zsh/alias.sh config/zsh/exports.sh config/zsh/utils.sh && bash -n bin/task-checkpoint bin/context-lite-doctor && bin/task-checkpoint --help && bin/context-lite-doctor --days 14 --sample 25 --no-record",
+      "approvals": 1,
+      "matchedRule": "Bash(chmod:*)",
+      "updatedAt": "2026-07-21T15:56:25.401Z"
+    }
+  ]
+}

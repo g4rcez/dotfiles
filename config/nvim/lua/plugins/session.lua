@@ -2,7 +2,7 @@ return {
     {
         cond = not require("config.vscode").isVscode(),
         "folke/persistence.nvim",
-        event = "BufReadPre",
+        event = "VimEnter",
         keys = {
             {
                 "<leader>ww",
@@ -40,6 +40,21 @@ return {
                 desc = "Stop workspace session",
             },
         },
-        opts = {},
+        opts = {
+            branch = true,
+            need = 1,
+        },
+        config = function(_, opts)
+            local persistence = require "persistence"
+            persistence.setup(opts)
+            vim.api.nvim_create_autocmd("VimEnter", {
+                group = vim.api.nvim_create_augroup("persistence_autoload", { clear = true }),
+                callback = function()
+                    if vim.fn.argc() == 0 and vim.fn.getcwd() ~= vim.env.HOME then
+                        vim.schedule(function() persistence.load() end)
+                    end
+                end,
+            })
+        end,
     },
 }

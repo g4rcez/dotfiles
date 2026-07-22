@@ -10,6 +10,7 @@ return {
             { "<leader>g", group = "[g]it" },
             { "<leader>f", group = "[F]ind" },
             { "<leader>o", group = "Github" },
+            { "<leader>p", group = "Project" },
             { "<leader>x", group = "Trouble/Errors" },
             { "<leader>c", group = "[C]ode" },
             { "<leader>u", group = "[U]i" },

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage:
+  task-checkpoint "intent" "next validation command"
+  task-checkpoint show
+  task-checkpoint clear
+
+Write a local, untracked checkpoint for the current Git worktree. The
+checkpoint lives inside .git and is never included in a commit.
+EOF
+}
+
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "$repo_root" ]]; then
+  echo "task-checkpoint: not inside a Git worktree" >&2
+  exit 1
+fi
+
+checkpoint_path="$(git rev-parse --git-path task-checkpoint)"
+
+case "${1:-}" in
+  show)
+    if [[ ! -f "$checkpoint_path" ]]; then
+      echo "No checkpoint for $repo_root"
+      exit 0
+    fi
+    command cat "$checkpoint_path"
+    exit 0
+    ;;
+  clear)
+    rm -f "$checkpoint_path"
+    echo "Cleared checkpoint for $repo_root"
+    exit 0
+    ;;
+  -h|--help|"")
+    usage
+    [[ -n "${1:-}" ]] || exit 2
+    exit 0
+    ;;
+  *)
+    intent="$1"
+    next_validation="${2:-not specified}"
+    ;;
+esac
+
+branch="$(git branch --show-current 2>/dev/null || true)"
+if [[ -z "$branch" ]]; then
+  branch="detached:$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+fi
+
+status="$(git status --short --untracked-files=normal)"
+changed_count="$(printf '%s\n' "$status" | sed '/^$/d' | wc -l | tr -d ' ')"
+
+mkdir -p "$(dirname "$checkpoint_path")"
+{
+  printf 'created: %s\n' "$(date '+%Y-%m-%d %H:%M:%S %z')"
+  printf 'repo: %s\n' "$repo_root"
+  printf 'branch: %s\n' "$branch"
+  printf 'intent: %s\n' "$intent"
+  printf 'next_validation: %s\n' "$next_validation"
+  printf 'changed_files: %s\n' "$changed_count"
+  if [[ -n "$status" ]]; then
+    printf '\nstatus:\n%s\n' "$status"
+  else
+    printf '\nstatus:\nclean\n'
+  fi
+} >"$checkpoint_path"
+
+printf 'Checkpoint saved: %s\n' "$checkpoint_path"
+printf 'Resume with: task-checkpoint show\n'

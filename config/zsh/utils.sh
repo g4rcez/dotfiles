@@ -58,6 +58,25 @@ function safeImport() {
     fi
 }
 
+function zsh:install() {
+    emulate -L zsh
+
+    local znap_dir="${1:-${HOME}/.znap}"
+    local entrypoint="$znap_dir/znap.zsh"
+    if [[ -r "$entrypoint" ]]; then
+        print -r -- "znap is already installed: $znap_dir"
+        return 0
+    fi
+
+    if ! (($ + commands[git])); then
+        print -u2 -r -- "zsh:install: git is required to install znap"
+        return 1
+    fi
+
+    command git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$znap_dir" || return $?
+    print -r -- "installed znap: $znap_dir"
+}
+
 function clearNvim() {
     rm -rf "$HOME/.cache/nvim"
     rm -rf "$HOME/.local/share/nvim"
@@ -85,8 +104,10 @@ function zsh:help() {
 zsh utilities
 
   zsh:doctor              Check shell dependencies, sourced files, stale .zwc files, and PATH duplicates
+  zsh:install              Install znap explicitly (never during shell startup)
   zsh:compile [--clean]   Compile config/zsh shell files to .zwc files; --clean removes orphaned .zwc files
   zsh:profile [N]         Time N interactive shell startups; add --zprof for detailed zprof output
+  zsh:benchmark            Profile startup timing and print the slowest functions
   zsh:edit [query]        Pick a config/zsh file with fzf and open it in $EDITOR
 
 cd utilities
@@ -183,12 +204,14 @@ function zsh:doctor() {
         "$root/fzf.sh"
         "$root/git.sh"
         "$root/node.sh"
-        "$root/zellij.sh"
         "$root/completion/node-completion.sh"
         "$root/completion/_ai.zsh"
         "$root/completion/_worktree.zsh"
         "$root/completion/_commit.zsh"
     )
+    if [[ -z "$TMUX" ]] && (($ + commands[zellij])); then
+        expected_sources+=("$root/zellij.sh")
+    fi
     for file in $expected_sources; do
         if [[ -f "$file" ]]; then
             print -r -- "  ok   ${file#$root/}"
@@ -360,6 +383,11 @@ Times interactive zsh startup in a child shell. Use --zprof for detailed functio
         print -r -- "zprof: $rc"
         ZSH_PROFILE_RC="$rc" zsh -dfi -c 'zmodload zsh/zprof; source "$ZSH_PROFILE_RC"; zprof'
     fi
+}
+
+function zsh:benchmark() {
+    emulate -L zsh
+    zsh:profile --zprof "$@"
 }
 
 function zsh:edit() {

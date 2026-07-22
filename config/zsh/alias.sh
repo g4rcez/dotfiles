@@ -328,6 +328,11 @@ function ask_ai() {
 alias '??'="ask_ai"
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
+# Local, untracked task boundary notes live inside each Git worktree's .git dir.
+alias checkpoint='task-checkpoint'
+alias checkpoint-show='task-checkpoint show'
+alias checkpoint-clear='task-checkpoint clear'
+
 function worktree() {
     case "${1:-}" in
     add)
