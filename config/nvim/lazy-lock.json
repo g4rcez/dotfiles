@@ -70,6 +70,7 @@
   "oil.nvim": { "branch": "master", "commit": "b73018b75affd13fa38e2fc94ef753b465f770d7" },
   "orgmode": { "branch": "master", "commit": "f32a06d4b5399dad8bf0478c772bf6c513f02dcf" },
   "persistence.nvim": { "branch": "main", "commit": "b20b2a7887bd39c1a356980b45e03250f3dce49c" },
+  "pi-nvim-bridge": { "branch": "main", "commit": "7ed6b667c2fa43e0ffd1f2939ba82ce6791f2140" },
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
   "promise-async": { "branch": "main", "commit": "119e8961014c9bfaf1487bf3c2a393d254f337e2" },
   "sidekick.nvim": { "branch": "main", "commit": "208e1c5b8170c01fd1d07df0139322a76479b235" },

@@ -1,0 +1,126 @@
+diff --git a/ftplugin/pi-prompt.lua b/ftplugin/pi-prompt.lua
+index df4b2cb..9f11d7e 100644
+--- a/ftplugin/pi-prompt.lua
++++ b/ftplugin/pi-prompt.lua
+@@ -47,6 +47,7 @@
+ -- but this ftplugin can also be sourced directly by tests / a manual `:set ft=pi-prompt`).
+ local pi_ok, pi = pcall(require, "pi-bridge")
+ local config = (pi_ok and pi and (pi.config or pi.defaults)) or {}
++local use_builtin = config.engine ~= "blink" and config.engine ~= "cmp"
+ 
+ local buf = vim.api.nvim_get_current_buf()   -- the matched pi-prompt buffer (ftplugin runs current==matched; :help filetype-plugins)
+ local win = vim.api.nvim_get_current_win()
+@@ -74,7 +75,7 @@ vim.wo[win].spell = false                                                   -- w
+ -- DIFFERENT, user-chosen path; this block only suppresses the user's EXISTING engine
+ -- so the builtin menu is the sole UI. Users who prefer their engine can set
+ -- `vim.g.pi_bridge_suppress_engines = false` to opt out.
+-if vim.g.pi_bridge_suppress_engines ~= false then
++if use_builtin and vim.g.pi_bridge_suppress_engines ~= false then
+   vim.b[buf].completion = false -- blink.cmp honors this (forces disabled in this buffer)
+   pcall(function()
+     local ok, cmp = pcall(require, "cmp")
+@@ -130,16 +131,18 @@ end
+ -- Each maps to a forward-contract completion function and falls through to its default
+ -- when that function is absent / signals fall-through. Until completion.lua (S30+) ships,
+ -- all six behave as their normal insert-mode defaults (Tab indents, CR inserts a newline).
+-map_dispatch("i", "<Tab>",   "pi-bridge.completion", "on_tab")     -- trigger / accept the menu (S33)
+-map_dispatch("i", "<S-Tab>", "pi-bridge.completion", "on_prev")    -- previous completion item (S36)
+-map_dispatch("i", "<C-N>",   "pi-bridge.completion", "on_next")    -- next completion item (S36)
+-map_dispatch("i", "<C-P>",   "pi-bridge.completion", "on_prev")    -- previous completion item (S36)
+-map_dispatch("i", "<C-E>",   "pi-bridge.completion", "on_dismiss") -- dismiss the completion menu (S36)
+-map_dispatch("i", "<CR>",    "pi-bridge.completion", "on_enter")   -- accept-or-newline (S32); no Enter-to-submit (PRD §7.4)
+--- S36: the PRD §7.5 full key set — arrows navigate; <C-Y> accepts (reuses on_enter).
+-map_dispatch("i", "<Down>",  "pi-bridge.completion", "on_next")    -- next completion item (S36; mirrors <C-N>)
+-map_dispatch("i", "<Up>",    "pi-bridge.completion", "on_prev")    -- previous completion item (S36; mirrors <C-P>)
+-map_dispatch("i", "<C-Y>",   "pi-bridge.completion", "on_enter")   -- accept (S36; reuses on_enter's accept-or-fall-through)
++if use_builtin then
++  map_dispatch("i", "<Tab>",   "pi-bridge.completion", "on_tab")     -- trigger / accept the menu (S33)
++  map_dispatch("i", "<S-Tab>", "pi-bridge.completion", "on_prev")    -- previous completion item (S36)
++  map_dispatch("i", "<C-N>",   "pi-bridge.completion", "on_next")    -- next completion item (S36)
++  map_dispatch("i", "<C-P>",   "pi-bridge.completion", "on_prev")    -- previous completion item (S36)
++  map_dispatch("i", "<C-E>",   "pi-bridge.completion", "on_dismiss") -- dismiss the completion menu (S36)
++  map_dispatch("i", "<CR>",    "pi-bridge.completion", "on_enter")   -- accept-or-newline (S32); no Enter-to-submit (PRD §7.4)
++  -- S36: the PRD §7.5 full key set — arrows navigate; <C-Y> accepts (reuses on_enter).
++  map_dispatch("i", "<Down>",  "pi-bridge.completion", "on_next")    -- next completion item (S36; mirrors <C-N>)
++  map_dispatch("i", "<Up>",    "pi-bridge.completion", "on_prev")    -- previous completion item (S36; mirrors <C-P>)
++  map_dispatch("i", "<C-Y>",   "pi-bridge.completion", "on_enter")   -- accept (S36; reuses on_enter's accept-or-fall-through)
++end
+ 
+ -- ── Autocmds (buffer-local, shared "pi-bridge" group; GOTCHA C: clear=false) ────
+ -- The "pi-bridge" augroup is SHARED with S20's VimEnter autocmd. Creating it here with
+@@ -150,13 +153,15 @@ local group = vim.api.nvim_create_augroup("pi-bridge", { clear = false })
+ vim.api.nvim_clear_autocmds({ buffer = buf, group = "pi-bridge" })   -- idempotent on re-source
+ 
+ -- Completion refresh triggers — fire-and-forget (no default to preserve, so no fall-through).
+-for _, ev in ipairs({ "InsertEnter", "TextChangedI", "CursorMovedI" }) do
+-  vim.api.nvim_create_autocmd(ev, {
+-    group = group,
+-    buffer = buf,
+-    desc = "pi-bridge: completion refresh (" .. ev .. ")",
+-    callback = function() dispatch("pi-bridge.completion", "refresh", buf) end,
+-  })
++if use_builtin then
++  for _, ev in ipairs({ "InsertEnter", "TextChangedI", "CursorMovedI" }) do
++    vim.api.nvim_create_autocmd(ev, {
++      group = group,
++      buffer = buf,
++      desc = "pi-bridge: completion refresh (" .. ev .. ")",
++      callback = function() dispatch("pi-bridge.completion", "refresh", buf) end,
++    })
++  end
+ end
+ 
+ -- ── S37: auto-close the menu when the user leaves the completion context (PRD §7.5) ─────────────
+@@ -167,14 +172,16 @@ end
+ -- Fire-and-forget (autocmd; dispatch's bool return is ignored here — used only for the no-op-safe-
+ -- absent-module guarantee). Buffer-local + the SHARED "pi-bridge" group + clear=false (idempotent via
+ -- the nvim_clear_autocmds line above).
+-for _, ev in ipairs({ "InsertLeave", "BufLeave" }) do
+-  local fn = (ev == "InsertLeave") and "on_insert_leave" or "on_buf_leave"
+-  vim.api.nvim_create_autocmd(ev, {
+-    group = group,
+-    buffer = buf,
+-    desc = "pi-bridge: auto-close completion menu on " .. ev,
+-    callback = function() dispatch("pi-bridge.completion", fn, buf) end,
+-  })
++if use_builtin then
++  for _, ev in ipairs({ "InsertLeave", "BufLeave" }) do
++    local fn = (ev == "InsertLeave") and "on_insert_leave" or "on_buf_leave"
++    vim.api.nvim_create_autocmd(ev, {
++      group = group,
++      buffer = buf,
++      desc = "pi-bridge: auto-close completion menu on " .. ev,
++      callback = function() dispatch("pi-bridge.completion", fn, buf) end,
++    })
++  end
+ end
+ 
+ -- Autosave + bridge teardown on exit (gated on config; default true — PRD §7.6, §11). The
+diff --git a/tests/ftplugin_spec.lua b/tests/ftplugin_spec.lua
+index 75fdd58..b030c00 100644
+--- a/tests/ftplugin_spec.lua
++++ b/tests/ftplugin_spec.lua
+@@ -59,6 +59,23 @@ describe("pi-bridge ftplugin/pi-prompt", function()
+     end
+   end)
+ 
++  it("leaves completion UI ownership to blink when engine=blink", function()
++    package.loaded["pi-bridge"] = nil
++    local pi = require("pi-bridge"); pi.setup({ engine = "blink" })
++    local b = fresh_prompt_buf()
++
++    assert.are_not.equals(false, vim.b[b].completion, "blink must remain enabled")
++    assert.are.equals(0, #vim.api.nvim_buf_get_keymap(b, "i"), "builtin keymaps must be skipped")
++
++    local evs = {}
++    for _, a in ipairs(vim.api.nvim_get_autocmds({ buffer = b, group = "pi-bridge" })) do evs[a.event] = true end
++    for _, ev in ipairs({ "InsertEnter", "TextChangedI", "CursorMovedI", "InsertLeave", "BufLeave" }) do
++      assert.is_nil(evs[ev], "builtin completion autocmd must be skipped: " .. ev)
++    end
++    assert.is_true(evs["VimLeavePre"], "bridge autosave must remain active")
++    assert.is_true(evs["ExitPre"], "bridge teardown must remain active")
++  end)
++
+   it("registers VimLeavePre/ExitPre autosave autocmds by default", function()
+     local b = fresh_prompt_buf()
+     local evs = {}

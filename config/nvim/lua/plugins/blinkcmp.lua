@@ -147,6 +147,7 @@ return {
             sources = {
                 default = { "lsp", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
+                    ["pi-prompt"] = { "pi_bridge" },
                     lua = { inherit_defaults = true, "lazydev" },
                     json = { inherit_defaults = true, "git", "filemention" },
                     txt = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
@@ -155,6 +156,7 @@ return {
                     gitcommit = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
                 },
                 providers = {
+                    pi_bridge = { name = "Pi", module = "pi-bridge.blink_source", async = true },
                     lsp = { name = "LSP" },
                     path = { name = "Path", opts = { show_hidden_files_by_default = true } },
                     git = { module = "blink-cmp-git", name = "Git", opts = {} },
