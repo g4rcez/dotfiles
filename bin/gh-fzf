@@ -1,14 +1,18 @@
 #!/bin/bash
+set -euo pipefail
 
-FILE="/tmp/fzf-gitcli"
-gh pr list --json 'body,number,id,title' > $FILE
+FZF_GITCLI_FILE=$(mktemp "${TMPDIR:-/tmp}/fzf-gitcli.XXXXXX")
+export FZF_GITCLI_FILE
+trap 'rm -f -- "$FZF_GITCLI_FILE"' EXIT
 
-if [[ "$(jq length $FILE)" == 0 ]]; then
+gh pr list --json 'body,number,id,title' >"$FZF_GITCLI_FILE"
+
+if [[ "$(jq length "$FZF_GITCLI_FILE")" == 0 ]]; then
   echo "No pull requests available"
   exit 0
 fi
 
-jq -c '.[] | .title' "$FILE"\
-  | fzf --ansi --info inline\
-  --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' /tmp/fzf-gitcli | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
-  --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' /tmp/fzf-gitcli | xargs -n 1 gh pr checkout)"
+jq -c '.[] | .title' "$FZF_GITCLI_FILE" \
+  | fzf --ansi --info inline \
+  --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' \"\$FZF_GITCLI_FILE\" | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
+  --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' \"\$FZF_GITCLI_FILE\" | xargs -n 1 gh pr checkout)"

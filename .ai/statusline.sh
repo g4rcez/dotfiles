@@ -3,13 +3,25 @@
 # Receives JSON on stdin or uses cache, outputs formatted text
 # --compact flag: single line for tmux
 
+umask 077
+
+if [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
+    STATUSLINE_CACHE_BASE="$XDG_RUNTIME_DIR"
+elif [[ -n "${TMPDIR:-}" ]]; then
+    STATUSLINE_CACHE_BASE="$TMPDIR"
+else
+    STATUSLINE_CACHE_BASE="${XDG_CACHE_HOME:-$HOME/.cache}"
+fi
+STATUSLINE_CACHE_DIR="${STATUSLINE_CACHE_BASE%/}/dotfiles-statusline"
+mkdir -p "$STATUSLINE_CACHE_DIR" 2>/dev/null || exit 0
+
 COMPACT=false
 if [[ "$1" == "--compact" ]]; then
   COMPACT=true
 fi
 
 # Cache for 10 seconds to avoid excessive processing
-CACHE_FILE="/tmp/claude_statusline_cache"
+CACHE_FILE="$STATUSLINE_CACHE_DIR/status.json"
 if [[ ! -t 0 ]]; then
   json=$(cat)
   echo "$json" > "$CACHE_FILE"
@@ -90,7 +102,7 @@ project=$(fish_dir "$current_dir")
 _ck=$(printf '%s' "$current_dir" | shasum 2>/dev/null | cut -c1-16 \
       || printf '%s' "$current_dir" | md5 -q 2>/dev/null \
       || printf '%s' "$current_dir" | md5sum 2>/dev/null | cut -c1-16)
-_cf="/tmp/.claude_sl_git_${_ck}"
+_cf="$STATUSLINE_CACHE_DIR/git_${_ck}"
 _use_cache=0
 if [[ -f "$_cf" ]]; then
   _mtime=$(stat -f '%m' "$_cf" 2>/dev/null || stat -c '%Y' "$_cf" 2>/dev/null || echo 0)

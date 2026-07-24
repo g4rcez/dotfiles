@@ -179,25 +179,41 @@ function pullb() {
     git pull --rebase origin "$(git branch --show-current)"
 }
 
-PRS_TMP_FILE="/tmp/fzf-gitcli"
 function parseprs() {
-    if [[ "$(jq length $PRS_TMP_FILE)" == 0 ]]; then
+    local prs_tmp_file="$1"
+    local -x FZF_GITCLI_FILE="$prs_tmp_file"
+
+    if [[ "$(jq length "$prs_tmp_file")" == 0 ]]; then
         echo "No pull requests available"
         return
     fi
-    jq -r '.[] | "#\(.number) \(.title)"' "$PRS_TMP_FILE" |
-        fzf --ansi --info inline --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" /tmp/fzf-gitcli | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
+    jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" |
+        fzf --ansi --info inline --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" \"\$FZF_GITCLI_FILE\" | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
             --bind "enter:become(echo {} | cut -d' ' -f1 | tr -d '#' | xargs -n 1 gh pr checkout)"
 }
 
+function _prs() {
+    local prs_tmp_file
+    prs_tmp_file="$(command mktemp "${TMPDIR:-/tmp}/fzf-gitcli.XXXXXX")" || return $?
+
+    local result
+    if gh pr list "$@" --json 'body,number,id,title' >"$prs_tmp_file"; then
+        parseprs "$prs_tmp_file"
+        result=$?
+    else
+        result=$?
+    fi
+
+    command rm -f -- "$prs_tmp_file"
+    return "$result"
+}
+
 function prs() {
-    gh pr list --json 'body,number,id,title' >$PRS_TMP_FILE
-    parseprs
+    _prs
 }
 
 function myprs() {
-    gh pr list --author "@me" --json 'body,number,id,title' >$PRS_TMP_FILE
-    parseprs
+    _prs --author "@me"
 }
 
 function killbranches() {
