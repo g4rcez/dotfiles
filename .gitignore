@@ -37,3 +37,4 @@ passwords.txt
 shortcuts.yml
 node_modules/
 /*/node_modules
+.pi/permissions.history.json

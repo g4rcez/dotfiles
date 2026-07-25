@@ -6,7 +6,7 @@ A modern, feature-rich Neovim configuration optimized for full-stack development
 
 ### 🎨 UI & Aesthetics
 
-- **Theme**: Catppuccin Mocha with fallback to Tokyo Night
+- **Theme**: Tokyo Night
 - **Statusline**: Lualine with mode indicator, diagnostics, git status, LSP info
 - **Buffer Tabs**: Bufferline with LSP diagnostics per buffer
 - **Winbar**: Dropbar for context-aware breadcrumbs and symbol hierarchy
@@ -353,7 +353,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 │       ├── snacks.lua            # Picker, project palette, git, terminal
 │       ├── format.lua            # Conform formatters and nvim-lint
 │       ├── treesitter.lua        # Syntax highlighting
-│       ├── ui.lua                # Catppuccin, noice, dropbar
+│       ├── ui.lua                # Tokyo Night, noice, dropbar
 │       ├── lualine.lua           # Statusline
 │       ├── bufferline.lua        # Buffer tabs
 │       ├── git.lua               # Gitsigns integration
@@ -519,7 +519,7 @@ Built with:
 - [blink.cmp](https://github.com/Saghen/blink.cmp) - Completion
 - [snacks.nvim](https://github.com/folke/snacks.nvim) - Utilities
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) - Syntax
-- [catppuccin](https://github.com/catppuccin/nvim) - Theme
+- [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) - Theme
 - [typescript-tools.nvim](https://github.com/pmizio/typescript-tools.nvim) - TypeScript LSP
 - And many more excellent plugins from the Neovim community
 

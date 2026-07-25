@@ -7,7 +7,7 @@ return vscode.disable_in_vscode {
     "akinsho/bufferline.nvim",
     "folke/noice.nvim",
     "2kabhishek/nerdy.nvim",
-    "catppuccin/nvim",
+    "folke/tokyonight.nvim",
     "Bekaboo/dropbar.nvim",
     "folke/snacks.nvim",
     "stevearc/oil.nvim",

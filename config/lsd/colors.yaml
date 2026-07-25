@@ -1,38 +1,39 @@
-user: blue
-group: green
+# TokyoNight ANSI palette (the terminal supplies the corresponding RGB values).
+user: 4
+group: 6
 permission:
-    read: white
-    write: dark_yellow
-    exec: dark_green
+    read: 2
+    write: 3
+    exec: 2
     exec-sticky: 5
-    no-access: 245
-    octal: 6
-    acl: dark_cyan
-    context: cyan
+    no-access: 1
+    octal: 5
+    acl: 6
+    context: 6
 date:
-    hour-old: white
-    day-old: white
-    older: white
+    hour-old: 7
+    day-old: 7
+    older: 7
 size:
-    none: white
-    small: dark_green
-    medium: dark_yellow
-    large: dark_red
+    none: 7
+    small: 2
+    medium: 3
+    large: 1
 inode:
-    valid: 13
-    invalid: 245
+    valid: 4
+    invalid: 1
 links:
-    valid: 13
-    invalid: 245
-tree-edge: 245
+    valid: 4
+    invalid: 1
+tree-edge: 8
 git-status:
-    default: 245
-    unmodified: 245
-    ignored: 245
-    new-in-index: dark_green
-    new-in-workdir: dark_green
-    typechange: dark_yellow
-    deleted: dark_red
-    renamed: dark_green
-    modified: dark_yellow
-    conflicted: dark_red
+    default: 7
+    unmodified: 7
+    ignored: 8
+    new-in-index: 2
+    new-in-workdir: 2
+    typechange: 3
+    deleted: 1
+    renamed: 6
+    modified: 3
+    conflicted: 1

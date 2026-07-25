@@ -27,67 +27,19 @@ return {
         opts = { max_recents = 30, add_default_keybindings = true, copy_to_clipboard = false, copy_register = "+" },
     },
     {
-        "tiagovla/tokyodark.nvim",
-        opts = {},
-        config = function(_, opts)
-            -- vim.cmd [[colorscheme tokyodark]]
-        end,
-    },
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
+        "folke/tokyonight.nvim",
         priority = 1000,
-        config = function()
-            vim.cmd.colorscheme "catppuccin-mocha"
-        end,
         opts = {
-            flavour = "mocha",
-            auto_integrations = true,
-            lsp_styles = {
-                virtual_text = {
-                    errors = { "italic" },
-                    hints = { "italic" },
-                    warnings = { "italic" },
-                    information = { "italic" },
-                    ok = { "italic" },
-                },
-                underlines = {
-                    errors = { "underline" },
-                    hints = { "underline" },
-                    warnings = { "underline" },
-                    information = { "underline" },
-                    ok = { "underline" },
-                },
-                inlay_hints = { background = true },
-            },
-            integrations = {
-                cmp = true,
-                fzf = true,
-                leap = true,
-                mini = true,
-                alpha = true,
-                flash = true,
-                mason = true,
-                noice = true,
-                aerial = true,
-                snacks = true,
-                neotest = true,
-                neotree = true,
-                gitsigns = true,
-                grug_far = true,
-                nvimtree = true,
-                blink_cmp = true,
-                dashboard = true,
-                headlines = true,
-                telescope = true,
-                which_key = true,
-                illuminate = true,
-                lsp_trouble = true,
-                treesitter_context = true,
-                bufferline = true,
-                indent_blankline = { enabled = true },
-                navic = { enabled = true, custom_bg = "lualine" },
+            style = "night",
+            terminal_colors = true,
+            styles = {
+                comments = { italic = true },
+                keywords = { italic = true },
             },
         },
+        config = function(_, opts)
+            require("tokyonight").setup(opts)
+            vim.cmd.colorscheme "tokyonight-night"
+        end,
     },
 }

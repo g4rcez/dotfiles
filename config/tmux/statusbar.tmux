@@ -10,12 +10,12 @@ tmux_set() {
 }
 
 # Theme colors.
-TC="#89b4fa"        # primary accent
-FG="#89b4fa"        # default foreground
-DISABLED="#64748b"  # inactive window text/separators
-HIGHLIGHT="#89b4fa" # active/prefix highlight
-G04=#141621          # darker status-left background
-BG="#1A1B26"        # main status background
+TC="#7aa2f7"        # primary accent
+FG="#c0caf5"        # default foreground
+DISABLED="#545c7e"  # inactive window text/separators
+HIGHLIGHT="#7dcfff" # active/prefix highlight
+G04="#16161e"       # darker status-left background
+BG="#1a1b26"        # main status background
 
 # Refresh the status bar every second so dynamic segments stay current.
 tmux_set status-interval 1
@@ -73,4 +73,4 @@ tmux_set message-style "fg=$TC,bg=$BG"
 tmux_set message-command-style "fg=$TC,bg=$BG"
 
 # Copy-mode selection/search highlight.
-tmux_set mode-style "bg=$TC,fg=#000000"
+tmux_set mode-style "bg=$TC,fg=$G04"

@@ -7,7 +7,7 @@ window-padding-x = 2
 bold-is-bright = true
 shell-integration = detect
 adjust-cell-width = 2%
-theme = Catppuccin Mocha
+theme = TokyoNight
 scrollback-limit = 100000
 macos-option-as-alt = true
 mouse-hide-while-typing = true
@@ -33,28 +33,3 @@ keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab
 keybind = super+p>p=toggle_command_palette
-
-background = #1A1B27
-cursor-color = #f5e0dc
-cursor-invert-fg-bg = true
-cursor-text = #1e1e2e
-foreground = #cdd6f4
-foreground = #efefef
-palette = 0=#45475a
-palette = 10=#89d88b
-palette = 11=#ebd391
-palette = 12=#74a8fc
-palette = 13=#f2aede
-palette = 14=#6bd7ca
-palette = 15=#bac2de
-palette = 1=#f38ba8
-palette = 2=#a6e3a1
-palette = 3=#f9e2af
-palette = 4=#89b4fa
-palette = 5=#f5c2e7
-palette = 6=#94e2d5
-palette = 7=#a6adc8
-palette = 8=#585b70
-palette = 9=#f37799
-selection-background = #585b70
-selection-foreground = #cdd6f4

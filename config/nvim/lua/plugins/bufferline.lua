@@ -23,7 +23,6 @@ return {
                     modified_icon = "●",
                     left_trunc_marker = "",
                     right_trunc_marker = "",
-                    highlights = require("catppuccin.special.bufferline").get_theme(),
                 },
             }
         end,

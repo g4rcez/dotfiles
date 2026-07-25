@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HOME}/.local/share/mise/shims:${HOME}/.bun/bin:${PATH:-}"
+
+repo=${DOTFILES_DIR:-"$HOME/dotfiles"}
+prompt_file="$repo/prompts/proofread-selection.txt"
+
+fail() {
+  printf 'proofread-selection: %s\n' "$1" >&2
+  exit 1
+}
+
+usage() {
+  cat <<'EOF'
+Usage: proofread-selection
+       printf 'text' | proofread-selection
+
+Corrects the current macOS selection, or text supplied on stdin, and opens the
+result in a full Neovim session inside the system-wide floating Kitty terminal.
+
+Use normal Neovim editing commands. With this configuration, `ggVGy` copies the
+entire correction to the system clipboard.
+
+Environment:
+  PROOFREAD_MODEL  override the configured Pi model
+  PI_BIN           override the Pi executable
+  NVIM_BIN         override the Neovim executable
+  KITTY_BIN        override the Kitty executable
+EOF
+}
+
+capture_selection() {
+  [[ $(uname -s) == "Darwin" ]] || fail "automatic selection capture is supported only on macOS; pipe text on stdin instead"
+
+  local marker="proofread-selection-$PPID-$$-$RANDOM"
+  /usr/bin/osascript - "$marker" <<'APPLESCRIPT'
+on run argv
+  set marker to item 1 of argv
+  set previousClipboard to the clipboard
+
+  try
+    set the clipboard to marker
+    tell application "System Events" to keystroke "c" using {command down}
+    delay 0.2
+    set selectedText to the clipboard as text
+    set the clipboard to previousClipboard
+  on error messageText number messageNumber
+    set the clipboard to previousClipboard
+    error messageText number messageNumber
+  end try
+
+  if selectedText is marker then error "No selected text was copied. Allow Accessibility access for the invoking terminal or launcher."
+  return selectedText
+end run
+APPLESCRIPT
+}
+
+if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
+  usage
+  exit 0
+fi
+[[ $# -eq 0 ]] || fail "unexpected argument: $1"
+
+[[ -r "$prompt_file" ]] || fail "prompt not found: $prompt_file"
+
+text=""
+if [[ ! -t 0 ]]; then
+  text=$(command cat)
+fi
+if [[ -z ${text//[[:space:]]/} ]]; then
+  text=$(capture_selection) || fail "could not capture the current selection"
+fi
+[[ -n ${text//[[:space:]]/} ]] || fail "the selected text is empty"
+
+pi_bin=${PI_BIN:-$(command -v pi || true)}
+nvim_bin=${NVIM_BIN:-$(command -v nvim || true)}
+kitty_bin=${KITTY_BIN:-$(command -v kitty || true)}
+[[ -n "$pi_bin" ]] || fail "pi was not found in PATH"
+[[ -n "$nvim_bin" ]] || fail "nvim was not found in PATH"
+[[ -n "$kitty_bin" ]] || fail "kitty was not found in PATH"
+
+prompt=$(<"$prompt_file")
+pi_args=(
+  --print
+  --no-tools
+  --no-session
+  --no-extensions
+  --no-skills
+  --no-prompt-templates
+  --no-context-files
+  --thinking low
+  --system-prompt "$prompt"
+)
+model=${PROOFREAD_MODEL:-${AI_CLI_MODEL:-}}
+if [[ -n "$model" ]]; then
+  pi_args+=(--model "$model")
+fi
+
+request=$'Text to proofread:\n\n'"$text"
+printf 'Proofreading selection...\n' >&2
+if ! corrected=$("$pi_bin" "${pi_args[@]}" "$request"); then
+  fail "Pi could not proofread the selection"
+fi
+[[ -n ${corrected//[[:space:]]/} ]] || fail "Pi returned an empty correction"
+
+work_dir=$(mktemp -d "${TMPDIR:-/tmp}/proofread-selection.XXXXXX")
+trap 'rm -rf "$work_dir"' EXIT
+correction_file="$work_dir/correction.txt"
+printf '%s' "$corrected" >"$correction_file"
+
+"$kitty_bin" --title "Proofread" --directory "$HOME" "$nvim_bin" "$correction_file"

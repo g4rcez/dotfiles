@@ -8,6 +8,14 @@
       "approvals": 1,
       "matchedRule": "Bash(chmod:*)",
       "updatedAt": "2026-07-21T15:56:25.401Z"
+    },
+    {
+      "tool": "bash",
+      "kind": "exact",
+      "value": "chmod +x bin/proofread-selection && bash -n bin/proofread-selection && bin/proofread-selection --help >/tmp/proofread-help.txt && printf 'bash syntax/help: passed\\n'; if command -v shellcheck >/dev/null 2>&1; then shellcheck bin/proofread-selection; else printf 'shellcheck: skipped (not installed)\\n'; fi",
+      "approvals": 1,
+      "matchedRule": "Bash(chmod:*)",
+      "updatedAt": "2026-07-25T17:24:03.742Z"
     }
   ]
 }

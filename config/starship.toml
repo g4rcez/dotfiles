@@ -1,6 +1,6 @@
 "$schema" = "https://starship.rs/config-schema.json"
 add_newline = true
-palette = "catppuccin"
+palette = "tokyonight"
 format = """
 $status\
 ${custom.dir}\
@@ -24,36 +24,29 @@ $line_break\
 $character\
 """
 
-[palettes.catppuccin]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
+[palettes.tokyonight]
+bg = "#1a1b26"
+bg_dark = "#16161e"
+bg_highlight = "#292e42"
+terminal_black = "#414868"
+fg = "#c0caf5"
+fg_dark = "#a9b1d6"
+comment = "#565f89"
+dark3 = "#545c7e"
+blue = "#7aa2f7"
+blue1 = "#2ac3de"
+cyan = "#7dcfff"
+green = "#9ece6a"
+magenta = "#bb9af7"
+purple = "#9d7cd8"
+orange = "#ff9e64"
+red = "#f7768e"
+red_dark = "#db4b4b"
+yellow = "#e0af68"
+teal = "#1abc9c"
 
 [docker_context]
-format = '[ $context](sky) '
+format = '[ $context](cyan) '
 
 [lua]
 format = '[󰢱 $version](blue) '
@@ -96,18 +89,18 @@ style = "white"
 symbol = ' '
 
 [git_status]
-ahead = '[⇡${count}](lavender) '
-behind = '[⇣${count}](peach) '
+ahead = '[⇡${count}](fg_dark) '
+behind = '[⇣${count}](orange) '
 conflicted = '[ ${count}](red) '
 deleted = '[󰗨 ${count}](red) '
 diverged = '[⇡${ahead_count}⇣${behind_count}](yellow) '
 format = '([$conflicted$staged$modified$renamed$deleted$untracked$stashed$ahead_behind]($style) )'
-modified = '[ ${count}](lavender) '
+modified = '[ ${count}](fg_dark) '
 renamed = '[󰑕 ${count}](teal) '
 staged = '[󰐕 ${count}](green) '
-stashed = '[ ${count}](mauve) '
+stashed = '[ ${count}](purple) '
 style = "white"
-untracked = '[ ${count}](sapphire) '
+untracked = '[ ${count}](blue1) '
 up_to_date = ''
 
 [git_state]
@@ -117,7 +110,7 @@ style = "fg"
 
 [git_metrics]
 disabled = false
-format = '([+$added](green) )([-$deleted](maroon) )'
+format = '([+$added](green) )([-$deleted](red_dark) )'
 only_nonzero_diffs = true
 
 [cmd_duration]
@@ -151,7 +144,7 @@ symbol = ' '
 description = "Show time since last commit"
 format = "[󰚰 $output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
-style = "mauve"
+style = "purple"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 command = '''
 ts=$(git log -1 --pretty=format:%cr 2>/dev/null) || exit 0

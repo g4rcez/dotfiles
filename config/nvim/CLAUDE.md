@@ -52,7 +52,7 @@ The configuration loads in this order:
 - `snacks.nvim` - Multi-purpose plugin providing picker (file/grep), terminal, git integration, notifications
 - `format.lua` - Formatting with conform.nvim and linting with nvim-lint
 - `treesitter.lua` - Syntax highlighting and parsing
-- `ui.lua` - UI components (heirline statusline, catppuccin theme, noice)
+- `ui.lua` - UI components (heirline statusline, Tokyo Night theme, noice)
 - `git.lua` - Git integration (gitsigns)
 - `code.lua` - Code editing helpers (autopairs, todo-comments, emmet, etc.)
 

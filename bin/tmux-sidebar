@@ -3,13 +3,13 @@
 #   j / k (or ↑/↓)  move the cursor
 #   Enter / l       jump to the selected agent's pane
 #   q               close the sidebar
-# Refreshes every 2s. Detection mirrors tmux-agent-menu (Claude panes title "✳ …";
-# a window flagged red by notify-ready.sh is "waiting").
+# Refreshes every 2s. Only panes with a live supported agent process are listed;
+# stale pane titles are intentionally ignored.
 
 G=$'\033[38;2;122;154;94m'
 R=$'\033[38;2;230;126;128m'
 Y=$'\033[38;2;219;188;127m'
-BL=$'\033[38;2;127;187;183m'
+GR=$'\033[38;2;84;92;126m'
 D=$'\033[2m'
 B=$'\033[1m'
 INV=$'\033[7m'
@@ -31,22 +31,50 @@ fi
 printf '\033[?25l' # hide terminal cursor
 trap 'printf "\033[?25h\033[2J\033[H"; exit 0' INT TERM HUP
 
-find_pi_proc() { # $1 root pid  $2 ps snapshot -> pi pid
-  local root="$1" snap="$2" depth=0 p cpid argv0 argv1 b0 b1
+agent_from_argv() { # $1 argv[0]  $2 argv[1] -> agent name
+  local argv0="$1" argv1="$2" b0="${1##*/}" b1="${2##*/}"
+
+  case "$b0" in
+  claude | claude-code) printf 'claude'; return 0 ;;
+  pi) printf 'pi'; return 0 ;;
+  codex) printf 'codex'; return 0 ;;
+  gemini | gemini-cli) printf 'gemini'; return 0 ;;
+  esac
+  case "$b1" in
+  claude | claude-code) printf 'claude'; return 0 ;;
+  pi) printf 'pi'; return 0 ;;
+  codex) printf 'codex'; return 0 ;;
+  gemini | gemini-cli) printf 'gemini'; return 0 ;;
+  esac
+
+  case "$argv0 $argv1" in
+  *'/@anthropic-ai/claude-code/'*) printf 'claude' ;;
+  *'/pi-coding-agent/'*) printf 'pi' ;;
+  *'/@openai/codex/'*) printf 'codex' ;;
+  *'/@google/gemini-cli/'*) printf 'gemini' ;;
+  *) return 1 ;;
+  esac
+}
+
+find_agent_proc() { # $1 root pid  $2 ps snapshot -> agent name
+  local root="$1" snap="$2" depth=0 p cpid argv0 argv1 agent
   local -a frontier=("$root") nxt=()
-  while [ "${#frontier[@]}" -gt 0 ] && [ "$depth" -lt 4 ]; do
+
+  while [ "${#frontier[@]}" -gt 0 ] && [ "$depth" -lt 5 ]; do
     nxt=()
     for p in "${frontier[@]}"; do
       while read -r cpid _ argv0 argv1 _rest; do
         [ -z "$cpid" ] && continue
-        b0="${argv0##*/}"
-        b1="${argv1##*/}"
-        if [[ "$b0" = pi || "$b1" = pi ]]; then
-          printf '%s' "$cpid"
+        agent=$(agent_from_argv "$argv0" "$argv1") || agent=""
+        if [ -n "$agent" ]; then
+          printf '%s' "$agent"
           return 0
         fi
-        nxt+=("$cpid")
-      done < <(awk -v p="$p" '$2==p{print $0}' <<< "$snap")
+      done < <(awk -v p="$p" '$1==p{print $0}' <<< "$snap")
+
+      while read -r cpid _; do
+        [ -n "$cpid" ] && nxt+=("$cpid")
+      done < <(awk -v p="$p" '$2==p{print $1, $2}' <<< "$snap")
     done
     [ "${#nxt[@]}" -eq 0 ] && break
     frontier=("${nxt[@]}")
@@ -55,11 +83,16 @@ find_pi_proc() { # $1 root pid  $2 ps snapshot -> pi pid
   return 1
 }
 
-pane_agent() { # $1 cmd  $2 title  $3 root pid  $4 ps snapshot -> agent name
-  local cmd="$1" title="$2" root="$3" snap="$4"
-  case "$cmd" in pi) printf 'pi'; return 0 ;; esac
-  case "$title" in π\ -\ * | pi\ -\ *) printf 'pi'; return 0 ;; esac
-  [ -n "$root" ] && find_pi_proc "$root" "$snap" >/dev/null && printf 'pi'
+pane_agent() { # $1 cmd  $2 title (ignored)  $3 root pid  $4 ps snapshot -> agent name
+  local cmd="$1" root="$3" snap="$4" agent
+
+  agent=$(agent_from_argv "$cmd" "") || agent=""
+  if [ -n "$agent" ]; then
+    printf '%s' "$agent"
+    return 0
+  fi
+
+  [ -n "$root" ] && find_agent_proc "$root" "$snap"
 }
 
 pi_name() { # $1 window name  $2 pane title
@@ -130,8 +163,8 @@ build() {
 }
 
 render() {
-  printf '%s%s%s AGENTS%s\n%s%s● idle %s◐ work %s✓ done%s\n%s──────────────%s\n' \
-    "$HOME_CLR" "$G" "$B" "$X" "$G" "" "$Y" "$BL" "$X" "$D" "$X"
+  printf '%s%s%s AGENTS%s\n%s● idle %s◐ work %s✓ done%s\n%s──────────────%s\n' \
+    "$HOME_CLR" "$G" "$B" "$X" "$GR" "$Y" "$G" "$X" "$D" "$X"
   local n=${#locs[@]} i mark col
   [ "$n" -eq 0 ] && {
     printf '%s  (nenhum agente)%s\n' "$D" "$X"
@@ -141,7 +174,7 @@ render() {
     case "${states[$i]}" in
     done)
       mark="✓"
-      col="$BL"
+      col="$G"
       ;;
     working)
       mark="◐"
@@ -149,7 +182,7 @@ render() {
       ;;
     *)
       mark="●"
-      col="$G"
+      col="$GR"
       ;;
     esac
     if [ "$i" -eq "$cursor" ]; then
@@ -162,10 +195,11 @@ render() {
 }
 
 jump_to_selected() {
-  local pane="${targets[$cursor]}" win
+  local pane="${targets[$cursor]}" sidebar_pane="${TMUX_PANE:-}" win
   win=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index}' 2>/dev/null) || win="${locs[$cursor]%.*}"
   tmux switch-client -t "$win"
   tmux select-pane -t "$pane"
+  [ -n "$sidebar_pane" ] && tmux kill-pane -t "$sidebar_pane"
 }
 
 build
