@@ -145,7 +145,7 @@ return {
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
-                default = { "lsp", "path", "dadbod", "snippets", "buffer" },
+                default = { "lsp", "contextual", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
                     ["pi-prompt"] = { "pi_bridge" },
                     lua = { inherit_defaults = true, "lazydev" },
@@ -157,9 +157,23 @@ return {
                 },
                 providers = {
                     pi_bridge = { name = "Pi", module = "pi-bridge.blink_source", async = true },
+                    contextual = {
+                        name = "Context",
+                        module = "config.contextual_completion",
+                        score_offset = 80,
+                        max_items = 2,
+                    },
                     lsp = { name = "LSP" },
                     path = { name = "Path", opts = { show_hidden_files_by_default = true } },
-                    git = { module = "blink-cmp-git", name = "Git", opts = {} },
+                    git = {
+                        module = "blink-cmp-git",
+                        name = "Git",
+                        opts = {
+                            commit = {
+                                triggers = { '' },
+                            },
+                        },
+                    },
                     dadbod = { name = "DB", module = "vim_dadbod_completion.blink" },
                     buffer = { name = "Buf", min_keyword_length = 5, score_offset = -5 },
                     filemention = { name = "File", module = "filemention.sources.blink" },
