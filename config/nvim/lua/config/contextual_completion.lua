@@ -2,9 +2,12 @@ local source = {}
 source.__index = source
 
 local supported_filetypes = {
+    lua = true,
+    css = true,
+    html = true,
     javascript = true,
-    javascriptreact = true,
     typescript = true,
+    javascriptreact = true,
     typescriptreact = true,
 }
 
@@ -23,22 +26,22 @@ local callback_methods = {
 }
 
 local irregular = {
-    children = "child",
+    men = "man",
     feet = "foot",
     geese = "goose",
-    men = "man",
-    people = "person",
-    statuses = "status",
     teeth = "tooth",
     women = "woman",
+    people = "person",
+    children = "child",
+    statuses = "status",
 }
 
 local uncountable = {
     data = true,
     fish = true,
     news = true,
-    series = true,
     sheep = true,
+    series = true,
     species = true,
 }
 

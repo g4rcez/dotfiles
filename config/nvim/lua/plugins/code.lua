@@ -104,10 +104,7 @@ return {
         opts = {
             filetypes = fileTypes,
             remove_template_string = true,
-            restore_quotes = {
-                normal = [[']],
-                jsx = [["]],
-            },
+            restore_quotes = { normal = [[']], jsx = [["]] },
         },
     },
     {

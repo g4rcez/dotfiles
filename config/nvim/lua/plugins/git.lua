@@ -38,8 +38,8 @@ return {
         dependencies = { "MunifTanjim/nui.nvim" },
         cmd = "CodeDiff",
         opts = {
-            explorer = { width = 20, initial_focus = "original" },
             history = { initial_focus = "original" },
+            explorer = { width = 20, initial_focus = "original" },
         },
     },
     {

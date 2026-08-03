@@ -1,4 +1,5 @@
 return {
+    enabled = false,
     "elixir-tools/elixir-tools.nvim",
     version = "*",
     event = { "BufReadPre", "BufNewFile" },

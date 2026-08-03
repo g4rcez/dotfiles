@@ -5,7 +5,6 @@ return {
         ---@class trouble.Mode: trouble.Config,trouble.Section.spec
         ---@field desc? string
         ---@field sections? string[]
-
         ---@class trouble.Config
         ---@field mode? string
         ---@field config? fun(opts:trouble.Config)
@@ -15,10 +14,8 @@ return {
         opts = {
             focus = true,
             ---@type trouble.Window.opts
-            win = {
-                type = "split",
-                position = "right",
-            },
+            win = { type = "float", position = "top" },
+            auto_close = true,
             modes = {
                 preview_float = {
                     mode = "diagnostics",

@@ -31,5 +31,6 @@ return {
     build = apply_local_patches,
     config = function()
         require("pi-bridge").setup { engine = "blink" }
+        vim.cmd "set ft=markdown"
     end,
 }

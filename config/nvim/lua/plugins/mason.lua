@@ -5,7 +5,7 @@ return {
         dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
         opts = {
             ensure_installed = require("config.ensure-installed").mason_lsp,
-            automatic_enable = false,
+            automatic_enable = true,
         },
     },
     {
@@ -19,7 +19,6 @@ return {
         "mason-org/mason.nvim",
         build = ":MasonUpdate",
         opts_extend = { "ensure_installed" },
-        keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
         opts = { ensure_installed = require("config.ensure-installed").fmt },
         ---@param opts MasonSettings | {ensure_installed: string[]}
         config = function(_, opts)

@@ -292,8 +292,13 @@ lsp_config("tailwindcss", {
 })
 
 lsp_config("vtsls", {
+    root_dir = function(bufnr, on_dir)
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        if filename ~= "" then
+            on_dir(vim.fs.dirname(filename))
+        end
+    end,
     settings = {
-        vtsls = { autoUseWorkspaceTsdk = true },
         javascript = {
             preferences = { jsxAttributeCompletionStyle = "auto" },
         },

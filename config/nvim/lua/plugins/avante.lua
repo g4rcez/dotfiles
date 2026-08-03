@@ -1,4 +1,5 @@
 return {
+    enabled = false,
     "yetone/avante.nvim",
     cond = not require("config.vscode").isVscode(),
     event = "VeryLazy",

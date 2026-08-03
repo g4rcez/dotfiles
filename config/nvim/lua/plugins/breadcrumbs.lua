@@ -8,14 +8,12 @@ return {
         opts = {
             icons = {
                 ui = {
-                    bar = {
-                        separator = "› ",
-                    },
+                    bar = { separator = " > " },
                 },
             },
             bar = {
-                enable = false,
                 hover = false,
+                enable = false,
                 padding = { left = 0, right = 0 },
             },
         },

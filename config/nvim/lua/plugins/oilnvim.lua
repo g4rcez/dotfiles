@@ -12,6 +12,7 @@ return {
         watch_for_changes = false,
         view_options = { show_hidden = true },
         float = { padding = 5, border = "solid", preview_split = "right" },
+        lsp_file_methods = { enabled = true },
         preview_win = {
             update_on_cursor_moved = true,
             preview_method = "scratch",

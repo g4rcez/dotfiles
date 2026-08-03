@@ -17,7 +17,7 @@ return {
         opts = {
             backend = "delta",
             picker = "snacks",
-            resolve_timeout = 100,
+            resolve_timeout = 200,
             backend_opts = { delta = { header_lines_to_remove = 4, args = { "--line-numbers" } } },
             signs = {
                 quickfix = { "", { link = "DiagnosticWarning" } },
