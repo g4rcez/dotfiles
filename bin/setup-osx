@@ -59,3 +59,5 @@ mdutil -i off -a
 defaults write -g NSWindowShouldDragOnGesture -bool true
 
 
+defaults delete -g NSConvolutionOverride1 2>/dev/null
+defaults delete -g NSConvolutionOverride2 2>/dev/null
