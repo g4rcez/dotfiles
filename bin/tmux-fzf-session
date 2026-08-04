@@ -1,13 +1,20 @@
-#!/bin/bash
-source "$HOME/dotfiles/config/zsh/utils.sh"
+#!/usr/bin/env bash
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+
+TMUX_SOCKET="${TMUX_SOCKET:-$HOME/.tmp/socket}"
+TMUX_ARGS=()
+TMUX_EXEC='tmux'
+if [[ -z "${TMUX:-}" ]]; then
+    TMUX_ARGS=(-S "$TMUX_SOCKET")
+    TMUX_EXEC="tmux -S $(printf '%q' "$TMUX_SOCKET")"
+fi
+
+tmux_cmd() {
+    command tmux "${TMUX_ARGS[@]}" "$@"
+}
 
 function homename() {
-    HOME_SED_SAFE=$?
-    if [ $HOME_SED_SAFE -eq 0 ]; then
-        echo "$1" | sed -e "s|^~/|$HOME/|"
-    else
-        echo "$1"
-    fi
+    printf '%s\n' "${1/#\~\//$HOME/}"
 }
 
 function fzf_window() {
@@ -17,36 +24,37 @@ function fzf_window() {
         --height 100% \
         $FZF_COLORS \
         --prompt "> " \
-        --preview "bash ~/dotfiles/bin/tmux-fzf-preview {}" \
+        --preview "bash \"$DOTFILES_DIR/bin/tmux-fzf-preview\" {}" \
         --header "ctrl+d: Delete session" \
-        --preview-window right,70% --bind "ctrl-d:execute-silent(tmux kill-session -t {2..})+abort"
+        --preview-window right,70% --bind "ctrl-d:execute-silent($TMUX_EXEC kill-session -t {2..})+abort"
 }
 
 function getProjects() {
-    tmux list-sessions | awk '{ print "[s] " $1 }' | sed 's/:$//1'
+    tmux_cmd list-sessions | awk '{ print "[s] " $1 }' | sed 's/:$//1'
     fd -p -t directory -a -d 2 "./Documents" ~/Documents | sed "s@$HOME/Documents/@[d] @g" | grep -e '.*/.*/' | sed 's/\/$//g'
 }
 
 function selectProject() {
     PROJECT=$(getProjects | fzf_window)
     if [ "${PROJECT:0:3}" == "[d]" ]; then
-        SANITIZE=$(echo $PROJECT | sed 's/\[d] //g')
-        echo "$HOME/Documents/$SANITIZE"
+        SANITIZE="${PROJECT#\[d] }"
+        printf '%s\n' "$HOME/Documents/$SANITIZE"
     fi
     if [ "${PROJECT:0:3}" == "[s]" ]; then
-        echo "$(echo $PROJECT | sed 's/\[s] //g')"
+        printf '%s\n' "$PROJECT"
     fi
     exit
 }
 
 function isSelected() {
-    if [ -n "$(echo "$1" | grep "^([0-9]*)\\\t\[Session\]")" ]; then
-        echo 1
-    fi
+    [[ "$1" == "[s] "* ]] && printf '1\n'
 }
 
 function sanitizeName() {
-    echo "$1" | sed "s/^([0-9]*)\t\[[^]]*\]\t//"
+    case "$1" in
+    "[s] "*) printf '%s\n' "${1#\[s\] }" ;;
+    *) printf '%s\n' "$1" ;;
+    esac
 }
 
 function getSessionName() {
@@ -67,15 +75,23 @@ selected_name=$(sanitizeName "$selected")
 session_name=$(getSessionName "$(homename "$selected_name")")
 
 if [[ -n "$is_session" ]]; then
-    tmux switch -t "$session_name"
-else
-    FULL_PATH="$(zoxide query "$selected")"
-    if [[ -d "$FULL_PATH" ]]; then
-        cd "$FULL_PATH"
-        tmux new-session -ds "$session_name"
-        tmux -S "$HOME/.tmp/socket" switch -t "$session_name"
+    if [[ -n "${TMUX:-}" ]]; then
+        tmux_cmd switch-client -t "$session_name"
     else
-        tmux new-session -ds "$selected"
-        tmux -S "$HOME/.tmp/socket" switch -t "$selected"
+        tmux_cmd attach-session -t "$session_name"
+    fi
+else
+    FULL_PATH="$(zoxide query "$selected" 2>/dev/null || true)"
+    if [[ -d "$FULL_PATH" ]]; then
+        tmux_cmd new-session -d -s "$session_name" -c "$FULL_PATH"
+        target_session="$session_name"
+    else
+        tmux_cmd new-session -d -s "$selected"
+        target_session="$selected"
+    fi
+    if [[ -n "${TMUX:-}" ]]; then
+        tmux_cmd switch-client -t "$target_session"
+    else
+        tmux_cmd attach-session -t "$target_session"
     fi
 fi

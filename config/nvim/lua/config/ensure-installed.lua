@@ -15,7 +15,7 @@ local lsp = {
     "eslint",
     "rust_analyzer",
     "tailwindcss",
-    "vtsls",
+    "tsgo",
     "yamlls",
     "kulala_ls",
 }

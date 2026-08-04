@@ -166,6 +166,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, opts)
 
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, ev.buf) then
+            vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+        end
+
         if
             client
             and not vim.b[ev.buf].lsp_document_highlight_enabled
@@ -291,28 +295,37 @@ lsp_config("tailwindcss", {
     },
 })
 
-lsp_config("vtsls", {
-    root_dir = function(bufnr, on_dir)
-        local filename = vim.api.nvim_buf_get_name(bufnr)
-        if filename ~= "" then
-            on_dir(vim.fs.dirname(filename))
-        end
-    end,
+local typescript_settings = {
+    format = { enable = true },
+    inlayHints = {
+        variableTypes = { enabled = true },
+        parameterTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+        parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
+        functionLikeReturnTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+    },
+    preferences = {
+        importModuleSpecifier = "shortest",
+        importModuleSpecifierEnding = "auto",
+        jsxAttributeCompletionStyle = "auto",
+        quotePreference = "auto",
+        useAliasesForRenames = true,
+    },
+    suggest = {
+        autoImports = true,
+        completeFunctionCalls = true,
+        includeCompletionsForImportStatements = true,
+        paths = true,
+    },
+    updateImportsOnFileMove = { enabled = "prompt" },
+    validate = { enable = true },
+}
+
+-- Use tsgo's built-in root_dir: it handles package roots, monorepos, and Deno exclusion.
+lsp_config("tsgo", {
     settings = {
-        javascript = {
-            preferences = { jsxAttributeCompletionStyle = "auto" },
-        },
-        typescript = {
-            preferences = { jsxAttributeCompletionStyle = "auto" },
-            inlayHints = {
-                variableTypes = { enabled = true },
-                parameterTypes = { enabled = true },
-                enumMemberValues = { enabled = true },
-                parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
-                functionLikeReturnTypes = { enabled = true },
-                propertyDeclarationTypes = { enabled = true },
-            },
-        },
+        typescript = vim.deepcopy(typescript_settings),
     },
 })
 
@@ -392,22 +405,6 @@ lsp_config("harper_ls", {
 
 lsp_config("oxlint", {
     root_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" },
-})
-
-lsp_config("eslint", {
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-    root_markers = {
-        ".eslintrc",
-        ".eslintrc.json",
-        ".eslintrc.js",
-        ".eslintrc.cjs",
-        ".eslintrc.yaml",
-        ".eslintrc.yml",
-        "eslint.config.js",
-        "eslint.config.mjs",
-        "eslint.config.cjs",
-        "eslint.config.ts",
-    },
 })
 
 vim.treesitter.language.register("markdown", "vimwiki")

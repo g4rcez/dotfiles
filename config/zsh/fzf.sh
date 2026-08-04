@@ -3,7 +3,7 @@ function _fzf_comprun() {
     shift
     case "$command" in
     cd) fzf "$@" --preview 'tree -C {} | head -200' ;;
-    *) fzf "$@" --preview '~/dotfiles/bin/lessfilter.sh {}' ;;
+    *) fzf "$@" --preview "$DOTFILES/bin/lessfilter.sh {}" ;;
     esac
 }
 
@@ -14,7 +14,7 @@ export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -pri
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '80%' --preview-window right,50%"
 export FZF_COMPLETION_TRIGGER="**"
 
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-}
 --ansi
 --bind 'ctrl-/:toggle-preview'
 --bind 'ctrl-f:preview-up'
@@ -25,7 +25,7 @@ $FZF_COLORS
 --height 95%
 --info=inline
 --layout=reverse
---preview '~/dotfiles/bin/lessfilter.sh {}'
+--preview '$DOTFILES/bin/lessfilter.sh {}'
 --preview-window right,75%
 -i
 "
@@ -41,7 +41,7 @@ function _fzf_git_fzf() {
         --info=inline \
         -l "90%" \
         --layout=reverse --multi --height=90% --min-height=30 \
-        --preview '~/dotfiles/bin/lessfilter.sh {}' \
+        --preview "$DOTFILES/bin/lessfilter.sh {}" \
         --preview-window 'right,75%' \
         -i \
         -p90%,90% \
@@ -83,10 +83,13 @@ function fns() {
 
 function files() {
     local file="$(fzf --multi --reverse)"
-    if [[ "$file" ]]; then
-        for prog in $(echo $file); do $EDITOR "$prog"; done
+    if [[ -n "$file" ]]; then
+        local prog
+        while IFS= read -r prog; do
+            [[ -n "$prog" ]] && "$EDITOR" "$prog"
+        done <<< "$file"
     else
-        echo "cancelled fzf"
+        print -r -- "cancelled fzf"
     fi
 }
 
@@ -99,8 +102,11 @@ function st() {
             --bind 'ctrl-u:preview-down' \
             --preview '(if [ -d {-1} ];then lsd -l {-1}; else git diff --color=always -- {-1} | delta --side-by-side -w "$(tput cols)-45" | sed 1,4d; cat {-1}; fi)' |
         cut -c4- | sed 's/.* -> //')
-    if [[ $selected ]]; then
-        for prog in $(echo $selected); do $EDITOR $prog; done
+    if [[ -n "$selected" ]]; then
+        local prog
+        while IFS= read -r prog; do
+            [[ -n "$prog" ]] && "$EDITOR" "$prog"
+        done <<< "$selected"
     fi
 }
 
@@ -111,4 +117,3 @@ function _fzf_compgen_path() {
 function _fzf_compgen_dir() {
     bfs -H "$1" -color -exclude \( -name .git \) -type d 2>/dev/null
 }
-

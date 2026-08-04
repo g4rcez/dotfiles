@@ -31,6 +31,12 @@ return {
     build = apply_local_patches,
     config = function()
         require("pi-bridge").setup { engine = "blink" }
-        vim.cmd "set ft=markdown"
+        local raw_bridge = vim.env.PI_NVIM_BRIDGE
+        if raw_bridge then
+            local ok, bridge = pcall(vim.json.decode, raw_bridge)
+            if ok and type(bridge) == "table" and bridge.transport == "unix" then
+                vim.cmd "set ft=markdown"
+            end
+        end
     end,
 }

@@ -1,14 +1,14 @@
-#!/bin/env bash
-source $HOME/dotfiles/zsh/utils.sh
-USER_CONFIG="$HOME/dotfiles/config/tmux/icons.yml"
-DIR="$2"
-OUTPUT="$2"
-CMD="$(echo $1 | cut -d ' ' -f1)"
+#!/usr/bin/env bash
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+USER_CONFIG="$DOTFILES_DIR/config/tmux/icons.yml"
+DIR="${2:-}"
+OUTPUT="${2:-}"
+CMD="$(printf '%s\n' "${1:-}" | cut -d ' ' -f1)"
 
 get_config_value() {
     local key=$1
     local value
-    value="$(yq "$key" "$USER_CONFIG")"
+    value="$(yq "$key" "$USER_CONFIG")" || return $?
     echo "${value-''}"
 }
 
@@ -24,14 +24,14 @@ function fn() {
         command nohup zellij action rename-tab "$OUTPUT" >/dev/null 2>&1
         return 0
     fi
-    CMD="$(echo "$1" | cut -d ' ' -f1)"
+    CMD="$(printf '%s\n' "$1" | cut -d ' ' -f1)"
     if [[ "$CMD" == "nvim" || "$CMD" == "vim" ]]; then
         OUTPUT="nvim $(basename $DIR)"
     elif [[ "$CMD" == "n" || "$CMD" == "n" ]]; then
-        OUTPUT="n $(echo $1 | cut -d ' ' -f2)"
+        OUTPUT="n $(printf '%s\n' "$1" | cut -d ' ' -f2)"
     elif [[ "$HAS_GIT" == "true" ]]; then
         OUTPUT="$(git -C "$DIR" config --get remote.origin.url | cut -d ':' -f2- | sed ' s/\.git$//g')"
-    elif [[ $DIR == $HOME ]]; then
+    elif [[ "$DIR" == "$HOME" ]]; then
         OUTPUT="~"
     else
         OUTPUT=${OUTPUT##*/}

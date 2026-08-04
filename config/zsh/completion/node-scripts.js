@@ -11,4 +11,4 @@ const result = Object.entries(pkg.scripts || {})
     .map((entry) => `${entry[0]}:$ ${entry[1]}`)
     .join("\n");
 
-console.log(result);
+process.stdout.write(`${result}\n`);

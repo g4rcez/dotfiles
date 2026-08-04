@@ -1,12 +1,15 @@
-ZLAYOUT="$HOME/dotfiles/config/zellij/layouts/default.kdl"
+typeset -g ZLAYOUT="${DOTFILES}/config/zellij/layouts/default.kdl"
 
 function zedit() {
-    zellij edit --floating "$*"
+    zellij edit --floating "$@"
 }
 
 function zrun() {
-    NAME=$(echo "$1" | cut -d ' ' -f1)
-    zellij run --name "$NAME" --floating -- zsh -i -c "$*"
+    emulate -L zsh
+    (($#)) || { print -u2 -r -- "Usage: zrun COMMAND [ARG ...]"; return 2; }
+    local command_line="$*"
+    local name="${command_line%% *}"
+    zellij run --name "$name" --floating -- zsh -i -c "$command_line"
 }
 
 function zkill() {
@@ -33,7 +36,7 @@ function zinit() {
 function zellij-start() {
     if [[ -z "$ZELLIJ" ]]; then
         if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-            zinit "$ZELLIJ_DEFAULT_SESSION" "$HOME/dotfiles"
+            zinit "$ZELLIJ_DEFAULT_SESSION" "$DOTFILES"
         fi
     fi
 }
@@ -51,22 +54,22 @@ function zri() {
 }
 
 function ze() {
-    zellij edit "$*"
+    zellij edit "$@"
 }
 
 function zef() {
-    zellij edit --floating "$*"
+    zellij edit --floating "$@"
 }
 
 function zei() {
-    zellij edit --in-place "$*"
+    zellij edit --in-place "$@"
 }
 
 function zpipe() {
     if [ -z "$1" ]; then
         zellij pipe
     else
-        zellij pipe -p $1
+        zellij pipe -p "$1"
     fi
 }
 

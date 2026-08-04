@@ -2,7 +2,14 @@
 ## Functions
 autoload -Uz is-at-least
 
-if [[ -n "$NVIM" ]] && command -v nvr &>/dev/null; then
+function _git_require_repo() {
+    if ! command git rev-parse --show-toplevel >/dev/null 2>&1; then
+        print -u2 -r -- "git helper: not inside a Git worktree"
+        return 1
+    fi
+}
+
+if [[ -n "${NVIM:-}" ]] && (($+commands[nvr])); then
     export GIT_EDITOR="nvr --remote-tab-wait"
 fi
 
@@ -75,7 +82,7 @@ alias tags='git tag | sort -V'
 alias gundo='git reset --soft HEAD~1'
 
 function gtv() {
-    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | grep --color=never '.'
+    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | command grep '.'
 }
 #############################################################################################################################
 ## github-cli
@@ -85,24 +92,32 @@ alias gdash="gh dash"
 #############################################################################################################################
 ## git functions
 function gco() {
-    _fzf_git_each_ref --no-multi | xargs git checkout
+    local selected
+    selected="$(_fzf_git_each_ref --no-multi)" || return $?
+    [[ -n "$selected" ]] || return 0
+    command git switch "$selected"
 }
 
 function git.clone() {
-    git clone "git@github.com:$1"
+    (($# == 1)) || { print -u2 -r -- "Usage: git.clone OWNER/REPOSITORY"; return 2; }
+    command git clone "git@github.com:$1"
 }
 
 function commit.wip() {
-    git add -A .
-    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
-    git commit --no-verify -S -m "wip: ${NOW}"
-    git push
+    emulate -L zsh
+    _git_require_repo || return
+    command git add -A . || return $?
+    local now
+    now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
+    command git commit --no-verify -S -m "wip: ${now}"
 }
 
 function _commit_message() {
-    git add -A .
-    git commit -S -m "$1"
-    git push
+    emulate -L zsh
+    (($# == 1)) || { print -u2 -r -- "git helper: commit message is required"; return 2; }
+    _git_require_repo || return
+    command git add -A . || return $?
+    command git commit -S -m "$1"
 }
 
 function commit.lockfile() {
@@ -162,44 +177,60 @@ function commit.write() {
 }
 
 function commit.ai() {
-    git add -A .
-    COMMIT_MESSAGE="$(commitwithai "$*")" || return $?
-    git commit --no-verify -S -m "${COMMIT_MESSAGE}"
-    git push
+    emulate -L zsh
+    _git_require_repo || return
+    command git add -A . || return $?
+    local commit_message
+    commit_message="$(commitwithai "$@")" || return $?
+    [[ -n "$commit_message" ]] || { print -u2 -r -- "commit.ai: empty commit message"; return 1; }
+    command git commit --no-verify -S -m "$commit_message"
 }
 
 function wip.staged() {
-    NOW=$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")
-    git commit --no-verify -S -m "wip: ${NOW}"
-    git push
+    emulate -L zsh
+    _git_require_repo || return
+    local now
+    now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
+    command git commit --no-verify -S -m "wip: ${now}"
 }
 
 function pullb() {
-    git fetch
-    git pull --rebase origin "$(git branch --show-current)"
+    emulate -L zsh
+    _git_require_repo || return
+    local branch
+    branch="$(command git branch --show-current)" || return $?
+    [[ -n "$branch" ]] || { print -u2 -r -- "pullb: detached HEAD"; return 1; }
+    command git fetch || return $?
+    command git pull --rebase origin "$branch"
 }
 
 function parseprs() {
-    local prs_tmp_file="$1"
-    local -x FZF_GITCLI_FILE="$prs_tmp_file"
+    emulate -L zsh
+    local prs_tmp_file="${1:-}"
+    [[ -r "$prs_tmp_file" ]] || { print -u2 -r -- "parseprs: JSON file is required"; return 2; }
 
     if [[ "$(jq length "$prs_tmp_file")" == 0 ]]; then
-        echo "No pull requests available"
-        return
+        print -r -- "No pull requests available"
+        return 0
     fi
-    jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" |
-        fzf --ansi --info inline --preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" \"\$FZF_GITCLI_FILE\" | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
-            --bind "enter:become(echo {} | cut -d' ' -f1 | tr -d '#' | xargs -n 1 gh pr checkout)"
+    local selected
+    selected="$(jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" | fzf --ansi --info inline)" || return $?
+    [[ -n "$selected" ]] || return 0
+    local pr_number="${selected%% *}"
+    pr_number="${pr_number#\#}"
+    [[ "$pr_number" =~ '^[0-9]+$' ]] || { print -u2 -r -- "parseprs: invalid pull request selection"; return 2; }
+    command gh pr checkout "$pr_number"
+        # removed unsafe shell-evaluated preview "PR_NUM=\$(echo {} | cut -d' ' -f1 | tr -d '#'); jq -r \".[] | select(.number == \$PR_NUM) | \\\"#\(.number) \(.title)\\n\\n\(.body)\\\"\" \"\$FZF_GITCLI_FILE\" | sed 's/\\\\n/\\'$'\\n''/g' | sed 's/\\\\r/''/g'" \
 }
 
 function _prs() {
+    emulate -L zsh
     local prs_tmp_file
     prs_tmp_file="$(command mktemp "${TMPDIR:-/tmp}/fzf-gitcli.XXXXXX")" || return $?
 
-    local result
-    if gh pr list "$@" --json 'body,number,id,title' >"$prs_tmp_file"; then
-        parseprs "$prs_tmp_file"
-        result=$?
+    local result=0
+    if command gh pr list "$@" --json 'body,number,id,title' >|"$prs_tmp_file"; then
+        parseprs "$prs_tmp_file" || result=$?
     else
         result=$?
     fi
@@ -217,21 +248,79 @@ function myprs() {
 }
 
 function killbranches() {
-    git for-each-ref --format '%(refname:short)' refs/heads | grep -v "master\|main\|develop" | xargs git branch -D
+    emulate -L zsh
+    local confirm=0 force=0
+    while (($#)); do
+        case "$1" in
+        --confirm | -y) confirm=1 ;;
+        --force) force=1 ;;
+        --dry-run) ;;
+        -h | --help)
+            print -r -- "Usage: killbranches [--dry-run|--confirm] [--force]"
+            return 0
+            ;;
+        *) print -u2 -r -- "killbranches: unknown option: $1"; return 2 ;;
+        esac
+        shift
+    done
+    _git_require_repo || return
+
+    local current
+    current="$(command git branch --show-current)" || return $?
+    local -a branches=()
+    local branch
+    local branch_output
+    branch_output="$(command git for-each-ref --format '%(refname:short)' refs/heads)" || return $?
+    while IFS= read -r branch; do
+        case "$branch" in
+        "" | "$current" | main | master | develop | development | dev | trunk | default) continue ;;
+        esac
+        branches+=("$branch")
+    done <<< "$branch_output"
+
+    if ((${#branches[@]} == 0)); then
+        print -r -- "no deletable local branches"
+        return 0
+    fi
+    print -rl -- "${branches[@]}"
+    if (( ! confirm )); then
+        print -r -- "dry-run; rerun with --confirm to delete these branches"
+        return 0
+    fi
+
+    local delete_flag=-d
+    ((force)) && delete_flag=-D
+    for branch in "${branches[@]}"; do
+        command git branch "$delete_flag" -- "$branch" || return $?
+    done
 }
 
 function tag() {
-    git tag "$1" && git push origin "$1"
+    emulate -L zsh
+    (($# == 1)) || { print -u2 -r -- "Usage: tag TAG"; return 2; }
+    _git_require_repo || return
+    command git tag "$1" || return $?
+    print -r -- "created tag $1; push it explicitly with: git push origin $1"
 }
 
 function actionWith() {
-    git fetch
-    local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-    local TARGET_BRANCH="$2"
-    git switch "$TARGET_BRANCH"
-    git pull origin "$TARGET_BRANCH"
-    git switch "$CURRENT_BRANCH"
-    git "$1" "$TARGET_BRANCH"
+    emulate -L zsh
+    (($# == 2)) || { print -u2 -r -- "Usage: actionWith ACTION TARGET_BRANCH"; return 2; }
+    _git_require_repo || return
+    local action="$1" target_branch="$2" current_branch
+    case "$action" in merge | rebase) ;;
+    *) print -u2 -r -- "actionWith: action must be merge or rebase"; return 2 ;;
+    esac
+    current_branch="$(command git branch --show-current)" || return $?
+    [[ -n "$current_branch" ]] || { print -u2 -r -- "actionWith: detached HEAD"; return 1; }
+    command git fetch || return $?
+    command git switch "$target_branch" || return $?
+    if ! command git pull --rebase origin "$target_branch"; then
+        command git switch "$current_branch" >/dev/null 2>&1 || true
+        return 1
+    fi
+    command git switch "$current_branch" || return $?
+    command git "$action" "$target_branch"
 }
 
 function mergewith() {
@@ -353,7 +442,7 @@ function lastcommit() {
 }
 
 function gtag() {
-    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview 'bash $HOME/dotfiles/bin/git-fzf-preview.sh tag {}'
+    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview "bash $DOTFILES/bin/git-fzf-preview.sh tag {}"
 }
 
 #############################################################################################################################
@@ -376,44 +465,69 @@ function gh.action() {
 }
 
 function gh.workflow() {
-    local tmpfile="$(mktemp)"
-    gh workflow list --json id,name,path,state >"$tmpfile"
-    jq -r '.[] | .name' "$tmpfile" |
-        fzf --ansi --info inline \
-            --preview "$DOTFILES/bin/gh-workflow-previewer {} $tmpfile" --bind "enter:become(echo {} | pbcopy && echo {})"
-    rm -f "$tmpfile"
+    emulate -L zsh
+    local tmpfile
+    tmpfile="$(command mktemp "${TMPDIR:-/tmp}/gh-workflow.XXXXXX")" || return $?
+    if ! command gh workflow list --json id,name,path,state >|"$tmpfile"; then
+        command rm -f -- "$tmpfile"
+        return 1
+    fi
+
+    local selected
+    selected="$(jq -r '.[] | .name' "$tmpfile" | fzf --ansi --info inline)"
+    local selection_rc=$?
+    command rm -f -- "$tmpfile"
+    ((selection_rc == 0)) || return "$selection_rc"
+    [[ -n "$selected" ]] || return 0
+    if (($+commands[pbcopy])); then
+        print -rn -- "$selected" | command pbcopy
+    fi
+    print -r -- "$selected"
 }
 
-function commitwithai {
-    local EXCLUDE_ARGS=()
+function commitwithai() {
+    emulate -L zsh
+    _git_require_repo || return
+    local -a EXCLUDE_ARGS=()
+    local COMMIT_MESSAGE=""
     for f in "${AICOMMIT_EXCLUDES[@]}"; do
         [[ -n "$f" ]] && EXCLUDE_ARGS+=(":(exclude)$f")
     done
 
     local HINT="${*}"
     local PROMPT
+    [[ -r "$DOTFILES/prompts/aicommit-script.txt" ]] || {
+        print -u2 -r -- "commitwithai: prompt file not found"
+        return 1
+    }
     PROMPT="$(<"$DOTFILES/prompts/aicommit-script.txt")"
     if [[ -n "$HINT" ]]; then
         PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
     fi
 
     local DIFF
-    DIFF="$(git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")"
+    DIFF="$(command git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")" || return $?
 
     if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
+        (($+commands[codex])) || { print -u2 -r -- "commitwithai: codex is not installed"; return 1; }
         local OUT_FILE ERR_FILE RC
-        OUT_FILE="$(mktemp)"
-        ERR_FILE="$(mktemp)"
+        OUT_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.XXXXXX")" || return $?
+        ERR_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.err.XXXXXX")"
+        local mktemp_rc=$?
+        if ((mktemp_rc != 0)); then
+            command rm -f -- "$OUT_FILE"
+            return "$mktemp_rc"
+        fi
         printf '%s\n\n%s\n' "$PROMPT" "$DIFF" \
-            | codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
+            | command codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
         RC=$?
         if (( RC != 0 )); then
             command cat "$ERR_FILE" >&2
-            rm -f "$OUT_FILE" "$ERR_FILE"
+            command rm -f -- "$OUT_FILE" "$ERR_FILE"
             return "$RC"
         fi
         COMMIT_MESSAGE="$(<"$OUT_FILE")"
-        rm -f "$OUT_FILE" "$ERR_FILE"
+        command rm -f -- "$OUT_FILE" "$ERR_FILE"
     elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
         # Pi's Responses API provider needs a single explicit user message; do
         # not split the diff into stdin and the instructions into argv.
@@ -421,11 +535,14 @@ function commitwithai {
         if ! COMMIT_MESSAGE=$(
             ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files "$REQUEST"
         ); then
-            echo "commitwithai: AI query failed" >&2
+            print -u2 -r -- "commitwithai: AI query failed"
             return 1
         fi
     else
-        COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1')
+        if ! COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1'); then
+            print -u2 -r -- "commitwithai: AI query failed"
+            return 1
+        fi
     fi
 
     COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | awk '
@@ -436,12 +553,14 @@ function commitwithai {
     ' | sed 's/# //1')"
 
     if [[ -z "$COMMIT_MESSAGE" ]] || ! printf '%s\n' "$COMMIT_MESSAGE" | head -n 1 | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
-        echo "commitwithai: AI did not return a valid Conventional Commit message" >&2
+        print -u2 -r -- "commitwithai: AI did not return a valid Conventional Commit message"
         return 1
     fi
 
-    echo "$COMMIT_MESSAGE" | pbcopy
-    echo "$COMMIT_MESSAGE"
+    if (($+commands[pbcopy])); then
+        print -rn -- "$COMMIT_MESSAGE" | command pbcopy
+    fi
+    print -r -- "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
@@ -459,14 +578,13 @@ function prdesc() {
 }
 
 function gcb() {
-    if [ -z "$1" ]; then
-        echo "Usage: gcb <branch-name>"
-        return 1
-    fi
-    if git show-ref --verify --quiet "refs/heads/$1"; then
-        git switch "$1"
+    emulate -L zsh
+    (($# == 1)) || { print -u2 -r -- "Usage: gcb BRANCH_NAME"; return 2; }
+    _git_require_repo || return
+    if command git show-ref --verify --quiet "refs/heads/$1"; then
+        command git switch "$1"
     else
-        git checkout -b "$1"
+        command git switch -c "$1"
     fi
 }
 _git_local_and_remote_branches() {
@@ -532,33 +650,44 @@ compdef _gh_action gh.action
 compdef _git add=git-add checkout=git-switch pull=git-pull push=git-push pushf=git-push rebase=git-rebase gcf=git-config gundo=git-reset logs=git-log git-graph=git-log gitree=git-log gittree=git-log tags=git-tag gtv=git-tag
 
 branch() {
+    emulate -L zsh
+    _git_require_repo || return
     local b
-    b=$(git branch --show-current)
-    echo "$b"
-    echo -n "$b" | pbcopy
+    b="$(command git branch --show-current)" || return $?
+    print -r -- "$b"
+    (($+commands[pbcopy])) && print -rn -- "$b" | command pbcopy
 }
 
 function prcommits() {
-    local pr="${1:?Usage: prcommits <PR_NUMBER> [author_filter]}"
-    local author="${2:-}"
+    emulate -L zsh
+    (($# >= 1 && $# <= 2)) || { print -u2 -r -- "Usage: prcommits PR_NUMBER [author_filter]"; return 2; }
+    local pr="$1" author="${2:-}"
+    [[ "$pr" =~ '^[0-9]+$' ]] || { print -u2 -r -- "prcommits: PR number must be numeric"; return 2; }
+    (($+commands[gh])) || { print -u2 -r -- "prcommits: gh is not installed"; return 1; }
 
     local repo
-    repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null) || {
-        echo "prcommits: could not determine repo (not in a GitHub repo?)" >&2
+    repo="$(command gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)" || {
+        print -u2 -r -- "prcommits: could not determine repo (not in a GitHub repo?)"
         return 1
     }
 
-    local jq_filter
+    local commits
+    commits="$(command gh api "repos/${repo}/pulls/${pr}/commits" --paginate --slurp)" || return $?
     if [[ -n "$author" ]]; then
         local author_lower="${author:l}"
-        jq_filter=".[] | select(
-            ((.author.login // \"\") | ascii_downcase | contains(\"${author_lower}\")) or
-            ((.commit.author.name // \"\") | ascii_downcase | contains(\"${author_lower}\"))
-        ) | \"\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // \"?\")):  \(.commit.message | split(\"\n\")[0])\""
+        print -r -- "$commits" | jq -r --arg author "$author_lower" '
+            [.[][]] | .[]
+            | select(
+                ((.author.login // "") | ascii_downcase | contains($author)) or
+                ((.commit.author.name // "") | ascii_downcase | contains($author))
+            )
+            | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"
+        '
     else
-        jq_filter='.[] | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"'
+        print -r -- "$commits" | jq -r '
+            [.[][]] | .[]
+            | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"
+        '
     fi
-
-    gh api "repos/${repo}/pulls/${pr}/commits" --paginate --jq "$jq_filter"
 }
 

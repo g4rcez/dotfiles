@@ -187,6 +187,28 @@ local parsers = {
     "yaml",
 }
 
+local function configure_context_scroll_updates()
+    local callback
+    local autocmd_id
+    for _, autocmd in ipairs(vim.api.nvim_get_autocmds { group = "treesitter_context_update" }) do
+        if autocmd.event == "CursorMoved" then
+            callback = autocmd.callback
+            autocmd_id = autocmd.id
+            break
+        end
+    end
+
+    if not callback or not autocmd_id then
+        return
+    end
+
+    vim.api.nvim_del_autocmd(autocmd_id)
+    vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "VimResized", "WinResized", "WinScrolled" }, {
+        group = "treesitter_context_update",
+        callback = callback,
+    })
+end
+
 return {
     {
         "b0o/SchemaStore.nvim",
@@ -310,13 +332,17 @@ return {
             zindex = 10,
             enable = true,
             max_lines = 4,
-            mode = "cursor",
+            mode = "topline",
             separator = "─",
-            multiwindow = true,
-            line_numbers = true,
+            multiwindow = false,
+            line_numbers = false,
             trim_scope = "outer",
             multiline_threshold = 1,
         },
+        config = function(_, opts)
+            require("treesitter-context").setup(opts)
+            configure_context_scroll_updates()
+        end,
     },
     {
         branch = "main",

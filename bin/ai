@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$HOME/dotfiles/config/zsh/utils.sh"
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
 set -euo pipefail
 
 # Resolve script location (follow symlinks)
@@ -9,7 +9,9 @@ while [ -L "$SCRIPT_PATH" ]; do
   SCRIPT_PATH="$(readlink "$SCRIPT_PATH")"
   [[ "$SCRIPT_PATH" != /* ]] && SCRIPT_PATH="$SCRIPT_DIR/$SCRIPT_PATH"
 done
-DOTFILES_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/.ai" ]]; then
+  DOTFILES_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+fi
 
 CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
 PROVIDER="${AI_PROVIDER:-claude}"

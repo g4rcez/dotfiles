@@ -1,38 +1,60 @@
-
 ##############################################################################################################
+## loader contract
+# Prefer an explicitly configured checkout, but keep ~/.zshrc symlinks and direct
+# sources relocatable by deriving the repository root from this file's path.
+typeset -g _zshrc_source="${(%):-%N}"
+[[ "$_zshrc_source" == /* ]] || _zshrc_source="$PWD/$_zshrc_source"
+typeset -g _zshrc_root="${_zshrc_source:A:h:h:h}"
+typeset -g DOTFILES="${DOTFILES:-$_zshrc_root}"
+[[ -d "$DOTFILES/config/zsh" ]] || DOTFILES="$_zshrc_root"
+export DOTFILES
+if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/config/zsh" ]]; then
+    export DOTFILES_DIR="$DOTFILES"
+else
+    export DOTFILES_DIR
+fi
+export TS_SCRIPTS="${TS_SCRIPTS:-$DOTFILES/bin}"
+unset _zshrc_source _zshrc_root
+
 ## exports
-source "$HOME/dotfiles/config/zsh/exports.sh"
-source "$HOME/dotfiles/config/zsh/utils.sh"
-safeImport "$HOME/.local-exports.sh"
+[[ -r "$DOTFILES/config/zsh/exports.sh" ]] && source "$DOTFILES/config/zsh/exports.sh"
+[[ -r "$DOTFILES/config/zsh/utils.sh" ]] && source "$DOTFILES/config/zsh/utils.sh"
+if (( $+functions[safeImport] )); then
+    safeImport "$HOME/.local-exports.sh"
+elif [[ -r "$HOME/.local-exports.sh" ]]; then
+    source "$HOME/.local-exports.sh"
+fi
 
 if [[ -o interactive && -t 1 ]]; then
     _zsh_restore_tty_output() {
         stty opost onlcr 2>/dev/null || true
     }
     autoload -Uz add-zsh-hook
+    add-zsh-hook -d preexec _zsh_restore_tty_output 2>/dev/null
+    add-zsh-hook -d precmd _zsh_restore_tty_output 2>/dev/null
     add-zsh-hook preexec _zsh_restore_tty_output
     add-zsh-hook precmd _zsh_restore_tty_output
     _zsh_restore_tty_output
 fi
 ##############################################################################################################
 ## znap
-(($+commands[mise])) && eval "$(mise activate zsh)"
-ZNAP_DIR="${ZNAP_DIR:-$HOME/.znap}"
-ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
+(($+commands[mise])) && eval "$(command mise activate zsh)"
+typeset -g ZNAP_DIR="${ZNAP_DIR:-$HOME/.znap}"
+typeset -g ZNAP_ENTRYPOINT="$ZNAP_DIR/znap.zsh"
 
 if [[ -r "$ZNAP_ENTRYPOINT" ]]; then
     zstyle ':znap:*' repos-dir "$PLUGINS_DIR"
     zstyle ':znap:*:*' git-maintenance off
     source "$ZNAP_ENTRYPOINT"
     znap source ohmyzsh/ohmyzsh lib/{git,clipboard,compfix,completion,key-bindings,termsupport,functions}
-    PLUGINS=(
+    typeset -a PLUGINS=(
         "MichaelAquilina/zsh-auto-notify"
         "zsh-users/zsh-autosuggestions"
         "zsh-users/zsh-completions"
         "zsh-users/zsh-history-substring-search"
         "zsh-users/zsh-syntax-highlighting"
     )
-    for plugin in $PLUGINS; do
+    for plugin in "${PLUGINS[@]}"; do
         if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
             znap source "$plugin" || print -u2 -r -- "failed to source $plugin"
         fi
@@ -41,30 +63,20 @@ else
     [[ -o interactive ]] && print -u2 -r -- "zsh: znap is not installed; run zsh:install"
 fi
 
-(($+commands[starship])) && eval "$(starship init zsh)"
-[[ -r "$DOTFILES/config/zsh/syntax-highlighting.zsh" ]] && source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
-
-function _zsh_lazy_znap_source() {
-    local plugin="$1"
-    (( $+functions[znap] )) || return 1
-    if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
-        znap source "$plugin"
-    else
-        znap clone "$plugin" && znap source "$plugin"
-    fi
-}
-
-if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
-    autoload -Uz add-zle-hook-widget
-    function _zsh_lazy_load_autopair() {
-        add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
-        _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
-    }
-    add-zle-hook-widget line-init _zsh_lazy_load_autopair
-fi
+(($+commands[starship])) && eval "$(command starship init zsh)"
 ##############################################################################################################
-## source files (cached with znap eval for faster startup)
-fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+## completion contract
+# Every custom file containing compdef is sourced after compinit. Keep optional
+# completion directories out of fpath when they are not installed.
+typeset -gU fpath
+typeset -a _zsh_completion_fpath=()
+for completion_dir in "$HOME/.local/share/zsh/site-functions" "$HOME/.grok/completions/zsh"; do
+    [[ -d "$completion_dir" ]] && _zsh_completion_fpath+=("$completion_dir")
+done
+fpath=("${_zsh_completion_fpath[@]}" "${fpath[@]}")
+unset _zsh_completion_fpath completion_dir
+autoload -Uz compinit && compinit -C
+
 if (( $+functions[znap] )); then
     (($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
     (($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
@@ -76,7 +88,9 @@ if (( $+functions[znap] )); then
     (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 fi
 
-local -a SOURCE=(
+##############################################################################################################
+## source files (cached with znap eval for faster startup)
+typeset -a SOURCE=(
     "$HOME/.secrets.sh"
     "$HOME/.cargo/env"
     "$HOME/.railway/env"
@@ -99,20 +113,50 @@ if [[ -z "$TMUX" ]] && (( $+commands[zellij] )); then
     SOURCE+=("$DOTFILES/config/zsh/zellij.sh")
 fi
 
-for config in $SOURCE; do
-    if [[ -f "$config" ]]; then source "$config"; fi
+for config in "${SOURCE[@]}"; do
+    [[ -r "$config" ]] && source "$config"
 done
+unset SOURCE config
 
-##############################################################################################################
-## fpath hooks
-autoload -Uz select-word-style
-select-word-style normal
-zstyle ':zle:*' word-style unspecified
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
+# Keep user-defined widgets and bindings ahead of syntax highlighting.
+[[ -r "$DOTFILES/config/zsh/syntax-highlighting.zsh" ]] && source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
 
-# BEGIN BUNSEN
-[ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
-# END BUNSEN
+if [[ -z "${BUNSEN_ENV_LOADED:-}" && -r "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh" ]]; then
+    source "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh"
+fi
 
-eval "$(atuin init zsh)"
+function _zsh_lazy_znap_source() {
+    local plugin="$1"
+    (( $+functions[znap] )) || return 1
+    if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+        znap source "$plugin"
+    else
+        znap clone "$plugin" && znap source "$plugin"
+    fi
+}
+
+if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
+    autoload -Uz add-zle-hook-widget
+    function _zsh_lazy_load_autopair() {
+        add-zle-hook-widget -d line-init _zsh_lazy_load_autopair
+        _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
+    }
+    add-zle-hook-widget line-init _zsh_lazy_load_autopair
+fi
+
+if [[ -o interactive && -t 0 && -t 1 && $+commands[atuin] -eq 1 ]]; then
+    if (( $+functions[znap] )); then
+        znap eval atuin-init 'atuin init zsh --disable-up-arrow --disable-ai'
+    else
+        eval "$(command atuin init zsh --disable-up-arrow --disable-ai)"
+    fi
+
+    # Keep Up-arrow on zsh history, even if an older cached Atuin init ran first.
+    typeset _zsh_history_up_widget=up-line-or-history
+    (( $+widgets[up-line-or-beginning-search] )) && _zsh_history_up_widget=up-line-or-beginning-search
+    for keymap in emacs viins vicmd; do
+        bindkey -M "$keymap" '^[[A' "$_zsh_history_up_widget"
+        bindkey -M "$keymap" '^[OA' "$_zsh_history_up_widget"
+    done
+    unset _zsh_history_up_widget keymap
+fi

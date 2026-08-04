@@ -1,9 +1,14 @@
 #!/bin/zsh
 
+typeset -g _json_inspect_source="${(%):-%N}"
+[[ "$_json_inspect_source" == /* ]] || _json_inspect_source="$PWD/$_json_inspect_source"
+typeset -g DOTFILES="${DOTFILES:-${_json_inspect_source:A:h:h}}"
+unset _json_inspect_source
+
 function main() {
-    source "$HOME/dotfiles/zsh/exports.sh"
-    source "$HOME/dotfiles/zsh/utils.sh"
-    source "$HOME/dotfiles/zsh/fzf.sh"
+    [[ -r "$DOTFILES/config/zsh/exports.sh" ]] && source "$DOTFILES/config/zsh/exports.sh"
+    [[ -r "$DOTFILES/config/zsh/utils.sh" ]] && source "$DOTFILES/config/zsh/utils.sh"
+    [[ -r "$DOTFILES/config/zsh/fzf.sh" ]] && source "$DOTFILES/config/zsh/fzf.sh"
     local FILE="$(fzf)"
     fx "$FILE"
 }

@@ -29,7 +29,7 @@ Powered by **Snacks.nvim picker** (telescope-inspired layout):
 
 Configured language servers for:
 
-- **JavaScript/TypeScript**: typescript-tools.nvim with auto-complete function calls, inlay hints, code lens
+- **JavaScript/TypeScript**: tsgo with native TypeScript project support and inlay hints
 - **Deno**: Automatic detection when `deno.json` present (alternative to TypeScript LSP)
 - **Lua**: lua_ls with Neovim API completion via lazydev.nvim
 - **Rust**: rust_analyzer
@@ -43,9 +43,9 @@ Configured language servers for:
 
 The configuration automatically detects whether you're in a Node.js or Deno project:
 
-- Projects with `package.json` → uses typescript-tools.nvim (vtsls-based)
-- Projects with `deno.json` → uses denols
-- Prevents conflicts by only running the appropriate server
+- Standard JavaScript/TypeScript projects → use tsgo
+- Projects with `deno.json` → use denols
+- Prevents conflicts by running only the appropriate server
 
 #### LSP Servers Enabled
 
@@ -281,7 +281,7 @@ Powered by **none-ls** (null-ls fork):
 
 ### Prerequisites
 
-1. **Neovim** 0.10+ (preferably 0.11+ for latest LSP features)
+1. **Neovim** 0.11+
 2. **Git**
 3. **A Nerd Font** (e.g., JetBrains Mono Nerd Font)
 4. **ripgrep** (for grep functionality)
@@ -306,7 +306,7 @@ bash install
 ```bash
 # JavaScript/TypeScript ecosystem
 npm i -g vscode-langservers-extracted  # html, css, json
-npm i -g @vtsls/language-server
+npm i -g @typescript/native-preview  # tsgo
 npm i -g tailwindcss-language-server
 npm i -g css-variables-language-server
 npm i -g bash-language-server
@@ -434,7 +434,7 @@ vim.opt.your_option = value
 - `lua/config/lsp.lua` - Server configs (capabilities, settings, filetypes)
 - `lua/plugins/nvimlspconfig.lua` - LspAttach autocommands and keymaps
 
-**Dual LSP Strategy**: Intelligently switches between vtsls (Node.js projects) and denols (Deno projects) based on project files.
+**TypeScript/Deno Strategy**: Uses tsgo for standard JavaScript/TypeScript projects and denols for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 
 **Keymap System**: Custom helper in `keymaps.lua` with mode-specific functions:
 
@@ -482,7 +482,7 @@ vim.opt.your_option = value
 
 **JavaScript/TypeScript**:
 
-- typescript-tools.nvim with separate diagnostic server
+- tsgo as the native TypeScript language server
 - Code lens for all constructs
 - JSX auto-close tags
 - Complete function calls
@@ -520,7 +520,7 @@ Built with:
 - [snacks.nvim](https://github.com/folke/snacks.nvim) - Utilities
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) - Syntax
 - [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) - Theme
-- [typescript-tools.nvim](https://github.com/pmizio/typescript-tools.nvim) - TypeScript LSP
+- [typescript-go](https://github.com/microsoft/typescript-go) - Native TypeScript language server
 - And many more excellent plugins from the Neovim community
 
 ## License

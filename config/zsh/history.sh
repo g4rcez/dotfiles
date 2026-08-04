@@ -1,7 +1,7 @@
 #!/bin/zsh
-SAVEHIST=$((100 * 1000))
-HISTSIZE=$((1.2 * SAVEHIST))
-HISTFILE=~/.zsh_history
+SAVEHIST=100000
+HISTSIZE=$((SAVEHIST * 6 / 5))
+HISTFILE="${HISTFILE:-$HOME/.zsh_history}"
 HISTDUP=erase
 setopt APPEND_HISTORY        # append to history file (Default)
 setopt EXTENDED_HISTORY      # Write the history file in the ':start:elapsed;command' format.

@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
 # Applies the visual theme for tmux's status bar and pane/message styles.
-source "$HOME/dotfiles/zsh/utils.sh"
+if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/bin" ]]; then
+    if [[ -n "${BASH_SOURCE[0]:-}" ]]; then
+        _statusbar_dir="$(CDPATH= cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)" || exit 1
+        DOTFILES_DIR="$(CDPATH= cd -P -- "$_statusbar_dir/../.." && pwd)" || exit 1
+        unset _statusbar_dir
+    else
+        DOTFILES_DIR="${DOTFILES:-$HOME/dotfiles}"
+    fi
+fi
+export DOTFILES_DIR
 
 # Read a tmux option with a fallback. Kept for quick theme tweaks.
 # Quiet global option setter used below to keep the theme lines compact.
@@ -38,7 +47,7 @@ tmux_set @prefix_highlight_output_suffix "#[fg=$HIGHLIGHT]#[bg=$BG]"
 tmux_set status-left-bg "$G04"
 tmux_set status-left-fg "$FG"
 tmux_set status-left-length 150
-tmux_set status-left " #{prefix_highlight} #(bash $HOME/dotfiles/bin/git-branch.sh #{q:pane_current_path} icon 2>/dev/null) #[fg=$FG,bg=$BG]"
+tmux_set status-left " #{prefix_highlight} #(bash $DOTFILES_DIR/bin/git-branch.sh #{q:pane_current_path} icon 2>/dev/null) #[fg=$FG,bg=$BG]"
 
 # Right status segment: current session name. Other useful segments are left as examples.
 tmux_set status-right-bg "$BG"

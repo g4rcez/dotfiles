@@ -5,7 +5,7 @@ return {
         dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
         opts = {
             ensure_installed = require("config.ensure-installed").mason_lsp,
-            automatic_enable = true,
+            automatic_enable = false,
         },
     },
     {

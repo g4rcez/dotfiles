@@ -7,9 +7,11 @@ function checkcommand() {
 }
 
 function _postcd() {
-    [[ -f ".env" ]] && dotenv ".env" && echo "[env loaded: .env]"
-    [[ -f ".env.local" ]] && dotenv ".env.local" && echo "[env loaded: .env.local]"
-    [[ -f "./src/.env" ]] && dotenv "./src/.env" && echo "[env loaded: src/.env]"
+    [[ "${ZSH_AUTO_DOTENV:-0}" == 1 || "${ZSH_AUTO_DOTENV:-0}" == true ]] || return 0
+    [[ -f ".env" ]] && dotenv ".env" && print -r -- "[env loaded: .env]"
+    [[ -f ".env.local" ]] && dotenv ".env.local" && print -r -- "[env loaded: .env.local]"
+    [[ -f "./src/.env" ]] && dotenv "./src/.env" && print -r -- "[env loaded: src/.env]"
+    return 0
 }
 
 function isGitDir() {
@@ -35,9 +37,11 @@ function _zellij_tab_name_update() {
 }
 
 function forEach() {
+    local ARRAY
     ARRAY=$(echo "$1" | tr ' ' '\n')
+    local item
     for item in $ARRAY; do
-        "$2" $item
+        "$2" "$item"
     done
 }
 
@@ -84,7 +88,8 @@ function clearNvim() {
 }
 
 function _zsh_config_root() {
-    print -r -- "${DOTFILES:-$HOME/dotfiles}/config/zsh"
+    emulate -L zsh
+    print -r -- "${DOTFILES:-$PWD}/config/zsh"
 }
 
 function _zsh_config_sources() {
@@ -103,7 +108,7 @@ function zsh:help() {
     command cat <<'EOF'
 zsh utilities
 
-  zsh:doctor              Check shell dependencies, sourced files, stale .zwc files, and PATH duplicates
+  zsh:doctor              Check required/optional dependencies, completions, caches, and PATH duplicates
   zsh:install              Install znap explicitly (never during shell startup)
   zsh:compile [--clean]   Compile config/zsh shell files to .zwc files; --clean removes orphaned .zwc files
   zsh:profile [N]         Time N interactive shell startups; add --zprof for detailed zprof output
@@ -117,6 +122,11 @@ cd utilities
   cd:mk DIR               mkdir -p DIR and cd into it
   cd:tmp [prefix]         Create a temporary directory and cd into it
   cd:up [N]               cd up N directories
+
+dotenv
+
+  dotenv TRUSTED_FILE     Explicitly export variables from a trusted dotenv file
+  Set ZSH_AUTO_DOTENV=1 to opt into loading .env files after cd; direnv remains preferred.
 
 PATH utilities
 
@@ -145,21 +155,14 @@ function zsh:doctor() {
         return 1
     fi
 
-    print -r -- "startup commands"
-    local -a startup_tools=(
-        "mise|mise activate zsh"
-        "git|znap clone/plugin management"
-        "starship|prompt initialization"
-        "gh|GitHub CLI completion"
-        "zoxide|directory jumper"
-        "direnv|direnv hook"
-        "tv|television shell integration"
-        "fzf|fzf shell integration"
+    print -r -- "required startup commands"
+    local -a required_tools=(
+        "git|plugin and Git helper support"
     )
-    for entry in $startup_tools; do
+    for entry in "${required_tools[@]}"; do
         cmd="${entry%%|*}"
         desc="${entry#*|}"
-        if (($ + commands[$cmd])); then
+        if (($+commands[$cmd])); then
             print -r -- "  ok   $cmd — $desc"
         else
             print -r -- "  miss $cmd — $desc"
@@ -168,7 +171,40 @@ function zsh:doctor() {
     done
 
     print -r -- ""
-    print -r -- "helper commands"
+    print -r -- "optional startup commands"
+    local -a optional_tools=(
+        "mise|mise activate zsh"
+        "starship|prompt initialization"
+        "gh|GitHub CLI completion"
+        "zoxide|directory jumper"
+        "direnv|directory environment hook (preferred dotenv workflow)"
+        "tv|television shell integration"
+        "fzf|fzf shell integration"
+        "atuin|history synchronization"
+        "zellij|opt-in multiplexer integration"
+    )
+    for entry in "${optional_tools[@]}"; do
+        cmd="${entry%%|*}"
+        desc="${entry#*|}"
+        if (($+commands[$cmd])); then
+            print -r -- "  ok   $cmd — $desc"
+        else
+            print -r -- "  skip $cmd — $desc"
+        fi
+    done
+
+    print -r -- ""
+    print -r -- "plugin manager"
+    local znap_entrypoint="${ZNAP_ENTRYPOINT:-$HOME/.znap/znap.zsh}"
+    if [[ -r "$znap_entrypoint" ]]; then
+        print -r -- "  ok   znap — plugin manager"
+    else
+        print -r -- "  warn znap — not installed; run zsh:install when plugin support is needed"
+        ((warnings++))
+    fi
+
+    print -r -- ""
+    print -r -- "optional helper commands"
     local -a helper_tools=(
         "bat|cat alias and previews"
         "lsd|ls alias and fzf previews"
@@ -178,14 +214,14 @@ function zsh:doctor() {
         "delta|git diff previews"
         "tmux|active multiplexer helpers"
         "vivid|LS_COLORS generation"
-        "podman|docker compatibility alias / DOCKER_HOST"
+        "podman|lazy Docker compatibility host discovery"
         "nvr|Neovim remote git editor inside NVIM"
         "pbcopy|clipboard bindings"
     )
-    for entry in $helper_tools; do
+    for entry in "${helper_tools[@]}"; do
         cmd="${entry%%|*}"
         desc="${entry#*|}"
-        if (($ + commands[$cmd])); then
+        if (($+commands[$cmd])); then
             print -r -- "  ok   $cmd — $desc"
         else
             print -r -- "  warn $cmd — $desc"
@@ -194,13 +230,26 @@ function zsh:doctor() {
     done
 
     print -r -- ""
-    print -r -- "sourced files"
-    local -a expected_sources=(
+    print -r -- "sourced files (required)"
+    local -a required_sources=(
         "$root/exports.sh"
         "$root/utils.sh"
         "$root/alias.sh"
         "$root/zstyle.sh"
         "$root/history.sh"
+    )
+    for file in "${required_sources[@]}"; do
+        if [[ -f "$file" ]]; then
+            print -r -- "  ok   ${file#$root/}"
+        else
+            print -r -- "  miss ${file#$root/}"
+            ((missing++))
+        fi
+    done
+
+    print -r -- ""
+    print -r -- "sourced files (optional integrations)"
+    local -a optional_sources=(
         "$root/fzf.sh"
         "$root/git.sh"
         "$root/node.sh"
@@ -209,17 +258,57 @@ function zsh:doctor() {
         "$root/completion/_worktree.zsh"
         "$root/completion/_commit.zsh"
     )
-    if [[ -z "$TMUX" ]] && (($ + commands[zellij])); then
-        expected_sources+=("$root/zellij.sh")
+    if [[ -z "$TMUX" ]] && (($+commands[zellij])); then
+        optional_sources+=("$root/zellij.sh")
     fi
-    for file in $expected_sources; do
+    for file in "${optional_sources[@]}"; do
         if [[ -f "$file" ]]; then
             print -r -- "  ok   ${file#$root/}"
         else
-            print -r -- "  miss ${file#$root/}"
-            ((missing++))
+            print -r -- "  skip ${file#$root/}"
         fi
     done
+
+    print -r -- ""
+    print -r -- "completion registration"
+    # Znap defers compinit until the first precmd to reduce startup cost. Run
+    # that hook for an explicit doctor invocation so non-interactive checks see
+    # the same completion state as an interactive prompt.
+    local completion_hook
+    for completion_hook in "${precmd_functions[@]}"; do
+        if [[ "$completion_hook" == ..znap.compinit-hook ]] && (( $+functions[$completion_hook] )); then
+            "$completion_hook"
+            break
+        fi
+    done
+    unset completion_hook
+
+    local -a completion_entries=(
+        "ai|_ai"
+        "worktree|_worktree"
+        "commit.*|_commit"
+    )
+    if (($+functions[compdef])); then
+        for entry in "${completion_entries[@]}"; do
+            cmd="${entry%%|*}"
+            desc="${entry#*|}"
+            if [[ -n "${functions[$desc]:-}" ]] && {
+                if [[ "$cmd" == commit.* ]]; then
+                    (( $+parameters[_patcomps] )) && [[ -n "${_patcomps[(I)commit.*]}" ]]
+                else
+                    (( $+parameters[_comps] )) && [[ "${_comps[$cmd]:-}" == "$desc" ]]
+                fi
+            }; then
+                print -r -- "  ok   $cmd → $desc"
+            else
+                print -u2 -r -- "  miss $cmd → $desc (compinit/registration)"
+                ((missing++))
+            fi
+        done
+    else
+        print -u2 -r -- "  miss compdef (compinit was not initialized)"
+        ((missing++))
+    fi
 
     print -r -- ""
     print -r -- "compiled caches"
@@ -245,7 +334,7 @@ function zsh:doctor() {
     print -r -- "PATH"
     local -A seen
     local -a duplicates=()
-    for file in $path; do
+    for file in "${path[@]}"; do
         if [[ -n "${seen[$file]:-}" ]]; then
             duplicates+=("$file")
         else
@@ -525,10 +614,13 @@ function path:which() {
     done
 }
 
-chpwd_functions+=(_postcd)
+autoload -Uz add-zsh-hook
+add-zsh-hook -d chpwd _postcd 2>/dev/null
+add-zsh-hook chpwd _postcd
 
 function _osc7_cwd() {
     printf '\033]7;file://%s%s\033\\' "${HOST:-localhost}" "$PWD"
 }
-chpwd_functions+=(_osc7_cwd)
+add-zsh-hook -d chpwd _osc7_cwd 2>/dev/null
+add-zsh-hook chpwd _osc7_cwd
 _osc7_cwd

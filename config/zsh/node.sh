@@ -10,7 +10,7 @@ function node:scripts() {
 }
 
 function n() {
-    bash "$HOME/dotfiles/bin/nnn" $@
+    bash "$DOTFILES/bin/nnn" "$@"
 }
 
 function ni() {
@@ -22,15 +22,21 @@ function ni() {
 }
 
 function types() {
-    LIBS=$(for a in "$@"; do echo "@types/$a"; done)
-    LIBS=$(echo "$LIBS" | tr '\n' ' ')
-    ni -D $LIBS
+    local -a libs=()
+    local package
+    for package in "$@"; do
+        libs+=("@types/$package")
+    done
+    ((${#libs[@]})) && ni -D "${libs[@]}"
 }
 
 function niu() {
-    LIBS=$(for a in "$@"; do echo "$a@latest"; done)
-    LIBS=$(echo "$LIBS" | tr '\n' ' ')
-    ni $LIBS
+    local -a packages=()
+    local package
+    for package in "$@"; do
+        packages+=("$package@latest")
+    done
+    ((${#packages[@]})) && ni "${packages[@]}"
 }
 
 function nodeUpdatePackages() {

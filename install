@@ -8,13 +8,15 @@
 #### ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
 ########################################################################################################################
 set -euo pipefail
+INSTALL_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+export DOTFILES_DIR="${DOTFILES_DIR:-$INSTALL_DIR}"
+source "$DOTFILES_DIR/bin/lib/dotfiles-shell.sh"
 HOME_CONFIG_DIR="$HOME/.config"
-DOTFILES_CONFIG_DIR="$HOME/dotfiles/config"
+DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 mkdir -p "$HOME/tools"
 mkdir -p "$HOME/.tmp"
 mkdir -p "$HOME/.config"
-source "$HOME/dotfiles/config/zsh/utils.sh"
-ln -sf "$PWD/config/zsh/zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/config/zsh/zshrc" "$HOME/.zshrc"
 
 ########################################################################################################################
 ##### mise config
@@ -30,4 +32,6 @@ function installmise() {
 
     ~/.local/bin/mise doctor
 }
-checkcommand "mise" installmise
+if ! command -v mise >/dev/null 2>&1; then
+    installmise
+fi

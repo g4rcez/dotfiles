@@ -18,22 +18,25 @@ alias 9='cd -9'
 ## aliases
 alias cp='cp -v'
 alias df='df -h'
-alias diff='diff --color=auto'
-alias dir='dir --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
-alias ip='ip --color=auto'
+# These flags are GNU-specific; keep the aliases off BSD/macOS tools.
+if [[ "$OSTYPE" == linux* ]]; then
+    alias diff='diff --color=auto'
+    alias dir='dir --color=auto'
+    alias egrep='egrep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias grep='grep --color=auto'
+    alias ip='ip --color=auto'
+    alias vdir='vdir --color=auto'
+fi
 alias ls="lsd"
 alias more='less'
 alias mv='mv -v'
 alias rm='rm -v'
 alias dotfiles.doctor='dotfiles-doctor'
-alias vdir='vdir --color=auto'
 alias wtf='pwd'
 alias ll="ls -l"
 alias cat="bat -p --pager cat"
-alias dotfiles="cd $HOME/dotfiles"
+alias dotfiles='cd -- "$DOTFILES"'
 alias costs='bun run "$HOME/.pi/costs.ts"'
 alias secrets="ripsecrets"
 # Intuitive map function
@@ -44,24 +47,24 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
-if [ -x "$(command -v podman)" ]; then
+if (($+commands[podman])); then
     alias docker='podman'
 fi
 alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 
 ############################################################################
 ## vim
-if [ -x "$(command -v nvim)" ]; then
+if (($+commands[nvim])); then
     alias vim="nvim"
 fi
 
 function zshrc() {
-    nvim "$HOME/dotfiles/config/zsh/zshrc"
+    nvim "$DOTFILES/config/zsh/zshrc"
 }
 
 ############################################################################
 ## linux
-if [[ "$(uname)" != "Darwin" ]]; then
+if [[ "$OSTYPE" != darwin* ]] && (($+commands[xclip])); then
     alias pbcopy='xclip -sel clip'
     alias pbpaste='xclip -selection clipboard -o'
 fi
@@ -75,15 +78,99 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 ## docker
 alias docker-compose="docker compose"
 function docker-prune-volumes() {
-    docker volume rm "$(docker volume ls -q --filter dangling=true)"
+    emulate -L zsh
+    local confirm=0
+    case "${1:-}" in
+    --confirm | -y)
+        confirm=1
+        shift
+        ;;
+    --dry-run | "") ;;
+    *)
+        print -u2 -r -- "Usage: docker-prune-volumes [--dry-run|--confirm]"
+        return 2
+        ;;
+    esac
+
+    local volume_output
+    volume_output="$(docker volume ls -q --filter dangling=true)" || return $?
+    local -a volumes=()
+    local volume
+    while IFS= read -r volume; do
+        [[ -n "$volume" ]] && volumes+=("$volume")
+    done <<<"$volume_output"
+    if ((${#volumes[@]} == 0)); then
+        print -r -- "no dangling volumes"
+        return 0
+    fi
+    print -rl -- "${volumes[@]}"
+    if ((!confirm)); then
+        print -r -- "dry-run; rerun with --confirm to remove these volumes"
+        return 0
+    fi
+    docker volume rm -- "${volumes[@]}"
 }
 
 function dockerkill() {
-    docker kill "$(docker ps -q)"
+    emulate -L zsh
+    local confirm=0
+    case "${1:-}" in
+    --confirm | -y)
+        confirm=1
+        shift
+        ;;
+    --dry-run | "") ;;
+    *)
+        print -u2 -r -- "Usage: dockerkill [--dry-run|--confirm]"
+        return 2
+        ;;
+    esac
+    (($# == 0)) || {
+        print -u2 -r -- "Usage: dockerkill [--dry-run|--confirm]"
+        return 2
+    }
+
+    local container_output
+    container_output="$(docker ps -q)" || return $?
+    local -a containers=()
+    local container
+    while IFS= read -r container; do
+        [[ -n "$container" ]] && containers+=("$container")
+    done <<<"$container_output"
+    if ((${#containers[@]} == 0)); then
+        print -r -- "no running containers"
+        return 0
+    fi
+    print -rl -- "${containers[@]}"
+    if ((!confirm)); then
+        print -r -- "dry-run; rerun with --confirm to kill these containers"
+        return 0
+    fi
+    docker kill -- "${containers[@]}"
 }
 
 function fdocker() {
-    docker ps -a | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $1 }' | xargs -r docker rm
+    emulate -L zsh
+    local confirm=0
+    if [[ "${1:-}" == --confirm ]]; then
+        confirm=1
+        shift
+    fi
+
+    local selected
+    selected="$(docker ps -a | sed 1d | fzf -q "${1:-}" --no-sort -m --tac | awk '{ print $1 }')" || return $?
+    local -a containers=()
+    local container
+    while IFS= read -r container; do
+        [[ -n "$container" ]] && containers+=("$container")
+    done <<<"$selected"
+    ((${#containers[@]})) || return 0
+    print -rl -- "${containers[@]}"
+    if ((!confirm)); then
+        print -r -- "dry-run; rerun fdocker --confirm [query] to remove these containers"
+        return 0
+    fi
+    docker rm -- "${containers[@]}"
 }
 
 ############################################################################
@@ -105,7 +192,7 @@ fi
 ############################################################################
 ## functions
 function extract() {
-    FILE="$1"
+    local FILE="$1"
     if [ -f "$FILE" ]; then
         case $FILE in
         *.tar.bz2) tar xjf "$FILE" ;;
@@ -130,23 +217,40 @@ function listening() {
     if [ $# -eq 0 ]; then
         sudo lsof -iTCP -sTCP:LISTEN -n -P
     elif [ $# -eq 1 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color "$1"
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | command grep -i -- "$1"
     else
         echo "Usage: listening [pattern]"
     fi
 }
 
 function vivid-update() {
-    echo "export LS_COLORS='$(vivid -d $DOTFILES/config/vivid/database.yml generate $DOTFILES/config/vivid/theme.yaml)'" >$DOTFILES/config/zsh/ls.sh
-    echo "🚀 Vivid updated...New LS_COLORS are enabled"
+    (($+commands[vivid])) || {
+        print -u2 -r -- "vivid-update: vivid is not installed"
+        return 1
+    }
+
+    local target="$DOTFILES/config/zsh/ls.sh"
+    local colors temp
+    colors="$(command vivid -d "$DOTFILES/config/vivid/database.yml" generate "$DOTFILES/config/vivid/theme.yaml")" || return $?
+    temp="$(command mktemp "$target.XXXXXX")" || return $?
+    if ! printf "export LS_COLORS='%s'\\n" "$colors" >|"$temp"; then
+        command rm -f -- "$temp"
+        return 1
+    fi
+    if ! command mv -f -- "$temp" "$target"; then
+        command rm -f -- "$temp"
+        return 1
+    fi
+    print -r -- "vivid updated; restart or reload zsh to apply the new LS_COLORS"
 }
 
 function updateAll() {
-    vivid-update
-    mise self-update
-    nodeUpdatePackages
-    brew update
-    brew upgrade
+    vivid-update || return
+    (($+commands[mise])) && command mise self-update
+    (($+commands[npm])) && nodeUpdatePackages
+    if (($+commands[brew])); then
+        command brew update && command brew upgrade
+    fi
 }
 
 function secretuuid() {
@@ -161,18 +265,28 @@ function fs() {
         local arg=-sh
     fi
     if (($# > 0)); then
-        du $arg -- "$@"
+        du "$arg" -- "$@"
     else
         du $arg .[^.]* ./*
     fi
 }
 
 function dotenv() {
-    if [[ -f "$1" ]]; then
-        set -o allexport
-        source "$1"
-        set +o allexport
+    emulate -L zsh
+    setopt localoptions allexport
+
+    if (($# != 1)); then
+        print -u2 -r -- "Usage: dotenv TRUSTED_FILE"
+        return 2
     fi
+    if [[ ! -r "$1" ]]; then
+        print -u2 -r -- "dotenv: file is not readable: $1"
+        return 1
+    fi
+    source "$1" || {
+        print -u2 -r -- "dotenv: failed to load $1"
+        return 1
+    }
 }
 
 function memory() {
@@ -189,7 +303,7 @@ function cpv() {
 }
 
 function anon() {
-    ZSH_AUTOSUGGEST_STRATEGY=()
+    export ZSH_AUTOSUGGEST_STRATEGY=()
 }
 
 function karabiner-reset() {
@@ -230,17 +344,38 @@ function _tmux_preexec_command_name() {
     tmux set-option -pq -t "$TMUX_PANE" @zsh_current_command "$cmd" 2>/dev/null || true
     tmux refresh-client -S 2>/dev/null || true
 }
-preexec_functions+=_tmux_preexec_command_name
+autoload -Uz add-zsh-hook
+add-zsh-hook -d preexec _tmux_preexec_command_name 2>/dev/null
+add-zsh-hook preexec _tmux_preexec_command_name
 
 function _tmux_precmd_clear_command_name() {
     emulate -L zsh
     [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || return 0
     tmux set-option -pqu -t "$TMUX_PANE" @zsh_current_command 2>/dev/null || true
 }
-precmd_functions+=_tmux_precmd_clear_command_name
+add-zsh-hook -d precmd _tmux_precmd_clear_command_name 2>/dev/null
+add-zsh-hook precmd _tmux_precmd_clear_command_name
 
 function killport() {
-    lsof -ti:"$1" | xargs kill -9 2>/dev/null && echo "killed $1"
+    emulate -L zsh
+    if (($# != 1)) || [[ ! "$1" =~ '^[0-9]+$' ]]; then
+        print -u2 -r -- "Usage: killport PORT"
+        return 2
+    fi
+
+    local -a pids=()
+    local pid
+    while IFS= read -r pid; do
+        [[ -n "$pid" ]] && pids+=("$pid")
+    done < <(lsof -ti:"$1" 2>/dev/null)
+    ((${#pids[@]})) || {
+        print -r -- "no process listening on $1"
+        return 0
+    }
+    for pid in "${pids[@]}"; do
+        kill -9 "$pid" || return $?
+    done
+    print -r -- "killed $1"
 }
 
 function psgrep() {
@@ -311,7 +446,8 @@ function _rm_safety_prompt() {
         print -P "%F{yellow}rm used $count times today. Consider rm:dry-run, rm:trash, or a repo-local cleanup script.%f"
     fi
 }
-preexec_functions+=_rm_safety_prompt
+add-zsh-hook -d preexec _rm_safety_prompt 2>/dev/null
+add-zsh-hook preexec _rm_safety_prompt
 
 function killnodemodules() {
     find . -name 'node_modules' -type d -prune -print

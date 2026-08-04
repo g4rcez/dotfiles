@@ -41,7 +41,7 @@ The configuration loads in this order:
 - `lua/config/lsp.lua` - Server-specific configs (capabilities, settings, filetypes)
 - `lua/plugins/nvimlspconfig.lua` - LspAttach autocommands, keymaps, and Mason integration
 
-**Dual LSP Strategy for TypeScript/Deno**: The config intelligently switches between `vtsls` (for Node.js projects with package.json) and `denols` (for Deno projects with deno.json) using an LspAttach autocommand in `lua/config/autocmds.lua:97-109`.
+**TypeScript/Deno Strategy**: The config uses `tsgo` for standard JavaScript/TypeScript projects and `denols` for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 
 **Keymap System**: Uses a custom keymap helper in `lua/config/keymaps.lua` that provides mode-specific binding functions (`bind.normal`, `bind.visual`, `bind.insert`, etc.) with consistent default options.
 
@@ -83,14 +83,14 @@ The following LSP servers are configured and should be installed:
 ```bash
 # JavaScript/TypeScript ecosystem
 npm i -g vscode-langservers-extracted  # html, cssls, json
-npm i -g @vtsls/language-server         # vtsls (TypeScript)
+npm i -g @typescript/native-preview      # tsgo (TypeScript)
 npm i -g tailwindcss-language-server
 npm i -g css-variables-language-server
 npm i -g bash-language-server
 npm i -g dockerfile-language-server-nodejs
 npm install @microsoft/compose-language-service
 
-# Deno (alternative to vtsls)
+# Deno (alternative to tsgo)
 # Install from https://deno.land
 
 # Docker

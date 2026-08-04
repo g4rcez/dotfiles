@@ -18,13 +18,13 @@
 ## 🛠 Core Technologies
 
 | Tool | Purpose | Configuration |
-|------|---------|--------------|
+| ------ | --------- | -------------- |
 | **Writeme** | Text editor for notes | [`writeme.dev`](https://app.writeme.dev/) |
 | **Karabiner Elements** | Keyboard remapping & shortcuts | [`karabiner.config.ts`](karabiner.config.ts) |
 | **Espanso** | Text expansion & snippets | [`espanso.config.ts`](espanso.config.ts) |
 | **Deno** | Configuration management | [`dotfiles.config.ts`](dotfiles.config.ts) |
 | **Bunsen** | Dotfiles management CLI | [`bunsen/`](bunsen/) |
-| **Zsh** | Shell with plugins | [`zsh/`](zsh/) |
+| **Zsh** | Shell with plugins | [`config/zsh/`](config/zsh/) |
 | **Neovim** | Text editor | [`config/nvim/`](config/nvim/) |
 | **Ghostty** | Terminal emulator | [`config/ghostty/`](config/ghostty/) |
 | **Wezterm** | Alternative terminal | [`config/wezterm/`](config/wezterm/) |
@@ -58,6 +58,7 @@ Trigger: `;` prefix
 ### 🐚 Shell Environment
 
 **Zsh Configuration** with:
+
 - **Oh My Zsh** framework with znap plugin manager
 - **Starship** prompt with git integration and Catppuccin theme
 - **FZF** for fuzzy finding with custom bindings
@@ -67,6 +68,7 @@ Trigger: `;` prefix
 - **Direnv** for per-directory environment variables
 
 **Plugins Loaded**:
+
 - auto-notify - Desktop notifications for long-running commands
 - autopair - Auto-close brackets and quotes
 - forgit - Interactive git operations with fzf
@@ -74,6 +76,14 @@ Trigger: `;` prefix
 - completions - Additional completion definitions
 - history-search - Multi-line history search
 - syntax-highlighting - Fish-like syntax highlighting
+
+**Startup and safety**:
+
+- `DOTFILES` may point to any checkout; the loader derives a fallback from `config/zsh/zshrc`.
+- Optional integrations (Starship, FZF, Atuin, GitHub CLI, Zoxide, Direnv, and Zellij) are skipped when unavailable. Tmux remains the active multiplexer; Zellij is opt-in.
+- Run `zsh:profile 3` or `bin/zsh-startup-profile` to inspect startup cost. `zsh:doctor` reports required versus optional tools and completion registration.
+- Direnv is the default per-directory environment workflow. Automatic `.env` loading is off; use `dotenv TRUSTED_FILE` explicitly or opt in with `ZSH_AUTO_DOTENV=1`.
+- Commit helpers never push implicitly. Review a commit, then run `git push` explicitly. `killbranches` and container cleanup helpers show a dry-run first and require `--confirm` for mutations.
 
 ### ⚡ Terminal Setup
 
@@ -89,6 +99,7 @@ Trigger: `;` prefix
 **Installed via Homebrew** (99 packages):
 
 **Languages & Runtimes**:
+
 - Rust (rust, rustup, rustp)
 - Go
 - Zig
@@ -96,6 +107,7 @@ Trigger: `;` prefix
 - .NET 10.0
 
 **CLI Development Tools**:
+
 - neovim - Modern Vim
 - lazygit, lazydocker - TUI for git/docker
 - gh - GitHub CLI
@@ -106,6 +118,7 @@ Trigger: `;` prefix
 - tokei - Code statistics
 
 **Terminal Utilities**:
+
 - bat - `cat` with syntax highlighting
 - lsd - Modern `ls` replacement
 - fd - Modern `find` replacement
@@ -117,17 +130,20 @@ Trigger: `;` prefix
 - yazi - Terminal file manager
 
 **Database & API Tools**:
+
 - pgcli, litecli - Database CLIs with auto-completion
 - posting - API client
 - harlequin - SQL IDE
 
 **Media & Files**:
+
 - ffmpeg, imagemagick - Media processing
 - exiftool - Metadata editor
 - yt-dlp - Video downloader
 - pandoc - Document converter
 
 **Applications** (casks):
+
 - Aerospace - Tiling window manager
 - Karabiner Elements - Keyboard customization
 - Espanso - Text expander
@@ -157,14 +173,14 @@ dotfiles/
 │   ├── mise/              # Runtime version manager
 │   ├── harlequin.toml     # SQL IDE config
 │   └── ...
-├── zsh/                   # Shell configuration
+├── config/zsh/           # Shell configuration
 │   ├── zshrc              # Main zsh initialization
 │   ├── alias.sh           # Command aliases (80+)
 │   ├── exports.sh         # Environment variables
 │   ├── git.sh             # Git functions
 │   ├── fzf.sh             # FZF configuration
 │   ├── node.sh            # Node.js aliases
-│   ├── zellij.sh          # Zellij shortcuts
+│   ├── zellij.sh          # Opt-in Zellij shortcuts
 │   ├── history.sh         # History settings
 │   └── ...
 ├── git/                   # Git configuration
@@ -196,11 +212,12 @@ bash install
 ```
 
 **What the install script does**:
+
 1. Creates necessary directories (`~/.config`, `~/.tmp`, `~/tools`)
 2. Symlinks zshrc to `~/.zshrc`
 3. Installs mise if not present
 4. Installs Bun and Node.js via mise
-5. Runs `bunsen apply` to set up all configurations
+5. Run `bunsen apply` separately to set up the remaining configurations
 
 ### Commands
 
@@ -222,9 +239,10 @@ The system automatically creates symlinks from `~/dotfiles/config/*` to `~/.conf
 - and 20+ more applications
 
 Additional symlinks:
+
 - `~/.gitconfig` → `dotfiles/git/gitconfig`
 - `~/.editorconfig` → `dotfiles/.editorconfig`
-- `~/.zshrc` → `dotfiles/zsh/zshrc`
+- `~/.zshrc` → `dotfiles/config/zsh/zshrc`
 
 ### Plugin System
 
@@ -251,6 +269,7 @@ plugins: [
 ## 🎨 Theming
 
 Consistent **Catppuccin Mocha** theme across:
+
 - Terminal (Ghostty, Wezterm, Alacritty, Kitty)
 - Shell (Zsh syntax highlighting, Starship prompt)
 - Editor (Neovim)
@@ -260,6 +279,7 @@ Consistent **Catppuccin Mocha** theme across:
 - Bottom system monitor
 
 **Color Palette**:
+
 - Background: `#1e1e2e`
 - Foreground: `#cdd6f4`
 - Accents: Red `#f38ba8`, Green `#a6e3a1`, Blue `#89b4fa`, Yellow `#f9e2af`
@@ -269,22 +289,26 @@ Consistent **Catppuccin Mocha** theme across:
 Located in [`bin/`](bin/) - 40+ utilities:
 
 **Git & Repository Management**:
+
 - `worktree` - Git worktree manager with auto-cd on creation
 - `git-branch.sh`, `git-fzf-preview.sh` - Enhanced git operations
 - `gh-fzf`, `fzf-git` - GitHub CLI and git with fzf integration
 - `release-cli` - Release management tool
 
 **Session Management**:
+
 - `tmux-fzf-session`, `tmux-fzf-windows` - Legacy tmux + fzf session/window pickers
 - `zellij-sessionx*` - Zellij session management suite (create, kill, rename, preview)
 
 **System Utilities**:
+
 - `clear-notifications`, `osx-close-notifications` - macOS notification management
 - `listening` - Show processes listening on ports
 - `notes` - Quick note-taking
 - `rfv` - Fuzzy file/directory viewer
 
 **Development Tools**:
+
 - `json-inspect` - JSON analysis
 - `relative-time-commit` - Show relative commit times
 - `fishfy-path` - Convert paths to fish shell format
@@ -293,18 +317,21 @@ Located in [`bin/`](bin/) - 40+ utilities:
 ## Applications Configured
 
 ### Development
+
 - **Neovim** - Primary editor with LSP for TypeScript, Rust, Lua, Docker, YAML, JSON, HTML, CSS, Tailwind, Bash
 - **VSCode** - Secondary editor with synchronized extensions
 - **Git** - Enhanced with delta diff viewer, GPG signing, GitHub CLI integration, custom aliases
 
 ### Terminal
+
 - **Ghostty** - Primary terminal emulator
 - **Wezterm** - Alternative GPU-accelerated terminal
-- **Tmux** - Legacy terminal multiplexer; core window/pane workflows now live in Ghostty/WezTerm
-- **Zellij** - Modern alternative to tmux
+- **Tmux** - Active terminal multiplexer for sessions, windows, and panes
+- **Zellij** - Opt-in alternative terminal multiplexer
 - **Starship** - Cross-shell prompt with git integration
 
 ### Productivity
+
 - **Karabiner Elements** - Advanced keyboard customization with modal system
 - **Espanso** - Universal text expander with custom scripts
 - **Aerospace** - Tiling window manager for macOS
@@ -312,6 +339,7 @@ Located in [`bin/`](bin/) - 40+ utilities:
 - **Obsidian** - Note-taking and knowledge management
 
 ### System Tools
+
 - **Yazi** - Terminal file manager with preview
 - **Lazygit** - Terminal UI for git operations
 - **Lazydocker** - Terminal UI for Docker
@@ -332,12 +360,14 @@ const modKeys = karabiner.createHyperSubLayers({
 ```
 
 **Karabiner Modes**:
+
 - `single` - Press prefix + key once
 - `hold` - Hold prefix until notification, then press key (can repeat keys)
 
 **Inspiration**: Based on [mxstbr's karabiner config](https://github.com/mxstbr/karabiner)
 
 Recommended videos:
+
 - [Max Stoiber Owns His Workflow with Raycast](https://www.youtube.com/watch?v=m5MDv9qwhU8)
 - [How I Programed the Most Productive MacOS Keyboard Setup Ever](https://www.youtube.com/watch?v=j4b_uQX3Vu0)
 
@@ -373,17 +403,19 @@ matches:
 
 ### Adding Shell Aliases
 
-Edit files in [`zsh/`](zsh/):
+Edit files in [`config/zsh/`](config/zsh/):
+
 - `alias.sh` - Command aliases (80+ defined)
 - `exports.sh` - Environment variables
 - `git.sh` - Git functions
 - `fzf.sh` - FZF bindings
 
 Example aliases:
+
 ```bash
 alias ll="ls -l"
 alias cat="bat -p --pager cat"
-alias dotfiles="cd $HOME/dotfiles"
+alias dotfiles='cd -- "$DOTFILES"'
 alias vim="nvim"
 ```
 
@@ -394,6 +426,7 @@ See [`config/nvim/README.md`](config/nvim/README.md) for detailed Neovim configu
 ## Git Configuration
 
 **Features** (from `git/gitconfig`):
+
 - **Delta** as pager with Catppuccin theme
 - **GPG signing** with SSH format
 - **GitHub CLI** for credentials
@@ -401,6 +434,7 @@ See [`config/nvim/README.md`](config/nvim/README.md) for detailed Neovim configu
 - **Custom aliases**: `lg` (log graph), `s` (status), `shame` (blame), `bye` (delete branch)
 
 **Commit Message Convention**:
+
 - Uses Commitizen with conventional-changelog format
 - Configured in `.czrc`
 

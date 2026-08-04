@@ -1,25 +1,19 @@
 #!/usr/bin/env bash
 
-source $HOME/dotfiles/zsh/zellij.sh
-source $HOME/dotfiles/zsh/utils.sh
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
 
-if [ "$(command -v zellij)" = "" ]; then
+if ! command -v zellij >/dev/null 2>&1; then
     echo "Zellij is not installed"
     exit 1
 fi
 
-if [ "$(command -v zoxide)" = "" ]; then
+if ! command -v zoxide >/dev/null 2>&1; then
     echo "Zoxide is not installed"
     exit 1
 fi
 
 function homename() {
-    HOME_SED_SAFE=$?
-    if [ $HOME_SED_SAFE -eq 0 ]; then
-        echo "$1" | sed -e "s|^~/|$HOME/|"
-    else
-        echo "$1"
-    fi
+    printf '%s\n' "${1/#\~\//$HOME/}"
 }
 
 function fzf_window() {
@@ -30,7 +24,7 @@ function fzf_window() {
         --color=dark --color='bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8' \
         --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc' --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8' \
         --prompt "Session > " \
-        --preview "bash ~/dotfiles/bin/zellij-sessionx-preview {}" \
+        --preview "bash \"$DOTFILES_DIR/bin/zellij-sessionx-preview\" {}" \
         --header "ctrl+d: Delete session" \
         --preview-window right,70% --bind "ctrl-d:execute-silent(zellij d --force {2..})+abort"
 }
