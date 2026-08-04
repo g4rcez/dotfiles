@@ -110,6 +110,7 @@ function commit.wip() {
     local now
     now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
     command git commit --no-verify -S -m "wip: ${now}"
+    command git push
 }
 
 function _commit_message() {
@@ -118,6 +119,85 @@ function _commit_message() {
     _git_require_repo || return
     command git add -A . || return $?
     command git commit -S -m "$1"
+    command git push
+}
+
+function commitwithai() {
+    emulate -L zsh
+    _git_require_repo || return
+    local -a EXCLUDE_ARGS=()
+    local COMMIT_MESSAGE=""
+    for f in "${AICOMMIT_EXCLUDES[@]}"; do
+        [[ -n "$f" ]] && EXCLUDE_ARGS+=(":(exclude)$f")
+    done
+
+    local HINT="${*}"
+    local PROMPT
+    [[ -r "$DOTFILES/prompts/aicommit-script.txt" ]] || {
+        print -u2 -r -- "commitwithai: prompt file not found"
+        return 1
+    }
+    PROMPT="$(<"$DOTFILES/prompts/aicommit-script.txt")"
+    if [[ -n "$HINT" ]]; then
+        PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
+    fi
+
+    local DIFF
+    DIFF="$(command git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")" || return $?
+
+    if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
+        (($+commands[codex])) || { print -u2 -r -- "commitwithai: codex is not installed"; return 1; }
+        local OUT_FILE ERR_FILE RC
+        OUT_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.XXXXXX")" || return $?
+        ERR_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.err.XXXXXX")"
+        local mktemp_rc=$?
+        if ((mktemp_rc != 0)); then
+            command rm -f -- "$OUT_FILE"
+            return "$mktemp_rc"
+        fi
+        printf '%s\n\n%s\n' "$PROMPT" "$DIFF" \
+            | command codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
+        RC=$?
+        if (( RC != 0 )); then
+            command cat "$ERR_FILE" >&2
+            command rm -f -- "$OUT_FILE" "$ERR_FILE"
+            return "$RC"
+        fi
+        COMMIT_MESSAGE="$(<"$OUT_FILE")"
+        command rm -f -- "$OUT_FILE" "$ERR_FILE"
+    elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
+        # Pi's Responses API provider needs a single explicit user message; do
+        # not split the diff into stdin and the instructions into argv.
+        local REQUEST="${PROMPT}"$'\n\n'"${DIFF}"
+        if ! COMMIT_MESSAGE=$(
+            ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files "$REQUEST"
+        ); then
+            print -u2 -r -- "commitwithai: AI query failed"
+            return 1
+        fi
+    else
+        if ! COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1'); then
+            print -u2 -r -- "commitwithai: AI query failed"
+            return 1
+        fi
+    fi
+
+    COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | awk '
+        /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: / { found = 1 }
+        found && /^\[[^]]+ [0-9a-f]{7,}\] / { next }
+        found && /^(\/var\/folders\/.*\/T\/tmp\.|\/tmp\/tmp\.)/ { next }
+        found { print }
+    ' | sed 's/# //1')"
+
+    if [[ -z "$COMMIT_MESSAGE" ]] || ! printf '%s\n' "$COMMIT_MESSAGE" | head -n 1 | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
+        print -u2 -r -- "commitwithai: AI did not return a valid Conventional Commit message"
+        return 1
+    fi
+
+    if (($+commands[pbcopy])); then
+        print -rn -- "$COMMIT_MESSAGE" | command pbcopy
+    fi
+    print -r -- "$COMMIT_MESSAGE"
 }
 
 function commit.lockfile() {
@@ -182,8 +262,9 @@ function commit.ai() {
     command git add -A . || return $?
     local commit_message
     commit_message="$(commitwithai "$@")" || return $?
-    [[ -n "$commit_message" ]] || { print -u2 -r -- "commit.ai: empty commit message"; return 1; }
+    [[ -n "$commit_message" ]] || { print -u2 -r -- "wip: work in progress"; return 1; }
     command git commit --no-verify -S -m "$commit_message"
+    command git push
 }
 
 function wip.staged() {
@@ -483,84 +564,6 @@ function gh.workflow() {
         print -rn -- "$selected" | command pbcopy
     fi
     print -r -- "$selected"
-}
-
-function commitwithai() {
-    emulate -L zsh
-    _git_require_repo || return
-    local -a EXCLUDE_ARGS=()
-    local COMMIT_MESSAGE=""
-    for f in "${AICOMMIT_EXCLUDES[@]}"; do
-        [[ -n "$f" ]] && EXCLUDE_ARGS+=(":(exclude)$f")
-    done
-
-    local HINT="${*}"
-    local PROMPT
-    [[ -r "$DOTFILES/prompts/aicommit-script.txt" ]] || {
-        print -u2 -r -- "commitwithai: prompt file not found"
-        return 1
-    }
-    PROMPT="$(<"$DOTFILES/prompts/aicommit-script.txt")"
-    if [[ -n "$HINT" ]]; then
-        PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
-    fi
-
-    local DIFF
-    DIFF="$(command git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")" || return $?
-
-    if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
-        (($+commands[codex])) || { print -u2 -r -- "commitwithai: codex is not installed"; return 1; }
-        local OUT_FILE ERR_FILE RC
-        OUT_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.XXXXXX")" || return $?
-        ERR_FILE="$(command mktemp "${TMPDIR:-/tmp}/commitwithai.err.XXXXXX")"
-        local mktemp_rc=$?
-        if ((mktemp_rc != 0)); then
-            command rm -f -- "$OUT_FILE"
-            return "$mktemp_rc"
-        fi
-        printf '%s\n\n%s\n' "$PROMPT" "$DIFF" \
-            | command codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$OUT_FILE" - >/dev/null 2>"$ERR_FILE"
-        RC=$?
-        if (( RC != 0 )); then
-            command cat "$ERR_FILE" >&2
-            command rm -f -- "$OUT_FILE" "$ERR_FILE"
-            return "$RC"
-        fi
-        COMMIT_MESSAGE="$(<"$OUT_FILE")"
-        command rm -f -- "$OUT_FILE" "$ERR_FILE"
-    elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
-        # Pi's Responses API provider needs a single explicit user message; do
-        # not split the diff into stdin and the instructions into argv.
-        local REQUEST="${PROMPT}"$'\n\n'"${DIFF}"
-        if ! COMMIT_MESSAGE=$(
-            ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files "$REQUEST"
-        ); then
-            print -u2 -r -- "commitwithai: AI query failed"
-            return 1
-        fi
-    else
-        if ! COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1'); then
-            print -u2 -r -- "commitwithai: AI query failed"
-            return 1
-        fi
-    fi
-
-    COMMIT_MESSAGE="$(printf '%s\n' "$COMMIT_MESSAGE" | awk '
-        /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: / { found = 1 }
-        found && /^\[[^]]+ [0-9a-f]{7,}\] / { next }
-        found && /^(\/var\/folders\/.*\/T\/tmp\.|\/tmp\/tmp\.)/ { next }
-        found { print }
-    ' | sed 's/# //1')"
-
-    if [[ -z "$COMMIT_MESSAGE" ]] || ! printf '%s\n' "$COMMIT_MESSAGE" | head -n 1 | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
-        print -u2 -r -- "commitwithai: AI did not return a valid Conventional Commit message"
-        return 1
-    fi
-
-    if (($+commands[pbcopy])); then
-        print -rn -- "$COMMIT_MESSAGE" | command pbcopy
-    fi
-    print -r -- "$COMMIT_MESSAGE"
 }
 
 function prdesc() {
