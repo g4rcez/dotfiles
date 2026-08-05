@@ -12,7 +12,7 @@ fi
 
 # Resolve extension (lowercase)
 EXT="${FILE_PATH##*.}"
-EXT="${EXT,,}"
+EXT=$(printf '%s' "$EXT" | tr '[:upper:]' '[:lower:]')
 
 # ── Helper: find biome root walking up from a directory ─────────────────────
 find_biome_root() {
@@ -25,6 +25,16 @@ find_biome_root() {
         dir="$(dirname "$dir")"
     done
     return 1
+}
+
+# ── Helper: resolve a formatter outside project-local dependency bins ────────
+resolve_trusted_command() {
+    local resolved
+    resolved=$(command -v "$1" 2>/dev/null) || return 1
+    case "$resolved" in
+    */node_modules/.bin/*) return 1 ;;
+    esac
+    printf '%s\n' "$resolved"
 }
 
 # ── Helper: hash file contents ───────────────────────────────────────────────
@@ -53,60 +63,46 @@ FORMATTER=""
 FORMATTER_CMD=()
 
 case "$EXT" in
-    js|jsx|ts|tsx|css|json)
-        FILE_DIR="$(dirname "$FILE_PATH")"
-        BIOME_ROOT=$(find_biome_root "$FILE_DIR")
-        if [[ -n "$BIOME_ROOT" ]]; then
-            # Prefer local biome binary
-            if [[ -x "$BIOME_ROOT/node_modules/.bin/biome" ]]; then
-                BIOME_BIN="$BIOME_ROOT/node_modules/.bin/biome"
-            elif command -v biome >/dev/null 2>&1; then
-                BIOME_BIN="biome"
-            else
-                BIOME_BIN=""
-            fi
-            if [[ -n "$BIOME_BIN" ]]; then
-                FORMATTER="biome"
-                FORMATTER_CMD=("$BIOME_BIN" "format" "--write" "$FILE_PATH")
-            fi
+js | jsx | ts | tsx | css | json)
+    FILE_DIR="$(dirname "$FILE_PATH")"
+    BIOME_ROOT=$(find_biome_root "$FILE_DIR")
+    if [[ -n "$BIOME_ROOT" ]]; then
+        BIOME_BIN=$(resolve_trusted_command biome) || BIOME_BIN=""
+        if [[ -n "$BIOME_BIN" ]]; then
+            FORMATTER="biome"
+            FORMATTER_CMD=("$BIOME_BIN" "format" "--write" "$FILE_PATH")
         fi
-        # Fallback to prettier
-        if [[ -z "$FORMATTER" ]]; then
-            if command -v prettier >/dev/null 2>&1; then
-                FORMATTER="prettier"
-                FORMATTER_CMD=(prettier --write "$FILE_PATH")
-            elif command -v npx >/dev/null 2>&1; then
-                # Only use npx if prettier is already installed (--no-install)
-                if npx --no-install prettier --version >/dev/null 2>&1; then
-                    FORMATTER="prettier"
-                    FORMATTER_CMD=(npx --no-install prettier --write "$FILE_PATH")
-                fi
-            fi
-        fi
-        ;;
-    html)
-        if command -v prettier >/dev/null 2>&1; then
+    fi
+    # Fallback to prettier
+    if [[ -z "$FORMATTER" ]]; then
+        PRETTIER_BIN=$(resolve_trusted_command prettier) || PRETTIER_BIN=""
+        if [[ -n "$PRETTIER_BIN" ]]; then
             FORMATTER="prettier"
-            FORMATTER_CMD=(prettier --write "$FILE_PATH")
-        elif command -v npx >/dev/null 2>&1; then
-            if npx --no-install prettier --version >/dev/null 2>&1; then
-                FORMATTER="prettier"
-                FORMATTER_CMD=(npx --no-install prettier --write "$FILE_PATH")
-            fi
+            FORMATTER_CMD=("$PRETTIER_BIN" --write "$FILE_PATH")
         fi
-        ;;
-    sh|bash|zsh)
-        if command -v shfmt >/dev/null 2>&1; then
-            FORMATTER="shfmt"
-            FORMATTER_CMD=(shfmt -w "$FILE_PATH")
-        fi
-        ;;
-    lua)
-        if command -v stylua >/dev/null 2>&1; then
-            FORMATTER="stylua"
-            FORMATTER_CMD=(stylua "$FILE_PATH")
-        fi
-        ;;
+    fi
+    ;;
+html)
+    PRETTIER_BIN=$(resolve_trusted_command prettier) || PRETTIER_BIN=""
+    if [[ -n "$PRETTIER_BIN" ]]; then
+        FORMATTER="prettier"
+        FORMATTER_CMD=("$PRETTIER_BIN" --write "$FILE_PATH")
+    fi
+    ;;
+sh | bash | zsh)
+    SHFMT_BIN=$(resolve_trusted_command shfmt) || SHFMT_BIN=""
+    if [[ -n "$SHFMT_BIN" ]]; then
+        FORMATTER="shfmt"
+        FORMATTER_CMD=("$SHFMT_BIN" -w "$FILE_PATH")
+    fi
+    ;;
+lua)
+    STYLUA_BIN=$(resolve_trusted_command stylua) || STYLUA_BIN=""
+    if [[ -n "$STYLUA_BIN" ]]; then
+        FORMATTER="stylua"
+        FORMATTER_CMD=("$STYLUA_BIN" "$FILE_PATH")
+    fi
+    ;;
 esac
 
 # No formatter found or applicable — exit silently

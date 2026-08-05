@@ -102,6 +102,10 @@ add_package_script() {
   add_cmd "$pm run $script"
 }
 
+has_bun_tests() {
+  [[ -d tests && -n "$(find tests -type f -name '*.test.ts' -print -quit)" ]]
+}
+
 if [[ -f package.json ]]; then
   if ! has_command node; then
     echo "repo-check: package.json found, but node is unavailable" >&2
@@ -154,9 +158,28 @@ if [[ -f pyproject.toml ]]; then
   fi
 fi
 
-if [[ -f config/zsh/zshrc && -x bin/dotfiles-doctor ]]; then
+if [[ -x bin/dotfiles-doctor ]]; then
   add_cmd "bash bin/dotfiles-doctor"
-  add_cmd "zsh -n config/zsh/zshrc config/zsh/alias.sh config/zsh/exports.sh config/zsh/git.sh config/zsh/zstyle.sh"
+fi
+
+if [[ -f tests/shell/run.bash ]]; then
+  add_cmd "bash tests/shell/run.bash"
+fi
+
+if [[ -f config/nvim/tests/contextual_completion.lua ]]; then
+  if has_command nvim; then
+    add_cmd "nvim --headless -u NONE -l config/nvim/tests/contextual_completion.lua"
+  else
+    echo "repo-check: SKIP contextual completion test (nvim unavailable)"
+  fi
+fi
+
+if has_bun_tests; then
+  if has_command bun; then
+    add_cmd "bash tests/bun/run.bash"
+  else
+    echo "repo-check: SKIP Bun tests (bun unavailable)"
+  fi
 fi
 
 printf 'repo-check: %s\n' "$repo"

@@ -1,6 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ "${1:-}" == "--preview" ]]; then
+  number="${2:-}"
+  if [[ ! "$number" =~ ^[0-9]+$ ]]; then
+    printf 'Invalid pull request number: %s\n' "$number" >&2
+    exit 2
+  fi
+  : "${FZF_GITCLI_FILE:?FZF_GITCLI_FILE is required}"
+  jq --argjson number "$number" -r '.[] | select(.number == $number) | .body' "$FZF_GITCLI_FILE"
+  exit 0
+fi
+
 FZF_GITCLI_FILE=$(mktemp "${TMPDIR:-/tmp}/fzf-gitcli.XXXXXX")
 export FZF_GITCLI_FILE
 trap 'rm -f -- "$FZF_GITCLI_FILE"' EXIT
@@ -12,7 +23,7 @@ if [[ "$(jq length "$FZF_GITCLI_FILE")" == 0 ]]; then
   exit 0
 fi
 
-jq -c '.[] | .title' "$FZF_GITCLI_FILE" \
-  | fzf --ansi --info inline \
-  --preview "jq -c -r '.[] | select(.title | contains(\"{}\"))|.body' \"\$FZF_GITCLI_FILE\" | sed 's/\\n/\'$'\n''/g' | sed 's/\\r/''/g'" \
-  --bind "enter:become(jq -c -r '.[] | select(.title | contains(\"{}\")) | .number' \"\$FZF_GITCLI_FILE\" | xargs -n 1 gh pr checkout)"
+jq -r '.[] | [.number, .title] | @tsv' "$FZF_GITCLI_FILE" \
+  | fzf --ansi --info inline --delimiter $'\t' --with-nth '2..' \
+  --preview "$0 --preview {1}" \
+  --bind 'enter:become(gh pr checkout {1})'

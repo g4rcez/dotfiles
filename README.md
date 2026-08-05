@@ -1,6 +1,6 @@
 # dotfiles
 
-> A comprehensive, configuration-as-code approach to managing development environment dotfiles with TypeScript/Deno, featuring custom keyboard shortcuts, text expansion, and automated symlink management.
+> A comprehensive, configuration-as-code approach to managing development environment dotfiles with TypeScript and Bun/Node-compatible imports, featuring custom keyboard shortcuts, text expansion, and automated symlink management.
 
 ![my shell](./assets/shell.png)
 
@@ -8,7 +8,7 @@
 
 - 🎹 **Custom Keyboard Shortcuts** - Programmatic Karabiner Elements configuration with leader keys and modal editing
 - 📝 **Text Expansion** - Espanso integration with dynamic snippets and clipboard management
-- 🔗 **Automated Symlinks** - Smart dotfiles synchronization with custom Deno-based management system
+- 🔗 **Automated Symlinks** - Declarative dotfiles deployment with Bunsen
 - 🐚 **Enhanced Shell** - Zsh with modern plugins, fzf integration, and custom functions
 - 🚀 **Modern Terminal** - Ghostty/Wezterm with an Option+P leader for splits/tabs, plus tmux for legacy session tools
 - ⚡ **Neovim IDE** - Comprehensive Lua configuration with LSP, treesitter, and custom keybindings
@@ -20,9 +20,9 @@
 | Tool | Purpose | Configuration |
 | ------ | --------- | -------------- |
 | **Writeme** | Text editor for notes | [`writeme.dev`](https://app.writeme.dev/) |
-| **Karabiner Elements** | Keyboard remapping & shortcuts | [`karabiner.config.ts`](karabiner.config.ts) |
-| **Espanso** | Text expansion & snippets | [`espanso.config.ts`](espanso.config.ts) |
-| **Deno** | Configuration management | [`dotfiles.config.ts`](dotfiles.config.ts) |
+| **Karabiner Elements** | Keyboard remapping & shortcuts | [`bunsen/karabiner.ts`](bunsen/karabiner.ts) |
+| **Espanso** | Text expansion & snippets | [`bunsen/espanso.ts`](bunsen/espanso.ts) |
+| **Bun** | Configuration runtime | [`dotfiles.config.ts`](dotfiles.config.ts) |
 | **Bunsen** | Dotfiles management CLI | [`bunsen/`](bunsen/) |
 | **Zsh** | Shell with plugins | [`config/zsh/`](config/zsh/) |
 | **Neovim** | Text editor | [`config/nvim/`](config/nvim/) |
@@ -103,7 +103,7 @@ Trigger: `;` prefix
 - Rust (rust, rustup, rustp)
 - Go
 - Zig
-- Node.js/Bun/Deno (via mise)
+- Node.js/Bun (via mise)
 - .NET 10.0
 
 **CLI Development Tools**:
@@ -183,88 +183,68 @@ dotfiles/
 │   ├── zellij.sh          # Opt-in Zellij shortcuts
 │   ├── history.sh         # History settings
 │   └── ...
-├── git/                   # Git configuration
+├── config/git/            # Git configuration
 │   └── gitconfig          # Git config with delta, GPG signing
-├── bunsen/                # Custom configuration system
-├── dotfiles.config.ts     # Main Deno configuration manager
-├── karabiner.config.ts    # Keyboard shortcuts definition
-├── espanso.config.ts      # Text expansion rules
+├── bunsen/                # Bunsen profile modules
+│   ├── karabiner.ts       # Keyboard shortcuts definition
+│   └── espanso.ts         # Text expansion rules
+├── dotfiles.config.ts     # Canonical Bunsen configuration and symlink inventory
 ├── Brewfile               # Homebrew packages (99 packages)
 ├── install                # Installation script
 ├── .tool-versions         # Mise version pinning
-├── .editorconfig          # Editor standards
 └── .czrc                  # Commitizen config
 ```
 
 ## Configuration Management
 
-This dotfiles system uses a custom TypeScript-based configuration management built on Deno and the `@g4rcez/bunsen` library:
+This dotfiles system uses `@g4rcez/bunsen` from TypeScript with Bun/Node-compatible imports. [`dotfiles.config.ts`](dotfiles.config.ts) is the canonical deployment configuration and symlink inventory.
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
-cd $HOME/dotfiles
+# Clone to the default path expected by dotfiles.config.ts
+git clone https://github.com/g4rcez/dotfiles "$HOME/dotfiles"
+cd "$HOME/dotfiles"
 
-# Run installation script
+# Install the pinned dependencies
+bun install --frozen-lockfile
+
+# Create directories and safely link only ~/.zshrc
 bash install
+
+# Validate, then inspect the proposed deployment
+bunx bunsen validate
+bunx bunsen diff
+
+# Optional: apply only when you intend to change deployed files
+bunx bunsen apply
 ```
 
-**What the install script does**:
-
-1. Creates necessary directories (`~/.config`, `~/.tmp`, `~/tools`)
-2. Symlinks zshrc to `~/.zshrc`
-3. Installs mise if not present
-4. Installs Bun and Node.js via mise
-5. Run `bunsen apply` separately to set up the remaining configurations
+The installer creates `~/.config`, `~/.tmp`, and `~/tools`. It refuses to replace a conflicting `~/.zshrc`, creates only the zshrc symlink, and bootstraps mise only when mise is unavailable. It does not apply the Bunsen deployment.
 
 ### Commands
 
-```bash
-# Apply all configurations
-bunsen apply
+Bunsen 0.0.9 provides these deployment checks and actions:
 
-# Check configuration status
-bunsen status
+```bash
+bunx bunsen validate
+bunx bunsen status
+bunx bunsen diff
+bunx bunsen apply
 ```
+
+Review `diff` before the optional, intentional `apply` command.
 
 ### Symlink Management
 
-The system automatically creates symlinks from `~/dotfiles/config/*` to `~/.config/*` for:
+The `symlinks` object in [`dotfiles.config.ts`](dotfiles.config.ts) is the source of truth. For example, the Git configuration source is [`config/git/gitconfig`](config/git/gitconfig). Do not infer deployed links from the repository directory names.
 
-- aerospace, alacritty, atuin, bat, btop, carapace, flameshot
-- ghostty, harlequin, htop, karabiner, kitty, lazygit, lsd
-- mise, nvim, starship.toml, tmux, vivid, wezterm, yazi, zellij
-- and 20+ more applications
+### Profile Modules
 
-Additional symlinks:
+The OS profile modules are imported by [`dotfiles.config.ts`](dotfiles.config.ts):
 
-- `~/.gitconfig` → `dotfiles/git/gitconfig`
-- `~/.editorconfig` → `dotfiles/.editorconfig`
-- `~/.zshrc` → `dotfiles/config/zsh/zshrc`
-
-### Plugin System
-
-The system supports custom plugins for:
-
-- **Espanso** - Dynamic snippet generation from TypeScript
-- **Karabiner** - Programmatic shortcut creation with TypeScript DSL
-- **VSCode** - Extension and settings management
-
-Example plugin configuration in `dotfiles.config.ts`:
-
-```typescript
-plugins: [
-  espansoPlugin(EspansoRules),
-  vscodePlugin({ path: "vscode", extensionsFile: "vscode/extensions.txt" }),
-  karabinerPlugin({
-    rules: KarabinerConfig.map,
-    whichKey: KarabinerConfig.whichKey,
-    configFile: "karabiner/karabiner.json"
-  }),
-]
-```
+- **Espanso** - [`bunsen/espanso.ts`](bunsen/espanso.ts)
+- **Karabiner** - [`bunsen/karabiner.ts`](bunsen/karabiner.ts)
 
 ## 🎨 Theming
 
@@ -350,7 +330,7 @@ Located in [`bin/`](bin/) - 40+ utilities:
 
 ### Adding Keyboard Shortcuts
 
-Edit [`karabiner.config.ts`](karabiner.config.ts):
+Edit [`bunsen/karabiner.ts`](bunsen/karabiner.ts):
 
 ```typescript
 const modKeys = karabiner.createHyperSubLayers({
@@ -373,7 +353,7 @@ Recommended videos:
 
 ### Adding Text Expansion
 
-Edit [`espanso.config.ts`](espanso.config.ts):
+Edit [`bunsen/espanso.ts`](bunsen/espanso.ts):
 
 ```typescript
 espanso.insert("mykey", "My expanded text", "Description"),
@@ -425,7 +405,7 @@ See [`config/nvim/README.md`](config/nvim/README.md) for detailed Neovim configu
 
 ## Git Configuration
 
-**Features** (from `git/gitconfig`):
+**Features** (from [`config/git/gitconfig`](config/git/gitconfig)):
 
 - **Delta** as pager with Catppuccin theme
 - **GPG signing** with SSH format
@@ -442,7 +422,7 @@ See [`config/nvim/README.md`](config/nvim/README.md) for detailed Neovim configu
 
 - **Zsh** >= v4
 - **Git** >= v2
-- **Deno** >= 2.1.0
+- **Bun** (for dependency installation and Bunsen)
 - **Mise** for runtime management
 - **macOS** (primary target, some Linux support via scripts)
 
@@ -467,7 +447,7 @@ Custom mechanical keyboard optimized for the Karabiner configuration with Caps L
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test with `bunsen sync`
+4. Test with `bunx bunsen validate`
 5. Submit a pull request
 
 Personal dotfiles configuration provided as-is for reference and inspiration.

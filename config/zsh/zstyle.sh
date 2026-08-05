@@ -1,7 +1,5 @@
 #!/bin/zsh
 zmodload -i zsh/complist
-WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\//[\/]/ '
-export WORDCHARS="${WORDCHARS/\//}"
 
 ############################## setops #################################
 unsetopt FLOW_CONTROL

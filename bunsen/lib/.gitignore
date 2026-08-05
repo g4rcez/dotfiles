@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+coverage/
+.env
+*.local
+*.tgz
+bin/

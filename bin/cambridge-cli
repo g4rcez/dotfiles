@@ -1,13 +1,9 @@
 #!/usr/bin/env bun
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
-
-const CACHE_DIR = "/tmp/cambridge";
-if (!existsSync(CACHE_DIR)) {
-  mkdirSync(CACHE_DIR, { recursive: true });
-}
+import { createHash } from "node:crypto";
 
 function stripTags(html: string): string {
   if (!html) return "";
@@ -21,8 +17,19 @@ function stripTags(html: string): string {
     .replace(/&gt;/g, ">");
 }
 
-function getCachePath(word: string): string {
-  return join(CACHE_DIR, `${word.toLowerCase().replace(/\s+/g, "-")}.md`);
+export function getCachePath(word: string): string {
+  const home = process.env.HOME;
+  const cacheHome = process.env.XDG_CACHE_HOME || (home ? join(home, ".cache") : "");
+  if (!cacheHome) {
+    throw new Error("XDG_CACHE_HOME or HOME is required");
+  }
+  const cacheDir = join(cacheHome, "cambridge");
+  mkdirSync(cacheDir, { recursive: true, mode: 0o700 });
+  chmodSync(cacheDir, 0o700);
+
+  const normalizedWord = word.trim().toLowerCase().replace(/\s+/g, " ");
+  const key = createHash("sha256").update(normalizedWord).digest("hex");
+  return join(cacheDir, `${key}.md`);
 }
 
 async function playPronunciation(word: string) {
@@ -148,7 +155,8 @@ async function fetchAndCache(word: string): Promise<string | null> {
     markdown += `<!-- AUDIO_US: ${usAudio} -->\n`;
 
     const cachePath = getCachePath(word);
-    writeFileSync(cachePath, markdown);
+    writeFileSync(cachePath, markdown, { mode: 0o600 });
+    chmodSync(cachePath, 0o600);
     return markdown;
   } catch (error) {
     console.error(`Error fetching word "${word}":`, error);
@@ -192,4 +200,6 @@ async function main() {
   }
 }
 
-main();
+if (import.meta.main) {
+  main();
+}

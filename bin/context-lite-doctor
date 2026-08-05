@@ -54,7 +54,7 @@ tmp_files="$(mktemp)"
 trap 'rm -f "$tmp_files"' EXIT
 if [[ -d "$runs_dir" ]]; then
   find "$runs_dir" -type f -name output.txt -mtime "-$days" -print 2>/dev/null |
-    sort -r | head -n "$sample" >"$tmp_files"
+    sort -r | awk -v limit="$sample" 'NR <= limit' >"$tmp_files"
 fi
 
 runs=0

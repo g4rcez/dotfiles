@@ -1,6 +1,6 @@
 ---
 name: react-typescript-frontend
-description: Guide for React + TypeScript frontend development. Use when creating, refactoring, or reviewing components, hooks, pages, or any frontend code. Triggers on: component architecture, React patterns, state management, frontend structure, TailwindCSS, testing, accessibility, or scaffolding features.
+description: "Guide for React + TypeScript frontend development. Use when creating, refactoring, or reviewing components, hooks, pages, or any frontend code. Triggers on: component architecture, React patterns, state management, frontend structure, TailwindCSS, testing, accessibility, or scaffolding features."
 ---
 
 # React + TypeScript Frontend Skill

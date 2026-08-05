@@ -65,7 +65,8 @@ Located in `lua/config/lsp.lua`:
 12. **oxlint** - Fast JavaScript/TypeScript linter
 13. **rust_analyzer** - Rust
 14. **tailwindcss** - Tailwind CSS with 50+ template types
-15. **yamlls** - YAML with GitHub Actions schemas
+15. **taplo** - TOML language server with JSON Schema completion
+16. **yamlls** - YAML with GitHub Actions schemas
 
 ### ⌨️ Completion
 
@@ -294,12 +295,19 @@ Powered by **none-ls** (null-ls fork):
 
 ```bash
 # Clone dotfiles repository
-git clone https://github.com/g4rcez/dotfiles $HOME/dotfiles
-cd $HOME/dotfiles
+git clone https://github.com/g4rcez/dotfiles "$HOME/dotfiles"
+cd "$HOME/dotfiles"
 
-# Run installation (includes Neovim config symlink)
+bun install --frozen-lockfile
 bash install
+bunx bunsen validate
+bunx bunsen diff
+
+# Optional: apply the reviewed Bunsen deployment
+bunx bunsen apply
 ```
+
+Bunsen creates the `~/.config/nvim` symlink when you intentionally run `bunx bunsen apply`. The `bash install` command alone links only `~/.zshrc` and refuses to replace a conflicting zshrc.
 
 1. Install language servers:
 

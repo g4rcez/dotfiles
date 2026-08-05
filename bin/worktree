@@ -71,20 +71,61 @@ cmd_add() {
     echo "Worktree created at: $worktree_path"
 }
 
-# Internal: emit fzf-ready lines (path TAB display)
+# Internal: emit NUL-delimited path/branch pairs from Git's stable format.
+_worktree_records() {
+    local field wt_path="" branch=""
+    while IFS= read -r -d '' field; do
+        case "$field" in
+        "worktree "*) wt_path="${field#worktree }" ;;
+        "branch refs/heads/"*) branch="${field#branch refs/heads/}" ;;
+        "")
+            if [[ -n "$wt_path" ]]; then
+                [[ -n "$branch" ]] || branch="$(basename "$wt_path")"
+                printf '%s\0%s\0' "$wt_path" "$branch"
+            fi
+            wt_path=""
+            branch=""
+            ;;
+        esac
+    done < <(git worktree list --porcelain -z)
+
+    if [[ -n "$wt_path" ]]; then
+        [[ -n "$branch" ]] || branch="$(basename "$wt_path")"
+        printf '%s\0%s\0' "$wt_path" "$branch"
+    fi
+}
+
+_is_managed_worktree() {
+    local wt_path="$1" repo_base="$2" main_path="$3"
+    [[ "$wt_path" == "$main_path" || "$wt_path" == "$repo_base"/* ]]
+}
+
+_worktree_record_by_id() {
+    local target_id="$1" id=0 wt_path branch
+    [[ "$target_id" =~ ^[0-9]+$ ]] || return 1
+    WORKTREE_PATH=""
+    WORKTREE_BRANCH=""
+    while IFS= read -r -d '' wt_path && IFS= read -r -d '' branch; do
+        if [[ "$id" -eq "$target_id" ]]; then
+            WORKTREE_PATH="$wt_path"
+            WORKTREE_BRANCH="$branch"
+            return 0
+        fi
+        id=$((id + 1))
+    done < <(_worktree_records)
+    return 1
+}
+
+# Internal: emit fzf-ready lines (opaque ID TAB display).
 _cmd_list_lines() {
-    local repo_name repo_base main_path
+    local repo_name repo_base main_path wt_path branch id=0
     repo_name="$(get_repo_name)"
     repo_base="$WORKTREE_BASE/$repo_name"
     main_path="$(git rev-parse --show-toplevel)"
 
-    git worktree list | while read -r line; do
-        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
-            local wt_path branch_raw branch display_path session_icon
-            wt_path="$(echo "$line" | awk '{print $1}')"
-            branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
-            [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
-            
+    while IFS= read -r -d '' wt_path && IFS= read -r -d '' branch; do
+        if _is_managed_worktree "$wt_path" "$repo_base" "$main_path"; then
+            local display_path session_icon
             local session_name="${branch//\//-}"
             session_name="${session_name#-}"
             if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -94,13 +135,16 @@ _cmd_list_lines() {
             fi
 
             display_path="${wt_path/#$HOME/\~}"
-            printf '%s\t%s%-35s  %s\n' "$wt_path" "$session_icon" "$branch" "$display_path"
+            printf '%s\t%s%-35s  %s\n' "$id" "$session_icon" "$branch" "$display_path"
         fi
-    done
+        id=$((id + 1))
+    done < <(_worktree_records)
 }
 
 _cmd_preview_wt() {
-    local wt_path="$1"
+    local worktree_id="$1"
+    _worktree_record_by_id "$worktree_id" || return 1
+    local wt_path="$WORKTREE_PATH"
     local session_name
     session_name="$(tmux list-sessions -F '#{session_name} #{pane_current_path}' 2>/dev/null |
         awk -v p="$wt_path" '$2 == p {print $1; exit}' || true)"
@@ -136,8 +180,9 @@ _cmd_preview_wt() {
 }
 
 _cmd_remove_wt() {
-    local wt_path="$1"
-    git worktree remove --force "$wt_path" 2>/dev/null || true
+    local worktree_id="$1"
+    _worktree_record_by_id "$worktree_id" || return 1
+    git worktree remove --force "$WORKTREE_PATH" 2>/dev/null || true
 }
 
 cmd_list() {
@@ -170,9 +215,9 @@ cmd_list() {
 
     [[ -z "$selected" ]] && return 0
 
-    local wt_path branch session_name
-    wt_path="$(echo "$selected" | cut -f1)"
-    branch="$(echo "$selected" | cut -f2 | awk '{print $2}')"
+    local worktree_id="${selected%%$'\t'*}"
+    _worktree_record_by_id "$worktree_id" || return 1
+    local wt_path="$WORKTREE_PATH" branch="$WORKTREE_BRANCH" session_name
     session_name="${branch//\//-}"
     session_name="${session_name#-}"
 
@@ -201,15 +246,11 @@ cmd_prune() {
         return
     fi
 
-    git worktree list | while read -r line; do
-        local wt_path branch_raw branch
-        wt_path="$(echo "$line" | awk '{print $1}')"
-        [[ "$wt_path" != *"$repo_base"* ]] && continue
+    local wt_path branch
+    while IFS= read -r -d '' wt_path && IFS= read -r -d '' branch; do
+        [[ "$wt_path" == "$repo_base"/* ]] || continue
 
-        branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
-        [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
-
-        if echo "$merged_branches" | grep -q "^$branch$"; then
+        if grep -Fxq "$branch" <<<"$merged_branches"; then
             echo -n "Worktree for merged branch '$branch' found. Remove? [y/N] "
             read -r response
             if [[ "$response" =~ ^[Yy]$ ]]; then
@@ -224,7 +265,7 @@ cmd_prune() {
                 fi
             fi
         fi
-    done
+    done < <(_worktree_records)
     git worktree prune
 }
 
@@ -254,7 +295,8 @@ cmd_cd() {
     local branch="${1:-}"
 
     if [[ -z "$branch" ]]; then
-        git worktree list | awk '{print $1}' | head -1
+        _worktree_record_by_id 0 || return 1
+        printf '%s\n' "$WORKTREE_PATH"
         return
     fi
 
@@ -301,26 +343,22 @@ cmd_mux() {
     local main_path
     main_path="$(git rev-parse --show-toplevel)"
 
-    local selected
-    selected="$(git worktree list | while read -r line; do
-        if [[ "$line" == *"$repo_base"* ]] || [[ "$line" == "$main_path"* ]]; then
-            local wt_path branch_raw branch display
-            wt_path="$(echo "$line" | awk '{print $1}')"
-            branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
-            if [[ -n "$branch_raw" ]]; then
-                branch="$branch_raw"
-            else
-                branch="$(basename "$wt_path")"
+    local selected wt_path branch id=0
+    selected="$(
+        while IFS= read -r -d '' wt_path && IFS= read -r -d '' branch; do
+            if _is_managed_worktree "$wt_path" "$repo_base" "$main_path"; then
+                printf '%s\t%-40s  %s\n' "$id" "$branch" "$wt_path"
             fi
-            printf "%-40s  %s\n" "$branch" "$wt_path"
-        fi
-    done | fzf --prompt='worktree> ')"
+            id=$((id + 1))
+        done < <(_worktree_records)
+    )"
+    selected="$(printf '%s\n' "$selected" | fzf --delimiter=$'\t' --with-nth=2.. --prompt='worktree> ')"
 
     [[ -z "$selected" ]] && return 0
 
-    local selected_path branch_field session_name
-    selected_path="$(echo "$selected" | awk '{print $NF}')"
-    branch_field="$(echo "$selected" | awk '{print $1}')"
+    local worktree_id="${selected%%$'\t'*}"
+    _worktree_record_by_id "$worktree_id" || return 1
+    local selected_path="$WORKTREE_PATH" branch_field="$WORKTREE_BRANCH" session_name
     session_name="${branch_field//\//-}"
     session_name="${session_name#-}"
 
@@ -345,15 +383,9 @@ cmd_overview() {
     printf '%-35s  %-8s  %-6s  %s\n' "BRANCH" "SESSION" "DIRTY" "AHEAD/BEHIND"
     printf '%-35s  %-8s  %-6s  %s\n' "------" "-------" "-----" "------------"
 
-    git worktree list | while read -r line; do
-        local wt_path branch_raw branch
-        wt_path="$(echo "$line" | awk '{print $1}')"
-        if [[ "$wt_path" != *"$repo_base"* && "$wt_path" != "$main_path" && "$wt_path" != "$main_path/"* ]]; then
-            continue
-        fi
-
-        branch_raw="$(echo "$line" | sed -n 's/.*\[\(.*\)\]/\1/p')"
-        [[ -n "$branch_raw" ]] && branch="$branch_raw" || branch="$(basename "$wt_path")"
+    local wt_path branch
+    while IFS= read -r -d '' wt_path && IFS= read -r -d '' branch; do
+        _is_managed_worktree "$wt_path" "$repo_base" "$main_path" || continue
 
         local session_name="${branch//\//-}"
         session_name="${session_name#-}"
@@ -369,12 +401,13 @@ cmd_overview() {
         local ahead_behind
         ahead_behind="$(git -C "$wt_path" rev-list --left-right --count "HEAD...@{upstream}" 2>/dev/null | tr '\t' '/' || echo "?/?") "
 
-        printf '%-35s  %-8s  %-6s  %s\n' "$branch" "$session_status" "$dirty_count" "$ahead_behind"
-    done | column -t
+        printf '%s\t%s\t%s\t%s\n' "$branch" "$session_status" "$dirty_count" "$ahead_behind"
+    done < <(_worktree_records) | column -s $'\t' -t
 }
 
 origin() {
-    cd "$(git worktree list | awk '{print $1}' | head -1)"
+    _worktree_record_by_id 0 || return 1
+    cd "$WORKTREE_PATH"
 }
 
 main() {

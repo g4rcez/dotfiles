@@ -3,6 +3,8 @@
 # Prefer an explicitly configured checkout, but keep ~/.zshrc symlinks and direct
 # sources relocatable by deriving the repository root from this file's path.
 typeset -g _zshrc_source="${(%):-%N}"
+export WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\//[\/]/ '
+export WORDCHARS="${WORDCHARS/\//}"
 [[ "$_zshrc_source" == /* ]] || _zshrc_source="$PWD/$_zshrc_source"
 typeset -g _zshrc_root="${_zshrc_source:A:h:h:h}"
 typeset -g DOTFILES="${DOTFILES:-$_zshrc_root}"
@@ -19,7 +21,7 @@ unset _zshrc_source _zshrc_root
 ## exports
 [[ -r "$DOTFILES/config/zsh/exports.sh" ]] && source "$DOTFILES/config/zsh/exports.sh"
 [[ -r "$DOTFILES/config/zsh/utils.sh" ]] && source "$DOTFILES/config/zsh/utils.sh"
-if (( $+functions[safeImport] )); then
+if (($+functions[safeImport])); then
     safeImport "$HOME/.local-exports.sh"
 elif [[ -r "$HOME/.local-exports.sh" ]]; then
     source "$HOME/.local-exports.sh"
@@ -77,7 +79,7 @@ fpath=("${_zsh_completion_fpath[@]}" "${fpath[@]}")
 unset _zsh_completion_fpath completion_dir
 autoload -Uz compinit && compinit -C
 
-if (( $+functions[znap] )); then
+if (($+functions[znap])); then
     (($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
     (($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
     (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
@@ -95,6 +97,7 @@ typeset -a SOURCE=(
     "$HOME/.cargo/env"
     "$HOME/.railway/env"
     "$HOME/.atuin/bin/env"
+    "$HOME/.lmstudio/bin"
     "$DOTFILES/bin/fzf-git"
     "$DOTFILES/config/zsh/alias.sh"
     "$DOTFILES/config/zsh/zstyle.sh"
@@ -102,32 +105,27 @@ typeset -a SOURCE=(
     "$DOTFILES/config/zsh/fzf.sh"
     "$DOTFILES/config/zsh/git.sh"
     "$DOTFILES/config/zsh/node.sh"
-    # Zellij is opt-in; tmux is the active multiplexer.
     "$DOTFILES/config/zsh/completion/node-completion.sh"
     "$DOTFILES/config/zsh/completion/_ai.zsh"
     "$DOTFILES/config/zsh/completion/_worktree.zsh"
     "$DOTFILES/config/zsh/completion/_commit.zsh"
+    "$DOTFILES/config/zsh/syntax-highlighting.zsh"
+    "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh"
 )
 
-if [[ -z "$TMUX" ]] && (( $+commands[zellij] )); then
+if [[ -z "$TMUX" ]] && (($+commands[zellij])); then
     SOURCE+=("$DOTFILES/config/zsh/zellij.sh")
 fi
 
 for config in "${SOURCE[@]}"; do
     [[ -r "$config" ]] && source "$config"
 done
+
 unset SOURCE config
-
-# Keep user-defined widgets and bindings ahead of syntax highlighting.
-[[ -r "$DOTFILES/config/zsh/syntax-highlighting.zsh" ]] && source "$DOTFILES/config/zsh/syntax-highlighting.zsh"
-
-if [[ -z "${BUNSEN_ENV_LOADED:-}" && -r "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh" ]]; then
-    source "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh"
-fi
 
 function _zsh_lazy_znap_source() {
     local plugin="$1"
-    (( $+functions[znap] )) || return 1
+    (($+functions[znap])) || return 1
     if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
         znap source "$plugin"
     else
@@ -145,7 +143,7 @@ if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
 fi
 
 if [[ -o interactive && -t 0 && -t 1 && $+commands[atuin] -eq 1 ]]; then
-    if (( $+functions[znap] )); then
+    if (($+functions[znap])); then
         znap eval atuin-init 'atuin init zsh --disable-up-arrow --disable-ai'
     else
         eval "$(command atuin init zsh --disable-up-arrow --disable-ai)"
@@ -153,7 +151,7 @@ if [[ -o interactive && -t 0 && -t 1 && $+commands[atuin] -eq 1 ]]; then
 
     # Keep Up-arrow on zsh history, even if an older cached Atuin init ran first.
     typeset _zsh_history_up_widget=up-line-or-history
-    (( $+widgets[up-line-or-beginning-search] )) && _zsh_history_up_widget=up-line-or-beginning-search
+    (($+widgets[up - line - or - beginning - search])) && _zsh_history_up_widget=up-line-or-beginning-search
     for keymap in emacs viins vicmd; do
         bindkey -M "$keymap" '^[[A' "$_zsh_history_up_widget"
         bindkey -M "$keymap" '^[OA' "$_zsh_history_up_widget"

@@ -1,0 +1,62 @@
+{
+  "name": "@g4rcez/bunsen",
+  "type": "module",
+  "version": "0.0.9",
+  "description": "NixOS flake-inspired dotfiles manager for TypeScript",
+  "main": "./src/api/index.ts",
+  "types": "./src/api/index.ts",
+  "author": "g4rcez",
+  "license": "MIT",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "bin": {
+    "bunsen": "./src/cli/index.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/api/index.ts",
+      "bun": "./src/api/index.ts",
+      "import": "./src/api/index.ts",
+      "require": "./src/api/index.ts",
+      "default": "./src/api/index.ts"
+    }
+  },
+  "scripts": {
+    "clean": "bun scripts/clean.ts",
+    "compile": "bun build --compile ./src/cli/index.ts --outfile bin/bunsen",
+    "format": "prettier --write src",
+    "bunsen": "bun src/cli/index.ts",
+    "start": "bun src/cli/index.ts",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "typecheck": "bun --no-install tsc --noEmit"
+  },
+  "files": [
+    "./src",
+    "./templates",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@types/bun": "^1.3.6",
+    "@types/node": "^25.0.2",
+    "commander": "14.0.2",
+    "ora": "9.0.0",
+    "yaml": "2.8.2",
+    "zod": "4.1.13"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "prettier": "3.7.4"
+  },
+  "keywords": [
+    "dotfiles",
+    "symlink",
+    "karabiner",
+    "espanso",
+    "configuration",
+    "macos",
+    "cli"
+  ]
+}

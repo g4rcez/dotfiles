@@ -16,7 +16,16 @@ DOTFILES_CONFIG_DIR="$DOTFILES_DIR/config"
 mkdir -p "$HOME/tools"
 mkdir -p "$HOME/.tmp"
 mkdir -p "$HOME/.config"
-ln -sf "$DOTFILES_DIR/config/zsh/zshrc" "$HOME/.zshrc"
+zshrc_source="$DOTFILES_DIR/config/zsh/zshrc"
+zshrc_destination="$HOME/.zshrc"
+if [[ -L "$zshrc_destination" && "$zshrc_destination" -ef "$zshrc_source" ]]; then
+    :
+elif [[ -e "$zshrc_destination" || -L "$zshrc_destination" ]]; then
+    printf 'install: refusing to replace existing %s\n' "$zshrc_destination" >&2
+    exit 1
+else
+    ln -s "$zshrc_source" "$zshrc_destination"
+fi
 
 ########################################################################################################################
 ##### mise config

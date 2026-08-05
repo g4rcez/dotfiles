@@ -29,6 +29,10 @@ keybind = super+p>\=new_split:right
 keybind = super+p>equal=equalize_splits
 keybind = super+p>h=previous_tab
 keybind = super+p>l=next_tab
+keybind = super+p>shift+h=goto_split:left
+keybind = super+p>shift+j=goto_split:down
+keybind = super+p>shift+k=goto_split:up
+keybind = super+p>shift+l=goto_split:right
 keybind = super+p>n=new_window
 keybind = super+p>r=reload_config
 keybind = super+p>t=new_tab

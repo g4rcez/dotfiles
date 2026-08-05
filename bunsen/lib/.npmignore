@@ -1,0 +1,35 @@
+# Development and testing
+tests/
+examples/
+*.test.ts
+*.spec.ts
+coverage/
+
+# Configuration files (user config - don't publish in package)
+dotfiles.config.ts
+.prettierrc
+.gitignore
+.tool-versions
+
+# Scripts
+scripts/
+
+# Documentation for Claude Code
+CLAUDE.md
+DEVELOPMENT.md
+PUBLISHING.md
+QUICK_PUBLISH.md
+
+# Logs and temp files
+*.log
+.DS_Store
+node_modules/
+bun.lockb
+
+# Build artifacts we don't need
+*.tsbuildinfo
+*.tgz
+
+# Don't include the bin directory (will be created by compile script)
+bin/
+old/

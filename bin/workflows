@@ -1,13 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CACHE="/tmp/gh-workflows-${UID}.json"
+WORKFLOWS_CACHE="${WORKFLOWS_CACHE:-}"
+export WORKFLOWS_CACHE
+
+require_cache() {
+    if [[ -z "$WORKFLOWS_CACHE" || ! -f "$WORKFLOWS_CACHE" ]]; then
+        echo "workflows: internal cache is unavailable" >&2
+        exit 2
+    fi
+}
+
+create_cache() {
+    local cache_home cache_dir
+    cache_home="${XDG_CACHE_HOME:-$HOME/.cache}"
+    cache_dir="$cache_home/gh-workflows"
+    mkdir -p "$cache_dir"
+    chmod 700 "$cache_dir"
+    WORKFLOWS_CACHE="$(mktemp "$cache_dir/runs.XXXXXX")"
+    chmod 600 "$WORKFLOWS_CACHE"
+    export WORKFLOWS_CACHE
+}
 
 fetch() {
+    require_cache
     local a b
     a=$(gh run list --status in_progress --json databaseId,name,headBranch,status,createdAt 2>/dev/null || echo '[]')
     b=$(gh run list --status queued      --json databaseId,name,headBranch,status,createdAt 2>/dev/null || echo '[]')
-    jq -n --argjson a "$a" --argjson b "$b" '$a + $b' > "$CACHE"
+    jq -n --argjson a "$a" --argjson b "$b" '$a + $b' >"$WORKFLOWS_CACHE"
 }
 
 list_lines() {
@@ -21,7 +41,7 @@ list_lines() {
             .headBranch,
             .name
         ] | join("\t")
-    ' "$CACHE"
+    ' "$WORKFLOWS_CACHE"
 }
 
 epoch_from_iso() {
@@ -35,9 +55,10 @@ human_date() {
 }
 
 preview_run() {
+    require_cache
     local id="$1"
     local created_at now created elapsed mins secs
-    created_at=$(jq -r --argjson id "$id" '.[] | select(.databaseId == $id) | .createdAt' "$CACHE")
+    created_at=$(jq -r --argjson id "$id" '.[] | select(.databaseId == $id) | .createdAt' "$WORKFLOWS_CACHE")
     now=$(date +%s)
     created=$(epoch_from_iso "$created_at")
     elapsed=$(( now - created ))
@@ -50,9 +71,11 @@ preview_run() {
 }
 
 main() {
+    create_cache
+    trap 'rm -f -- "$WORKFLOWS_CACHE"' EXIT
     fetch
 
-    if [[ "$(jq length "$CACHE")" == "0" ]]; then
+    if [[ "$(jq length "$WORKFLOWS_CACHE")" == "0" ]]; then
         echo "No in-progress or queued workflows"
         exit 0
     fi
