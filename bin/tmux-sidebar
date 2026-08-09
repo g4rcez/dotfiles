@@ -167,7 +167,7 @@ render() {
     "$HOME_CLR" "$G" "$B" "$X" "$GR" "$Y" "$G" "$X" "$D" "$X"
   local n=${#locs[@]} i mark col
   [ "$n" -eq 0 ] && {
-    printf '%s  (nenhum agente)%s\n' "$D" "$X"
+    printf '%s  (no agents running)%s\n' "$D" "$X"
     return
   }
   for i in $(seq 0 $((n - 1))); do

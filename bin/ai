@@ -2,6 +2,9 @@
 source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
 set -euo pipefail
 
+CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
+PROVIDER="${AI_PROVIDER:-pi}"
+
 # Resolve script location (follow symlinks)
 SCRIPT_PATH="${BASH_SOURCE[0]}"
 while [ -L "$SCRIPT_PATH" ]; do
@@ -12,9 +15,6 @@ done
 if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/.ai" ]]; then
   DOTFILES_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")/.." && pwd)"
 fi
-
-CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
-PROVIDER="${AI_PROVIDER:-claude}"
 
 # Check dependencies
 if ! command -v jq &>/dev/null; then

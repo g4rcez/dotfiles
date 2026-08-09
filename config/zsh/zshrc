@@ -19,13 +19,9 @@ export TS_SCRIPTS="${TS_SCRIPTS:-$DOTFILES/bin}"
 unset _zshrc_source _zshrc_root
 
 ## exports
-[[ -r "$DOTFILES/config/zsh/exports.sh" ]] && source "$DOTFILES/config/zsh/exports.sh"
-[[ -r "$DOTFILES/config/zsh/utils.sh" ]] && source "$DOTFILES/config/zsh/utils.sh"
-if (($+functions[safeImport])); then
-    safeImport "$HOME/.local-exports.sh"
-elif [[ -r "$HOME/.local-exports.sh" ]]; then
-    source "$HOME/.local-exports.sh"
-fi
+source "$DOTFILES/config/zsh/exports.sh"
+source "$DOTFILES/config/zsh/utils.sh"
+safeImport "$HOME/.local-exports.sh"
 
 if [[ -o interactive && -t 1 ]]; then
     _zsh_restore_tty_output() {
@@ -72,7 +68,8 @@ fi
 # completion directories out of fpath when they are not installed.
 typeset -gU fpath
 typeset -a _zsh_completion_fpath=()
-for completion_dir in "$HOME/.local/share/zsh/site-functions" "$HOME/.grok/completions/zsh"; do
+local COMPLETIONS=("$HOME/.local/share/zsh/site-functions" "$HOME/.grok/completions/zsh")
+for completion_dir in $COMPLETIONS; do
     [[ -d "$completion_dir" ]] && _zsh_completion_fpath+=("$completion_dir")
 done
 fpath=("${_zsh_completion_fpath[@]}" "${fpath[@]}")
@@ -83,11 +80,11 @@ if (($+functions[znap])); then
     (($+commands[gh])) && znap eval gh-completion 'gh completion -s zsh'
     (($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
     (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
-    (($+commands[tv])) && znap eval tv-init 'tv init zsh'
+    (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
     if [[ -o interactive && -t 0 && -t 1 ]]; then
         (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
+        (($+commands[tv])) && znap eval tv-init 'tv init zsh'
     fi
-    (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
 fi
 
 ##############################################################################################################
@@ -148,13 +145,4 @@ if [[ -o interactive && -t 0 && -t 1 && $+commands[atuin] -eq 1 ]]; then
     else
         eval "$(command atuin init zsh --disable-up-arrow --disable-ai)"
     fi
-
-    # Keep Up-arrow on zsh history, even if an older cached Atuin init ran first.
-    typeset _zsh_history_up_widget=up-line-or-history
-    (($+widgets[up - line - or - beginning - search])) && _zsh_history_up_widget=up-line-or-beginning-search
-    for keymap in emacs viins vicmd; do
-        bindkey -M "$keymap" '^[[A' "$_zsh_history_up_widget"
-        bindkey -M "$keymap" '^[OA' "$_zsh_history_up_widget"
-    done
-    unset _zsh_history_up_widget keymap
 fi

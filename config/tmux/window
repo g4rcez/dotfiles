@@ -23,11 +23,9 @@ get_config_value() {
     local key=$1
     local fallback=$2
     local value=""
-
     if command -v yq >/dev/null 2>&1; then
         value="$(yq -r "$key" "$USER_CONFIG" 2>/dev/null || true)"
     fi
-
     [[ -n "$value" && "$value" != "null" ]] && printf '%s\n' "$value" || printf '%s\n' "$fallback"
 }
 

@@ -58,7 +58,9 @@ export PATH
 
 #####################################################################################
 ## Important exports
-export LISTMAX="${LISTMAX:-10000}"
+export WEZTERM_CONFIG_DIR="$DOTFILES/config/wezterm"
+export WEZTERM_CONFIG_FILE="$DOTFILES/config/wezterm/wezterm.lua"
+export LISTMAX="${LISTMAX:-100000}"
 export TS_SCRIPTS="${TS_SCRIPTS:-$DOTFILES/bin}"
 export ZSH="${ZSH:-$HOME/.zsh/plugins/ohmyzsh/ohmyzsh}"
 export PLUGINS_DIR="${PLUGINS_DIR:-$HOME/.zsh/plugins}"
