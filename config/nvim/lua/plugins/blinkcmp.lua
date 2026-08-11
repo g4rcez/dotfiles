@@ -1,4 +1,5 @@
 local enabledFtMarkdown = { "markdown", "json", "text", "txt", "gitcommit" }
+local denyList = { "markdown", "text", "txt" }
 
 return {
     {
@@ -111,7 +112,9 @@ return {
                 },
                 menu = {
                     min_width = 40,
-                    auto_show = true,
+                    auto_show = function(ctx)
+                        return not vim.tbl_contains(denyList, vim.bo[ctx.bufnr].filetype)
+                    end,
                     border = "single",
                     auto_show_delay_ms = 0,
                     draw = {

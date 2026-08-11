@@ -182,5 +182,8 @@
     "vscode-copilot-chat-code-block",
   ],
   "tailwindCSS.colorDecorators": true,
-  "tailwindCSS.codeLens": true,
+"tailwindCSS.codeLens": true,
+"[tailwindcss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+},
 }

@@ -93,7 +93,6 @@ typeset -a SOURCE=(
     "$HOME/.secrets.sh"
     "$HOME/.cargo/env"
     "$HOME/.railway/env"
-    "$HOME/.atuin/bin/env"
     "$HOME/.lmstudio/bin"
     "$DOTFILES/bin/fzf-git"
     "$DOTFILES/config/zsh/alias.sh"
@@ -137,12 +136,4 @@ if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
         _zsh_lazy_znap_source "hlissner/zsh-autopair" >/dev/null 2>&1 || true
     }
     add-zle-hook-widget line-init _zsh_lazy_load_autopair
-fi
-
-if [[ -o interactive && -t 0 && -t 1 && $+commands[atuin] -eq 1 ]]; then
-    if (($+functions[znap])); then
-        znap eval atuin-init 'atuin init zsh --disable-up-arrow --disable-ai'
-    else
-        eval "$(command atuin init zsh --disable-up-arrow --disable-ai)"
-    fi
 fi

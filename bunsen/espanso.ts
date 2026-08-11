@@ -61,6 +61,7 @@ espanso
     .insert("crazy", "🤪", "Emoji: Pensive face")
     .insert("think", "🤔", "Emoji: Thinking face")
     .insert("money", "🤑", "Emoji: Money face")
+    .insert("check", "✅", "Emoji: Check")
     .insert("idk", "'¯\\\\_(ツ)_/¯'", "Emoji: Shrug")
     .insert(
         "tnc",
