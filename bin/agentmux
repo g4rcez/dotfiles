@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR=$(CDPATH= cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+ROOT=$(CDPATH= cd -P -- "$SCRIPT_DIR/.." && pwd)
+MANIFEST="$ROOT/agentmux/Cargo.toml"
+LOCKFILE="$ROOT/agentmux/Cargo.lock"
+BINARY="$ROOT/agentmux/target/release/agentmux"
+
+if [[ ! -x "$BINARY" ]] \
+  || [[ "$MANIFEST" -nt "$BINARY" ]] \
+  || [[ "$LOCKFILE" -nt "$BINARY" ]] \
+  || [[ -n "$(find "$ROOT/agentmux/src" -type f -newer "$BINARY" -print -quit)" ]]; then
+  if ! command -v cargo >/dev/null 2>&1; then
+    printf 'agentmux: cargo is required to build the updated source\n' >&2
+    exit 1
+  fi
+  printf 'agentmux: building the local binary...\n' >&2
+  cargo build --quiet --release --manifest-path "$MANIFEST"
+fi
+
+exec "$BINARY" "$@"

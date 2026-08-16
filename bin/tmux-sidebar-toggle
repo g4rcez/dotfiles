@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# Toggle a right-docked sidebar pane showing the live agent list (herdr-style).
-# It is a real split, so the content reflows beside it; closing reclaims the space.
+# Toggle the agentmux compact dashboard as a right-docked tmux pane.
+set -euo pipefail
 
-sb=$(tmux list-panes -F '#{pane_id} #{@is_sidebar}' | awk '$2=="1"{print $1; exit}')
+SCRIPT_DIR=$(CDPATH= cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+SIDEBAR=$(tmux list-panes -F '#{pane_id} #{@is_agentmux_sidebar}' | awk '$2=="1" { print $1; exit }')
 
-if [ -n "$sb" ]; then
-  tmux kill-pane -t "$sb"
-else
-  tmux split-window -h -l 34 -c "#{pane_current_path}" "exec $HOME/dotfiles/bin/tmux-sidebar"
-  tmux set -p @is_sidebar 1
-  # leave focus IN the sidebar so j/k work immediately (no manual pane switch)
+if [[ -n "$SIDEBAR" ]]; then
+  tmux kill-pane -t "$SIDEBAR"
+  exit 0
 fi
+
+printf -v COMMAND 'exec %q sidebar' "$SCRIPT_DIR/agentmux"
+SIDEBAR=$(tmux split-window -f -h -l 36 -c '#{pane_current_path}' -P -F '#{pane_id}' "$COMMAND")
+tmux set-option -p -t "$SIDEBAR" @is_agentmux_sidebar 1

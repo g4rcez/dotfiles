@@ -31,6 +31,9 @@ export default defineConfig({
         "~/.config/mise": file("config/mise"),
         "~/.config/nvim": file("config/nvim"),
         "~/.config/tmux": file("config/tmux"),
+        "~/.pi/agent/extensions/agentmux-status.ts": file(
+            "config/pi/extensions/agentmux-status.ts",
+        ),
         "~/.config/yazi": file("config/yazi"),
         "~/.config/kitty": file("config/kitty"),
         "~/.config/vivid": file("config/vivid"),

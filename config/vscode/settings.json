@@ -29,7 +29,7 @@
   "editor.fontFamily": "JetBrainsMono Nerd Font",
   "editor.fontLigatures": true,
   "editor.lineHeight": 1.75,
-  "editor.fontSize": 17,
+  "editor.fontSize": 16,
   "editor.hideCursorInOverviewRuler": true,
   "editor.lineNumbers": "relative",
   "editor.linkedEditing": true,
