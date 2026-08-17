@@ -5,12 +5,12 @@ deno = "2.4.5"
 rust = "1.95.0"
 usage = "1.3.4"
 node = "24.18.0"
-python = "3.13.0"
 dotnet = "10.0.300"
-java = "corretto-23.0.1.8.1"
-"pipx:neovim-remote" = "2.5.1"
 "npm:pi-acp" = "0.0.31"
+"pipx:neovim-remote" = "2.5.1"
 "github:akitaonrails/ai-jail" = "1.5.0"
+pi = "0.84.2"
+codex = "0.147.0"
 
 [settings]
 jobs = 16

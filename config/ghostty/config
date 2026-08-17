@@ -1,6 +1,6 @@
 # vim: ft=ghostty
-font-size = 16
-adjust-cell-height = 60%
+font-size = 17
+adjust-cell-height = 55%
 font-thicken = true
 font-thicken-strength = 120
 window-padding-x = 2

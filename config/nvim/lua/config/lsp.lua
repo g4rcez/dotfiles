@@ -35,7 +35,7 @@ end
 vim.diagnostic.config {
     underline = false,
     severity_sort = true,
-    virtual_text = false,
+    virtual_text = true,
     update_in_insert = true,
     float = { border = "single", source = "if_many" },
     diagnostics = { underline = false, update_in_insert = true },
@@ -166,9 +166,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, opts)
 
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, ev.buf) then
-            vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-        end
+        -- if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, ev.buf) then
+        --     vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+        -- end
 
         if
             client
@@ -301,16 +301,16 @@ local typescript_settings = {
         variableTypes = { enabled = true },
         parameterTypes = { enabled = true },
         enumMemberValues = { enabled = true },
-        parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
         functionLikeReturnTypes = { enabled = true },
         propertyDeclarationTypes = { enabled = true },
+        parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
     },
     preferences = {
+        quotePreference = "auto",
+        useAliasesForRenames = true,
         importModuleSpecifier = "shortest",
         importModuleSpecifierEnding = "auto",
         jsxAttributeCompletionStyle = "auto",
-        quotePreference = "auto",
-        useAliasesForRenames = true,
     },
     suggest = {
         autoImports = true,
