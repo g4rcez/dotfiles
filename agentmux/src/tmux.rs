@@ -10,16 +10,9 @@ pub fn list_panes() -> Result<Vec<TmuxPane>> {
     Ok(output.lines().filter_map(parse_pane).collect())
 }
 
-pub fn capture_pane(pane_id: &str, lines: u16) -> String {
-    tmux_output(&[
-        "capture-pane",
-        "-p",
-        "-S",
-        &format!("-{lines}"),
-        "-t",
-        pane_id,
-    ])
-    .unwrap_or_else(|_| "Preview unavailable".to_owned())
+pub fn capture_pane(pane_id: &str) -> String {
+    tmux_output(&["capture-pane", "-p", "-t", pane_id])
+        .unwrap_or_else(|_| "Preview unavailable".to_owned())
 }
 
 pub fn current_session() -> Option<String> {

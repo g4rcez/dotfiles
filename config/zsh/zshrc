@@ -81,6 +81,7 @@ if (($+functions[znap])); then
     (($+commands[zoxide])) && znap eval zoxide-init 'zoxide init zsh'
     (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
     (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
+    (($+commands[herdr])) && znap eval herdr-completion 'herdr completion zsh'
     if [[ -o interactive && -t 0 && -t 1 ]]; then
         (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
         (($+commands[tv])) && znap eval tv-init 'tv init zsh'

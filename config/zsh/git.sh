@@ -103,6 +103,18 @@ function git.clone() {
     command git clone "git@github.com:$1"
 }
 
+function git.compare() {
+    emulate -L zsh
+    (($# == 2)) || { print -u2 -r -- "Usage: git.compare BRANCH1 BRANCH2"; return 2; }
+    command git log "$2..$1"
+}
+
+function git.restore() {
+    emulate -L zsh
+    (($# == 2)) || { print -u2 -r -- "Usage: git.restore BRANCH_NAME FILE_PATH"; return 2; }
+    command git restore --source "$1" -- "$2"
+}
+
 function commit.wip() {
     emulate -L zsh
     _git_require_repo || return
@@ -609,6 +621,18 @@ _git_branch_arg() {
     _arguments '1:branch:_git_local_and_remote_branches'
 }
 
+_git_compare_args() {
+    _arguments \
+        '1:branch:_git_local_and_remote_branches' \
+        '2:branch:_git_local_and_remote_branches'
+}
+
+_git_restore_args() {
+    _arguments \
+        '1:branch:_git_local_and_remote_branches' \
+        '2:file:_files'
+}
+
 _git_pr_numbers() {
     (( $+commands[gh] )) || return 1
 
@@ -648,6 +672,8 @@ _gcb() {
 }
 compdef _gcb gcb
 compdef _git_branch_arg switch mergewith rebasewith createpr newpr draft
+compdef _git_compare_args git.compare
+compdef _git_restore_args git.restore
 compdef _git_pr_arg prcommits prdesc
 compdef _gh_action gh.action
 compdef _git add=git-add checkout=git-switch pull=git-pull push=git-push pushf=git-push rebase=git-rebase gcf=git-config gundo=git-reset logs=git-log git-graph=git-log gitree=git-log gittree=git-log tags=git-tag gtv=git-tag

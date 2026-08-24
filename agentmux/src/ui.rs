@@ -136,7 +136,7 @@ impl App {
         if self.view == View::Dashboard {
             self.preview = self
                 .selected_agent()
-                .map(|agent| tmux::capture_pane(&agent.pane.pane_id, 120))
+                .map(|agent| tmux::capture_pane(&agent.pane.pane_id))
                 .unwrap_or_else(|| "No agent selected".to_owned());
         }
         self.last_preview_refresh = Instant::now();
