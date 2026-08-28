@@ -633,14 +633,67 @@ _git_restore_args() {
         '2:file:_files'
 }
 
+typeset -g _git_completion_cache_ttl=30
+typeset -g _git_completion_timeout=2
+typeset -g _git_pr_numbers_cache=''
+typeset -g _git_pr_numbers_cache_at=-1
+typeset -g _git_pr_numbers_cache_repo=''
+typeset -g _gh_workflow_files_cache=''
+typeset -g _gh_workflow_files_cache_at=-1
+typeset -g _gh_workflow_files_cache_repo=''
+
+_git_completion_cache_fresh() {
+    local cached_at="$1"
+    [[ "$cached_at" =~ '^[0-9]+$' ]] || return 1
+    (( SECONDS - cached_at < _git_completion_cache_ttl ))
+}
+
+_git_completion_gh() {
+    local timeout_command=''
+    if (($+commands[gtimeout])); then
+        timeout_command="${commands[gtimeout]}"
+    elif (($+commands[timeout])); then
+        timeout_command="${commands[timeout]}"
+    fi
+
+    if [[ -n "$timeout_command" ]]; then
+        command "$timeout_command" "$_git_completion_timeout" gh "$@"
+    else
+        command gh "$@"
+    fi
+}
+
+_git_completion_repository() {
+    command git rev-parse --show-toplevel 2>/dev/null
+}
+
 _git_pr_numbers() {
     (( $+commands[gh] )) || return 1
+
+    local repository
+    repository="$(_git_completion_repository)" || return 1
+    if [[ "$repository" != "$_git_pr_numbers_cache_repo" ]]; then
+        _git_pr_numbers_cache=''
+        _git_pr_numbers_cache_at=-1
+        _git_pr_numbers_cache_repo="$repository"
+    fi
+
+    local output
+    if _git_completion_cache_fresh "$_git_pr_numbers_cache_at"; then
+        output="$_git_pr_numbers_cache"
+    elif output="$(_git_completion_gh pr list --limit 50 --json number,title --jq '.[] | "\(.number):#\(.number) \(.title)"' 2>/dev/null)"; then
+        _git_pr_numbers_cache="$output"
+        _git_pr_numbers_cache_at="$SECONDS"
+    else
+        _git_pr_numbers_cache_at="$SECONDS"
+        output="$_git_pr_numbers_cache"
+    fi
 
     local -a prs=()
     local pr
     while IFS= read -r pr; do
         [[ -n "$pr" ]] && prs+=("$pr")
-    done < <(gh pr list --json number,title --jq '.[] | "\(.number):#\(.number) \(.title)"' 2>/dev/null)
+    done <<< "$output"
     _describe 'pull request' prs
 }
 
@@ -653,11 +706,30 @@ _git_pr_arg() {
 _gh_workflow_files() {
     (( $+commands[gh] )) || return 1
 
+    local repository
+    repository="$(_git_completion_repository)" || return 1
+    if [[ "$repository" != "$_gh_workflow_files_cache_repo" ]]; then
+        _gh_workflow_files_cache=''
+        _gh_workflow_files_cache_at=-1
+        _gh_workflow_files_cache_repo="$repository"
+    fi
+
+    local output
+    if _git_completion_cache_fresh "$_gh_workflow_files_cache_at"; then
+        output="$_gh_workflow_files_cache"
+    elif output="$(_git_completion_gh workflow list --limit 50 --json path --jq '.[] | .path | sub("^.github/workflows/"; "") | sub("\\.ya?ml$"; "")' 2>/dev/null)"; then
+        _gh_workflow_files_cache="$output"
+        _gh_workflow_files_cache_at="$SECONDS"
+    else
+        _gh_workflow_files_cache_at="$SECONDS"
+        output="$_gh_workflow_files_cache"
+    fi
+
     local -a workflows=()
     local workflow
     while IFS= read -r workflow; do
         [[ -n "$workflow" ]] && workflows+=("$workflow")
-    done < <(gh workflow list --json path --jq '.[] | .path | sub("^.github/workflows/"; "") | sub("\\.ya?ml$"; "")' 2>/dev/null)
+    done <<< "$output"
     _values 'workflow' "${workflows[@]}"
 }
 

@@ -9,7 +9,7 @@ dotnet = "10.0.300"
 "npm:pi-acp" = "0.0.31"
 "pipx:neovim-remote" = "2.5.1"
 "github:akitaonrails/ai-jail" = "1.5.0"
-pi = "0.84.2"
+pi = "0.84.3"
 codex = "0.147.0"
 
 [settings]

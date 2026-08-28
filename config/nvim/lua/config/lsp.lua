@@ -50,7 +50,15 @@ vim.diagnostic.config {
 }
 
 vim.filetype.add {
-    extension = { mdx = "mdx", http = "http", rasi = "rasi", rofi = "rasi", wofi = "rasi", vifmrc = "vim" },
+    extension = {
+        mdx = "mdx",
+        http = "http",
+        rasi = "rasi",
+        rofi = "rasi",
+        wofi = "rasi",
+        vifmrc = "vim",
+        txt = "markdown",
+    },
     pattern = {
         ["%.env%.[%w_.-]+"] = "sh",
         [".*/mako/config"] = "dosini",
