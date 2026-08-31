@@ -1,5 +1,5 @@
 diff --git a/ftplugin/pi-prompt.lua b/ftplugin/pi-prompt.lua
-index df4b2cb..9f11d7e 100644
+index df4b2cb..62b704e 100644
 --- a/ftplugin/pi-prompt.lua
 +++ b/ftplugin/pi-prompt.lua
 @@ -47,6 +47,7 @@
@@ -96,11 +96,151 @@ index df4b2cb..9f11d7e 100644
  end
  
  -- Autosave + bridge teardown on exit (gated on config; default true — PRD §7.6, §11). The
+@@ -192,4 +199,11 @@ end
+ 
+ -- BufWritePre: intentionally NOT overridden. The pi temp file is writable, so the default
+ -- `:w` works (PRD §7.6 "no-op normal write" = let the default proceed). Registering a no-op
+--- BufWritePre would be pointless and could risk breaking `:w`. No autocmd registered.
+\ No newline at end of file
++-- BufWritePre would be pointless and could risk breaking `:w`. No autocmd registered.
++
++-- Keep pi-prompt as the filetype marker for bridge completion, while using Markdown syntax
++-- highlighting for the prompt buffer. The syntaxset FileType autocmd runs after ftplugins,
++-- so defer this assignment until all FileType handlers have completed.
++vim.schedule(function()
++  if vim.api.nvim_buf_is_valid(buf) then vim.bo[buf].syntax = "markdown" end
++end)
+\ No newline at end of file
+diff --git a/lua/pi-bridge/blink_source.lua b/lua/pi-bridge/blink_source.lua
+index f7c5a62..fca36b0 100644
+--- a/lua/pi-bridge/blink_source.lua
++++ b/lua/pi-bridge/blink_source.lua
+@@ -149,13 +149,14 @@ function M.new(opts) -- luacheck: ignore opts (accepted for blink's contract; un
+ end
+ 
+ --- The trigger characters that start a pi completion context (blink calls this to decide
+---- when to fire `get_completions`). Returns pi's two trigger chars: `/` (slash commands +
+---- `skill:` templates) and `@` (file mentions + paths). `#` (the attachment context
+---- completion.lua's `is_attachment_context` also matches) is OPTIONAL — pi's TUI does not
+---- treat it as a hard trigger, so we omit it to match the TUI's menu-pop timing.
++--- when to fire `get_completions`). Returns pi's three custom trigger chars: `/` (slash
++--- commands + `skill:` templates), `@` (file mentions + paths), and `$` (inline agents /
++--- skills supplied by the fzf extension). `#` (the attachment context completion.lua's
++--- `is_attachment_context` also matches) is OPTIONAL — pi's TUI does not treat it as a hard
++--- trigger, so we omit it to match the TUI's menu-pop timing.
+ ---@return string[] chars The trigger characters.
+ function M:get_trigger_characters()
+-  return { "/", "@" }
++  return { "/", "@", "$" }
+ end
+ 
+ --- Source-level dormancy gate — the twin of `init.lua`'s VimEnter activation gate. Returns
+@@ -268,11 +269,11 @@ end
+ 
+ --- The get_completions handler (blink calls this on a trigger char / typing). Reads the
+ --- buffer + cursor, converts nvim→pi via coords, issues `getSuggestions` over the bridge
+---- with `{lines, cursorLine, cursorCol, force=false}` (EXACT shape completion.lua uses),
+---- superseds (two-layer), maps pi items → blink items, and calls `callback` ONCE with
+---- `{is_incomplete_forward=false, is_incomplete_backward=false, items}`. Error/timeout/
+---- cancel → `callback()` (nil). NEVER throws; NEVER hangs blink (callback always called
+---- once). Do NOT wrap `callback` in vim.schedule_wrap (the bridge cb already runs on the
++--- with `{lines, cursorLine, cursorCol, force}` (the path-context request uses `force=true`,
++--- matching completion.lua), supersedes (two-layer), maps pi items → blink items, and calls
++--- `callback` ONCE with `{is_incomplete_forward=false, is_incomplete_backward=false, items}`.
++--- Error/timeout/cancel → `callback()` (nil). NEVER throws; NEVER hangs blink (callback always
++--- called once). Do NOT wrap `callback` in vim.schedule_wrap (the bridge cb already runs on the
+ --- main loop).
+ ---
+ ---@param ctx      table   The blink context (`ctx.bufnr`, `ctx.id`, `ctx.bounds`, `ctx.line`, …).
+@@ -296,6 +297,15 @@ function M:get_completions(ctx, callback)
+   -- CONVERT nvim→pi (S29 — THE centralized seam). `pi.lines` is the SAME reference as
+   -- `lines`, so the result drops straight into the RPC params.
+   local pi_coords = require("pi-bridge.coords").nvim_to_pi_coords(lines, cur[1], cur[2])
++  -- Mirror completion.lua's path-context force flag. Pi's provider needs force=true for
++  -- file mentions so `@` requests use the file/path branch instead of the slash-only gate.
++  local force = false
++  pcall(function()
++    local completion = require("pi-bridge.completion")
++    local line = lines[cur[1]] or ""
++    local before_cursor = line:sub(1, cur[2])
++    force = completion.is_attachment_context(before_cursor) == true
++  end)
+   -- SUPERSEDE layer 1 (cancel prev in-flight — optimization; frees the round-trip).
+   if state.inflight_id and type(bridge.cancel) == "function" then
+     pcall(bridge.cancel, state.inflight_id)
+@@ -304,7 +314,7 @@ function M:get_completions(ctx, callback)
+   -- SUPERSEDE layer 2 (ctx.id guard — the CORRECTNESS boundary; captured in the cb closure).
+   local my_id = ctx and ctx.id
+   state.current_id = my_id
+-  local params = vim.tbl_extend("keep", pi_coords, { force = false }) -- {lines,cursorLine,cursorCol,force=false}
++  local params = vim.tbl_extend("keep", pi_coords, { force = force }) -- {lines,cursorLine,cursorCol,force}
+   -- ISSUE (pcall so a bridge bug never throws out of blink's pipeline).
+   local ok, rid = pcall(bridge.request, "getSuggestions", params, function(err, result)
+     if my_id ~= state.current_id then return end     -- STALE (superseded) — drop, touch nothing
+diff --git a/tests/blink_source_spec.lua b/tests/blink_source_spec.lua
+index 3881a58..26a475f 100644
+--- a/tests/blink_source_spec.lua
++++ b/tests/blink_source_spec.lua
+@@ -111,14 +111,15 @@ describe("pi-bridge.blink_source", function()
+     assert.is_not_nil(blink.new({ name = "pi", module = "pi-bridge.blink_source" }))
+   end)
+ 
+-  -- (2) get_trigger_characters contains "/" + "@"
+-  it("get_trigger_characters() contains '/' and '@'", function()
++  -- (2) get_trigger_characters contains "/" + "@" + "$"
++  it("get_trigger_characters() contains '/', '@', and '$'", function()
+     local src = blink.new()
+     local chars = src:get_trigger_characters()
+     local has = {}
+     for _, c in ipairs(chars) do has[c] = true end
+     assert.is_true(has["/"], "must contain '/'")
+     assert.is_true(has["@"], "must contain '@'")
++    assert.is_true(has["$"], "must contain '$'")
+   end)
+ 
+   -- (3) enabled() is true in a pi-prompt buffer, false otherwise
+@@ -193,6 +194,23 @@ describe("pi-bridge.blink_source", function()
+     vim.api.nvim_buf_delete(buf, { force = true })
+   end)
+ 
++  it("sets force=true for @ file mentions", function()
++    local fake = fake_bridge()
++    pi.bridge = fake
++    local src = blink.new()
++    local buf = vim.api.nvim_create_buf(true, false)
++    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "@sr" })
++    local win = vim.api.nvim_get_current_win()
++    vim.api.nvim_win_set_buf(win, buf)
++    vim.wo[win].virtualedit = "onemore"
++    vim.api.nvim_win_set_cursor(win, { 1, 3 })
++
++    src:get_completions(make_ctx(buf, 1), function() end)
++    assert.are.equals(1, #fake.requests, "must issue exactly 1 getSuggestions")
++    assert.is_true(fake.requests[1].params.force, "@ file completion must use the forced path branch")
++    vim.api.nvim_buf_delete(buf, { force = true })
++  end)
++
+   -- (4b) item mapping: @file → File kind; directory → Folder kind; else → Text kind
+   describe("item mapping kind heuristic", function()
+     local function kind_for(value)
 diff --git a/tests/ftplugin_spec.lua b/tests/ftplugin_spec.lua
-index 75fdd58..b030c00 100644
+index 75fdd58..ec9b967 100644
 --- a/tests/ftplugin_spec.lua
 +++ b/tests/ftplugin_spec.lua
-@@ -59,6 +59,23 @@ describe("pi-bridge ftplugin/pi-prompt", function()
+@@ -22,9 +22,11 @@ describe("pi-bridge ftplugin/pi-prompt", function()
+     return b
+   end
+ 
+-  it("is auto-sourced on filetype=pi-prompt (textwidth applied)", function()
++  it("is auto-sourced on filetype=pi-prompt (textwidth and markdown syntax applied)", function()
+     local b = fresh_prompt_buf()
+     assert.are.equals(0, vim.bo[b].textwidth)
++    vim.wait(100, function() return vim.bo[b].syntax == "markdown" end, 5)
++    assert.are.equals("markdown", vim.bo[b].syntax)
+   end)
+ 
+   it("removes the 't' flag from formatoptions", function()
+@@ -59,6 +61,23 @@ describe("pi-bridge ftplugin/pi-prompt", function()
      end
    end)
  
