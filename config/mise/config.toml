@@ -9,8 +9,9 @@ dotnet = "10.0.300"
 "npm:pi-acp" = "0.0.31"
 "pipx:neovim-remote" = "2.5.1"
 "github:akitaonrails/ai-jail" = "1.5.0"
-pi = "0.84.3"
+pi = "0.84.4"
 codex = "0.147.0"
+wrangler = { version = "4.128.0", allow_builds = ["esbuild", "sharp", "workerd"] }
 
 [settings]
 jobs = 16

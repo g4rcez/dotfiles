@@ -178,11 +178,10 @@ function commitwithai() {
         COMMIT_MESSAGE="$(<"$OUT_FILE")"
         command rm -f -- "$OUT_FILE" "$ERR_FILE"
     elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
-        # Pi's Responses API provider needs a single explicit user message; do
-        # not split the diff into stdin and the instructions into argv.
-        local REQUEST="${PROMPT}"$'\n\n'"${DIFF}"
+        # Keep the diff on stdin so large changes do not exceed the OS argument-size limit.
         if ! COMMIT_MESSAGE=$(
-            ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files "$REQUEST"
+            printf '%s\n\n%s\n' "$PROMPT" "$DIFF" |
+                ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files
         ); then
             print -u2 -r -- "commitwithai: AI query failed"
             return 1
@@ -393,7 +392,7 @@ function tag() {
     (($# == 1)) || { print -u2 -r -- "Usage: tag TAG"; return 2; }
     _git_require_repo || return
     command git tag "$1" || return $?
-    print -r -- "created tag $1; push it explicitly with: git push origin $1"
+    command git push origin "$1" || return $?
 }
 
 function actionWith() {

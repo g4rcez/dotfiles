@@ -1,5 +1,4 @@
 import { homedir } from 'node:os'
-import { resolve } from 'node:path'
 import { writeFile } from '../../utils/fs.ts'
 import {
   getShellConfigPath,
@@ -24,7 +23,6 @@ function generateExports(
 
   // Mark as loaded to prevent duplicate sourcing
   lines.push('export BUNSEN_ENV_LOADED="true"')
-
 
   const home = homedir()
   for (const [key, value] of Object.entries(variables)) {

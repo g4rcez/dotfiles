@@ -30,7 +30,9 @@ export async function applyCommand(options: ApplyOptions) {
       configPath: options.config,
       profile: options.profile,
     })
-    const profileInfo = loadedConfig.context.profile ? ` (profile: ${loadedConfig.context.profile})` : ''
+    const profileInfo = loadedConfig.context.profile
+      ? ` (profile: ${loadedConfig.context.profile})`
+      : ''
     spinner.succeed(`Configuration loaded${profileInfo}`)
   } catch (error) {
     logger.error(error)
@@ -95,7 +97,11 @@ export async function applyCommand(options: ApplyOptions) {
   }
 
   // Apply symlinks
-  if ((applyAll || options.symlinksOnly) && config.symlinks && Object.keys(config.symlinks).length > 0) {
+  if (
+    (applyAll || options.symlinksOnly) &&
+    config.symlinks &&
+    Object.keys(config.symlinks).length > 0
+  ) {
     spinner.start('Creating symlinks...')
     const normalized = normalizeSymlinks(config.symlinks)
     let successCount = 0
@@ -123,18 +129,25 @@ export async function applyCommand(options: ApplyOptions) {
 
   // Apply env
   if ((applyAll || options.envOnly) && (config.env || context.profile)) {
-    spinner.start(config.env ? 'Generating environment variables...' : 'Setting profile environment variable...')
+    spinner.start(
+      config.env ? 'Generating environment variables...' : 'Setting profile environment variable...'
+    )
     try {
       const envConfig = config.env || {
         shells: ['zsh', 'bash'],
         variables: {},
       }
-      // @ts-expect-error - EnvConfig vs minimal config
       await generateEnvConfig(envConfig, { dryRun, profileName: context.profile || undefined })
       if (dryRun) {
-        spinner.info(config.env ? '[DRY RUN] Would generate env config' : '[DRY RUN] Would set profile environment variable')
+        spinner.info(
+          config.env
+            ? '[DRY RUN] Would generate env config'
+            : '[DRY RUN] Would set profile environment variable'
+        )
       } else {
-        spinner.succeed(config.env ? 'Generated environment variables' : 'Set profile environment variable')
+        spinner.succeed(
+          config.env ? 'Generated environment variables' : 'Set profile environment variable'
+        )
       }
     } catch (error) {
       spinner.fail(config.env ? 'Failed to generate env config' : 'Failed to set BUNSEN_PROFILE')
