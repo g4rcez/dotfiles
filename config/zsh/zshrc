@@ -2,10 +2,6 @@
 ## loader contract
 # Prefer an explicitly configured checkout, but keep ~/.zshrc symlinks and direct
 # sources relocatable by deriving the repository root from this file's path.
-## exports
-source "$DOTFILES/config/zsh/exports.sh"
-source "$DOTFILES/config/zsh/utils.sh"
-safeImport "$HOME/.local-exports.sh"
 typeset -g _zshrc_source="${(%):-%N}"
 export WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\//[\/]/ '
 export WORDCHARS="${WORDCHARS/\//}"
@@ -21,6 +17,11 @@ else
 fi
 export TS_SCRIPTS="${TS_SCRIPTS:-$DOTFILES/bin}"
 unset _zshrc_source _zshrc_root
+
+## exports
+source "$DOTFILES/config/zsh/exports.sh"
+source "$DOTFILES/config/zsh/utils.sh"
+safeImport "$HOME/.local-exports.sh"
 
 if [[ -o interactive && -t 1 ]]; then
     _zsh_restore_tty_output() {
