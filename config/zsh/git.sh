@@ -42,7 +42,7 @@ function git_develop_branch() {
             return
         fi
     done
-    echo develop
+    echo "develop"
 }
 
 function getBranchFzf() {
@@ -55,17 +55,6 @@ function countCommits() {
     gh pr view --json commits | jq '.commits|length' | tr -d "\n"
 }
 
-#############################################################################################################################
-## alias
-alias pushf="git push --force-with-lease"
-alias add='git add'
-alias checkout='git switch'
-alias gcd='git checkout $(git_develop_branch)'
-alias gcf='git config --list'
-alias gcm='git checkout $(git_main_branch)'
-alias gitree='git-graph'
-alias gittree='git-graph'
-alias gst='git status'
 function _forgit_lazy_load() {
     [[ -n "${functions[forgit::log]:-}" ]] && return 0
     _zsh_lazy_znap_source "wfxr/forgit"
@@ -75,19 +64,30 @@ function git.log() {
     _forgit_lazy_load && forgit::log "$@"
 }
 
+function gtv() {
+    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | command grep '.'
+}
+
+#############################################################################################################################
+## alias
+alias pushf="git push --force-with-lease"
+alias add='git add'
+alias checkout='git switch'
+alias gcd='git checkout $(git_develop_branch)'
+alias git.config='git config --list'
+alias gcm='git checkout $(git_main_branch)'
+alias gitree='git-graph'
+alias gittree='git-graph'
+alias gst='git status'
 alias pull='git pull'
 alias push='git push -u'
 alias rebase='git rebase'
 alias tags='git tag | sort -V'
 alias gundo='git reset --soft HEAD~1'
-
-function gtv() {
-    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | command grep '.'
-}
 #############################################################################################################################
 ## github-cli
-alias ghc='gh pr checkout'
-alias ghl='gh pr list'
+alias ghc='PAGER=less gh pr checkout'
+alias ghl='PAGER=less gh pr list'
 alias gdash="gh dash"
 #############################################################################################################################
 ## git functions
@@ -129,9 +129,9 @@ function _commit_message() {
     emulate -L zsh
     (($# == 1)) || { print -u2 -r -- "git helper: commit message is required"; return 2; }
     _git_require_repo || return
-    command git add -A . || return $?
-    command git commit -S -m "$1"
-    command git push
+    git add .
+    git commit -S -m "$1"
+    git push
 }
 
 function commitwithai() {

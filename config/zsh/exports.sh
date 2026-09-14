@@ -34,21 +34,21 @@ typeset -gU path PATH
 typeset -a _path_entries=(
     "/usr/local/bin"
     "/opt/homebrew/bin"
-    "$PNPM_HOME"
-    "$PNPM_HOME/bin"
-    "$GOPATH/bin"
+    "${PNPM_HOME}"
+    "${PNPM_HOME}/bin"
+    "${GOPATH}/bin"
     "${GOROOT:+$GOROOT/bin}"
     "$HOME/tools"
     "$HOME/.dotnet"
     "$HOME/.dotnet/tools"
     "$HOME/.bun/bin"
     "$HOME/.cargo/bin"
-    "$DOTFILES/bin"
     "$HOME/.local/bin"
     "$HOME/.grok/bin"
     "$HOME/.local/share"
     "$HOME/.opencode/bin"
     "$HOME/.local/share/bin"
+    "$DOTFILES/bin"
 )
 for _path_entry in "${_path_entries[@]}"; do
     [[ -n "$_path_entry" && -d "$_path_entry" ]] && path+=("$_path_entry")
@@ -60,7 +60,7 @@ export PATH
 ## Important exports
 export WEZTERM_CONFIG_DIR="$DOTFILES/config/wezterm"
 export WEZTERM_CONFIG_FILE="$DOTFILES/config/wezterm/wezterm.lua"
-export LISTMAX="${LISTMAX:-100000}"
+export LISTMAX="${LISTMAX:-10000}"
 export TS_SCRIPTS="${TS_SCRIPTS:-$DOTFILES/bin}"
 export ZSH="${ZSH:-$HOME/.zsh/plugins/ohmyzsh/ohmyzsh}"
 export PLUGINS_DIR="${PLUGINS_DIR:-$HOME/.zsh/plugins}"
@@ -123,12 +123,11 @@ export ZSH_TMUX_FIXTERM="${ZSH_TMUX_FIXTERM:-true}"
 ## Auto notify plugin
 export AUTO_NOTIFY_BODY="${AUTO_NOTIFY_BODY:-Completed in %elapseds - Exit code %exit_code}"
 export AUTO_NOTIFY_EXPIRE_TIME="${AUTO_NOTIFY_EXPIRE_TIME:-5000}"
-if [[ -z "${AUTO_NOTIFY_IGNORE+x}" ]]; then
-    export AUTO_NOTIFY_IGNORE=(vim ssh st fzf nvim mvim neovim zshrc zellij)
-fi
 export AUTO_NOTIFY_THRESHOLD="${AUTO_NOTIFY_THRESHOLD:-10000}"
 export AUTO_NOTIFY_TITLE="${AUTO_NOTIFY_TITLE:-%command - Finished}"
-
+if [[ -z "${AUTO_NOTIFY_IGNORE+x}" ]]; then
+    export AUTO_NOTIFY_IGNORE=(vim ssh st fzf nvim mvim zshrc zellij tmux)
+fi
 #####################################################################################
 ## Cat + Bat + Less + Man
 export BAT_PAGER="${BAT_PAGER:-less}"
@@ -163,7 +162,6 @@ function _zsh_configure_podman_host() {
     _DOTFILES_PODMAN_HOST_CHECKED=1
     [[ -n "${DOCKER_HOST:-}" ]] && return 0
     (($+commands[podman])) || return 0
-
     local podman_socket
     podman_socket="$(command podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}' 2>/dev/null)" || return 0
     [[ -S "$podman_socket" ]] && export DOCKER_HOST="unix://$podman_socket"
@@ -188,5 +186,3 @@ export AI_QUERY_COMMAND="${AI_QUERY_COMMAND:-${AI_COMMAND_PROMPT} -p}"
 if [[ -z "${AICOMMIT_EXCLUDES+x}" ]]; then
     export AICOMMIT_EXCLUDES=(package-lock.json pnpm-lock.yaml yarn.lock '*.lock')
 fi
-unset BUN_CONFIG_VERBOSE_FETCH
-[[ -r "$DOTFILES/config/zsh/ls.sh" ]] && source "$DOTFILES/config/zsh/ls.sh"

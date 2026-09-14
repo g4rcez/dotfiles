@@ -1,6 +1,8 @@
 ---@class lazyvim.util.treesitter
 local utils = {}
 
+vim.treesitter.language.register("markdown", { "prompt-pi", "pi-prompt" })
+
 utils._installed = nil ---@type table<string,boolean>?
 utils._queries = {} ---@type table<string,boolean>
 

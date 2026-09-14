@@ -57,26 +57,24 @@ function fishify() {
 export FZF_COLORS="--color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator='─' --scrollbar=\| --info=right"
 
 function safeImport() {
-    if [[ -e "$1" ]]; then
-        source "$1"
+    local src="${1}"
+    if [[ -e "$src" ]]; then
+        source "$src"
     fi
 }
 
 function zsh:install() {
     emulate -L zsh
-
     local znap_dir="${1:-${HOME}/.znap}"
     local entrypoint="$znap_dir/znap.zsh"
     if [[ -r "$entrypoint" ]]; then
         print -r -- "znap is already installed: $znap_dir"
         return 0
     fi
-
     if ! (($ + commands[git])); then
         print -u2 -r -- "zsh:install: git is required to install znap"
         return 1
     fi
-
     command git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$znap_dir" || return $?
     print -r -- "installed znap: $znap_dir"
 }
@@ -94,9 +92,7 @@ function _zsh_config_root() {
 
 function _zsh_config_sources() {
     emulate -L zsh
-
     local root="${1:-$(_zsh_config_root)}"
-
     [[ -f "$root/zshrc" ]] && print -r -- "$root/zshrc"
     command find "$root" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.zsh' \) -print 2>/dev/null | command sort
     if [[ -d "$root/completion" ]]; then
@@ -140,21 +136,17 @@ EOF
 function zsh:doctor() {
     emulate -L zsh
     setopt extended_glob null_glob
-
     local root="$(_zsh_config_root)"
     local missing=0
     local warnings=0
     local entry cmd desc file
-
     print -r -- "zsh doctor"
     print -r -- "config: $root"
     print -r -- ""
-
     if [[ ! -d "$root" ]]; then
         print -u2 -r -- "error: config directory not found: $root"
         return 1
     fi
-
     print -r -- "required startup commands"
     local -a required_tools=(
         "git|plugin and Git helper support"
@@ -169,7 +161,6 @@ function zsh:doctor() {
             ((missing++))
         fi
     done
-
     print -r -- ""
     print -r -- "optional startup commands"
     local -a optional_tools=(
@@ -192,7 +183,6 @@ function zsh:doctor() {
             print -r -- "  skip $cmd — $desc"
         fi
     done
-
     print -r -- ""
     print -r -- "plugin manager"
     local znap_entrypoint="${ZNAP_ENTRYPOINT:-$HOME/.znap/znap.zsh}"
@@ -202,7 +192,6 @@ function zsh:doctor() {
         print -r -- "  warn znap — not installed; run zsh:install when plugin support is needed"
         ((warnings++))
     fi
-
     print -r -- ""
     print -r -- "optional helper commands"
     local -a helper_tools=(
@@ -228,7 +217,6 @@ function zsh:doctor() {
             ((warnings++))
         fi
     done
-
     print -r -- ""
     print -r -- "sourced files (required)"
     local -a required_sources=(
@@ -246,7 +234,6 @@ function zsh:doctor() {
             ((missing++))
         fi
     done
-
     print -r -- ""
     print -r -- "sourced files (optional integrations)"
     local -a optional_sources=(

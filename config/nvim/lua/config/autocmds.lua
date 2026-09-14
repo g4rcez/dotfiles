@@ -9,6 +9,34 @@ vim.api.nvim_create_user_command("CodeActionsOnSaveToggle", function()
     vim.notify("Code actions on save: " .. (vim.g.code_actions_on_save and "enabled" or "disabled"))
 end, { desc = "Toggle format + organize imports on save" })
 
+-- Pi uses a temporary `pi-extension-editor-*.md` file for Ctrl+G; keep the legacy names too.
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+    group = augroup "pi_prompt_filetype",
+    pattern = { "prompt.md", "pi-extension-editor-*.md", "pi-editor-*.md", "pi-editor-*.pi.md" },
+    callback = function(event)
+        vim.bo[event.buf].filetype = "prompt-pi"
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = augroup "pi_prompt",
+    pattern = { "prompt-pi", "pi-prompt" },
+    callback = function(event)
+        vim.bo[event.buf].syntax = "markdown"
+        vim.bo[event.buf].formatoptions = (vim.bo[event.buf].formatoptions or ""):gsub("t", "")
+        vim.bo[event.buf].textwidth = 0
+
+        local win = vim.fn.bufwinid(event.buf)
+        if win ~= -1 then
+            vim.wo[win].wrap = true
+            vim.wo[win].conceallevel = 0
+            vim.wo[win].spell = false
+        end
+
+        pcall(vim.treesitter.start, event.buf, "markdown")
+    end,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
     group = augroup "code_actions_on_save",
     pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.vue" },

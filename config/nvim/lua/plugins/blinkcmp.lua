@@ -1,4 +1,4 @@
-local enabledFtMarkdown = { "markdown", "json", "text", "txt", "gitcommit" }
+local enabledFtMarkdown = { "markdown", "json", "text", "txt", "gitcommit", "prompt-pi", "pi-prompt" }
 local denyList = { "markdown", "text", "txt" }
 
 return {
@@ -150,7 +150,8 @@ return {
             sources = {
                 default = { "lsp", "contextual", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
-                    ["pi-prompt"] = { "pi_bridge" },
+                    ["pi-prompt"] = { "pi_resources" },
+                    ["prompt-pi"] = { inherit_defaults = true, "pi_resources", "filemention" },
                     lua = { inherit_defaults = true, "lazydev" },
                     json = { inherit_defaults = true, "git", "filemention" },
                     txt = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
@@ -159,7 +160,12 @@ return {
                     gitcommit = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
                 },
                 providers = {
-                    pi_bridge = { name = "Pi", module = "pi-bridge.blink_source", async = true },
+                    pi_resources = {
+                        name = "Pi",
+                        module = "config.pi_resources",
+                        max_items = 20,
+                        min_keyword_length = 0,
+                    },
                     contextual = {
                         name = "Context",
                         module = "config.contextual_completion",
@@ -173,7 +179,7 @@ return {
                         name = "Git",
                         opts = {
                             commit = {
-                                triggers = { '' },
+                                triggers = { "" },
                             },
                         },
                     },
