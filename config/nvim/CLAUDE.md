@@ -33,13 +33,14 @@ The configuration loads in this order:
 5. `lua/config/autocmds.lua` - Autocommands for various events
 6. `lua/config/keymaps.lua` - Global keymaps using custom binding helper
 7. `lua/config/lsp.lua` - LSP server configurations using the new vim.lsp.config API
+8. `lua/config/diagnostics.lua` - Custom diagnostics panel setup in native Neovim mode
 
 ### Key Architectural Patterns
 
 **LSP Configuration**: This config uses Neovim's new built-in LSP configuration pattern (`vim.lsp.config` and `vim.lsp.enable`) rather than lspconfig for base server setup. The configuration is split between:
 
-- `lua/config/lsp.lua` - Server-specific configs (capabilities, settings, filetypes)
-- `lua/plugins/nvimlspconfig.lua` - LspAttach autocommands, keymaps, and Mason integration
+- `lua/config/lsp.lua` - Server-specific configs, LSP attach keymaps, capabilities, settings, and filetypes
+- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
 
 **TypeScript/Deno Strategy**: The config uses `tsgo` for standard JavaScript/TypeScript projects and `denols` for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 
@@ -48,11 +49,12 @@ The configuration loads in this order:
 **Plugin Organization**: Plugins are modular and organized by function in `lua/plugins/`:
 
 - `blinkcmp.lua` - Completion engine (blink.cmp) with LSP, snippets, and various sources
-- `nvimlspconfig.lua` - LSP attach handlers and Mason integration
+- `nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
 - `snacks.nvim` - Multi-purpose plugin providing picker (file/grep), terminal, git integration, notifications
 - `format.lua` - Formatting with conform.nvim and linting with nvim-lint
 - `treesitter.lua` - Syntax highlighting and parsing
-- `ui.lua` - UI components (heirline statusline, Tokyo Night theme, noice)
+- `ui.lua` - UI components (Tokyo Night theme and noice)
+- `lualine.lua` - Lualine statusline
 - `git.lua` - Git integration (gitsigns)
 - `code.lua` - Code editing helpers (autopairs, todo-comments, emmet, etc.)
 
@@ -114,12 +116,21 @@ Conform and nvim-lint are configured with the following tools (ensure they're in
 
 - stylua (Lua formatting)
 - prettier (JS/TS/JSON/etc formatting)
-- rustywind (Tailwind class sorting)
+- oxfmt (Oxlint projects)
+- shfmt (shell formatting)
+- isort and black (Python formatting)
 - hadolint (Dockerfile linting)
 - yamllint (YAML linting)
 - stylelint (CSS/SCSS linting)
-- dotenv_linter (.env file linting)
-- codespell (spell checking)
+
+Oxlint and ESLint are project-aware LSP linters. Oxlint takes precedence when both configuration files exist.
+
+## Keymap ownership
+
+- `<leader>p` is the Snacks project palette; Yanky history is `<leader>py`.
+- Snacks owns `<leader>bd`; tiny-code-action owns `<leader>ca` in LSP buffers.
+- Mini.diff owns `<leader>g=`; Treesitter owns `[[`/`]]` textobject movement.
+- Mini/LSP owns `[d`/`]d` diagnostic navigation.
 
 ## Key Differences from Standard LazyVim
 

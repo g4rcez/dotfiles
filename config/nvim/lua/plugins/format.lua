@@ -1,11 +1,7 @@
-local oxc_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" }
-
-local function has_oxc(bufnr)
-    return vim.fs.root(bufnr, oxc_markers) ~= nil
-end
+local javascript_tools = require "config.javascript_tools"
 
 local function is_oxc(bufnr)
-    if has_oxc(bufnr) then
+    if javascript_tools.oxlint_root(bufnr) then
         return { "oxfmt" }
     end
     return { "prettier" }
@@ -40,9 +36,8 @@ return {
             format_on_save = false,
             notify_on_error = false,
             formatters = {
-                oxfmt = { trailingComma = "none" },
-                prettier = { trailingComma = "none" },
-                prettierd = { trailingComma = "none" },
+                oxfmt = { append_args = { "--trailing-comma", "none" } },
+                prettier = { append_args = { "--trailing-comma", "none" } },
                 shfmt = { append_args = { "-i", "4" } },
             },
             formatters_by_ft = {

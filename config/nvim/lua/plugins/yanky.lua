@@ -6,7 +6,7 @@ return {
         cond = not require("config.vscode").isVscode(),
         keys = {
             {
-                "<leader>p",
+                "<leader>py",
                 function()
                     require("snacks").picker.yanky()
                 end,

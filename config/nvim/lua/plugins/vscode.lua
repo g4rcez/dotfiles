@@ -64,5 +64,4 @@ return vscode.disable_in_vscode {
     "nvim-treesitter/nvim-treesitter-textobjects",
     "nvim-treesitter/nvim-treesitter-context",
     "nvim-treesitter/nvim-treesitter",
-    "nvim-mini/mini.pairs",
 }

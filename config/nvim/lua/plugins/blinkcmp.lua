@@ -150,8 +150,8 @@ return {
             sources = {
                 default = { "lsp", "contextual", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
-                    ["pi-prompt"] = { "pi_resources" },
-                    ["prompt-pi"] = { inherit_defaults = true, "pi_resources", "filemention" },
+                    ["pi-prompt"] = { "pi_bridge", "pi_resources" },
+                    ["prompt-pi"] = { inherit_defaults = true, "pi_bridge", "pi_resources", "filemention" },
                     lua = { inherit_defaults = true, "lazydev" },
                     json = { inherit_defaults = true, "git", "filemention" },
                     txt = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
@@ -160,8 +160,13 @@ return {
                     gitcommit = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
                 },
                 providers = {
-                    pi_resources = {
+                    pi_bridge = {
                         name = "Pi",
+                        module = "pi-bridge.blink_source",
+                        async = true,
+                    },
+                    pi_resources = {
+                        name = "Pi resources",
                         module = "config.pi_resources",
                         max_items = 20,
                         min_keyword_length = 0,

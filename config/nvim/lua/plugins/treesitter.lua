@@ -302,15 +302,6 @@ return {
                 move.goto_previous_end("@class.outer", "textobjects")
             end)
 
-            -- Go to either the start or the end, whichever is closer.
-            -- Use if you want more granular movements
-            vim.keymap.set({ "n", "x", "o" }, "]d", function()
-                move.goto_next("@conditional.outer", "textobjects")
-            end)
-            vim.keymap.set({ "n", "x", "o" }, "[d", function()
-                move.goto_previous("@conditional.outer", "textobjects")
-            end)
-
             local ts_repeat_move = require "nvim-treesitter-textobjects.repeatable_move"
 
             -- Repeat movement with ; and ,

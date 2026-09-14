@@ -2,6 +2,7 @@ return {
     {
         cond = not require("config.vscode").isVscode(),
         "rachartier/tiny-inline-diagnostic.nvim",
+        enabled = false,
         event = "VeryLazy",
         priority = 1000,
         opts = {

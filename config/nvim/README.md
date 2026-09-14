@@ -105,11 +105,11 @@ Located in `lua/config/lsp.lua`:
 
 ### 🎯 Code Editing
 
-- **Auto-pairs**: Intelligent bracket/quote pairing (nvim-autopairs)
+- **Auto-pairs**: Intelligent bracket/quote pairing (mini.pairs)
 - **Auto-tag**: Auto-close and auto-rename HTML/JSX tags (ts-autotag)
 - **Emmet**: HTML/CSS abbreviation expansion
 - **Template Strings**: Auto-convert to template literals when typing `${` in JS/TS
-- **Surround**: vim-surround for quick wrapping/changing
+- **Surround**: mini.surround for quick wrapping/changing
 - **Comments**: ts-comments for smart, language-aware comment toggling
 - **Todo Comments**: Highlight and search TODO, FIXME, NOTE, etc.
 - **Multi-cursor**: Advanced multi-cursor editing (multicursor.nvim)
@@ -120,11 +120,11 @@ Located in `lua/config/lsp.lua`:
 
 ### 🔧 Formatting & Linting
 
-Powered by **none-ls** (null-ls fork):
+Powered by **Conform.nvim** for formatting and **nvim-lint** for linting:
 
-- **Formatters**: stylua (Lua), prettier (JS/TS/JSON/etc), rustywind (Tailwind), codespell (spelling)
-- **Linters**: hadolint (Dockerfile), yamllint (YAML), stylelint (CSS), dotenv_linter (.env), oxlint (JS/TS)
-- **Spell Check**: codespell with en-US and pt-BR support
+- **Formatters**: stylua (Lua), prettier (JS/TS/JSON/etc), oxfmt (Oxlint projects), shfmt, isort, and black
+- **Linters**: hadolint (Dockerfile), yamllint (YAML), and stylelint (CSS/SCSS)
+- **JavaScript/TypeScript LSP linting**: Oxlint is used when an Oxlint config exists; ESLint is used when only an ESLint config exists
 - `<leader>cf` - Format current buffer
 - `<leader>co` - Organize imports
 
@@ -161,7 +161,7 @@ Powered by **none-ls** (null-ls fork):
 - `<leader>on` - List notifications
 - `<leader>os` - Search GitHub
 
-**Mini.diff**: `<leader>g=` - Toggle inline diff overlay (VSCode mode)
+**Mini.diff**: `<leader>g=` - Toggle inline diff overlay (native Neovim mode)
 
 ### 📝 LSP Features
 
@@ -175,12 +175,12 @@ Powered by **none-ls** (null-ls fork):
 - `grn` - Rename symbol
 - `gra` - Code actions
 - `K` - Hover documentation
-- `[[` / `]]` - Jump to prev/next reference
+- `[[` / `]]` - Jump to previous/next Treesitter class
 
 **Diagnostics**:
 
 - `]d` / `[d` - Next/previous diagnostic
-- `<leader>xd` - Open diagnostic float
+- `<leader>xd` - Open the custom diagnostics panel
 - `<leader>sd` - Search diagnostics (workspace)
 - `<leader>sD` - Search diagnostics (buffer)
 - `<leader>cq` - Quickfix list
@@ -228,7 +228,8 @@ Powered by **none-ls** (null-ls fork):
 - **Icons**: `<leader>si` - Icon picker (Nerdy)
 - **Notifications**: `<leader>nh` - Notification history
 - **REST Client**: Kulala.nvim for `.http` and `.rest` files
-- **Debug Adapter Protocol**: nvim-dap with UI for debugging
+- **Debug Adapter Protocol**: nvim-dap with UI for debugging (`<leader>du` toggles the UI)
+- **Markdown images**: Paste images into an `images/` directory beside the current Markdown file
 - **Test Runner**: Neotest framework (adapters not configured)
 
 ### 🎓 Editor Behavior
@@ -353,10 +354,14 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── options.lua           # Vim options
 │   │   ├── keymaps.lua           # Global keymaps with custom bind helper
 │   │   ├── autocmds.lua          # Autocommands
+│   │   ├── diagnostics.lua       # Custom diagnostic panel
+│   │   ├── ensure-installed.lua  # Mason LSP and tool lists
+│   │   ├── javascript_tools.lua  # ESLint/Oxlint project policy
 │   │   └── lsp.lua               # LSP configurations (vim.lsp.config/enable)
 │   └── plugins/
 │       ├── blinkcmp.lua          # Completion engine
-│       ├── nvimlspconfig.lua     # LSP handlers & attach
+│       ├── nvimlspconfig.lua     # LSP plugin declaration and Fidget
+
 │       ├── mason.lua             # LSP/tool installer
 │       ├── snacks.lua            # Picker, project palette, git, terminal
 │       ├── format.lua            # Conform formatters and nvim-lint
@@ -439,8 +444,8 @@ vim.opt.your_option = value
 
 **LSP Configuration**: Uses Neovim's built-in `vim.lsp.config` and `vim.lsp.enable` pattern (not lspconfig) for base server setup. Configuration is split:
 
-- `lua/config/lsp.lua` - Server configs (capabilities, settings, filetypes)
-- `lua/plugins/nvimlspconfig.lua` - LspAttach autocommands and keymaps
+- `lua/config/lsp.lua` - Server configs, LSP attach keymaps, capabilities, settings, and filetypes
+- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
 
 **TypeScript/Deno Strategy**: Uses tsgo for standard JavaScript/TypeScript projects and denols for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 
@@ -465,6 +470,19 @@ vim.opt.your_option = value
 - `<leader>?` or `<leader>sk` - Leader keymap index
 - `gr*` - LSP goto operations
 
+### Keymap ownership
+
+| Mapping | Owner | Context |
+| --- | --- | --- |
+| `<leader>p` | Snacks project palette | Native Neovim |
+| `<leader>py` | Yanky history | Native Neovim |
+| `<leader>bd` | Snacks buffer delete | Native Neovim |
+| `<leader>ca` | tiny-code-action | LSP buffers |
+| `<leader>g=` | Mini.diff | Native Neovim |
+| `[[` / `]]` | Treesitter textobject movement | Code buffers |
+| `[d` / `]d` | Mini/LSP diagnostic navigation | All/LSP buffers |
+| `<C-j>` / `<C-k>` | Blink insert completion; multicursor normal/visual | Mode-specific |
+
 ## Troubleshooting
 
 ### LSP Not Working
@@ -482,8 +500,8 @@ vim.opt.your_option = value
 
 ### Formatting Not Working
 
-1. Check none-ls sources are loaded
-2. Verify formatter is installed: `which prettier`
+1. Check Conform and nvim-lint are loaded: `:Lazy`
+2. Verify the formatter or linter is installed: `:Mason`
 3. Try manual format: `<leader>cf`
 
 ## Language-Specific Features

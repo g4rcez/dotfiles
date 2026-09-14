@@ -117,7 +117,6 @@ if not vscode.isVscode() then
     bind.normal("<leader>bh", function()
         require("treesitter-context").go_to_context(vim.v.count1)
     end, { silent = true, desc = "[h]eader of context" })
-
     bind.normal("<leader>g=", function()
         require("mini.diff").toggle_overlay(0)
     end, { desc = "Git diff" })
@@ -130,7 +129,12 @@ if not vscode.isVscode() then
     end, { desc = "Mini files" })
     bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
 end
-bind.normal("<leader>xd", vim.diagnostic.open_float, { desc = "Open diagnostics" })
+
+if not vscode.isVscode() then
+    bind.normal("<leader>xd", function()
+        require("config.diagnostics").hover()
+    end, { desc = "Show diagnostics" })
+end
 
 local function buf_abs()
     return vim.api.nvim_buf_get_name(0)

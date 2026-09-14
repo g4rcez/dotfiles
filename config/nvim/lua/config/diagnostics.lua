@@ -4,18 +4,18 @@
 ## Usage
 
 ```lua
-require("diagnostics").setup();
+require("config.diagnostics").setup { keymap = false };
 ```
 
-You can then hit `D` to show diagnostics for the current line.
+The configuration maps `<leader>xd` to show diagnostics for the current line.
 
 ## Highlight groups
 
 This script uses highlight groups provided by [highlights.lua](https://github.com/OXY2DEV/nvim/blob/main/lua/scripts/highlights.lua).
 
 The used groups are,
-- `FancyDiagnostic`, Default group for diagnostics.
-- `FancyDiagnosticIcon`, Default group for the icons of diagnostics.
+- `FancyDiagnosticDefault`, Default group for diagnostics.
+- `FancyDiagnosticDefaultIcon`, Default group for the icons of diagnostics.
 - `FancyDiagnosticInfo`, Group for `information` diagnostics.
 - `FancyDiagnosticInfoIcon`, Group for the icons of `information` diagnostics.
 - `FancyDiagnosticHint`, Group for `hint` diagnostics.
@@ -85,10 +85,10 @@ diagnostics.config = {
 		for _, item in ipairs(items) do
 			local width = vim.fn.strdisplaywidth(item.message or "");
 
-			use = math.min(
+			use = math.max(use, math.min(
 				math.max(width, 0),
 				max
-			);
+			));
 		end
 
 		return use;
@@ -498,11 +498,14 @@ _G.fancy_diagnostics_statuscolumn = function ()
 	local lnum = vim.v.lnum;
 
 	local data = diagnostics.sign_data[lnum];
-	local start = data.start_row;
 
 	if not data then
 		return "";
-	elseif vim.v.virtnum == 0 and start == lnum then
+	end
+
+	local start = data.start_row;
+
+	if vim.v.virtnum == 0 and start == lnum then
 		return virt_text_to_sign(data.icon);
 	else
 		return virt_text_to_sign(data.padding or data.icon);
@@ -719,6 +722,25 @@ diagnostics.hover = function (window)
 	---|fE
 end
 
+local function set_highlights ()
+	local links = {
+		FancyDiagnosticDefault = "NormalFloat",
+		FancyDiagnosticDefaultIcon = "DiagnosticVirtualTextInfo",
+		FancyDiagnosticInfo = "DiagnosticVirtualTextInfo",
+		FancyDiagnosticInfoIcon = "DiagnosticInfo",
+		FancyDiagnosticHint = "DiagnosticVirtualTextHint",
+		FancyDiagnosticHintIcon = "DiagnosticHint",
+		FancyDiagnosticWarn = "DiagnosticVirtualTextWarn",
+		FancyDiagnosticWarnIcon = "DiagnosticWarn",
+		FancyDiagnosticError = "DiagnosticVirtualTextError",
+		FancyDiagnosticErrorIcon = "DiagnosticError",
+	};
+
+	for name, link in pairs(links) do
+		vim.api.nvim_set_hl(0, name, { link = link });
+	end
+end
+
 --- Configuration for the diagnostics module.
 ---@param config? diagnostics.config
 diagnostics.setup = function (config)
@@ -734,9 +756,16 @@ diagnostics.setup = function (config)
 		});
 	end
 
+	set_highlights();
+	local group = vim.api.nvim_create_augroup("FancyDiagnostics", { clear = true });
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		group = group,
+		callback = set_highlights,
+	});
 	vim.api.nvim_create_autocmd({
 		"CursorMoved", "CursorMovedI"
 	}, {
+		group = group,
 		callback = function ()
 			local win = vim.api.nvim_get_current_win();
 

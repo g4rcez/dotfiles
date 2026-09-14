@@ -12,6 +12,7 @@ dotnet = "10.0.300"
 pi = "0.85.1"
 codex = "0.147.0"
 wrangler = { version = "4.128.0", allow_builds = ["esbuild", "sharp", "workerd"] }
+vercel = { version = "59.16.0", allow_builds = ["esbuild"], trust_policy_excludes = ["undici"] }
 
 [settings]
 jobs = 16

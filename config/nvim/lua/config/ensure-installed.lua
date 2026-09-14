@@ -23,7 +23,7 @@ local lsp = {
 
 return {
     lsp = lsp,
-    fmt = { "prettier", "shfmt", "stylua", "eslint_d", "rustywind", "oxfmt" },
+    tools = { "prettier", "shfmt", "stylua", "oxfmt", "isort", "black", "stylelint", "yamllint", "hadolint" },
     mason_lsp = vim.tbl_filter(function(server)
         return server ~= "kulala_ls"
     end, lsp),

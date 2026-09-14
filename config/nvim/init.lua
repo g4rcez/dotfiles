@@ -20,5 +20,5 @@ require "config.keymaps"
 
 if not vscode.isVscode() then
     require "config.lsp"
-    require "config.diagnostics"
+    require("config.diagnostics").setup { keymap = false }
 end

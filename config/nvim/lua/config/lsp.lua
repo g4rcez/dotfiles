@@ -1,5 +1,6 @@
 local keymap = vim.keymap
 local severity = vim.diagnostic.severity
+local javascript_tools = require "config.javascript_tools"
 
 local function restart_lsp_clients(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
@@ -33,9 +34,9 @@ if vim.lsp.log and vim.lsp.log.set_level then
 end
 
 vim.diagnostic.config {
-    underline = false,
+    underline = true,
     severity_sort = true,
-    virtual_text = true,
+    virtual_text = false,
     update_in_insert = true,
     float = { border = "single", source = "if_many" },
     diagnostics = { underline = false, update_in_insert = true },
@@ -112,9 +113,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         keymap.set("n", "gt", function()
             Snacks.picker.lsp_type_definitions()
         end, opts)
-
-        opts.desc = "See available code actions"
-        keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 
         opts.desc = "Extract refactor"
         keymap.set({ "n", "v" }, "<leader>cx", function()
@@ -411,8 +409,22 @@ lsp_config("harper_ls", {
     },
 })
 
+lsp_config("eslint", {
+    root_dir = function(bufnr, on_dir)
+        local root = javascript_tools.eslint_root(bufnr)
+        if root then
+            on_dir(root)
+        end
+    end,
+})
+
 lsp_config("oxlint", {
-    root_markers = { "oxlint.json", ".oxlintrc.json", "oxlint.config.js", "oxlint.config.ts", "oxlint.config.mjs", "oxlint.config.cjs" },
+    root_dir = function(bufnr, on_dir)
+        local root = javascript_tools.oxlint_root(bufnr)
+        if root then
+            on_dir(root)
+        end
+    end,
 })
 
 vim.treesitter.language.register("markdown", "vimwiki")

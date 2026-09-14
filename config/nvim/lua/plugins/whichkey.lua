@@ -6,7 +6,6 @@ return {
         spec = {
             { "<leader>A", group = "treesitter" },
             { "<leader>a", group = "treesitter" },
-            { "<leader>a", group = "treesitter" },
             { "<leader>g", group = "[g]it" },
             { "<leader>f", group = "[F]ind" },
             { "<leader>o", group = "Github" },

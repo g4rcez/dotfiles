@@ -2,47 +2,6 @@ local is_vscode = require("config.vscode").isVscode()
 
 return {
     {
-        "nvim-mini/mini.pairs",
-        enabled = not is_vscode,
-        opts = {
-            markdown = true,
-            skip_ts = { "string" },
-            skip_unbalanced = true,
-            skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
-            modes = { insert = true, command = true, terminal = false },
-            mappings = {
-                ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-                ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-                ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
-                [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
-                ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
-                ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
-                ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
-                ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
-                ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
-            },
-        },
-    },
-    {
-        "nvim-mini/mini.bracketed",
-        opts = {
-            buffer = { suffix = "b", options = {} },
-            comment = { suffix = "c", options = {} },
-            conflict = { suffix = "x", options = {} },
-            diagnostic = { suffix = "d", options = {} },
-            file = { suffix = "f", options = {} },
-            indent = { suffix = "i", options = {} },
-            jump = { suffix = "j", options = {} },
-            location = { suffix = "l", options = {} },
-            oldfile = { suffix = "r", options = {} },
-            quickfix = { suffix = "q", options = {} },
-            treesitter = { suffix = "n", options = {} },
-            undo = { suffix = "u", options = {} },
-            window = { suffix = "w", options = {} },
-            yank = { suffix = "y", options = {} },
-        },
-    },
-    {
         "nvim-mini/mini.nvim",
         config = function()
             require("mini.ai").setup { n_lines = 500 }
@@ -51,6 +10,41 @@ return {
             if is_vscode then
                 return
             end
+
+            require("mini.pairs").setup {
+                markdown = true,
+                skip_ts = { "string" },
+                skip_unbalanced = true,
+                skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+                modes = { insert = true, command = true, terminal = false },
+                mappings = {
+                    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+                    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+                    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+                    [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+                    ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+                    ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+                    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
+                    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+                    ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
+                },
+            }
+            require("mini.bracketed").setup {
+                buffer = { suffix = "b", options = {} },
+                comment = { suffix = "c", options = {} },
+                conflict = { suffix = "x", options = {} },
+                diagnostic = { suffix = "d", options = {} },
+                file = { suffix = "f", options = {} },
+                indent = { suffix = "i", options = {} },
+                jump = { suffix = "j", options = {} },
+                location = { suffix = "l", options = {} },
+                oldfile = { suffix = "r", options = {} },
+                quickfix = { suffix = "q", options = {} },
+                treesitter = { suffix = "n", options = {} },
+                undo = { suffix = "u", options = {} },
+                window = { suffix = "w", options = {} },
+                yank = { suffix = "y", options = {} },
+            }
 
             require("mini.diff").setup()
             require("mini.git").setup()
@@ -72,6 +66,7 @@ return {
                 require("mini.diff").toggle_overlay(0)
             end, { desc = "Git diff" })
             vim.api.nvim_create_autocmd("User", {
+                group = vim.api.nvim_create_augroup("MiniFilesBufferCreate", { clear = true }),
                 pattern = "MiniFilesBufferCreate",
                 callback = function(args)
                     local buf_id = args.data.buf_id
