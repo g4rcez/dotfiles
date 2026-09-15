@@ -3,19 +3,21 @@ use clap::Parser;
 use crossterm::{
     event::{self, Event, KeyCode, KeyEventKind},
     execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
 use ratatui::{
+    Frame, Terminal,
     backend::CrosstermBackend,
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     text::{Line, Span},
     widgets::{Block, Borders, List, ListItem, ListState, Paragraph, Wrap},
-    Frame, Terminal,
 };
 use serde::Deserialize;
 use std::{
     io,
+    sync::mpsc::{self, Receiver, Sender, TryRecvError},
+    thread,
     time::{Duration, Instant},
 };
 
@@ -61,8 +63,8 @@ fn sort_latest(runs: &mut [Run]) {
 }
 
 mod github {
-    use super::{sort_latest, Run, RUN_FIELDS, RUN_LIMIT};
-    use anyhow::{bail, Context, Result};
+    use super::{RUN_FIELDS, RUN_LIMIT, Run, sort_latest};
+    use anyhow::{Context, Result, bail};
     use serde_json::Value;
     use std::process::Command;
 
@@ -134,6 +136,84 @@ mod github {
     }
 }
 
+struct RunsRefreshRequest {
+    generation: u64,
+    repo_filter: Option<String>,
+}
+
+struct RunsRefreshResult {
+    generation: u64,
+    runs: Result<Vec<Run>, String>,
+}
+
+struct RunsRefreshWorker {
+    requests: Sender<RunsRefreshRequest>,
+    results: Receiver<RunsRefreshResult>,
+    in_flight: bool,
+    next_generation: u64,
+}
+
+impl RunsRefreshWorker {
+    fn new() -> Self {
+        let (request_tx, request_rx) = mpsc::channel::<RunsRefreshRequest>();
+        let (result_tx, result_rx) = mpsc::channel();
+        thread::Builder::new()
+            .name("agentmux-gh-refresh".to_owned())
+            .spawn(move || {
+                for request in request_rx {
+                    let runs = github::current_runs(request.repo_filter.as_deref())
+                        .map_err(|error| error.to_string());
+                    if result_tx
+                        .send(RunsRefreshResult {
+                            generation: request.generation,
+                            runs,
+                        })
+                        .is_err()
+                    {
+                        break;
+                    }
+                }
+            })
+            .expect("failed to start GitHub refresh worker");
+        Self {
+            requests: request_tx,
+            results: result_rx,
+            in_flight: false,
+            next_generation: 0,
+        }
+    }
+
+    fn request(&mut self, repo_filter: Option<String>) -> Option<u64> {
+        if self.in_flight {
+            return None;
+        }
+        self.next_generation = self.next_generation.wrapping_add(1);
+        let generation = self.next_generation;
+        self.in_flight = self
+            .requests
+            .send(RunsRefreshRequest {
+                generation,
+                repo_filter,
+            })
+            .is_ok();
+        self.in_flight.then_some(generation)
+    }
+
+    fn poll(&mut self) -> Option<RunsRefreshResult> {
+        match self.results.try_recv() {
+            Ok(result) => {
+                self.in_flight = false;
+                Some(result)
+            }
+            Err(TryRecvError::Disconnected) => {
+                self.in_flight = false;
+                None
+            }
+            Err(TryRecvError::Empty) => None,
+        }
+    }
+}
+
 struct App {
     repo: String,
     repo_filter: Option<String>,
@@ -141,6 +221,8 @@ struct App {
     selected: usize,
     message: Option<String>,
     last_refresh: Instant,
+    refresh_generation: u64,
+    refresh_worker: RunsRefreshWorker,
 }
 
 impl App {
@@ -152,12 +234,28 @@ impl App {
             selected: 0,
             message: None,
             last_refresh: Instant::now(),
+            refresh_generation: 0,
+            refresh_worker: RunsRefreshWorker::new(),
         }
     }
 
-    fn refresh(&mut self) {
+    fn request_refresh(&mut self) {
+        if let Some(generation) = self.refresh_worker.request(self.repo_filter.clone()) {
+            self.refresh_generation = generation;
+            self.last_refresh = Instant::now();
+        }
+    }
+
+    fn apply_refresh(&mut self) {
+        let Some(result) = self.refresh_worker.poll() else {
+            return;
+        };
+        if result.generation != self.refresh_generation {
+            return;
+        }
+
         let selected_id = self.runs.get(self.selected).map(|run| run.id);
-        match github::current_runs(self.repo_filter.as_deref()) {
+        match result.runs {
             Ok(runs) => {
                 self.runs = runs;
                 self.selected = selected_id
@@ -243,7 +341,7 @@ fn main() -> Result<()> {
             Action::Quit => return Ok(()),
             Action::Open(run_id) => {
                 let result = github::open_run(run_id, app.repo_filter.as_deref());
-                app.refresh();
+                app.request_refresh();
                 app.message = Some(match result {
                     Ok(()) => format!("Opened run #{run_id} in the browser"),
                     Err(error) => format!("Could not open run #{run_id}: {error}"),
@@ -265,10 +363,13 @@ fn event_loop(
     app: &mut App,
 ) -> Result<Action> {
     loop {
+        app.apply_refresh();
         terminal.draw(|frame| draw(frame, app))?;
 
         let now = Instant::now();
-        let timeout = REFRESH_INTERVAL.saturating_sub(now.duration_since(app.last_refresh));
+        let timeout = REFRESH_INTERVAL
+            .saturating_sub(now.duration_since(app.last_refresh))
+            .min(Duration::from_millis(100));
         if event::poll(timeout)? {
             let Event::Key(key) = event::read()? else {
                 continue;
@@ -289,11 +390,11 @@ fn event_loop(
                 KeyCode::Char('G') => {
                     app.selected = app.runs.len().saturating_sub(1);
                 }
-                KeyCode::Char('r') => app.refresh(),
+                KeyCode::Char('r') => app.request_refresh(),
                 _ => {}
             }
-        } else {
-            app.refresh();
+        } else if app.last_refresh.elapsed() >= REFRESH_INTERVAL {
+            app.request_refresh();
         }
     }
 }
@@ -462,7 +563,47 @@ fn status_color(status: &str, conclusion: Option<&str>) -> Color {
 
 #[cfg(test)]
 mod tests {
-    use super::Run;
+    use super::*;
+
+    fn run(id: u64) -> Run {
+        Run {
+            id,
+            name: "CI".to_owned(),
+            display_title: "Test".to_owned(),
+            head_branch: "main".to_owned(),
+            status: "completed".to_owned(),
+            conclusion: Some("success".to_owned()),
+            event: "push".to_owned(),
+            created_at: "2026-01-01T10:00:00Z".to_owned(),
+            started_at: None,
+            updated_at: "2026-01-01T10:00:00Z".to_owned(),
+            url: "https://example.test/run".to_owned(),
+        }
+    }
+
+    fn app_with_result_channel(runs: Vec<Run>) -> (App, Sender<RunsRefreshResult>) {
+        let (requests, _request_rx) = mpsc::channel();
+        let (result_tx, results) = mpsc::channel();
+        let worker = RunsRefreshWorker {
+            requests,
+            results,
+            in_flight: true,
+            next_generation: 1,
+        };
+        (
+            App {
+                repo: "example/repo".to_owned(),
+                repo_filter: None,
+                runs,
+                selected: 0,
+                message: None,
+                last_refresh: Instant::now(),
+                refresh_generation: 1,
+                refresh_worker: worker,
+            },
+            result_tx,
+        )
+    }
 
     #[test]
     fn parses_github_run_json() {
@@ -495,5 +636,50 @@ mod tests {
         let mut ordered = vec![older, runs[0].clone()];
         super::sort_latest(&mut ordered);
         assert_eq!(ordered[0].id, 42);
+    }
+
+    #[test]
+    fn runs_refresh_rejects_a_duplicate_request() {
+        let (requests, request_rx) = mpsc::channel();
+        let (_result_tx, results) = mpsc::channel();
+        let mut worker = RunsRefreshWorker {
+            requests,
+            results,
+            in_flight: false,
+            next_generation: 0,
+        };
+
+        assert_eq!(worker.request(None), Some(1));
+        assert_eq!(worker.request(None), None);
+        assert_eq!(request_rx.recv().unwrap().generation, 1);
+    }
+
+    #[test]
+    fn stale_runs_refresh_does_not_replace_the_snapshot() {
+        let (mut app, results) = app_with_result_channel(vec![run(1)]);
+        results
+            .send(RunsRefreshResult {
+                generation: 0,
+                runs: Ok(vec![run(2)]),
+            })
+            .unwrap();
+
+        app.apply_refresh();
+        assert_eq!(app.runs[0].id, 1);
+    }
+
+    #[test]
+    fn failed_runs_refresh_retains_the_snapshot() {
+        let (mut app, results) = app_with_result_channel(vec![run(1)]);
+        results
+            .send(RunsRefreshResult {
+                generation: 1,
+                runs: Err("offline".to_owned()),
+            })
+            .unwrap();
+
+        app.apply_refresh();
+        assert_eq!(app.runs[0].id, 1);
+        assert_eq!(app.message.as_deref(), Some("Refresh failed: offline"));
     }
 }

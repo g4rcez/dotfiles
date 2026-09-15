@@ -1,39 +1,26 @@
-import { expect, test, mock } from "bun:test";
-import { injectIntoShellConfig } from "../../src/utils/shell";
+import { expect, test } from 'bun:test'
+import { buildShellConfigContent } from '../../src/utils/shell'
 
-// Mock homedir to return a fixed path
-mock.module("node:os", () => {
-  return {
-    homedir: () => "/Users/testuser",
-    resolve: (a, b) => `${a}/${b}` 
-  };
-});
+const home = '/Users/testuser'
+const exportFile = `${home}/.config/bunsen/env.sh`
 
-// Mock fs
-let writtenContent = "";
-mock.module("../../src/utils/fs", () => {
-  return {
-    pathExists: () => true,
-    readFile: () => Promise.resolve("# existing content"),
-    writeFile: (path, content) => {
-      writtenContent = content;
-      return Promise.resolve();
-    }
-  };
-});
+test('buildShellConfigContent uses $HOME and adds one integration block', () => {
+  const content = buildShellConfigContent('# existing content', exportFile, home)
 
-test("injectIntoShellConfig uses $HOME and adds check", async () => {
-  const configPath = "/Users/testuser/.zshrc";
-  const exportFile = "/Users/testuser/.config/bunsen/env.sh";
-  
-  await injectIntoShellConfig(configPath, exportFile);
-  
-  // Debug output
-  console.log("Written content:\n ", writtenContent);
+  expect(content).toContain('# existing content')
+  expect(content).toContain(
+    '[ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"'
+  )
+  expect(content.match(/# BEGIN BUNSEN/g)).toHaveLength(1)
+  expect(content.match(/# END BUNSEN/g)).toHaveLength(1)
+})
 
-  expect(writtenContent).toContain('[ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"');
-  expect(writtenContent).toContain("# BEGIN BUNSEN");
-  expect(writtenContent).toContain("# END BUNSEN");
-});
+test('buildShellConfigContent replaces an existing integration block', () => {
+  const existing = `before\n# BEGIN BUNSEN\nold\n# END BUNSEN\nafter\n`
+  const content = buildShellConfigContent(existing, exportFile, home)
 
-
+  expect(content).toContain('before')
+  expect(content).toContain('after')
+  expect(content).not.toContain('\nold\n')
+  expect(content.match(/# BEGIN BUNSEN/g)).toHaveLength(1)
+})

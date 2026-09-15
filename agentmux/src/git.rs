@@ -1,16 +1,14 @@
 use crate::model::RepoInfo;
 use std::process::Command;
 
-pub fn inspect(path: &str) -> RepoInfo {
+pub fn inspect(path: &str) -> Result<RepoInfo, String> {
     let mut info = RepoInfo::default();
     let status = Command::new("git")
         .args(["-C", path, "status", "--porcelain=v1", "--branch"])
-        .output();
-    let Ok(status) = status else {
-        return info;
-    };
+        .output()
+        .map_err(|error| format!("git status failed: {error}"))?;
     if !status.status.success() {
-        return info;
+        return Err("git status returned a failure".to_owned());
     }
 
     let output = String::from_utf8_lossy(&status.stdout);
@@ -28,21 +26,21 @@ pub fn inspect(path: &str) -> RepoInfo {
 
     let diff = Command::new("git")
         .args(["-C", path, "diff", "--numstat", "HEAD", "--"])
-        .output();
-    if let Ok(diff) = diff
-        && diff.status.success()
-    {
-        for line in String::from_utf8_lossy(&diff.stdout).lines() {
-            let mut fields = line.split_whitespace();
-            info.additions += fields
-                .next()
-                .and_then(|value| value.parse().ok())
-                .unwrap_or(0);
-            info.deletions += fields
-                .next()
-                .and_then(|value| value.parse().ok())
-                .unwrap_or(0);
-        }
+        .output()
+        .map_err(|error| format!("git diff failed: {error}"))?;
+    if !diff.status.success() {
+        return Err("git diff returned a failure".to_owned());
     }
-    info
+    for line in String::from_utf8_lossy(&diff.stdout).lines() {
+        let mut fields = line.split_whitespace();
+        info.additions += fields
+            .next()
+            .and_then(|value| value.parse().ok())
+            .unwrap_or(0);
+        info.deletions += fields
+            .next()
+            .and_then(|value| value.parse().ok())
+            .unwrap_or(0);
+    }
+    Ok(info)
 }

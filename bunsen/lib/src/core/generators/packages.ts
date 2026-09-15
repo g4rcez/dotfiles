@@ -7,7 +7,7 @@ import { parseBrewfile, parseAptList, parsePacmanList, parseDnfList } from '../p
 import { updatePackagesState } from '../state/storage.ts'
 import type { PackageManagerConfig, PackageManager, PackageInstallResult } from '../config/types.ts'
 
-async function normalizePackageList(
+export async function normalizePackageList(
   manager: PackageManager,
   config: string[] | { packages?: string[]; import?: string }
 ): Promise<string[]> {
@@ -115,5 +115,11 @@ export async function generatePackagesConfig(
       }))
 
     await updatePackagesState(installed)
+  }
+
+  const failures = allResults.filter((result) => !result.success)
+  if (failures.length > 0) {
+    const packages = failures.map((result) => `${result.manager}:${result.package}`).join(', ')
+    throw new Error(`Package installation failed for ${packages}`)
   }
 }

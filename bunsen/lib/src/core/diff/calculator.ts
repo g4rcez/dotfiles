@@ -1,289 +1,307 @@
+import { lstat, readlink } from 'node:fs/promises'
 import { homedir } from 'node:os'
-import { resolve } from 'node:path'
-import type { DotfilesConfig } from '../config/types.js'
-import { loadState } from '../state/storage.js'
-import { normalizeSymlinks } from '../symlink/manager.js'
-import { resolvePath } from '../symlink/resolver.js'
-import { pathExists, readFile } from '../../utils/fs.ts'
-import type { DiffResult, DiffOptions, DiffEntry, CurrentState, DesiredState } from './types.js'
+import { dirname, resolve } from 'node:path'
+import { parse as parseYaml } from 'yaml'
+import { readFile, pathExists } from '../../utils/fs.ts'
+import { serializeEspansoConfig } from '../generators/espanso.ts'
+import { serializeKarabinerConfig } from '../generators/karabiner.ts'
+import { normalizePackageList } from '../generators/packages.ts'
+import { StateFileSchema } from '../config/schema.ts'
+import type { DotfilesConfig, PackageManager, StateFile } from '../config/types.ts'
+import { normalizeSymlinks } from '../symlink/manager.ts'
+import { expandPath, resolvePath } from '../symlink/resolver.ts'
+import type { CurrentState, DesiredState, DiffEntry, DiffOptions, DiffResult } from './types.ts'
 
-export async function loadCurrentState(): Promise<CurrentState> {
-  const state = await loadState()
-  const home = homedir()
+export interface DiffRuntime {
+  home?: string
+  state?: StateFile | null
+}
 
-  const currentState: CurrentState = {
-    symlinks: state.symlinks,
-    envFile: null,
-    envVariables: {},
-    karabinerConfig: null,
-    espansoConfig: null,
-    installedPackages: {},
+function emptyState(): StateFile {
+  return { version: '1.0.0', lastApplied: '', symlinks: [] }
+}
+
+async function readState(home: string, runtime: DiffRuntime, warnings: string[]): Promise<StateFile> {
+  if ('state' in runtime) return runtime.state ?? emptyState()
+  const statePath = resolve(home, '.config/bunsen/state.json')
+  if (!pathExists(statePath)) return emptyState()
+  try {
+    const parsed = StateFileSchema.safeParse(JSON.parse(await readFile(statePath)))
+    if (parsed.success) return parsed.data
+    warnings.push(`Cannot read Bunsen state at ${statePath}: invalid state file`)
+  } catch (error) {
+    warnings.push(`Cannot read Bunsen state at ${statePath}: ${String(error)}`)
   }
+  return emptyState()
+}
 
-  const envFilePath = resolve(home, '.config/bunsen/env.sh')
-  if (pathExists(envFilePath)) {
-    currentState.envFile = envFilePath
+async function readGeneratedFile(
+  path: string | null,
+  kind: 'karabiner' | 'espanso',
+  warnings: string[]
+): Promise<string | null> {
+  if (!path || !pathExists(path)) return null
+  try {
+    const content = await readFile(path)
     try {
-      const content = await readFile(envFilePath)
-      const lines = content.split('\n')
-      for (const line of lines) {
+      if (kind === 'karabiner') JSON.parse(content)
+      else parseYaml(content)
+    } catch (error) {
+      warnings.push(`Existing ${kind} config is malformed at ${path}: ${String(error)}`)
+    }
+    return content
+  } catch (error) {
+    warnings.push(`Cannot read existing ${kind} config at ${path}: ${String(error)}`)
+    return null
+  }
+}
+
+export async function loadCurrentState(
+  config: DotfilesConfig,
+  options: DiffOptions = {},
+  runtime: DiffRuntime = {}
+): Promise<CurrentState> {
+  const home = runtime.home ?? homedir()
+  const warnings: string[] = []
+  const state = await readState(home, runtime, warnings)
+  const envFile =
+    config.env || options.profileName
+      ? expandPath(config.env?.exportFile ?? state.env?.exportFile ?? '~/.config/bunsen/env.sh', home)
+      : null
+  const karabinerPath = config.karabiner
+    ? expandPath(config.karabiner.configPath, home)
+    : state.karabiner?.outputPath ?? null
+  const espansoPath = config.espanso
+    ? expandPath(config.espanso.path, home)
+    : state.espanso?.outputPath ?? null
+  const envVariables: Record<string, string> = {}
+
+  if (envFile && pathExists(envFile)) {
+    try {
+      for (const line of (await readFile(envFile)).split('\n')) {
         const match = line.match(/^export\s+([^=]+)=(.+)$/)
-        if (match) {
-          const [, key, value] = match
-          currentState.envVariables[key] = value.replace(/^["']|["']$/g, '')
+        if (match && match[1] !== 'BUNSEN_ENV_LOADED') {
+          envVariables[match[1]] = match[2].replace(/^["']|["']$/g, '')
         }
       }
-    } catch {}
+    } catch (error) {
+      warnings.push(`Cannot read environment file at ${envFile}: ${String(error)}`)
+    }
   }
 
-  const karabinerPath = resolve(home, '.config/karabiner/karabiner.json')
-  if (pathExists(karabinerPath)) {
-    try {
-      const content = await readFile(karabinerPath)
-      currentState.karabinerConfig = JSON.parse(content)
-    } catch {}
+  const installedPackages: Record<string, string[]> = {}
+  for (const installed of state.packages?.installed ?? []) {
+    ;(installedPackages[installed.manager] ??= []).push(installed.package)
   }
 
-  return currentState
+  return {
+    symlinks: state.symlinks,
+    envFile,
+    envVariables,
+    karabinerPath,
+    karabinerConfig: await readGeneratedFile(karabinerPath, 'karabiner', warnings),
+    espansoPath,
+    espansoConfig: await readGeneratedFile(espansoPath, 'espanso', warnings),
+    installedPackages,
+    warnings,
+  }
 }
 
-export async function loadDesiredState(config: DotfilesConfig): Promise<DesiredState> {
-  const symlinks = normalizeSymlinks(config.symlinks || {})
-
-  const desiredState: DesiredState = {
+export async function loadDesiredState(
+  config: DotfilesConfig,
+  options: DiffOptions = {},
+  runtime: DiffRuntime = {}
+): Promise<DesiredState> {
+  const home = runtime.home ?? homedir()
+  const desired: DesiredState = {
     symlinks: {},
-    envVariables: config.env?.variables || {},
-    karabinerConfig: config.karabiner || null,
-    espansoConfig: config.espanso || null,
+    envVariables: { ...(config.env?.variables ?? {}) },
+    karabinerPath: config.karabiner ? expandPath(config.karabiner.configPath, home) : null,
+    karabinerConfig: config.karabiner ? serializeKarabinerConfig(config.karabiner) : null,
+    espansoPath: config.espanso ? expandPath(config.espanso.path, home) : null,
+    espansoConfig: config.espanso ? serializeEspansoConfig(config.espanso, home) : null,
     packages: {},
   }
+  if (options.profileName) desired.envVariables.BUNSEN_PROFILE = options.profileName
 
-  for (const link of symlinks) {
-    desiredState.symlinks[link.target] = link.source
+  for (const link of normalizeSymlinks(config.symlinks ?? {})) {
+    desired.symlinks[link.target] = link.source
   }
-
-  return desiredState
+  for (const manager of ['brew', 'apt', 'pacman', 'dnf'] as PackageManager[]) {
+    const managerConfig = config.packages?.[manager]
+    if (managerConfig) desired.packages[manager] = await normalizePackageList(manager, managerConfig)
+  }
+  return desired
 }
 
-export function compareSymlinks(current: CurrentState, desired: DesiredState): DiffEntry[] {
+async function inspectSymlink(target: string, home: string): Promise<string | null | 'existing-file'> {
+  const resolvedTarget = resolvePath(target, home)
+  try {
+    const stat = await lstat(resolvedTarget)
+    if (!stat.isSymbolicLink()) return 'existing-file'
+    const destination = await readlink(resolvedTarget)
+    return resolve(dirname(resolvedTarget), destination)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw error
+  }
+}
+
+export async function compareSymlinks(
+  current: CurrentState,
+  desired: DesiredState,
+  home = homedir()
+): Promise<DiffEntry[]> {
   const entries: DiffEntry[] = []
-  const home = homedir()
-
-  const currentMap = new Map(
-    current.symlinks.map(s => [
-      resolvePath(s.target, home),
-      { original: s.target, resolved: resolvePath(s.source, home), originalSource: s.source }
-    ])
-  )
-
-  const desiredMap = new Map(
-    Object.entries(desired.symlinks).map(([target, source]) => [
-      resolvePath(target, home),
-      { original: target, resolved: resolvePath(source, home), originalSource: source }
-    ])
-  )
-
-  for (const [resolvedTarget, desiredInfo] of desiredMap) {
-    const currentInfo = currentMap.get(resolvedTarget)
-    if (!currentInfo) {
-      entries.push({
-        section: 'symlink',
-        changeType: 'add',
-        path: desiredInfo.original,
-        newValue: desiredInfo.originalSource,
-      })
-    } else if (currentInfo.resolved !== desiredInfo.resolved) {
+  const desiredTargets = new Set<string>()
+  for (const [target, source] of Object.entries(desired.symlinks)) {
+    const resolvedTarget = resolvePath(target, home)
+    const resolvedSource = resolvePath(source, home)
+    desiredTargets.add(resolvedTarget)
+    const actual = await inspectSymlink(target, home)
+    if (actual === null) {
+      entries.push({ section: 'symlink', changeType: 'add', path: target, newValue: source })
+    } else if (actual !== resolvedSource) {
       entries.push({
         section: 'symlink',
         changeType: 'modify',
-        path: desiredInfo.original,
-        oldValue: currentInfo.originalSource,
-        newValue: desiredInfo.originalSource,
+        path: target,
+        oldValue: actual,
+        newValue: source,
       })
     }
   }
 
-  for (const [resolvedTarget, currentInfo] of currentMap) {
-    if (!desiredMap.has(resolvedTarget)) {
+  for (const tracked of current.symlinks) {
+    if (!desiredTargets.has(resolvePath(tracked.target, home))) {
       entries.push({
         section: 'symlink',
-        changeType: 'remove',
-        path: currentInfo.original,
-        oldValue: currentInfo.originalSource,
+        changeType: 'stale',
+        path: tracked.target,
+        oldValue: tracked.source,
+        details: { retained: true },
       })
     }
   }
-
   return entries
 }
 
 export function compareEnv(current: CurrentState, desired: DesiredState): DiffEntry[] {
   const entries: DiffEntry[] = []
-  const currentVars = current.envVariables
-  const desiredVars = desired.envVariables
-
-  for (const [key, value] of Object.entries(desiredVars)) {
-    const valueStr = Array.isArray(value) ? value.join(':') : String(value)
-    const currentValue = currentVars[key]
-
-    if (!currentValue) {
-      entries.push({
-        section: 'env',
-        changeType: 'add',
-        path: key,
-        newValue: valueStr,
-      })
-    } else if (currentValue !== valueStr) {
+  for (const [key, value] of Object.entries(desired.envVariables)) {
+    const desiredValue = Array.isArray(value) ? value.join(':') : String(value)
+    const currentValue = current.envVariables[key]
+    if (currentValue === undefined) {
+      entries.push({ section: 'env', changeType: 'add', path: key, newValue: desiredValue })
+    } else if (currentValue !== desiredValue) {
       entries.push({
         section: 'env',
         changeType: 'modify',
         path: key,
         oldValue: currentValue,
-        newValue: valueStr,
+        newValue: desiredValue,
       })
     }
   }
-
-  for (const key of Object.keys(currentVars)) {
-    if (!(key in desiredVars)) {
-      entries.push({
-        section: 'env',
-        changeType: 'remove',
-        path: key,
-        oldValue: currentVars[key],
-      })
+  for (const [key, value] of Object.entries(current.envVariables)) {
+    if (!(key in desired.envVariables)) {
+      entries.push({ section: 'env', changeType: 'remove', path: key, oldValue: value })
     }
   }
-
   return entries
+}
+
+function compareGenerated(
+  section: 'karabiner' | 'espanso',
+  path: string | null,
+  current: string | null,
+  desired: string | null
+): DiffEntry[] {
+  const label = section === 'karabiner' ? 'Karabiner configuration' : 'Espanso configuration'
+  const outputPath = path ?? `${section} config`
+  if (desired && !current) {
+    return [{ section, changeType: 'add', path: outputPath, newValue: `${label} will be generated` }]
+  }
+  if (!desired && current) {
+    return [{ section, changeType: 'stale', path: outputPath, oldValue: `${label} is retained` }]
+  }
+  if (desired !== current) {
+    return [{ section, changeType: 'modify', path: outputPath, oldValue: 'Current content', newValue: 'Generated content' }]
+  }
+  return []
 }
 
 export function compareKarabiner(current: CurrentState, desired: DesiredState): DiffEntry[] {
-  const entries: DiffEntry[] = []
-
-  if (!desired.karabinerConfig && !current.karabinerConfig) {
-    return entries
-  }
-
-  if (desired.karabinerConfig && !current.karabinerConfig) {
-    entries.push({
-      section: 'karabiner',
-      changeType: 'add',
-      path: '~/.config/karabiner/karabiner.json',
-      newValue: 'Configuration will be generated',
-    })
-  } else if (!desired.karabinerConfig && current.karabinerConfig) {
-    entries.push({
-      section: 'karabiner',
-      changeType: 'remove',
-      path: '~/.config/karabiner/karabiner.json',
-      oldValue: 'Configuration exists',
-    })
-  } else if (JSON.stringify(current.karabinerConfig) !== JSON.stringify(desired.karabinerConfig)) {
-    entries.push({
-      section: 'karabiner',
-      changeType: 'modify',
-      path: '~/.config/karabiner/karabiner.json',
-      oldValue: 'Current configuration',
-      newValue: 'Will be regenerated',
-    })
-  }
-
-  return entries
+  return compareGenerated(
+    'karabiner',
+    desired.karabinerPath ?? current.karabinerPath,
+    current.karabinerConfig,
+    desired.karabinerConfig
+  )
 }
 
 export function compareEspanso(current: CurrentState, desired: DesiredState): DiffEntry[] {
-  const entries: DiffEntry[] = []
-
-  if (!desired.espansoConfig && !current.espansoConfig) {
-    return entries
-  }
-
-  if (desired.espansoConfig && !current.espansoConfig) {
-    entries.push({
-      section: 'espanso',
-      changeType: 'add',
-      path: 'espanso config',
-      newValue: 'Configuration will be generated',
-    })
-  } else if (!desired.espansoConfig && current.espansoConfig) {
-    entries.push({
-      section: 'espanso',
-      changeType: 'remove',
-      path: 'espanso config',
-      oldValue: 'Configuration exists',
-    })
-  } else if (JSON.stringify(current.espansoConfig) !== JSON.stringify(desired.espansoConfig)) {
-    entries.push({
-      section: 'espanso',
-      changeType: 'modify',
-      path: 'espanso config',
-      oldValue: 'Current configuration',
-      newValue: 'Will be regenerated',
-    })
-  }
-
-  return entries
+  return compareGenerated(
+    'espanso',
+    desired.espansoPath ?? current.espansoPath,
+    current.espansoConfig,
+    desired.espansoConfig
+  )
 }
 
 export function comparePackages(current: CurrentState, desired: DesiredState): DiffEntry[] {
   const entries: DiffEntry[] = []
-
   for (const [manager, packages] of Object.entries(desired.packages)) {
-    const currentPackages = current.installedPackages[manager] || []
-
-    for (const pkg of packages) {
-      if (!currentPackages.includes(pkg)) {
+    const installed = current.installedPackages[manager] ?? []
+    for (const packageName of packages) {
+      if (!installed.includes(packageName)) {
         entries.push({
           section: 'packages',
           changeType: 'add',
-          path: pkg,
+          path: packageName,
           newValue: `via ${manager}`,
         })
       }
     }
   }
-
   return entries
+}
+
+function sectionEnabled(options: DiffOptions, section: keyof DiffOptions): boolean {
+  const flags: Array<keyof DiffOptions> = [
+    'symlinksOnly',
+    'envOnly',
+    'karabinerOnly',
+    'espansoOnly',
+    'packagesOnly',
+  ]
+  return !flags.some((flag) => options[flag] === true) || options[section] === true
 }
 
 export async function calculateDiff(
   config: DotfilesConfig,
-  options: DiffOptions = {}
+  options: DiffOptions = {},
+  runtime: DiffRuntime = {}
 ): Promise<DiffResult> {
-  const current = await loadCurrentState()
-  const desired = await loadDesiredState(config)
-
+  const current = await loadCurrentState(config, options, runtime)
+  const desired = await loadDesiredState(config, options, runtime)
   const result: DiffResult = {
-    symlinks: [],
-    env: [],
-    karabiner: [],
-    espanso: [],
-    packages: [],
+    symlinks: sectionEnabled(options, 'symlinksOnly')
+      ? await compareSymlinks(current, desired, runtime.home)
+      : [],
+    env: sectionEnabled(options, 'envOnly') ? compareEnv(current, desired) : [],
+    karabiner: sectionEnabled(options, 'karabinerOnly') ? compareKarabiner(current, desired) : [],
+    espanso: sectionEnabled(options, 'espansoOnly') ? compareEspanso(current, desired) : [],
+    packages: sectionEnabled(options, 'packagesOnly') ? comparePackages(current, desired) : [],
+    warnings: current.warnings,
     hasChanges: false,
   }
-
-  if (!options.envOnly && !options.karabinerOnly && !options.espansoOnly && !options.packagesOnly) {
-    result.symlinks = compareSymlinks(current, desired)
-  }
-
-  if (!options.symlinksOnly && !options.karabinerOnly && !options.espansoOnly && !options.packagesOnly) {
-    result.env = compareEnv(current, desired)
-  }
-
-  if (!options.symlinksOnly && !options.envOnly && !options.espansoOnly && !options.packagesOnly) {
-    result.karabiner = compareKarabiner(current, desired)
-  }
-
-  if (!options.symlinksOnly && !options.envOnly && !options.karabinerOnly && !options.packagesOnly) {
-    result.espanso = compareEspanso(current, desired)
-  }
-
-  if (!options.symlinksOnly && !options.envOnly && !options.karabinerOnly && !options.espansoOnly) {
-    result.packages = comparePackages(current, desired)
-  }
-
-  result.hasChanges = Object.values(result).some(v => Array.isArray(v) && v.length > 0)
-
+  result.hasChanges = [
+    result.symlinks,
+    result.env,
+    result.karabiner,
+    result.espanso,
+    result.packages,
+  ].some((entries) => entries.length > 0)
   return result
 }

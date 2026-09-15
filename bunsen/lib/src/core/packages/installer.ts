@@ -2,13 +2,22 @@ import { logger } from '../../utils/logger.ts'
 import { PACKAGE_MANAGER_COMMANDS } from './commands.ts'
 import type { PackageManager, PackageInstallResult } from '../config/types.ts'
 
+interface InstallCommandOptions {
+  command: string[]
+  requiresSudo: boolean
+  autoSudo: boolean
+  isRoot: boolean
+}
+
+export function buildInstallCommand(options: InstallCommandOptions): string[] {
+  const { command, requiresSudo, autoSudo, isRoot } = options
+  return requiresSudo && autoSudo && !isRoot ? ['sudo', ...command] : command
+}
+
 /**
  * Checks if a package is already installed
  */
-export async function isPackageInstalled(
-  manager: PackageManager,
-  pkg: string
-): Promise<boolean> {
+export async function isPackageInstalled(manager: PackageManager, pkg: string): Promise<boolean> {
   const commands = PACKAGE_MANAGER_COMMANDS[manager]
 
   try {
@@ -55,17 +64,12 @@ export async function installPackage(
     }
   }
 
-  // Build install command
-  let installCmd = commands.install(pkg)
-
-  // Prepend sudo if needed
-  if (commands.requiresSudo && !autoSudo) {
-    // Check if already running as root
-    const isRoot = process.getuid?.() === 0
-    if (!isRoot) {
-      installCmd = ['sudo', ...installCmd]
-    }
-  }
+  const installCmd = buildInstallCommand({
+    command: commands.install(pkg),
+    requiresSudo: commands.requiresSudo,
+    autoSudo,
+    isRoot: process.getuid?.() === 0,
+  })
 
   try {
     const proc = Bun.spawn(installCmd, {

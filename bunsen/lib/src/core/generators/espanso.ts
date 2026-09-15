@@ -1,18 +1,12 @@
 import { homedir } from 'node:os'
 import { stringify } from 'yaml'
-import { Espanso } from '../../api/espanso.ts'
+import type { Espanso } from '../../api/espanso.ts'
 import { writeFile } from '../../utils/fs.ts'
 import { logger } from '../../utils/logger.ts'
 import { updateEspansoState, updateWhichKeyState } from '../state/storage.ts'
 import { expandPath } from '../symlink/resolver.ts'
 
-export async function generateEspansoConfig(
-  config: Espanso,
-  options: { dryRun?: boolean } = {}
-): Promise<void> {
-  const { dryRun = false } = options
-  const home = homedir()
-  const outputPath = expandPath(config.path, home)
+export function serializeEspansoConfig(config: Espanso, home = homedir()): string {
   const espansoYaml: Record<string, unknown> = {
     matches: config.matches.map((match) => {
       const entry: Record<string, unknown> = {
@@ -44,10 +38,19 @@ export async function generateEspansoConfig(
   }
 
   if (config.imports && config.imports.length > 0) {
-    const home = homedir()
     espansoYaml.imports = config.imports.map((x) => expandPath(x, home))
   }
-  const content = stringify(espansoYaml, { indent: 4 })
+  return stringify(espansoYaml, { indent: 4 })
+}
+
+export async function generateEspansoConfig(
+  config: Espanso,
+  options: { dryRun?: boolean } = {}
+): Promise<void> {
+  const { dryRun = false } = options
+  const home = homedir()
+  const outputPath = expandPath(config.path, home)
+  const content = serializeEspansoConfig(config, home)
   if (dryRun) {
     logger.info(`[DRY RUN] Would write Espanso config to: ${outputPath}`)
     logger.debug('Config preview:')

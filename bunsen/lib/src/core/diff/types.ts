@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import type { StateFile } from '../config/types.js'
+import type { StateFile } from '../config/types.ts'
 
-export type ChangeType = 'add' | 'remove' | 'modify'
+export type ChangeType = 'add' | 'remove' | 'modify' | 'stale'
 export type SectionType = 'symlink' | 'env' | 'karabiner' | 'espanso' | 'packages'
 
 export interface DiffEntry {
@@ -19,11 +19,13 @@ export interface DiffResult {
   karabiner: DiffEntry[]
   espanso: DiffEntry[]
   packages: DiffEntry[]
+  warnings: string[]
   hasChanges: boolean
 }
 
 export interface DiffOptions {
   configPath?: string
+  profileName?: string
   symlinksOnly?: boolean
   envOnly?: boolean
   karabinerOnly?: boolean
@@ -35,20 +37,25 @@ export interface CurrentState {
   symlinks: StateFile['symlinks']
   envFile: string | null
   envVariables: Record<string, string>
-  karabinerConfig: unknown | null
-  espansoConfig: unknown | null
+  karabinerPath: string | null
+  karabinerConfig: string | null
+  espansoPath: string | null
+  espansoConfig: string | null
   installedPackages: Record<string, string[]>
+  warnings: string[]
 }
 
 export interface DesiredState {
   symlinks: Record<string, string>
   envVariables: Record<string, string | string[]>
-  karabinerConfig: unknown | null
-  espansoConfig: unknown | null
+  karabinerPath: string | null
+  karabinerConfig: string | null
+  espansoPath: string | null
+  espansoConfig: string | null
   packages: Record<string, string[]>
 }
 
-export const ChangeTypeSchema = z.enum(['add', 'remove', 'modify'])
+export const ChangeTypeSchema = z.enum(['add', 'remove', 'modify', 'stale'])
 export const SectionTypeSchema = z.enum(['symlink', 'env', 'karabiner', 'espanso', 'packages'])
 
 export const DiffEntrySchema = z.object({
@@ -66,14 +73,18 @@ export const DiffResultSchema = z.object({
   karabiner: z.array(DiffEntrySchema),
   espanso: z.array(DiffEntrySchema),
   packages: z.array(DiffEntrySchema),
+  warnings: z.array(z.string()),
   hasChanges: z.boolean(),
 })
 
-export const DiffOptionsSchema = z.object({
-  configPath: z.string().optional(),
-  symlinksOnly: z.boolean().optional(),
-  envOnly: z.boolean().optional(),
-  karabinerOnly: z.boolean().optional(),
-  espansoOnly: z.boolean().optional(),
-  packagesOnly: z.boolean().optional(),
-}).optional()
+export const DiffOptionsSchema = z
+  .object({
+    configPath: z.string().optional(),
+    profileName: z.string().optional(),
+    symlinksOnly: z.boolean().optional(),
+    envOnly: z.boolean().optional(),
+    karabinerOnly: z.boolean().optional(),
+    espansoOnly: z.boolean().optional(),
+    packagesOnly: z.boolean().optional(),
+  })
+  .optional()

@@ -48,15 +48,17 @@ function generateExports(
 /**
  * Generates environment variable configuration
  */
+export function resolveEnvExportFile(exportFile: string | undefined, home: string): string {
+  return expandPath(exportFile ?? '~/.config/bunsen/env.sh', home)
+}
+
 export async function generateEnvConfig(
   config: EnvConfig,
   options: { dryRun?: boolean; profileName?: string } = {}
 ): Promise<void> {
   const { dryRun = false, profileName } = options
   const home = homedir()
-  const exportFile = config.exportFile
-    ? expandPath(config.exportFile, home)
-    : '$HOME/.config/bunsen/env.sh'
+  const exportFile = resolveEnvExportFile(config.exportFile, home)
   const content = generateExports(config.variables, profileName)
   if (dryRun) {
     logger.info(`[DRY RUN] Would write env exports to: ${exportFile}`)
@@ -68,6 +70,7 @@ export async function generateEnvConfig(
   }
   const shells = config.shells || ['zsh', 'bash']
   const injectedShells: string[] = []
+  const injectionFailures: string[] = []
   for (const shell of shells) {
     const configPath = getShellConfigPath(shell)
     if (dryRun) {
@@ -83,9 +86,14 @@ export async function generateEnvConfig(
         injectedShells.push(configPath)
         logger.success(`Injected into ${shell} config: ${configPath}`)
       } catch (error) {
-        logger.error(`Failed to inject into ${shell} config: ${error}`)
+        const message = error instanceof Error ? error.message : String(error)
+        injectionFailures.push(`${shell}: ${message}`)
+        logger.error(`Failed to inject into ${shell} config: ${message}`)
       }
     }
+  }
+  if (!dryRun && injectionFailures.length > 0) {
+    throw new Error(`Environment shell injection failed (${injectionFailures.join('; ')})`)
   }
   if (!dryRun) {
     await updateEnvState(exportFile, injectedShells)

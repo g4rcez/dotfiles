@@ -1,4 +1,7 @@
 import { loadConfig } from '../../core/config/loader.ts'
+import { calculateDiff } from '../../core/diff/calculator.ts'
+import { formatDiffResult } from '../../core/diff/formatter.ts'
+import type { DiffOptions } from '../../core/diff/types.ts'
 import { logger } from '../../utils/logger.ts'
 
 export interface DiffCommandOptions {
@@ -12,48 +15,31 @@ export interface DiffCommandOptions {
 }
 
 export async function diffCommand(options: DiffCommandOptions): Promise<void> {
-  try {
-    const loaded = await loadConfig({
-      configPath: options.config,
-      profile: options.profile,
-    })
-
-    const config = loaded.config
-    const { context } = loaded
-
-    logger.success('Configuration is valid')
-    if (context.profile) {
-      logger.info(`Profile: ${context.profile}`)
-      if (!context.exists) {
-        logger.warn('Profile not defined in config, using base config only')
-      }
-    }
-
-    logger.plain('')
-    logger.info('Configuration Summary:')
-
-    if (config.symlinks) {
-      const count = Object.keys(config.symlinks).length
-      logger.plain(`  Symlinks: ${count} entries`)
-    }
-    if (config.env) {
-      const varCount = Object.keys(config.env.variables || {}).length
-      logger.plain(`  Environment: ${varCount} variables`)
-    }
-    if (config.karabiner) {
-      logger.plain('  Karabiner: configured')
-    }
-    if (config.espanso) {
-      logger.plain('  Espanso: configured')
-    }
-    if (config.packages) {
-      logger.plain('  Packages: configured')
-    }
-  } catch (error) {
-    logger.error('Failed to load configuration')
-    if (error instanceof Error) {
-      logger.plain(error.message)
-    }
-    process.exit(1)
+  const filters = [
+    options.symlinksOnly,
+    options.envOnly,
+    options.karabinerOnly,
+    options.espansoOnly,
+    options.packagesOnly,
+  ].filter(Boolean)
+  if (filters.length > 1) {
+    throw new Error('Choose only one --*-only filter at a time')
   }
+
+  const loaded = await loadConfig({ configPath: options.config, profile: options.profile })
+  const diffOptions: DiffOptions = {
+    profileName: loaded.context.profile || undefined,
+    symlinksOnly: options.symlinksOnly,
+    envOnly: options.envOnly,
+    karabinerOnly: options.karabinerOnly,
+    espansoOnly: options.espansoOnly,
+    packagesOnly: options.packagesOnly,
+  }
+  const result = await calculateDiff(loaded.config, diffOptions)
+
+  if (loaded.context.profile) {
+    logger.info(`Profile: ${loaded.context.profile}`)
+    if (!loaded.context.exists) logger.warn('Profile not defined in config, using base config only')
+  }
+  logger.plain(formatDiffResult(result))
 }

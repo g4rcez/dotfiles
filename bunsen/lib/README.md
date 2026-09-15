@@ -75,17 +75,23 @@ export default defineConfig({
 
   // Karabiner keyboard configuration
   karabiner: karabiner({
-    profiles: [{
-      name: 'Default',
-      rules: [{
-        description: 'Caps Lock to Escape',
-        manipulators: [{
-          type: 'basic',
-          from: { key_code: 'caps_lock' },
-          to: [{ key_code: 'escape' }],
-        }],
-      }],
-    }],
+    profiles: [
+      {
+        name: 'Default',
+        rules: [
+          {
+            description: 'Caps Lock to Escape',
+            manipulators: [
+              {
+                type: 'basic',
+                from: { key_code: 'caps_lock' },
+                to: [{ key_code: 'escape' }],
+              },
+            ],
+          },
+        ],
+      },
+    ],
     outputPath: '~/.config/karabiner/karabiner.json',
   }),
 
@@ -128,6 +134,7 @@ bunsen status
 Creates a new `dotfiles.config.ts` template with examples.
 
 **Options:**
+
 - `-f, --force` - Overwrite existing configuration file
 
 ### `bunsen validate`
@@ -135,6 +142,7 @@ Creates a new `dotfiles.config.ts` template with examples.
 Validates your configuration file against the schema.
 
 **Options:**
+
 - `-c, --config <path>` - Path to config file (auto-discovered if not specified)
 
 ### `bunsen apply`
@@ -142,6 +150,7 @@ Validates your configuration file against the schema.
 Applies your dotfiles configuration (symlinks, packages, env vars, etc.).
 
 **Options:**
+
 - `-c, --config <path>` - Path to config file
 - `--dry-run` - Preview changes without applying them
 - `-f, --force` - Skip confirmation prompts and overwrite existing files
@@ -161,6 +170,7 @@ Shows the current state of your dotfiles (symlinks, env injection status, etc.).
 ### Symlinks
 
 **Simple mapping:**
+
 ```typescript
 symlinks: {
   '~/.zshrc': '~/dotfiles/zsh/.zshrc',
@@ -169,6 +179,7 @@ symlinks: {
 ```
 
 **Advanced options:**
+
 ```typescript
 symlinks: {
   '~/.ssh/config': {
@@ -197,6 +208,7 @@ env: {
 ```
 
 The generated file is automatically sourced in your shell configs using markers:
+
 ```bash
 # BEGIN BUNSEN
 source ~/.config/bunsen/env.sh
@@ -229,30 +241,39 @@ packages: packages({
   // pacman: importFrom('~/dotfiles/packages.txt'),
 
   // Auto-sudo for system package managers
-  autoSudo: false, // Set to true to automatically use sudo for apt/pacman/dnf
+  autoSudo: false, // Set true to prepend sudo for apt/pacman/dnf when not root
 })
 ```
 
 ### Karabiner Configuration
 
 **Basic example:**
+
 ```typescript
 karabiner: karabiner({
-  profiles: [{
-    name: 'Default',
-    rules: [{
-      description: 'Caps Lock to Escape when pressed alone, Hyper when held',
-      manipulators: [{
-        type: 'basic',
-        from: { key_code: 'caps_lock' },
-        to: [{
-          key_code: 'left_shift',
-          modifiers: ['left_control', 'left_option', 'left_command'],
-        }],
-        to_if_alone: [{ key_code: 'escape' }],
-      }],
-    }],
-  }],
+  profiles: [
+    {
+      name: 'Default',
+      rules: [
+        {
+          description: 'Caps Lock to Escape when pressed alone, Hyper when held',
+          manipulators: [
+            {
+              type: 'basic',
+              from: { key_code: 'caps_lock' },
+              to: [
+                {
+                  key_code: 'left_shift',
+                  modifiers: ['left_control', 'left_option', 'left_command'],
+                },
+              ],
+              to_if_alone: [{ key_code: 'escape' }],
+            },
+          ],
+        },
+      ],
+    },
+  ],
   outputPath: '~/.config/karabiner/karabiner.json',
 })
 ```
@@ -260,6 +281,7 @@ karabiner: karabiner({
 ### Window Manager Integration
 
 **AeroSpace:**
+
 ```typescript
 import { aerospace } from 'bunsen'
 
@@ -275,6 +297,7 @@ karabiner: karabiner({
 ```
 
 **Rectangle:**
+
 ```typescript
 import { rectangle } from 'bunsen'
 
@@ -300,22 +323,26 @@ espanso: espanso({
     {
       trigger: ':date',
       replace: '{{date}}',
-      vars: [{
-        name: 'date',
-        type: 'date',
-        params: { format: '%Y-%m-%d' },
-      }],
+      vars: [
+        {
+          name: 'date',
+          type: 'date',
+          params: { format: '%Y-%m-%d' },
+        },
+      ],
     },
 
     // Shell command output
     {
       trigger: ':git',
       replace: '{{output}}',
-      vars: [{
-        name: 'output',
-        type: 'shell',
-        params: { cmd: 'git branch --show-current' },
-      }],
+      vars: [
+        {
+          name: 'output',
+          type: 'shell',
+          params: { cmd: 'git branch --show-current' },
+        },
+      ],
     },
   ],
   outputPath: '~/.config/espanso/match/base.yml',
@@ -359,6 +386,7 @@ hooks: {
 ### Configuration Loading
 
 Bunsen searches for `dotfiles.config.ts` in:
+
 1. Current working directory
 2. Path specified via `--config` flag
 3. `~/.config/bunsen/dotfiles.config.ts`
@@ -370,6 +398,7 @@ The configuration is loaded using Bun's native TypeScript support (no transpilat
 ### State Tracking
 
 All operations are tracked in `~/.config/bunsen/state.json`. This enables:
+
 - **Status checking** - See what Bunsen has created
 - **Conflict detection** - Prevent accidental overwrites
 - **Idempotent operations** - Safe to run `bunsen apply` multiple times
@@ -378,6 +407,7 @@ All operations are tracked in `~/.config/bunsen/state.json`. This enables:
 ### Conflict Resolution
 
 When a symlink target already exists:
+
 1. **Backup (default)** - Creates `.backup.{timestamp}` file
 2. **Overwrite** - Removes existing file (with `--force` flag)
 3. **Skip** - Leaves existing file unchanged (interactive mode)
@@ -385,6 +415,7 @@ When a symlink target already exists:
 ### Path Resolution
 
 All paths are resolved securely:
+
 1. Expand `~` to `$HOME`
 2. Expand environment variables (`$HOME`, `$USER`, etc.)
 3. Resolve to absolute paths
@@ -393,6 +424,7 @@ All paths are resolved securely:
 ## Examples
 
 See the [examples](./examples) directory for complete configuration examples:
+
 - `dotfiles.config.ts` - Full-featured example with all features
 - `karabiner.config.ts` - Karabiner-specific examples
 - `espanso-config/` - Espanso configuration examples
@@ -450,6 +482,7 @@ State Tracker (src/core/state/)
 ```
 
 **Key principles:**
+
 - **Bun Native TypeScript** - No transpilation, instant startup
 - **Dynamic Imports** - User configs loaded at runtime
 - **Zod Validation** - Type-safe configuration with helpful errors
@@ -463,7 +496,9 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture documentation.
 ### Planned Features
 
 #### VS Code Integration
+
 - [ ] **VS Code Extensions Sync** - Declaratively manage VS Code extensions
+
   ```typescript
   vscode: {
     extensions: [
@@ -474,7 +509,9 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture documentation.
     autoInstall: true,
   }
   ```
+
 - [ ] **VS Code Settings Link** - Symlink VS Code settings from dotfiles
+
   ```typescript
   vscode: {
     settingsPath: '~/dotfiles/vscode/settings.json',
@@ -484,6 +521,7 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture documentation.
   ```
 
 #### Other Planned Features
+
 - [ ] **Template Support** - Use variables and templates in config files
 - [ ] **Homebrew Cask Support** - Install GUI applications
 - [ ] **System Preferences** - Manage macOS defaults and system settings
@@ -499,6 +537,7 @@ Contributions are welcome! If you'd like to work on any roadmap items or have id
 ## Inspiration
 
 Bunsen is inspired by:
+
 - **NixOS** - Declarative configuration approach
 - **GNU Stow** - Symlink management
 - **Homebrew Bundle** - Package management

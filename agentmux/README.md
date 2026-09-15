@@ -8,9 +8,9 @@ A tmux-native dashboard for coding agents. It has one shared agent registry and 
 - `gh.runs` monitors the latest 20 GitHub Actions runs.
   Use `gh.runs --repo OWNER/REPO` to select a repository; without it, the CWD repository is used.
 
-Pi reports lifecycle state through `config/pi/extensions/agentmux-status.ts`. Other supported agents are discovered from processes and show an unknown state until their lifecycle integrations are added.
+Pi reports lifecycle state through `config/pi/extensions/agentmux-status.ts`: agent runs are working, blocking UI prompts are waiting, and settled runs are done. The extension is a no-op outside tmux and removes its pane record when Pi shuts down. Other supported agents are discovered from processes and show an unknown state until their lifecycle integrations are added.
 
-State is stored in `AGENTMUX_STATE_DIR`, `$XDG_RUNTIME_DIR/agentmux`, or the current user's temporary directory, in that order.
+State is stored in `AGENTMUX_STATE_DIR`, `$XDG_RUNTIME_DIR/agentmux`, or the current user's temporary directory, in that order. State directories and files use private permissions.
 
 ## Keys
 

@@ -26,7 +26,11 @@ export async function statusCommand(_options: StatusOptions = {}) {
   logger.plain(`  ${colors.green('✓')} OK: ${summary.ok}`)
   if (summary.missing > 0) logger.plain(`  ${colors.red('✗')} Missing: ${summary.missing}`)
   if (summary.modified > 0) logger.plain(`  ${colors.yellow('⚠')} Modified: ${summary.modified}`)
-  if (summary.notSymlink > 0) logger.plain(`  ${colors.red('✗')} Not symlink: ${summary.notSymlink}`)
+  if (summary.notSymlink > 0)
+    logger.plain(`  ${colors.red('✗')} Not symlink: ${summary.notSymlink}`)
+  if (summary.wrongTarget > 0) {
+    logger.plain(`  ${colors.yellow('⚠')} Wrong target: ${summary.wrongTarget}`)
+  }
 
   logger.plain('')
   logger.plain(`  Last applied: ${new Date(summary.lastApplied).toLocaleString()}`)
@@ -71,11 +75,14 @@ export async function statusCommand(_options: StatusOptions = {}) {
     logger.plain('')
     logger.plain(colors.bold('Packages:'))
 
-    const byManager = packagesState.installed.reduce((acc, pkg) => {
-      if (!acc[pkg.manager]) acc[pkg.manager] = []
-      acc[pkg.manager].push(pkg)
-      return acc
-    }, {} as Record<string, typeof packagesState.installed>)
+    const byManager = packagesState.installed.reduce(
+      (acc, pkg) => {
+        if (!acc[pkg.manager]) acc[pkg.manager] = []
+        acc[pkg.manager].push(pkg)
+        return acc
+      },
+      {} as Record<string, typeof packagesState.installed>
+    )
 
     for (const [manager, pkgs] of Object.entries(byManager)) {
       logger.plain(`  ${colors.cyan(manager)}: ${pkgs.length} packages`)

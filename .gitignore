@@ -23,12 +23,12 @@ node_modules/
 passwords.txt
 shortcuts.yml
 ./lvim/session
+.pi-subagents/
 nvim/README.md
 .Spotlight-V100
 .TemporaryItems
 /*/node_modules
 Temporary Items
-./.pi-subagents/
 .VolumeIcon.icns
 nvim/lazy-lock.json
 Network Trash Folder

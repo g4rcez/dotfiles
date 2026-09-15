@@ -1,17 +1,11 @@
 import { homedir } from 'node:os'
-import { Karabiner } from '../../api/karabiner/karabiner.ts'
+import type { Karabiner } from '../../api/karabiner/karabiner.ts'
 import { writeFile } from '../../utils/fs.ts'
 import { logger } from '../../utils/logger.ts'
 import { updateKarabinerState, updateWhichKeyState } from '../state/storage.ts'
 import { expandPath } from '../symlink/resolver.ts'
 
-export async function generateKarabinerConfig(
-  karabiner: Karabiner,
-  options: { dryRun?: boolean } = {}
-): Promise<void> {
-  const { dryRun = false } = options
-  const home = homedir()
-  const outputPath = expandPath(karabiner.configPath, home)
+export function serializeKarabinerConfig(karabiner: Karabiner): string {
   const karabinerJson = {
     global: {
       check_for_updates_on_startup: true,
@@ -31,7 +25,17 @@ export async function generateKarabinerConfig(
     })),
   }
 
-  const content = JSON.stringify(karabinerJson, null, 2)
+  return JSON.stringify(karabinerJson, null, 2)
+}
+
+export async function generateKarabinerConfig(
+  karabiner: Karabiner,
+  options: { dryRun?: boolean } = {}
+): Promise<void> {
+  const { dryRun = false } = options
+  const home = homedir()
+  const outputPath = expandPath(karabiner.configPath, home)
+  const content = serializeKarabinerConfig(karabiner)
 
   if (dryRun) {
     logger.info(`[DRY RUN] Would write Karabiner config to: ${outputPath}`)

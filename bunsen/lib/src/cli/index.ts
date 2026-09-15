@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { Command } from 'commander'
-import { setVerbose } from '../utils/logger.ts'
+import { logger, setVerbose } from '../utils/logger.ts'
 import { initCommand } from './commands/init.ts'
 import { validateCommand } from './commands/validate.ts'
 import { statusCommand } from './commands/status.ts'
@@ -36,7 +36,7 @@ program
   .option('-c, --config <path>', 'Path to config file')
   .action((options) => {
     const globalOpts = program.opts()
-    validateCommand({ ...options, profile: globalOpts.profile })
+    return validateCommand({ ...options, profile: globalOpts.profile })
   })
 
 program
@@ -45,7 +45,7 @@ program
   .option('-c, --config <path>', 'Path to config file')
   .action((options) => {
     const globalOpts = program.opts()
-    statusCommand({ ...options, profile: globalOpts.profile })
+    return statusCommand({ ...options, profile: globalOpts.profile })
   })
 
 program
@@ -62,7 +62,7 @@ program
   .option('--packages-only', 'Only install packages')
   .action((options) => {
     const globalOpts = program.opts()
-    applyCommand({ ...options, profile: options.profile || globalOpts.profile })
+    return applyCommand({ ...options, profile: options.profile || globalOpts.profile })
   })
 
 program
@@ -76,7 +76,7 @@ program
   .option('--packages-only', 'Show only package changes')
   .action((options) => {
     const globalOpts = program.opts()
-    diffCommand({ ...options, profile: globalOpts.profile })
+    return diffCommand({ ...options, profile: globalOpts.profile })
   })
 
 program
@@ -86,7 +86,7 @@ program
   .option('--force', 'Force overwrite existing files')
   .option('--dry-run', 'Show what would be done without making changes')
   .action((name, options) => {
-    profileCommand(name, options)
+    return profileCommand(name, options)
   })
 
 program
@@ -94,7 +94,12 @@ program
   .description('List available profiles')
   .option('-c, --config <path>', 'Path to config file')
   .action((options) => {
-    profilesCommand(options)
+    return profilesCommand(options)
   })
 
-program.parse()
+try {
+  await program.parseAsync()
+} catch (error) {
+  logger.error(error instanceof Error ? error.message : String(error))
+  process.exitCode = 1
+}

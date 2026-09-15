@@ -6,16 +6,18 @@ use anyhow::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use crossterm::execute;
 use crossterm::terminal::{
-    disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
+    EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
 };
+use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, List, ListItem, ListState, Paragraph, Wrap};
-use ratatui::Terminal;
 use std::collections::HashMap;
 use std::io::{self, Stdout};
+use std::sync::mpsc::{self, Receiver, Sender, TryRecvError};
+use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 const BLUE: Color = Color::Rgb(122, 162, 247);
@@ -33,6 +35,84 @@ pub enum View {
     Sidebar,
 }
 
+struct GitRefreshRequest {
+    generation: u64,
+    path: String,
+}
+
+struct GitRefreshResult {
+    generation: u64,
+    path: String,
+    repo: Result<RepoInfo, String>,
+}
+
+impl GitRefreshResult {
+    fn matches(&self, generation: u64, path: Option<&str>) -> bool {
+        self.generation == generation && path == Some(self.path.as_str())
+    }
+}
+
+struct GitRefreshWorker {
+    requests: Sender<GitRefreshRequest>,
+    results: Receiver<GitRefreshResult>,
+    in_flight: bool,
+}
+
+impl GitRefreshWorker {
+    fn new() -> Self {
+        let (request_tx, request_rx) = mpsc::channel::<GitRefreshRequest>();
+        let (result_tx, result_rx) = mpsc::channel();
+        thread::Builder::new()
+            .name("agentmux-git-refresh".to_owned())
+            .spawn(move || {
+                for request in request_rx {
+                    let repo = git::inspect(&request.path);
+                    if result_tx
+                        .send(GitRefreshResult {
+                            generation: request.generation,
+                            path: request.path,
+                            repo,
+                        })
+                        .is_err()
+                    {
+                        break;
+                    }
+                }
+            })
+            .expect("failed to start Git refresh worker");
+        Self {
+            requests: request_tx,
+            results: result_rx,
+            in_flight: false,
+        }
+    }
+
+    fn request(&mut self, generation: u64, path: String) -> bool {
+        if self.in_flight {
+            return false;
+        }
+        self.in_flight = self
+            .requests
+            .send(GitRefreshRequest { generation, path })
+            .is_ok();
+        self.in_flight
+    }
+
+    fn poll(&mut self) -> Option<GitRefreshResult> {
+        match self.results.try_recv() {
+            Ok(result) => {
+                self.in_flight = false;
+                Some(result)
+            }
+            Err(TryRecvError::Disconnected) => {
+                self.in_flight = false;
+                None
+            }
+            Err(TryRecvError::Empty) => None,
+        }
+    }
+}
+
 struct App {
     view: View,
     agents: Vec<AgentRecord>,
@@ -45,6 +125,8 @@ struct App {
     last_git_refresh: Instant,
     last_preview_refresh: Instant,
     git_pending: bool,
+    git_generation: u64,
+    git_worker: GitRefreshWorker,
 }
 
 impl App {
@@ -64,6 +146,8 @@ impl App {
             last_git_refresh: now,
             last_preview_refresh: now,
             git_pending: view == View::Dashboard,
+            git_generation: 0,
+            git_worker: GitRefreshWorker::new(),
         };
         app.refresh_preview();
         Ok(app)
@@ -113,23 +197,42 @@ impl App {
         self.last_agent_refresh = Instant::now();
     }
 
-    fn refresh_selected_repo(&mut self) {
-        if self.view != View::Dashboard {
+    fn request_selected_repo_refresh(&mut self) {
+        if self.view != View::Dashboard || self.git_worker.in_flight {
             return;
         }
-        if let Some(path) = self.selected_agent().map(|agent| agent.pane.path.clone()) {
-            let repo = git::inspect(&path);
-            self.repo_cache.insert(path.clone(), repo.clone());
+        let Some(path) = self.selected_agent().map(|agent| agent.pane.path.clone()) else {
+            self.git_pending = false;
+            return;
+        };
+        if self.git_worker.request(self.git_generation, path) {
+            self.git_pending = false;
+        }
+    }
+
+    fn apply_repo_refresh(&mut self) -> bool {
+        let Some(result) = self.git_worker.poll() else {
+            return false;
+        };
+        let current_path = self.selected_agent().map(|agent| agent.pane.path.as_str());
+        if !result.matches(self.git_generation, current_path) {
+            self.git_pending = self.view == View::Dashboard;
+            return false;
+        }
+
+        self.last_git_refresh = Instant::now();
+        if let Ok(repo) = result.repo {
+            self.repo_cache.insert(result.path.clone(), repo.clone());
             for agent in self
                 .agents
                 .iter_mut()
-                .filter(|agent| agent.pane.path == path)
+                .filter(|agent| agent.pane.path == result.path)
             {
                 agent.repo = repo.clone();
             }
+            return true;
         }
-        self.last_git_refresh = Instant::now();
-        self.git_pending = false;
+        false
     }
 
     fn refresh_preview(&mut self) {
@@ -143,6 +246,7 @@ impl App {
     }
 
     fn selection_changed(&mut self) {
+        self.git_generation = self.git_generation.wrapping_add(1);
         self.git_pending = self.view == View::Dashboard;
         self.last_git_refresh = Instant::now();
         self.refresh_preview();
@@ -197,6 +301,9 @@ fn run_loop(
     let mut dirty = true;
 
     loop {
+        if app.apply_repo_refresh() {
+            dirty = true;
+        }
         if app.last_agent_refresh.elapsed() >= Duration::from_secs(2) {
             app.refresh_agents();
             dirty = true;
@@ -207,7 +314,10 @@ fn run_loop(
             app.refresh_preview();
             dirty = true;
         }
-        if !app.git_pending && app.last_git_refresh.elapsed() >= Duration::from_secs(10) {
+        if !app.git_pending
+            && !app.git_worker.in_flight
+            && app.last_git_refresh.elapsed() >= Duration::from_secs(10)
+        {
             app.git_pending = view == View::Dashboard;
         }
         if dirty {
@@ -215,9 +325,7 @@ fn run_loop(
             dirty = false;
         }
         if app.git_pending && app.last_git_refresh.elapsed() >= Duration::from_millis(200) {
-            app.refresh_selected_repo();
-            dirty = true;
-            continue;
+            app.request_selected_repo_refresh();
         }
 
         if !event::poll(Duration::from_millis(200))? {
@@ -415,5 +523,38 @@ fn elapsed_since(timestamp_ms: u64) -> String {
         format!("{}m", seconds / 60)
     } else {
         format!("{}h", seconds / 3_600)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn git_refresh_rejects_a_duplicate_request() {
+        let (requests, request_rx) = mpsc::channel();
+        let (_results, result_rx) = mpsc::channel();
+        let mut worker = GitRefreshWorker {
+            requests,
+            results: result_rx,
+            in_flight: false,
+        };
+
+        assert!(worker.request(1, "/first".to_owned()));
+        assert!(!worker.request(2, "/second".to_owned()));
+        assert_eq!(request_rx.recv().unwrap().path, "/first");
+    }
+
+    #[test]
+    fn git_refresh_matches_both_generation_and_path() {
+        let result = GitRefreshResult {
+            generation: 2,
+            path: "/repo".to_owned(),
+            repo: Ok(RepoInfo::default()),
+        };
+
+        assert!(result.matches(2, Some("/repo")));
+        assert!(!result.matches(1, Some("/repo")));
+        assert!(!result.matches(2, Some("/other")));
     }
 }

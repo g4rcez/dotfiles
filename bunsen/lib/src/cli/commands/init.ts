@@ -1,20 +1,8 @@
-import { resolve, basename } from 'node:path'
-import { homedir } from 'node:os'
+import { resolve } from 'node:path'
 import { pathExists, writeFile } from '../../utils/fs.ts'
 import { logger } from '../../utils/logger.ts'
 
-function getImportStatement(): string {
-  const username = basename(homedir())
-  const isBunsenRepo = process.cwd().includes('bunsen') && process.cwd().includes(username)
-  if (isBunsenRepo) {
-    return `// Running from Bunsen repo - using local build
-import { defineConfig, karabiner, espanso } from './dist/index.js'`
-  }
-
-  return `import { defineConfig, karabiner, espanso } from 'bunsen'`
-}
-
-const TEMPLATE = `${getImportStatement()}
+export const STARTER_CONFIG = `import { defineConfig } from '@g4rcez/bunsen'
 
 export default defineConfig({
   // Symlink management
@@ -42,30 +30,6 @@ export default defineConfig({
     exportFile: '~/.config/bunsen/env.sh',
   },
 
-  // Karabiner configuration
-  // karabiner: karabiner({
-  //   profiles: [{
-  //     name: 'Default',
-  //     rules: [{
-  //       description: 'Caps Lock to Escape',
-  //       manipulators: [{
-  //         type: 'basic',
-  //         from: { key_code: 'caps_lock' },
-  //         to: [{ key_code: 'escape' }],
-  //       }],
-  //     }],
-  //   }],
-  //   outputPath: '~/.config/karabiner/karabiner.json',
-  // }),
-
-  // Espanso configuration
-  // espanso: espanso({
-  //   matches: [
-  //     { trigger: ':shrug', replace: '¯\\\\_(ツ)_/¯' },
-  //   ],
-  //   outputPath: '~/.config/espanso/match/base.yml',
-  // }),
-
   // Lifecycle hooks
   hooks: {
     beforeApply: async () => {
@@ -86,7 +50,7 @@ export async function initCommand(options: { force?: boolean }) {
     process.exit(1)
   }
 
-  await writeFile(configPath, TEMPLATE)
+  await writeFile(configPath, STARTER_CONFIG)
   logger.success('Created dotfiles.config.ts')
   logger.info('Edit the file to configure your dotfiles')
   logger.info('Run "bunsen apply" when ready')

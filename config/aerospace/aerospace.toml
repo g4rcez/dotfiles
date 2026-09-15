@@ -61,10 +61,16 @@ alt-l = 'move right'
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 check-further-callbacks = true
-run = ['layout floating', 'exec-and-forget $HOME/.config/aerospace/center-kitty.sh']
+run = [
+    'layout floating',
+    'exec-and-forget $HOME/.config/aerospace/center-kitty.sh',
+]
 
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
 check-further-callbacks = true
 run = ['layout floating']
 
+[[on-window-detected]]
+if.app-id = "com.mitchellh.ghostty"
+run = ["layout tiling"]

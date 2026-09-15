@@ -55,19 +55,20 @@ export async function createSymlink(
     } else {
       if (resolution === 'backup') {
         await createBackup(target)
-      }
-
-      // Remove existing file/symlink
-      try {
-        const type = getPathType(target)
-        if (type === 'directory') {
-          await rm(target, { recursive: true })
-        } else {
-          await unlink(target)
+      } else {
+        // Backup already moved the target out of the way. Only overwrite
+        // needs to remove the conflicting path here.
+        try {
+          const type = getPathType(target)
+          if (type === 'directory') {
+            await rm(target, { recursive: true })
+          } else {
+            await unlink(target)
+          }
+        } catch {
+          logger.error(`Failed to remove existing ${conflict.type}: ${target}`)
+          return false
         }
-      } catch (error) {
-        logger.error(`Failed to remove existing ${conflict.type}: ${target}`)
-        return false
       }
     }
   }

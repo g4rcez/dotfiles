@@ -1,5 +1,5 @@
-import { Espanso } from '../../api/espanso'
-import { Karabiner } from '../../api/karabiner/karabiner'
+import type { Espanso } from '../../api/espanso'
+import type { Karabiner } from '../../api/karabiner/karabiner'
 
 export interface SymlinkConfig {
   [target: string]:
@@ -611,7 +611,7 @@ export interface PackageManagerConfig {
   /** DNF packages (Fedora/RHEL) */
   dnf?: string[] | { packages?: string[]; import?: string }
 
-  /** Skip sudo confirmation for apt/pacman/dnf */
+  /** Prepend sudo for apt/pacman/dnf when the process is not root */
   autoSudo?: boolean
 }
 

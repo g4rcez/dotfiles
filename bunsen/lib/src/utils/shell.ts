@@ -52,40 +52,41 @@ export async function hasBunsenIntegration(configPath: string): Promise<boolean>
 }
 
 /**
- * Injects source statement into shell config
+ * Builds shell config content with one Bunsen integration block.
  */
-export async function injectIntoShellConfig(
-  configPath: string,
-  exportFilePath: string
-): Promise<void> {
-  let content = ''
+export function buildShellConfigContent(
+  existingContent: string,
+  exportFilePath: string,
+  home: string
+): string {
+  let content = existingContent
+  const beginIndex = content.indexOf(MARKER_BEGIN)
+  const endIndex = content.indexOf(MARKER_END)
 
-  if (pathExists(configPath)) {
-    content = await readFile(configPath)
-
-    // Remove existing Bunsen section if present
-    const beginIndex = content.indexOf(MARKER_BEGIN)
-    const endIndex = content.indexOf(MARKER_END)
-
-    if (beginIndex !== -1 && endIndex !== -1) {
-      const before = content.substring(0, beginIndex)
-      const after = content.substring(endIndex + MARKER_END.length)
-      content = before + after.trim()
-    }
+  if (beginIndex !== -1 && endIndex !== -1) {
+    const before = content.substring(0, beginIndex)
+    const after = content.substring(endIndex + MARKER_END.length)
+    content = before + after.trim()
   }
 
-  // Add new Bunsen section
-  const home = homedir()
   const portablePath = exportFilePath.replace(home, '$HOME')
   const injection = `
 ${MARKER_BEGIN}
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "${portablePath}" ] && source "${portablePath}"
 ${MARKER_END}
 `
+  return content.trim() + '\n' + injection
+}
 
-  content = content.trim() + '\n' + injection
-
-  await writeFile(configPath, content)
+/**
+ * Injects source statement into shell config
+ */
+export async function injectIntoShellConfig(
+  configPath: string,
+  exportFilePath: string
+): Promise<void> {
+  const content = pathExists(configPath) ? await readFile(configPath) : ''
+  await writeFile(configPath, buildShellConfigContent(content, exportFilePath, homedir()))
 }
 
 /**
