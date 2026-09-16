@@ -22,6 +22,7 @@ espanso
 	.format("time", "date", "%H:%M", "Time in HH:MM")
 	.format("now", "date", "%d/%m/%Y %H:%M", "Datetime")
 	.clipboard("mdl", "link", "[$|$]({{link}})", "Clipboard to Markdown link")
+	.insert("mcode", "```$|$```", "Codefence")
 	.form(
 		"hex",
 		"{{hex}}",

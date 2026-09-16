@@ -1,7 +1,5 @@
 ##############################################################################################################
 ## loader contract
-# Prefer an explicitly configured checkout, but keep ~/.zshrc symlinks and direct
-# sources relocatable by deriving the repository root from this file's path.
 typeset -g _zshrc_source="${(%):-%N}"
 export WORDCHARS='.*_-[]@~&;:!#$%^(){}<>/\//[\/]/ '
 export WORDCHARS="${WORDCHARS/\//}"
@@ -96,13 +94,13 @@ typeset -a SOURCE=(
     "$HOME/.railway/env"
     "$HOME/.lmstudio/bin"
     "$DOTFILES/bin/fzf-git"
-    $DOTFILES/config/zsh/ls.sh
-    "$DOTFILES/config/zsh/alias.sh"
+    "$DOTFILES/config/zsh/ls.sh"
     "$DOTFILES/config/zsh/zstyle.sh"
     "$DOTFILES/config/zsh/history.sh"
     "$DOTFILES/config/zsh/fzf.sh"
     "$DOTFILES/config/zsh/git.sh"
     "$DOTFILES/config/zsh/node.sh"
+    "$DOTFILES/config/zsh/alias.sh"
     "$DOTFILES/config/zsh/completion/node-completion.sh"
     "$DOTFILES/config/zsh/completion/_ai.zsh"
     "$DOTFILES/config/zsh/completion/_worktree.zsh"
@@ -114,6 +112,7 @@ typeset -a SOURCE=(
 if [[ -z "$TMUX" ]] && (($+commands[zellij])); then
     SOURCE+=("$DOTFILES/config/zsh/zellij.sh")
 fi
+
 
 for config in "${SOURCE[@]}"; do
     [[ -r "$config" ]] && source "$config"
@@ -140,5 +139,10 @@ if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
     add-zle-hook-widget line-init _zsh_lazy_load_autopair
 fi
 
-if [ -f '~/tools/google-cloud-sdk/path.zsh.inc' ]; then . '~/tools/google-cloud-sdk/path.zsh.inc'; fi
-if [ -f '~/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '~/tools/google-cloud-sdk/completion.zsh.inc'; fi
+
+if [ -f "$HOME/tools/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/tools/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/tools/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/tools/google-cloud-sdk/completion.zsh.inc"; fi
+
+# BEGIN BUNSEN
+[ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
+# END BUNSEN

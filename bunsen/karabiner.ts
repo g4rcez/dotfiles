@@ -64,7 +64,7 @@ const keys = [
 				"CLI math expressions",
 			),
 			r: karabiner.shell(
-				`${TERM} -e '~/.local/share/mise/installs/node/lts/bin/node'`,
+				`${TERM} -e '$(which node)'`,
 				"Node REPL",
 			),
 		},
