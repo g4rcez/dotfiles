@@ -224,6 +224,7 @@ local function lsp_config(name, opts)
 end
 
 lsp_config "kulala_ls"
+lsp_config "git_config"
 lsp_config "css_variables"
 lsp_config "docker_compose_language_service"
 lsp_config("denols", {

@@ -1,39 +1,98 @@
-# vim: ft=ghostty
 font-size = 17
+window-save-state = always
 adjust-cell-height = 55%
 font-thicken = true
 font-thicken-strength = 120
 window-padding-x = 2
 bold-is-bright = true
 shell-integration = detect
+shell-integration-features = no-cursor
+cursor-style = block
 adjust-cell-width = 2%
 theme = TokyoNight
 scrollback-limit = 100000
-macos-option-as-alt = true
 mouse-hide-while-typing = true
-macos-titlebar-style = tabs
 font-family = "JetBrainsMono Nerd Font"
-quick-terminal-animation-duration = 0.5
-window-decoration = none
-window-theme = ghostty
-window-colorspace = display-p3
-macos-titlebar-style = transparent
+macos-option-as-alt = true
+macos-titlebar-style = tabs
+tab-inherit-working-directory = true
+split-inherit-working-directory = true
+# window-decoration = none
 
 # keybind
+# Cmd+p is the Ghostty equivalent of tmux's Ctrl+p prefix.
 keybind = global:super+shift+zero=toggle_quick_terminal
+
+# Keep direct tab shortcuts available as well as the tmux-style leader bindings.
 keybind = super+t=new_tab
 keybind = super+shift+[=previous_tab
 keybind = super+shift+]=next_tab
+
+# Prefix + r/w rename the focused surface/tab. Ghostty has no tmux session.
+keybind = super+p>r=prompt_surface_title
+keybind = super+p>w=prompt_tab_title
+# Prefix + , opens the current scrollback in the default text editor.
+keybind = super+p>,=write_scrollback_file:open
+# Prefix + R reloads this configuration.
+keybind = super+p>shift+r=reload_config
+
+# Prefix + b/o/p/: use Ghostty's command palette where tmux uses a picker.
+keybind = super+p>b=toggle_command_palette
+keybind = super+p>o=toggle_command_palette
+keybind = super+p>p=toggle_command_palette
+keybind = super+p>shift+;=toggle_command_palette
+# Prefix + Tab cycles tabs, matching the useful part of tmux's window picker.
+keybind = super+p>tab=next_tab
+keybind = super+p>shift+tab=previous_tab
+
+# Prefix + - / \ split down/right. New tabs and splits inherit the cwd.
 keybind = super+p>-=new_split:down
 keybind = super+p>\=new_split:right
 keybind = super+p>equal=equalize_splits
-keybind = super+p>h=previous_tab
-keybind = super+p>l=next_tab
-keybind = super+p>shift+h=goto_split:left
-keybind = super+p>shift+j=goto_split:down
-keybind = super+p>shift+k=goto_split:up
-keybind = super+p>shift+l=goto_split:right
-keybind = super+p>n=new_window
-keybind = super+p>r=reload_config
+
+# Prefix + x closes the current tmux-like tab and all its splits.
+keybind = super+p>x=close_tab
+# Prefix + t/n create a tab/window.
 keybind = super+p>t=new_tab
-keybind = super+p>p=toggle_command_palette
+keybind = super+p>n=new_window
+
+# Prefix + numbers select tabs; 0 selects tab 10.
+keybind = super+p>1=goto_tab:1
+keybind = super+p>2=goto_tab:2
+keybind = super+p>3=goto_tab:3
+keybind = super+p>4=goto_tab:4
+keybind = super+p>5=goto_tab:5
+keybind = super+p>6=goto_tab:6
+keybind = super+p>7=goto_tab:7
+keybind = super+p>8=goto_tab:8
+keybind = super+p>9=goto_tab:9
+keybind = super+p>0=goto_tab:10
+
+# Prefix + vim keys move between splits.
+keybind = super+p>h=goto_split:left
+keybind = super+p>j=goto_split:down
+keybind = super+p>k=goto_split:up
+keybind = super+p>l=goto_split:right
+
+# Alt-arrows move between splits without the prefix.
+keybind = alt+arrow_left=goto_split:left
+keybind = alt+arrow_right=goto_split:right
+keybind = alt+arrow_up=goto_split:up
+keybind = alt+arrow_down=goto_split:down
+
+# Prefix + Alt-arrows and Alt-vim keys resize splits.
+# Ghostty uses pixels; 50 is a visible approximation of tmux's five-cell step.
+keybind = super+p>alt+arrow_left=resize_split:left,50
+keybind = super+p>alt+arrow_right=resize_split:right,50
+keybind = super+p>alt+arrow_up=resize_split:up,50
+keybind = super+p>alt+arrow_down=resize_split:down,50
+keybind = super+p>alt+h=resize_split:left,50
+keybind = super+p>alt+j=resize_split:down,50
+keybind = super+p>alt+k=resize_split:up,50
+keybind = super+p>alt+l=resize_split:right,50
+
+# Prefix + uppercase vim keys resize splits too.
+keybind = super+p>shift+h=resize_split:left,50
+keybind = super+p>shift+j=resize_split:down,50
+keybind = super+p>shift+k=resize_split:up,50
+keybind = super+p>shift+l=resize_split:right,50

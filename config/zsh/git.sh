@@ -391,8 +391,8 @@ function tag() {
     emulate -L zsh
     (($# == 1)) || { print -u2 -r -- "Usage: tag TAG"; return 2; }
     _git_require_repo || return
-    command git tag "$1" || return $?
-    command git push origin "$1" || return $?
+    git tag "$1"
+    git push origin "$1"
 }
 
 function actionWith() {
@@ -534,7 +534,7 @@ function lastcommit() {
 }
 
 function gtag() {
-    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview "bash $DOTFILES/bin/git-fzf-preview.sh tag {}"
+    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview "bash $DOTFILES/bin/git-fzf-preview.sh gettag {}"
 }
 
 #############################################################################################################################

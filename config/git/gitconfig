@@ -55,14 +55,14 @@
 
 [merge]
     log = true
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 
 [interactive]
     diffFilter = delta --color-only --features=interactive
 
 [delta]
     dark = true
-    features = decorations
+    features = decorations unobtrusive-line-numbers
     hyperlinks = true
     hyperlinks-file-link-format = "vscode://file/{path}:{line}"
     line-numbers = true
@@ -71,7 +71,7 @@
     true-color = always
 
 [delta "interactive"]
-    keep-plus-minus-markers = false
+    keep-plus-minus-markers = true
 
 [delta "decorations"]
     file-style = omit
@@ -103,7 +103,7 @@
     author = config user.name
     forcecommit = commit --no-verify
     # Interactive rebase with the given number of latest commits.
-    reb = "!r() { git rebase -i HEAD~$1; }; r"
+    squash = "!r() { git rebase -i HEAD~$1; }; r"
     tag = "tag -s"
     # Find commits by source code
     fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
@@ -133,13 +133,9 @@
     line-numbers-plus-style = "bold #a6e3a1"
     line-numbers-right-style = "#6c7086"
     line-numbers-zero-style = "#6c7086"
-# 25% red 75% base
     minus-emph-style = "bold syntax #53394c"
-# 10% red 90% base
     minus-style = "syntax #35293b"
-# 25% green 75% base
     plus-emph-style = "bold syntax #40504b"
-# 10% green 90% base
     plus-style = "syntax #2c333a"
     map-styles = \
         bold purple => syntax "#494060", \
@@ -151,6 +147,7 @@
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential

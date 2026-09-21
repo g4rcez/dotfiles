@@ -1,4 +1,4 @@
-function tag() { 
+function gettag() { 
     echo "Tag: $1"
     git log "$1" --pretty
 }

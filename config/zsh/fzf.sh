@@ -87,7 +87,7 @@ function files() {
         local prog
         while IFS= read -r prog; do
             [[ -n "$prog" ]] && "$EDITOR" "$prog"
-        done <<< "$file"
+        done <<<"$file"
     else
         print -r -- "cancelled fzf"
     fi
@@ -97,16 +97,17 @@ function st() {
     git rev-parse --git-dir >/dev/null 2>&1 || { echo "You are not in a git repository" && return; }
     local selected
     selected=$(git -c color.status=always status --short |
-        fzf --no-height --cycle "$@" --border -m --ansi --nth 2..,.. \
+        fzf --no-height --cycle "$@" -m --ansi --nth 2..,.. \
+            --preview-window right,85% \
             --bind 'ctrl-d:preview-down' \
             --bind 'ctrl-u:preview-up' \
-            --preview '(if [ -d {-1} ];then lsd -l {-1}; else git diff --color=always -- {-1} | delta --side-by-side -w "$(tput cols)-45" | sed 1,4d; cat {-1}; fi)' |
+            --preview '(printf "%s\n\n" {-1}; if [ -d {-1} ];then lsd -l {-1}; else git diff --color=always -- {-1} | delta --side-by-side -w "$(tput cols)-45" | sed 1,4d; cat {-1}; fi)' |
         cut -c4- | sed 's/.* -> //')
     if [[ -n "$selected" ]]; then
         local prog
         while IFS= read -r prog; do
             [[ -n "$prog" ]] && "$EDITOR" "$prog"
-        done <<< "$selected"
+        done <<<"$selected"
     fi
 }
 

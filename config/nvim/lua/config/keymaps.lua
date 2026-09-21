@@ -212,6 +212,9 @@ bind.visual("<leader>fr", function()
     require("grug-far").with_visual_selection { engine = "astgrep" }
 end, { desc = "Structural replace selection" })
 
+bind.x(".", ":norm .<CR>", nosilent)
+bind.x("@", ":norm @q<CR>", nosilent)
+
 if vscode.isVscode() then
     local function vscode_action(command, opts)
         return function()
@@ -317,7 +320,3 @@ if vscode.isVscode() then
     bind.normal("zm", vscode_action "editor.fold", { desc = "Close fold" })
     bind.normal("zo", vscode_action "editor.unfold", { desc = "Open fold" })
 end
-
-bind.x(".", ":norm .<CR>", nosilent)
-bind.x("@", ":norm @q<CR>", nosilent)
-
