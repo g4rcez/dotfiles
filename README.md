@@ -1,453 +1,182 @@
 # dotfiles
 
-> A comprehensive, configuration-as-code approach to managing development environment dotfiles with TypeScript and Bun/Node-compatible imports, featuring custom keyboard shortcuts, text expansion, and automated symlink management.
+Personal, macOS-first development environment for daily software work. This repository keeps my shell, terminal, editor, keyboard, window-management, text-expansion, and command-line workflows in one place.
 
-![my shell](./assets/shell.png)
+The setup is opinionated and designed for my machines. TypeScript and Bun, together with [`@g4rcez/bunsen`](https://github.com/g4rcez/bunsen), handle deployment. The behavior lives in the zsh, Lua, TOML, JSON, and standalone script files under this repository.
 
-## Features
+![My shell](./assets/shell.png)
 
-- 🎹 **Custom Keyboard Shortcuts** - Programmatic Karabiner Elements configuration with leader keys and modal editing
-- 📝 **Text Expansion** - Espanso integration with dynamic snippets and clipboard management
-- 🔗 **Automated Symlinks** - Declarative dotfiles deployment with Bunsen
-- 🐚 **Enhanced Shell** - Zsh with modern plugins, fzf integration, and custom functions
-- 🚀 **Modern Terminal** - Ghostty/Wezterm with an Option+P leader for splits/tabs, plus tmux for legacy session tools
-- ⚡ **Neovim IDE** - Comprehensive Lua configuration with LSP, treesitter, and custom keybindings
-- 📦 **Package Management** - Automated Homebrew package installation and management
-- 🎨 **Consistent Theming** - Catppuccin theme across all applications
+## What is included
 
-## 🛠 Core Technologies
+- **Zsh** — znap plugins, Starship, fzf, zoxide, mise, direnv, custom completions, Git helpers, and startup diagnostics.
+- **Neovim** — lazy.nvim, LSP, completion, Treesitter, Snacks, formatting, linting, debugging, HTTP tools, and GitHub integration. See [`config/nvim/README.md`](config/nvim/README.md).
+- **Terminals and sessions** — Ghostty as the primary terminal, WezTerm as an alternative, tmux as the active multiplexer, optional Zellij support, and Yazi for file management.
+- **macOS automation** — Karabiner Elements, Aerospace, Raycast, Espanso, and application shortcuts.
+- **Developer tools** — Git with delta and SSH signing, mise-managed runtimes, Homebrew packages, and configuration for Zed, VS Code, IntelliJ IDEA Vim, Kitty, Alacritty, Posting, Lazygit, and other CLI tools.
+- **Agent workflow** — the tmux-native [`agentmux`](agentmux/) dashboard, Pi lifecycle status integration, helper scripts, and prompts.
 
-| Tool | Purpose | Configuration |
-| ------ | --------- | -------------- |
-| **Writeme** | Text editor for notes | [`writeme.dev`](https://app.writeme.dev/) |
-| **Karabiner Elements** | Keyboard remapping & shortcuts | [`bunsen/karabiner.ts`](bunsen/karabiner.ts) |
-| **Espanso** | Text expansion & snippets | [`bunsen/espanso.ts`](bunsen/espanso.ts) |
-| **Bun** | Configuration runtime | [`dotfiles.config.ts`](dotfiles.config.ts) |
-| **Bunsen** | Dotfiles management CLI | [`bunsen/`](bunsen/) |
-| **Zsh** | Shell with plugins | [`config/zsh/`](config/zsh/) |
-| **Neovim** | Text editor | [`config/nvim/`](config/nvim/) |
-| **Ghostty** | Terminal emulator | [`config/ghostty/`](config/ghostty/) |
-| **Wezterm** | Alternative terminal | [`config/wezterm/`](config/wezterm/) |
-| **Tmux** | Terminal multiplexer | [`config/tmux/`](config/tmux/) |
-| **Zellij** | Modern terminal multiplexer | [`config/zellij/`](config/zellij/) |
+## Quick reference
 
-## What Gets Configured
+- Hold **Caps Lock** for the Hyper key (`Control` + `Option` + `Shift` + `Command`); tap it for Escape.
+- **Hyper + `h`/`j`/`k`/`l`** sends arrow keys.
+- **Command + `P`** is the terminal leader in Ghostty and WezTerm for tabs, splits, pane navigation, and reloads.
+- **Control + `P`** is the tmux prefix.
+- Espanso matches use the **`;`** prefix, for example `;date`, `;time`, `;uuid`, `;hex`, and `;rgb`.
+- Neovim uses **Space** as its leader key.
 
-### Keyboard Shortcuts (Karabiner)
+## Repository layout
 
-The configuration creates a powerful modal system with Caps Lock as the hyper key:
-
-- **Hyper + hjkl** - Vim-style navigation arrows
-- **Hyper + Return** - Tmux leader key bindings
-- **Hyper + w** - Window management (Aerospace)
-- **Hyper + s** - System controls (brightness, volume)
-- **Hyper + v** - Vim mode for system-wide navigation
-- **Hyper + r** - Raycast shortcuts
-- **Hyper + b** - Browser profile switching
-
-### Text Expansion (Espanso)
-
-Trigger: `;` prefix
-
-- **Social**: `;git`, `;blog`, `;linkedin` - Personal links
-- **Utilities**: `;uuid`, `;pass[length]`, `;cpf`, `;cnpj` - Generators
-- **Colors**: `;hex`, `;rgb`, `;hsl` - Color conversions
-- **Dates**: `;date`, `;time`, `;now` - Date/time insertion
-- **Emojis**: `;eyes`, `;s2`, `;blz` - Quick emoji access
-
-### 🐚 Shell Environment
-
-**Zsh Configuration** with:
-
-- **Oh My Zsh** framework with znap plugin manager
-- **Starship** prompt with git integration and Catppuccin theme
-- **FZF** for fuzzy finding with custom bindings
-- **Zoxide** for smart directory jumping (`z` command)
-- **Mise** for runtime version management (Node.js, Bun, Deno, .NET)
-- **Atuin** for command history synchronization across machines
-- **Direnv** for per-directory environment variables
-
-**Plugins Loaded**:
-
-- auto-notify - Desktop notifications for long-running commands
-- autopair - Auto-close brackets and quotes
-- forgit - Interactive git operations with fzf
-- autosuggestions - Fish-like suggestions
-- completions - Additional completion definitions
-- history-search - Multi-line history search
-- syntax-highlighting - Fish-like syntax highlighting
-
-**Startup and safety**:
-
-- `DOTFILES` may point to any checkout; the loader derives a fallback from `config/zsh/zshrc`.
-- Optional integrations (Starship, FZF, Atuin, GitHub CLI, Zoxide, Direnv, and Zellij) are skipped when unavailable. Tmux remains the active multiplexer; Zellij is opt-in.
-- Run `zsh:profile 3` or `bin/zsh-startup-profile` to inspect startup cost. `zsh:doctor` reports required versus optional tools and completion registration.
-- Direnv is the default per-directory environment workflow. Automatic `.env` loading is off; use `dotenv TRUSTED_FILE` explicitly or opt in with `ZSH_AUTO_DOTENV=1`.
-- Commit helpers never push implicitly. Review a commit, then run `git push` explicitly. `killbranches` and container cleanup helpers show a dry-run first and require `--confirm` for mutations.
-
-### ⚡ Terminal Setup
-
-- **Ghostty** - Fast, feature-rich terminal emulator (primary)
-- **Wezterm** - GPU-accelerated terminal with Lua config
-- **Shared leader** - `Option+P` for tab, split, picker, and reload workflows
-- **Tmux** - Legacy terminal multiplexer / session tooling
-- **Zellij** - Modern Rust-based terminal multiplexer
-- **Integrated file manager** - Yazi with Catppuccin theme
-
-### 📦 Development Tools
-
-**Installed via Homebrew** (99 packages):
-
-**Languages & Runtimes**:
-
-- Rust (rust, rustup, rustp)
-- Go
-- Zig
-- Node.js/Bun (via mise)
-- .NET 10.0
-
-**CLI Development Tools**:
-
-- neovim - Modern Vim
-- lazygit, lazydocker - TUI for git/docker
-- gh - GitHub CLI
-- act - Run GitHub Actions locally
-- ast-grep - Structural code search
-- semgrep - Static analysis
-- gitleaks, ripsecrets - Secret scanning
-- tokei - Code statistics
-
-**Terminal Utilities**:
-
-- bat - `cat` with syntax highlighting
-- lsd - Modern `ls` replacement
-- fd - Modern `find` replacement
-- ripgrep - Fast text search
-- fzf - Fuzzy finder
-- delta, difftastic - Enhanced diff viewers
-- bottom, htop - System monitors
-- ncdu - Disk usage analyzer
-- yazi - Terminal file manager
-
-**Database & API Tools**:
-
-- pgcli, litecli - Database CLIs with auto-completion
-- posting - API client
-- harlequin - SQL IDE
-
-**Media & Files**:
-
-- ffmpeg, imagemagick - Media processing
-- exiftool - Metadata editor
-- yt-dlp - Video downloader
-- pandoc - Document converter
-
-**Applications** (casks):
-
-- Aerospace - Tiling window manager
-- Karabiner Elements - Keyboard customization
-- Espanso - Text expander
-- Raycast - Spotlight replacement
-- Obsidian - Note-taking
-- Flameshot - Screenshot tool
-- KeyCastr - Keystroke visualizer
-- MonitorControl - External display brightness
-
-## Directory Structure
-
-```
+```text
 dotfiles/
-├── bin/                    # Custom scripts and utilities (40+)
-├── config/                 # Application configurations
-│   ├── nvim/              # Neovim configuration (see config/nvim/README.md)
-│   ├── ghostty/           # Ghostty terminal config
-│   ├── wezterm/           # Wezterm terminal config
-│   ├── zellij/            # Zellij terminal multiplexer
-│   ├── tmux/              # Tmux configuration
-│   ├── aerospace/         # Window manager config
-│   ├── yazi/              # File manager config
-│   ├── lazygit/           # Git TUI config
-│   ├── starship.toml      # Prompt configuration
-│   ├── bat/               # Bat pager config
-│   ├── lsd/               # LSD ls replacement config
-│   ├── mise/              # Runtime version manager
-│   ├── harlequin.toml     # SQL IDE config
-│   └── ...
-├── config/zsh/           # Shell configuration
-│   ├── zshrc              # Main zsh initialization
-│   ├── alias.sh           # Command aliases (80+)
-│   ├── exports.sh         # Environment variables
-│   ├── git.sh             # Git functions
-│   ├── fzf.sh             # FZF configuration
-│   ├── node.sh            # Node.js aliases
-│   ├── zellij.sh          # Opt-in Zellij shortcuts
-│   ├── history.sh         # History settings
-│   └── ...
-├── config/git/            # Git configuration
-│   └── gitconfig          # Git config with delta, GPG signing
-├── bunsen/                # Bunsen profile modules
-│   ├── karabiner.ts       # Keyboard shortcuts definition
-│   └── espanso.ts         # Text expansion rules
-├── dotfiles.config.ts     # Canonical Bunsen configuration and symlink inventory
-├── Brewfile               # Homebrew packages (99 packages)
-├── install                # Installation script
-├── .tool-versions         # Mise version pinning
-└── .czrc                  # Commitizen config
+├── dotfiles.config.ts       # Bunsen deployment config, environment, and symlink map
+├── install                   # Conservative bootstrap script
+├── Brewfile                  # Homebrew formulae and casks
+├── .tool-versions            # Runtime versions managed by mise
+├── bunsen/                   # Generated Karabiner and Espanso profiles
+├── config/                   # Application and shell configuration
+│   ├── zsh/                  # zsh entrypoint, modules, aliases, and completions
+│   ├── nvim/                 # Neovim configuration
+│   ├── ghostty/ wezterm/     # Terminal configurations
+│   ├── tmux/ zellij/         # Multiplexer configurations
+│   ├── aerospace/            # macOS window management
+│   ├── vscode/ zed/ idea/   # Editor configurations
+│   ├── git/                  # Git configuration and global ignore rules
+│   ├── pi/ claude/           # Assistant and agent integrations
+│   └── ...                   # Yazi, Lazygit, Posting, Kitty, and other tools
+├── bin/                      # Standalone shell, TypeScript, and utility scripts
+├── agentmux/                 # Rust tmux dashboard for coding agents
+├── espanso/                  # Runtime helpers used by Espanso matches
+├── raycast/                  # Raycast extensions
+├── snippets/                 # Reusable snippets
+├── prompts/                  # Prompt templates
+└── tests/                    # Shell, Bun, and agent integration tests
 ```
 
-## Configuration Management
+`dotfiles.config.ts` is the source of truth for deployment. A directory under `config/` is not deployed just because it exists; add its destination to the `symlinks` map when it should be managed. The current configuration targets `~/dotfiles` and defines an `osx` profile for the Karabiner and Espanso integrations. Some Linux-specific configurations are kept in the repository but are not part of that default profile.
 
-This dotfiles system uses `@g4rcez/bunsen` from TypeScript with Bun/Node-compatible imports. [`dotfiles.config.ts`](dotfiles.config.ts) is the canonical deployment configuration and symlink inventory.
+## Installation
 
-### Installation
+The deployment is deliberately split into bootstrap and apply steps. Clone to `~/dotfiles`, which is the path used by [`dotfiles.config.ts`](dotfiles.config.ts):
 
 ```bash
-# Clone to the default path expected by dotfiles.config.ts
 git clone https://github.com/g4rcez/dotfiles "$HOME/dotfiles"
 cd "$HOME/dotfiles"
 
-# Install the pinned dependencies
+# Install the pinned JavaScript dependencies.
 bun install --frozen-lockfile
 
-# Create directories and safely link only ~/.zshrc
+# Create local directories, link ~/.zshrc, and bootstrap mise if needed.
 bash install
 
-# Validate, then inspect the proposed deployment
+# Validate and inspect the deployment before changing other files.
 bunx bunsen validate
 bunx bunsen diff
 
-# Optional: apply only when you intend to change deployed files
+# Apply the reviewed deployment when ready.
 bunx bunsen apply
 ```
 
-The installer creates `~/.config`, `~/.tmp`, and `~/tools`. It refuses to replace a conflicting `~/.zshrc`, creates only the zshrc symlink, and bootstraps mise only when mise is unavailable. It does not apply the Bunsen deployment.
+`bash install` creates `~/.config`, `~/.tmp`, and `~/tools`. It links only `~/.zshrc`, refuses to replace a conflicting file, and does not run `bunx bunsen apply`. If mise is missing, the script bootstraps it before returning.
 
-### Commands
+The [`Brewfile`](Brewfile) is optional and is not applied by `install`. Review it before installing its formulae and casks:
 
-Bunsen 0.0.9 provides these deployment checks and actions:
+```bash
+brew bundle --file="$PWD/Brewfile"
+```
+
+If the repository lives somewhere other than `~/dotfiles`, update the `file()` helper in `dotfiles.config.ts` before applying the Bunsen configuration.
+
+## Deployment model
+
+`dotfiles.config.ts` declares both environment variables and managed destinations. It currently covers:
+
+- Shell, runtime, and editor paths such as `~/.zshrc`, `~/.config/mise`, `~/.config/nvim`, `~/.config/tmux`, `~/.config/zellij`, `~/.gitconfig`, and `~/.ideavimrc`.
+- Terminal and CLI tools such as Ghostty, WezTerm, Kitty, Alacritty, Yazi, Lazygit, Posting, fd, bat, lsd, vivid, and Starship.
+- Zed and VS Code settings, keybindings, the Aerospace configuration, and the Pi `agentmux-status.ts` extension.
+- The `osx` profile, which generates the Karabiner Elements and Espanso configuration from [`bunsen/karabiner.ts`](bunsen/karabiner.ts) and [`bunsen/espanso.ts`](bunsen/espanso.ts).
+
+Review the output of `bunx bunsen diff` before every `apply`. Use `bunx bunsen status` to inspect the current deployment.
+
+## Shell
+
+`config/zsh/zshrc` is the entrypoint. It derives `DOTFILES` from the checkout, loads guarded integrations, initializes completions, then sources the modules in its `SOURCE` array. Missing optional tools do not prevent the shell from starting.
+
+The shell includes:
+
+- znap-managed Oh My Zsh libraries and plugins for suggestions, syntax highlighting, history search, completions, and notifications;
+- Starship, fzf, zoxide, direnv, GitHub CLI, and other optional integrations;
+- Git, Node, fzf, aliases, history, and custom completion modules;
+- `zsh:doctor` for dependencies, completion registration, caches, and PATH problems;
+- `zsh:profile [runs]` for startup timing.
+
+Direnv is the preferred per-directory environment workflow. Automatic `.env` loading is off by default; use `dotenv TRUSTED_FILE` explicitly or set `ZSH_AUTO_DOTENV=1` when that behavior is wanted. Commit helpers do not push implicitly, and destructive cleanup helpers show a dry run or require `--confirm`.
+
+## Keyboard and macOS automation
+
+The Karabiner profile is generated from TypeScript. Caps Lock becomes a Hyper key when held and remains Escape when tapped. Its layers cover:
+
+- Vim-style navigation;
+- Aerospace workspace and window management;
+- media, brightness, volume, and notification controls;
+- Raycast actions and browser profile switching;
+- quick access to applications and terminal utilities.
+
+Espanso uses `;` as its trigger prefix. [`bunsen/espanso.ts`](bunsen/espanso.ts) defines links, dates, Markdown helpers, color conversion, emoji, clipboard utilities, UUIDs, test data, and other generated values. The helper runtime is in [`espanso/`](espanso/).
+
+## Terminal and agent workflow
+
+Ghostty and WezTerm share a Command-P leader for tabs, splits, pane navigation, and configuration reloads. Kitty and Alacritty configurations are also kept for other environments.
+
+Tmux is the active multiplexer. Its configuration uses Control-P as the prefix, Vim-style pane movement, large scrollback, session persistence, popups, and the `agentmux` dashboard. Zellij is an optional alternative and is loaded by the shell only when it is available and tmux is not active.
+
+[`agentmux/README.md`](agentmux/README.md) documents the dashboard and its `gh.runs` view. Pi reports lifecycle state through [`config/pi/extensions/agentmux-status.ts`](config/pi/extensions/agentmux-status.ts); the extension is a no-op outside tmux.
+
+## Editor and runtime setup
+
+Neovim is the primary editor. Its configuration includes:
+
+- LSP for TypeScript, Deno, Lua, Rust, web, Docker, YAML, JSON, and Bash;
+- Blink completion, LuaSnip, Treesitter, Snacks pickers, and project navigation;
+- Conform formatting, nvim-lint, DAP, Neotest, Kulala, and GitHub tools;
+- Tokyo Night styling, relative line numbers, persistent undo, autosave, and custom keymaps.
+
+The full feature list and Neovim-specific prerequisites are in [`config/nvim/README.md`](config/nvim/README.md).
+
+Mise manages the language runtimes and CLI tools. Versions are recorded in [`.tool-versions`](.tool-versions) and [`config/mise/config.toml`](config/mise/config.toml). Run `mise install` after mise is available to install the declared tools.
+
+## Git and command-line tools
+
+[`config/git/gitconfig`](config/git/gitconfig) configures:
+
+- delta and difftastic for reviewing changes;
+- SSH-format commit signing;
+- GitHub CLI credential integration;
+- rebasing pulls, automatic remote setup, and useful aliases;
+- global ignore rules and a commit message template.
+
+The [`bin/`](bin/) directory contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
+
+## Themes and fonts
+
+The configuration uses a small set of shared visual choices rather than one theme in every application. Tokyo Night and Catppuccin Mocha are used across the terminals, editor, prompt, Git tools, and file managers. JetBrains Mono Nerd Font is the default programming font where the application supports it.
+
+## Maintenance
+
+When changing a managed configuration:
 
 ```bash
 bunx bunsen validate
-bunx bunsen status
 bunx bunsen diff
+# Apply only after reviewing the diff.
 bunx bunsen apply
 ```
 
-Review `diff` before the optional, intentional `apply` command.
-
-### Symlink Management
-
-The `symlinks` object in [`dotfiles.config.ts`](dotfiles.config.ts) is the source of truth. For example, the Git configuration source is [`config/git/gitconfig`](config/git/gitconfig). Do not infer deployed links from the repository directory names.
-
-### Profile Modules
-
-The OS profile modules are imported by [`dotfiles.config.ts`](dotfiles.config.ts):
-
-- **Espanso** - [`bunsen/espanso.ts`](bunsen/espanso.ts)
-- **Karabiner** - [`bunsen/karabiner.ts`](bunsen/karabiner.ts)
-
-## 🎨 Theming
-
-Consistent **Catppuccin Mocha** theme across:
-
-- Terminal (Ghostty, Wezterm, Alacritty, Kitty)
-- Shell (Zsh syntax highlighting, Starship prompt)
-- Editor (Neovim)
-- File manager (Yazi)
-- Directory listings (LSD)
-- Git diff viewer (Delta)
-- Bottom system monitor
-
-**Color Palette**:
-
-- Background: `#1e1e2e`
-- Foreground: `#cdd6f4`
-- Accents: Red `#f38ba8`, Green `#a6e3a1`, Blue `#89b4fa`, Yellow `#f9e2af`
-
-## 🛠 Custom Scripts
-
-Located in [`bin/`](bin/) - 40+ utilities:
-
-**Git & Repository Management**:
-
-- `worktree` - Git worktree manager with auto-cd on creation
-- `git-branch.sh`, `git-fzf-preview.sh` - Enhanced git operations
-- `gh-fzf`, `fzf-git` - GitHub CLI and git with fzf integration
-- `release-cli` - Release management tool
-
-**Session Management**:
-
-- `tmux-fzf-session`, `tmux-fzf-windows` - Legacy tmux + fzf session/window pickers
-- `zellij-sessionx*` - Zellij session management suite (create, kill, rename, preview)
-
-**System Utilities**:
-
-- `clear-notifications`, `osx-close-notifications` - macOS notification management
-- `listening` - Show processes listening on ports
-- `notes` - Quick note-taking
-- `rfv` - Fuzzy file/directory viewer
-
-**Development Tools**:
-
-- `json-inspect` - JSON analysis
-- `relative-time-commit` - Show relative commit times
-- `fishfy-path` - Convert paths to fish shell format
-- `github-icon` - GitHub icon generator
-
-## Applications Configured
-
-### Development
-
-- **Neovim** - Primary editor with LSP for TypeScript, Rust, Lua, Docker, YAML, JSON, HTML, CSS, Tailwind, Bash
-- **VSCode** - Secondary editor with synchronized extensions
-- **Git** - Enhanced with delta diff viewer, GPG signing, GitHub CLI integration, custom aliases
-
-### Terminal
-
-- **Ghostty** - Primary terminal emulator
-- **Wezterm** - Alternative GPU-accelerated terminal
-- **Tmux** - Active terminal multiplexer for sessions, windows, and panes
-- **Zellij** - Opt-in alternative terminal multiplexer
-- **Starship** - Cross-shell prompt with git integration
-
-### Productivity
-
-- **Karabiner Elements** - Advanced keyboard customization with modal system
-- **Espanso** - Universal text expander with custom scripts
-- **Aerospace** - Tiling window manager for macOS
-- **Raycast** - Spotlight replacement with custom extensions
-- **Obsidian** - Note-taking and knowledge management
-
-### System Tools
-
-- **Yazi** - Terminal file manager with preview
-- **Lazygit** - Terminal UI for git operations
-- **Lazydocker** - Terminal UI for Docker
-- **Atuin** - Shell history sync across machines
-- **Flameshot** - Screenshot tool with annotation
-
-## 🔧 Customization
-
-### Adding Keyboard Shortcuts
-
-Edit [`bunsen/karabiner.ts`](bunsen/karabiner.ts):
-
-```typescript
-const modKeys = karabiner.createHyperSubLayers({
-  // Add new shortcut
-  n: { to: [{ key_code: "page_down" }], description: "Page down" },
-});
-```
-
-**Karabiner Modes**:
-
-- `single` - Press prefix + key once
-- `hold` - Hold prefix until notification, then press key (can repeat keys)
-
-**Inspiration**: Based on [mxstbr's karabiner config](https://github.com/mxstbr/karabiner)
-
-Recommended videos:
-
-- [Max Stoiber Owns His Workflow with Raycast](https://www.youtube.com/watch?v=m5MDv9qwhU8)
-- [How I Programed the Most Productive MacOS Keyboard Setup Ever](https://www.youtube.com/watch?v=j4b_uQX3Vu0)
-
-### Adding Text Expansion
-
-Edit [`bunsen/espanso.ts`](bunsen/espanso.ts):
-
-```typescript
-espanso.insert("mykey", "My expanded text", "Description"),
-```
-
-Example espanso config:
-
-```yaml
-matches:
-    - trigger: ";cnpj"
-      replace: "{{cnpj}}"
-      vars:
-          - name: "cnpj"
-            type: "shell"
-            params:
-                shell: "bash"
-                cmd: "deno ~/dotfiles/espanso/cnpj"
-
-    - trigger: ";date"
-      replace: "{{date}}"
-      vars:
-          - name: "date"
-            type: "date"
-            params:
-                format: "%d/%m/%Y"
-```
-
-### Adding Shell Aliases
-
-Edit files in [`config/zsh/`](config/zsh/):
-
-- `alias.sh` - Command aliases (80+ defined)
-- `exports.sh` - Environment variables
-- `git.sh` - Git functions
-- `fzf.sh` - FZF bindings
-
-Example aliases:
+Run the shell test suite before changing shell behavior:
 
 ```bash
-alias ll="ls -l"
-alias cat="bat -p --pager cat"
-alias dotfiles='cd -- "$DOTFILES"'
-alias vim="nvim"
+bash tests/shell/run.bash
 ```
 
-### Modifying Neovim
+This is a personal configuration repository. It is provided as-is for reference and adaptation.
 
-See [`config/nvim/README.md`](config/nvim/README.md) for detailed Neovim configuration documentation.
-
-## Git Configuration
-
-**Features** (from [`config/git/gitconfig`](config/git/gitconfig)):
-
-- **Delta** as pager with Catppuccin theme
-- **GPG signing** with SSH format
-- **GitHub CLI** for credentials
-- **Auto-rebase** on pull
-- **Custom aliases**: `lg` (log graph), `s` (status), `shame` (blame), `bye` (delete branch)
-
-**Commit Message Convention**:
-
-- Uses Commitizen with conventional-changelog format
-- Configured in `.czrc`
-
-## Requirements
-
-- **Zsh** >= v4
-- **Git** >= v2
-- **Bun** (for dependency installation and Bunsen)
-- **Mise** for runtime management
-- **macOS** (primary target, some Linux support via scripts)
-
-## My Keyboard
-
-![my keyboard](./assets/keyboard.jpg)
-
-Custom mechanical keyboard optimized for the Karabiner configuration with Caps Lock as hyper key.
-
-## 🙏 Acknowledgments
-
-- [Oh My Zsh](https://ohmyz.sh/) - Zsh framework
-- [Neovim](https://neovim.io/) - Modern Vim
-- [Catppuccin](https://catppuccin.com/) - Soothing pastel theme
-- [Karabiner Elements](https://karabiner-elements.pqrs.org/) - Keyboard customization
-- [Espanso](https://espanso.org/) - Text expander
-- [Starship](https://starship.rs/) - Cross-shell prompt
-- [@g4rcez/bunsen](https://github.com/g4rcez/bunsen) - Configuration management library
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with `bunx bunsen validate`
-5. Submit a pull request
-
-Personal dotfiles configuration provided as-is for reference and inspiration.
+![My keyboard](./assets/keyboard.jpg)
