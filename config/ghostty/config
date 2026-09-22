@@ -14,7 +14,7 @@ scrollback-limit = 100000
 mouse-hide-while-typing = true
 font-family = "JetBrainsMono Nerd Font"
 macos-option-as-alt = true
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
 tab-inherit-working-directory = true
 split-inherit-working-directory = true
 # window-decoration = none
@@ -27,6 +27,12 @@ keybind = global:super+shift+zero=toggle_quick_terminal
 keybind = super+t=new_tab
 keybind = super+shift+[=previous_tab
 keybind = super+shift+]=next_tab
+
+# Scroll terminal history without the leader key.
+keybind = super+arrow_up=scroll_page_up
+keybind = super+arrow_down=scroll_page_down
+keybind = super+shift+arrow_up=scroll_to_top
+keybind = super+shift+arrow_down=scroll_to_bottom
 
 # Prefix + r/w rename the focused surface/tab. Ghostty has no tmux session.
 keybind = super+p>r=prompt_surface_title
