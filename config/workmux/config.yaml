@@ -1,0 +1,14 @@
+nerdfont: true
+# Options: default, emberforge, glacier-signal, obsidian-pop, slate-garden,
+#          phosphor-arcade, lasergrid, mossfire, night-sorbet, graphite-code,
+#          festival-circuit, teal-drift
+theme: glacier-signal
+main_branch: main
+base_branch: auto
+merge_strategy: merge
+mode: session
+agent: omp
+
+sidebar:
+  position: left
+  height: 2

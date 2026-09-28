@@ -75,6 +75,7 @@ export KEYTIMEOUT="${KEYTIMEOUT:-1000}"
 export LANG="${LANG:-en_US.UTF-8}"
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 export LC_COLLATE="${LC_COLLATE:-C}"
+export TMUX_SOCKET_PATH="$HOME/.tmp/socket"
 
 # Only add the conventional macOS man directory when it exists; preserve a
 # user's existing MANPATH and compiler flags.

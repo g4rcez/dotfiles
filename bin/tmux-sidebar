@@ -105,7 +105,7 @@ pi_name() { # $1 window name  $2 pane title
 }
 
 pi_state() { # $1 pane -> idle | working
-  tmux capture-pane -t "$1" -p 2>/dev/null | tail -30 | grep -q 'Working\.\.\.' && echo working || echo idle
+  tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$1" -p 2>/dev/null | tail -30 | grep -q 'Working\.\.\.' && echo working || echo idle
 }
 
 agent_state() { # $1 pane  $2 loc  $3 title  $4 agent -> idle | working | done
@@ -116,10 +116,10 @@ agent_state() { # $1 pane  $2 loc  $3 title  $4 agent -> idle | working | done
     [ "$(cat "/tmp/agent-state-$p" 2>/dev/null)" = working ] && st="working"
   else
     case "$title" in ✳*) ;; *) st="working" ;; esac
-    [ "$st" = idle ] && [ -n "$TMUX" ] && tmux capture-pane -t "$p" -p 2>/dev/null | grep -qE '\(([0-9]+m )?[0-9]+s' && st="working"
+    [ "$st" = idle ] && [ -n "$TMUX" ] && tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$p" -p 2>/dev/null | grep -qE '\(([0-9]+m )?[0-9]+s' && st="working"
   fi
   if [ "$st" = idle ] && [ -n "$TMUX" ]; then
-    fmt=$(tmux show-options -wv -t "$loc" window-status-format 2>/dev/null)
+    fmt=$(tmux -S "$TMUX_SOCKET_PATH" show-options -wv -t "$loc" window-status-format 2>/dev/null)
     printf '%s' "$fmt" | grep -q 'bg=red' && st="done"
   fi
   echo "$st"
@@ -156,7 +156,7 @@ build() {
     names+=("$wname")
     metas+=("$meta")
     states+=("$st")
-  done < <({ [ -n "$AGENT_PANES_FILE" ] && cat "$AGENT_PANES_FILE" || tmux list-panes -a -F '#{pane_id}|#{session_name}:#{window_index}.#{pane_index}|#{window_name}|#{pane_current_command}|#{pane_title}||#{pane_pid}'; } | sort -t'|' -k2)
+  done < <({ [ -n "$AGENT_PANES_FILE" ] && cat "$AGENT_PANES_FILE" || tmux -S "$TMUX_SOCKET_PATH" list-panes -a -F '#{pane_id}|#{session_name}:#{window_index}.#{pane_index}|#{window_name}|#{pane_current_command}|#{pane_title}||#{pane_pid}'; } | sort -t'|' -k2)
   local n=${#locs[@]}
   [ "$cursor" -ge "$n" ] && cursor=$((n - 1))
   [ "$cursor" -lt 0 ] && cursor=0
@@ -196,10 +196,10 @@ render() {
 
 jump_to_selected() {
   local pane="${targets[$cursor]}" sidebar_pane="${TMUX_PANE:-}" win
-  win=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index}' 2>/dev/null) || win="${locs[$cursor]%.*}"
-  tmux switch-client -t "$win"
-  tmux select-pane -t "$pane"
-  [ -n "$sidebar_pane" ] && tmux kill-pane -t "$sidebar_pane"
+  win=$(tmux -S "$TMUX_SOCKET_PATH" display-message -p -t "$pane" '#{session_name}:#{window_index}' 2>/dev/null) || win="${locs[$cursor]%.*}"
+  tmux -S "$TMUX_SOCKET_PATH" switch-client -t "$win"
+  tmux -S "$TMUX_SOCKET_PATH" select-pane -t "$pane"
+  [ -n "$sidebar_pane" ] && tmux -S "$TMUX_SOCKET_PATH" kill-pane -t "$sidebar_pane"
 }
 
 build
@@ -220,7 +220,7 @@ while :; do
   l | $'\n' | $'\r') [ "$n" -gt 0 ] && jump_to_selected ;;
   q)
     printf '\033[?25h'
-    tmux kill-pane
+    tmux -S "$TMUX_SOCKET_PATH" kill-pane
     exit 0
     ;;
   $'\033') # arrow keys: ESC [ A/B

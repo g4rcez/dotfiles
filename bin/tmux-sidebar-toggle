@@ -3,13 +3,13 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(CDPATH= cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-SIDEBAR=$(tmux list-panes -F '#{pane_id} #{@is_agentmux_sidebar}' | awk '$2=="1" { print $1; exit }')
+SIDEBAR=$(tmux -S "$TMUX_SOCKET_PATH" list-panes -F '#{pane_id} #{@is_agentmux_sidebar}' | awk '$2=="1" { print $1; exit }')
 
 if [[ -n "$SIDEBAR" ]]; then
-  tmux kill-pane -t "$SIDEBAR"
+  tmux -S "$TMUX_SOCKET_PATH" kill-pane -t "$SIDEBAR"
   exit 0
 fi
 
 printf -v COMMAND 'exec %q sidebar' "$SCRIPT_DIR/agentmux"
-SIDEBAR=$(tmux split-window -f -h -l 36 -c '#{pane_current_path}' -P -F '#{pane_id}' "$COMMAND")
-tmux set-option -p -t "$SIDEBAR" @is_agentmux_sidebar 1
+SIDEBAR=$(tmux -S "$TMUX_SOCKET_PATH" split-window -f -h -l 36 -c '#{pane_current_path}' -P -F '#{pane_id}' "$COMMAND")
+tmux -S "$TMUX_SOCKET_PATH" set-option -p -t "$SIDEBAR" @is_agentmux_sidebar 1

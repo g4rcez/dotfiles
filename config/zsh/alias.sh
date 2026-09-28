@@ -51,6 +51,7 @@ if (($+commands[podman])); then
     alias docker='podman'
 fi
 alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias worktree="workmux"
 
 ############################################################################
 ## vim
@@ -244,7 +245,14 @@ function vivid-update() {
     print -r -- "vivid updated; restart or reload zsh to apply the new LS_COLORS"
 }
 
+
+function piUpdate() {
+    mise install pi@latest
+    mise use -g pi@latest
+}
+
 function updateAll() {
+    piUpdate || return
     vivid-update || return
     (($+commands[mise])) && command mise self-update
     (($+commands[npm])) && nodeUpdatePackages
@@ -299,7 +307,7 @@ function cdm() {
 }
 
 function cpv() {
-    rsync -pogbr -hhh --backup-dir="$HOME/.tmp" -e /dev/null --progress "$@"
+    rsync -pogbr -hhh --backup-dir="/tmp/" -e /dev/null --progress "$@"
 }
 
 function anon() {
@@ -317,7 +325,7 @@ function brewfix() {
 }
 
 function tmux-start() {
-    tmux -S "$HOME/.tmp/socket" new-session -A -s localhost
+    tmux -S "$TMUX_SOCKET_PATH" new-session -A -s localhost
 }
 
 function _tmux_preexec_command_name() {
@@ -341,8 +349,8 @@ function _tmux_preexec_command_name() {
     done
 
     [[ -n "$cmd" ]] || return 0
-    tmux set-option -pq -t "$TMUX_PANE" @zsh_current_command "$cmd" 2>/dev/null || true
-    tmux refresh-client -S 2>/dev/null || true
+    tmux -S "$TMUX_SOCKET_PATH" set-option -pq -t "$TMUX_PANE" @zsh_current_command "$cmd" 2>/dev/null || true
+    tmux -S "$TMUX_SOCKET_PATH" refresh-client -S 2>/dev/null || true
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook -d preexec _tmux_preexec_command_name 2>/dev/null
@@ -351,7 +359,7 @@ add-zsh-hook preexec _tmux_preexec_command_name
 function _tmux_precmd_clear_command_name() {
     emulate -L zsh
     [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || return 0
-    tmux set-option -pqu -t "$TMUX_PANE" @zsh_current_command 2>/dev/null || true
+    tmux -S "$TMUX_SOCKET_PATH" set-option -pqu -t "$TMUX_PANE" @zsh_current_command 2>/dev/null || true
 }
 add-zsh-hook -d precmd _tmux_precmd_clear_command_name 2>/dev/null
 add-zsh-hook precmd _tmux_precmd_clear_command_name
@@ -461,33 +469,13 @@ function npm.kill() {
 function ask_ai() {
     ${=AI_QUERY_COMMAND} "$@"
 }
+
 alias '??'="ask_ai"
-alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 # Local, untracked task boundary notes live inside each Git worktree's .git dir.
 alias checkpoint='task-checkpoint'
 alias checkpoint-show='task-checkpoint show'
 alias checkpoint-clear='task-checkpoint clear'
-
-function worktree() {
-    case "${1:-}" in
-    add)
-        command worktree "$@" || return $?
-        [[ -n "${2:-}" ]] || return 0
-        local p
-        p="$(command worktree cd "$2" 2>/dev/null)" || return 0
-        [[ -d "$p" ]] && cd "$p"
-        ;;
-    cd)
-        local p
-        p="$(command worktree cd "${2:-}")" || return $?
-        [[ -d "$p" ]] && cd "$p"
-        ;;
-    *)
-        command worktree "$@"
-        ;;
-    esac
-}
 
 _killport() {
     local -a ports=()

@@ -14,7 +14,7 @@ if [[ -f "package-lock.json" ]]; then
 fi
 if [[ -f "yarn.lock" ]]; then COMMAND="yarn"; fi
 if [[ -f "pnpm-lock.yaml" ]]; then COMMAND="pnpm"; fi
-if [[ -f "bun.lockb" ]] || [[ -f "bun.lock" ]]; then COMMAND="bun"; fi
+if [[ -f "bunfig.toml" ]] || [[ -f "bun.lockb" ]] || [[ -f "bun.lock" ]]; then COMMAND="bun"; fi
 if [[ -f "deno.json" ]] || [[ -f "deno.jsonc" ]]; then
   COMMAND="deno"
   INSTALL_COMMAND="add"

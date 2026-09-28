@@ -115,23 +115,42 @@ function git.restore() {
     command git restore --source "$1" -- "$2"
 }
 
+# Arguments go to git commit; --push switches to git push arguments.
+function _git_commit_and_push() {
+    emulate -L zsh
+    local -a commit_args=() push_args=()
+    local push_args_started=0 arg
+    for arg in "$@"; do
+        if ((push_args_started)); then
+            push_args+=("$arg")
+        elif [[ "$arg" == --push ]]; then
+            push_args_started=1
+        else
+            commit_args+=("$arg")
+        fi
+    done
+
+    command git commit "${commit_args[@]}" || return $?
+    command git push "${push_args[@]}"
+}
+
 function commit.wip() {
     emulate -L zsh
     _git_require_repo || return
     command git add -A . || return $?
     local now
     now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
-    command git commit --no-verify -S -m "wip: ${now}"
-    command git push
+    _git_commit_and_push --no-verify -S -m "wip: ${now}" "$@"
 }
 
 function _commit_message() {
     emulate -L zsh
-    (($# == 1)) || { print -u2 -r -- "git helper: commit message is required"; return 2; }
+    (($# >= 1)) || { print -u2 -r -- "git helper: commit message is required"; return 2; }
     _git_require_repo || return
-    git add .
-    git commit -S -m "$1"
-    git push
+    local message="$1"
+    shift
+    command git add . || return $?
+    _git_commit_and_push -S -m "$message" "$@"
 }
 
 function commitwithai() {
@@ -212,55 +231,55 @@ function commitwithai() {
 }
 
 function commit.lockfile() {
-    _commit_message "chore: sync lockfile"
+    _commit_message "chore: sync lockfile" "$@"
 }
 
 function commit.deps() {
-    _commit_message "chore: update dependencies"
+    _commit_message "chore: update dependencies" "$@"
 }
 
 function commit.format() {
-    _commit_message "style: format source files"
+    _commit_message "style: format source files" "$@"
 }
 
 function commit.merge() {
-    _commit_message "chore: resolve merge conflicts"
+    _commit_message "chore: resolve merge conflicts" "$@"
 }
 
 function commit.cleanup() {
-    _commit_message "chore: clean up unused files"
+    _commit_message "chore: clean up unused files" "$@"
 }
 
 function commit.refactor() {
-    _commit_message "refactor: code clean up"
+    _commit_message "refactor: code clean up" "$@"
 }
 
 function commit.remove() {
-    _commit_message "chore: remove obsolete files"
+    _commit_message "chore: remove obsolete files" "$@"
 }
 
 function commit.rename() {
-    _commit_message "refactor: rename files and symbols"
+    _commit_message "refactor: rename files and symbols" "$@"
 }
 
 function commit.docs() {
-    _commit_message "docs: update documentation"
+    _commit_message "docs: update documentation" "$@"
 }
 
 function commit.test() {
-    _commit_message "test: update tests"
+    _commit_message "test: update tests" "$@"
 }
 
 function commit.ci() {
-    _commit_message "ci: update CI configuration"
+    _commit_message "ci: update CI configuration" "$@"
 }
 
 function commit.release() {
-    _commit_message "build: prepare release"
+    _commit_message "build: prepare release" "$@"
 }
 
 function commit.rebase() {
-    _commit_message "chore: resolve rebase conflicts"
+    _commit_message "chore: resolve rebase conflicts" "$@"
 }
 
 function commit.write() {
@@ -270,12 +289,32 @@ function commit.write() {
 function commit.ai() {
     emulate -L zsh
     _git_require_repo || return
+    # Keep AI hints before --, then accept git commit and --push arguments.
+    local -a hint_args=() commit_args=() push_args=()
+    local mode=hint arg
+    for arg in "$@"; do
+        case "$arg" in
+        --)
+            [[ "$mode" == hint ]] && mode=commit
+            ;;
+        --push)
+            mode=push
+            ;;
+        *)
+            case "$mode" in
+            hint) hint_args+=("$arg") ;;
+            commit) commit_args+=("$arg") ;;
+            push) push_args+=("$arg") ;;
+            esac
+            ;;
+        esac
+    done
+
     command git add -A . || return $?
     local commit_message
-    commit_message="$(commitwithai "$@")" || return $?
+    commit_message="$(commitwithai "${hint_args[@]}")" || return $?
     [[ -n "$commit_message" ]] || { print -u2 -r -- "wip: work in progress"; return 1; }
-    command git commit --no-verify -S -m "$commit_message"
-    command git push
+    _git_commit_and_push --no-verify -S -m "$commit_message" "${commit_args[@]}" --push "${push_args[@]}"
 }
 
 function wip.staged() {

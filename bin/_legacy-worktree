@@ -128,7 +128,7 @@ _cmd_list_lines() {
             local display_path session_icon
             local session_name="${branch//\//-}"
             session_name="${session_name#-}"
-            if tmux has-session -t "$session_name" 2>/dev/null; then
+            if tmux -S "$TMUX_SOCKET_PATH" has-session -t "$session_name" 2>/dev/null; then
                 session_icon="● "
             else
                 session_icon="○ "
@@ -146,7 +146,7 @@ _cmd_preview_wt() {
     _worktree_record_by_id "$worktree_id" || return 1
     local wt_path="$WORKTREE_PATH"
     local session_name
-    session_name="$(tmux list-sessions -F '#{session_name} #{pane_current_path}' 2>/dev/null |
+    session_name="$(tmux -S "$TMUX_SOCKET_PATH" list-sessions -F '#{session_name} #{pane_current_path}' 2>/dev/null |
         awk -v p="$wt_path" '$2 == p {print $1; exit}' || true)"
 
     # Catppuccin Mocha colors
@@ -163,7 +163,7 @@ _cmd_preview_wt() {
 
     if [[ -n "$session_name" ]]; then
         _section_header "$pink" "tmux: $session_name"
-        tmux capture-pane -t "$session_name" -p -e 2>/dev/null || true
+        tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$session_name" -p -e 2>/dev/null || true
     else
         _section_header "$mauve" "git log"
         git -C "$wt_path" log --color=always \
@@ -221,14 +221,14 @@ cmd_list() {
     session_name="${branch//\//-}"
     session_name="${session_name#-}"
 
-    if ! tmux has-session -t "$session_name" 2>/dev/null; then
-        tmux new-session -d -s "$session_name" -c "$wt_path"
+    if ! tmux -S "$TMUX_SOCKET_PATH" has-session -t "$session_name" 2>/dev/null; then
+        tmux -S "$TMUX_SOCKET_PATH" new-session -d -s "$session_name" -c "$wt_path"
     fi
 
     if [[ -n "${TMUX:-}" ]]; then
-        tmux switch-client -t "$session_name"
+        tmux -S "$TMUX_SOCKET_PATH" switch-client -t "$session_name"
     else
-        tmux attach-session -t "$session_name"
+        tmux -S "$TMUX_SOCKET_PATH" attach-session -t "$session_name"
     fi
 }
 
@@ -257,8 +257,8 @@ cmd_prune() {
                 git worktree remove "$wt_path"
                 local session_name="${branch//\//-}"
                 session_name="${session_name#-}"
-                if tmux has-session -t "$session_name" 2>/dev/null; then
-                    tmux kill-session -t "$session_name"
+                if tmux -S "$TMUX_SOCKET_PATH" has-session -t "$session_name" 2>/dev/null; then
+                    tmux -S "$TMUX_SOCKET_PATH" kill-session -t "$session_name"
                     echo "Removed worktree and killed tmux session: $session_name"
                 else
                     echo "Removed worktree: $wt_path"
@@ -362,14 +362,14 @@ cmd_mux() {
     session_name="${branch_field//\//-}"
     session_name="${session_name#-}"
 
-    if ! tmux has-session -t "$session_name" 2>/dev/null; then
-        tmux new-session -d -s "$session_name" -c "$selected_path"
+    if ! tmux -S "$TMUX_SOCKET_PATH" has-session -t "$session_name" 2>/dev/null; then
+        tmux -S "$TMUX_SOCKET_PATH" new-session -d -s "$session_name" -c "$selected_path"
     fi
 
     if [[ -n "${TMUX:-}" ]]; then
-        tmux switch-client -t "$session_name"
+        tmux -S "$TMUX_SOCKET_PATH" switch-client -t "$session_name"
     else
-        tmux attach-session -t "$session_name"
+        tmux -S "$TMUX_SOCKET_PATH" attach-session -t "$session_name"
     fi
 }
 
@@ -389,7 +389,7 @@ cmd_overview() {
 
         local session_name="${branch//\//-}"
         session_name="${session_name#-}"
-        if tmux has-session -t "$session_name" 2>/dev/null; then
+        if tmux -S "$TMUX_SOCKET_PATH" has-session -t "$session_name" 2>/dev/null; then
             local session_status="●"
         else
             local session_status="○"

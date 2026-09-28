@@ -284,7 +284,121 @@ lsp_config("cssls", {
     },
 })
 
+-- Tailwind configFile paths are workspace-relative; use one Git-root client for all monorepo packages.
+local tailwind_defaults = vim.lsp.config.tailwindcss
+local default_tailwind_root_dir = tailwind_defaults.root_dir
+local default_tailwind_before_init = tailwind_defaults.before_init
+local tailwind_configs_by_root = {}
+local pending_tailwind_config_callbacks = {}
+
+local function git_root_for_buffer(bufnr)
+    local filename = vim.api.nvim_buf_get_name(bufnr)
+    if filename == "" then
+        return nil
+    end
+
+    local git_marker = vim.fs.find(".git", { path = filename, upward = true })[1]
+    return git_marker and vim.fs.dirname(git_marker)
+end
+
+local function load_tailwind_configs(root, callback)
+    if tailwind_configs_by_root[root] then
+        callback(tailwind_configs_by_root[root])
+        return
+    end
+
+    pending_tailwind_config_callbacks[root] = pending_tailwind_config_callbacks[root] or {}
+    table.insert(pending_tailwind_config_callbacks[root], callback)
+    if #pending_tailwind_config_callbacks[root] > 1 then
+        return
+    end
+
+    vim.system({
+        "git",
+        "-C",
+        root,
+        "ls-files",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+        "-z",
+        "--",
+        ":(glob)**/tailwind.config.*",
+        ":(glob)tailwind.config.*",
+    }, { text = true }, function(result)
+        local configs = {}
+        if result.code == 0 then
+            for path in (result.stdout or ""):gmatch("[^%z]+") do
+                local stat = vim.uv.fs_stat(vim.fs.joinpath(root, path))
+                if stat and stat.type == "file" then
+                    table.insert(configs, path)
+                end
+            end
+        end
+        table.sort(configs)
+
+        vim.schedule(function()
+            tailwind_configs_by_root[root] = configs
+            local callbacks = pending_tailwind_config_callbacks[root]
+            pending_tailwind_config_callbacks[root] = nil
+            for _, on_loaded in ipairs(callbacks) do
+                on_loaded(configs)
+            end
+        end)
+    end)
+end
+
+local function tailwind_root_dir(bufnr, on_dir)
+    local root = git_root_for_buffer(bufnr)
+    if not root or vim.fn.executable("git") ~= 1 then
+        return default_tailwind_root_dir(bufnr, on_dir)
+    end
+
+    load_tailwind_configs(root, function(configs)
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+            return
+        end
+        if #configs > 0 then
+            on_dir(root)
+        else
+            default_tailwind_root_dir(bufnr, on_dir)
+        end
+    end)
+end
+
+local function tailwind_before_init(params, new_config)
+    if default_tailwind_before_init then
+        default_tailwind_before_init(params, new_config)
+    end
+
+    local configs = tailwind_configs_by_root[new_config.root_dir]
+    if not configs or #configs == 0 then
+        return
+    end
+
+    new_config.settings = new_config.settings or {}
+    new_config.settings.tailwindCSS = new_config.settings.tailwindCSS or {}
+    local tailwind = new_config.settings.tailwindCSS
+    tailwind.experimental = tailwind.experimental or {}
+
+    local config_files = {}
+    local configured = tailwind.experimental.configFile
+    if type(configured) == "string" then
+        config_files[configured] = "**/*"
+    elseif type(configured) == "table" then
+        for path, pattern in pairs(configured) do
+            config_files[path] = pattern
+        end
+    end
+    for _, path in ipairs(configs) do
+        config_files[path] = "**/*"
+    end
+    tailwind.experimental.configFile = config_files
+end
+
 lsp_config("tailwindcss", {
+    root_dir = tailwind_root_dir,
+    before_init = tailwind_before_init,
     settings = {
         tailwindCSS = {
             classFunctions = { "css", "cn", "clsx", "cva", "twMerge", "twJoin" },

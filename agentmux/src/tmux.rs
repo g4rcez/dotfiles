@@ -27,9 +27,17 @@ pub fn jump_to(pane: &TmuxPane) -> Result<()> {
     tmux_status(&["select-pane", "-t", &pane.pane_id])
 }
 
+fn tmux_command(args: &[&str]) -> Result<Command> {
+    let socket_path = std::env::var_os("TMUX_SOCKET_PATH")
+        .filter(|path| !path.is_empty())
+        .context("TMUX_SOCKET_PATH must be set to a non-empty socket path")?;
+    let mut command = Command::new("tmux");
+    command.arg("-S").arg(socket_path).args(args);
+    Ok(command)
+}
+
 fn tmux_output(args: &[&str]) -> Result<String> {
-    let output = Command::new("tmux")
-        .args(args)
+    let output = tmux_command(args)?
         .output()
         .with_context(|| format!("failed to run tmux {}", args.join(" ")))?;
     if !output.status.success() {
@@ -43,8 +51,7 @@ fn tmux_output(args: &[&str]) -> Result<String> {
 }
 
 fn tmux_status(args: &[&str]) -> Result<()> {
-    let status = Command::new("tmux")
-        .args(args)
+    let status = tmux_command(args)?
         .status()
         .with_context(|| format!("failed to run tmux {}", args.join(" ")))?;
     if !status.success() {

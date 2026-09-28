@@ -14,7 +14,7 @@ fishify() {
 
 # Prefer zsh's preexec-captured command, so node-based CLIs show as pi/codex/etc.
 if [[ -n "$PANE_ID" ]]; then
-    ZSH_NAME="$(tmux show-option -pqv -t "$PANE_ID" @zsh_current_command 2>/dev/null || true)"
+    ZSH_NAME="$(tmux -S "$TMUX_SOCKET_PATH" show-option -pqv -t "$PANE_ID" @zsh_current_command 2>/dev/null || true)"
     NAME="${ZSH_NAME##*/}"
     NAME="${NAME:-$1}"
 fi

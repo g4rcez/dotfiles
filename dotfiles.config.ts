@@ -35,6 +35,8 @@ export default defineConfig({
             "config/pi/extensions/agentmux-status.ts",
         ),
         "~/.config/yazi": file("config/yazi"),
+        "~/.config/workmux": file("config/workmux"),
+        "~/.config/tuios": file("config/tuios"),
         "~/.config/kitty": file("config/kitty"),
         "~/.config/vivid": file("config/vivid"),
         "~/.config/zellij": file("config/zellij"),

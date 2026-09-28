@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
 
-TMUX_SOCKET="${TMUX_SOCKET:-$HOME/.tmp/socket}"
-TMUX_ARGS=()
-TMUX_EXEC='tmux'
-if [[ -z "${TMUX:-}" ]]; then
-    TMUX_ARGS=(-S "$TMUX_SOCKET")
-    TMUX_EXEC="tmux -S $(printf '%q' "$TMUX_SOCKET")"
-fi
+TMUX_SOCKET_PATH="${TMUX_SOCKET_PATH:-$HOME/.tmp/socket}"
+TMUX_ARGS=(-S "$TMUX_SOCKET_PATH")
+TMUX_EXEC="tmux -S $(printf '%q' "$TMUX_SOCKET_PATH")"
 
 tmux_cmd() {
     command tmux "${TMUX_ARGS[@]}" "$@"

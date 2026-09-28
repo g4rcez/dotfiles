@@ -19,7 +19,7 @@ local keys = {
     {
         "<leader>cf",
         function()
-            require("conform").format { lsp_fallback = true }
+            vim.lsp.buf.format { async = true }
         end,
         mode = { "n", "v" },
         desc = "[c]ode [F]ormat",

@@ -80,6 +80,8 @@ if (($+functions[znap])); then
     (($+commands[direnv])) && znap eval direnv-hook 'direnv hook zsh'
     (($+commands[omp])) && znap eval omp-completion 'omp completions zsh'
     (($+commands[herdr])) && znap eval herdr-completion 'herdr completion zsh'
+    (($+commands[workmux])) && znap eval workmux-completion 'workmux completions zsh'
+    (($+commands[worktree])) && znap eval worktree-completion 'workmux completions zsh'
     if [[ -o interactive && -t 0 && -t 1 ]]; then
         (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
         (($+commands[tv])) && znap eval tv-init 'tv init zsh'
@@ -87,7 +89,7 @@ if (($+functions[znap])); then
 fi
 
 ##############################################################################################################
-## source files (cached with znap eval for faster startup)
+## source files (directly sourced; refresh compiled caches with zsh:compile)
 typeset -a SOURCE=(
     "$HOME/.secrets.sh"
     "$HOME/.cargo/env"
@@ -112,6 +114,10 @@ typeset -a SOURCE=(
 if [[ -z "$TMUX" ]] && (($+commands[zellij])); then
     SOURCE+=("$DOTFILES/config/zsh/zellij.sh")
 fi
+SOURCE+=(
+    "$HOME/tools/google-cloud-sdk/path.zsh.inc"
+    "$HOME/tools/google-cloud-sdk/completion.zsh.inc"
+)
 
 
 for config in "${SOURCE[@]}"; do
@@ -138,10 +144,6 @@ if [[ -o interactive && -t 0 && -t 1 && -r "$ZNAP_ENTRYPOINT" ]]; then
     }
     add-zle-hook-widget line-init _zsh_lazy_load_autopair
 fi
-
-
-if [ -f "$HOME/tools/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/tools/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "$HOME/tools/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/tools/google-cloud-sdk/completion.zsh.inc"; fi
 
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
