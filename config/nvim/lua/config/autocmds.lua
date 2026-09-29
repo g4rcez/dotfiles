@@ -12,7 +12,7 @@ end, { desc = "Toggle format + organize imports on save" })
 -- Pi uses a temporary `pi-extension-editor-*.md` file for Ctrl+G; keep the legacy names too.
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
     group = augroup "pi_prompt_filetype",
-    pattern = { "prompt.md", "pi-extension-editor-*.md", "pi-editor-*.md", "pi-editor-*.pi.md" },
+    pattern = { "prompt.md", "pi-extension-editor-*.md", "pi-editor-*.md", "pi-editor-*.pi.md", "*.omp.md" },
     callback = function(event)
         vim.bo[event.buf].filetype = "prompt-pi"
     end,

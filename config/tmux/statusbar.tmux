@@ -15,7 +15,7 @@ export DOTFILES_DIR
 # Read a tmux option with a fallback. Kept for quick theme tweaks.
 # Quiet global option setter used below to keep the theme lines compact.
 tmux_set() {
-    tmux -S "$TMUX_SOCKET_PATH" set-option -gq "$1" "$2"
+    tmux set-option -gq "$1" "$2"
 }
 
 # Theme colors.

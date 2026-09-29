@@ -471,6 +471,7 @@ function ask_ai() {
 }
 
 alias '??'="ask_ai"
+alias code.="code ."
 
 # Local, untracked task boundary notes live inside each Git worktree's .git dir.
 alias checkpoint='task-checkpoint'

@@ -185,7 +185,12 @@ local function project_palette()
             text = "Test current file",
             action = function()
                 local ok, neotest = pcall(require, "neotest")
-                if ok then neotest.run.run(vim.fn.expand "%") else vim.notify("Neotest is not available", vim.log.levels.WARN) end
+                if ok then
+                    neotest.run.run(vim.fn.expand "%")
+                else
+                    vim.notify("Neotest is not available",
+                        vim.log.levels.WARN)
+                end
             end,
         },
     }
@@ -307,7 +312,7 @@ return {
                                 backdrop = true,
                                 border = "single",
                                 box = "vertical",
-                                { win = "input",   height = 1,          border = "", title = "{title} {live} {flags}", title_pos = "center" },
+                                { win = "input",   height = 1,          border = "",    title = "{title} {live} {flags}", title_pos = "center" },
                                 { win = "list",    border = "none" },
                                 { win = "preview", title = "{preview}", border = "none" },
                             },
@@ -918,7 +923,7 @@ return {
             {
                 "<leader>gg",
                 function()
-                    Snacks.lazygit()
+                    Snacks.lazygit.open({ win = { border = "single", width = 0.99, height = 0.99 } })
                 end,
                 desc = "Lazygit",
             },
@@ -974,7 +979,6 @@ return {
         },
         init = function()
             vim.g.snacks_oil_startup_cwd = vim.fn.getcwd()
-
             vim.api.nvim_create_autocmd("User", {
                 pattern = "VeryLazy",
                 callback = function()

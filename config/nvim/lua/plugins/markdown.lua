@@ -6,15 +6,15 @@ return {
         event = "VeryLazy",
         opts = {
             default = {
-                dir_path = function()
-                    return require("config.markdown_viewer").image_dir()
-                end,
                 use_absolute_path = false,
                 prompt_for_file_name = false,
                 embed_image_as_base64 = false,
-                drag_and_drop = { insert_mode = true },
                 file_name = "%Y-%m-%d-%H-%M-%S",
                 template = "![$CURSOR]($FILE_PATH)",
+                drag_and_drop = { insert_mode = true },
+                dir_path = function()
+                    return require("config.markdown_viewer").image_dir()
+                end,
             },
         },
     },

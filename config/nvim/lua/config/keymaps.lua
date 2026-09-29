@@ -44,72 +44,130 @@ local function createMapper()
 end
 
 local bind = createMapper()
-bind.term("<esc><esc>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
-bind.term("<C-[>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
-bind.x("p", [["_dP]], bind.DEFAULT_OPTS)
+-- Shared shortcuts apply in both native Neovim and VS Code.
+local sharedKeymaps = function()
+    bind.term("<esc><esc>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
+    bind.term("<C-[>", [[<C-\><C-n>]], { desc = "Exit terminal-insert mode" })
+    bind.x("p", [["_dP]], bind.DEFAULT_OPTS)
 
-bind.cmd("<C-A>", "<HOME>", { desc = "Go to HOME in command" })
-bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
-bind.normal("j", "gj", bind.DEFAULT_OPTS)
-bind.normal("k", "gk", bind.DEFAULT_OPTS)
-bind.normal("g;", "g;", { desc = "Older change" })
-bind.normal("g,", "g,", { desc = "Newer change" })
-bind.normal("vv", "V", { desc = "Select line" })
+    bind.normal("J", "mzJ`z", { desc = "Primeagen join lines" })
+    bind.normal("j", "gj", bind.DEFAULT_OPTS)
+    bind.normal("k", "gk", bind.DEFAULT_OPTS)
+    bind.normal("g;", "g;", { desc = "Older change" })
+    bind.normal("g,", "g,", { desc = "Newer change" })
+    bind.normal("vv", "V", { desc = "Select line" })
 
-bind.normal("0", "^", { desc = "Goto first non-whitespace" })
-bind.normal("<", "<<", { desc = "Deindent" })
-bind.normal(">", ">>", { desc = "Indent" })
-bind.insert("<C-A>", "<HOME>", { desc = "Go to home in insert" })
-bind.insert("<C-E>", "<END>", { desc = "Go to end in insert" })
-bind.insert("<C-s>", "<Esc>:w<CR>a", { desc = "Save" })
-bind.insert("<C-z>", "<Esc>ua", { desc = "Go to end in insert" })
-bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
-bind.normal("#", "#zz", { desc = "Center previous pattern" })
-bind.normal("*", "*zz", { desc = "Center next pattern" })
-bind.normal("+", "<C-a>", { desc = "Increment" })
-bind.normal("-", "<C-x>", { desc = "Decrement" })
-bind.normal("<BS>", '"_', { desc = "BlackHole register" })
-bind.normal("dd", function()
-    return vim.api.nvim_get_current_line() == "" and '"_dd' or "dd"
-end, { expr = true, desc = "Delete line" })
-bind.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
-bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
-bind.normal("<leader>uA", "<cmd>CodeActionsOnSaveToggle<CR>", { desc = "Toggle code actions on save" })
-bind.normal("<leader>J", "v%J", { desc = "Join next match" })
-bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
+    bind.normal("0", "^", { desc = "Goto first non-whitespace" })
+    bind.normal("<", "<<", { desc = "Deindent" })
+    bind.normal(">", ">>", { desc = "Indent" })
+    bind.normal("#", "#zz", { desc = "Center previous pattern" })
+    bind.normal("*", "*zz", { desc = "Center next pattern" })
+    bind.normal("+", "<C-a>", { desc = "Increment" })
+    bind.normal("-", "<C-x>", { desc = "Decrement" })
+    bind.normal("<BS>", '"_', { desc = "BlackHole register" })
+    bind.normal("dd", function()
+        return vim.api.nvim_get_current_line() == "" and '"_dd' or "dd"
+    end, { expr = true, desc = "Delete line" })
+    bind.normal("<C-s>", "<cmd>:w<CR>", { desc = "Save" })
+    bind.normal("<Esc>", "<cmd>nohlsearch<CR>", { desc = "No hlsearch" })
+    bind.normal("<leader>uA", "<cmd>CodeActionsOnSaveToggle<CR>", { desc = "Toggle code actions on save" })
+    bind.normal("<leader>J", "v%J", { desc = "Join next match" })
+    bind.normal("<leader>cq", vim.diagnostic.setloclist, { desc = "Open diagnostic [c]ode [q]uickfix list" })
 
-bind.visual("0", "^", { desc = "Goto first non-whitespace" })
-bind.visual("<BS>", '"_', { desc = "BlackHole register" })
-bind.visual("<", "<gv", bind.DEFAULT_OPTS)
-bind.visual(">", ">gv", bind.DEFAULT_OPTS)
-bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
-bind.visual("<leader>su", ":sort u<CR>", { desc = "[s]ort unique" })
-bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
-bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
-bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>", { desc = "[s]ort size" })
-bind.visual("J", ":m '>+1<CR>gv=gv", { desc = "" })
-bind.visual("K", ":m '<-2<CR>gv=gv", { desc = "" })
+    bind.visual("0", "^", { desc = "Goto first non-whitespace" })
+    bind.visual("<BS>", '"_', { desc = "BlackHole register" })
+    bind.visual("<", "<gv", bind.DEFAULT_OPTS)
+    bind.visual(">", ">gv", bind.DEFAULT_OPTS)
+    bind.visual("<leader>sa", ":sort<CR>", { desc = "[s]ort ascii" })
+    bind.visual("<leader>su", ":sort u<CR>", { desc = "[s]ort unique" })
+    bind.visual("<leader>sn", ":sort n<CR>", { desc = "[s]ort numbers" })
+    bind.visual("<leader>sr", ":!tail -r<CR>", { desc = "[s]ort reverse" })
+    bind.visual("<leader>ss", ":<C-u>'<,'>! awk '{ print length(), $0 | \"sort -n | cut -d\\\\  -f2-\" }'<CR>",
+        { desc = "[s]ort size" })
+    bind.visual("J", ":m '>+1<CR>gv=gv", { desc = "" })
+    bind.visual("K", ":m '<-2<CR>gv=gv", { desc = "" })
+    bind.normal("<leader>pp", "<cmd>PasteImage<cr>", { desc = "Paste image" })
 
-bind.normal("<leader>co", function()
-    vim.lsp.buf.code_action {
-        apply = true,
-        context = { only = { "source.organizeImports" } },
-    }
-end, { desc = "[c]ode [o]rganizeImports" })
+    bind.normal("<leader>co", function()
+        vim.lsp.buf.code_action {
+            apply = true,
+            context = { only = { "source.organizeImports" } },
+        }
+    end, { desc = "[c]ode [o]rganizeImports" })
 
-if not vscode.isVscode() then
+    bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
+    bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
+    bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
+    bind.normal("<C-h>", "<cmd>bprevious<cr>", bind.DEFAULT_OPTS)
+    bind.normal("<C-l>", "<cmd>bnext<cr>", bind.DEFAULT_OPTS)
+    bind.normal("<leader>br", "<CMD>e#<CR>", { desc = "Buffer reopen last", icon = "" })
+
+    local function buf_abs()
+        return vim.api.nvim_buf_get_name(0)
+    end
+
+    bind.normal("<leader>cy", function()
+        local rel = vim.fn.fnamemodify(buf_abs(), ":.")
+        vim.fn.setreg("+", rel)
+        vim.notify("Yanked (relative): " .. rel)
+    end, { desc = "[c]ode [y]ank path" })
+
+    bind.normal("<leader>cd", function()
+        local function dirname(str)
+            return str:match "(.*[/\\])"
+        end
+        local rel = dirname(vim.fn.fnamemodify(buf_abs(), ":."))
+        vim.fn.setreg("+", rel)
+        vim.notify("Yanked (relative): " .. rel)
+    end, { desc = "[c]ode yank [d]ir" })
+
+    bind.normal("<leader>xc", function()
+        local loc = vim.fn.fnamemodify(buf_abs(), ":.") .. ":" .. vim.fn.line "."
+        vim.fn.setreg("+", loc)
+        vim.notify("Yanked: " .. loc)
+    end, { desc = "Copy path:line" })
+
+    bind.normal("<leader>xo", function()
+        local loc = vim.fn.getreg("+"):match "^%s*(.-)%s*$"
+        if loc == "" then
+            vim.notify("Clipboard is empty", vim.log.levels.WARN)
+            return
+        end
+
+        vim.cmd.edit(vim.fn.fnameescape(loc))
+    end, { desc = "Open copied path:line" })
+
+    bind.normal("zo", function()
+        local line = vim.fn.line "."
+        if vim.fn.foldclosed(line) == -1 then
+            vim.cmd "normal! zc"
+        else
+            vim.cmd "normal! zo"
+        end
+    end, { desc = "Fold" })
+
+    bind.normal("<leader>fr", function()
+        require("grug-far").open { engine = "astgrep" }
+    end, { desc = "Structural find and replace" })
+
+    bind.visual("<leader>fr", function()
+        require("grug-far").with_visual_selection { engine = "astgrep" }
+    end, { desc = "Structural replace selection" })
+
+    bind.x(".", ":norm .<CR>", nosilent)
+    bind.x("@", ":norm @q<CR>", nosilent)
+
+    bind.insert("<C-s>", "<Esc>:w<CR>a", { desc = "Save" })
+    bind.insert("<C-E>", "<END>", { desc = "Go to end in insert" })
+    bind.insert("<C-a>", "<HOME>", { desc = "Go to HOME in command" })
+    bind.insert("<Esc>", "<C-c>", { desc = "normal mode", noremap = true, silent = true })
+end
+
+local function neovimKeymaps()
     bind.normal("<leader>tm", function()
         require("mini.map").toggle()
     end, { desc = "[t]oggle [m]inimap", icon = "" })
-end
 
-bind.normal("<leader>qf", "<cmd>q!<cr>", { desc = "[q]uit force", icon = "󰅛" })
-bind.normal("<leader>qq", "<cmd>bdelete<CR>", { desc = "[q]uit tab", icon = "󰅛" })
-bind.normal("<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete current buffer", icon = "󰅛" })
-bind.normal("<C-h>", "<cmd>bprevious<cr>", bind.DEFAULT_OPTS)
-bind.normal("<C-l>", "<cmd>bnext<cr>", bind.DEFAULT_OPTS)
-bind.normal("<leader>br", "<CMD>e#<CR>", { desc = "Buffer reopen last", icon = "" })
-if not vscode.isVscode() then
     bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
     bind.normal("<leader>bo", function()
         require("snacks.bufdelete").other()
@@ -120,7 +178,6 @@ if not vscode.isVscode() then
     bind.normal("<leader>g=", function()
         require("mini.diff").toggle_overlay(0)
     end, { desc = "Git diff" })
-
     bind.normal("<leader>gD", "<CMD>CodeDiff<CR>", { desc = "Vscode diff" })
     bind.normal("<leader>rm", "<CMD>Nvumi<CR>", { desc = "[R]epl [M]aths" })
     bind.normal("<leader>so", "<CMD>Oil --float --preview<CR>", { desc = "Oil" })
@@ -128,94 +185,29 @@ if not vscode.isVscode() then
         require("mini.files").open(vim.api.nvim_buf_get_name(0))
     end, { desc = "Mini files" })
     bind.normal("<leader>on", "<CMD>Nvumi<CR>", { desc = "[O]pen [N]vumi" })
-end
 
-if not vscode.isVscode() then
     bind.normal("<leader>xd", function()
         require("config.diagnostics").hover()
     end, { desc = "Show diagnostics" })
-end
-
-local function buf_abs()
-    return vim.api.nvim_buf_get_name(0)
-end
-
-if not vscode.isVscode() then
     bind.normal("<leader>um", function()
         Snacks.dim.disable()
     end, { desc = "Disable dim" })
-
     bind.normal("<leader>uf", function()
         Snacks.dim.enable()
     end, { desc = "Enable dim" })
-end
 
-bind.normal("<leader>cy", function()
-    local rel = vim.fn.fnamemodify(buf_abs(), ":.")
-    vim.fn.setreg("+", rel)
-    vim.notify("Yanked (relative): " .. rel)
-end, { desc = "[c]ode [y]ank path" })
-
-bind.normal("<leader>cd", function()
-    local function dirname(str)
-        return str:match "(.*[/\\])"
-    end
-    local rel = dirname(vim.fn.fnamemodify(buf_abs(), ":."))
-    vim.fn.setreg("+", rel)
-    vim.notify("Yanked (relative): " .. rel)
-end, { desc = "[c]ode yank [d]ir" })
-
-bind.normal("<leader>xc", function()
-    local loc = vim.fn.fnamemodify(buf_abs(), ":.") .. ":" .. vim.fn.line "."
-    vim.fn.setreg("+", loc)
-    vim.notify("Yanked: " .. loc)
-end, { desc = "Copy path:line" })
-
-bind.normal("<leader>xo", function()
-    local loc = vim.fn.getreg("+"):match "^%s*(.-)%s*$"
-    if loc == "" then
-        vim.notify("Clipboard is empty", vim.log.levels.WARN)
-        return
-    end
-
-    vim.cmd.edit(vim.fn.fnameescape(loc))
-end, { desc = "Open copied path:line" })
-
-if not vscode.isVscode() then
     bind.normal("zR", function()
         require("ufo").openAllFolds()
     end)
-
     bind.normal("zM", function()
         require("ufo").closeAllFolds()
     end)
-
     bind.normal("zm", function()
         require("ufo").closeFoldsWith()
     end)
 end
 
-bind.normal("zo", function()
-    local line = vim.fn.line "."
-    if vim.fn.foldclosed(line) == -1 then
-        vim.cmd "normal! zc"
-    else
-        vim.cmd "normal! zo"
-    end
-end, { desc = "Fold" })
-
-bind.normal("<leader>fr", function()
-    require("grug-far").open { engine = "astgrep" }
-end, { desc = "Structural find and replace" })
-
-bind.visual("<leader>fr", function()
-    require("grug-far").with_visual_selection { engine = "astgrep" }
-end, { desc = "Structural replace selection" })
-
-bind.x(".", ":norm .<CR>", nosilent)
-bind.x("@", ":norm @q<CR>", nosilent)
-
-if vscode.isVscode() then
+local function vscodeKeymaps()
     local function vscode_action(command, opts)
         return function()
             require("vscode").action(command, opts)
@@ -243,11 +235,13 @@ if vscode.isVscode() then
     bind.normal("<leader>sw", vscode_word_action "workbench.action.findInFiles", { desc = "Grep word" })
     bind.normal("<leader>fe", vscode_action "workbench.view.explorer", { desc = "File explorer" })
     bind.normal("<leader>fo", vscode_action "workbench.action.openRecent", { desc = "Open recent" })
-    bind.normal("<leader>fb", vscode_action "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup", { desc = "Buffers" })
+    bind.normal("<leader>fb", vscode_action "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup",
+        { desc = "Buffers" })
     bind.normal("<leader>sb", vscode_action "workbench.action.gotoLine", { desc = "Buffer lines" })
     bind.normal("<leader>ss", vscode_action "workbench.action.gotoSymbol", { desc = "Document symbols" })
     bind.normal("<leader>sS", vscode_action "workbench.action.showAllSymbols", { desc = "Workspace symbols" })
-    bind.normal("<leader>sB", vscode_action "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup", { desc = "Open buffers" })
+    bind.normal("<leader>sB", vscode_action "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup",
+        { desc = "Open buffers" })
     bind.normal("<leader>sd", vscode_action "workbench.actions.view.problems", { desc = "Workspace diagnostics" })
     bind.normal("<leader>sD", vscode_action "workbench.actions.view.problems", { desc = "Buffer diagnostics" })
     bind.normal("<leader>sl", vscode_action "workbench.actions.view.problems", { desc = "Location list" })
@@ -279,7 +273,8 @@ if vscode.isVscode() then
     bind.normal("<leader>bd", vscode_action "workbench.action.closeActiveEditor", { desc = "Close buffer" })
     bind.normal("<leader>qq", vscode_action "workbench.action.closeActiveEditor", { desc = "Close buffer" })
     bind.normal("<leader>qf", vscode_action "workbench.action.closeActiveEditor", { desc = "Close buffer" })
-    bind.normal("<leader>br", vscode_action "workbench.action.openPreviousRecentlyUsedEditorInGroup", { desc = "Previous buffer" })
+    bind.normal("<leader>br", vscode_action "workbench.action.openPreviousRecentlyUsedEditorInGroup",
+        { desc = "Previous buffer" })
     bind.normal("<leader>so", vscode_action "workbench.view.explorer", { desc = "File explorer" })
     bind.normal("<leader>se", vscode_action "workbench.view.explorer", { desc = "File explorer" })
     bind.normal("<leader>Z", vscode_action "workbench.action.toggleMaximizeEditorGroup", { desc = "Maximize editor" })
@@ -319,4 +314,11 @@ if vscode.isVscode() then
     bind.normal("zM", vscode_action "editor.foldAll", { desc = "Close all folds" })
     bind.normal("zm", vscode_action "editor.fold", { desc = "Close fold" })
     bind.normal("zo", vscode_action "editor.unfold", { desc = "Open fold" })
+end
+
+sharedKeymaps()
+if vscode.isVscode() then
+    vscodeKeymaps()
+else
+    neovimKeymaps()
 end
