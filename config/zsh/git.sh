@@ -149,7 +149,7 @@ function _commit_message() {
     _git_require_repo || return
     local message="$1"
     shift
-    command git add . || return $?
+    git add . 
     _git_commit_and_push -S -m "$message" "$@"
 }
 
@@ -322,7 +322,7 @@ function wip.staged() {
     _git_require_repo || return
     local now
     now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
-    command git commit --no-verify -S -m "wip: ${now}"
+    git commit --no-verify -S -m "wip: ${now}"
 }
 
 function pullb() {
@@ -331,8 +331,8 @@ function pullb() {
     local branch
     branch="$(command git branch --show-current)" || return $?
     [[ -n "$branch" ]] || { print -u2 -r -- "pullb: detached HEAD"; return 1; }
-    command git fetch || return $?
-    command git pull --rebase origin "$branch"
+    git fetch
+    git pull origin "$branch"
 }
 
 function parseprs() {

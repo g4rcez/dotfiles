@@ -123,7 +123,6 @@ espanso
 	.shell("email", "FakerJS email", run("email"))
 	.shell("yesterday", "Get yesterday date", run(`dates --value=yesterday`))
 	.shell("tomorrow", "Get tomorrow date", run(`dates --value=tomorrow`))
-	.shell("dd", "Get date in ISO format", run("dates --value=isod"))
 	.shell("iso", "Get date in ISO format", run(`dates --value=iso`))
 	.shell(
 		"r",
