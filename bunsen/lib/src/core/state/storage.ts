@@ -44,7 +44,27 @@ export async function loadState(): Promise<StateFile> {
       return getDefaultState()
     }
 
-    return result.data
+    const { activeProfile, env, karabiner, espanso, packages } = result.data
+    return {
+      version: result.data.version,
+      lastApplied: result.data.lastApplied,
+      symlinks: result.data.symlinks,
+      ...(activeProfile === undefined ? {} : { activeProfile }),
+      ...(env === undefined ? {} : { env }),
+      ...(karabiner === undefined ? {} : { karabiner }),
+      ...(espanso === undefined ? {} : { espanso }),
+      ...(packages === undefined
+        ? {}
+        : {
+            packages: {
+              lastSync: packages.lastSync,
+              installed: packages.installed.map(({ version, ...pkg }) => ({
+                ...pkg,
+                ...(version === undefined ? {} : { version }),
+              })),
+            },
+          }),
+    }
   } catch (error) {
     console.warn('Failed to load state file, using default state')
     return getDefaultState()

@@ -9,7 +9,8 @@ const getSnippetMatches = (input: string) => {
     const matches: string[] = [];
     let match: RegExpExecArray | null;
     while ((match = SNIPPET_MATCHER.exec(input)) !== null) {
-        matches.push(match[1]);
+        const snippet = match[1];
+        if (snippet !== undefined) matches.push(snippet);
     }
     return matches;
 };
@@ -31,7 +32,7 @@ const transform = {
 };
 
 const parseStr = (rule: string, map: Record<string, any>): string => {
-    const [word, ...mappers] = rule.split("|");
+    const [word = "", ...mappers] = rule.split("|");
     return mappers.reduce(
         (acc, el) => (transform as any)[el]?.(acc || "") || acc,
         map[word] || word

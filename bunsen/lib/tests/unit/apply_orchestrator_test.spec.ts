@@ -3,7 +3,7 @@ import {
   applyConfiguration,
   type ApplyDependencies,
   type ApplyConfigurationOptions,
-} from '../../src/core/apply/orchestrator'
+} from '../../src/core/apply/orchestrator.js'
 
 function setup(events: string[], symlinkSuccess = true): ApplyDependencies {
   return {

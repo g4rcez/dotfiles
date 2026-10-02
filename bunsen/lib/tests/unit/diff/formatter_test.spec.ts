@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
-import { formatDiffResult } from '../../../src/core/diff/formatter'
-import type { DiffResult } from '../../../src/core/diff/types'
+import { formatDiffResult } from '../../../src/core/diff/formatter.js'
+import type { DiffResult } from '../../../src/core/diff/types.js'
 
 const empty = (): DiffResult => ({
   symlinks: [],

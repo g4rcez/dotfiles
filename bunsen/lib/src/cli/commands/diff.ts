@@ -26,14 +26,17 @@ export async function diffCommand(options: DiffCommandOptions): Promise<void> {
     throw new Error('Choose only one --*-only filter at a time')
   }
 
-  const loaded = await loadConfig({ configPath: options.config, profile: options.profile })
+  const loaded = await loadConfig({
+    ...(options.config !== undefined && { configPath: options.config }),
+    ...(options.profile !== undefined && { profile: options.profile }),
+  })
   const diffOptions: DiffOptions = {
-    profileName: loaded.context.profile || undefined,
-    symlinksOnly: options.symlinksOnly,
-    envOnly: options.envOnly,
-    karabinerOnly: options.karabinerOnly,
-    espansoOnly: options.espansoOnly,
-    packagesOnly: options.packagesOnly,
+    ...(loaded.context.profile && { profileName: loaded.context.profile }),
+    ...(options.symlinksOnly !== undefined && { symlinksOnly: options.symlinksOnly }),
+    ...(options.envOnly !== undefined && { envOnly: options.envOnly }),
+    ...(options.karabinerOnly !== undefined && { karabinerOnly: options.karabinerOnly }),
+    ...(options.espansoOnly !== undefined && { espansoOnly: options.espansoOnly }),
+    ...(options.packagesOnly !== undefined && { packagesOnly: options.packagesOnly }),
   }
   const result = await calculateDiff(loaded.config, diffOptions)
 

@@ -20,7 +20,10 @@ export async function profileCommand(
 
   let loaded
   try {
-    loaded = await loadConfig({ configPath: options.config, profile: profileName })
+    loaded = await loadConfig({
+      ...(options.config !== undefined ? { configPath: options.config } : {}),
+      profile: profileName,
+    })
   } catch (error) {
     spinner.fail('Failed to load configuration')
     throw error

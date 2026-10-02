@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { buildInstallCommand } from '../../src/core/packages/installer'
+import { buildInstallCommand } from '../../src/core/packages/installer.js'
 
 const apt = ['apt-get', 'install', '-y', 'git']
 

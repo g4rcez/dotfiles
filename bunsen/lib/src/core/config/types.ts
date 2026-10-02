@@ -1,5 +1,5 @@
-import type { Espanso } from '../../api/espanso'
-import type { Karabiner } from '../../api/karabiner/karabiner'
+import type { Espanso } from '../../api/espanso.js'
+import type { Karabiner } from '../../api/karabiner/karabiner.js'
 
 export interface SymlinkConfig {
   [target: string]:

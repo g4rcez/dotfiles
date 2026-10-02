@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from 'bun:test'
 import { mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { diffCommand } from '../../../src/cli/commands/diff'
+import { diffCommand } from '../../../src/cli/commands/diff.js'
 
 const directories: string[] = []
 afterEach(async () => {

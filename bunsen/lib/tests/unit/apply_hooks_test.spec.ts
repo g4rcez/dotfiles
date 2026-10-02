@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { applyConfiguration, type ApplyDependencies } from '../../src/core/apply/orchestrator'
+import { applyConfiguration, type ApplyDependencies } from '../../src/core/apply/orchestrator.js'
 
 function dependencies(events: string[]): ApplyDependencies {
   return {

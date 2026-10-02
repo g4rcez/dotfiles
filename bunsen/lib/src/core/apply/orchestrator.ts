@@ -84,7 +84,7 @@ export async function applyConfiguration(
   if (sectionEnabled(options, 'envOnly') && (config.env || context.profile)) {
     await dependencies.generateEnvConfig(
       config.env ?? { shells: ['zsh', 'bash'], variables: {} },
-      { dryRun, profileName: context.profile || undefined }
+      context.profile ? { dryRun, profileName: context.profile } : { dryRun }
     )
   }
 

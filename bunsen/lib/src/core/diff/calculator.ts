@@ -27,7 +27,7 @@ async function readState(home: string, runtime: DiffRuntime, warnings: string[])
   if (!pathExists(statePath)) return emptyState()
   try {
     const parsed = StateFileSchema.safeParse(JSON.parse(await readFile(statePath)))
-    if (parsed.success) return parsed.data
+    if (parsed.success) return parsed.data as StateFile
     warnings.push(`Cannot read Bunsen state at ${statePath}: invalid state file`)
   } catch (error) {
     warnings.push(`Cannot read Bunsen state at ${statePath}: ${String(error)}`)
@@ -79,9 +79,9 @@ export async function loadCurrentState(
   if (envFile && pathExists(envFile)) {
     try {
       for (const line of (await readFile(envFile)).split('\n')) {
-        const match = line.match(/^export\s+([^=]+)=(.+)$/)
-        if (match && match[1] !== 'BUNSEN_ENV_LOADED') {
-          envVariables[match[1]] = match[2].replace(/^["']|["']$/g, '')
+        const [, key, value] = line.match(/^export\s+([^=]+)=(.+)$/) ?? []
+        if (key && key !== 'BUNSEN_ENV_LOADED' && value !== undefined) {
+          envVariables[key] = value.replace(/^["']|["']$/g, '')
         }
       }
     } catch (error) {

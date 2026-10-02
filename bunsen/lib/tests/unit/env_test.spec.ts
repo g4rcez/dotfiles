@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { resolveEnvExportFile } from '../../src/core/generators/env'
+import { resolveEnvExportFile } from '../../src/core/generators/env.js'
 
 const home = '/tmp/bunsen-test-home'
 

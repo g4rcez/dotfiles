@@ -77,8 +77,8 @@ export async function statusCommand(_options: StatusOptions = {}) {
 
     const byManager = packagesState.installed.reduce(
       (acc, pkg) => {
-        if (!acc[pkg.manager]) acc[pkg.manager] = []
-        acc[pkg.manager].push(pkg)
+        const managerPackages = (acc[pkg.manager] ??= [])
+        managerPackages.push(pkg)
         return acc
       },
       {} as Record<string, typeof packagesState.installed>

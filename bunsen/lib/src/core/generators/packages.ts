@@ -75,7 +75,7 @@ export async function generatePackagesConfig(
     spinner.start(`Installing ${packages.length} packages via ${manager}...`)
     const results = await installPackages(manager, packages, {
       dryRun,
-      autoSudo: config.autoSudo,
+      ...(config.autoSudo !== undefined ? { autoSudo: config.autoSudo } : {}),
     })
     allResults.push(...results)
     const installed = results.filter((r) => r.success && !r.alreadyInstalled).length

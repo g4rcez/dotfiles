@@ -1,6 +1,6 @@
 import { beforeEach, expect, mock, test } from 'bun:test'
-import { applyCommand, type ApplyOptions } from '../../src/cli/commands/apply'
-import type { ApplyConfigurationOptions, ApplySummary } from '../../src/core/apply/orchestrator'
+import { applyCommand, type ApplyOptions } from '../../src/cli/commands/apply.js'
+import type { ApplyConfigurationOptions, ApplySummary } from '../../src/core/apply/orchestrator.js'
 
 let appliedOptions: ApplyConfigurationOptions | null = null
 

@@ -1,5 +1,5 @@
 import { hostname } from 'node:os'
-import type { DotfilesConfig, ProfileConfig, ProfileContext, EnvConfig, Hooks, PackageManagerConfig } from './types'
+import type { DotfilesConfig, ProfileConfig, ProfileContext, EnvConfig, Hooks, PackageManagerConfig } from './types.js'
 
 /**
  * Select which profile to use based on priority
@@ -40,7 +40,7 @@ export function selectProfile(
 
   // Priority 3: Hostname matching
   const currentHostname = hostname()
-  for (const [name, profile] of Object.entries(profiles)) {
+  for (const [name, profile] of Object.entries(profiles) as [string, ProfileConfig][]) {
     if (!profile.hostname) continue
 
     const hostnames = Array.isArray(profile.hostname)

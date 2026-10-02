@@ -91,9 +91,10 @@ export async function loadConfig(options: LoadConfigOptions = {}): Promise<Loade
     logger.debug('Configuration loaded and validated successfully')
 
     // Select profile with priority: CLI > ENV > hostname > default
+    const envProfile = process.env.BUNSEN_PROFILE
     const context = selectProfile(raw, {
-      cliProfile: options.profile,
-      envProfile: process.env.BUNSEN_PROFILE,
+      ...(options.profile !== undefined && { cliProfile: options.profile }),
+      ...(envProfile !== undefined && { envProfile }),
     })
 
     // Get effective config (base + profile merged)

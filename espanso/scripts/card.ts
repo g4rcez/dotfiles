@@ -10,7 +10,7 @@ type Brand = keyof typeof creditCardTemplate;
 
 const createCreditCard = (type: Brand) => {
     let pos = 0;
-    const str = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const str: [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let sum = 0;
     let final_digit = 0;
     let i = 0;
@@ -40,18 +40,18 @@ const createCreditCard = (type: Brand) => {
     len_offset = (len + 1) % 2;
     for (pos = 0; pos < len - 1; pos++) {
         if ((pos + len_offset) % 2) {
-            t = str[pos] * 2;
+            t = str[pos]! * 2;
             if (t > 9) {
                 t -= 9;
             }
             sum += t;
         } else {
-            sum += str[pos];
+            sum += str[pos]!;
         }
     }
     final_digit = (10 - (sum % 10)) % 10;
     str[len - 1] = final_digit;
-    return creditCardTemplate[type].replace(/[x]/g, () => str[i++].toString());
+    return creditCardTemplate[type].replace(/[x]/g, () => str[i++]!.toString());
 };
 
 function createCardCvv(type: Brand) {

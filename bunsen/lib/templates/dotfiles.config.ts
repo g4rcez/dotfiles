@@ -1,4 +1,4 @@
-import { defineConfig, karabiner, espanso } from 'bunsen'
+import { defineConfig, karabiner, espanso } from '@g4rcez/bunsen'
 
 export default defineConfig({
   // Symlink management

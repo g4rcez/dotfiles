@@ -9,8 +9,8 @@ export interface ValidateOptions {
 export async function validateCommand(options: ValidateOptions) {
   try {
     const loaded = await loadConfig({
-      configPath: options.config,
-      profile: options.profile,
+      ...(options.config !== undefined && { configPath: options.config }),
+      ...(options.profile !== undefined && { profile: options.profile }),
     })
 
     logger.success('Configuration is valid')

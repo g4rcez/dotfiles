@@ -8,7 +8,13 @@ const specialChars = "!@#$%^&*()_+-=[]{}\\|;:'\",./<>?~`";
 
 const allOfThen = numbers + letters + specialChars;
 
-const rand = <T>(array: T[]) => array[Math.floor(Math.random() * array.length)];
+const rand = <T>(array: T[]) => {
+    const value = array[Math.floor(Math.random() * array.length)];
+    if (value === undefined) {
+        throw new RangeError("Cannot choose a random value from an empty array");
+    }
+    return value;
+};
 
 const shuffle = <T>(array: T[] = []) =>
     array

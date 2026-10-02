@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { buildShellConfigContent } from '../../src/utils/shell'
+import { buildShellConfigContent } from '../../src/utils/shell.js'
 
 const home = '/Users/testuser'
 const exportFile = `${home}/.config/bunsen/env.sh`

@@ -1,7 +1,7 @@
 import { afterEach, expect, spyOn, test } from 'bun:test'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { STARTER_CONFIG, initCommand } from '../../src/cli/commands/init'
+import { STARTER_CONFIG, initCommand } from '../../src/cli/commands/init.js'
 
 const config = STARTER_CONFIG
 const directories: string[] = []

@@ -9,7 +9,9 @@ export interface ProfilesCommandOptions {
 
 export async function profilesCommand(options: ProfilesCommandOptions) {
   try {
-    const loaded = await loadConfig({ configPath: options.config })
+    const loaded = await loadConfig(
+      options.config === undefined ? {} : { configPath: options.config },
+    )
 
     const profiles = loaded.raw.profiles
     if (!profiles || Object.keys(profiles).length === 0) {

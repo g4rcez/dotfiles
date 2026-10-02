@@ -4,7 +4,9 @@
  * Demonstrates using AeroSpace and Rectangle as standalone plugins
  */
 
-import { defineConfig, createHyperSubLayers, AeroSpace, Rectangle } from '../src/api/index.ts'
+import { defineConfig, Karabiner, AeroSpace, Rectangle } from '../src/api/index.ts'
+
+const karabiner = new Karabiner()
 
 // ============================================================================
 // AeroSpace Window Manager Example
@@ -14,7 +16,7 @@ import { defineConfig, createHyperSubLayers, AeroSpace, Rectangle } from '../src
  * AeroSpace is a tiling window manager for macOS
  * https://github.com/nikitabobko/AeroSpace
  */
-const aerospaceKeys = createHyperSubLayers({
+const aerospaceKeys = karabiner.createHyperSubLayers({
   // Workspace navigation
   1: AeroSpace.workspace.focus(1),
   2: AeroSpace.workspace.focus(2),
@@ -61,7 +63,7 @@ const aerospaceKeys = createHyperSubLayers({
  * Rectangle is a window manager for macOS
  * https://rectangleapp.com/
  */
-const rectangleKeys = createHyperSubLayers({
+const rectangleKeys = karabiner.createHyperSubLayers({
   // Half screen layouts
   w: {
     h: Rectangle.half.left(),

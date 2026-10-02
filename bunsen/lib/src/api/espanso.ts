@@ -19,7 +19,7 @@ export class Espanso<T extends string = ';'> {
   }
 
   private getTriggerKey = (key: string | string[]): string => {
-    return Array.isArray(key) ? key[0] : key
+    return Array.isArray(key) ? (key[0] ?? '') : key
   }
 
   public insert(key: string, syntax: string, label: string) {

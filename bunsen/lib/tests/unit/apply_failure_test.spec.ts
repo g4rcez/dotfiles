@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test'
-import { applyConfiguration, type ApplyDependencies } from '../../src/core/apply/orchestrator'
+import { applyConfiguration, type ApplyDependencies } from '../../src/core/apply/orchestrator.js'
 
 function dependencies(events: string[], createResult: boolean): ApplyDependencies {
   return {
@@ -8,7 +8,7 @@ function dependencies(events: string[], createResult: boolean): ApplyDependencie
       { target: '/first', source: '/source/first', backup: true, force: false, createDirs: true },
       { target: '/second', source: '/source/second', backup: true, force: false, createDirs: true },
     ],
-    createSymlink: async (link) => {
+    createSymlink: async (link: Parameters<ApplyDependencies['createSymlink']>[0]) => {
       events.push(link.target)
       return link.target === '/first' ? createResult : true
     },

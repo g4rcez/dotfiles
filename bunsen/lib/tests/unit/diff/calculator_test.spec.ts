@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from 'bun:test'
 import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { Karabiner } from '../../../src/api/karabiner/karabiner'
-import { calculateDiff, loadDesiredState } from '../../../src/core/diff/calculator'
-import type { StateFile } from '../../../src/core/config/types'
+import { Karabiner } from '../../../src/api/karabiner/karabiner.js'
+import { calculateDiff, loadDesiredState } from '../../../src/core/diff/calculator.js'
+import type { StateFile } from '../../../src/core/config/types.js'
 
 const directories: string[] = []
 afterEach(async () => {

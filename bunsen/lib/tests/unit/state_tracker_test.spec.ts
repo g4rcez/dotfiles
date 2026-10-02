@@ -2,7 +2,7 @@ import { afterEach, expect, test } from 'bun:test'
 import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { getSymlinkStatus, resolveSymlinkDestination } from '../../src/core/state/tracker'
+import { getSymlinkStatus, resolveSymlinkDestination } from '../../src/core/state/tracker.js'
 
 const directories: string[] = []
 

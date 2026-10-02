@@ -148,3 +148,5 @@ fi
 # BEGIN BUNSEN
 [ -z "$BUNSEN_ENV_LOADED" ] && [ -f "$HOME/.config/bunsen/env.sh" ] && source "$HOME/.config/bunsen/env.sh"
 # END BUNSEN
+
+export BUF_TOKEN="$(awk '/machine echo.buf.dev/{f=1} f && /password/{print $2; exit}' ~/.netrc 2>/dev/null)"

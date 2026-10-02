@@ -4,7 +4,7 @@
  * This example demonstrates comprehensive Espanso configuration with Bunsen.
  * Includes text replacements, date formatting, shell commands, and forms.
  */
-import { defineConfig, espanso } from '../../src/api/index.ts'
+import { defineConfig } from '../../src/api/index.ts'
 
 export default defineConfig({
   espanso: {

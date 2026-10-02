@@ -149,7 +149,7 @@ export const createLeaderLayers = (config: Config): KarabinerModConfiguration =>
               ],
               description,
               from: { key_code: subKey as KeyCode },
-              to: subMotion.to,
+              ...(subMotion.to === undefined ? {} : { to: subMotion.to }),
               type: 'basic',
             },
           ],

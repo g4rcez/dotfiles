@@ -1,4 +1,4 @@
-import { defineConfig, karabiner, espanso, packages, importFrom, hyperKey, mapKey } from 'lucius'
+import { defineConfig, packages } from '../src/api/index.ts'
 
 export default defineConfig({
   // Symlink management
@@ -64,7 +64,7 @@ export default defineConfig({
   }),
 
   // Karabiner configuration
-  karabiner: karabiner({
+  karabiner: {
     profiles: [
       {
         name: 'Default',
@@ -134,10 +134,10 @@ export default defineConfig({
       },
     ],
     outputPath: '~/.config/karabiner/karabiner.json',
-  }),
+  },
 
   // Espanso configuration
-  espanso: espanso({
+  espanso: {
     matches: [
       // Emoticons
       { trigger: ':shrug', replace: '¯\\_(ツ)_/¯' },
@@ -175,7 +175,7 @@ export default defineConfig({
       { trigger: ':todo', replace: 'TODO: $|$' },
     ],
     outputPath: '~/.config/espanso/match/base.yml',
-  }),
+  },
 
   // Lifecycle hooks
   hooks: {

@@ -17,7 +17,10 @@ export async function parseBrewfile(filePath: string): Promise<string[]> {
   let match
 
   while ((match = brewRegex.exec(content)) !== null) {
-    packages.push(match[1])
+    const packageName = match[1]
+    if (packageName !== undefined) {
+      packages.push(packageName)
+    }
   }
 
   return packages

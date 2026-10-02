@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test'
-import { Karabiner } from '../../src/api/karabiner/karabiner'
-import { getEffectiveConfig } from '../../src/core/config/profile'
-import type { DotfilesConfig } from '../../src/core/config/types'
+import { Karabiner } from '../../src/api/karabiner/karabiner.js'
+import { getEffectiveConfig } from '../../src/core/config/profile.js'
+import type { DotfilesConfig } from '../../src/core/config/types.js'
 
 const createKarabiner = (profileNames: string[], configPath?: string) => {
   const config = new Karabiner()

@@ -19,7 +19,10 @@ export async function applyCommand(
 
   let loaded
   try {
-    loaded = await loadConfig({ configPath: options.config, profile: options.profile })
+    loaded = await loadConfig({
+      ...(options.config !== undefined && { configPath: options.config }),
+      ...(options.profile !== undefined && { profile: options.profile }),
+    })
   } catch (error) {
     spinner.fail('Failed to load configuration')
     throw error
@@ -48,11 +51,11 @@ export async function applyCommand(
       context,
       dryRun,
       force,
-      symlinksOnly: options.symlinksOnly,
-      envOnly: options.envOnly,
-      karabinerOnly: options.karabinerOnly,
-      espansoOnly: options.espansoOnly,
-      packagesOnly: options.packagesOnly,
+      ...(options.symlinksOnly !== undefined && { symlinksOnly: options.symlinksOnly }),
+      ...(options.envOnly !== undefined && { envOnly: options.envOnly }),
+      ...(options.karabinerOnly !== undefined && { karabinerOnly: options.karabinerOnly }),
+      ...(options.espansoOnly !== undefined && { espansoOnly: options.espansoOnly }),
+      ...(options.packagesOnly !== undefined && { packagesOnly: options.packagesOnly }),
     })
     if (summary.symlinks.total > 0) {
       spinner.succeed(

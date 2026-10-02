@@ -8,7 +8,7 @@ mock.module('../../src/core/state/storage.ts', () => ({
   removeSymlinkFromState: async () => {},
 }))
 
-const { createSymlink } = await import('../../src/core/symlink/manager')
+const { createSymlink } = await import('../../src/core/symlink/manager.js')
 const directories: string[] = []
 
 afterEach(async () => {
@@ -35,7 +35,7 @@ test('backup mode preserves the conflict and creates the link', async () => {
   expect(await readlink(target)).toBe(source)
   const backups = (await readdir(directory)).filter((name) => name.startsWith('target.backup.'))
   expect(backups).toHaveLength(1)
-  expect(await readFile(join(directory, backups[0]), 'utf8')).toBe('old')
+  expect(await readFile(join(directory, backups[0]!), 'utf8')).toBe('old')
 })
 
 test('force overwrites without creating a backup', async () => {
