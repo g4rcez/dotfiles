@@ -127,6 +127,8 @@ Espanso uses `;` as its trigger prefix. [`bunsen/espanso.ts`](bunsen/espanso.ts)
 
 Ghostty and WezTerm share a Command-P leader for tabs, splits, pane navigation, and configuration reloads. Kitty and Alacritty configurations are also kept for other environments.
 
+`bin/ghostty.keybind 'super+1'` prints `text:\x10\x31` for a Ghostty `text:` binding; `super` adds tmux's Control-P prefix.
+
 Tmux is the active multiplexer. Its configuration uses Control-P as the prefix, Vim-style pane movement, large scrollback, session persistence, popups, and the `agentmux` dashboard. Zellij is an optional alternative and is loaded by the shell only when it is available and tmux is not active.
 
 [`agentmux/README.md`](agentmux/README.md) documents the dashboard and its `gh.runs` view. Pi reports lifecycle state through [`config/pi/extensions/agentmux-status.ts`](config/pi/extensions/agentmux-status.ts); the extension is a no-op outside tmux.

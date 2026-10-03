@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  printf 'Usage: ghostty.keybind [super+]<key>\n' >&2
+  printf 'Encode a printable ASCII key as a Ghostty text action; super adds the Ctrl-P prefix.\n' >&2
+}
+
+if [[ $# -ne 1 || $1 == '-h' || $1 == '--help' ]]; then
+  usage
+  [[ $# -eq 1 ]] && exit 0
+  exit 2
+fi
+
+shortcut=$1
+prefix=''
+if [[ $shortcut == super+* ]]; then
+  prefix='\x10'
+  key=${shortcut#super+}
+elif [[ $shortcut == *+* ]]; then
+  printf 'error: only the super modifier is supported\n' >&2
+  usage
+  exit 2
+else
+  key=$shortcut
+fi
+
+if [[ $key == digit_[0-9] ]]; then
+  key=${key#digit_}
+fi
+
+export LC_ALL=C
+if [[ ! $key =~ ^[!-~]$ ]]; then
+  printf 'error: key must be one printable ASCII character (or digit_0 through digit_9)\n' >&2
+  exit 2
+fi
+
+printf -v key_hex '%02x' "'$key"
+printf 'text:%s\\x%s\n' "$prefix" "$key_hex"
