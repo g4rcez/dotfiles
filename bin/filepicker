@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+script_path="$script_dir/$(basename -- "${BASH_SOURCE[0]}")"
+preview_path="$script_dir/lessfilter.sh"
+
+list_entries() {
+    local mode=$1
+    local -a types
+
+    case "$mode" in
+        all) types=(--type file --type directory) ;;
+        files) types=(--type file) ;;
+        directories) types=(--type directory) ;;
+        *) printf 'Unknown filepicker mode: %s\n' "$mode" >&2; return 2 ;;
+    esac
+
+    fd --hidden --no-require-git --strip-cwd-prefix --exclude .git "${types[@]}"
+}
+
+case "${1:-}" in
+    --_list)
+        mode=$2
+        mode_file=$3
+        printf '%s\n' "$mode" > "$mode_file"
+        list_entries "$mode"
+        exit
+        ;;
+    --_refresh)
+        mode_file=$2
+        IFS= read -r mode < "$mode_file"
+        list_entries "$mode"
+        exit
+        ;;
+esac
+
+agent_mode=0
+if (($# == 1)) && [[ $1 == --agent-mode ]]; then
+    agent_mode=1
+elif (($# != 0)); then
+    printf 'Usage: %s [--agent-mode]\n' "${0##*/}" >&2
+    exit 2
+fi
+
+if ! command -v fd >/dev/null 2>&1; then
+    printf 'filepicker: fd is required\n' >&2
+    exit 127
+fi
+if ! command -v fzf >/dev/null 2>&1; then
+    printf 'filepicker: fzf is required\n' >&2
+    exit 127
+fi
+
+if command -v pbcopy >/dev/null 2>&1; then
+    clipboard=(pbcopy)
+elif command -v wl-copy >/dev/null 2>&1; then
+    clipboard=(wl-copy)
+elif command -v xclip >/dev/null 2>&1; then
+    clipboard=(xclip -selection clipboard)
+else
+    printf 'filepicker: pbcopy, wl-copy, or xclip is required to copy the selected path\n' >&2
+    exit 127
+fi
+
+mode_file=$(mktemp "${TMPDIR:-/tmp}/filepicker.XXXXXX")
+trap 'rm -f -- "$mode_file"' EXIT
+printf 'all\n' > "$mode_file"
+
+printf -v initial_command '%q --_list %q %q' "$script_path" all "$mode_file"
+printf -v files_command '%q --_list %q %q' "$script_path" files "$mode_file"
+printf -v directories_command '%q --_list %q %q' "$script_path" directories "$mode_file"
+printf -v refresh_command '%q --_refresh %q' "$script_path" "$mode_file"
+printf -v preview_command '%q {}' "$preview_path"
+
+# Keep the shared palette after generic defaults so its layout options win.
+fzf_default_opts=${FZF_DEFAULT_OPTS:-}
+if [[ -n ${FZF_COLORS:-} ]]; then
+    fzf_default_opts="${fzf_default_opts:+$fzf_default_opts }$FZF_COLORS"
+fi
+
+selected=$(FZF_DEFAULT_OPTS="$fzf_default_opts" fzf \
+    --preview "$preview_command" \
+    --preview-window 'right,75%' \
+    --header 'ctrl-d: directories  ctrl-f: files  ctrl-r: refresh  enter/ctrl-y: copy path' \
+    --bind "start:reload($initial_command),ctrl-d:change-prompt(Directories> )+reload($directories_command),ctrl-f:change-prompt(Files> )+reload($files_command),ctrl-r:reload($refresh_command),ctrl-y:accept,enter:accept"
+) || exit $?
+
+if [[ -n $selected ]]; then
+    if ((agent_mode)); then
+        selected="@$selected"
+    fi
+    printf '%s' "$selected" | "${clipboard[@]}"
+    printf '%s\n' "$selected"
+fi

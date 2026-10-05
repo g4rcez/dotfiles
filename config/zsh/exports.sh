@@ -12,7 +12,6 @@ if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/config/zsh" ]]; then
     DOTFILES_DIR="$DOTFILES"
 fi
 export DOTFILES_DIR
-
 export PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}"
 export GOPATH="${GOPATH:-$HOME/go}"
 
@@ -55,7 +54,6 @@ for _path_entry in "${_path_entries[@]}"; do
 done
 unset _path_entries _path_entry
 export PATH
-
 #####################################################################################
 ## Important exports
 export WEZTERM_CONFIG_DIR="$DOTFILES/config/wezterm"
@@ -98,7 +96,6 @@ fi
 export ZELLIJ_AUTO_ATTACH="${ZELLIJ_AUTO_ATTACH:-false}"
 export ZELLIJ_AUTO_EXIT="${ZELLIJ_AUTO_EXIT:-false}"
 export ZELLIJ_DEFAULT_SESSION="${ZELLIJ_DEFAULT_SESSION:-localhost}"
-
 #####################################################################################
 ## ZSH_PLUGINS
 # `zsh-autosuggestions`' completion strategy toggles tty line-discipline while
@@ -181,7 +178,7 @@ export ENABLE_LSP_TOOL="${ENABLE_LSP_TOOL:-1}"
 export AI_CLI_NAME="${AI_CLI_NAME:-pi}"
 export USE_BUILTIN_RIPGREP="${USE_BUILTIN_RIPGREP:-0}"
 export PI_FFF_MODE="${PI_FFF_MODE:-override}"
-export AI_CLI_MODEL="${AI_CLI_MODEL:-openai-codex/gpt-5.6-luna}"
+export AI_CLI_MODEL="${AI_CLI_MODEL:-openai-codex/gpt-6-luna}"
 export AI_COMMAND_PROMPT="${AI_COMMAND_PROMPT:-pi --model ${AI_CLI_MODEL}}"
 export AI_QUERY_COMMAND="${AI_QUERY_COMMAND:-${AI_COMMAND_PROMPT} -p}"
 if [[ -z "${AICOMMIT_EXCLUDES+x}" ]]; then

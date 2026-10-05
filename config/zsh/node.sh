@@ -45,3 +45,12 @@ function nodeUpdatePackages() {
         npm i -g "$line@latest"
     done <$DOTFILES/config/mise/defaults/node
 }
+
+function fns() {
+    if [[ -f package.json ]]; then
+        local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo 'Script -> {}\n';grep '{}' package.json | sed 's/^[ ]*//g'")
+        if [[ "$script" != "" ]]; then
+            n "$script"
+        fi
+    fi
+}

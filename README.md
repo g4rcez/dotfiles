@@ -129,7 +129,7 @@ Ghostty and WezTerm share a Command-P leader for tabs, splits, pane navigation, 
 
 `bin/ghostty.keybind 'super+1'` prints `text:\x10\x31` for a Ghostty `text:` binding; `super` adds tmux's Control-P prefix.
 
-Tmux is the active multiplexer. Its configuration uses Control-P as the prefix, Vim-style pane movement, large scrollback, session persistence, popups, and the `agentmux` dashboard. Zellij is an optional alternative and is loaded by the shell only when it is available and tmux is not active.
+Tmux is the active multiplexer. Its configuration uses Control-P as the prefix, Vim-style pane movement, large scrollback, session persistence, popups, and the `agentmux` dashboard. Prefix+e opens the file picker in a popup and copies selected paths as `@path` references. Zellij is an optional alternative and is loaded by the shell only when it is available and tmux is not active.
 
 [`agentmux/README.md`](agentmux/README.md) documents the dashboard and its `gh.runs` view. Pi reports lifecycle state through [`config/pi/extensions/agentmux-status.ts`](config/pi/extensions/agentmux-status.ts); the extension is a no-op outside tmux.
 
@@ -156,7 +156,7 @@ Mise manages the language runtimes and CLI tools. Versions are recorded in [`.to
 - rebasing pulls, automatic remote setup, and useful aliases;
 - global ignore rules and a commit message template.
 
-The [`bin/`](bin/) directory contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
+Run `bin/filepicker` for an ignore-aware recursive file/directory picker; Enter or Ctrl-Y copies the selected path, Ctrl-D and Ctrl-F switch entry types, and Ctrl-R refreshes the active list. Pass `--agent-mode` to prefix the returned and copied path with `@` (for example, `@src/component.ts`). The rest of [`bin/`](bin/) contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
 
 ## Themes and fonts
 

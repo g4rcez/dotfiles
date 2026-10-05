@@ -68,14 +68,23 @@ function gtv() {
     git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | command grep '.'
 }
 
+function git.tags() { 
+    gtv
+}
+
+function gcd () { 
+    git checkout "$(git_develop_branch)"
+}
+
+function gcm () {
+    git checkout "$(git_main_branch)"
+}
 #############################################################################################################################
 ## alias
 alias pushf="git push --force-with-lease"
 alias add='git add'
 alias checkout='git switch'
-alias gcd='git checkout $(git_develop_branch)'
 alias git.config='git config --list'
-alias gcm='git checkout $(git_main_branch)'
 alias gitree='git-graph'
 alias gittree='git-graph'
 alias gst='git status'
@@ -566,6 +575,7 @@ _scopecommit() {
         '(-h --help)'{-h,--help}'[show help]' \
         '::commit message (type: msg):'
 }
+
 compdef _scopecommit scopecommit
 
 function lastcommit() {
@@ -587,7 +597,7 @@ function newpr() {
     createpr "$1"
 }
 
-function draft() {
+function draftpr() {
     createpr "$1" "--draft"
 }
 
@@ -640,6 +650,7 @@ function gcb() {
         command git switch -c "$1"
     fi
 }
+
 _git_local_and_remote_branches() {
     (( $+commands[git] )) || return 1
 
@@ -780,6 +791,7 @@ _gh_action() {
 _gcb() {
     _git_local_and_remote_branches
 }
+
 compdef _gcb gcb
 compdef _git_branch_arg switch mergewith rebasewith createpr newpr draft
 compdef _git_compare_args git.compare
@@ -828,5 +840,15 @@ function prcommits() {
             | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"
         '
     fi
+}
+
+function gh.config () {
+    gh config set telemetry disabled
+    gh config set color_labels enabled
+    gh config set spinner enabled
+    gh config set clipboard enabled
+    gh config set pager cat
+    gh config set editor nvim
+    gh config set prefer_editor_prompt enabled
 }
 

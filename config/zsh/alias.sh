@@ -1,5 +1,12 @@
 #!/bin/zsh
-## directories
+############################################################################
+## overrides
+if (($+commands[podman])); then
+    alias docker='podman'
+fi
+alias docker-compose="docker compose"
+############################################################################
+## aliases
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
@@ -47,17 +54,8 @@ alias map="xargs -n1"
 alias reload="exec ${SHELL} -l"
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
-if (($+commands[podman])); then
-    alias docker='podman'
-fi
 alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias worktree="workmux"
-
-############################################################################
-## vim
-if (($+commands[nvim])); then
-    alias vim="nvim"
-fi
 
 function zshrc() {
     nvim "$DOTFILES/config/zsh/zshrc"
@@ -77,7 +75,6 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 
 ############################################################################
 ## docker
-alias docker-compose="docker compose"
 function docker-prune-volumes() {
     emulate -L zsh
     local confirm=0
@@ -183,7 +180,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
     command -v sha1sum >/dev/null || alias sha1sum="shasum"
     command -v hd >/dev/null || alias hd="hexdump -C"
     alias dsclean="find . -type f -name '*.DS_Store' -ls -delete"
-
     function flush() {
         sudo dscacheutil -flushcache
         sudo killall -HUP mDNSResponder
@@ -484,7 +480,6 @@ _killport() {
     while IFS= read -r port; do
         [[ -n "$port" ]] && ports+=("$port")
     done < <(lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | awk 'NR > 1 { n = split($9, a, ":"); if (a[n] ~ /^[0-9]+$/) print a[n] ":" $1 }' | sort -u)
-
     _describe 'listening port' ports
 }
 
@@ -494,7 +489,6 @@ _process_names() {
     while IFS= read -r process; do
         [[ -n "$process" ]] && processes+=("$process:$process")
     done < <(ps -axo comm= 2>/dev/null | sed 's#.*/##' | sort -u)
-
     _describe 'process' processes
 }
 

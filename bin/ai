@@ -4,6 +4,12 @@ set -euo pipefail
 
 CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
 PROVIDER="${AI_PROVIDER:-pi}"
+if [[ -n "${TMUX:-}" ]]; then
+  TMUX_SOCKET_PATH="${TMUX%%,*}"
+else
+  TMUX_SOCKET_PATH="${TMUX_SOCKET_PATH:-$HOME/.tmp/socket}"
+fi
+export TMUX_SOCKET_PATH
 
 # Resolve script location (follow symlinks)
 SCRIPT_PATH="${BASH_SOURCE[0]}"
@@ -373,8 +379,21 @@ cmd_list() {
 }
 
 cmd_open() {
-  local cmd="${AI_COMMAND_PROMPT:-claude --dangerously-skip-permissions}"
-  eval exec "$cmd" "$@"
+  if [[ -n "${AI_COMMAND_PROMPT:-}" ]]; then
+    eval exec "$AI_COMMAND_PROMPT" "$@"
+  fi
+
+  local cli="${AI_CLI_NAME:-$PROVIDER}"
+  local -a cmd=("$cli")
+  case "${cli##*/}" in
+    pi)
+      [[ -n "${AI_CLI_MODEL:-}" ]] && cmd+=(--model "$AI_CLI_MODEL")
+      ;;
+    claude)
+      cmd+=(--dangerously-skip-permissions)
+      ;;
+  esac
+  exec "${cmd[@]}" "$@"
 }
 
 _ai_find_ai_proc() {
@@ -390,10 +409,10 @@ _ai_find_ai_proc() {
       while read -r cpid _ argv0 argv1 _rest; do
         [ -z "$cpid" ] && continue
         b0="${argv0##*/}"; b1="${argv1##*/}"
-        if [[ "$b0" =~ ^(claude|gemini|codex|opencode|pi)$ ]]; then
+        if [[ "$b0" =~ ^(claude|gemini|codex|opencode|pi|omp)$ ]]; then
           printf '%s %s' "$b0" "$cpid"; return
         fi
-        if [[ "$b1" =~ ^(claude|gemini|codex|opencode|pi)$ ]]; then
+        if [[ "$b1" =~ ^(claude|gemini|codex|opencode|pi|omp)$ ]]; then
           printf '%s %s' "$b1" "$cpid"; return
         fi
         nxt+=("$cpid")
@@ -594,7 +613,7 @@ Commands:
   help           show this help
 
 Options:
-  --provider  AI provider (default: claude, or \$AI_PROVIDER)
+  --provider  AI provider (default: pi, or \$AI_PROVIDER)
   -h, --help  show this help
 EOF
   exit "$exit_code"
