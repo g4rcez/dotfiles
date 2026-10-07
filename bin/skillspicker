@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+script_path="$script_dir/$(basename -- "${BASH_SOURCE[0]}")"
+preview_path="$script_dir/lessfilter.sh"
+
+list_root() {
+    local root=$1
+    local prefix=$2
+    local skill_dir
+    local skill_name
+    local skill_file
+    local seen_name
+    local seen
+
+    [[ -d "$root" ]] || return 0
+
+    for skill_dir in "$root"/*/; do
+        skill_file="${skill_dir%/}/SKILL.md"
+        [[ -f "$skill_file" ]] || continue
+
+        skill_name="${skill_dir%/}"
+        skill_name="${skill_name##*/}"
+        seen=0
+        for seen_name in "${seen_names[@]}"; do
+            if [[ "$seen_name" == "$skill_name" ]]; then
+                seen=1
+                break
+            fi
+        done
+        if [[ "$seen" == 1 ]]; then
+            continue
+        fi
+
+        seen_names+=("$skill_name")
+        printf '%s%s\t%s\n' "$prefix" "$skill_name" "$skill_file"
+    done
+}
+
+list_entries() {
+    local -a seen_names=('')
+    local PROJECT_ICON=" [p] "
+    local GLOBAL_ICON=" [g] "
+
+    list_root "$PWD/.agents/skills" "${PROJECT_ICON}"
+    list_root "$PWD/.claude/skills" "${PROJECT_ICON}"
+    list_root "$PWD/.codex/skills" "${PROJECT_ICON}"
+    list_root "$PWD/.pi/agent/skills" "${PROJECT_ICON}"
+    list_root "$PWD/.ai/skills" "${PROJECT_ICON}"
+
+    list_root "$HOME/.agents/skills" "${GLOBAL_ICON}"
+    list_root "$HOME/.claude/skills" "${GLOBAL_ICON}"
+    list_root "$HOME/.codex/skills" "${GLOBAL_ICON}"
+    list_root "$HOME/.pi/agent/skills" "${GLOBAL_ICON}"
+    list_root "$HOME/.ai/skills" "${GLOBAL_ICON}"
+}
+
+case "${1:-}" in
+--_list | --_refresh)
+    (($# == 1)) || {
+        printf 'Usage: %s [--agent-mode]\n' "${0##*/}" >&2
+        exit 2
+    }
+    list_entries
+    exit
+    ;;
+esac
+
+agent_mode=0
+if (($# == 1)) && [[ $1 == --agent-mode ]]; then
+    agent_mode=1
+elif (($# != 0)); then
+    printf 'Usage: %s [--agent-mode]\n' "${0##*/}" >&2
+    exit 2
+fi
+
+if ! command -v fzf >/dev/null 2>&1; then
+    printf 'skillspicker: fzf is required\n' >&2
+    exit 127
+fi
+
+if command -v pbcopy >/dev/null 2>&1; then
+    clipboard=(pbcopy)
+elif command -v wl-copy >/dev/null 2>&1; then
+    clipboard=(wl-copy)
+elif command -v xclip >/dev/null 2>&1; then
+    clipboard=(xclip -selection clipboard)
+else
+    printf 'skillspicker: pbcopy, wl-copy, or xclip is required to copy the selected skill path\n' >&2
+    exit 127
+fi
+
+printf -v initial_command '%q --_list' "$script_path"
+printf -v refresh_command '%q --_refresh' "$script_path"
+printf -v preview_command '%q {2}' "$preview_path"
+
+# Keep the shared palette after generic defaults so its layout options win.
+fzf_default_opts=${FZF_DEFAULT_OPTS:-}
+if [[ -n ${FZF_COLORS:-} ]]; then
+    fzf_default_opts="${fzf_default_opts:+$fzf_default_opts }$FZF_COLORS"
+fi
+
+selected=$(
+    FZF_DEFAULT_OPTS="$fzf_default_opts" fzf \
+        --no-sort \
+        --delimiter=$'\t' \
+        --with-nth=1 \
+        --preview "$preview_command" \
+        --preview-window 'right,75%' \
+        --header 'ctrl-r: refresh  enter/ctrl-y: copy skill path' \
+        --bind "start:reload($initial_command),ctrl-r:reload($refresh_command),ctrl-y:accept,enter:accept"
+) || exit $?
+
+if [[ -n $selected ]]; then
+    if [[ $selected != *$'\t'* ]]; then
+        printf 'skillspicker: selected entry has no skill path\n' >&2
+        exit 1
+    fi
+
+    selected_path=${selected#*$'\t'}
+    if ((agent_mode)); then
+        selected_path="@$selected_path"
+    fi
+    printf '%s' "$selected_path" | "${clipboard[@]}"
+    printf '%s\n' "$selected_path"
+fi

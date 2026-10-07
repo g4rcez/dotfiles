@@ -156,7 +156,7 @@ Mise manages the language runtimes and CLI tools. Versions are recorded in [`.to
 - rebasing pulls, automatic remote setup, and useful aliases;
 - global ignore rules and a commit message template.
 
-Run `bin/filepicker` for an ignore-aware recursive file/directory picker; Enter or Ctrl-Y copies the selected path, Ctrl-D and Ctrl-F switch entry types, and Ctrl-R refreshes the active list. Pass `--agent-mode` to prefix the returned and copied path with `@` (for example, `@src/component.ts`). The rest of [`bin/`](bin/) contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
+Run `bin/filepicker` for an ignore-aware recursive file/directory picker; Enter or Ctrl-Y copies the selected path, Ctrl-D and Ctrl-F switch entry types, and Ctrl-R refreshes the active list. Pass `--agent-mode` to prefix the returned and copied path with `@` (for example, `@src/component.ts`). Run `bin/skillspicker` to pick skills with a `SKILL.md` from common project or home skill folders (`.agents/skills`, `.claude/skills`, `.codex/skills`, `.pi/agent/skills`, and `.ai/skills`); Enter or Ctrl-Y copies the selected skill file path, Ctrl-R refreshes the list, and `--agent-mode` adds an `@` prefix. In tmux, Prefix+s opens it from the current pane's directory. The rest of [`bin/`](bin/) contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
 
 ## Themes and fonts
 
