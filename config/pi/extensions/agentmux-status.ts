@@ -3,6 +3,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 type AgentStatus = "working" | "waiting" | "done";
+const IDLE_RECONCILIATION_GRACE_MS = 2_000;
+const IDLE_POLL_INTERVAL_MS = 1_000;
+
 type LifecycleEvent =
 	| "session_start"
 	| "before_agent_start"
@@ -105,7 +108,10 @@ export default function agentmuxStatus(pi: AgentmuxExtensionAPI): void {
 	let currentStatus: AgentStatus = "done";
 	let statusBeforePrompt: AgentStatus = "working";
 	let task: string | null = null;
+	let currentCwd = "";
+	let workingSince = 0;
 	let pending = Promise.resolve();
+	let idlePoll: ReturnType<typeof setInterval> | undefined;
 
 	const enqueue = (operation: () => Promise<void>): Promise<void> => {
 		pending = pending.then(operation).catch((error: unknown) => {
@@ -117,6 +123,8 @@ export default function agentmuxStatus(pi: AgentmuxExtensionAPI): void {
 
 	const update = (status: AgentStatus, cwd: string): Promise<void> => {
 		currentStatus = status;
+		currentCwd = cwd;
+		if (status === "working") workingSince = Date.now();
 		return enqueue(() =>
 			writeAgentmuxState(path, {
 				version: 1,
@@ -133,13 +141,29 @@ export default function agentmuxStatus(pi: AgentmuxExtensionAPI): void {
 		);
 	};
 
-	pi.on("session_start", async (_event, ctx) => update("done", ctx.cwd));
-	pi.on("before_agent_start", async (event, ctx) => {
+	pi.on("session_start", (_event, ctx) => {
+		if (idlePoll !== undefined) clearInterval(idlePoll);
+		idlePoll = setInterval(() => {
+			if (
+				currentStatus !== "working" ||
+				Date.now() - workingSince < IDLE_RECONCILIATION_GRACE_MS
+			)
+				return;
+			try {
+				if (ctx.isIdle()) void update("done", currentCwd);
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				process.stderr.write(`agentmux idle check failed: ${message}\n`);
+			}
+		}, IDLE_POLL_INTERVAL_MS);
+		return update("done", ctx.cwd);
+	});
+	pi.on("before_agent_start", (event, ctx) => {
 		const prompt = promptFromEvent(event);
 		if (prompt !== undefined) task = sanitizeTask(prompt);
 		return update("working", ctx.cwd);
 	});
-	pi.on("agent_start", async (_event, ctx) => update("working", ctx.cwd));
+	pi.on("agent_start", (_event, ctx) => update("working", ctx.cwd));
 	pi.on("ui_prompt_start", (_event, ctx) => {
 		statusBeforePrompt =
 			currentStatus === "waiting" ? "working" : currentStatus;
@@ -148,8 +172,12 @@ export default function agentmuxStatus(pi: AgentmuxExtensionAPI): void {
 	pi.on("ui_prompt_end", (_event, ctx) => {
 		return update(ctx.isIdle() ? "done" : statusBeforePrompt, ctx.cwd);
 	});
-	pi.on("agent_settled", async (_event, ctx) => update("done", ctx.cwd));
+	pi.on("agent_settled", (_event, ctx) => update("done", ctx.cwd));
 	pi.on("session_shutdown", async () => {
+		if (idlePoll !== undefined) {
+			clearInterval(idlePoll);
+			idlePoll = undefined;
+		}
 		await pending;
 		await rm(path, { force: true });
 	});

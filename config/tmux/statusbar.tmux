@@ -49,13 +49,15 @@ tmux_set status-left-fg "$FG"
 tmux_set status-left-length 150
 tmux_set status-left " #{prefix_highlight} #(bash $DOTFILES_DIR/bin/git-branch.sh #{q:pane_current_path} icon 2>/dev/null) #[fg=$FG,bg=$BG]"
 
-# Right status segment: current session name. Other useful segments are left as examples.
+# Right status segment: clickable agent status, then the current session name.
 tmux_set status-right-bg "$BG"
 tmux_set status-right-fg "$FG"
 tmux_set status-right-length 200
 # Dir: tmux_set status-right "  #(basename \"#{pane_current_path}\")"
 # AI: tmux_set status-right "#($DOTFILES/.ai/statusline.sh --compact) #[fg=$FG,bg=$BG] #S "
-tmux_set status-right " #S "
+printf -v AGENT_STATUS_COMMAND '%q --_statusline' "$DOTFILES_DIR/bin/ai"
+tmux_set status-right "#[range=user|agents]#($AGENT_STATUS_COMMAND)#[norange]   #S "
+unset AGENT_STATUS_COMMAND
 
 # Inactive and active window labels in the center of the status bar.
 tmux_set window-status-format "#[fg=$DISABLED,bg=$BG] #I:#W "

@@ -22,8 +22,8 @@ if [[ -z "${DOTFILES_DIR:-}" || ! -d "$DOTFILES_DIR/.ai" ]]; then
   DOTFILES_DIR="$(cd -P "$(dirname "$SCRIPT_PATH")/.." && pwd)"
 fi
 
-# Check dependencies
-if ! command -v jq &>/dev/null; then
+# Most commands need jq; the statusline probe does not.
+if [[ "${1:-}" != "--_statusline" ]] && ! command -v jq &>/dev/null; then
   echo "error: jq not found" >&2
   exit 1
 fi
@@ -396,24 +396,46 @@ cmd_open() {
   exec "${cmd[@]}" "$@"
 }
 
+_ai_agent_name() {
+  local argv0="$1" argv1="$2"
+  local b0="${argv0##*/}" b1="${argv1##*/}"
+
+  case "$b0" in
+    claude|claude-code) printf 'claude'; return 0 ;;
+    gemini|gemini-cli) printf 'gemini'; return 0 ;;
+    codex|opencode|pi|omp|harness) printf '%s' "$b0"; return 0 ;;
+  esac
+  case "$b1" in
+    claude|claude-code) printf 'claude'; return 0 ;;
+    gemini|gemini-cli) printf 'gemini'; return 0 ;;
+    codex|opencode|pi|omp|harness) printf '%s' "$b1"; return 0 ;;
+  esac
+
+  case "$argv0 $argv1" in
+    *'/@anthropic-ai/claude-code/'*) printf 'claude' ;;
+    *'/@google/gemini-cli/'*) printf 'gemini' ;;
+    *'/@openai/codex/'*) printf 'codex' ;;
+    *'/pi-coding-agent/'*) printf 'pi' ;;
+    *'/opencode-ai/'*) printf 'opencode' ;;
+    *) return 1 ;;
+  esac
+}
+
 _ai_find_ai_proc() {
   local root="$1"
   local snap="$2"
   local -a frontier=("$root")
   local depth=0
-  local p cpid argv0 argv1 b0 b1
+  local p cpid argv0 argv1 agent
   local -a nxt=()
   while [ "${#frontier[@]}" -gt 0 ] && [ "$depth" -lt 4 ]; do
     nxt=()
     for p in "${frontier[@]}"; do
       while read -r cpid _ argv0 argv1 _rest; do
         [ -z "$cpid" ] && continue
-        b0="${argv0##*/}"; b1="${argv1##*/}"
-        if [[ "$b0" =~ ^(claude|gemini|codex|opencode|pi|omp)$ ]]; then
-          printf '%s %s' "$b0" "$cpid"; return
-        fi
-        if [[ "$b1" =~ ^(claude|gemini|codex|opencode|pi|omp)$ ]]; then
-          printf '%s %s' "$b1" "$cpid"; return
+        agent=$(_ai_agent_name "$argv0" "$argv1") || agent=""
+        if [[ -n "$agent" ]]; then
+          printf '%s %s' "$agent" "$cpid"; return
         fi
         nxt+=("$cpid")
       done < <(awk -v p="$p" '$2==p{print $0}' <<< "$snap")
@@ -425,11 +447,15 @@ _ai_find_ai_proc() {
 }
 
 cmd_sessions_rows() {
+  local include_current=0
   local current_pane="${TMUX_PANE:-}"
   local ps_snap
+  [[ "${1:-}" == "--include-current" ]] && include_current=1
   ps_snap=$(ps -A -o pid=,ppid=,args= 2>/dev/null)
   while IFS='|' read -r pane_id sess win pane win_name path pid pane_title; do
-    [ "$pane_id" = "$current_pane" ] && continue
+    if [[ "$include_current" != 1 && "$pane_id" == "$current_pane" ]]; then
+      continue
+    fi
     local found found_name ai_pid
     found=$(_ai_find_ai_proc "$pid" "$ps_snap")
     [ -z "$found" ] && continue
@@ -446,16 +472,128 @@ cmd_pane_status() {
   local ai_pid="$1"
   local pane_id="$2"
   local child_count
-  child_count=$(ps -A -o ppid=,comm= 2>/dev/null | \
-    awk -v p="$ai_pid" '$1+0==p+0 && $2!~/^node/{c++} END{print c+0}')
+  if (( $# >= 3 )); then
+    child_count="$3"
+  else
+    child_count=$(ps -A -o ppid=,comm= 2>/dev/null | \
+      awk -v p="$ai_pid" '$1+0==p+0 && $2!~/^node/{c++} END{print c+0}')
+  fi
   local at_prompt=0
   local last_line
-  last_line=$(tmux -S "$TMUX_SOCKET_PATH" capture-pane -p -t "$pane_id" 2>/dev/null | grep -v '^\s*$' | tail -1)
+  last_line=$(tmux -S "$TMUX_SOCKET_PATH" capture-pane -p -t "$pane_id" 2>/dev/null | grep -v '^\s*$' | tail -1) || last_line=""
   [[ "$last_line" =~ ^[[:space:]]*\> ]] && at_prompt=1
   if   (( child_count > 0 )) && (( at_prompt )); then printf 'background'
   elif (( child_count > 0 ));                    then printf 'running'
   elif (( at_prompt ));                          then printf 'waiting'
   else                                                printf 'idle'
+  fi
+}
+
+# Match tmux-sidebar's existing completed-pane marker.
+cmd_agent_is_done() {
+  local target="$1"
+  local status_format
+  status_format=$(tmux -S "$TMUX_SOCKET_PATH" show-options -wv -t "$target" window-status-format 2>/dev/null || true)
+  [[ "$status_format" == *'bg=red'* ]]
+}
+
+cmd_agentmux_status() {
+  local pane_id="$1" agent_pid="$2" state_dir state_file
+  [[ "$pane_id" =~ ^%[0-9]+$ && "$agent_pid" =~ ^[0-9]+$ ]] || return 1
+
+  if [[ -n "${AGENTMUX_STATE_DIR:-}" ]]; then
+    state_dir="$AGENTMUX_STATE_DIR"
+  elif [[ -n "${XDG_RUNTIME_DIR:-}" ]]; then
+    state_dir="$XDG_RUNTIME_DIR/agentmux"
+  else
+    state_dir="${TMPDIR:-/tmp}/agentmux-${UID:-${USER:-user}}"
+  fi
+  state_file="$state_dir/tmux-${pane_id#%}.json"
+  [[ -r "$state_file" ]] || return 1
+  command -v jq >/dev/null 2>&1 || return 1
+
+  jq -er --arg pane_id "$pane_id" --arg pid "$agent_pid" '
+    select(
+      .version == 1 and
+      .agent == "pi" and
+      .pane_id == $pane_id and
+      (.pid | tostring) == $pid and
+      (.status == "working" or .status == "waiting" or .status == "done")
+    ) | .status
+  ' "$state_file" 2>/dev/null
+}
+
+cmd_agent_work_state() {
+  local pane_id="$1" agent="$2" pane_title="$3" ai_pid="${4:-}"
+  local pane_content state=idle state_file="/tmp/agent-state-$pane_id"
+
+  if [[ "$agent" == pi ]]; then
+    local pi_status
+    pi_status=$(cmd_agentmux_status "$pane_id" "$ai_pid") || pi_status=""
+    case "$pi_status" in
+      working) state=working ;;
+      # Pi's "done" means the turn settled; the pane marker identifies completion.
+      waiting|done) state=idle ;;
+      *)
+        pane_content=$(tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$pane_id" -p 2>/dev/null | tail -30) || pane_content=""
+        [[ "$pane_content" == *'Working...'* ]] && state=working
+        ;;
+    esac
+  elif [[ -f "$state_file" ]]; then
+    [[ "$(<"$state_file")" == working ]] && state=working
+  else
+    case "$pane_title" in
+      ✳*) ;;
+      *) state=working ;;
+    esac
+    if [[ "$state" == idle && -n "${TMUX:-}" ]]; then
+      pane_content=$(tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$pane_id" -p 2>/dev/null) || pane_content=""
+      if grep -qE '[(][0-9]+(m )?[0-9]+s' <<< "$pane_content"; then
+        state=working
+      fi
+    fi
+  fi
+
+  printf '%s' "$state"
+}
+
+cmd_agent_statusline() {
+  local rows pane_id location agent_name _short_path _win_name pane_title _ai_pid state separator=""
+  local count=0 running_count=0 idle_count=0 done_count=0
+  rows=$(cmd_sessions_rows --include-current)
+  if [[ -n "$rows" ]]; then
+    while IFS=$'\t' read -r pane_id location agent_name _short_path _win_name pane_title _ai_pid; do
+      [[ -n "$pane_id" ]] || continue
+      count=$((count + 1))
+      state=$(cmd_agent_work_state "$pane_id" "$agent_name" "$pane_title" "$_ai_pid")
+      if [[ "$state" == idle ]] && cmd_agent_is_done "$location"; then
+        state=done
+      fi
+      case "$state" in
+        working) running_count=$((running_count + 1)) ;;
+        idle) idle_count=$((idle_count + 1)) ;;
+        done) done_count=$((done_count + 1)) ;;
+      esac
+    done <<< "$rows"
+  fi
+
+  if (( count == 0 )); then
+    return 0
+  fi
+  if (( running_count == 0 && idle_count == 0 )); then
+    printf '#[fg=#9ece6a] %s agents#[default]' "$done_count"
+    return
+  fi
+  if (( running_count > 0 )); then
+    printf '#[fg=#7dcfff] %s running#[default]' "$running_count"
+    separator=' · '
+  fi
+  if (( idle_count > 0 )); then
+    printf '%s#[fg=#545c7e]󱎫 %s idle#[default]' "$separator" "$idle_count"
+    separator=' · '
+  fi
+  if (( done_count > 0 )); then
+    printf '%s#[fg=#9ece6a] %s done#[default]' "$separator" "$done_count"
   fi
 }
 
@@ -635,7 +773,8 @@ while [[ $# -gt 0 ]]; do
     list)             shift; cmd_list "$@"; exit 0 ;;
     sessions)         shift; cmd_sessions "$@"; exit 0 ;;
     monitor)          shift; cmd_monitor "$@"; exit 0 ;;
-    --_sessions-rows) cmd_sessions_rows; exit 0 ;;
+    --_sessions-rows) shift; cmd_sessions_rows "$@"; exit 0 ;;
+    --_statusline)    cmd_agent_statusline; exit 0 ;;
     --_preview)       shift; cmd_preview "$@"; exit 0 ;;
     *)         break ;;
   esac

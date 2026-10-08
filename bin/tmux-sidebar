@@ -116,7 +116,7 @@ agent_state() { # $1 pane  $2 loc  $3 title  $4 agent -> idle | working | done
     [ "$(cat "/tmp/agent-state-$p" 2>/dev/null)" = working ] && st="working"
   else
     case "$title" in ✳*) ;; *) st="working" ;; esac
-    [ "$st" = idle ] && [ -n "$TMUX" ] && tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$p" -p 2>/dev/null | grep -qE '\(([0-9]+m )?[0-9]+s' && st="working"
+    [ "$st" = idle ] && [ -n "$TMUX" ] && tmux -S "$TMUX_SOCKET_PATH" capture-pane -t "$p" -p 2>/dev/null | grep -qE '[(][0-9]+(m )?[0-9]+s' && st="working"
   fi
   if [ "$st" = idle ] && [ -n "$TMUX" ]; then
     fmt=$(tmux -S "$TMUX_SOCKET_PATH" show-options -wv -t "$loc" window-status-format 2>/dev/null)

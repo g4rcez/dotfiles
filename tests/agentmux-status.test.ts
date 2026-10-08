@@ -93,6 +93,45 @@ test("state writes are private and task text is bounded", async () => {
 	assert.doesNotMatch(state.task ?? "", /\n/);
 });
 
+test("idle Pi sessions reconcile a stale working state", async () => {
+	const directory = await mkdtemp(join(tmpdir(), "agentmux-status-"));
+	directories.push(directory);
+	process.env.TMUX_PANE = "%8";
+	process.env.AGENTMUX_STATE_DIR = directory;
+
+	let isIdle = false;
+	const handlers = new Map<
+		string,
+		(
+			event: unknown,
+			context: { cwd: string; isIdle(): boolean },
+		) => void | Promise<void>
+	>();
+	agentmuxStatus({
+		on(event, handler) {
+			handlers.set(event, handler);
+		},
+	});
+	const context = { cwd: "/repo", isIdle: () => isIdle };
+	const invoke = async (event: string, payload: unknown = {}) => {
+		await handlers.get(event)?.(payload, context);
+	};
+	const path = join(directory, "tmux-8.json");
+	const status = async () => parseState(await readFile(path, "utf8"));
+
+	try {
+		await invoke("session_start");
+		await invoke("before_agent_start", { prompt: "start task" });
+		assert.equal((await status()).status, "working");
+		isIdle = true;
+		await new Promise((resolve) => setTimeout(resolve, 2_200));
+		assert.equal((await status()).status, "done");
+	} finally {
+		await invoke("session_shutdown");
+	}
+	await assert.rejects(access(path));
+});
+
 test("Pi lifecycle transitions and shutdown update one pane record", async () => {
 	const directory = await mkdtemp(join(tmpdir(), "agentmux-status-"));
 	directories.push(directory);
@@ -118,17 +157,20 @@ test("Pi lifecycle transitions and shutdown update one pane record", async () =>
 	const path = join(directory, "tmux-7.json");
 	const status = async () => parseState(await readFile(path, "utf8"));
 
-	await invoke("session_start");
-	assert.equal((await status()).status, "done");
-	await invoke("before_agent_start", { prompt: "implement feature" });
-	assert.equal((await status()).status, "working");
-	assert.equal((await status()).task, "implement feature");
-	await invoke("ui_prompt_start");
-	assert.equal((await status()).status, "waiting");
-	await invoke("ui_prompt_end");
-	assert.equal((await status()).status, "working");
-	await invoke("agent_settled");
-	assert.equal((await status()).status, "done");
-	await invoke("session_shutdown");
+	try {
+		await invoke("session_start");
+		assert.equal((await status()).status, "done");
+		await invoke("before_agent_start", { prompt: "implement feature" });
+		assert.equal((await status()).status, "working");
+		assert.equal((await status()).task, "implement feature");
+		await invoke("ui_prompt_start");
+		assert.equal((await status()).status, "waiting");
+		await invoke("ui_prompt_end");
+		assert.equal((await status()).status, "working");
+		await invoke("agent_settled");
+		assert.equal((await status()).status, "done");
+	} finally {
+		await invoke("session_shutdown");
+	}
 	await assert.rejects(access(path));
 });
