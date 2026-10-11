@@ -793,10 +793,12 @@ return {
             {
                 "gd",
                 function()
-                    Snacks.picker.lsp_definitions {
-                        supports_live = true,
-                        unique_lines = true,
-                    }
+                    require("config.css_class_definition").goto_definition(function()
+                        Snacks.picker.lsp_definitions {
+                            supports_live = true,
+                            unique_lines = true,
+                        }
+                    end)
                 end,
                 desc = "Goto Definition",
             },

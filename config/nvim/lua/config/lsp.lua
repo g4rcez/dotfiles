@@ -102,7 +102,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, opts)
 
         opts.desc = "Show LSP definition"
-        keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+        keymap.set("n", "gd", function()
+            require("config.css_class_definition").goto_definition(vim.lsp.buf.definition)
+        end, opts)
 
         opts.desc = "Show LSP implementations"
         keymap.set("n", "gi", function()
