@@ -3,7 +3,7 @@
 # A key you leave out keeps the value shown here.
 # Every key and command: https://dinky.rodeo/configuration/
 start-at-login = true
-workspaces = 8                  # across all displays, one native Space each
+workspaces = 9                  # across all displays, one native Space each
 default-layout = 'tiles'        # tiles (dwindle) | dwindle | accordion | fixed
 default-tiling = true           # false leaves workspaces untiled unless overridden
 follow-app-activation = true    # Cmd-Tab and Dock clicks switch Spaces the fast way
@@ -24,8 +24,8 @@ padding = 2                    # points the neighbours peek out by
 orientation = 'auto'            # auto: run along the container's longer side | keep
 
 [gaps]
-inner = 0                       # or { horizontal = 8, vertical = 8 }
-outer = 0                       # or { top = 8, bottom = 8, left = 8, right = 8 }
+inner = 2                       # or { horizontal = 8, vertical = 8 }
+outer = 2                       # or { top = 8, bottom = 8, left = 8, right = 8 }
 
 # Display patterns: main, secondary, or part of a name as `dinky list-displays` prints it.
 # A workspace lives on the first display its patterns match, else on the main display.
@@ -37,10 +37,10 @@ outer = 0                       # or { top = 8, bottom = 8, left = 8, right = 8 
 # gaps.outer.top = 44
 
 [borders]
-enabled = false
+enabled = true
 width = 1
-active-color = '#99a6F4'        # '#rrggbb' or '#rrggbbaa'
-inactive-color = '#494d64'
+active-color = '#2e3459'       # '#rrggbb' or '#rrggbbaa'
+inactive-color = '#15161c'
 order = 'below'                 # below | above (a click-through ring over the window)
 exclude-apps = []               # bundle IDs whose windows get no border
 
@@ -51,7 +51,7 @@ accordion-edges = true          # resting on a peeking accordion edge focuses th
 
 [animations]
 enabled = false                  # windows glide to their tiles; off while Reduce Motion is on
-duration-ms = 200               # roughly how long a window takes to arrive
+duration-ms = 100               # roughly how long a window takes to arrive
 
 [drag]
 placeholders = true             # outline where a dragged tile came from and the tile it will swap with
@@ -107,6 +107,15 @@ alt-comma = 'layout accordion'
 alt-slash = 'layout tiles'
 alt-shift-n = 'move-window-to-display next'
 alt-shift-semicolon = 'mode service'
+alt-shift-r = 'mode resize'
+
+[mode.resize]
+esc = 'mode main'
+h = 'resize width +50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width -50'
+b = 'balance-sizes'
 
 [mode.service]
 esc = ['reload-config', 'mode main']
@@ -115,3 +124,4 @@ alt-shift-h = ['join-with left', 'mode main']
 alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
+

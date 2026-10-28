@@ -69,14 +69,14 @@ bun install --frozen-lockfile
 bash install
 
 # Validate and inspect the deployment before changing other files.
-bunx bunsen validate
-bunx bunsen diff
+dots validate
+dots diff
 
 # Apply the reviewed deployment when ready.
-bunx bunsen apply
+dots apply
 ```
 
-`bash install` creates `~/.config`, `~/.tmp`, and `~/tools`. It links only `~/.zshrc`, refuses to replace a conflicting file, and does not run `bunx bunsen apply`. If mise is missing, the script bootstraps it before returning.
+`bash install` creates `~/.config`, `~/.tmp`, and `~/tools`. It links only `~/.zshrc`, refuses to replace a conflicting file, and does not run `dots apply`. If mise is missing, the script bootstraps it before returning.
 
 The [`Brewfile`](Brewfile) is optional and is not applied by `install`. Review it before installing its formulae and casks:
 
@@ -95,7 +95,7 @@ If the repository lives somewhere other than `~/dotfiles`, update the `file()` h
 - Zed and VS Code settings, keybindings, the Aerospace configuration, and the Pi `agentmux-status.ts` extension.
 - The `osx` profile, which generates the Karabiner Elements and Espanso configuration from [`bunsen/karabiner.ts`](bunsen/karabiner.ts) and [`bunsen/espanso.ts`](bunsen/espanso.ts).
 
-Review the output of `bunx bunsen diff` before every `apply`. Use `bunx bunsen status` to inspect the current deployment.
+Review the output of `dots diff` before every `apply`. Use `dots status` to inspect the current deployment.
 
 ## Shell
 
@@ -167,10 +167,10 @@ The configuration uses a small set of shared visual choices rather than one them
 When changing a managed configuration:
 
 ```bash
-bunx bunsen validate
-bunx bunsen diff
+dots validate
+dots diff
 # Apply only after reviewing the diff.
-bunx bunsen apply
+dots apply
 ```
 
 Run the shell test suite before changing shell behavior:

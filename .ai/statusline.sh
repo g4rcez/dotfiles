@@ -61,7 +61,7 @@ fmt_datetime() {
   date -r "$epoch" "+%b %e, %l:%M%p" | tr 'A-Z' 'a-z' | sed 's/  */ /g; s/^ //'
 }
 
-# Fish-style shortened path: /Users/garcez/foo/bar/baz -> ~/f/b/baz
+# Fish-style shortened path: $HOME/foo/bar/baz -> ~/f/b/baz
 fish_dir() {
   local dir="${1/#"$HOME"/~}"
   IFS='/' read -ra parts <<< "$dir"

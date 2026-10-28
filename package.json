@@ -3,7 +3,7 @@
     "private": true,
     "dependencies": {
         "@faker-js/faker": "8.4.1",
-        "@g4rcez/bunsen": "0.0.9",
+        "dots": "file:./bunsen/lib",
         "color-convert": "3.1.3",
         "date-fns": "4.4.0",
         "remark": "15.0.1",

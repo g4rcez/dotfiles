@@ -301,14 +301,14 @@ cd "$HOME/dotfiles"
 
 bun install --frozen-lockfile
 bash install
-bunx bunsen validate
-bunx bunsen diff
+dots validate
+dots diff
 
 # Optional: apply the reviewed Bunsen deployment
-bunx bunsen apply
+dots apply
 ```
 
-Bunsen creates the `~/.config/nvim` symlink when you intentionally run `bunx bunsen apply`. The `bash install` command alone links only `~/.zshrc` and refuses to replace a conflicting zshrc.
+dots creates the `~/.config/nvim` symlink when you intentionally run `dots apply`. The `bash install` command alone links only `~/.zshrc` and refuses to replace a conflicting zshrc.
 
 1. Install language servers:
 

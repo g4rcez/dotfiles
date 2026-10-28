@@ -37,10 +37,10 @@ typeset -a _path_entries=(
     "${PNPM_HOME}/bin"
     "${GOPATH}/bin"
     "${GOROOT:+$GOROOT/bin}"
+    "$HOME/.bun/bin"
     "$HOME/tools"
     "$HOME/.dotnet"
     "$HOME/.dotnet/tools"
-    "$HOME/.bun/bin"
     "$HOME/.cargo/bin"
     "$HOME/.local/bin"
     "$HOME/.grok/bin"
@@ -175,12 +175,12 @@ fi
 #####################################################################################
 ## ai
 export ENABLE_LSP_TOOL="${ENABLE_LSP_TOOL:-1}"
-export AI_CLI_NAME="${AI_CLI_NAME:-pi}"
+export AI_CLI_NAME="${AI_CLI_NAME:-claude}"
 export USE_BUILTIN_RIPGREP="${USE_BUILTIN_RIPGREP:-0}"
 export PI_FFF_MODE="${PI_FFF_MODE:-override}"
-export AI_CLI_MODEL="${AI_CLI_MODEL:-openai-codex/gpt-6-luna}"
-export AI_COMMAND_PROMPT="${AI_COMMAND_PROMPT:-pi --model ${AI_CLI_MODEL}}"
-export AI_QUERY_COMMAND="${AI_QUERY_COMMAND:-${AI_COMMAND_PROMPT} -p}"
+export AI_CLI_MODEL="${AI_CLI_MODEL:-opusplan}"
+export AI_COMMIT_MODEL="${AI_COMMIT_MODEL:-claude-haiku-5-5}"
+export AI_QUERY_COMMAND="${AI_QUERY_COMMAND:-claude --model ${AI_COMMIT_MODEL} -p}"
 if [[ -z "${AICOMMIT_EXCLUDES+x}" ]]; then
     export AICOMMIT_EXCLUDES=(package-lock.json pnpm-lock.yaml yarn.lock '*.lock')
 fi

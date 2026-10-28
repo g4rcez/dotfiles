@@ -23,8 +23,8 @@ Use normal Neovim editing commands. With this configuration, `ggVGy` copies the
 entire correction to the system clipboard.
 
 Environment:
-  PROOFREAD_MODEL  override the configured Pi model
-  PI_BIN           override the Pi executable
+  PROOFREAD_MODEL  override the configured model (default: $AI_COMMIT_MODEL)
+  CLAUDE_BIN       override the Claude executable
   NVIM_BIN         override the Neovim executable
   KITTY_BIN        override the Kitty executable
 EOF
@@ -73,36 +73,32 @@ if [[ -z ${text//[[:space:]]/} ]]; then
 fi
 [[ -n ${text//[[:space:]]/} ]] || fail "the selected text is empty"
 
-pi_bin=${PI_BIN:-$(command -v pi || true)}
+claude_bin=${CLAUDE_BIN:-$(command -v claude || true)}
 nvim_bin=${NVIM_BIN:-$(command -v nvim || true)}
 kitty_bin=${KITTY_BIN:-$(command -v kitty || true)}
-[[ -n "$pi_bin" ]] || fail "pi was not found in PATH"
+[[ -n "$claude_bin" ]] || fail "claude was not found in PATH"
 [[ -n "$nvim_bin" ]] || fail "nvim was not found in PATH"
 [[ -n "$kitty_bin" ]] || fail "kitty was not found in PATH"
 
 prompt=$(<"$prompt_file")
-pi_args=(
+claude_args=(
   --print
-  --no-tools
-  --no-session
-  --no-extensions
-  --no-skills
-  --no-prompt-templates
-  --no-context-files
-  --thinking low
+  --tools ""
+  --no-session-persistence
+  --disable-slash-commands
+  --setting-sources ""
+  --effort low
   --system-prompt "$prompt"
 )
-model=${PROOFREAD_MODEL:-${AI_CLI_MODEL:-}}
-if [[ -n "$model" ]]; then
-  pi_args+=(--model "$model")
-fi
+model=${PROOFREAD_MODEL:-${AI_COMMIT_MODEL:-claude-haiku-5-5}}
+claude_args+=(--model "$model")
 
 request=$'Text to proofread:\n\n'"$text"
 printf 'Proofreading selection...\n' >&2
-if ! corrected=$("$pi_bin" "${pi_args[@]}" "$request"); then
-  fail "Pi could not proofread the selection"
+if ! corrected=$("$claude_bin" "${claude_args[@]}" "$request"); then
+  fail "Claude could not proofread the selection"
 fi
-[[ -n ${corrected//[[:space:]]/} ]] || fail "Pi returned an empty correction"
+[[ -n ${corrected//[[:space:]]/} ]] || fail "Claude returned an empty correction"
 
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/proofread-selection.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT

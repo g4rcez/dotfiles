@@ -1,7 +1,7 @@
 # TUIOS Configuration File
 # This file allows you to customize appearance and keybindings
 #
-# Configuration location: /Users/allangarcez/.config/tuios/config.toml
+# Configuration location: ~/.config/tuios/config.toml
 # Documentation: https://github.com/Gaurav-Gosain/tuios
 # For keybindings documentation, run: tuios keybinds list
 #

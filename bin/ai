@@ -3,7 +3,7 @@ source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shel
 set -euo pipefail
 
 CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
-PROVIDER="${AI_PROVIDER:-pi}"
+PROVIDER="${AI_PROVIDER:-claude}"
 if [[ -n "${TMUX:-}" ]]; then
   TMUX_SOCKET_PATH="${TMUX%%,*}"
 else
@@ -390,6 +390,7 @@ cmd_open() {
       [[ -n "${AI_CLI_MODEL:-}" ]] && cmd+=(--model "$AI_CLI_MODEL")
       ;;
     claude)
+      [[ -n "${AI_CLI_MODEL:-}" ]] && cmd+=(--model "$AI_CLI_MODEL")
       cmd+=(--dangerously-skip-permissions)
       ;;
   esac
@@ -751,7 +752,7 @@ Commands:
   help           show this help
 
 Options:
-  --provider  AI provider (default: pi, or \$AI_PROVIDER)
+  --provider  AI provider (default: claude, or \$AI_PROVIDER)
   -h, --help  show this help
 EOF
   exit "$exit_code"

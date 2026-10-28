@@ -11,7 +11,15 @@ return {
         delete_to_trash = true,
         watch_for_changes = false,
         view_options = { show_hidden = true },
-        float = { padding = 5, border = "solid", preview_split = "right" },
+        float = {
+            padding = 5,
+            max_width = 0.9,
+            max_height = 0.9,
+            border = "solid",
+            get_win_title = nil,
+            preview_split = "right",
+            win_options = { winblend = 0, },
+        },
         lsp_file_methods = { enabled = true },
         preview_win = {
             update_on_cursor_moved = true,

@@ -73,5 +73,11 @@
     "use_smartcase_find": true,
     "use_regex_search": true,
   },
-  "scroll_beyond_last_line": "off"
+  "scroll_beyond_last_line": "off",
+  "context_servers": {
+    "cua-driver": {
+      "command": "~/.local/bin/cua-driver",
+      "args": ["mcp"]
+    }
+  }
 }

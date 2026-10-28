@@ -16,9 +16,9 @@ assert_not_contains "$docs" 'dotfiles/git/gitconfig'
 assert_not_contains "$nvim_readme" 'includes Neovim config symlink'
 
 assert_contains "$readme" 'bun install --frozen-lockfile'
-assert_contains "$readme" 'bunx bunsen validate'
-assert_contains "$readme" 'bunx bunsen diff'
-assert_contains "$readme" 'bunx bunsen apply'
+assert_contains "$readme" 'dots validate'
+assert_contains "$readme" 'dots diff'
+assert_contains "$readme" 'dots apply'
 
 for documented_path in \
     dotfiles.config.ts \

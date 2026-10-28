@@ -77,12 +77,12 @@ mod tests {
     #[test]
     fn user_name_is_used_when_uid_is_missing_or_empty() {
         assert_eq!(
-            user_component(None, Some("allangarcez".to_owned())),
-            "allangarcez"
+            user_component(None, Some("alice".to_owned())),
+            "alice"
         );
         assert_eq!(
-            user_component(Some(String::new()), Some("allangarcez".to_owned())),
-            "allangarcez"
+            user_component(Some(String::new()), Some("alice".to_owned())),
+            "alice"
         );
     }
 
@@ -93,9 +93,9 @@ mod tests {
                 Some(PathBuf::new()),
                 Some(PathBuf::new()),
                 PathBuf::from("/tmp"),
-                "allangarcez",
+                "alice",
             ),
-            PathBuf::from("/tmp/agentmux-allangarcez")
+            PathBuf::from("/tmp/agentmux-alice")
         );
     }
 

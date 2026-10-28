@@ -4,6 +4,7 @@ Claude Code inside tmux gets two fixes here:
 
 - passthrough + extended keys so notifications and Shift+Enter survive tmux
 - `CLAUDE_CODE_TMUX_TRUECOLOR=1` so Claude keeps truecolor rendering in tmux
+- Active window labels use the accent background without an underline.
 
 Reload the server after edits:
 

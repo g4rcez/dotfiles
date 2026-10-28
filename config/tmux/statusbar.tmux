@@ -61,9 +61,10 @@ unset AGENT_STATUS_COMMAND
 
 # Inactive and active window labels in the center of the status bar.
 tmux_set window-status-format "#[fg=$DISABLED,bg=$BG] #I:#W "
-tmux_set window-status-current-format "#[fg=$HIGHLIGHT,bg=$BG] #I:#W "
+tmux_set window-status-current-format "#[fg=$G04,bg=$HIGHLIGHT,none] #I:#W "
+tmux_set window-status-current-style "fg=$G04,bg=$HIGHLIGHT,none"
 
-# Window label styling for normal, last-used, and activity states.
+# Window label styles for normal, active, last-used, and activity states.
 tmux_set window-status-style "fg=$FG,bg=$BG,none"
 tmux_set window-status-last-style "fg=$TC,bg=$BG"
 tmux_set window-status-activity-style "fg=$TC,bg=$BG"

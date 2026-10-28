@@ -1,4 +1,4 @@
-import { Espanso } from "@g4rcez/bunsen";
+import { Espanso } from "dots";
 
 const run = (cmd: string) =>
 	`"$($HOME/.local/bin/mise which bun)" run "$HOME/dotfiles/espanso/main.ts" ${cmd}`;

@@ -1,5 +1,5 @@
 {
-  "name": "@g4rcez/bunsen",
+  "name": "dots",
   "type": "module",
   "version": "0.0.9",
   "description": "NixOS flake-inspired dotfiles manager for TypeScript",
@@ -11,7 +11,7 @@
     "bun": ">=1.0.0"
   },
   "bin": {
-    "bunsen": "./src/cli/index.ts"
+    "dots": "./src/cli/index.ts"
   },
   "exports": {
     ".": {
@@ -24,9 +24,9 @@
   },
   "scripts": {
     "clean": "bun scripts/clean.ts",
-    "compile": "bun build --compile ./src/cli/index.ts --outfile bin/bunsen",
+    "compile": "bun build --compile ./src/cli/index.ts --outfile bin/dots",
     "format": "prettier --write src",
-    "bunsen": "bun src/cli/index.ts",
+    "dots": "bun src/cli/index.ts",
     "start": "bun src/cli/index.ts",
     "test": "bun test",
     "test:coverage": "bun test --coverage",

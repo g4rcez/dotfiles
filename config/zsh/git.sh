@@ -205,15 +205,6 @@ function commitwithai() {
         fi
         COMMIT_MESSAGE="$(<"$OUT_FILE")"
         command rm -f -- "$OUT_FILE" "$ERR_FILE"
-    elif [[ "${AI_CLI_NAME:-}" == "pi" || "${AI_QUERY_COMMAND:-}" == pi\ * ]]; then
-        # Keep the diff on stdin so large changes do not exceed the OS argument-size limit.
-        if ! COMMIT_MESSAGE=$(
-            printf '%s\n\n%s\n' "$PROMPT" "$DIFF" |
-                ${=AI_QUERY_COMMAND} --no-tools --no-extensions --no-skills --no-context-files
-        ); then
-            print -u2 -r -- "commitwithai: AI query failed"
-            return 1
-        fi
     else
         if ! COMMIT_MESSAGE=$(printf '%s\n' "$DIFF" | ${=AI_QUERY_COMMAND} "$PROMPT" | sed 's/# //1'); then
             print -u2 -r -- "commitwithai: AI query failed"

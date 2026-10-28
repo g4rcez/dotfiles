@@ -51,7 +51,8 @@ alias secrets="ripsecrets"
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
 # Reload the shell (i.e. invoke as a login shell)
-alias reload="exec ${SHELL} -l"
+# Drop inherited AI_* defaults so exports.sh recomputes them; a plain `exec` keeps stale values.
+alias reload='exec env -u AI_CLI_NAME -u AI_CLI_MODEL -u AI_COMMIT_MODEL -u AI_COMMAND_PROMPT -u AI_QUERY_COMMAND "$SHELL" -l'
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
 alias dockers='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
@@ -454,8 +455,7 @@ add-zsh-hook -d preexec _rm_safety_prompt 2>/dev/null
 add-zsh-hook preexec _rm_safety_prompt
 
 function killnodemodules() {
-    find . -name 'node_modules' -type d -prune -print
-    print -r -- "Use rm:trash on selected paths, or run: find . -name 'node_modules' -type d -prune -exec command rm -rf {} +"
+    find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
 }
 
 function npm.kill() {

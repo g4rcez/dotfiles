@@ -1,4 +1,4 @@
-import { defineConfig } from "@g4rcez/bunsen";
+import { defineConfig } from "dots";
 import os from "node:os";
 import path from "node:path";
 import { espanso } from "./bunsen/espanso";

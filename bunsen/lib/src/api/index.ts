@@ -2,6 +2,7 @@ export { defineConfig } from './dotfiles.ts'
 export { Espanso } from './espanso.ts'
 export { Karabiner, type Manipulator } from './karabiner/karabiner.ts'
 export { AeroSpace, aerospace } from './karabiner/aerospace.ts'
+export { Dinky, dinky } from './karabiner/dinky.ts'
 export { Rectangle, rectangle } from './karabiner/rectangle.ts'
 export { packages, importFrom, inlinePackages } from './packages.ts'
 export type {
