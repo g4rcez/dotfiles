@@ -13,5 +13,5 @@ on open fileList
 end open
 
 on launcherPath()
-	return (POSIX path of (path to home folder)) & "dotfiles/bin/open-in-neovim-wezterm"
+	return (POSIX path of (path to home folder)) & "dotfiles/bin/open-in-neovim"
 end launcherPath

@@ -5,14 +5,16 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HO
 
 fail() {
   /usr/bin/osascript -e "display alert \"Open in Neovim failed\" message \"$1\" as critical" >/dev/null 2>&1 || true
-  printf 'open-in-neovim-wezterm: %s\n' "$1" >&2
+  printf 'open-in-neovim: %s\n' "$1" >&2
   exit 1
 }
 
-wezterm_bin=${WEZTERM_BIN:-$(command -v wezterm || true)}
+# Rex is not on the GUI PATH; the CLI lives inside the Rex Server bundle.
+rex_bin=${REX_BIN:-$(command -v rex || true)}
+[[ -n "$rex_bin" ]] || rex_bin="$HOME/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex"
 nvim_bin=${NVIM_BIN:-$(command -v nvim || true)}
 
-[[ -n "$wezterm_bin" ]] || fail "wezterm was not found in PATH."
+[[ -x "$rex_bin" ]] || fail "rex was not found."
 [[ -n "$nvim_bin" ]] || fail "nvim was not found in PATH."
 
 cwd=$HOME
@@ -25,4 +27,6 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 
-exec "$wezterm_bin" start --cwd "$cwd" -- "$nvim_bin" "$@"
+# `rex run` focuses the new window inside Rex; activating the app brings Rex to the front.
+"$rex_bin" run --cwd "$cwd" -- "$nvim_bin" "$@"
+/usr/bin/open -a "Rex Beta"

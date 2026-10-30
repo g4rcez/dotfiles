@@ -12,7 +12,7 @@ This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `b
   - `options.lua`, `keymaps.lua`, `config/`, `nvconfig.lua`
 - `config/tmux/`, `config/starship.toml`, `config/zed/`, `config/aerospace/`, etc.
 - `config/zsh/zellij.sh` exists for reference but tmux is the active multiplexer — do not propose migrating off tmux unless the user explicitly initiates it
-- `.ai/` — Codex-specific helpers: `statusline.sh`, `guidelines/`, `skills/`, `subagents/`
+- `.ai/` — Claude-specific helpers: `statusline.sh`, `guidelines/`, `skills/`, `subagents/`
 
 ## Shell Scripts
 
@@ -57,21 +57,28 @@ This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `b
 
 - In `[custom.*]` `when` conditions, always resolve both sides of git path comparisons to absolute paths before comparing — relative vs absolute causes false matches in subdirectories. For worktree detection specifically: `--git-dir` returns absolute but `--git-common-dir` returns relative when inside a subdirectory; resolve both via `$(cd "$(git rev-parse --git-dir)" && pwd)`.
 
+## Rex / terminal config
+
+- Before writing any fzf picker or Rex extension, read and reuse the existing styling and layout in `config/zsh/exports.sh`, `config/zsh/fzf.sh`, and `bin/tmux-fzf-session` / `bin/tmux-fzf-preview`.
+- Put each new behavior in its own extension file under `config/rex/extensions/`. Do not bolt it onto an unrelated plugin (e.g. the tab-numbering plugin `numbers.lua`).
+- The Rex Lua sandbox has no `utf8` library. Pane cwd comes back as an OSC 7 `file://` URL, so strip and percent-decode it.
+- Use plain Unicode glyphs unless you have confirmed that Nerd Font glyphs render.
+
 ## Deployment
 
 - Dotfiles worktrees break live testing: `~/.config/nvim`, `~/.config/mise`, etc. are symlinks into the master checkout. Neovim and mise follow the symlink to the main tree, not the worktree. Work on the active branch directly for dotfiles changes.
 - bunsen deployment: symlinks are declared in `dotfiles.config.ts` (`@g4rcez/bunsen`). When adding `config/<tool>/`, check `dotfiles.config.ts` for a needed entry — missing entries mean the config never reaches `~/.config/`.
-- `config/Codex/` has no bunsen symlink entry in `dotfiles.config.ts` — hook paths in `settings.json` are hardcoded absolute paths. On a new machine, add the symlink manually or add the entry to `dotfiles.config.ts`.
+- `config/claude/` has no bunsen symlink entry in `dotfiles.config.ts` — hook paths in `settings.json` are hardcoded absolute paths. On a new machine, add the symlink manually or add the entry to `dotfiles.config.ts`.
 - Mise tool versions must be pinned explicitly (e.g. `"pipx:neovim-remote" = "2.5.1"`), never `"latest"`.
 
-## Codex Hooks
+## Claude Code Hooks
 
 - Hook script shebangs must match how `settings.json` invokes the script. If `settings.json` runs `bash script.sh`, the shebang must be `#!/usr/bin/env bash` — a zsh shebang is silently ignored.
-- Codex transcript JSONL format (for hook scripts parsing `.jsonl` files): each line is a standalone JSON object with `.type` at the top level (`"user"`/`"assistant"`), body at `.message.content[]`, and `.uuid` as the stable dedup key. `to_entries[]` does not work on JSONL.
+- Claude Code transcript JSONL format (for hook scripts parsing `.jsonl` files): each line is a standalone JSON object with `.type` at the top level (`"user"`/`"assistant"`), body at `.message.content[]`, and `.uuid` as the stable dedup key. `to_entries[]` does not work on JSONL.
 - When extracting the first user message from a transcript JSONL for titling/naming, filter out bracketed single-line system messages (pattern `^\[.+\]$`) — they are not real user input.
-- When a `bin/` script sets env vars consumed by Codex (e.g. `EDITOR`), update `~/.Codex/settings.json` `"env"` key in the same task.
+- When a `bin/` script sets env vars consumed by Claude Code (e.g. `EDITOR`), update `~/.claude/settings.json` `"env"` key in the same task.
 
-## Codex Tool Environment Quirks
+## Claude Tool Environment Quirks
 
 - `cat` is aliased to `bat` in this shell and mangles paths and emits OSC-8 hyperlinks when called via Bash. Use the `Read` tool (or `command cat`) instead of `cat`.
 - `ls` output is colorized and can include hyperlink escapes; use `command ls` or the `Glob` tool when parsing.

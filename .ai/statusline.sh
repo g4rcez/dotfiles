@@ -33,6 +33,7 @@ fi
 
 # ANSI colors (actual escape chars)
 GREEN=$'\033[32m'
+RED=$'\033[31m'
 GRAY=$'\033[90m'
 RESET=$'\033[0m'
 
@@ -112,14 +113,17 @@ fi
 
 is_worktree=false
 if (( _use_cache )); then
-  IFS=$'\t' read -r _gd _gcd branch _dflag < "$_cf"
+  IFS=$'\t' read -r _gd _gcd branch _dflag _add _del < "$_cf"
 else
   _gd=$(git -C "$current_dir" rev-parse --git-dir 2>/dev/null || echo "")
   _gcd=$(git -C "$current_dir" rev-parse --git-common-dir 2>/dev/null || echo "")
   branch=$(git -C "$current_dir" branch --show-current 2>/dev/null || echo "")
   _dirty=$(git -C "$current_dir" status --porcelain 2>/dev/null || echo "")
   _dflag="0"; [[ -n "$_dirty" ]] && _dflag="1"
-  printf '%s\t%s\t%s\t%s\n' "$_gd" "$_gcd" "$branch" "$_dflag" > "$_cf"
+  # Tracked changes vs HEAD (staged + unstaged); binary files show "-" and count as 0
+  read -r _add _del < <(git -C "$current_dir" diff HEAD --numstat 2>/dev/null \
+    | awk '{a+=$1; d+=$2} END {print a+0, d+0}')
+  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$_gd" "$_gcd" "$branch" "$_dflag" "${_add:-0}" "${_del:-0}" > "$_cf"
 fi
 
 # Worktree: prefer branch from JSON (already resolved); fall back to git detection
@@ -130,6 +134,10 @@ elif [[ -n "$_gd" && "$_gd" != "$_gcd" ]]; then
   is_worktree=true
 fi
 [[ "${_dflag:-0}" == "1" ]] && branch="${branch}*"
+diff_stat=""
+if (( ${_add:-0} > 0 || ${_del:-0} > 0 )); then
+  diff_stat=" ${GREEN}+${_add}${RESET} ${RED}-${_del}${RESET}"
+fi
 
 if $COMPACT; then
   echo "${model} ${context_pct}%"
@@ -145,5 +153,5 @@ else
   bar_weekly=$(dot_bar "$seven_day_pct" "$RESET")
   reset_weekly=$(fmt_datetime "$seven_day_reset")
 
-  echo "${model} ${GRAY}|${RESET} ${context_pct}% ${GRAY}|${RESET} ${project} - ${branch}${worktree_suffix} ${GRAY}|${RESET} current ${bar_current} ${five_hr_pct}% ${GRAY}↻ ${reset_current}${RESET} ${GRAY}|${RESET} weekly ${bar_weekly} ${seven_day_pct}% ${GRAY}↻ ${reset_weekly}${RESET}"
+  echo "${model} ${GRAY}|${RESET} ${context_pct}% ${GRAY}|${RESET} ${project} - ${branch}${diff_stat}${worktree_suffix} ${GRAY}|${RESET} current ${bar_current} ${five_hr_pct}% ${GRAY}↻ ${reset_current}${RESET} ${GRAY}|${RESET} weekly ${bar_weekly} ${seven_day_pct}% ${GRAY}↻ ${reset_weekly}${RESET}"
 fi

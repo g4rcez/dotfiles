@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+# Prompt for a file path (Tab completes, Esc closes) and open it with macOS `open`.
+# Runs inside a Rex popup (see config/rex/extensions/openpath.lua), which starts in the focused pane's cwd.
+# zsh, not bash: macOS bash 3.2 cannot bind a lone Esc, because its readline has no keyseq-timeout.
+
+autoload -Uz compinit && compinit -C -d "${XDG_CACHE_HOME:-$HOME/.cache}/rex-open-path.zcompdump"
+KEYTIMEOUT=10
+# send-break would abort the whole script with status 1. Clearing and accepting the line exits 0 below.
+close-prompt() { BUFFER=; zle accept-line }
+zle -N close-prompt
+bindkey '^[' close-prompt
+
+path_input=
+vared -p "open> " path_input
+[[ -z $path_input ]] && exit 0
+
+# vared does not expand "~" when typed in full.
+path_input=${~path_input}
+
+if [[ ! -e $path_input ]]; then
+    print -u2 "not found: $path_input"
+    read -k 1 -s "?press any key"
+    exit 1
+fi
+open -- "$path_input"

@@ -47,4 +47,13 @@ if [[ -x "$lsregister" ]]; then
 fi
 
 printf 'Installed %s\n' "$app_dir"
-printf 'To make it the default for a file type: Finder → Get Info → Open with → Open in Neovim → Change All.\n'
+bundle_id=com.g4rcez.open-in-neovim
+if command -v scheman >/dev/null 2>&1; then
+  # UTIs cover all text/source files; extensions cover those macOS types as plain data.
+  scheman set "$bundle_id" \
+    public.plain-text public.source-code public.shell-script public.json public.xml public.yaml net.daringfireball.markdown \
+    .txt .md .lua .sh .zsh .bash .toml .ini .conf .env .log .csv .ts .tsx .js .jsx .mjs .json .yaml .yml
+  printf 'Bound text file types to Open in Neovim.\n'
+else
+  printf 'scheman not found: build it in ~/tools/scheman (see README) and re-run this script to bind file types.\n'
+fi

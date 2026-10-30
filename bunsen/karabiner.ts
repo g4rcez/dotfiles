@@ -264,7 +264,7 @@ const keys = [
     }),
 ];
 
-const disableLeaderKeys = keys.flatMap((key): Manipulator[] => key.keys.flatMap((k) => karabiner.createLeaderDisable(k, false));
+const disableLeaderKeys = keys.flatMap((key): Manipulator[] => key.keys.flatMap((k) => karabiner.createLeaderDisable(k, false)));
 
 karabiner.profile(
     "Default",

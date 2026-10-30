@@ -82,6 +82,8 @@ if (($+functions[znap])); then
     (($+commands[herdr])) && znap eval herdr-completion 'herdr completion zsh'
     (($+commands[workmux])) && znap eval workmux-completion 'workmux completions zsh'
     (($+commands[worktree])) && znap eval worktree-completion 'workmux completions zsh'
+    (($+commands[rex])) && znap eval rex-completion 'rex completion zsh'
+    (($+commands[scheman])) && znap eval scheman-completion 'scheman completion zsh'
     if [[ -o interactive && -t 0 && -t 1 ]]; then
         (($+commands[fzf])) && znap eval fzf-zsh 'fzf --zsh'
         (($+commands[tv])) && znap eval tv-init 'tv init zsh'

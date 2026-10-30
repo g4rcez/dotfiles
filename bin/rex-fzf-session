@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Rex port of tmux-fzf-session. Runs inside a Rex popup (see config/rex/init.lua).
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
+
+function fzf_window() {
+    fzf --cycle --border-label "rex-fzf-session - ctrl+d: delete session" --reverse --no-sort \
+        --border "sharp" \
+        --info inline \
+        --height 100% \
+        $FZF_COLORS \
+        --prompt "> " \
+        --delimiter $'\t' --with-nth 1 \
+        --preview "if [[ {1} == '[s] '* ]]; then rex session inspect {2}; else bash \"$DOTFILES_DIR/bin/tmux-fzf-preview\" {1}; fi" \
+        --header "ctrl+d: Delete session" \
+        --preview-window right,70% --bind "ctrl-d:execute-silent(rex kill {2})+abort"
+}
+
+function getProjects() {
+    rex ls --json | jq -r '.sessions[] | "[s] \(.label)\t\(.session_id)"'
+    fd -p -t directory -a -d 2 "./Documents" ~/Documents | sed "s@$HOME/Documents/@[d] @g" | grep -e '.*/.*/' | sed 's/\/$//g'
+}
+
+function selectProject() {
+    getProjects | fzf_window
+}
+
+function getSessionName() {
+    basename "$1" | tr ' .:' '_'
+}
+
+selected=$(selectProject)
+[ -z "$selected" ] && exit 0
+
+client=$(rex client ls --json | jq -r '[.clients[] | select(.info.kind == "app")][0].client_id')
+
+if [ "${selected:0:3}" == "[s]" ]; then
+    session_id="${selected#*$'\t'}"
+else
+    dir="$HOME/Documents/${selected#\[d\] }"
+    session_name=$(getSessionName "$dir")
+    session_id=$(rex ls --json | jq -r --arg l "$session_name" '.sessions[] | select(.label == $l) | .session_id' | head -n1)
+    [ -n "$session_id" ] || session_id=$(rex new "$session_name" -c "$dir" --json | jq -r '.session_id')
+fi
+
+rex -C "$client" do session.select session_id="$session_id"

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Rex replacement for `ai sessions` and `agentmux dashboard`, which only read tmux.
+# Lists every terminal that runs a coding agent, in all sessions, with the status it reports.
+# Runs inside a Rex popup (see config/rex/init.lua).
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
+
+AGENTS='^(claude|codex|gemini|pi|opencode|aider)$'
+
+function rows() {
+    local sid slabel bid wid process status
+    while IFS=$'\t' read -r sid slabel; do
+        while IFS=$'\t' read -r bid wid; do
+            process=$(rex block call -s "$sid" -b "$bid" process 2>/dev/null) || continue
+            name=$(jq -r '.foreground | (.argv0 // .name) | split("/")[-1] | ltrimstr("-")' <<<"$process")
+            [[ "$name" =~ $AGENTS ]] || continue
+            cwd=$(jq -r '.foreground.cwd // ""' <<<"$process")
+            status=$(rex block call -s "$sid" -b "$bid" program_status 2>/dev/null \
+                | jq -r '[.records[].state] | first // "-"')
+            printf '%-8s %-8s %s · %s\t%s\t%s\t%s\n' "$status" "$name" "$slabel" "${cwd/#$HOME/~}" "$sid" "$bid" "$wid"
+        done < <(rex block ls -s "$sid" --json | jq -r '.blocks[] | select(.placement == "placed") | "\(.block_id)\t\(.window_id)"')
+    done < <(rex ls --json | jq -r '.sessions[] | "\(.session_id)\t\(.label)"')
+}
+
+selected=$(rows | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
+    --border-label "rex-fzf-agents" --prompt "agents> " \
+    --delimiter $'\t' --with-nth 1 \
+    --preview "rex capture -s {2} -b {3} --trim | tail -n 60" \
+    --preview-window right,60%)
+[ -z "$selected" ] && exit 0
+
+IFS=$'\t' read -r _ sid bid wid <<<"$selected"
+client=$(rex client ls --json | jq -r '[.clients[] | select(.info.kind == "app")][0].client_id')
+rex focus -s "$sid" "$bid"
+rex -C "$client" do session.select session_id="$sid" window_id="$wid"

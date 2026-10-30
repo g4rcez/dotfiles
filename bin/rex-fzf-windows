@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Rex port of tmux-fzf-windows: pick a tab of the current session. Runs inside a Rex popup (see config/rex/init.lua).
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
+
+session="${REX_SESSION:?run this inside a Rex terminal}"
+
+selected=$(rex session inspect "$session" --json \
+    | jq -r '.windows[] | "\(.label)\t\(.window_id)\t\(.focused_block_id)"' \
+    | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
+        --border-label "rex-fzf-windows" --prompt "> " \
+        --delimiter $'\t' --with-nth 1 \
+        --preview "rex capture -s '$session' -b {3} --trim | tail -n 60" \
+        --preview-window right,70%)
+[ -z "$selected" ] && exit 0
+
+IFS=$'\t' read -r _ window_id _ <<<"$selected"
+rex focus -s "$session" "$window_id"

@@ -20,4 +20,4 @@ if [ -z "${DOTFILES:-}" ] || [ ! -d "$DOTFILES/bin" ]; then
     DOTFILES="$DOTFILES_DIR"
 fi
 export DOTFILES
-export FZF_COLORS="${FZF_COLORS:---color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator='─' --scrollbar=\| --info=right}"
+export FZF_COLORS="${FZF_COLORS:---color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator=─ --scrollbar=| --info=right}"

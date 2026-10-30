@@ -41,6 +41,7 @@ export default defineConfig({
         "~/.config/lazygit": file("config/lazygit"),
         "~/.config/posting": file("config/posting"),
         "~/.config/wezterm": file("config/wezterm"),
+        "~/.config/rex": file("config/rex"),
         "~/.config/workmux": file("config/workmux"),
         "~/.gitconfig": file("config/git/gitconfig"),
         "~/.ideavimrc": file("config/idea/.ideavimrc"),
