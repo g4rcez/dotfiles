@@ -11,9 +11,9 @@ function fzf_window() {
         $FZF_COLORS \
         --prompt "> " \
         --delimiter $'\t' --with-nth 1 \
-        --preview "if [[ {1} == '[s] '* ]]; then rex session inspect {2}; else bash \"$DOTFILES_DIR/bin/tmux-fzf-preview\" {1}; fi" \
+        --preview "if [[ {1} == '[s] '* ]]; then \"$DOTFILES_DIR/bin/rex-fzf-preview\" {2}; else bash \"$DOTFILES_DIR/bin/tmux-fzf-preview\" {1}; fi" \
         --header "ctrl+d: Delete session" \
-        --preview-window right,70% --bind "ctrl-d:execute-silent(rex kill {2})+abort"
+        --preview-window right,70%,nowrap --bind "ctrl-d:execute-silent(rex kill {2})+abort"
 }
 
 function getProjects() {

@@ -3,7 +3,7 @@ local cwd_of = dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("apps%.lu
 
 local APPS = {
     { key = "n", name = "nvim", title = "Neovim", command = { "nvim" } },
-    { key = "c", name = "claude", title = "Claude", command = { "claude" } },
+    { key = "a", name = "a", title = "AI Harness", command = { "ai" } },
     { key = "g", name = "lazygit", title = "Lazygit", command = { "lazygit" } },
 }
 
@@ -22,6 +22,8 @@ for _, app in ipairs(APPS) do
             }
             if err ~= nil then error(err, 0) end
             rex.client.queue("session.select", { session_id = ctx.session_id, window_id = made.window_id })
+            -- session.select can ignore window_id when the session is already shown; a new tab is always last.
+            rex.client.queue("client.tab.goto", { index = -1 })
         end,
     }
 end

@@ -10,8 +10,8 @@ selected=$(rex session inspect "$session" --json \
     | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
         --border-label "rex-fzf-windows" --prompt "> " \
         --delimiter $'\t' --with-nth 1 \
-        --preview "rex capture -s '$session' -b {3} --trim | tail -n 60" \
-        --preview-window right,70%)
+        --preview "\"$DOTFILES_DIR/bin/rex-fzf-preview\" '$session' {3}" \
+        --preview-window right,70%,nowrap)
 [ -z "$selected" ] && exit 0
 
 IFS=$'\t' read -r _ window_id _ <<<"$selected"

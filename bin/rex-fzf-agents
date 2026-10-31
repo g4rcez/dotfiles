@@ -25,8 +25,8 @@ function rows() {
 selected=$(rows | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
     --border-label "rex-fzf-agents" --prompt "agents> " \
     --delimiter $'\t' --with-nth 1 \
-    --preview "rex capture -s {2} -b {3} --trim | tail -n 60" \
-    --preview-window right,60%)
+    --preview "\"$DOTFILES_DIR/bin/rex-fzf-preview\" {2} {3}" \
+    --preview-window right,60%,nowrap)
 [ -z "$selected" ] && exit 0
 
 IFS=$'\t' read -r _ sid bid wid <<<"$selected"

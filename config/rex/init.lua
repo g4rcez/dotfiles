@@ -1,5 +1,6 @@
 -- Ported from dotfiles/config/tmux/tmux.conf. Prefix is Ctrl-p, as in tmux.
-local P = "ctrl+p>"
+local PREFIX = "ctrl+p>"
+local BIN = os.getenv("HOME") .. "/dotfiles/bin/"
 
 local dir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "")
 local theme = dofile(dir .. "theme.lua")
@@ -18,7 +19,7 @@ rex.action {
 rex.on("block_created", function(_, ev) theme.apply(ev.block_id) end)
 
 local function bind(key, action, args)
-    rex.bind(P .. key, action, args)
+    rex.bind(PREFIX .. key, action, args)
 end
 
 -- Floating terminal running a command, like tmux display-popup.
@@ -40,7 +41,6 @@ local function popup(name, title, argv)
 end
 
 popup("lazygit", "Open Lazygit", { "lazygit" })
-local BIN = os.getenv("HOME") .. "/dotfiles/bin/"
 popup("fzf_session", "Pick Session or Directory", { BIN .. "rex-fzf-session" })
 popup("fzf_windows", "Pick Tab", { BIN .. "rex-fzf-windows" })
 popup("fzf_agents", "Pick Coding Agent", { BIN .. "rex-fzf-agents" })

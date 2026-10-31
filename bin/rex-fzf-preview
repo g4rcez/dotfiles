@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# fzf preview for Rex pickers: the live screen of a block, with true colors (`--format vt` keeps the SGR codes).
+# Usage: rex-fzf-preview SESSION [BLOCK]. Without BLOCK, previews the focused block of the active tab.
+sid="$1" bid="${2:-}"
+if [[ -z "$bid" ]]; then
+    bid=$(rex session inspect "$sid" --json 2>/dev/null \
+        | jq -r '.active_window_id as $a | (.windows[] | select(.window_id == $a) | .focused_block_id) // empty')
+fi
+[[ -n "$bid" ]] || { echo "no block to preview"; exit 0; }
+rex capture -s "$sid" -b "$bid" --format vt --trim 2>&1 | tail -n "${FZF_PREVIEW_LINES:-60}"
