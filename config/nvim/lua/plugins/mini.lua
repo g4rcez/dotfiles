@@ -59,7 +59,8 @@ return {
                     zindex = 1,
                 },
             }
-            require("mini.hipatterns").setup()
+            local hipatterns = require "mini.hipatterns"
+            hipatterns.setup { highlighters = { hex_color = hipatterns.gen_highlighter.hex_color() } }
             require("mini.bufremove").setup()
             require("mini.files").setup { windows = { preview = true } }
             vim.keymap.set("n", "<leader>g=", function()

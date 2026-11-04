@@ -27,7 +27,6 @@ The used groups are,
 
 ## Dependencies
 
-- [beacon.lua](https://github.com/OXY2DEV/nvim/blob/main/lua/scripts/beacon.lua), For highlighting cursor.
 - [highlights.lua](https://github.com/OXY2DEV/nvim/blob/main/lua/scripts/highlights.lua), For highlight groups.
 - [types/diagnostics.lua](https://github.com/OXY2DEV/nvim/blob/main/lua/scripts/types/diagnostics.lua), For type definition.
 
@@ -98,51 +97,6 @@ diagnostics.config = {
 		return math.floor(vim.o.lines * 0.4);
 	end,
 
-	beacon = {
-		---|fS
-
-		default = {
-			from = function ()
-				local fg = vim.api.nvim_get_hl(0, { name = "@comment", link = false }).fg;
-				return fg and string.format("#%06x", fg) or "#9399b2";
-			end,
-			to = function ()
-				local bg = vim.api.nvim_get_hl(0, { name = vim.o.statusline and "Cursorline" or "Normal", link = false }).bg;
-				return bg and string.format("#%06x", bg) or "#1e1e2e";
-			end,
-
-			steps = 10,
-			interval = 100,
-		},
-
-		[vim.diagnostic.severity.INFO] = {
-			from = function ()
-				local fg = vim.api.nvim_get_hl(0, { name = "FancyDiagnosticInfoIcon", link = false }).fg;
-				return fg and string.format("#%06x", fg) or "#94e2d5";
-			end
-		},
-		[vim.diagnostic.severity.HINT] = {
-			from = function ()
-				local fg = vim.api.nvim_get_hl(0, { name = "FancyDiagnosticHintIcon", link = false }).fg;
-				return fg and string.format("#%06x", fg) or "#94e2d5";
-			end
-		},
-		[vim.diagnostic.severity.WARN] = {
-			from = function ()
-				local fg = vim.api.nvim_get_hl(0, { name = "FancyDiagnosticWarnIcon", link = false }).fg;
-				return fg and string.format("#%06x", fg) or "#f9e2af";
-			end
-		},
-		[vim.diagnostic.severity.ERROR] = {
-			from = function ()
-				local fg = vim.api.nvim_get_hl(0, { name = "FancyDiagnosticErrorIcon", link = false }).fg;
-				return fg and string.format("#%06x", fg) or "#f38ba8";
-			end
-		},
-
-		---|fE
-	},
-
 	decorations = {
 		---|fS
 
@@ -187,28 +141,6 @@ local function get_decorations (level, ...)
 	local output = {};
 
 	for k, v in pairs(diagnostics.config.decorations[level]) do
-		output[k] = eval(v, ...);
-	end
-
-	return output;
-
-	---|fE
-end
-
---[[ Gets `beacon` configuration. ]]
----@param level? vim.diagnostic.Severity | "default" Diagnostic level.
----@param ... any Extra arguments to be used for value evaluation.
----@return table?
-local function get_beacon_config (level, ...)
-	---|fS
-
-	if not level or not diagnostics.config.beacon then
-		return;
-	end
-
-	local output = {};
-
-	for k, v in pairs(diagnostics.config.beacon[level]) do
 		output[k] = eval(v, ...);
 	end
 
@@ -449,13 +381,8 @@ diagnostics.close = function ()
 	---|fE
 end
 
----@type beacon.instance Beacon instance to use for the Cursor.
-diagnostics.__beacon = nil;
-
 --[[ External integrations. ]]
----@param window integer Window Id.
----@param beacon_config beacon.instance.config Configuration for `beacon`.
-diagnostics.__integration = function (window, beacon_config)
+diagnostics.__integration = function ()
 	---|fS
 
 	-- Markdown rendering.
@@ -470,17 +397,6 @@ diagnostics.__integration = function (window, beacon_config)
 				}
 			}
 		});
-	end
-
-	-- Beacon.
-	if package.loaded["scripts.beacon"] then
-		if not diagnostics.__beacon then
-			diagnostics.__beacon = require("scripts.beacon").new(window, beacon_config);
-		else
-			diagnostics.__beacon:update(window, beacon_config);
-		end
-
-		diagnostics.__beacon:start();
 	end
 
 	---|fE
@@ -588,8 +504,6 @@ diagnostics.hover = function (window)
 	local ranges = {};
 
 	local start_row = 1;
-	---@type vim.diagnostic.Severity | nil
-	local level;
 
 	diagnostics.sign_data = {};
 
@@ -621,10 +535,6 @@ diagnostics.hover = function (window)
 
 		diagnostic_lines = diagnostic_lines + #lines;
 
-		if current == true and ( not level or item.severity < level ) then
-			level = item.severity;
-		end
-
 		for _ = 1, #lines do
 			-- Signs
 			table.insert(diagnostics.sign_data, {
@@ -643,11 +553,6 @@ diagnostics.hover = function (window)
 
 		---|fE
 	end
-
-	local beacon_config = vim.tbl_extend("force",
-		get_beacon_config("default", {}, true),
-		get_beacon_config(level, {}, true) or {}
-	);
 
 	local H = vim.api.nvim_win_text_height(diagnostics.window, { start_row = 0, end_row = -1 }).all;
 
@@ -681,7 +586,7 @@ diagnostics.hover = function (window)
 
 	vim.wo[diagnostics.window].winhl = "FloatBorder:@comment,Normal:Normal";
 
-	diagnostics.__integration(window, beacon_config);
+	diagnostics.__integration();
 
 	---|fS
 

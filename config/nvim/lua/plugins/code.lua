@@ -1,7 +1,6 @@
 local fileTypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" }
 
 return {
-    "editorconfig/editorconfig-vim",
     { "folke/ts-comments.nvim", event = "VeryLazy", opts = {} },
     {
         "Sang-it/fluoride",
@@ -56,13 +55,6 @@ return {
     },
     {
         cond = not require("config.vscode").isVscode(),
-        opts = {},
-        event = { "BufReadPost", "BufNewFile" },
-        "kevinhwang91/nvim-ufo",
-        dependencies = { "kevinhwang91/promise-async" },
-    },
-    {
-        cond = not require("config.vscode").isVscode(),
         "olrtg/nvim-emmet",
         keys = {
             {
@@ -105,26 +97,6 @@ return {
             filetypes = fileTypes,
             remove_template_string = true,
             restore_quotes = { normal = [[']], jsx = [["]] },
-        },
-    },
-    {
-        "brenoprata10/nvim-highlight-colors",
-        event = { "BufReadPost", "BufNewFile" },
-        opts = {
-            enable_hex = true,
-            enable_hsl = true,
-            enable_rgb = true,
-            exclude_buftypes = {},
-            render = "background",
-            enable_tailwind = true,
-            exclude_filetypes = {},
-            virtual_symbol = "■",
-            enable_short_hex = true,
-            enable_var_usage = true,
-            enable_named_colors = true,
-            virtual_symbol_prefix = "",
-            virtual_symbol_suffix = " ",
-            virtual_symbol_position = "inline",
         },
     },
 }

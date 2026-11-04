@@ -40,7 +40,7 @@ The configuration loads in this order:
 **LSP Configuration**: This config uses Neovim's new built-in LSP configuration pattern (`vim.lsp.config` and `vim.lsp.enable`) rather than lspconfig for base server setup. The configuration is split between:
 
 - `lua/config/lsp.lua` - Server-specific configs, LSP attach keymaps, capabilities, settings, and filetypes
-- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
+- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration (nvim-lspconfig, blink.cmp dependency)
 
 **TypeScript/Deno Strategy**: The config uses `tsgo` for standard JavaScript/TypeScript projects and `denols` for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 
@@ -49,7 +49,7 @@ The configuration loads in this order:
 **Plugin Organization**: Plugins are modular and organized by function in `lua/plugins/`:
 
 - `blinkcmp.lua` - Completion engine (blink.cmp) with LSP, snippets, and various sources
-- `nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
+- `nvimlspconfig.lua` - LSP plugin declaration (nvim-lspconfig, blink.cmp dependency)
 - `snacks.nvim` - Multi-purpose plugin providing picker (file/grep), terminal, git integration, notifications
 - `format.lua` - Formatting with conform.nvim and linting with nvim-lint
 - `treesitter.lua` - Syntax highlighting and parsing

@@ -6,7 +6,6 @@ return {
             "nvim-lua/plenary.nvim",
             "nvim-neotest/nvim-nio",
             "marilari88/neotest-vitest",
-            "antoinemadec/FixCursorHold.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
         keys = {

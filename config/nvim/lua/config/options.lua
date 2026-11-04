@@ -21,21 +21,21 @@ vim.opt.cursorline = true
 -- fold
 vim.opt.foldcolumn = "1"
 vim.opt.foldenable = true
-vim.opt.foldexpr = "0"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 
 vim.opt.autowrite = true
 vim.opt.breakindent = true
 vim.opt.cmdheight = 0
-vim.opt.showtabline = 2
+vim.opt.showtabline = 1
 vim.opt.completeopt = { "menu", "fuzzy", "menuone", "noselect", "popup" }
 vim.opt.conceallevel = 0
 vim.opt.confirm = true
 vim.opt.expandtab = true
 vim.opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " " }
 vim.opt.foldmethod = "expr"
-vim.opt.foldtext = ">"
+vim.opt.foldtext = ""
 vim.opt.formatoptions = "jcroqlnt"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.grepprg = "rg --vimgrep"

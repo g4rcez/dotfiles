@@ -168,6 +168,11 @@ local function neovimKeymaps()
         require("mini.map").toggle()
     end, { desc = "[t]oggle [m]inimap", icon = "" })
 
+    bind.normal("<leader>tu", function()
+        vim.cmd.packadd "nvim.undotree"
+        vim.cmd.Undotree()
+    end, { desc = "[t]oggle [u]ndotree" })
+
     bind.normal("<leader>bp", "<CMD>BufferLineTogglePin<CR>", { desc = "[b]uffer [p]in", icon = "" })
     bind.normal("<leader>bo", function()
         require("snacks.bufdelete").other()
@@ -198,16 +203,6 @@ local function neovimKeymaps()
     bind.normal("<leader>uf", function()
         Snacks.dim.enable()
     end, { desc = "Enable dim" })
-
-    bind.normal("zR", function()
-        require("ufo").openAllFolds()
-    end)
-    bind.normal("zM", function()
-        require("ufo").closeAllFolds()
-    end)
-    bind.normal("zm", function()
-        require("ufo").closeFoldsWith()
-    end)
 end
 
 local function vscodeKeymaps()
