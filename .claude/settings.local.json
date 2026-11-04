@@ -1,3 +1,6 @@
 {
-    "agent": "dotfiles"
+    "agent": "dotfiles",
+    "permissions": {
+        "deny": []
+    }
 }

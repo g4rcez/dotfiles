@@ -6,7 +6,7 @@ local dir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "")
 local theme = dofile(dir .. "theme.lua")
 local cwd_of = dofile(dir .. "extensions/cwd.lua")
 
--- Theme every terminal in the session. Also runs for each new block, so tabs and splits match.
+-- Theme every terminal in the session. extensions/theme.lua also runs it for each new block.
 rex.action {
     name = "apply_theme",
     title = "Apply TokyoNight Theme",
@@ -16,7 +16,7 @@ rex.action {
         for _, b in ipairs(list.blocks or {}) do theme.apply(b.block_id) end
     end,
 }
-rex.on("block_created", function(_, ev) theme.apply(ev.block_id) end)
+dofile(dir .. "extensions/theme.lua")
 
 local function bind(key, action, args)
     rex.bind(PREFIX .. key, action, args)
@@ -96,7 +96,6 @@ bind("b", "fzf_windows")
 bind("o", "fzf_windows")
 bind("tab", "fzf_windows")
 
--- tmux copy-mode replacement, adapted from manishprivet/.dotfiles (.config/rex/copy_mode.lua).
 -- Shows the focused pane's text in bare nvim: v/V select, / search, any yank copies and closes, q closes.
 rex.action {
     name = "copy_mode",
@@ -144,7 +143,6 @@ rex.action {
 bind("v", "copy_mode")
 bind("enter", "copy_mode")
 
--- Full scrollback in a writable nvim tab, replacing tmux-edit-scrollback. The tab closes with nvim.
 rex.action {
     name = "edit_scrollback",
     title = "Edit Scrollback in Nvim",

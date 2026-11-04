@@ -1,0 +1,11 @@
+# Written by "rex terminfo setup". Rex owns this file and rewrites it, so
+# edits made here are lost. Remove it with "rex terminfo remove".
+#
+# Rex terminals may set TERM=xterm-rex. A host that has no terminfo entry by
+# that name cannot run curses programs at all, so announce xterm-256color to
+# every host except the ones recorded in
+# ~/.config/rex/terminfo-hosts
+# as having the entry. Outside a Rex terminal this block does nothing.
+
+Match exec "/bin/sh -c '[ x$TERM = xxterm-rex ] && ! grep -qxF -- %h ~/.config/rex/terminfo-hosts 2>/dev/null'"
+    SetEnv TERM=xterm-256color

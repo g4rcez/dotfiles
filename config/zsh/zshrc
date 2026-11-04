@@ -107,6 +107,7 @@ typeset -a SOURCE=(
     "$DOTFILES/config/zsh/alias.sh"
     "$DOTFILES/config/zsh/completion/node-completion.sh"
     "$DOTFILES/config/zsh/completion/_ai.zsh"
+    "$DOTFILES/config/zsh/completion/_claude.zsh"
     "$DOTFILES/config/zsh/completion/_worktree.zsh"
     "$DOTFILES/config/zsh/completion/_commit.zsh"
     "$DOTFILES/config/zsh/syntax-highlighting.zsh"
