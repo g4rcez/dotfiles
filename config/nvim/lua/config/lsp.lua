@@ -468,7 +468,8 @@ lsp_config("yamlls", {
 lsp_config("lua_ls", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
-    root_markers = { ".git", ".luarc.json", ".stylua.toml" },
+    -- Nested list = equal priority; `.git` last so config/rex/.luarc.json (Rex API types) wins over the repo root.
+    root_markers = { { ".luarc.json", ".luarc.jsonc", ".stylua.toml" }, ".git" },
     settings = {
         Lua = {
             workspace = { checkThirdParty = false },

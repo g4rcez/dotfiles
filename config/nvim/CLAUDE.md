@@ -102,7 +102,7 @@ npm install @microsoft/compose-language-service
 go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 
 # Lua
-# lua-language-server (install via Mason or package manager)
+# lua-language-server (pinned in config/mise/config.toml; Mason also installs it)
 
 # Rust
 # rust-analyzer (install via rustup)

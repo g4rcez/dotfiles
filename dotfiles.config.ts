@@ -42,6 +42,7 @@ export default defineConfig({
         "~/.config/posting": file("config/posting"),
         "~/.config/wezterm": file("config/wezterm"),
         "~/.config/rex": file("config/rex"),
+        "~/.claude/AGENTS.md": file("config/claude/AGENTS.md"),
         "~/.config/workmux": file("config/workmux"),
         "~/.gitconfig": file("config/git/gitconfig"),
         "~/.ideavimrc": file("config/idea/.ideavimrc"),

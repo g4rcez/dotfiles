@@ -101,6 +101,7 @@
 ---@field view fun(args?: table): table?, string?
 ---@field list_blocks fun(args?: table): {blocks: {block_id: string, label: string, placement: "placed"|"detached", window_id?: string, flavor: string}[]}?, string?
 ---@field list_clients fun(args?: table): table?, string?
+---@field attach fun(args: {session_id: string}): table?, string?
 ---@field describe_block fun(args: {block_id: string}): table?, string?
 ---@field new_window fun(args: {layout: RexLayout, focus?: boolean, window_label?: string, session_id?: string}): {window_id: string, block_ids: string[], revision: integer}?, string?
 ---@field new_split fun(args: table): table?, string?

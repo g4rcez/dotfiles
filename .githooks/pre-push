@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Block a push when gitleaks finds a secret in the commits being pushed.
+# Enable with: git config core.hooksPath .githooks
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    printf 'pre-push: gitleaks not found, secret scan skipped\n' >&2
+    exit 0
+fi
+
+zero=0000000000000000000000000000000000000000
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+    [[ "$local_sha" == "$zero" ]] && continue
+    if [[ "$remote_sha" == "$zero" ]]; then
+        range="$local_sha --not --remotes"
+    else
+        range="$remote_sha..$local_sha"
+    fi
+    gitleaks git --redact --no-banner --log-opts="$range" . || {
+        printf 'pre-push: gitleaks found secrets in %s. Push blocked.\n' "$range" >&2
+        exit 1
+    }
+done

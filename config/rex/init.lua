@@ -12,8 +12,8 @@ rex.action {
     title = "Apply TokyoNight Theme",
     run = function()
         local list, err = rex.session.list_blocks {}
-        if err ~= nil then error(err, 0) end
-        for _, b in ipairs(list.blocks or {}) do theme.apply(b.block_id) end
+        if err ~= nil or list == nil then error(err or "list_blocks returned no result", 0) end
+        for _, b in ipairs(list.blocks) do theme.apply(b.block_id) end
     end,
 }
 dofile(dir .. "extensions/theme.lua")
@@ -57,9 +57,9 @@ rex.action {
     title = "Toggle Floating Shell",
     run = function(ctx)
         local list, err = rex.session.list_blocks {}
-        if err ~= nil then error(err, 0) end
+        if err ~= nil or list == nil then error(err or "list_blocks returned no result", 0) end
         local float
-        for _, b in ipairs(list.blocks or {}) do
+        for _, b in ipairs(list.blocks) do
             if b.label == FLOAT_LABEL then float = b end
         end
 
@@ -72,7 +72,7 @@ rex.action {
                     options = { command = { "sh", "-c", "while :; do zsh -i; done" }, theme = theme.theme },
                 },
             }
-            if nerr ~= nil then error(nerr, 0) end
+            if nerr ~= nil or made == nil then error(nerr or "new_layer returned no result", 0) end
             local _, lerr = rex.session.set_block_label { block_id = made.block_ids[1], label = FLOAT_LABEL }
             if lerr ~= nil then error(lerr, 0) end
         elseif float.placement == "placed" then

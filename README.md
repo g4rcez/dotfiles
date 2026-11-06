@@ -10,17 +10,17 @@ The setup is opinionated and designed for my machines. TypeScript and Bun, toget
 
 - **Zsh** — znap plugins, Starship, fzf, zoxide, mise, direnv, custom completions, Git helpers, and startup diagnostics.
 - **Neovim** — lazy.nvim, LSP, completion, Treesitter, Snacks, formatting, linting, debugging, HTTP tools, and GitHub integration. See [`config/nvim/README.md`](config/nvim/README.md).
-- **Terminals and sessions** — Ghostty as the primary terminal, WezTerm as an alternative, tmux as the active multiplexer, optional Zellij support, and Yazi for file management.
+- **Terminal and sessions** — [Rex](config/rex/) as the terminal and multiplexer, configured in Lua with one extension per behavior, and Yazi for file management. Ghostty, WezTerm, tmux, and Zellij configurations stay in the repository as legacy references.
 - **macOS automation** — Karabiner Elements, Aerospace, Raycast, Espanso, and application shortcuts.
 - **Developer tools** — Git with delta and SSH signing, mise-managed runtimes, Homebrew packages, and configuration for Zed, VS Code, IntelliJ IDEA Vim, Kitty, Alacritty, Posting, Lazygit, and other CLI tools.
-- **Agent workflow** — the tmux-native [`agentmux`](agentmux/) dashboard, Pi lifecycle status integration, helper scripts, and prompts.
+- **Agent workflow** — a global Claude Code instruction file and hooks, Rex agent notifications and repo sessions, the `ai` project launcher, the legacy tmux-native [`agentmux`](agentmux/) dashboard, Pi lifecycle status integration, helper scripts, and prompts.
 
 ## Quick reference
 
 - Hold **Caps Lock** for the Hyper key (`Control` + `Option` + `Shift` + `Command`); tap it for Escape.
 - **Hyper + `h`/`j`/`k`/`l`** sends arrow keys.
-- **Command + `P`** is the terminal leader in Ghostty and WezTerm for tabs, splits, pane navigation, and reloads.
-- **Control + `P`** is the tmux prefix.
+- **Control + `P`** is the Rex prefix (the same key as the old tmux prefix) for sessions, tabs, panes, pickers, and reloads.
+- **Option + `P`** opens Rex app mode: then `n` opens Neovim, `a` the AI harness, and `g` Lazygit in a new tab. **Option + `R`** toggles resize mode.
 - Espanso matches use the **`;`** prefix, for example `;date`, `;time`, `;uuid`, `;hex`, and `;rgb`.
 - Neovim uses **Space** as its leader key.
 
@@ -36,15 +36,17 @@ dotfiles/
 ├── config/                   # Application and shell configuration
 │   ├── zsh/                  # zsh entrypoint, modules, aliases, and completions
 │   ├── nvim/                 # Neovim configuration
-│   ├── ghostty/ wezterm/     # Terminal configurations
-│   ├── tmux/ zellij/         # Multiplexer configurations
+│   ├── rex/                  # Rex terminal and multiplexer (init.lua, extensions/, types/)
+│   ├── ghostty/ wezterm/     # Legacy terminal configurations
+│   ├── tmux/ zellij/         # Legacy multiplexer configurations
 │   ├── aerospace/            # macOS window management
 │   ├── vscode/ zed/ idea/   # Editor configurations
 │   ├── git/                  # Git configuration and global ignore rules
-│   ├── pi/ claude/           # Assistant and agent integrations
+│   ├── pi/ claude/           # Assistant and agent integrations (global AGENTS.md, hooks)
 │   └── ...                   # Yazi, Lazygit, Posting, Kitty, and other tools
 ├── bin/                      # Standalone shell, TypeScript, and utility scripts
-├── agentmux/                 # Rust tmux dashboard for coding agents
+├── agentmux/                 # Rust tmux dashboard for coding agents (legacy)
+├── .githooks/                # Opt-in pre-push secret scan (gitleaks)
 ├── espanso/                  # Runtime helpers used by Espanso matches
 ├── raycast/                  # Raycast extensions
 ├── snippets/                 # Reusable snippets
@@ -90,12 +92,14 @@ If the repository lives somewhere other than `~/dotfiles`, update the `file()` h
 
 `dotfiles.config.ts` declares both environment variables and managed destinations. It currently covers:
 
-- Shell, runtime, and editor paths such as `~/.zshrc`, `~/.config/mise`, `~/.config/nvim`, `~/.config/tmux`, `~/.config/zellij`, `~/.gitconfig`, and `~/.ideavimrc`.
-- Terminal and CLI tools such as Ghostty, WezTerm, Kitty, Alacritty, Yazi, Lazygit, Posting, fd, bat, lsd, vivid, and Starship.
-- Zed and VS Code settings, keybindings, the Aerospace configuration, and the Pi `agentmux-status.ts` extension.
+- Shell, runtime, and editor paths such as `~/.zshrc`, `~/.config/mise`, `~/.config/nvim`, `~/.config/rex`, `~/.gitconfig`, and `~/.ideavimrc`.
+- Terminal and CLI tools such as Ghostty, WezTerm, Kitty, Alacritty, tmux, Zellij, Yazi, Lazygit, Posting, fd, bat, lsd, vivid, and Starship.
+- Zed and VS Code settings, keybindings, the Aerospace configuration, the Pi `agentmux-status.ts` extension, and the global Claude Code instructions (`~/.claude/AGENTS.md`).
 - The `osx` profile, which generates the Karabiner Elements and Espanso configuration from [`bunsen/karabiner.ts`](bunsen/karabiner.ts) and [`bunsen/espanso.ts`](bunsen/espanso.ts).
 
 Review the output of `dots diff` before every `apply`. Use `dots status` to inspect the current deployment.
+
+`~/.claude/settings.json` is not tracked, and its hook paths are absolute. Do not create `~/.claude/CLAUDE.md`: Claude Code loads it together with `AGENTS.md`, so a copy doubles the context cost.
 
 ## Shell
 
@@ -125,13 +129,23 @@ Espanso uses `;` as its trigger prefix. [`bunsen/espanso.ts`](bunsen/espanso.ts)
 
 ## Terminal and agent workflow
 
-Ghostty and WezTerm share a Command-P leader for tabs, splits, pane navigation, and configuration reloads. Kitty and Alacritty configurations are also kept for other environments.
+Rex is the active terminal and multiplexer. [`config/rex/init.lua`](config/rex/init.lua) keeps the old tmux prefix (Control-P) and its session, tab, and pane bindings. Each added behavior lives in its own file under [`config/rex/extensions/`](config/rex/extensions/):
 
-`bin/ghostty.keybind 'super+1'` prints `text:\x10\x31` for a Ghostty `text:` binding; `super` adds tmux's Control-P prefix.
+- numbered tabs (`numbers.lua`) and tab names from the running program and Git repo (`window.lua`);
+- desktop notifications when a coding agent is blocked, done, or failed in a pane you are not viewing (`agents.lua`);
+- URL and path picking from terminal output (`rexurl.lua`), a file-path prompt (`openpath.lua`), and repo sessions with Neovim, Claude, and a shell (`project.lua`);
+- app mode (`apps.lua`) and per-block Tokyo Night theming (`theme.lua`).
 
-Tmux is the active multiplexer. Its configuration uses Control-P as the prefix, Vim-style pane movement, large scrollback, session persistence, popups, and the `agentmux` dashboard. Prefix+e opens the file picker in a popup and copies selected paths as `@path` references. Zellij is an optional alternative and is loaded by the shell only when it is available and tmux is not active.
+Common keys after the Control-P prefix: `t`/`x` new and close tab, `1`–`9` go to tab, `-` and `\` split, `h`/`j`/`k`/`l` move focus, `H`/`J`/`K`/`L` resize, `z` zoom, `f` floating shell, `g` Lazygit, `e` file picker, `s` skill picker, `a` agent picker, `p` session picker, `n` open the current repo as a session, `v` copy mode, `,` edit scrollback in Neovim, and `u` open a URL. The fzf pickers are `bin/rex-fzf-*`; they reuse the shared styling in `config/zsh/fzf.sh`.
 
-[`agentmux/README.md`](agentmux/README.md) documents the dashboard and its `gh.runs` view. Pi reports lifecycle state through [`config/pi/extensions/agentmux-status.ts`](config/pi/extensions/agentmux-status.ts); the extension is a no-op outside tmux.
+The Rex Lua API types are in [`config/rex/types/`](config/rex/types/), so lua-language-server (pinned in mise) completes `rex.*` calls in Neovim.
+
+Ghostty, WezTerm, Kitty, and Alacritty configurations are kept for other environments. `bin/ghostty.keybind 'super+1'` prints `text:\x10\x31` for a Ghostty `text:` binding; `super` adds the Control-P prefix.
+
+tmux and Zellij are legacy. The shell loads Zellij only when it is installed and tmux is not active.
+[`agentmux/README.md`](agentmux/README.md) documents the tmux-native dashboard and its `gh.runs` view. Pi reports lifecycle state through [`config/pi/extensions/agentmux-status.ts`](config/pi/extensions/agentmux-status.ts); the extension is a no-op outside tmux. Under Rex, agents report state with the program status protocol, and `agents.lua` turns it into notifications.
+
+Claude Code uses one global instruction file, [`config/claude/AGENTS.md`](config/claude/AGENTS.md), linked to `~/.claude/AGENTS.md`. Its hooks are in [`config/claude/hooks/`](config/claude/hooks/); the repository rules are in [`AGENTS.md`](AGENTS.md).
 
 ## Editor and runtime setup
 
@@ -156,7 +170,7 @@ Mise manages the language runtimes and CLI tools. Versions are recorded in [`.to
 - rebasing pulls, automatic remote setup, and useful aliases;
 - global ignore rules and a commit message template.
 
-Run `bin/filepicker` for an ignore-aware recursive file/directory picker; Enter or Ctrl-Y copies the selected path, Ctrl-D and Ctrl-F switch entry types, and Ctrl-R refreshes the active list. Pass `--agent-mode` to prefix the returned and copied path with `@` (for example, `@src/component.ts`). Run `bin/skillspicker` to pick skills with a `SKILL.md` from common project or home skill folders (`.agents/skills`, `.claude/skills`, `.codex/skills`, `.pi/agent/skills`, and `.ai/skills`); Enter or Ctrl-Y copies the selected skill file path, Ctrl-R refreshes the list, and `--agent-mode` adds an `@` prefix. In tmux, Prefix+s opens it from the current pane's directory. The rest of [`bin/`](bin/) contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
+Run `bin/filepicker` for an ignore-aware recursive file/directory picker; Enter or Ctrl-Y copies the selected path, Ctrl-D and Ctrl-F switch entry types, and Ctrl-R refreshes the active list. Pass `--agent-mode` to prefix the returned and copied path with `@` (for example, `@src/component.ts`). Run `bin/skillspicker` to pick skills with a `SKILL.md` from common project or home skill folders (`.agents/skills`, `.claude/skills`, `.codex/skills`, `.pi/agent/skills`, and `.ai/skills`); Enter or Ctrl-Y copies the selected skill file path, Ctrl-R refreshes the list, and `--agent-mode` adds an `@` prefix. In Rex, Prefix+e opens the file picker and Prefix+s opens the skill picker from the current pane's directory. The rest of [`bin/`](bin/) contains tools for worktrees, GitHub, fzf, tmux, notifications, notes, JSON, releases, repository checks, startup profiling, and other daily tasks. Read a script before using it: several commands are intentionally specific to macOS, Homebrew, or the local workflow.
 
 ## Themes and fonts
 
@@ -177,6 +191,12 @@ Run the shell test suite before changing shell behavior:
 
 ```bash
 bash tests/shell/run.bash
+```
+
+Enable the opt-in pre-push hook to scan the pushed commits for secrets with [gitleaks](https://github.com/gitleaks/gitleaks). The hook skips the scan with a warning when gitleaks is not installed:
+
+```bash
+git config core.hooksPath .githooks
 ```
 
 This is a personal configuration repository. It is provided as-is for reference and adaptation.

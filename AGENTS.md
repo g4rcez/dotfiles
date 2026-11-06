@@ -1,6 +1,6 @@
 # Dotfiles Project Guidelines
 
-This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `bin/` scripts. It is not a frontend project — do not assume React/TS/Node conventions.
+This repo contains shell config, Neovim config, Rex terminal config (tmux/zellij are legacy), CLI tooling, and `bin/` scripts. It is not a frontend project — do not assume React/TS/Node conventions.
 
 ## Layout
 
@@ -10,13 +10,14 @@ This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `b
 - `config/nvim/lua/` — Neovim config
   - `plugins/` — plugin specs (lazy.nvim)
   - `options.lua`, `keymaps.lua`, `config/`, `nvconfig.lua`
-- `config/tmux/`, `config/starship.toml`, `config/zed/`, `config/aerospace/`, etc.
-- `config/zsh/zellij.sh` exists for reference but tmux is the active multiplexer — do not propose migrating off tmux unless the user explicitly initiates it
+- `config/rex/` — active terminal and multiplexer (`init.lua`, one extension per behavior in `extensions/`, LSP types in `types/`)
+- `config/tmux/` (legacy), `config/starship.toml`, `config/zed/`, `config/aerospace/`, etc.
+- `config/zsh/zellij.sh` and `config/tmux/` exist for reference only. Rex replaced them (commit `f7475ad`)
 - `.ai/` — Claude-specific helpers: `statusline.sh`, `guidelines/`, `skills/`, `subagents/`
 
 ## Shell Scripts
 
-- The active multiplexer is tmux. Do not assume zellij is in use. Do not propose migrating off tmux unless the user explicitly initiates it.
+- The active terminal and multiplexer is Rex. Do not assume tmux or zellij is in use. Do not extend the legacy tmux/zellij scripts unless the user asks.
 - Always read the shebang before writing shell-expansion code. `bin/` scripts are a mix of `#!/usr/bin/env bash` and zsh.
 - A script cannot change its parent shell's cwd. Any `bin/` command that needs to `cd` after running must be wrapped with a zsh function in `config/zsh/alias.sh`. Before implementing any navigation logic in a `bin/` script, determine upfront whether a cwd change is needed — if yes, the wrapper is mandatory from the start. Do not attempt a bin-only implementation first and fix it after user pushback.
 - `config/zsh/alias.sh` has an incorrect shebang that is ignored — the file is sourced by zsh. Always treat it as zsh.
@@ -59,7 +60,7 @@ This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `b
 
 ## Rex / terminal config
 
-- Before writing any fzf picker or Rex extension, read and reuse the existing styling and layout in `config/zsh/exports.sh`, `config/zsh/fzf.sh`, and `bin/tmux-fzf-session` / `bin/tmux-fzf-preview`.
+- Before writing any fzf picker or Rex extension, read and reuse the existing styling and layout in `config/zsh/exports.sh`, `config/zsh/fzf.sh`, and `bin/rex-fzf-session` / `bin/rex-fzf-preview`. Every `bin/` script that calls `fzf` must source `config/zsh/fzf.sh`; `tests/shell/fzf-layout-test.bash` enforces this.
 - Put each new behavior in its own extension file under `config/rex/extensions/`. Do not bolt it onto an unrelated plugin (e.g. the tab-numbering plugin `numbers.lua`).
 - The Rex Lua sandbox has no `utf8` library. Pane cwd comes back as an OSC 7 `file://` URL, so strip and percent-decode it.
 - Use plain Unicode glyphs unless you have confirmed that Nerd Font glyphs render.
@@ -68,7 +69,7 @@ This repo contains shell config, Neovim config, tmux/zellij, CLI tooling, and `b
 
 - Dotfiles worktrees break live testing: `~/.config/nvim`, `~/.config/mise`, etc. are symlinks into the master checkout. Neovim and mise follow the symlink to the main tree, not the worktree. Work on the active branch directly for dotfiles changes.
 - bunsen deployment: symlinks are declared in `dotfiles.config.ts` (`@g4rcez/bunsen`). When adding `config/<tool>/`, check `dotfiles.config.ts` for a needed entry — missing entries mean the config never reaches `~/.config/`.
-- `config/claude/` has no bunsen symlink entry in `dotfiles.config.ts` — hook paths in `settings.json` are hardcoded absolute paths. On a new machine, add the symlink manually or add the entry to `dotfiles.config.ts`.
+- `config/claude/AGENTS.md` is the single global instruction file and is linked to `~/.claude/AGENTS.md` in `dotfiles.config.ts`. Do not create `~/.claude/CLAUDE.md`: Claude Code loads both files, so a copy doubles the context cost. `~/.claude/settings.json` is not tracked; its hook paths are hardcoded absolute paths.
 - Mise tool versions must be pinned explicitly (e.g. `"pipx:neovim-remote" = "2.5.1"`), never `"latest"`.
 
 ## Claude Code Hooks

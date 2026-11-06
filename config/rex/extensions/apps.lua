@@ -20,7 +20,7 @@ for _, app in ipairs(APPS) do
                     options = { command = app.command, cwd = ctx.block_id and cwd_of(ctx.block_id) or nil },
                 },
             }
-            if err ~= nil then error(err, 0) end
+            if err ~= nil or made == nil then error(err or "new_window returned no result", 0) end
             rex.client.queue("session.select", { session_id = ctx.session_id, window_id = made.window_id })
             -- session.select can ignore window_id when the session is already shown; a new tab is always last.
             rex.client.queue("client.tab.goto", { index = -1 })
