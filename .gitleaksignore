@@ -2,3 +2,4 @@ b2ac47240c8ce5a0f94d6dba59a0bfef2aa99532:git/gitconfig:generic-api-key:11
 18d9bdb57913b089ff2a406a1c4175f1f084208d:vscode/keybindings.json:generic-api-key:134
 18d9bdb57913b089ff2a406a1c4175f1f084208d:vscode/keybindings.json:generic-api-key:139
 4c75b1059d4656be683483c59ef11524cee620c4:vscode/keybindings.json:generic-api-key:20
+cc165d6a3db998f78bc1e7fbd90ec45f05091ee0:tests/shell/pre-push-test.bash:github-pat:21
