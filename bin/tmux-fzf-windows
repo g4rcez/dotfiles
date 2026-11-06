@@ -1,4 +1,6 @@
 #!/bin/bash
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 
 windows=$(tmux list-windows -F "#{window_index}: #{window_name}")
 selection=$(echo "$windows" | fzf --header="Select a tmux window:" \

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 
 TMUX_SOCKET_PATH="${TMUX_SOCKET_PATH:-$HOME/.tmp/socket}"
 TMUX_ARGS=(-S "$TMUX_SOCKET_PATH")
@@ -14,15 +15,11 @@ function homename() {
 }
 
 function fzf_window() {
-    fzf --cycle --border-label "tmux-fzf-session - ctrl+d: delete session" --reverse --no-sort \
-        --border "sharp" \
-        --info inline \
-        --height 100% \
-        $FZF_COLORS \
+    fzf --cycle --border-label "tmux-fzf-session - ctrl+d: delete session" --no-sort \
         --prompt "> " \
         --preview "bash \"$DOTFILES_DIR/bin/tmux-fzf-preview\" {}" \
         --header "ctrl+d: Delete session" \
-        --preview-window right,70% --bind "ctrl-d:execute-silent($TMUX_EXEC kill-session -t {2..})+abort"
+        --bind "ctrl-d:execute-silent($TMUX_EXEC kill-session -t {2..})+abort"
 }
 
 function getProjects() {

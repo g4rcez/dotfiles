@@ -7,10 +7,12 @@ preview_cmd() {
     echo "$SCRIPT_DIR/cambridge-cli {q} | bat --style=plain --language=markdown --color=always --paging=never"
 }
 
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 echo "Type a word to search..." | fzf -q "$QUERY" \
     --disabled \
     --preview "$(preview_cmd)" \
     --bind "ctrl-a:execute-silent($SCRIPT_DIR/cambridge-cli {q} --play)" \
-    --preview-window 'right,75%,wrap,border-left' \
+    --preview-window 'wrap,border-left' \
     --no-sort \
     --header "Press CTRL-a to play pronunciation"

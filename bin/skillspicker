@@ -95,19 +95,15 @@ printf -v initial_command '%q --_list' "$script_path"
 printf -v refresh_command '%q --_refresh' "$script_path"
 printf -v preview_command '%q {2}' "$preview_path"
 
-# Keep the shared palette after generic defaults so its layout options win.
-fzf_default_opts=${FZF_DEFAULT_OPTS:-}
-if [[ -n ${FZF_COLORS:-} ]]; then
-    fzf_default_opts="${fzf_default_opts:+$fzf_default_opts }$FZF_COLORS"
-fi
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 
 selected=$(
-    FZF_DEFAULT_OPTS="$fzf_default_opts" fzf \
+    fzf \
         --no-sort \
         --delimiter=$'\t' \
         --with-nth=1 \
         --preview "$preview_command" \
-        --preview-window 'right,75%' \
         --header 'ctrl-r: refresh  enter/ctrl-y: copy skill path' \
         --bind "start:reload($initial_command),ctrl-r:reload($refresh_command),ctrl-y:accept,enter:accept"
 ) || exit $?

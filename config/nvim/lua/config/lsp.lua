@@ -559,4 +559,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- In-process server (lua/mention_ls): `@file` and `$skill` mentions in AI-harness prompts. Not a Mason package.
+lsp_config("mention_ls", { cmd = require("mention_ls").cmd, filetypes = { "markdown", "text" } })
+vim.lsp.enable "mention_ls"
 vim.lsp.enable(require("config.ensure-installed").lsp)

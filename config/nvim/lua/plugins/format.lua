@@ -57,8 +57,6 @@ return {
                 javascriptreact = is_oxc,
                 typescriptreact = is_oxc,
                 markdown = { "prettier" },
-                ["prompt-pi"] = { "prettier" },
-                ["pi-prompt"] = { "prettier" },
                 python = { "isort", "black" },
             },
         },

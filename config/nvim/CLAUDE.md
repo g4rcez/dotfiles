@@ -78,6 +78,8 @@ The configuration loads in this order:
 
 **Completion**: Uses blink.cmp with multiple sources (LSP, snippets, path, buffer, git, dadbod, conventional commits for git commits)
 
+**Mentions**: `lua/mention_ls` is an in-process LSP server (registered in `lua/config/lsp.lua`, not Mason) for markdown/text buffers. `@` completes files (`fd`, honors `.gitignore`) and `$` completes skills from `.claude/skills` and `.agents/skills` in the project and home; blink shows the items through its `lsp` source. Test: `nvim --headless -u NONE -l tests/mention_ls.lua`.
+
 ## LSP Servers
 
 The following LSP servers are configured and should be installed:
@@ -89,6 +91,7 @@ npm i -g @typescript/native-preview      # tsgo (TypeScript)
 npm i -g tailwindcss-language-server
 npm i -g css-variables-language-server
 npm i -g bash-language-server
+npm i -g @mistweaverco/kulala-ls     # kulala-ls (.http files); not in the Mason registry
 npm i -g dockerfile-language-server-nodejs
 npm install @microsoft/compose-language-service
 
@@ -140,7 +143,7 @@ Oxlint and ESLint are project-aware LSP linters. Oxlint takes precedence when bo
 4. Custom LSP configuration using vim.lsp.config/enable pattern
 5. conform.nvim enabled for formatting and nvim-lint for linting
 6. Custom keybind helper function instead of direct vim.keymap.set
-7. Includes specialized plugins like nvim-emmet, template-string, highlight-colors for web development
+7. Includes specialized plugins like nvim-emmet, template-string for web development
 
 ## Working with this Configuration
 

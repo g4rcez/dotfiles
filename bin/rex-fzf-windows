@@ -7,11 +7,11 @@ session="${REX_SESSION:?run this inside a Rex terminal}"
 
 selected=$(rex session inspect "$session" --json \
     | jq -r '.windows[] | "\(.label)\t\(.window_id)\t\(.focused_block_id)"' \
-    | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
+    | fzf --cycle --no-sort \
         --border-label "rex-fzf-windows" --prompt "> " \
         --delimiter $'\t' --with-nth 1 \
         --preview "\"$DOTFILES_DIR/bin/rex-fzf-preview\" '$session' {3}" \
-        --preview-window right,70%,nowrap)
+        --preview-window nowrap)
 [ -z "$selected" ] && exit 0
 
 IFS=$'\t' read -r _ window_id _ <<<"$selected"

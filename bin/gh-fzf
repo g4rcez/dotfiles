@@ -23,7 +23,9 @@ if [[ "$(jq length "$FZF_GITCLI_FILE")" == 0 ]]; then
   exit 0
 fi
 
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 jq -r '.[] | [.number, .title] | @tsv' "$FZF_GITCLI_FILE" \
-  | fzf --ansi --info inline --delimiter $'\t' --with-nth '2..' \
+  | fzf --delimiter $'\t' --with-nth '2..' \
   --preview "$0 --preview {1}" \
   --bind 'enter:become(gh pr checkout {1})'

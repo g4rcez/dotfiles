@@ -95,6 +95,13 @@ Located in `lua/config/lsp.lua`:
 7. dadbod - Database completion
 8. buffer - Current buffer words
 
+**AI-harness mentions** (`lua/mention_ls`, an in-process LSP server for markdown and text buffers):
+
+- `@` completes files below the working directory. It runs `fd` and respects `.gitignore`, also outside a git repository.
+- `$` completes skills from `$PWD/.claude/skills`, `$PWD/.agents/skills`, `~/.claude/skills` and `~/.agents/skills`. Accepting one inserts `/skill-name`. Project skills win over home skills with the same name.
+- The completion menu opens by itself only after `@` or `$`; it stays hidden in normal prose.
+- Test: `nvim --headless -u NONE -l tests/mention_ls.lua`
+
 **Keybindings**:
 
 - `<Tab>` / `<CR>` - Accept completion
@@ -113,7 +120,6 @@ Located in `lua/config/lsp.lua`:
 - **Comments**: ts-comments for smart, language-aware comment toggling
 - **Todo Comments**: Highlight and search TODO, FIXME, NOTE, etc.
 - **Multi-cursor**: Advanced multi-cursor editing (multicursor.nvim)
-- **UFO**: Advanced code folding with treesitter
 - **Matchup**: Enhanced bracket matching
 - **Dial.nvim**: Increment/decrement numbers, dates, and language-specific constants
 - **Yanky**: Enhanced yank history with SQLite persistence
@@ -250,7 +256,7 @@ Powered by **Conform.nvim** for formatting and **nvim-lint** for linting:
 
 **Folding**:
 
-- Provider: nvim-ufo with expression-based folding
+- Provider: Treesitter `foldexpr` with `foldmethod=expr`
 - Level 99 (open by default)
 - `zo` - Toggle fold
 - `zR` - Open all folds
@@ -358,9 +364,10 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── ensure-installed.lua  # Mason LSP and tool lists
 │   │   ├── javascript_tools.lua  # ESLint/Oxlint project policy
 │   │   └── lsp.lua               # LSP configurations (vim.lsp.config/enable)
+│   ├── mention_ls/           # In-process LSP: @file and $skill mentions
 │   └── plugins/
 │       ├── blinkcmp.lua          # Completion engine
-│       ├── nvimlspconfig.lua     # LSP plugin declaration and Fidget
+│       ├── nvimlspconfig.lua     # LSP plugin declaration
 
 │       ├── mason.lua             # LSP/tool installer
 │       ├── snacks.lua            # Picker, project palette, git, terminal
@@ -445,7 +452,7 @@ vim.opt.your_option = value
 **LSP Configuration**: Uses Neovim's built-in `vim.lsp.config` and `vim.lsp.enable` pattern (not lspconfig) for base server setup. Configuration is split:
 
 - `lua/config/lsp.lua` - Server configs, LSP attach keymaps, capabilities, settings, and filetypes
-- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration and Fidget dependency
+- `lua/plugins/nvimlspconfig.lua` - LSP plugin declaration
 
 **TypeScript/Deno Strategy**: Uses tsgo for standard JavaScript/TypeScript projects and denols for Deno projects. Their built-in root detection prevents both servers from attaching to the same buffer.
 

@@ -22,11 +22,11 @@ function rows() {
     done < <(rex ls --json | jq -r '.sessions[] | "\(.session_id)\t\(.label)"')
 }
 
-selected=$(rows | fzf --cycle --reverse --no-sort --border sharp --height 100% $FZF_COLORS \
+selected=$(rows | fzf --cycle --no-sort \
     --border-label "rex-fzf-agents" --prompt "agents> " \
     --delimiter $'\t' --with-nth 1 \
     --preview "\"$DOTFILES_DIR/bin/rex-fzf-preview\" {2} {3}" \
-    --preview-window right,60%,nowrap)
+    --preview-window nowrap)
 [ -z "$selected" ] && exit 0
 
 IFS=$'\t' read -r _ sid bid wid <<<"$selected"

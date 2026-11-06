@@ -73,15 +73,11 @@ printf -v directories_command '%q --_list %q %q' "$script_path" directories "$mo
 printf -v refresh_command '%q --_refresh %q' "$script_path" "$mode_file"
 printf -v preview_command '%q {}' "$preview_path"
 
-# Keep the shared palette after generic defaults so its layout options win.
-fzf_default_opts=${FZF_DEFAULT_OPTS:-}
-if [[ -n ${FZF_COLORS:-} ]]; then
-    fzf_default_opts="${fzf_default_opts:+$fzf_default_opts }$FZF_COLORS"
-fi
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 
-selected=$(FZF_DEFAULT_OPTS="$fzf_default_opts" fzf \
+selected=$(fzf \
     --preview "$preview_command" \
-    --preview-window 'right,75%' \
     --header 'ctrl-d: directories  ctrl-f: files  ctrl-r: refresh  enter/ctrl-y: copy path' \
     --bind "start:reload($initial_command),ctrl-d:change-prompt(Directories> )+reload($directories_command),ctrl-f:change-prompt(Files> )+reload($files_command),ctrl-r:reload($refresh_command),ctrl-y:accept,enter:accept"
 ) || exit $?

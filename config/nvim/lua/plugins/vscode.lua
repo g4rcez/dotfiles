@@ -13,7 +13,6 @@ return vscode.disable_in_vscode {
     "stevearc/oil.nvim",
     "folke/persistence.nvim",
     "okuuva/auto-save.nvim",
-    "not-manu/filemention.nvim",
     "saghen/blink.cmp",
     "neovim/nvim-lspconfig",
     "mason-org/mason-lspconfig.nvim",

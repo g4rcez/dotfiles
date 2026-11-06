@@ -1,21 +1,6 @@
-local enabledFtMarkdown = { "markdown", "json", "text", "txt", "gitcommit", "prompt-pi", "pi-prompt" }
 local denyList = { "markdown", "text", "txt" }
 
 return {
-    {
-        "not-manu/filemention.nvim",
-        event = "InsertEnter",
-        opts = {
-            root = "git",
-            trigger = "@",
-            finder = "auto",
-            format = "bare",
-            max_items = 500,
-            include_hidden = false,
-            respect_gitignore = true,
-            filetypes = enabledFtMarkdown,
-        },
-    },
     {
         cond = not require("config.vscode").isVscode(),
         "saghen/blink.cmp",
@@ -113,7 +98,11 @@ return {
                 menu = {
                     min_width = 40,
                     auto_show = function(ctx)
-                        return not vim.tbl_contains(denyList, vim.bo[ctx.bufnr].filetype)
+                        if not vim.tbl_contains(denyList, vim.bo[ctx.bufnr].filetype) then
+                            return true
+                        end
+                        -- Prose stays quiet; `@file` and `$skill` mentions (lua/mention_ls) open the menu.
+                        return require("mention_ls").context(ctx.line, ctx.cursor[2]) ~= nil
                     end,
                     border = "single",
                     auto_show_delay_ms = 0,
@@ -143,34 +132,29 @@ return {
                 ["<C-j>"] = { "select_next", "fallback" },
                 ["<C-k>"] = { "select_prev", "fallback" },
                 ["<C-/>"] = { "show_signature", "fallback" },
-                ["<CR>"] = { "select_and_accept", "fallback" },
+                -- is_visible() also counts ghost text; require the menu so <CR> keeps its default behaviour otherwise
+                ["<CR>"] = {
+                    function(cmp)
+                        if cmp.is_menu_visible() then
+                            return cmp.select_and_accept()
+                        end
+                    end,
+                    "fallback",
+                },
                 ["<S-Tab>"] = { "snippet_backward", "fallback" },
                 ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
             },
             sources = {
                 default = { "lsp", "contextual", "path", "dadbod", "snippets", "buffer" },
                 per_filetype = {
-                    ["pi-prompt"] = { "pi_bridge", "pi_resources" },
-                    ["prompt-pi"] = { inherit_defaults = true, "pi_bridge", "pi_resources", "filemention" },
                     lua = { inherit_defaults = true, "lazydev" },
-                    json = { inherit_defaults = true, "git", "filemention" },
-                    txt = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
-                    text = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
-                    markdown = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
-                    gitcommit = { inherit_defaults = true, "git", "conventional_commits", "filemention" },
+                    json = { inherit_defaults = true, "git" },
+                    txt = { inherit_defaults = true, "git", "conventional_commits" },
+                    text = { inherit_defaults = true, "git", "conventional_commits" },
+                    markdown = { inherit_defaults = true, "git", "conventional_commits" },
+                    gitcommit = { inherit_defaults = true, "git", "conventional_commits" },
                 },
                 providers = {
-                    pi_bridge = {
-                        name = "Pi",
-                        module = "pi-bridge.blink_source",
-                        async = true,
-                    },
-                    pi_resources = {
-                        name = "Pi resources",
-                        module = "config.pi_resources",
-                        max_items = 20,
-                        min_keyword_length = 0,
-                    },
                     contextual = {
                         name = "Context",
                         module = "config.contextual_completion",
@@ -190,7 +174,6 @@ return {
                     },
                     dadbod = { name = "DB", module = "vim_dadbod_completion.blink" },
                     buffer = { name = "Buf", min_keyword_length = 5, score_offset = -5 },
-                    filemention = { name = "File", module = "filemention.sources.blink" },
                     snippets = { name = "Snip", min_keyword_length = 3, score_offset = 0 },
                     lazydev = { name = "Lua", module = "lazydev.integrations.blink", score_offset = 100 },
                     conventional_commits = { name = "Commit", module = "blink-cmp-conventional-commits", opts = {} },

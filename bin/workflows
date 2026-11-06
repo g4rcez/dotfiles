@@ -80,12 +80,12 @@ main() {
         exit 0
     fi
 
+    source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+    source "$DOTFILES_DIR/config/zsh/fzf.sh"
     list_lines | fzf \
-        --ansi \
         --delimiter $'\t' \
         --with-nth 2.. \
         --preview "$0 --preview {1}" \
-        --preview-window 'right:60%' \
         --bind "ctrl-r:reload($0 --list-lines)" \
         --bind "ctrl-b:execute(gh run view --web {1})" \
         --bind "ctrl-t:execute(gh run watch {1})" \

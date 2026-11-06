@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
 set -euo pipefail
 
 CONFIG_FILE="$HOME/.config/ai-dotfiles/projects.json"
@@ -64,8 +65,7 @@ cmd_guidelines() {
     --prompt='guideline: ' \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
-    --preview-window 'right,65%')
+    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}')
   [ -z "$selected" ] && return 0
   local file; file=$(cut -f2 <<< "$selected")
   local dest="./$(basename "$file")"
@@ -102,8 +102,7 @@ cmd_agents_list() {
     --prompt='agent: ' \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
-    --preview-window 'right,65%')
+    --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}')
   [ -z "$selected" ] && return 0
   local file; file=$(cut -f2 <<< "$selected")
   local aname; aname="$(basename "$file")"
@@ -148,8 +147,7 @@ cmd_agents_copy() {
       --prompt='agent: ' \
       --delimiter $'\t' \
       --with-nth 1 \
-      --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}' \
-      --preview-window 'right,65%')
+      --preview 'bat --theme="Catppuccin Mocha" --color=always {2} 2>/dev/null || cat {2}')
     [ -z "$selected" ] && return 0
     file=$(cut -f2 <<< "$selected")
   fi
@@ -216,8 +214,7 @@ cmd_skills() {
       --prompt='skill: ' \
       --delimiter $'\t' \
       --with-nth 1 \
-      --preview "$DOTFILES_DIR/bin/lessfilter.sh {2}/SKILL.md" \
-      --preview-window 'right,65%')"
+      --preview "$DOTFILES_DIR/bin/lessfilter.sh {2}/SKILL.md")"
     [ -z "$selected" ] && return 0
     skill_path="$(cut -f2 <<< "$selected")"
     skill_name="$(basename "$skill_path")"
@@ -353,12 +350,8 @@ cmd_list() {
     return 0
   fi
   printf '%s\n' "${entries[@]}" | fzf --ansi \
-    --height 95% \
-    --info=inline \
-    --layout=reverse \
     --delimiter $'\t' \
     --with-nth 1 \
-    --preview-window right,75% \
     --preview "
       entry={1}
       path={2}
@@ -652,19 +645,13 @@ cmd_sessions() {
     printf '%s\n' "$rows" \
       | fzf \
           --cycle \
-          --border "sharp" \
           --border-label "ai sessions" \
-          --reverse \
           --no-sort \
-          --info inline \
-          --height 100% \
-          $( _ai_fzf_theme ) \
           --prompt "AI sessions > " \
           --header "ctrl-d: kill  ctrl-x: /clear  ctrl-r: reload" \
           --delimiter $'\t' \
           --with-nth '2..5' \
           --preview "$self --_preview {1} {3} {4} {5} {6} {7}" \
-          --preview-window right,65% \
           --bind "ctrl-d:execute-silent(tmux -S \"\$TMUX_SOCKET_PATH\" kill-pane -t {1})+reload($self --_sessions-rows)" \
           --bind "ctrl-x:execute-silent(tmux -S \"\$TMUX_SOCKET_PATH\" send-keys -t {1} '/clear' Enter)+reload($self --_sessions-rows)" \
           --bind "ctrl-r:reload($self --_sessions-rows)"

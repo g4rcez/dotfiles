@@ -1,4 +1,4 @@
-local ft = { "markdown", "prompt-pi", "pi-prompt", "vimwiki", "Avante" }
+local ft = { "markdown", "vimwiki" }
 
 return {
     {
