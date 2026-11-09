@@ -26,7 +26,7 @@ while IFS= read -r file; do
     is_allowed "$file" && continue
     checked=$((checked + 1))
     grep -q 'config/zsh/fzf\.sh' "$file" || fail "$file calls fzf but does not source config/zsh/fzf.sh"
-done < <(git ls-files 'bin/*' | xargs grep -lE '^[^#]*(^|[|;&(]|\$\()[[:space:]]*fzf([[:space:]]|$)')
+done < <(git ls-files 'bin/*' | xargs grep -lE '^[^#]*(^|[|;&(]|\$\()[[:space:]]*fzf([[:space:])]|$)')
 
 [[ "$checked" -gt 0 ]] || fail "no fzf scripts found; the test pattern is broken"
 printf 'fzf layout test: PASS (%s scripts)\n' "$checked"

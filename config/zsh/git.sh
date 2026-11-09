@@ -48,7 +48,7 @@ function git_develop_branch() {
 function getBranchFzf() {
     local current
     current="$(git branch --show-current)"
-    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g' | grep -vxF -- "$current" | fzf --ansi --info inline --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
+    git branch --sort=-committerdate | sed 's/* //g' | sed 's/  //g' | grep -vxF -- "$current" | fzf --ansi --preview "echo Branch: {};echo; git log -n 20 --oneline {}" | tr -d ';'
 }
 
 function countCommits() {
@@ -116,6 +116,61 @@ function git.compare() {
     emulate -L zsh
     (($# == 2)) || { print -u2 -r -- "Usage: git.compare BRANCH1 BRANCH2"; return 2; }
     command git log "$2..$1"
+}
+
+# Linked worktrees have a .git file whose gitdir points into <repo>/.git/worktrees/.
+# Submodules also have a .git file, so filter on that path. Depth 4 = worktree at 3 levels.
+function _worktree_find() {
+    emulate -L zsh
+    local gitfile
+    command find "$1" -maxdepth 4 \
+        \( -name node_modules -o \( -name .git -type d \) \) -prune -o \
+        -name .git -type f -print 2>/dev/null |
+        while IFS= read -r gitfile; do
+            [[ "$(<"$gitfile")" == gitdir:*/worktrees/* ]] && print -r -- "${gitfile:h}"
+        done
+}
+
+# Enter marks/unmarks a worktree. Ctrl-d removes the marked ones (or the current one), then reopens the list.
+function worktree.clean() {
+    emulate -L zsh
+    (($# <= 1)) || { print -u2 -r -- "Usage: worktree.clean [ROOT]"; return 2; }
+    (($+commands[fzf])) || { print -u2 -r -- "worktree.clean: fzf not found"; return 1; }
+    local root="${1:-.}"
+    root="${root:A}"
+    [[ -d "$root" ]] || { print -u2 -r -- "worktree.clean: not a directory: $root"; return 2; }
+
+    local -a found out targets
+    local result wt common
+    local TAB=$'\t'
+    while true; do
+        found=("${(@f)$(_worktree_find "$root")}")
+        found=(${found:#})
+        ((${#found})) || { print -r -- "No git worktrees found under $root"; return 0; }
+        # Each line is "full path<TAB>path relative to ROOT"; only the relative path is shown.
+        result="$(for wt in "${found[@]}"; do print -r -- "$wt$TAB${${wt#$root/}:-$wt}"; done | fzf --multi --cycle --no-sort --expect=ctrl-d \
+            --delimiter $'\t' --with-nth 2 \
+            --border-label "worktree.clean - ctrl+d: delete worktrees" --prompt "> " \
+            --bind 'enter:toggle+down' \
+            --header 'enter: mark  ctrl+d: delete marked  esc: quit' \
+            --preview-window 'right,50%' \
+            --preview 'printf "%s\n\n" {1}; lsd -la --color=always {1}')" || return 0
+        out=("${(@f)result}")
+        targets=("${(@)out[2,-1]}")
+        targets=(${targets:#})
+        targets=("${(@)targets%%$TAB*}")
+        ((${#targets})) || continue
+
+        print -r -- "Remove ${#targets} worktree(s):"
+        print -rl -- "${targets[@]/#/  }"
+        read -q -u 0 "?Confirm? [y/N] " || { print; continue; }
+        print
+        for wt in "${targets[@]}"; do
+            common="$(command git -C "$wt" rev-parse --path-format=absolute --git-common-dir)" &&
+                command git --git-dir="$common" worktree remove --force "$wt" ||
+                print -u2 -r -- "worktree.clean: failed to remove $wt"
+        done
+    done
 }
 
 function git.restore() {
@@ -345,7 +400,7 @@ function parseprs() {
         return 0
     fi
     local selected
-    selected="$(jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" | fzf --ansi --info inline)" || return $?
+    selected="$(jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" | fzf --ansi)" || return $?
     [[ -n "$selected" ]] || return 0
     local pr_number="${selected%% *}"
     pr_number="${pr_number#\#}"
@@ -606,7 +661,7 @@ function gh.workflow() {
     fi
 
     local selected
-    selected="$(jq -r '.[] | .name' "$tmpfile" | fzf --ansi --info inline)"
+    selected="$(jq -r '.[] | .name' "$tmpfile" | fzf --ansi)"
     local selection_rc=$?
     command rm -f -- "$tmpfile"
     ((selection_rc == 0)) || return "$selection_rc"

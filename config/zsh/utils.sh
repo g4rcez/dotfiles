@@ -54,7 +54,7 @@ function fishify() {
 ')
 }
 
-export FZF_COLORS="--color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator=─ --scrollbar=| --info=right"
+export FZF_COLORS="--color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator=─ --scrollbar=│ --info=right"
 
 function safeImport() {
     local src="${1}"
@@ -483,7 +483,6 @@ function zsh:edit() {
     local preview="bat --color=always --style=numbers '$root'/{} 2>/dev/null || command sed -n '1,160p' '$root'/{}"
     local -a fzf_args=(
         --prompt='zsh> '
-        --height=90%
         --preview="$preview"
     )
     (($#)) && fzf_args+=(--query="$*")

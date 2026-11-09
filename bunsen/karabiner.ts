@@ -8,17 +8,18 @@ const TERM = "/Applications/Ghostty.app/Contents/MacOS/ghostty";
 
 const keys = [
     karabiner.createHyperSubLayers({
+        t: karabiner.open("raycast://extensions/koinzhang/browser-tabs/index", "", "List browser tabs"),
         k: { to: [{ key_code: "up_arrow" }], description: "Up arrow" },
         h: { to: [{ key_code: "left_arrow" }], description: "Left arrow" },
         j: { to: [{ key_code: "down_arrow" }], description: "Down arrow" },
         l: { to: [{ key_code: "right_arrow" }], description: "Right arrow" },
         open_bracket: karabiner.open(
-			"raycast://extensions/g4rcez/whichkey/whichkey",
+            "raycast://extensions/g4rcez/whichkey/whichkey",
             "",
             "Snippets",
         ),
         close_bracket: karabiner.open(
-			"raycast://extensions/g4rcez/snippets/snippets",
+            "raycast://extensions/g4rcez/snippets/snippets",
             "",
             "Snippets",
         ),
@@ -27,7 +28,7 @@ const keys = [
             description: "Go to end of line",
         },
         e: karabiner.open(
-			"raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+            "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
             "",
             "Open emojis",
         ),
@@ -36,7 +37,7 @@ const keys = [
             description: "Go to begin of line",
         },
         tab: karabiner.open(
-			"raycast://extensions/raycast/navigation/switch-windows",
+            "raycast://extensions/raycast/navigation/switch-windows",
             "",
             "Switch windows with Vicinae",
         ),
@@ -190,52 +191,52 @@ const keys = [
         },
         r: {
             description: "Vicinae layer",
-			i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
+            i: karabiner.open("raycast://extensions/raycast/raycast-ai/ai-chat"),
             q: karabiner.open(
-				"raycast://extensions/raycast/raycast-ai/search-ai-chat-presets",
+                "raycast://extensions/raycast/raycast-ai/search-ai-chat-presets",
             ),
             t: karabiner.open(
-				"raycast://extensions/g4rcez/snippets/snippets",
+                "raycast://extensions/g4rcez/snippets/snippets",
                 "",
                 "Open my personal snippets gallery",
             ),
             m: karabiner.open(
-				"raycast://extensions/raycast/navigation/search-menu-items",
+                "raycast://extensions/raycast/navigation/search-menu-items",
                 "",
                 "Search menu of current app",
             ),
             w: karabiner.open(
-				"raycast://extensions/raycast/navigation/switch-windows",
+                "raycast://extensions/raycast/navigation/switch-windows",
                 "",
                 "Switch windows with Vicinae",
             ),
             c: karabiner.open(
-				"raycast://extensions/raycast/raycast/confetti",
+                "raycast://extensions/raycast/raycast/confetti",
                 "",
                 "Confetti",
             ),
             d: karabiner.open(
-				'raycast://extensions/yakitrak/do-not-disturb/toggle',
+                'raycast://extensions/yakitrak/do-not-disturb/toggle',
                 "",
                 "Do not disturb",
             ),
             e: karabiner.open(
-				"raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+                "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
                 "",
                 "Emoji finder",
             ),
             p: karabiner.open(
-				"raycast://extensions/thomas/color-picker/pick-color",
+                "raycast://extensions/thomas/color-picker/pick-color",
                 "",
                 "Vicinae color picker",
             ),
             s: karabiner.open(
-				"raycast://extensions/mattisssa/spotify-player/yourLibrary",
+                "raycast://extensions/mattisssa/spotify-player/yourLibrary",
                 "",
                 "My spotify library",
             ),
             o: karabiner.open(
-				"raycast://extensions/huzef44/screenocr/recognize-text",
+                "raycast://extensions/huzef44/screenocr/recognize-text",
                 "",
                 "OCR screen area",
             ),
@@ -249,7 +250,7 @@ const keys = [
                 "",
             ),
             t: karabiner.open(
-				"raycast://extensions/koinzhang/browser-tabs/index",
+                "raycast://extensions/koinzhang/browser-tabs/index",
                 "",
                 "Search tabs",
             ),

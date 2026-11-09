@@ -19,7 +19,7 @@ case "${1:-}" in
     list)
         source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
         source "$DOTFILES_DIR/config/zsh/fzf.sh"
-        NOTE=$(ls "$NOTES_DIR"/*.md 2>/dev/null | xargs -I{} basename {} .md | sort -r | fzf --no-height)
+        NOTE=$(ls "$NOTES_DIR"/*.md 2>/dev/null | xargs -I{} basename {} .md | sort -r | fzf)
         [[ -n "$NOTE" ]] && _open "$NOTES_DIR/$NOTE.md"
         ;;
     *)

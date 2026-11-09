@@ -5,8 +5,7 @@ export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \( -name .git \) -pri
 export FORGIT_FZF_DEFAULT_OPTS="--ansi --exact --border --cycle --reverse --height '99%' --preview-window right,70%"
 export FZF_COMPLETION_TRIGGER="**"
 
-export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-}
---ansi
+export FZF_DEFAULT_OPTS="--ansi
 --bind 'ctrl-/:toggle-preview'
 --bind 'ctrl-f:preview-up'
 --bind 'ctrl-u:preview-down'
@@ -73,7 +72,7 @@ function cdf() {
 }
 
 function files() {
-    local file="$(fzf --multi --reverse)"
+    local file="$(fzf --multi)"
     if [[ -n "$file" ]]; then
         local prog
         while IFS= read -r prog; do
@@ -88,7 +87,7 @@ function st() {
     git rev-parse --git-dir >/dev/null 2>&1 || { echo "You are not in a git repository" && return; }
     local selected
     selected=$(git -c color.status=always status --short |
-        fzf --no-height --cycle "$@" -m --ansi --nth 2..,.. \
+        fzf --cycle "$@" -m --ansi --nth 2..,.. \
             --preview-window right,85% \
             --bind 'ctrl-d:preview-down' \
             --bind 'ctrl-u:preview-up' \
