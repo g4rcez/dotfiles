@@ -134,9 +134,10 @@ Rex is the active terminal and multiplexer. [`config/rex/init.lua`](config/rex/i
 - numbered tabs (`numbers.lua`) and tab names from the running program and Git repo (`window.lua`);
 - desktop notifications when a coding agent is blocked, done, or failed in a pane you are not viewing (`agents.lua`);
 - URL and path picking from terminal output (`rexurl.lua`), a file-path prompt (`openpath.lua`), and repo sessions with Neovim, Claude, and a shell (`project.lua`);
+- a pane picker that shows a big number over each pane (`panes.lua`, with `bin/rex-pane-select`);
 - app mode (`apps.lua`) and per-block Tokyo Night theming (`theme.lua`).
 
-Common keys after the Control-P prefix: `t`/`x` new and close tab, `1`–`9` go to tab, `-` and `\` split, `h`/`j`/`k`/`l` move focus, `H`/`J`/`K`/`L` resize, `z` zoom, `f` floating shell, `g` Lazygit, `e` file picker, `s` scroll mode (`K`/`J`, Esc leaves), `S` skill picker, `a` agent picker, `p` session picker, `n` open the current repo as a session, `v` copy mode, `,` edit scrollback in Neovim, and `u` open a URL. The fzf pickers are `bin/rex-fzf-*`; they reuse the shared styling in `config/zsh/fzf.sh`.
+Common keys after the Control-P prefix: `t`/`x` new and close tab, `1`–`9` go to tab, `-` and `\` split, `h`/`j`/`k`/`l` move focus, `q` pick a pane by its number, `H`/`J`/`K`/`L` resize, `z` zoom, `f` floating shell, `g` Lazygit, `e` file picker, `s` scroll mode (`K`/`J`, Esc leaves), `S` skill picker, `a` agent picker, `p` session picker, `n` open the current repo as a session, `v` copy mode, `,` edit scrollback in Neovim, and `u` open a URL. The fzf pickers are `bin/rex-fzf-*`; they reuse the shared styling in `config/zsh/fzf.sh`.
 
 The Rex Lua API types are in [`config/rex/types/`](config/rex/types/), so lua-language-server (pinned in mise) completes `rex.*` calls in Neovim.
 
