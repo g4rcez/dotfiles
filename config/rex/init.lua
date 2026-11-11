@@ -183,9 +183,9 @@ dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extension
 -- Name tabs after the running program
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/window.lua"))
 
--- Hint and flash labels over the focused pane's text (Rust binary, built on first use).
--- All options: extensions/rexflash/rexflash.lua
-dofile(dir .. "extensions/rexflash/rexflash.lua") {
+-- Hint and flash labels over the focused pane's text. Install: brew install g4rcez/tap/rexflash
+-- Source and options: https://github.com/g4rcez/rexflash
+dofile("/opt/homebrew/opt/rexflash/share/rexflash/rexflash.lua") {
     hint_key = PREFIX .. "y",
     flash_key = PREFIX .. "/",
 }
@@ -224,6 +224,8 @@ rex.bind("alt+up", "pane.focus", { direction = "up" })
 rex.bind("alt+down", "pane.focus", { direction = "down" })
 -- Scroll mode: prefix + s. K/J scroll a page, Esc leaves. Also scrolls claude.
 dofile(dir .. "extensions/scroll.lua") { key = PREFIX .. "s" }
+-- Pane picker: prefix + q shows a big number over each pane, a digit focuses it (like tmux display-panes).
+dofile(dir .. "extensions/panes.lua") { key = PREFIX .. "q", script = BIN .. "rex-pane-select" }
 -- Session, tab and config
 bind("r", "session.rename")
 bind("w", "client.tab.rename")

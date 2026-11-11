@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# Rex port of tmux display-panes. Runs inside the small floats that extensions/panes.lua puts over each pane.
+#   render DIGIT HEX COLS ROWS          print one big digit centered in COLS x ROWS (used by the others and the tests)
+#   show   DIGIT HEX SESSION READER     draw the digit and stay until the READER block ends
+#   pick   DIGIT HEX SESSION ORIGIN BLOCK...  draw the digit, read one key: 1..N focuses the Nth BLOCK, any other key focuses ORIGIN.
+#          It also ends when this float loses focus, for example after a click outside of it.
+set -euo pipefail
+
+# 3x5 bitmap font, one string per digit, rows top to bottom.
+glyph() {
+    case "$1" in
+        1) echo "010 110 010 010 111" ;;
+        2) echo "111 001 111 100 111" ;;
+        3) echo "111 001 111 001 111" ;;
+        4) echo "101 101 111 001 001" ;;
+        5) echo "111 100 111 001 111" ;;
+        6) echo "111 100 111 101 111" ;;
+        7) echo "111 001 001 001 001" ;;
+        8) echo "111 101 111 101 111" ;;
+        9) echo "111 101 111 001 111" ;;
+        *) return 1 ;;
+    esac
+}
+
+render() {
+    local digit="$1" hex="$2" cols="$3" rows="$4" rgb
+    local rows_of_glyph
+    rows_of_glyph="$(glyph "$digit")" || return 1
+    rgb="$((16#${hex:0:2}));$((16#${hex:2:2}));$((16#${hex:4:2}))"
+
+    # A pixel is 2s columns by s rows, because a terminal cell is about twice as tall as wide.
+    local scale=$((cols / 6))
+    ((rows / 5 < scale)) && scale=$((rows / 5))
+    ((scale < 1)) && scale=1
+    local px=$((scale * 2))
+    local x0=$(((cols - 3 * px) / 2)) y0=$(((rows - 5 * scale) / 2))
+    ((x0 < 0)) && x0=0
+    ((y0 < 0)) && y0=0
+
+    local on off row bits i k line=0
+    printf -v on '\033[48;2;%sm%*s\033[0m' "$rgb" "$px" ''
+    printf -v off '%*s' "$px" ''
+    for bits in $rows_of_glyph; do
+        local out=""
+        for ((i = 0; i < 3; i++)); do
+            if [[ "${bits:i:1}" == 1 ]]; then out+="$on"; else out+="$off"; fi
+        done
+        for ((k = 0; k < scale; k++)); do
+            printf '\033[%d;%dH%s' $((y0 + line * scale + k + 1)) $((x0 + 1)) "$out"
+        done
+        line=$((line + 1))
+    done
+}
+
+draw() {
+    local size
+    size="$(stty size </dev/tty)"
+    printf '\033[?25l\033[2J'
+    render "$1" "$2" "${size#* }" "${size% *}"
+}
+
+# Background loop of a float. The terminal of a float is resized after this script starts, and a signal
+# does not interrupt bash 3.2 while it reads, so this loop polls: it draws again when the size changes.
+# With a SESSION it also ends the script (PARENT) once this block is no longer the focused block.
+watch() {
+    local digit="$1" hex="$2" parent="$3" session="${4:-}" last="" size="" tick=0 focused
+    while kill -0 "$parent" 2>/dev/null; do
+        size="$(stty size </dev/tty 2>/dev/null || true)"
+        if [[ -n "$size" && "$size" != "$last" ]]; then
+            last="$size"
+            draw "$digit" "$hex"
+        fi
+        tick=$((tick + 1))
+        # The first second is a grace period: focus moves to this float just after it opens.
+        if [[ -n "$session" ]] && ((tick > 6 && tick % 2 == 0)); then
+            focused="$(rex api call -s "$session" session.view 2>/dev/null |
+                jq -r --arg b "${REX_BLOCK:-}" '[.windows[] | select(.focused_block_id == $b)] | length' 2>/dev/null || true)"
+            if [[ "$focused" == 0 ]]; then
+                kill -KILL "$parent" 2>/dev/null || true
+                return 0
+            fi
+        fi
+        sleep 0.15
+    done
+}
+
+cmd="${1:-}"
+shift || true
+case "$cmd" in
+    render)
+        render "$@"
+        ;;
+    show)
+        watch "$1" "$2" "$$" &
+        trap 'kill $! 2>/dev/null || true' EXIT
+        # --for is a safety net: a float must never outlive the picker.
+        rex wait --for 60s -s "$3" "$4" >/dev/null 2>&1 || true
+        ;;
+    pick)
+        digit="$1" hex="$2" session="$3" origin="$4"
+        shift 4
+        watch "$digit" "$hex" "$$" "$session" &
+        watcher=$!
+        trap 'kill "$watcher" 2>/dev/null || true' EXIT
+        key=""
+        IFS= read -rsn1 -t 30 key || true
+        if [[ "$key" =~ ^[1-9]$ ]] && ((key <= $#)); then
+            rex focus -s "$session" "${!key}" >/dev/null 2>&1 || true
+        else
+            rex focus -s "$session" "$origin" >/dev/null 2>&1 || true
+        fi
+        ;;
+    *)
+        printf 'usage: rex-pane-select render|show|pick ...\n' >&2
+        exit 2
+        ;;
+esac
