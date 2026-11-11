@@ -1,0 +1,251 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+source "$DOTFILES/bin/lib/common.zsh"
+source "$DOTFILES/bin/lib/git.zsh"
+
+COMMANDS=(
+    'branch:print the current branch and copy it'
+    'switch:switch to a branch, or pick one with fzf'
+    'new:switch to a branch, creating it when missing'
+    'main:check out the main branch'
+    'develop:check out the develop branch'
+    'pull:fetch, then pull origin on the current branch'
+    'prune:delete local branches except the protected ones (dry run by default)'
+    'merge-with:update a branch, then merge it into the current one'
+    'rebase-with:update a branch, then rebase the current one onto it'
+    'squash:interactive rebase of the last N commits'
+    'compare:log of BRANCH1 commits that BRANCH2 lacks'
+    'restore:restore a file from a branch'
+    'clone:clone git@github.com:OWNER/REPOSITORY'
+    'graph:pretty commit graph of all branches'
+    'last:subject and age of the last commit'
+    'tags:tags sorted by date'
+    'tag:create a tag and push it'
+    'tag-pick:pick a tag with fzf'
+    'worktree-clean:pick and remove linked worktrees with fzf'
+)
+
+# Prints the basename of the first existing ref in $2..., or the fallback $1 when none exists.
+_default_branch() {
+    local fallback="$1" ref
+    shift
+    git rev-parse --git-dir &>/dev/null || return
+    for ref in "$@"; do
+        if git show-ref -q --verify "$ref"; then
+            print -r -- "${ref:t}"
+            return
+        fi
+    done
+    print -r -- "$fallback"
+}
+
+# Updates TARGET_BRANCH from origin, then runs ACTION (merge or rebase) for it on the current branch.
+_sync_and_run() {
+    (($# == 2)) || { print -u2 -r -- "Usage: gitx merge-with|rebase-with TARGET_BRANCH"; return 2; }
+    git_require_repo || return
+    local action="$1" target_branch="$2" current_branch
+    current_branch="$(git branch --show-current)" || return $?
+    [[ -n "$current_branch" ]] || { print -u2 -r -- "gitx ${action}-with: detached HEAD"; return 1; }
+    git fetch || return $?
+    git switch "$target_branch" || return $?
+    if ! git pull --rebase origin "$target_branch"; then
+        git switch "$current_branch" >/dev/null 2>&1 || true
+        return 1
+    fi
+    git switch "$current_branch" || return $?
+    git "$action" "$target_branch"
+}
+
+# Linked worktrees have a .git file whose gitdir points into <repo>/.git/worktrees/.
+# Submodules also have a .git file, so filter on that path. Depth 4 = worktree at 3 levels.
+_worktree_find() {
+    local gitfile
+    find "$1" -maxdepth 4 \
+        \( -name node_modules -o \( -name .git -type d \) \) -prune -o \
+        -name .git -type f -print 2>/dev/null |
+        while IFS= read -r gitfile; do
+            [[ "$(<"$gitfile")" == gitdir:*/worktrees/* ]] && print -r -- "${gitfile:h}"
+        done
+}
+
+cmd_branch() {
+    git_require_repo || return
+    local b
+    b="$(git branch --show-current)" || return $?
+    print -r -- "$b"
+    clip "$b"
+}
+
+cmd_switch() {
+    git switch "${1:-$(git_pick_branch)}"
+}
+
+cmd_new() {
+    (($# == 1)) || { print -u2 -r -- "Usage: gitx new BRANCH_NAME"; return 2; }
+    git_require_repo || return
+    if git show-ref --verify --quiet "refs/heads/$1"; then
+        git switch "$1"
+    else
+        git switch -c "$1"
+    fi
+}
+
+cmd_main() {
+    git checkout "$(_default_branch master refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default})"
+}
+
+cmd_develop() {
+    git checkout "$(_default_branch develop refs/heads/{dev,devel,development})"
+}
+
+cmd_pull() {
+    git_require_repo || return
+    local branch
+    branch="$(git branch --show-current)" || return $?
+    [[ -n "$branch" ]] || { print -u2 -r -- "gitx pull: detached HEAD"; return 1; }
+    git fetch
+    git pull origin "$branch"
+}
+
+cmd_prune() {
+    local confirm=0 force=0
+    while (($#)); do
+        case "$1" in
+        --confirm | -y) confirm=1 ;;
+        --force) force=1 ;;
+        --dry-run) ;;
+        -h | --help)
+            print -r -- "Usage: gitx prune [--dry-run|--confirm] [--force]"
+            return 0
+            ;;
+        *) print -u2 -r -- "gitx prune: unknown option: $1"; return 2 ;;
+        esac
+        shift
+    done
+    git_require_repo || return
+
+    local current
+    current="$(git branch --show-current)" || return $?
+    local -a branches=()
+    local branch
+    local branch_output
+    branch_output="$(git for-each-ref --format '%(refname:short)' refs/heads)" || return $?
+    while IFS= read -r branch; do
+        case "$branch" in
+        "" | "$current" | main | master | develop | development | dev | trunk | default) continue ;;
+        esac
+        branches+=("$branch")
+    done <<< "$branch_output"
+
+    if ((${#branches[@]} == 0)); then
+        print -r -- "no deletable local branches"
+        return 0
+    fi
+    print -rl -- "${branches[@]}"
+    if ((! confirm)); then
+        print -r -- "dry-run; rerun with --confirm to delete these branches"
+        return 0
+    fi
+
+    local delete_flag=-d
+    ((force)) && delete_flag=-D
+    for branch in "${branches[@]}"; do
+        git branch "$delete_flag" -- "$branch" || return $?
+    done
+}
+
+cmd_merge_with() {
+    _sync_and_run merge "$1"
+}
+
+cmd_rebase_with() {
+    _sync_and_run rebase "$1"
+}
+
+cmd_squash() {
+    git rebase -i "HEAD~${1}"
+}
+
+cmd_compare() {
+    (($# == 2)) || { print -u2 -r -- "Usage: gitx compare BRANCH1 BRANCH2"; return 2; }
+    git log "$2..$1"
+}
+
+cmd_restore() {
+    (($# == 2)) || { print -u2 -r -- "Usage: gitx restore BRANCH_NAME FILE_PATH"; return 2; }
+    git restore --source "$1" -- "$2"
+}
+
+cmd_clone() {
+    (($# == 1)) || { print -u2 -r -- "Usage: gitx clone OWNER/REPOSITORY"; return 2; }
+    git clone "git@github.com:$1"
+}
+
+cmd_graph() {
+    git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset" --abbrev-commit --all
+}
+
+cmd_last() {
+    git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1
+}
+
+cmd_tags() {
+    git for-each-ref --sort=creatordate --format '%(creatordate:iso) -> %(refname:short)' refs/tags | grep '.'
+}
+
+cmd_tag() {
+    (($# == 1)) || { print -u2 -r -- "Usage: gitx tag TAG"; return 2; }
+    git_require_repo || return
+    git tag "$1"
+    git push origin "$1"
+}
+
+cmd_tag_pick() {
+    git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags | tac | fzf --preview "bash $DOTFILES/bin/git-fzf-preview.sh gettag {}"
+}
+
+# Enter marks/unmarks a worktree. Ctrl-d removes the marked ones (or the current one), then reopens the list.
+cmd_worktree_clean() {
+    (($# <= 1)) || { print -u2 -r -- "Usage: gitx worktree-clean [ROOT]"; return 2; }
+    (($+commands[fzf])) || { print -u2 -r -- "gitx worktree-clean: fzf not found"; return 1; }
+    local root="${1:-.}"
+    root="${root:A}"
+    [[ -d "$root" ]] || { print -u2 -r -- "gitx worktree-clean: not a directory: $root"; return 2; }
+
+    local -a found out targets
+    local result wt common
+    local TAB=$'\t'
+    while true; do
+        found=("${(@f)$(_worktree_find "$root")}")
+        found=(${found:#})
+        ((${#found})) || { print -r -- "No git worktrees found under $root"; return 0; }
+        # Each line is "full path<TAB>path relative to ROOT"; only the relative path is shown.
+        result="$(for wt in "${found[@]}"; do print -r -- "$wt$TAB${${wt#$root/}:-$wt}"; done | fzf --multi --cycle --no-sort --expect=ctrl-d \
+            --delimiter $'\t' --with-nth 2 \
+            --border-label "gitx worktree-clean - ctrl+d: delete worktrees" --prompt "> " \
+            --bind 'enter:toggle+down' \
+            --header 'enter: mark  ctrl+d: delete marked  esc: quit' \
+            --preview-window 'right,50%' \
+            --preview 'printf "%s\n\n" {1}; lsd -la --color=always {1}')" || return 0
+        out=("${(@f)result}")
+        targets=("${(@)out[2,-1]}")
+        targets=(${targets:#})
+        targets=("${(@)targets%%$TAB*}")
+        ((${#targets})) || continue
+
+        print -r -- "Remove ${#targets} worktree(s):"
+        print -rl -- "${targets[@]/#/  }"
+        read -q -u 0 "?Confirm? [y/N] " || { print; continue; }
+        print
+        for wt in "${targets[@]}"; do
+            common="$(git -C "$wt" rev-parse --path-format=absolute --git-common-dir)" &&
+                git --git-dir="$common" worktree remove --force "$wt" ||
+                print -u2 -r -- "gitx worktree-clean: failed to remove $wt"
+        done
+    done
+}
+
+family_main "$@"

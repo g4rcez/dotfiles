@@ -181,6 +181,3 @@ export PI_FFF_MODE="${PI_FFF_MODE:-override}"
 export AI_CLI_MODEL="${AI_CLI_MODEL:-opusplan}"
 export AI_COMMIT_MODEL="${AI_COMMIT_MODEL:-claude-haiku-5-5}"
 export AI_QUERY_COMMAND="${AI_QUERY_COMMAND:-claude --model ${AI_COMMIT_MODEL} -p}"
-if [[ -z "${AICOMMIT_EXCLUDES+x}" ]]; then
-    export AICOMMIT_EXCLUDES=(package-lock.json pnpm-lock.yaml yarn.lock '*.lock')
-fi

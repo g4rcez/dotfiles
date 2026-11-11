@@ -1,0 +1,72 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/family.zsh"
+
+COMMANDS=(
+    'update:update pi, LS_COLORS, mise, npm globals and brew'
+    'pi-update:install and select the latest pi with mise'
+    'ls-colors:regenerate config/zsh/ls.sh from the vivid theme'
+    'flush-dns:flush the macOS DNS cache'
+    'karabiner-reset:restart the Karabiner agent'
+    'secret-uuid:encrypt a value with openssl, then base64'
+    'clear-nvim:delete the nvim cache, share and state directories'
+)
+
+cmd_pi_update() {
+    mise install pi@latest
+    mise use -g pi@latest
+}
+
+cmd_ls_colors() {
+    (($+commands[vivid])) || {
+        print -u2 -r -- "sys ls-colors: vivid is not installed"
+        return 1
+    }
+
+    local target="$DOTFILES/config/zsh/ls.sh"
+    local colors temp
+    colors="$(vivid -d "$DOTFILES/config/vivid/database.yml" generate "$DOTFILES/config/vivid/theme.yaml")" || return $?
+    temp="$(mktemp "$target.XXXXXX")" || return $?
+    if ! printf "export LS_COLORS='%s'\\n" "$colors" >|"$temp"; then
+        rm -f -- "$temp"
+        return 1
+    fi
+    if ! mv -f -- "$temp" "$target"; then
+        rm -f -- "$temp"
+        return 1
+    fi
+    print -r -- "vivid updated; restart or reload zsh to apply the new LS_COLORS"
+}
+
+cmd_update() {
+    cmd_pi_update || return
+    cmd_ls_colors || return
+    (($+commands[mise])) && mise self-update
+    (($+commands[npm])) && "$DOTFILES/bin/nodex" update-globals
+    if (($+commands[brew])); then
+        brew update && brew upgrade
+    fi
+}
+
+cmd_flush_dns() {
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
+}
+
+cmd_karabiner_reset() {
+    launchctl stop org.pqrs.karabiner.karabiner_console_user_server
+    sleep 0.5
+    launchctl start org.pqrs.karabiner.karabiner_console_user_server
+}
+
+cmd_clear_nvim() {
+    rm -rf "$HOME/.cache/nvim"
+    rm -rf "$HOME/.local/share/nvim"
+    rm -rf "$HOME/.local/state/nvim"
+}
+
+cmd_secret_uuid() {
+    echo -n "$1" | openssl enc -e -aes-256-cbc -a -salt | base64
+}
+
+family_main "$@"

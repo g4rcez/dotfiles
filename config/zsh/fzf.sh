@@ -58,60 +58,9 @@ function fcd() {
     cd "$(find . -type d -print | fzf)"
 }
 
-function fzf-eval() {
-    echo | fzf -q "$*" --preview-window=up:99% --preview="eval {q}"
-}
-
-function view() {
-    fd --type f --strip-cwd-prefix | fzf
-}
-
 function cdf() {
     DIR="$(fd --type directory --hidden --exclude .git | fzf)"
     cd "$PWD/$DIR"
-}
-
-function files() {
-    local file="$(fzf --multi)"
-    if [[ -n "$file" ]]; then
-        local prog
-        while IFS= read -r prog; do
-            [[ -n "$prog" ]] && "$EDITOR" "$prog"
-        done <<<"$file"
-    else
-        print -r -- "cancelled fzf"
-    fi
-}
-
-# Preview below the list, full width, no outer border. Delta draws the diff without boxes
-# or panel separators. Tracked files show `git diff HEAD`; untracked files show the content.
-_ST_PREVIEW='f={-1}
-if [ -d "$f" ]; then lsd -l "$f"
-elif git ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then
-    git diff HEAD --color=always -- "$f" | delta --side-by-side -w "${FZF_PREVIEW_COLUMNS:-120}" \
-        --hunk-header-decoration-style=none \
-        --line-numbers-left-format="{nm:>4} " --line-numbers-right-format="{np:>4} "
-else bat --color=always --style=numbers --paging=never -- "$f"; fi'
-
-function st() {
-    git rev-parse --git-dir >/dev/null 2>&1 || { echo "You are not in a git repository" && return; }
-    local selected
-    selected=$(git -c color.status=always status --short |
-        fzf --cycle "$@" -m --ansi --nth 2..,.. \
-            --border=none --no-scrollbar \
-            --preview-window 'down,75%,border-top,nowrap' \
-            --preview-label-pos 2 \
-            --bind 'focus:transform-preview-label:printf " %s " {-1}' \
-            --bind 'ctrl-d:preview-half-page-down' \
-            --bind 'ctrl-u:preview-half-page-up' \
-            --preview "$_ST_PREVIEW" |
-        cut -c4- | sed 's/.* -> //')
-    if [[ -n "$selected" ]]; then
-        local prog
-        while IFS= read -r prog; do
-            [[ -n "$prog" ]] && "$EDITOR" "$prog"
-        done <<<"$selected"
-    fi
 }
 
 function _fzf_compgen_path() {

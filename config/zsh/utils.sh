@@ -1,11 +1,3 @@
-function checkcommand() {
-    if [[ -f "$(command -v $1)" ]]; then
-        echo -n
-    else
-        $2
-    fi
-}
-
 function _postcd() {
     [[ "${ZSH_AUTO_DOTENV:-0}" == 1 || "${ZSH_AUTO_DOTENV:-0}" == true ]] || return 0
     [[ -f ".env" ]] && dotenv ".env" && print -r -- "[env loaded: .env]"
@@ -14,44 +6,10 @@ function _postcd() {
     return 0
 }
 
-function isGitDir() {
-    echo $(git -C "$1" rev-parse --is-inside-work-tree 2>/dev/null)
-}
-
-function getCurrentBranch() {
-    echo $(git -C "$1" rev-parse --abbrev-ref HEAD 2>/dev/null)
-}
-
-function getRepositoryName() {
-    echo $(git -C "$1" config --get remote.origin.url 2>/dev/null | cut -d ':' -f2- | sed ' s/\.git$//g')
-}
-
-function basename2() {
-    echo $(basename "$(dirname "$1")")/$(basename "$1")
-}
-
 function _zellij_tab_name_update() {
     if [[ -n $ZELLIJ ]]; then
         bash "$DOTFILES/bin/zellij-sessionx-rename" "" "$(pwd)"
     fi
-}
-
-function forEach() {
-    local ARRAY
-    ARRAY=$(echo "$1" | tr ' ' '\n')
-    local item
-    for item in $ARRAY; do
-        "$2" "$item"
-    done
-}
-
-function fishify() {
-    echo $(echo "$1" | perl -pe '
-   BEGIN {
-      binmode STDIN,  ":encoding(UTF-8)";
-      binmode STDOUT, ":encoding(UTF-8)";
-   }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
-')
 }
 
 export FZF_COLORS="--color=dark,bg+:#2d353d,border:#1E1E2E,bg:#1A1B26,spinner:#f6c177,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 --separator=─ --scrollbar=│ --info=right"
@@ -63,75 +21,7 @@ function safeImport() {
     fi
 }
 
-function zsh:install() {
-    emulate -L zsh
-    local znap_dir="${1:-${HOME}/.znap}"
-    local entrypoint="$znap_dir/znap.zsh"
-    if [[ -r "$entrypoint" ]]; then
-        print -r -- "znap is already installed: $znap_dir"
-        return 0
-    fi
-    if ! (($ + commands[git])); then
-        print -u2 -r -- "zsh:install: git is required to install znap"
-        return 1
-    fi
-    command git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$znap_dir" || return $?
-    print -r -- "installed znap: $znap_dir"
-}
-
-function clearNvim() {
-    rm -rf "$HOME/.cache/nvim"
-    rm -rf "$HOME/.local/share/nvim"
-    rm -rf "$HOME/.local/state/nvim"
-}
-
-function _zsh_config_root() {
-    emulate -L zsh
-    print -r -- "${DOTFILES:-$PWD}/config/zsh"
-}
-
-function _zsh_config_sources() {
-    emulate -L zsh
-    local root="${1:-$(_zsh_config_root)}"
-    [[ -f "$root/zshrc" ]] && print -r -- "$root/zshrc"
-    command find "$root" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.zsh' \) -print 2>/dev/null | command sort
-    if [[ -d "$root/completion" ]]; then
-        command find "$root/completion" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.zsh' \) -print 2>/dev/null | command sort
-    fi
-}
-
-function zsh:help() {
-    command cat <<'EOF'
-zsh utilities
-
-  zsh:doctor              Check required/optional dependencies, completions, caches, and PATH duplicates
-  zsh:install              Install znap explicitly (never during shell startup)
-  zsh:compile [--clean]   Compile config/zsh shell files to .zwc files; --clean removes orphaned .zwc files
-  zsh:profile [N]         Time N interactive shell startups; add --zprof for detailed zprof output
-  zsh:benchmark            Profile startup timing and print the slowest functions
-  zsh:edit [query]        Pick a config/zsh file with fzf and open it in $EDITOR
-
-cd utilities
-
-  cd:repo                 cd to the current git repository root
-  cd:zsh                  cd to dotfiles/config/zsh
-  cd:mk DIR               mkdir -p DIR and cd into it
-  cd:tmp [prefix]         Create a temporary directory and cd into it
-  cd:up [N]               cd up N directories
-
-dotenv
-
-  dotenv TRUSTED_FILE     Explicitly export variables from a trusted dotenv file
-  Set ZSH_AUTO_DOTENV=1 to opt into loading .env files after cd; direnv remains preferred.
-
-PATH utilities
-
-  path:list               Print PATH entries, one per line
-  path:dedupe             Remove duplicate PATH entries in the current shell
-  path:has DIR            Return success if DIR is in PATH
-  path:which CMD [...]    Show every executable/function/alias resolution for command(s)
-EOF
-}
+safeImport "$DOTFILES/bin/lib/zsh-config.zsh"
 
 function zsh:doctor() {
     emulate -L zsh
@@ -189,7 +79,7 @@ function zsh:doctor() {
     if [[ -r "$znap_entrypoint" ]]; then
         print -r -- "  ok   znap — plugin manager"
     else
-        print -r -- "  warn znap — not installed; run zsh:install when plugin support is needed"
+        print -r -- "  warn znap — not installed; run zshx install when plugin support is needed"
         ((warnings++))
     fi
     print -r -- ""
@@ -243,7 +133,7 @@ function zsh:doctor() {
         "$root/completion/node-completion.sh"
         "$root/completion/_ai.zsh"
         "$root/completion/_worktree.zsh"
-        "$root/completion/_commit.zsh"
+        "$root/completion/_family.zsh"
     )
     if [[ -z "$TMUX" ]] && (($+commands[zellij])); then
         optional_sources+=("$root/zellij.sh")
@@ -273,19 +163,13 @@ function zsh:doctor() {
     local -a completion_entries=(
         "ai|_ai"
         "worktree|_worktree"
-        "commit.*|_commit"
+        "commit|_family"
     )
     if (($+functions[compdef])); then
         for entry in "${completion_entries[@]}"; do
             cmd="${entry%%|*}"
             desc="${entry#*|}"
-            if [[ -n "${functions[$desc]:-}" ]] && {
-                if [[ "$cmd" == commit.* ]]; then
-                    (( $+parameters[_patcomps] )) && [[ -n "${_patcomps[(I)commit.*]}" ]]
-                else
-                    (( $+parameters[_comps] )) && [[ "${_comps[$cmd]:-}" == "$desc" ]]
-                fi
-            }; then
+            if [[ -n "${functions[$desc]:-}" ]] && (( $+parameters[_comps] )) && [[ "${_comps[$cmd]:-}" == "$desc" ]]; then
                 print -r -- "  ok   $cmd → $desc"
             else
                 print -u2 -r -- "  miss $cmd → $desc (compinit/registration)"
@@ -310,7 +194,7 @@ function zsh:doctor() {
         fi
     done
     if (($#stale)); then
-        print -r -- "  warn stale .zwc files; run zsh:compile"
+        print -r -- "  warn stale .zwc files; run zshx compile"
         print -rl -- "${stale[@]/#/       }"
         ((warnings += $#stale))
     else
@@ -339,162 +223,6 @@ function zsh:doctor() {
     print -r -- ""
     print -r -- "summary: $missing missing, $warnings warning(s)"
     return $((missing > 0 ? 1 : 0))
-}
-
-function zsh:compile() {
-    emulate -L zsh
-    setopt null_glob
-
-    local root="$(_zsh_config_root)"
-    local clean=0
-    local dry_run=0
-    local usage="Usage: zsh:compile [--clean] [--dry-run]
-
-Compile config/zsh shell files to adjacent .zwc files.
-
-Options:
-  --clean     remove .zwc files whose source file no longer exists
-  --dry-run   show what would be compiled/removed without changing files
-  -h, --help  show this help"
-
-    while (($#)); do
-        case "$1" in
-        --clean) clean=1 ;;
-        --dry-run | -n) dry_run=1 ;;
-        -h | --help)
-            print -r -- "$usage"
-            return 0
-            ;;
-        *)
-            print -u2 -r -- "zsh:compile: unknown option: $1"
-            return 2
-            ;;
-        esac
-        shift
-    done
-
-    if [[ ! -d "$root" ]]; then
-        print -u2 -r -- "zsh:compile: config directory not found: $root"
-        return 1
-    fi
-
-    if ((clean)); then
-        local zwc src
-        while IFS= read -r zwc; do
-            src="${zwc%.zwc}"
-            if [[ ! -e "$src" ]]; then
-                if ((dry_run)); then
-                    print -r -- "would remove ${zwc#$root/}"
-                else
-                    command rm -f -- "$zwc"
-                    print -r -- "removed ${zwc#$root/}"
-                fi
-            fi
-        done < <(command find "$root" -type f -name '*.zwc' -print 2>/dev/null)
-    fi
-
-    local file failed=0 compiled=0
-    local -a source_files=()
-    while IFS= read -r file; do
-        source_files+=("$file")
-    done < <(_zsh_config_sources "$root")
-    for file in "${source_files[@]}"; do
-        if ((dry_run)); then
-            print -r -- "would compile ${file#$root/}"
-            continue
-        fi
-
-        if zcompile "$file"; then
-            print -r -- "compiled ${file#$root/}"
-            ((compiled++))
-        else
-            print -u2 -r -- "failed ${file#$root/}"
-            ((failed++))
-        fi
-    done
-
-    ((dry_run)) && return 0
-    print -r -- "compiled $compiled file(s); $failed failure(s)"
-    return $failed
-}
-
-function zsh:profile() {
-    emulate -L zsh
-
-    local runs=3
-    local detailed=0
-    local usage="Usage: zsh:profile [--zprof] [runs]
-
-Times interactive zsh startup in a child shell. Use --zprof for detailed function profiling."
-
-    while (($#)); do
-        case "$1" in
-        --zprof | -z) detailed=1 ;;
-        -h | --help)
-            print -r -- "$usage"
-            return 0
-            ;;
-        *)
-            if [[ "$1" =~ '^[0-9]+$' ]]; then
-                runs="$1"
-            else
-                print -u2 -r -- "zsh:profile: unknown argument: $1"
-                return 2
-            fi
-            ;;
-        esac
-        shift
-    done
-
-    local i
-    for ((i = 1; i <= runs; i++)); do
-        print -r -- "run $i/$runs"
-        time zsh -i -c exit
-    done
-
-    if ((detailed)); then
-        local rc="${ZDOTDIR:-$HOME}/.zshrc"
-        [[ -r "$rc" ]] || rc="$(_zsh_config_root)/zshrc"
-        print -r -- ""
-        print -r -- "zprof: $rc"
-        ZSH_PROFILE_RC="$rc" zsh -dfi -c 'zmodload zsh/zprof; source "$ZSH_PROFILE_RC"; zprof'
-    fi
-}
-
-function zsh:benchmark() {
-    emulate -L zsh
-    zsh:profile --zprof "$@"
-}
-
-function zsh:edit() {
-    emulate -L zsh
-    setopt pipefail
-
-    local root="$(_zsh_config_root)"
-    if [[ ! -d "$root" ]]; then
-        print -u2 -r -- "zsh:edit: config directory not found: $root"
-        return 1
-    fi
-    if ! (($ + commands[fzf])); then
-        print -u2 -r -- "zsh:edit: fzf is required"
-        return 1
-    fi
-
-    local preview="bat --color=always --style=numbers '$root'/{} 2>/dev/null || command sed -n '1,160p' '$root'/{}"
-    local -a fzf_args=(
-        --prompt='zsh> '
-        --preview="$preview"
-    )
-    (($#)) && fzf_args+=(--query="$*")
-
-    local selected
-    selected=$(command find "$root" -type f ! -name '*.zwc' -print |
-        command sed "s#^$root/##" |
-        command sort |
-        fzf "${fzf_args[@]}") || return
-    [[ -n "$selected" ]] || return 0
-
-    command "${EDITOR:-nvim}" "$root/$selected"
 }
 
 function cd:repo() {

@@ -1,0 +1,85 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+
+COMMANDS=(
+    'prune-volumes:remove dangling volumes (dry run unless --confirm)'
+    'kill:kill running containers (dry run unless --confirm)'
+    'rm:pick containers with fzf and remove them (dry run unless --confirm)'
+)
+
+# Podman replaces docker when installed, as the interactive shell alias did.
+DOCKER=docker
+(($+commands[podman])) && DOCKER=podman
+
+# Sets the caller's confirm to 1 for --confirm|-y. --dry-run or no argument keeps it 0. $1 names the command in the usage.
+_parse_confirm() {
+    case "${2:-}" in
+    --confirm | -y) confirm=1 ;;
+    --dry-run | "") ;;
+    *)
+        print -u2 -r -- "Usage: dk $1 [--dry-run|--confirm]"
+        return 2
+        ;;
+    esac
+}
+
+# Reads items from stdin, lists them and appends them to the command only when confirm is 1.
+# $1 confirm, $2 message when stdin has no items (may be empty), $3 message for the dry run, rest is the command.
+_run_on_lines() {
+    local confirm="$1" empty_message="$2" dry_run_message="$3" item
+    shift 3
+    local -a items=()
+    while IFS= read -r item; do
+        [[ -n "$item" ]] && items+=("$item")
+    done
+    if ((${#items[@]} == 0)); then
+        [[ -n "$empty_message" ]] && print -r -- "$empty_message"
+        return 0
+    fi
+    print -rl -- "${items[@]}"
+    if ((!confirm)); then
+        print -r -- "$dry_run_message"
+        return 0
+    fi
+    "$@" "${items[@]}"
+}
+
+cmd_prune_volumes() {
+    local confirm=0
+    _parse_confirm prune-volumes "${1:-}" || return $?
+
+    local volumes
+    volumes="$($DOCKER volume ls -q --filter dangling=true)" || return $?
+    _run_on_lines "$confirm" "no dangling volumes" "dry-run; rerun with --confirm to remove these volumes" $DOCKER volume rm -- <<<"$volumes"
+}
+
+cmd_kill() {
+    local confirm=0
+    _parse_confirm kill "${1:-}" || return $?
+    ((confirm)) && shift
+    (($# == 0)) || {
+        print -u2 -r -- "Usage: dk kill [--dry-run|--confirm]"
+        return 2
+    }
+
+    local containers
+    containers="$($DOCKER ps -q)" || return $?
+    _run_on_lines "$confirm" "no running containers" "dry-run; rerun with --confirm to kill these containers" $DOCKER kill -- <<<"$containers"
+}
+
+cmd_rm() {
+    local confirm=0
+    if [[ "${1:-}" == --confirm ]]; then
+        confirm=1
+        shift
+    fi
+
+    local selected
+    selected="$($DOCKER ps -a | sed 1d | fzf -q "${1:-}" --no-sort -m --tac | awk '{ print $1 }')" || return $?
+    _run_on_lines "$confirm" "" "dry-run; rerun dk rm --confirm [query] to remove these containers" $DOCKER rm -- <<<"$selected"
+}
+
+family_main "$@"

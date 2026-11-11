@@ -1,9 +1,36 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/family.zsh"
+source "$DOTFILES/bin/lib/common.zsh"
+source "$DOTFILES/bin/lib/git.zsh"
 
-usage() {
-    cat <<EOF
+# A name without a cmd_ function commits with the message after the colon. Git hooks run on every commit.
+COMMANDS=(
+    'wip:stage everything and push a timestamped work-in-progress commit'
+    'staged:commit only the index as a timestamped work-in-progress commit'
+    'ai:split changes into AI-written commits and push'
+    'write:write a commit message with the configured AI helper'
+    'scope:commit "type: msg" as type(BRANCH): msg'
+    'fake:commit with a backdated author and committer date'
+    'lockfile:chore: sync lockfile'
+    'deps:chore: update dependencies'
+    'format:style: format source files'
+    'merge:chore: resolve merge conflicts'
+    'cleanup:chore: clean up unused files'
+    'refactor:refactor: code clean up'
+    'remove:chore: remove obsolete files'
+    'rename:refactor: rename files and symbols'
+    'docs:docs: update documentation'
+    'test:test: update tests'
+    'ci:ci: update CI configuration'
+    'release:build: prepare release'
+    'rebase:chore: resolve rebase conflicts'
+)
+
+usage_commit() {
+    cat <<'EOF'
 Usage: commit [options] [message]
+       commit <command> [git commit args] [--push git push args]
 
 Options:
   -s, --skip, --no-verify   skip pre-commit and commit-msg hooks
@@ -17,58 +44,347 @@ Examples:
   commit -b "my message"    commit with subject "BRANCH my message"
   commit -b                 open editor with branch name pre-seeded
   commit -b -s "msg"        skip hooks and prefix branch
+  commit docs               stage everything, commit "docs: update documentation", push
+
+A message equal to a command name below runs that command; write `commit -- docs` to commit "docs".
+
+Commands:
 EOF
-    exit 0
+    family_list
 }
 
-main() {
-    local NO_VERIFY=0
-    local PREFIX_BRANCH=0
-    local POSITIONALS=()
+usage_scope() {
+    cat <<'EOF'
+Usage: commit scope [-s] "type: message"
 
-    while [[ $# -gt 0 ]]; do
+Rewrites a conventional commit subject to include the current branch as scope.
+  feat: msg  ->  feat(BRANCH): msg
+
+Accepted types: feat, fix, build, chore, ci, docs, style, refactor, perf, test
+If the message already contains a scope (e.g. feat(foo): ...) it is left untouched.
+When no message is given, opens the git editor without a pre-seeded subject.
+
+Options:
+  -s, --skip, --no-verify   skip pre-commit and commit-msg hooks
+  -h, --help                show this help
+EOF
+}
+
+# Parses [-s] [-b] [message] into NO_VERIFY, PREFIX_BRANCH and MSG.
+# $1 names the command in errors, $2 enables -b, $3 is the usage function that -h prints.
+_parse_message_args() {
+    local who="$1" allow_branch="$2" usage_fn="$3"
+    shift 3
+    local -a positionals=()
+    NO_VERIFY=0 PREFIX_BRANCH=0 MSG=""
+    while (($# > 0)); do
         case "$1" in
         -s | --skip | --no-verify) NO_VERIFY=1 ;;
-        -b | --branch) PREFIX_BRANCH=1 ;;
-        -h | --help) usage ;;
-        --) shift; POSITIONALS+=("$@"); break ;;
-        -*) echo "commit: unknown option: $1" >&2; exit 2 ;;
-        *) POSITIONALS+=("$1") ;;
+        -b | --branch)
+            ((allow_branch)) || { print -u2 -r -- "$who: unknown option: $1"; return 2; }
+            PREFIX_BRANCH=1
+            ;;
+        -h | --help) "$usage_fn"; exit 0 ;;
+        --) shift; positionals+=("$@"); break ;;
+        -*) print -u2 -r -- "$who: unknown option: $1"; return 2 ;;
+        *) positionals+=("$1") ;;
         esac
         shift
     done
+    if ((${#positionals} > 1)); then
+        print -u2 -r -- "$who: only one message argument is allowed"
+        return 2
+    fi
+    MSG="${positionals[1]:-}"
+}
 
-    if [[ ${#POSITIONALS[@]} -gt 1 ]]; then
-        echo "commit: only one message argument is allowed" >&2
-        exit 2
+# Sets reply to the paths changed under the cwd: tracked changes (renames as delete + add) and untracked files.
+_git_changed_paths() {
+    local changed_path base=HEAD
+    git rev-parse --verify -q HEAD >/dev/null || base="$(git hash-object -t tree /dev/null)"
+    reply=()
+    while IFS= read -r -d '' changed_path; do
+        reply+=("$changed_path")
+    done < <(git diff --relative --no-renames --name-only -z "$base" -- . ; git ls-files --others --exclude-standard -z -- .)
+}
+
+# Stages the changed paths by explicit path, never with a blanket git add.
+_git_add_changed() {
+    _git_changed_paths
+    ((${#reply} > 0)) || { print -u2 -r -- "git helper: nothing to commit"; return 1; }
+    git add -- "${reply[@]}"
+}
+
+# Arguments go to git commit; --push switches to git push arguments.
+_git_commit_and_push() {
+    local -a commit_args=() push_args=()
+    local push_args_started=0 arg
+    for arg in "$@"; do
+        if ((push_args_started)); then
+            push_args+=("$arg")
+        elif [[ "$arg" == --push ]]; then
+            push_args_started=1
+        else
+            commit_args+=("$arg")
+        fi
+    done
+
+    git commit "${commit_args[@]}" || return $?
+    git push "${push_args[@]}"
+}
+
+_commit_message() {
+    (($# >= 1)) || { print -u2 -r -- "git helper: commit message is required"; return 2; }
+    git_require_repo || return
+    local message="$1"
+    shift
+    _git_add_changed || return $?
+    _git_commit_and_push -S -m "$message" "$@"
+}
+
+_wip_message() {
+    local now
+    now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
+    print -r -- "wip: ${now}"
+}
+
+# Prints the AI grouping of the changed paths as JSON, or nothing when the AI fails.
+_commit_ai_split() {
+    local prompt_file="$DOTFILES/prompts/aicommit-split.txt"
+    [[ -r "$prompt_file" && -n "${AI_QUERY_COMMAND:-}" ]] || return 1
+    local hint="$1"
+    shift
+    {
+        print -r -- "Context Hint: ${hint}"
+        print -r -- "Changed paths:"
+        print -rl -- "$@"
+        print
+        git diff --stat HEAD -- .
+    } | ${=AI_QUERY_COMMAND} "$(<"$prompt_file")" 2>/dev/null | sed '/^```/d'
+}
+
+# Default: the original `commit [-s] [-b] [message]`, or a fixed-message command from COMMANDS.
+family_default() {
+    local entry
+    for entry in "${COMMANDS[@]}"; do
+        if [[ "${entry%%:*}" == "${1-}" ]]; then
+            shift
+            _commit_message "${entry#*:}" "$@"
+            return
+        fi
+    done
+
+    _parse_message_args commit 1 usage_commit "$@" || return $?
+    local branch=""
+    if ((PREFIX_BRANCH)); then
+        branch="$(git_current_branch)" || { print -u2 -r -- "commit: cannot resolve branch (detached HEAD?)"; return 1; }
     fi
 
-    local MSG="${POSITIONALS[0]:-}"
+    local -a args=(-S)
+    ((NO_VERIFY)) && args+=(--no-verify)
+    if ((PREFIX_BRANCH)) && [[ -n "$MSG" ]]; then
+        args+=(-m "$branch $MSG")
+    elif ((PREFIX_BRANCH)); then
+        args+=(-e -m "$branch ")
+    elif [[ -n "$MSG" ]]; then
+        args+=(-m "$MSG")
+    fi
+    exec git commit "${args[@]}"
+}
 
-    local BRANCH=""
-    if [[ $PREFIX_BRANCH -eq 1 ]]; then
-        BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || {
-            echo "commit: cannot resolve branch (detached HEAD?)" >&2
-            exit 1
-        }
-        if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
-            echo "commit: cannot resolve branch (detached HEAD?)" >&2
-            exit 1
+cmd_wip() {
+    git_require_repo || return
+    _git_add_changed || return $?
+    local message
+    message="$(_wip_message)" || return $?
+    _git_commit_and_push -S -m "$message" "$@"
+}
+
+cmd_staged() {
+    git_require_repo || return
+    local message
+    message="$(_wip_message)" || return $?
+    git commit -S -m "$message"
+}
+
+cmd_fake() {
+    GIT_AUTHOR_DATE="$1" GIT_COMMITTER_DATE="$1" git commit -S -m "$2"
+}
+
+cmd_scope() {
+    _parse_message_args "commit scope" 0 usage_scope "$@" || return $?
+    local branch
+    branch="$(git_current_branch)" || { print -u2 -r -- "commit scope: cannot resolve branch (detached HEAD?)"; return 1; }
+
+    local -a args=(-S)
+    ((NO_VERIFY)) && args+=(--no-verify)
+    [[ -n "$MSG" ]] || { git commit "${args[@]}"; return; }
+
+    local types_alt='feat|fix|build|chore|ci|docs|style|refactor|perf|test' msg_out
+    if [[ "$MSG" =~ "^(${types_alt})\([^\)]+\):" ]]; then
+        msg_out="$MSG"
+    elif [[ "$MSG" =~ "^(${types_alt}):[[:space:]]*(.*)" ]]; then
+        msg_out="${match[1]}(${branch}): ${match[2]}"
+    else
+        print -u2 -r -- "commit scope: message must start with one of: feat, fix, build, chore, ci, docs, style, refactor, perf, test"
+        return 2
+    fi
+    git commit "${args[@]}" -m "$msg_out"
+}
+
+cmd_write() {
+    git_require_repo || return
+    local -a exclude_args=()
+    local commit_message="" f
+    for f in ${=AICOMMIT_EXCLUDES-package-lock.json pnpm-lock.yaml yarn.lock \*.lock}; do
+        [[ -n "$f" ]] && exclude_args+=(":(exclude)$f")
+    done
+
+    local hint="${*}" prompt
+    [[ -r "$DOTFILES/prompts/aicommit-script.txt" ]] || {
+        print -u2 -r -- "commit write: prompt file not found"
+        return 1
+    }
+    prompt="$(<"$DOTFILES/prompts/aicommit-script.txt")"
+    if [[ -n "$hint" ]]; then
+        prompt="${prompt}\n\nContext Hint (use this to explain the WHY): ${hint}"
+    fi
+
+    # AICOMMIT_CACHED=1 limits the diff to the index, so `commit ai` can describe one group at a time.
+    local -a diff_base=(HEAD)
+    [[ -n "${AICOMMIT_CACHED:-}" ]] && diff_base=(--cached)
+    local diff
+    diff="$(git diff "${diff_base[@]}" -U5 -- . "${exclude_args[@]}")" || return $?
+    # A group made only of excluded files (a lockfile) would otherwise send an empty diff.
+    [[ -n "$diff" ]] || diff="$(git diff "${diff_base[@]}" -U5 -- .)" || return $?
+
+    if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
+        (($+commands[codex])) || { print -u2 -r -- "commit write: codex is not installed"; return 1; }
+        local out_file err_file rc
+        out_file="$(mktemp "${TMPDIR:-/tmp}/commitwithai.XXXXXX")" || return $?
+        err_file="$(mktemp "${TMPDIR:-/tmp}/commitwithai.err.XXXXXX")"
+        local mktemp_rc=$?
+        if ((mktemp_rc != 0)); then
+            rm -f -- "$out_file"
+            return "$mktemp_rc"
+        fi
+        printf '%s\n\n%s\n' "$prompt" "$diff" \
+            | codex -m "${AI_CLI_MODEL:-gpt-5.3-codex-spark}" exec --ignore-user-config --ephemeral --sandbox read-only --output-last-message "$out_file" - >/dev/null 2>"$err_file"
+        rc=$?
+        if ((rc != 0)); then
+            cat "$err_file" >&2
+            rm -f -- "$out_file" "$err_file"
+            return "$rc"
+        fi
+        commit_message="$(<"$out_file")"
+        rm -f -- "$out_file" "$err_file"
+    else
+        if ! commit_message=$(printf '%s\n' "$diff" | ${=AI_QUERY_COMMAND} "$prompt" | sed 's/# //1'); then
+            print -u2 -r -- "commit write: AI query failed"
+            return 1
         fi
     fi
 
-    local -a ARGS=(-S)
-    [[ $NO_VERIFY -eq 1 ]] && ARGS+=(--no-verify)
+    local types='feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert'
+    commit_message="$(printf '%s\n' "$commit_message" | awk '
+        /^('"$types"')(\([^)]+\))?!?: / { found = 1 }
+        found && /^\[[^]]+ [0-9a-f]{7,}\] / { next }
+        found && /^(\/var\/folders\/.*\/T\/tmp\.|\/tmp\/tmp\.)/ { next }
+        found { print }
+    ' | sed 's/# //1')"
 
-    if [[ $PREFIX_BRANCH -eq 1 && -n "$MSG" ]]; then
-        ARGS+=(-m "$BRANCH $MSG")
-    elif [[ $PREFIX_BRANCH -eq 1 ]]; then
-        ARGS+=(-e -m "$BRANCH ")
-    elif [[ -n "$MSG" ]]; then
-        ARGS+=(-m "$MSG")
+    if [[ -z "$commit_message" ]] || ! printf '%s\n' "$commit_message" | head -n 1 | grep -Eq "^($types)(\([^)]+\))?!?: .+"; then
+        print -u2 -r -- "commit write: AI did not return a valid Conventional Commit message"
+        return 1
     fi
 
-    exec git commit "${ARGS[@]}"
+    clip "$commit_message"
+    print -r -- "$commit_message"
 }
 
-main "$@"
+# One commit per reason. Splits the changed paths with AI, asks before committing more than one group,
+# stages each group by explicit path and lets the git hooks run. Commit args apply to every commit.
+cmd_ai() {
+    git_require_repo || return
+    # Keep AI hints before --, then accept git commit and --push arguments.
+    local -a hint_args=() commit_args=() push_args=()
+    local mode=hint arg
+    for arg in "$@"; do
+        case "$arg" in
+        --)
+            [[ "$mode" == hint ]] && mode=commit
+            ;;
+        --push)
+            mode=push
+            ;;
+        *)
+            case "$mode" in
+            hint) hint_args+=("$arg") ;;
+            commit) commit_args+=("$arg") ;;
+            push) push_args+=("$arg") ;;
+            esac
+            ;;
+        esac
+    done
+
+    git rev-parse --verify -q HEAD >/dev/null || { print -u2 -r -- "commit ai: repository has no commits"; return 1; }
+    local changed_path
+    _git_changed_paths
+    local -a all_paths=("${reply[@]}")
+    ((${#all_paths} > 0)) || { print -u2 -r -- "commit ai: nothing to commit"; return 1; }
+
+    # Each group is a line of shell-quoted paths plus a hint. Fall back to one group when the AI answer is not a partition.
+    local -a group_lines=() group_hints=()
+    local -A seen=()
+    local split_json line valid=1 group_count i
+    split_json="$(_commit_ai_split "${hint_args[*]}" "${all_paths[@]}")"
+    if group_count="$(print -r -- "$split_json" | jq -e '.groups | length' 2>/dev/null)"; then
+        for ((i = 0; i < group_count; i++)); do
+            line="$(print -r -- "$split_json" | jq -r ".groups[$i].paths | map(@sh) | join(\" \")")"
+            group_lines+=("$line")
+            group_hints+=("$(print -r -- "$split_json" | jq -r ".groups[$i].hint // \"\"")")
+            for changed_path in "${(@Q)${(z)line}}"; do
+                (($all_paths[(Ie)$changed_path])) && ((! ${+seen[$changed_path]})) || valid=0
+                seen[$changed_path]=1
+            done
+        done
+        ((${#seen} == ${#all_paths})) || valid=0
+    else
+        valid=0
+    fi
+    if ((! valid)); then
+        print -u2 -r -- "commit ai: no valid AI split, using one commit"
+        group_lines=("${(j: :)${(@qq)all_paths}}")
+        group_hints=("")
+    fi
+
+    if ((${#group_lines} > 1)); then
+        for ((i = 1; i <= ${#group_lines}; i++)); do
+            print -u2 -r -- "$i. ${group_hints[i]}"
+            print -u2 -rl -- "${(@Q)${(z)group_lines[i]}}" | sed 's/^/     /'
+        done
+        local reply
+        print -n -u2 -r -- "Commit as ${#group_lines} commits? [y/N] "
+        read -r reply || return 1
+        [[ "$reply" == [yY]* ]] || { print -u2 -r -- "commit ai: aborted, nothing changed"; return 1; }
+    fi
+
+    local commit_message
+    local -a group_paths
+    for ((i = 1; i <= ${#group_lines}; i++)); do
+        group_paths=("${(@Q)${(z)group_lines[i]}}")
+        git reset -q || return $?
+        git add -- "${group_paths[@]}" || return $?
+        commit_message="$(AICOMMIT_CACHED=1 cmd_write "${hint_args[@]}" "${group_hints[i]}")" || return $?
+        [[ -n "$commit_message" ]] || { print -u2 -r -- "commit ai: empty commit message"; return 1; }
+        git commit -S -m "$commit_message" "${commit_args[@]}" || {
+            local rc=$?
+            print -u2 -r -- "commit ai: commit $i of ${#group_lines} failed, its files stay staged and later groups are untouched"
+            return $rc
+        }
+        git show --stat --format='%h %s' HEAD
+    done
+    git push "${push_args[@]}"
+}
+
+family_main "$@"

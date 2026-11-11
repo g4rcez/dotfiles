@@ -66,52 +66,6 @@ add-zsh-hook -d chpwd _zsh_node_modules_bin_update 2>/dev/null
 add-zsh-hook chpwd _zsh_node_modules_bin_update
 _zsh_node_modules_bin_update
 
-function node:scripts() {
-    jq .scripts "$PWD/package.json"
-}
-
 function n() {
     bash "$DOTFILES/bin/nnn" "$@"
-}
-
-function ni() {
-    if [[ "$#" == "0" ]]; then
-        n install
-    else
-        n add -E "$@"
-    fi
-}
-
-function types() {
-    local -a libs=()
-    local package
-    for package in "$@"; do
-        libs+=("@types/$package")
-    done
-    ((${#libs[@]})) && ni -D "${libs[@]}"
-}
-
-function niu() {
-    local -a packages=()
-    local package
-    for package in "$@"; do
-        packages+=("$package@latest")
-    done
-    ((${#packages[@]})) && ni "${packages[@]}"
-}
-
-function nodeUpdatePackages() {
-    while IFS= read -r line; do
-        echo "Installing $line@latest..."
-        npm i -g "$line@latest"
-    done <$DOTFILES/config/mise/defaults/node
-}
-
-function fns() {
-    if [[ -f package.json ]]; then
-        local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo 'Script -> {}\n';grep '{}' package.json | sed 's/^[ ]*//g'")
-        if [[ "$script" != "" ]]; then
-            n "$script"
-        fi
-    fi
 }

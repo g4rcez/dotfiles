@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+source "$DOTFILES/bin/lib/common.zsh"
+
+COMMANDS=(
+    'action:run a workflow on a ref'
+    'workflow:pick a workflow name with fzf and copy it'
+    'config:set the gh defaults'
+)
+
+cmd_action() {
+    gh workflow run "${1}.yml" --ref "${2}"
+}
+
+cmd_workflow() {
+    local tmpfile
+    tmpfile="$(mktemp "${TMPDIR:-/tmp}/gh-workflow.XXXXXX")" || return $?
+    if ! gh workflow list --json id,name,path,state >|"$tmpfile"; then
+        rm -f -- "$tmpfile"
+        return 1
+    fi
+
+    local selected
+    selected="$(jq -r '.[] | .name' "$tmpfile" | fzf --ansi)"
+    local selection_rc=$?
+    rm -f -- "$tmpfile"
+    ((selection_rc == 0)) || return "$selection_rc"
+    [[ -n "$selected" ]] || return 0
+    clip "$selected"
+    print -r -- "$selected"
+}
+
+cmd_config() {
+    gh config set telemetry disabled
+    gh config set color_labels enabled
+    gh config set spinner enabled
+    gh config set clipboard enabled
+    gh config set pager cat
+    gh config set editor nvim
+    gh config set prefer_editor_prompt enabled
+}
+
+family_main "$@"

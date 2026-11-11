@@ -1,0 +1,72 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+
+COMMANDS=(
+    'install:install dependencies, or add exact versions of the given packages'
+    'types:add @types/<package> dev dependencies'
+    'upgrade:add the latest version of the given packages'
+    'scripts:print the scripts of package.json'
+    'run:pick a package.json script with fzf and run it'
+    'update-globals:update the global npm packages listed in config/mise/defaults/node'
+    'kill-modules:remove every node_modules below the current directory'
+)
+
+# bin/nnn picks the package manager from the lockfile.
+_nnn() {
+    bash "$DOTFILES/bin/nnn" "$@"
+}
+
+cmd_install() {
+    if [[ "$#" == "0" ]]; then
+        _nnn install
+    else
+        _nnn add -E "$@"
+    fi
+}
+
+cmd_types() {
+    local -a libs=()
+    local package
+    for package in "$@"; do
+        libs+=("@types/$package")
+    done
+    ((${#libs[@]})) && cmd_install -D "${libs[@]}"
+}
+
+cmd_upgrade() {
+    local -a packages=()
+    local package
+    for package in "$@"; do
+        packages+=("$package@latest")
+    done
+    ((${#packages[@]})) && cmd_install "${packages[@]}"
+}
+
+cmd_scripts() {
+    jq .scripts "$PWD/package.json"
+}
+
+cmd_run() {
+    if [[ -f package.json ]]; then
+        local script=$(jq -r '.scripts | keys[] ' package.json | sort -u | fzf --preview="echo 'Script -> {}\n';grep '{}' package.json | sed 's/^[ ]*//g'")
+        if [[ "$script" != "" ]]; then
+            _nnn "$script"
+        fi
+    fi
+}
+
+cmd_update_globals() {
+    while IFS= read -r line; do
+        echo "Installing $line@latest..."
+        npm i -g "$line@latest"
+    done <$DOTFILES/config/mise/defaults/node
+}
+
+cmd_kill_modules() {
+    find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
+}
+
+family_main "$@"

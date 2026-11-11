@@ -56,7 +56,7 @@ if [[ -r "$ZNAP_ENTRYPOINT" ]]; then
         fi
     done
 else
-    [[ -o interactive ]] && print -u2 -r -- "zsh: znap is not installed; run zsh:install"
+    [[ -o interactive ]] && print -u2 -r -- "zsh: znap is not installed; run zshx install"
 fi
 
 (($+commands[starship])) && eval "$(command starship init zsh)"
@@ -91,7 +91,7 @@ if (($+functions[znap])); then
 fi
 
 ##############################################################################################################
-## source files (directly sourced; refresh compiled caches with zsh:compile)
+## source files (directly sourced; refresh compiled caches with zshx compile)
 typeset -a SOURCE=(
     "$HOME/.secrets.sh"
     "$HOME/.cargo/env"
@@ -109,7 +109,7 @@ typeset -a SOURCE=(
     "$DOTFILES/config/zsh/completion/_ai.zsh"
     "$DOTFILES/config/zsh/completion/_claude.zsh"
     "$DOTFILES/config/zsh/completion/_worktree.zsh"
-    "$DOTFILES/config/zsh/completion/_commit.zsh"
+    "$DOTFILES/config/zsh/completion/_family.zsh"
     "$DOTFILES/config/zsh/syntax-highlighting.zsh"
     "${XDG_CONFIG_HOME:-$HOME/.config}/bunsen/env.sh"
 )

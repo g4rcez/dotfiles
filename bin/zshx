@@ -1,0 +1,212 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+source "$DOTFILES/bin/lib/zsh-config.zsh"
+
+COMMANDS=(
+    'help:list the zsh utilities'
+    'install:install znap explicitly (never during shell startup)'
+    'compile:compile config/zsh shell files to .zwc files'
+    'profile:time interactive shell startups'
+    'benchmark:profile startup timing and print the slowest functions'
+    'edit:pick a config/zsh file with fzf and open it in $EDITOR'
+)
+
+cmd_help() {
+    cat <<'EOF'
+zshx <command>
+
+  zshx install [DIR]          Install znap explicitly (never during shell startup)
+  zshx compile [--clean]      Compile config/zsh shell files to .zwc files; --clean removes orphaned .zwc files
+  zshx profile [N]            Time N interactive shell startups; add --zprof for detailed zprof output
+  zshx benchmark              Profile startup timing and print the slowest functions
+  zshx edit [query]           Pick a config/zsh file with fzf and open it in $EDITOR
+
+Shell functions (they change the current shell, so they stay in zsh)
+
+  zsh:doctor              Check required/optional dependencies, completions, caches, and PATH duplicates
+  cd:repo                 cd to the current git repository root
+  cd:zsh                  cd to dotfiles/config/zsh
+  cd:mk DIR               mkdir -p DIR and cd into it
+  cd:tmp [prefix]         Create a temporary directory and cd into it
+  cd:up [N]               cd up N directories
+  dotenv TRUSTED_FILE     Explicitly export variables from a trusted dotenv file
+                          Set ZSH_AUTO_DOTENV=1 to opt into loading .env files after cd; direnv remains preferred.
+  path:list               Print PATH entries, one per line
+  path:dedupe             Remove duplicate PATH entries in the current shell
+  path:has DIR            Return success if DIR is in PATH
+  path:which CMD [...]    Show every executable/function/alias resolution for command(s)
+EOF
+}
+
+cmd_install() {
+    local znap_dir="${1:-${HOME}/.znap}"
+    local entrypoint="$znap_dir/znap.zsh"
+    if [[ -r "$entrypoint" ]]; then
+        print -r -- "znap is already installed: $znap_dir"
+        return 0
+    fi
+    if ! (($ + commands[git])); then
+        print -u2 -r -- "zshx install: git is required to install znap"
+        return 1
+    fi
+    command git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git "$znap_dir" || return $?
+    print -r -- "installed znap: $znap_dir"
+}
+
+cmd_compile() {
+    emulate -L zsh
+    setopt null_glob
+
+    local root="$(_zsh_config_root)"
+    local clean=0
+    local dry_run=0
+    local usage="Usage: zshx compile [--clean] [--dry-run]
+
+Compile config/zsh shell files to adjacent .zwc files.
+
+Options:
+  --clean     remove .zwc files whose source file no longer exists
+  --dry-run   show what would be compiled/removed without changing files
+  -h, --help  show this help"
+
+    while (($#)); do
+        case "$1" in
+        --clean) clean=1 ;;
+        --dry-run | -n) dry_run=1 ;;
+        -h | --help)
+            print -r -- "$usage"
+            return 0
+            ;;
+        *)
+            print -u2 -r -- "zshx compile: unknown option: $1"
+            return 2
+            ;;
+        esac
+        shift
+    done
+
+    if [[ ! -d "$root" ]]; then
+        print -u2 -r -- "zshx compile: config directory not found: $root"
+        return 1
+    fi
+
+    if ((clean)); then
+        local zwc src
+        while IFS= read -r zwc; do
+            src="${zwc%.zwc}"
+            if [[ ! -e "$src" ]]; then
+                if ((dry_run)); then
+                    print -r -- "would remove ${zwc#$root/}"
+                else
+                    command rm -f -- "$zwc"
+                    print -r -- "removed ${zwc#$root/}"
+                fi
+            fi
+        done < <(command find "$root" -type f -name '*.zwc' -print 2>/dev/null)
+    fi
+
+    local file failed=0 compiled=0
+    local -a source_files=()
+    while IFS= read -r file; do
+        source_files+=("$file")
+    done < <(_zsh_config_sources "$root")
+    for file in "${source_files[@]}"; do
+        if ((dry_run)); then
+            print -r -- "would compile ${file#$root/}"
+            continue
+        fi
+
+        if zcompile "$file"; then
+            print -r -- "compiled ${file#$root/}"
+            ((compiled++))
+        else
+            print -u2 -r -- "failed ${file#$root/}"
+            ((failed++))
+        fi
+    done
+
+    ((dry_run)) && return 0
+    print -r -- "compiled $compiled file(s); $failed failure(s)"
+    return $failed
+}
+
+cmd_profile() {
+    local runs=3
+    local detailed=0
+    local usage="Usage: zshx profile [--zprof] [runs]
+
+Times interactive zsh startup in a child shell. Use --zprof for detailed function profiling."
+
+    while (($#)); do
+        case "$1" in
+        --zprof | -z) detailed=1 ;;
+        -h | --help)
+            print -r -- "$usage"
+            return 0
+            ;;
+        *)
+            if [[ "$1" =~ '^[0-9]+$' ]]; then
+                runs="$1"
+            else
+                print -u2 -r -- "zshx profile: unknown argument: $1"
+                return 2
+            fi
+            ;;
+        esac
+        shift
+    done
+
+    local i
+    for ((i = 1; i <= runs; i++)); do
+        print -r -- "run $i/$runs"
+        time zsh -i -c exit
+    done
+
+    if ((detailed)); then
+        local rc="${ZDOTDIR:-$HOME}/.zshrc"
+        [[ -r "$rc" ]] || rc="$(_zsh_config_root)/zshrc"
+        print -r -- ""
+        print -r -- "zprof: $rc"
+        ZSH_PROFILE_RC="$rc" zsh -dfi -c 'zmodload zsh/zprof; source "$ZSH_PROFILE_RC"; zprof'
+    fi
+}
+
+cmd_benchmark() {
+    cmd_profile --zprof "$@"
+}
+
+cmd_edit() {
+    emulate -L zsh
+    setopt pipefail
+
+    local root="$(_zsh_config_root)"
+    if [[ ! -d "$root" ]]; then
+        print -u2 -r -- "zshx edit: config directory not found: $root"
+        return 1
+    fi
+    if ! (($ + commands[fzf])); then
+        print -u2 -r -- "zshx edit: fzf is required"
+        return 1
+    fi
+
+    local preview="bat --color=always --style=numbers '$root'/{} 2>/dev/null || command sed -n '1,160p' '$root'/{}"
+    local -a fzf_args=(
+        --prompt='zsh> '
+        --preview="$preview"
+    )
+    (($#)) && fzf_args+=(--query="$*")
+
+    local selected
+    selected=$(command find "$root" -type f ! -name '*.zwc' -print |
+        command sed "s#^$root/##" |
+        command sort |
+        fzf "${fzf_args[@]}") || return
+    [[ -n "$selected" ]] || return 0
+
+    command "${EDITOR:-nvim}" "$root/$selected"
+}
+
+family_main "$@"

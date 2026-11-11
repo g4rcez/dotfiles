@@ -1,0 +1,121 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/dotfiles-shell.sh"
+source "$DOTFILES/config/zsh/fzf.sh"
+source "$DOTFILES/bin/lib/family.zsh"
+source "$DOTFILES/bin/lib/git.zsh"
+
+COMMANDS=(
+    'list:pick an open pull request with fzf and check it out'
+    'mine:pick one of your open pull requests with fzf and check it out'
+    'create:create a pull request against a base branch (picked with fzf when omitted)'
+    'draft:create a draft pull request against a base branch'
+    'desc:write a pull request description with the configured AI helper'
+    'commits:list the commits of a pull request, optionally by author'
+    'squash:interactive rebase of the pull request commits'
+)
+
+# Checks out the pull request picked with fzf from the JSON file written by gh pr list.
+_checkout_picked_pr() {
+    local prs_tmp_file="${1:-}"
+    [[ -r "$prs_tmp_file" ]] || { print -u2 -r -- "ghpr: JSON file is required"; return 2; }
+
+    if [[ "$(jq length "$prs_tmp_file")" == 0 ]]; then
+        print -r -- "No pull requests available"
+        return 0
+    fi
+    local selected
+    selected="$(jq -r '.[] | "#\(.number) \(.title)"' "$prs_tmp_file" | fzf --ansi)" || return $?
+    [[ -n "$selected" ]] || return 0
+    local pr_number="${selected%% *}"
+    pr_number="${pr_number#\#}"
+    [[ "$pr_number" =~ '^[0-9]+$' ]] || { print -u2 -r -- "ghpr: invalid pull request selection"; return 2; }
+    gh pr checkout "$pr_number"
+}
+
+# Arguments go to gh pr list.
+_pick_pr() {
+    local prs_tmp_file
+    prs_tmp_file="$(mktemp "${TMPDIR:-/tmp}/fzf-gitcli.XXXXXX")" || return $?
+
+    local result=0
+    if gh pr list "$@" --json 'body,number,id,title' >|"$prs_tmp_file"; then
+        _checkout_picked_pr "$prs_tmp_file" || result=$?
+    else
+        result=$?
+    fi
+
+    rm -f -- "$prs_tmp_file"
+    return "$result"
+}
+
+cmd_list() {
+    _pick_pr
+}
+
+cmd_mine() {
+    _pick_pr --author "@me"
+}
+
+cmd_create() {
+    gh pr create --base "${1:-$(git_pick_branch)}" -a "@me" "${@:2}"
+}
+
+cmd_draft() {
+    cmd_create "$1" "--draft"
+}
+
+cmd_desc() {
+    local pr_ref="${1:-}"
+    local -a diff_args=()
+    [[ -n "$pr_ref" ]] && diff_args=("$pr_ref")
+
+    local prompt
+    prompt="$(<"$DOTFILES/prompts/prdesc-script.txt")"
+
+    local PR_MESSAGE
+    PR_MESSAGE=$(gh pr diff "${diff_args[@]}" | ${=AI_QUERY_COMMAND} "${prompt}.\n ${pr_ref}")
+    echo "$PR_MESSAGE" | pbcopy
+    echo "$PR_MESSAGE"
+}
+
+cmd_commits() {
+    (($# >= 1 && $# <= 2)) || { print -u2 -r -- "Usage: ghpr commits PR_NUMBER [author_filter]"; return 2; }
+    local pr="$1" author="${2:-}"
+    [[ "$pr" =~ '^[0-9]+$' ]] || { print -u2 -r -- "ghpr commits: PR number must be numeric"; return 2; }
+    (($+commands[gh])) || { print -u2 -r -- "ghpr commits: gh is not installed"; return 1; }
+
+    local repo
+    repo="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)" || {
+        print -u2 -r -- "ghpr commits: could not determine repo (not in a GitHub repo?)"
+        return 1
+    }
+
+    local commits
+    commits="$(gh api "repos/${repo}/pulls/${pr}/commits" --paginate --slurp)" || return $?
+    if [[ -n "$author" ]]; then
+        local author_lower="${author:l}"
+        print -r -- "$commits" | jq -r --arg author "$author_lower" '
+            [.[][]] | .[]
+            | select(
+                ((.author.login // "") | ascii_downcase | contains($author)) or
+                ((.commit.author.name // "") | ascii_downcase | contains($author))
+            )
+            | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"
+        '
+    else
+        print -r -- "$commits" | jq -r '
+            [.[][]] | .[]
+            | "\(.sha[0:7])  \(.commit.author.date[0:10])  \(.commit.author.name) (\(.author.login // "?")):  \(.commit.message | split("\n")[0])"
+        '
+    fi
+}
+
+cmd_squash() {
+    local count="${1:-$(gh pr view --json commits | jq '.commits|length' | tr -d "\n")}"
+    echo "Rebase '$count' behind...Press ENTER to continue"
+    read -r
+    git rebase -i "HEAD~${count}"
+}
+
+family_main "$@"

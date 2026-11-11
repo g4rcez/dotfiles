@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/family.zsh"
+
+COMMANDS=(
+    'extract:unpack an archive based on its extension'
+    'size:size of files, or of everything in the current directory'
+    'copy:rsync copy with progress'
+)
+
+cmd_extract() {
+    local FILE="$1"
+    if [ -f "$FILE" ]; then
+        case $FILE in
+        *.tar.bz2) tar xjf "$FILE" ;;
+        *.tar.gz) tar xzf "$FILE" ;;
+        *.bz2) bunzip2 "$FILE" ;;
+        *.rar) unrar x "$FILE" ;;
+        *.gz) gunzip "$FILE" ;;
+        *.tar) tar xf "$FILE" ;;
+        *.tbz2) tar xjf "$FILE" ;;
+        *.tgz) tar xzf "$FILE" ;;
+        *.zip) unzip "$FILE" ;;
+        *.Z) uncompress "$FILE" ;;
+        *.7z) 7z x "$FILE" ;;
+        *) echo "'$FILE' cannot be extracted via ex()" ;;
+        esac
+    else
+        echo "'$FILE' is not a valid file"
+    fi
+}
+
+# Determine size of a file or total size of a directory
+cmd_size() {
+    if du -b /dev/null >/dev/null 2>&1; then
+        local arg=-sbh
+    else
+        local arg=-sh
+    fi
+    if (($# > 0)); then
+        du "$arg" -- "$@"
+    else
+        du $arg .[^.]* ./*
+    fi
+}
+
+cmd_copy() {
+    rsync -pogbr -hhh --backup-dir="/tmp/" -e /dev/null --progress "$@"
+}
+
+family_main "$@"

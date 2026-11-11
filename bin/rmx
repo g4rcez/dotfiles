@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+: ${DOTFILES:=${0:A:h:h}}
+source "$DOTFILES/bin/lib/family.zsh"
+
+COMMANDS=(
+    'dry-run:print what rm would remove'
+    'trash:move paths to the Trash'
+    'safe:dry run, then a hint about trash and rm'
+)
+
+# Every command takes one or more paths.
+_require_paths() {
+    local name="$1"
+    shift
+    if (($# == 0)); then
+        print -u2 -r -- "Usage: rmx $name PATH [...]"
+        return 2
+    fi
+}
+
+cmd_dry_run() {
+    _require_paths dry-run "$@" || return $?
+
+    local target
+    for target in "$@"; do
+        if [[ -e "$target" || -L "$target" ]]; then
+            print -r -- "would remove: $target"
+        else
+            print -r -- "missing: $target"
+        fi
+    done
+}
+
+cmd_trash() {
+    _require_paths trash "$@" || return $?
+
+    if (($ + commands[trash])); then
+        command trash "$@"
+    else
+        local trash_dir="$HOME/.Trash"
+        [[ -d "$trash_dir" ]] || mkdir -p "$trash_dir"
+        command mv -v -- "$@" "$trash_dir/"
+    fi
+}
+
+cmd_safe() {
+    _require_paths safe "$@" || return $?
+
+    cmd_dry_run "$@"
+    print -r -- "Use rmx trash to move these paths to Trash, or command rm to delete permanently."
+}
+
+family_main "$@"

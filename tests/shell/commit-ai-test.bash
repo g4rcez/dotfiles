@@ -6,7 +6,7 @@ cd "$TEST_REPO_ROOT"
 
 for tool in zsh jq ssh-keygen; do
     if ! command -v "$tool" >/dev/null 2>&1; then
-        printf 'commit.ai tests: SKIP (%s unavailable)\n' "$tool"
+        printf 'commit tests: SKIP (%s unavailable)\n' "$tool"
         exit 0
     fi
 done
@@ -36,14 +36,6 @@ git config --global user.email 'commit-ai@example.invalid'
 git config --global gpg.format ssh
 git config --global user.signingkey "$test_root/key.pub"
 
-cat >"$test_root/run.zsh" <<'EOF'
-compdef() { :; }
-export DOTFILES="$REPO_ROOT"
-source "$REPO_ROOT/config/zsh/git.sh"
-export AI_QUERY_COMMAND="$FAKE_AI"
-"$@"
-EOF
-
 new_repo() {
     repo="$test_root/$1"
     bare="$test_root/$1.git"
@@ -59,21 +51,21 @@ new_repo() {
     printf 'c\n' >"$repo/c.txt"
 }
 
-# Usage: run_in_repo ANSWER FUNCTION [ARGS]. Sets rc and output.
+# Usage: run_in_repo ANSWER SUBCOMMAND [ARGS]. Runs bin/commit. Sets rc and output.
 run_in_repo() {
     rc=0
     output="$(
         cd "$repo" &&
             printf '%s\n' "$1" |
-            REPO_ROOT="$TEST_REPO_ROOT" FAKE_AI="$test_root/bin/fake-ai" FAKE_SPLIT_JSON="$test_root/split.json" \
-                PATH="$test_root/bin:$PATH" zsh -f "$test_root/run.zsh" "${@:2}" 2>&1
+            DOTFILES="$TEST_REPO_ROOT" AI_QUERY_COMMAND="$test_root/bin/fake-ai" FAKE_SPLIT_JSON="$test_root/split.json" \
+                PATH="$test_root/bin:$PATH" "$TEST_REPO_ROOT/bin/commit" "${@:2}" 2>&1
     )" || rc=$?
 }
 
 # Two groups and an approved split: two commits, each holding only its own files, then one push.
 new_repo split-approved
 printf '%s' '{"groups":[{"paths":["a.txt"],"hint":"update a"},{"paths":["b.txt","c.txt"],"hint":"add b and c"}]}' >"$test_root/split.json"
-run_in_repo y commit.ai
+run_in_repo y ai
 [[ "$rc" == 0 ]] || fail "approved split exited $rc: $output"
 [[ "$(git -C "$repo" log --format=%s -n 2)" == $'feat: b.txt,c.txt\nfeat: a.txt' ]] || fail "expected one commit per group, got: $(git -C "$repo" log --format=%s)"
 [[ "$(git -C "$bare" log --format=%s -n 1 main)" == 'feat: b.txt,c.txt' ]] || fail "expected the commits to be pushed"
@@ -81,7 +73,7 @@ run_in_repo y commit.ai
 
 # The user declines: nothing is committed.
 new_repo split-declined
-run_in_repo n commit.ai
+run_in_repo n ai
 [[ "$rc" != 0 ]] || fail "declined split must exit non-zero"
 assert_contains "$output" 'aborted, nothing changed'
 [[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "declined split must not commit"
@@ -89,49 +81,49 @@ assert_contains "$output" 'aborted, nothing changed'
 # The AI forgets a path: fall back to one commit with every path.
 new_repo split-invalid
 printf '%s' '{"groups":[{"paths":["a.txt"],"hint":"update a"}]}' >"$test_root/split.json"
-run_in_repo '' commit.ai
+run_in_repo '' ai
 [[ "$rc" == 0 ]] || fail "fallback exited $rc: $output"
 assert_contains "$output" 'no valid AI split'
 [[ "$(git -C "$repo" log --format=%s -n 1)" == 'feat: a.txt,b.txt,c.txt' ]] || fail "expected one commit with all paths"
 [[ "$(git -C "$repo" rev-list --count HEAD)" == 2 ]] || fail "expected exactly one new commit"
 
-# A failing pre-commit hook must stop the commit: commit.ai never skips hooks.
+# A failing pre-commit hook must stop the commit: commit ai never skips hooks.
 new_repo hook-fails
 mkdir "$repo/.hooks"
 printf '#!/usr/bin/env bash\nexit 1\n' >"$repo/.hooks/pre-commit"
 chmod +x "$repo/.hooks/pre-commit"
 git -C "$repo" config core.hooksPath .hooks
 printf '%s' '{"groups":[{"paths":["a.txt","b.txt","c.txt"],"hint":"all"}]}' >"$test_root/split.json"
-run_in_repo '' commit.ai
-[[ "$rc" != 0 ]] || fail "a failing hook must fail commit.ai"
+run_in_repo '' ai
+[[ "$rc" != 0 ]] || fail "a failing hook must fail commit ai"
 assert_contains "$output" 'commit 1 of 1 failed'
 [[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "a failing hook must not create a commit"
 
 # The shorthand helpers stage the changed paths and keep the hooks: a failing hook blocks them.
 new_repo docs-helper
-run_in_repo '' commit.docs
-[[ "$rc" == 0 ]] || fail "commit.docs exited $rc: $output"
-[[ "$(git -C "$bare" log --format=%s -n 1 main)" == 'docs: update documentation' ]] || fail "expected commit.docs to commit and push"
-[[ "$(git -C "$repo" show --name-only --format= HEAD)" == $'a.txt\nb.txt\nc.txt' ]] || fail "expected commit.docs to commit every changed path"
+run_in_repo '' docs
+[[ "$rc" == 0 ]] || fail "commit docs exited $rc: $output"
+[[ "$(git -C "$bare" log --format=%s -n 1 main)" == 'docs: update documentation' ]] || fail "expected commit docs to commit and push"
+[[ "$(git -C "$repo" show --name-only --format= HEAD)" == $'a.txt\nb.txt\nc.txt' ]] || fail "expected commit docs to commit every changed path"
 
 new_repo wip-hook-fails
 mkdir "$repo/.hooks"
 printf '#!/usr/bin/env bash\nexit 1\n' >"$repo/.hooks/pre-commit"
 chmod +x "$repo/.hooks/pre-commit"
 git -C "$repo" config core.hooksPath .hooks
-run_in_repo '' commit.wip
-[[ "$rc" != 0 ]] || fail "a failing hook must fail commit.wip"
-[[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "commit.wip must not skip the hooks"
+run_in_repo '' wip
+[[ "$rc" != 0 ]] || fail "a failing hook must fail commit wip"
+[[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "commit wip must not skip the hooks"
 git -C "$repo" add a.txt
-run_in_repo '' wip.staged
-[[ "$rc" != 0 ]] || fail "a failing hook must fail wip.staged"
-[[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "wip.staged must not skip the hooks"
+run_in_repo '' staged
+[[ "$rc" != 0 ]] || fail "a failing hook must fail commit staged"
+[[ "$(git -C "$repo" rev-list --count HEAD)" == 1 ]] || fail "commit staged must not skip the hooks"
 
 new_repo helper-nothing
 git -C "$repo" checkout -q -- a.txt
 rm "$repo/b.txt" "$repo/c.txt"
-run_in_repo '' commit.docs
-[[ "$rc" != 0 ]] || fail "commit.docs with no changes must fail"
+run_in_repo '' docs
+[[ "$rc" != 0 ]] || fail "commit docs with no changes must fail"
 assert_contains "$output" 'nothing to commit'
 
-printf 'commit.ai tests passed\n'
+printf 'commit tests passed\n'
