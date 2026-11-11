@@ -222,6 +222,8 @@ rex.bind("alt+left", "pane.focus", { direction = "left" })
 rex.bind("alt+right", "pane.focus", { direction = "right" })
 rex.bind("alt+up", "pane.focus", { direction = "up" })
 rex.bind("alt+down", "pane.focus", { direction = "down" })
+-- Scroll mode: prefix + s. K/J scroll a page, Esc leaves. Also scrolls claude.
+dofile(dir .. "extensions/scroll.lua") { key = PREFIX .. "s" }
 -- Session, tab and config
 bind("r", "session.rename")
 bind("w", "client.tab.rename")
@@ -241,7 +243,7 @@ bind("m", "pane.move_to_new_tab")
 bind("z", "pane.zoom")
 bind("g", "lazygit")
 bind("e", "filepicker")
-bind("s", "skillspicker")
+bind("shift+s", "skillspicker")
 bind("a", "fzf_agents")
 bind("d", "fzf_agents")
 bind("b", "fzf_windows")
