@@ -198,13 +198,33 @@ function _git_commit_and_push() {
     command git push "${push_args[@]}"
 }
 
+# Sets reply to the paths changed under the cwd: tracked changes (renames as delete + add) and untracked files.
+function _git_changed_paths() {
+    emulate -L zsh
+    local changed_path base=HEAD
+    command git rev-parse --verify -q HEAD >/dev/null || base="$(command git hash-object -t tree /dev/null)"
+    reply=()
+    while IFS= read -r -d '' changed_path; do
+        reply+=("$changed_path")
+    done < <(command git diff --relative --no-renames --name-only -z "$base" -- . ; command git ls-files --others --exclude-standard -z -- .)
+}
+
+# Stages the changed paths by explicit path, never with a blanket git add.
+function _git_add_changed() {
+    emulate -L zsh
+    _git_changed_paths
+    ((${#reply} > 0)) || { print -u2 -r -- "git helper: nothing to commit"; return 1; }
+    command git add -- "${reply[@]}"
+}
+
+# Git hooks run on every commit made by these helpers.
 function commit.wip() {
     emulate -L zsh
     _git_require_repo || return
-    command git add -A . || return $?
+    _git_add_changed || return $?
     local now
     now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
-    _git_commit_and_push --no-verify -S -m "wip: ${now}" "$@"
+    _git_commit_and_push -S -m "wip: ${now}" "$@"
 }
 
 function _commit_message() {
@@ -213,7 +233,7 @@ function _commit_message() {
     _git_require_repo || return
     local message="$1"
     shift
-    git add . 
+    _git_add_changed || return $?
     _git_commit_and_push -S -m "$message" "$@"
 }
 
@@ -237,8 +257,13 @@ function commitwithai() {
         PROMPT="${PROMPT}\n\nContext Hint (use this to explain the WHY): ${HINT}"
     fi
 
+    # AICOMMIT_CACHED=1 limits the diff to the index, so commit.ai can describe one group at a time.
+    local -a DIFF_BASE=(HEAD)
+    [[ -n "${AICOMMIT_CACHED:-}" ]] && DIFF_BASE=(--cached)
     local DIFF
-    DIFF="$(command git diff HEAD -U5 -- . "${EXCLUDE_ARGS[@]}")" || return $?
+    DIFF="$(command git diff "${DIFF_BASE[@]}" -U5 -- . "${EXCLUDE_ARGS[@]}")" || return $?
+    # A group made only of excluded files (a lockfile) would otherwise send an empty diff.
+    [[ -n "$DIFF" ]] || DIFF="$(command git diff "${DIFF_BASE[@]}" -U5 -- .)" || return $?
 
     if [[ "${AI_CLI_NAME:-}" == "codex" || "${AI_QUERY_COMMAND:-}" == codex* ]]; then
         (($+commands[codex])) || { print -u2 -r -- "commitwithai: codex is not installed"; return 1; }
@@ -341,6 +366,24 @@ function commit.write() {
     commitwithai "$@"
 }
 
+# Prints the AI grouping of the changed paths as JSON, or nothing when the AI fails.
+function _commit_ai_split() {
+    emulate -L zsh
+    local prompt_file="$DOTFILES/prompts/aicommit-split.txt"
+    [[ -r "$prompt_file" && -n "${AI_QUERY_COMMAND:-}" ]] || return 1
+    local hint="$1"
+    shift
+    {
+        print -r -- "Context Hint: ${hint}"
+        print -r -- "Changed paths:"
+        print -rl -- "$@"
+        print
+        command git diff --stat HEAD -- .
+    } | ${=AI_QUERY_COMMAND} "$(<"$prompt_file")" 2>/dev/null | command sed '/^```/d'
+}
+
+# One commit per reason. Splits the changed paths with AI, asks before committing more than one group,
+# stages each group by explicit path and lets the git hooks run. Commit args apply to every commit.
 function commit.ai() {
     emulate -L zsh
     _git_require_repo || return
@@ -365,11 +408,64 @@ function commit.ai() {
         esac
     done
 
-    command git add -A . || return $?
+    command git rev-parse --verify -q HEAD >/dev/null || { print -u2 -r -- "commit.ai: repository has no commits"; return 1; }
+    local changed_path
+    _git_changed_paths
+    local -a all_paths=("${reply[@]}")
+    ((${#all_paths} > 0)) || { print -u2 -r -- "commit.ai: nothing to commit"; return 1; }
+
+    # Each group is a line of shell-quoted paths plus a hint. Fall back to one group when the AI answer is not a partition.
+    local -a group_lines=() group_hints=()
+    local -A seen=()
+    local split_json line valid=1 group_count i
+    split_json="$(_commit_ai_split "${hint_args[*]}" "${all_paths[@]}")"
+    if group_count="$(print -r -- "$split_json" | command jq -e '.groups | length' 2>/dev/null)"; then
+        for ((i = 0; i < group_count; i++)); do
+            line="$(print -r -- "$split_json" | command jq -r ".groups[$i].paths | map(@sh) | join(\" \")")"
+            group_lines+=("$line")
+            group_hints+=("$(print -r -- "$split_json" | command jq -r ".groups[$i].hint // \"\"")")
+            for changed_path in "${(@Q)${(z)line}}"; do
+                (($all_paths[(Ie)$changed_path])) && ((! ${+seen[$changed_path]})) || valid=0
+                seen[$changed_path]=1
+            done
+        done
+        ((${#seen} == ${#all_paths})) || valid=0
+    else
+        valid=0
+    fi
+    if ((! valid)); then
+        print -u2 -r -- "commit.ai: no valid AI split, using one commit"
+        group_lines=("${(j: :)${(@qq)all_paths}}")
+        group_hints=("")
+    fi
+
+    if ((${#group_lines} > 1)); then
+        for ((i = 1; i <= ${#group_lines}; i++)); do
+            print -u2 -r -- "$i. ${group_hints[i]}"
+            print -u2 -rl -- "${(@Q)${(z)group_lines[i]}}" | command sed 's/^/     /'
+        done
+        local reply
+        print -n -u2 -r -- "Commit as ${#group_lines} commits? [y/N] "
+        read -r reply || return 1
+        [[ "$reply" == [yY]* ]] || { print -u2 -r -- "commit.ai: aborted, nothing changed"; return 1; }
+    fi
+
     local commit_message
-    commit_message="$(commitwithai "${hint_args[@]}")" || return $?
-    [[ -n "$commit_message" ]] || { print -u2 -r -- "wip: work in progress"; return 1; }
-    _git_commit_and_push --no-verify -S -m "$commit_message" "${commit_args[@]}" --push "${push_args[@]}"
+    local -a group_paths
+    for ((i = 1; i <= ${#group_lines}; i++)); do
+        group_paths=("${(@Q)${(z)group_lines[i]}}")
+        command git reset -q || return $?
+        command git add -- "${group_paths[@]}" || return $?
+        commit_message="$(AICOMMIT_CACHED=1 commitwithai "${hint_args[@]}" "${group_hints[i]}")" || return $?
+        [[ -n "$commit_message" ]] || { print -u2 -r -- "commit.ai: empty commit message"; return 1; }
+        command git commit -S -m "$commit_message" "${commit_args[@]}" || {
+            local rc=$?
+            print -u2 -r -- "commit.ai: commit $i of ${#group_lines} failed, its files stay staged and later groups are untouched"
+            return $rc
+        }
+        command git show --stat --format='%h %s' HEAD
+    done
+    command git push "${push_args[@]}"
 }
 
 function wip.staged() {
@@ -377,7 +473,7 @@ function wip.staged() {
     _git_require_repo || return
     local now
     now="$(date +"%Y-%m-%dT%H:%M:%S TZ%Z(%a, %j)")" || return $?
-    git commit --no-verify -S -m "wip: ${now}"
+    git commit -S -m "wip: ${now}"
 }
 
 function pullb() {

@@ -203,4 +203,65 @@ status="$(
     exit 1
 }
 
+# Rex backend: no $TMUX, agents come from block process info and program_status.
+cat >"$stub_dir/rex" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+case "$*" in
+  "ls --json") printf '%s\n' '{"sessions":[{"session_id":"session:s1","label":"work"}]}' ;;
+  "window ls -s session:s1 --json") printf '%s\n' '{"windows":[{"window_id":"window:w1","label":"1: agent"}]}' ;;
+  "block ls -s session:s1 --json")
+    printf '%s\n' '{"blocks":[{"block_id":"block:b1","placement":"placed","window_id":"window:w1"},{"block_id":"block:b2","placement":"placed","window_id":"window:w1"},{"block_id":"block:b3","placement":"placed","window_id":"window:w1"}]}' ;;
+  *"-b block:b1 process"*) printf '%s\n' '{"foreground":{"pid":11,"argv0":"claude","name":"2.1.0","cwd":"/tmp"}}' ;;
+  *"-b block:b2 process"*) printf '%s\n' '{"foreground":{"pid":22,"argv0":"codex","name":"codex"}}' ;;
+  *"-b block:b3 process"*) printf '%s\n' '{"foreground":{"pid":33,"argv0":"-zsh","name":"zsh"}}' ;;
+  *"-b block:b1 program_status"*) printf '%s\n' '{"records":[{"state":"working"}]}' ;;
+  *"-b block:b2 program_status"*) printf '%s\n' '{"records":[{"state":"done"}]}' ;;
+esac
+EOF
+chmod +x "$stub_dir/rex"
+
+status="$(
+    HOME="$tmp_dir/home" \
+        DOTFILES_DIR="$repo_root" \
+        REX_SESSION='session:s1' \
+        REX_BLOCK='block:b3' \
+        TMUX= \
+        PATH="$stub_dir:$PATH" \
+        "$script" --_statusline
+)"
+[[ "$status" == *' 1 running'* && "$status" == *' 1 done'* && "$status" != *idle* ]] || {
+    printf 'FAIL: expected Rex backend to count one running and one done agent, got: %s\n' "$status" >&2
+    exit 1
+}
+
+# Rex session rows: the current block (b3) is skipped, the shell block is not an agent.
+rows="$(
+    HOME="$tmp_dir/home" \
+        DOTFILES_DIR="$repo_root" \
+        REX_SESSION='session:s1' \
+        REX_BLOCK='block:b3' \
+        TMUX= \
+        PATH="$stub_dir:$PATH" \
+        "$script" --_sessions-rows
+)"
+expected_rows=$'session:s1,block:b1,window:w1\twork:1: agent\tclaude\t/tmp\t1: agent\tworking\t11\n'
+expected_rows+=$'session:s1,block:b2,window:w1\twork:1: agent\tcodex\t-\t1: agent\tdone\t22'
+[[ "$rows" == "$expected_rows" ]] || {
+    printf 'FAIL: expected Rex session rows for claude and codex only, got:\n%s\n' "$rows" >&2
+    exit 1
+}
+
+# Cockpit sidebar: one row per session, led by the first agent status found in that session.
+sidebar_rows="$(
+    HOME="$tmp_dir/home" \
+        DOTFILES_DIR="$repo_root" \
+        PATH="$stub_dir:$PATH" \
+        "$repo_root/bin/rex-cockpit-sidebar" --rows
+)"
+[[ "$sidebar_rows" == $'working  work\tsession:s1' ]] || {
+    printf 'FAIL: expected cockpit sidebar row for session work, got: %s\n' "$sidebar_rows" >&2
+    exit 1
+}
+
 printf 'ai statusline tests passed\n'

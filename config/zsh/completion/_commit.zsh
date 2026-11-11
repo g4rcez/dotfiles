@@ -14,7 +14,7 @@ _commit() {
         'commit.rebase:chore: resolve rebase conflicts'
         'commit.wip:wip: create a timestamped work-in-progress commit'
         'commit.write:write a commit message with the configured AI helper'
-        'commit.ai:generate a commit message with AI'
+        'commit.ai:split changes into AI-written commits and push'
     )
 
     _describe 'commit command' cmds
