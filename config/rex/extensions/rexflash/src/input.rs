@@ -22,9 +22,21 @@ impl Modifier {
     }
 }
 
+/// Moves the view through the captured history.
+#[derive(Clone, Copy)]
+pub enum Scroll {
+    LineUp,
+    LineDown,
+    PageUp,
+    PageDown,
+    Top,
+    Bottom,
+}
+
 pub enum Key {
     /// The terminal changed size: draw again.
     Redraw,
+    Scroll(Scroll),
     Cancel,
     Backspace,
     Enter,
@@ -45,6 +57,12 @@ pub fn read() -> io::Result<Key> {
         }
         let ctrl = k.modifiers.contains(KeyModifiers::CONTROL);
         match k.code {
+            KeyCode::Up => return Ok(Key::Scroll(Scroll::LineUp)),
+            KeyCode::Down => return Ok(Key::Scroll(Scroll::LineDown)),
+            KeyCode::PageUp => return Ok(Key::Scroll(Scroll::PageUp)),
+            KeyCode::PageDown => return Ok(Key::Scroll(Scroll::PageDown)),
+            KeyCode::Home => return Ok(Key::Scroll(Scroll::Top)),
+            KeyCode::End => return Ok(Key::Scroll(Scroll::Bottom)),
             KeyCode::Esc => return Ok(Key::Cancel),
             KeyCode::Backspace => return Ok(Key::Backspace),
             KeyCode::Enter => return Ok(Key::Enter),

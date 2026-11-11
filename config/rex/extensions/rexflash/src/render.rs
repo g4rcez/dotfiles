@@ -25,17 +25,18 @@ impl Style {
     }
 }
 
-/// Draws `screen` from the top-left corner. Text beyond `cols` columns or `rows` rows is cut.
-/// The overlay starts at the pane's own corner, so row `r` of the screen belongs on row `r`.
+/// Draws `rows` rows of `screen`, from row `top`, at the top-left corner. Text beyond `cols` columns is cut.
+/// Marks use the row numbers of the whole screen.
 pub fn draw(
     out: &mut impl Write,
     screen: &Screen,
     marks: &Marks,
     style: &Style,
     cols: usize,
+    top: usize,
     rows: usize,
 ) -> io::Result<()> {
-    for (r, row) in screen.rows.iter().enumerate().take(rows) {
+    for (r, row) in screen.rows.iter().enumerate().skip(top).take(rows) {
         let mut line = String::new();
         // (kind, original style); kind 0 = plain, 1 = highlight, 2 = label.
         let mut state: Option<(u8, u32)> = None;
@@ -70,7 +71,7 @@ pub fn draw(
         }
         line.push_str("\x1b[0m");
         // Clear first: after a full-width row the cursor waits on the last column, and clearing then would erase it.
-        queue!(out, MoveTo(0, r as u16), Clear(ClearType::CurrentLine), Print(&line))?;
+        queue!(out, MoveTo(0, (r - top) as u16), Clear(ClearType::CurrentLine), Print(&line))?;
     }
     out.flush()
 }

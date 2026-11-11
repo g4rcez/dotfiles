@@ -1,9 +1,13 @@
 -- rexflash: capture the text of the focused pane, show it with labels, then copy, paste or open what you pick.
 --   hint  labels URLs, paths, hashes, IPs and more (patterns).
 --   flash labels whatever you type (search).
--- The pane is captured once and shown in a floating terminal over it. The Rust binary next to this
--- file reads the keys itself, so no key mode is needed and Rex shows no key list. The pane is never
--- drawn on. Press the same key again, or Esc, to close it.
+-- The pane is captured once, with some scrollback, and shown in a floating terminal over it. The
+-- Rust binary next to this file reads the keys itself, so no key mode is needed and Rex shows no
+-- key list. The pane is never drawn on. Press the same key again, or Esc, to close it.
+--
+-- The view starts on the live screen. Rex does not say where you have scrolled the pane, so the
+-- overlay cannot start there. Page Up, Page Down, Up, Down, Home and End scroll the captured
+-- history, and only the matches on display get labels.
 --
 -- Rex draws a title bar and a border on every float and has no option to hide them. They shift the
 -- content down and cost a row and a column, so the float is never exactly the pane.
@@ -25,6 +29,7 @@
 --       hint_style = "1;38;5;0;48;5;12", -- SGR codes
 --       highlight_style = "1;38;5;12",
 --       dim = false,                     -- true dims the text that is not a match
+--       scrollback = 2000,               -- rows of history to capture above the screen (0 = none)
 --   }
 local here = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("rexflash%.lua$", "")
 local cwd_of = dofile(here .. "../cwd.lua")

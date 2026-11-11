@@ -23,6 +23,8 @@ pub struct Config {
     pub highlight_style: String,
     /// Dim the text that is not a match. Off by default: the capture is shown as it was.
     pub dim: bool,
+    /// Rows of history to capture above the screen. Page Up and Page Down scroll through them.
+    pub scrollback: usize,
     /// "left" or "right": which end of a match gets its hint.
     pub hint_position: String,
 }
@@ -40,10 +42,14 @@ impl Default for Config {
             hint_style: "1;38;5;0;48;5;12".into(),
             highlight_style: "1;38;5;12".into(),
             dim: false,
+            scrollback: 2000,
             hint_position: "left".into(),
         }
     }
 }
+
+/// A larger capture would make every key press slow.
+const MAX_SCROLLBACK: usize = 50_000;
 
 fn sgr_ok(s: &str) -> bool {
     s.bytes().all(|b| b.is_ascii_digit() || b == b';' || b == b':')
@@ -74,6 +80,9 @@ impl Config {
             || !self.alphabet.chars().all(|c| c.is_ascii_lowercase())
         {
             return Err("config: alphabet needs at least 2 distinct letters a-z".into());
+        }
+        if self.scrollback > MAX_SCROLLBACK {
+            return Err(format!("config: scrollback must be at most {MAX_SCROLLBACK} rows"));
         }
         if !sgr_ok(&self.hint_style) || !sgr_ok(&self.highlight_style) {
             return Err("config: styles may only hold digits, ';' and ':'".into());
@@ -124,6 +133,13 @@ mod tests {
     #[test]
     fn overlay_option_is_gone() {
         assert!(Config::from_json(r#"{"overlay":"pane"}"#).is_err());
+    }
+
+    #[test]
+    fn scrollback_has_a_default_and_a_limit() {
+        assert_eq!(Config::from_json("{}").unwrap().scrollback, 2000);
+        assert_eq!(Config::from_json(r#"{"scrollback":0}"#).unwrap().scrollback, 0);
+        assert!(Config::from_json(r#"{"scrollback":50001}"#).is_err());
     }
 
     #[test]

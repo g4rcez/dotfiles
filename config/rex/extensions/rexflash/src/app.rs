@@ -1,13 +1,14 @@
 //! The hint and flash overlays as state machines, and the float overlay loop.
 //!
-//! An overlay turns a key into a `Step` and describes what to draw (`Marks`). The float loop below
-//! and the pane daemon in `pane.rs` both drive the same state machines.
+//! The pane is captured once: its screen and some scrollback. The overlay shows `rows` rows of that
+//! capture, from row `top`, and only the matches in those rows get labels. Page Up, Page Down, the
+//! arrow keys, Home and End move `top`.
 
 use crate::actions;
 use crate::config::Config;
 use crate::flash;
 use crate::hints;
-use crate::input::{self, Key, Modifier};
+use crate::input::{self, Key, Modifier, Scroll};
 use crate::patterns::{self, Found, Pattern};
 use crate::render::{self, Marks, Style};
 use crate::rex::Target;
@@ -39,15 +40,19 @@ pub enum Step {
 }
 
 pub trait Overlay {
+    /// The rows on display: `rows` rows from row `top` of the screen. Only matches there get labels.
+    fn set_view(&mut self, top: usize, rows: usize);
     fn marks(&self) -> Marks;
     fn step(&mut self, key: Key) -> Step;
 }
 
-/// The captured screen and everything found in it.
+/// The captured screen with its scrollback, and everything found in it.
 pub struct Loaded {
     pub screen: Screen,
     pub lines: Vec<Line>,
     pub found: Vec<Found>,
+    /// The first row of the live screen. The overlay starts there.
+    pub live_top: usize,
 }
 
 /// The last `n` lines of `s`, for `n` >= 1. Lines end with '\n'.
@@ -60,20 +65,42 @@ fn lower(c: char) -> char {
 }
 
 impl Loaded {
-    /// `cols` and `rows` are the size of the captured pane.
-    pub fn new(vt: &str, cols: usize, rows: usize, patterns: &[Pattern]) -> Loaded {
-        let screen = Screen::parse(tail_lines(vt, rows + 1), cols).tail(rows);
+    /// `cols` and `pane_rows` are the size of the captured pane. Up to `scrollback` rows above its screen are kept.
+    pub fn new(vt: &str, cols: usize, pane_rows: usize, scrollback: usize, patterns: &[Pattern]) -> Loaded {
+        let keep = pane_rows + scrollback;
+        let screen = Screen::parse(tail_lines(vt, keep + 1), cols).tail(keep);
+        let live_top = screen.rows.len().saturating_sub(pane_rows);
         let lines = screen.lines();
         let found = patterns::find_all(patterns, &lines);
-        Loaded { screen, lines, found }
+        Loaded { screen, lines, found, live_top }
     }
+
+    /// Whether the character at `index` of line `line` is on display.
+    fn in_view(&self, line: usize, index: usize, top: usize, rows: usize) -> bool {
+        let row = self.lines[line].pos[index].0;
+        row >= top && row < top + rows
+    }
+}
+
+/// The new first row of the view after a scroll key. The view never goes past the captured rows.
+pub fn scrolled(top: usize, total: usize, rows: usize, scroll: Scroll) -> usize {
+    let max = total.saturating_sub(rows);
+    let new = match scroll {
+        Scroll::LineUp => top.saturating_sub(1),
+        Scroll::LineDown => top + 1,
+        Scroll::PageUp => top.saturating_sub(rows),
+        Scroll::PageDown => top + rows,
+        Scroll::Top => 0,
+        Scroll::Bottom => max,
+    };
+    new.min(max)
 }
 
 pub fn overlay<'a>(mode: Mode, loaded: &'a Loaded, cfg: &Config) -> Box<dyn Overlay + 'a> {
     let alphabet = cfg.alphabet_chars();
     match mode {
         Mode::Hint => Box::new(Hint::new(loaded, alphabet, cfg.hint_position == "right")),
-        Mode::Flash => Box::new(Flash { loaded, alphabet, query: String::new() }),
+        Mode::Flash => Box::new(Flash { loaded, alphabet, query: String::new(), view: (0, usize::MAX) }),
     }
 }
 
@@ -85,10 +112,12 @@ struct Hint<'a> {
     loaded: &'a Loaded,
     alphabet: Vec<char>,
     right: bool,
-    /// One text per distinct match text, most important first.
+    /// (top, rows) of the view.
+    view: (usize, usize),
+    /// One text per distinct match text in view, most important first.
     texts: Vec<&'a str>,
-    /// The text group of each entry of `loaded.found`.
-    group_of: Vec<usize>,
+    /// The text group of each entry of `loaded.found`. `None` when the match is not in view.
+    group_of: Vec<Option<usize>>,
     /// `labels[g]` is the label of text group `g`. Groups past the last label have none.
     labels: Vec<String>,
     typed: String,
@@ -96,9 +125,28 @@ struct Hint<'a> {
 
 impl<'a> Hint<'a> {
     fn new(loaded: &'a Loaded, alphabet: Vec<char>, right: bool) -> Self {
-        // Same text, same label. The most important texts come first and get the shortest labels.
+        let mut hint = Hint {
+            loaded,
+            alphabet,
+            right,
+            view: (0, usize::MAX),
+            texts: Vec::new(),
+            group_of: Vec::new(),
+            labels: Vec::new(),
+            typed: String::new(),
+        };
+        hint.rebuild();
+        hint
+    }
+
+    /// Same text, same label. The most important texts come first and get the shortest labels.
+    fn rebuild(&mut self) {
+        let loaded: &'a Loaded = self.loaded;
+        let (top, rows) = self.view;
         let found = &loaded.found;
-        let mut order: Vec<usize> = (0..found.len()).collect();
+        let mut order: Vec<usize> = (0..found.len())
+            .filter(|&i| loaded.in_view(found[i].line, found[i].start, top, rows))
+            .collect();
         order.sort_by(|&a, &b| {
             found[b]
                 .weight
@@ -106,26 +154,35 @@ impl<'a> Hint<'a> {
                 .then(found[a].line.cmp(&found[b].line))
                 .then(found[a].start.cmp(&found[b].start))
         });
-        let mut texts: Vec<&str> = Vec::new();
+        let mut texts: Vec<&'a str> = Vec::new();
         let mut index: HashMap<&str, usize> = HashMap::new();
-        let mut group_of = vec![0; found.len()];
+        let mut group_of = vec![None; found.len()];
         for &i in &order {
             let text = found[i].text.as_str();
-            group_of[i] = *index.entry(text).or_insert_with(|| {
+            group_of[i] = Some(*index.entry(text).or_insert_with(|| {
                 texts.push(text);
                 texts.len() - 1
-            });
+            }));
         }
-        let labels = hints::assign(texts.len(), &alphabet);
-        Hint { loaded, alphabet, right, texts, group_of, labels, typed: String::new() }
+        self.labels = hints::assign(texts.len(), &self.alphabet);
+        self.texts = texts;
+        self.group_of = group_of;
+        self.typed.clear();
     }
 }
 
 impl Overlay for Hint<'_> {
+    fn set_view(&mut self, top: usize, rows: usize) {
+        if self.view != (top, rows) {
+            self.view = (top, rows);
+            self.rebuild();
+        }
+    }
+
     fn marks(&self) -> Marks {
         let mut marks = Marks::default();
         for (i, f) in self.loaded.found.iter().enumerate() {
-            let Some(label) = self.labels.get(self.group_of[i]) else {
+            let Some(label) = self.group_of[i].and_then(|g| self.labels.get(g)) else {
                 continue;
             };
             if !label.starts_with(&self.typed) {
@@ -153,7 +210,7 @@ impl Overlay for Hint<'_> {
                 self.typed.pop();
                 Step::Continue
             }
-            Key::Enter | Key::Redraw => Step::Continue,
+            Key::Enter | Key::Redraw | Key::Scroll(_) => Step::Continue,
             Key::Char(c, modifier) => {
                 let c = lower(c);
                 if !self.alphabet.contains(&c) {
@@ -176,11 +233,16 @@ struct Flash<'a> {
     loaded: &'a Loaded,
     alphabet: Vec<char>,
     query: String,
+    /// (top, rows) of the view.
+    view: (usize, usize),
 }
 
 impl Flash<'_> {
+    /// The matches of the query that are in view, and their labels.
     fn hits(&self) -> (Vec<flash::Hit>, Vec<Option<char>>) {
+        let (top, rows) = self.view;
         let mut hits = flash::search(&self.loaded.lines, &self.query);
+        hits.retain(|h| self.loaded.in_view(h.line, h.start, top, rows));
         flash::sort_bottom_first(&mut hits, &self.loaded.lines);
         let labels = flash::labels(&hits, &self.loaded.lines, &self.alphabet);
         (hits, labels)
@@ -197,6 +259,10 @@ fn flash_label_cell(line: &Line, h: &flash::Hit) -> (usize, usize) {
 }
 
 impl Overlay for Flash<'_> {
+    fn set_view(&mut self, top: usize, rows: usize) {
+        self.view = (top, rows);
+    }
+
     fn marks(&self) -> Marks {
         let (hits, labels) = self.hits();
         let mut marks = Marks::default();
@@ -226,7 +292,7 @@ impl Overlay for Flash<'_> {
                 Step::Continue
             }
             Key::Enter if hits.len() == 1 => pick(0, Modifier::Main),
-            Key::Enter | Key::Redraw => Step::Continue,
+            Key::Enter | Key::Redraw | Key::Scroll(_) => Step::Continue,
             Key::Char(c, modifier) => {
                 if let Some(i) = labels.iter().position(|l| *l == Some(lower(c))) {
                     return pick(i, modifier);
@@ -273,9 +339,11 @@ pub fn run(mode: Mode, target: &Target, cfg: &Config, cwd: Option<&str>) -> Resu
     let patterns = patterns::build(cfg.patterns.as_deref(), &cfg.extra)?;
     let size = target.size()?;
     let vt = target.capture_vt()?;
-    let loaded = Loaded::new(&vt, size.columns, size.rows, &patterns);
+    let loaded = Loaded::new(&vt, size.columns, size.rows, cfg.scrollback, &patterns);
+    let total = loaded.screen.rows.len();
     let mut overlay = overlay(mode, &loaded, cfg);
     let style = style(cfg, cfg.dim);
+    let mut top = loaded.live_top;
 
     let picked = {
         let _guard = Guard::enter().map_err(io_err)?;
@@ -284,17 +352,20 @@ pub fn run(mode: Mode, target: &Target, cfg: &Config, cwd: Option<&str>) -> Resu
         loop {
             // The size is read for every frame. Rex resizes a new float a moment after it starts.
             let (cols, rows) = terminal::size().map_err(io_err)?;
-            render::draw(&mut out, &loaded.screen, &overlay.marks(), &style, cols as usize, rows as usize)
-                .map_err(io_err)?;
-            let key = input::read().map_err(io_err)?;
-            if let Key::Redraw = key {
-                queue!(out, Clear(ClearType::All)).map_err(io_err)?;
-                continue;
-            }
-            match overlay.step(key) {
-                Step::Continue => {}
-                Step::Pick(p) => break Some(p),
-                Step::Cancel => break None,
+            let (cols, rows) = (cols as usize, rows as usize);
+            top = top.min(total.saturating_sub(rows));
+            overlay.set_view(top, rows);
+            render::draw(&mut out, &loaded.screen, &overlay.marks(), &style, cols, top, rows).map_err(io_err)?;
+            match input::read().map_err(io_err)? {
+                Key::Redraw => {
+                    queue!(out, Clear(ClearType::All)).map_err(io_err)?;
+                }
+                Key::Scroll(s) => top = scrolled(top, total, rows, s),
+                key => match overlay.step(key) {
+                    Step::Continue => {}
+                    Step::Pick(p) => break Some(p),
+                    Step::Cancel => break None,
+                },
             }
         }
     };
@@ -310,7 +381,7 @@ mod tests {
     use super::*;
 
     fn loaded(vt: &str) -> Loaded {
-        Loaded::new(vt, 80, 3, &patterns::build(None, &[]).unwrap())
+        Loaded::new(vt, 80, 3, 0, &patterns::build(None, &[]).unwrap())
     }
 
     fn cfg(json: &str) -> Config {
@@ -413,5 +484,75 @@ mod tests {
         assert!(matches!(o.step(Key::Enter), Step::Continue));
         o.step(Key::Char('n', Modifier::Main));
         assert_eq!(pick(o.step(Key::Enter)).0, "one");
+    }
+
+    // Five rows, one path each. A pane of 2 rows leaves 3 rows of scrollback.
+    const FIVE_ROWS: &str = "p/a1\np/b2\np/c3\np/d4\np/e5\n";
+
+    fn with_scrollback() -> Loaded {
+        Loaded::new(FIVE_ROWS, 80, 2, 10, &patterns::build(None, &[]).unwrap())
+    }
+
+    #[test]
+    fn the_live_screen_is_the_last_pane_rows() {
+        assert_eq!(with_scrollback().live_top, 3);
+    }
+
+    #[test]
+    fn scrollback_is_limited_to_the_configured_rows() {
+        let l = Loaded::new(FIVE_ROWS, 80, 2, 1, &patterns::build(None, &[]).unwrap());
+        assert_eq!((l.screen.rows.len(), l.live_top), (3, 1));
+    }
+
+    #[test]
+    fn hint_labels_only_the_matches_in_view() {
+        let l = with_scrollback();
+        let mut o = overlay(Mode::Hint, &l, &cfg("{}"));
+        o.set_view(3, 2);
+        let rows: std::collections::BTreeSet<usize> = o.marks().labels.keys().map(|c| c.0).collect();
+        assert_eq!(rows, [3, 4].into());
+        o.set_view(0, 2);
+        let rows: std::collections::BTreeSet<usize> = o.marks().labels.keys().map(|c| c.0).collect();
+        assert_eq!(rows, [0, 1].into());
+    }
+
+    #[test]
+    fn hint_labels_restart_when_the_view_changes() {
+        let l = with_scrollback();
+        let mut o = overlay(Mode::Hint, &l, &cfg("{}"));
+        o.set_view(3, 2);
+        // "p/d4" is the first match in view, so it has the first label.
+        assert_eq!(pick(o.step(Key::Char('a', Modifier::Main))).0, "p/d4");
+        o.set_view(0, 2);
+        assert_eq!(pick(o.step(Key::Char('a', Modifier::Main))).0, "p/a1");
+    }
+
+    #[test]
+    fn flash_finds_only_the_matches_in_view() {
+        let l = with_scrollback();
+        let mut o = overlay(Mode::Flash, &l, &cfg("{}"));
+        o.set_view(3, 2);
+        o.step(Key::Char('p', Modifier::Main));
+        assert_eq!(o.marks().highlight.len(), 2);
+        o.set_view(0, 5);
+        assert_eq!(o.marks().highlight.len(), 5);
+    }
+
+    #[test]
+    fn scrolling_moves_the_view_and_stops_at_the_ends() {
+        // 10 captured rows, 4 rows on display: top can be 0..=6.
+        assert_eq!(scrolled(3, 10, 4, Scroll::LineUp), 2);
+        assert_eq!(scrolled(3, 10, 4, Scroll::LineDown), 4);
+        assert_eq!(scrolled(3, 10, 4, Scroll::PageUp), 0);
+        assert_eq!(scrolled(3, 10, 4, Scroll::PageDown), 6);
+        assert_eq!(scrolled(3, 10, 4, Scroll::Top), 0);
+        assert_eq!(scrolled(3, 10, 4, Scroll::Bottom), 6);
+        assert_eq!(scrolled(0, 10, 4, Scroll::LineUp), 0);
+        assert_eq!(scrolled(6, 10, 4, Scroll::LineDown), 6);
+    }
+
+    #[test]
+    fn scrolling_a_short_capture_stays_at_the_top() {
+        assert_eq!(scrolled(0, 3, 10, Scroll::PageDown), 0);
     }
 }
