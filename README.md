@@ -111,7 +111,7 @@ The shell includes:
 - Starship, fzf, zoxide, direnv, GitHub CLI, and other optional integrations;
 - Git, Node, fzf, aliases, history, and custom completion modules;
 - `zsh:doctor` for dependencies, completion registration, caches, and PATH problems;
-- `zsh:profile [runs]` for startup timing.
+- `zshx profile [runs]` for startup timing.
 
 Direnv is the preferred per-directory environment workflow. Automatic `.env` loading is off by default; use `dotenv TRUSTED_FILE` explicitly or set `ZSH_AUTO_DOTENV=1` when that behavior is wanted. Commit helpers do not push implicitly, and destructive cleanup helpers show a dry run or require `--confirm`.
 

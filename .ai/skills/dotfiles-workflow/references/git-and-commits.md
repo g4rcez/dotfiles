@@ -7,12 +7,12 @@
 | Tool | Job |
 |---|---|
 | `bin/aicommit` | Generates a conventional commit message from `git diff --staged` with the AI provider in `$AI_QUERY_COMMAND` and the prompt in `prompts/aicommit-script.txt`. `-e` opens the editor with the message. `-c` commits directly. |
-| `commit.ai [hint] [-- git-commit-args] [--push push-args]` (`config/zsh/git.sh`) | Splits all changed paths into one commit per reason. AI groups the paths (`prompts/aicommit-split.txt`), it asks before making more than one commit, stages each group by explicit path, and lets the hooks run (it never uses `--no-verify`). If the AI answer is not a valid split, it makes one commit. Pushes once at the end. Covered by `tests/shell/commit-ai-test.bash`. |
-| `commitwithai` (`config/zsh/git.sh`) | Prints an AI commit message for the whole diff. `AICOMMIT_CACHED=1` limits it to the index. |
-| `bin/commit` | Wrapper around `git commit` with `--no-verify` and `--branch` prefix options. |
+| `commit ai [hint] [-- git-commit-args] [--push push-args]` (`bin/commit`) | Splits all changed paths into one commit per reason. AI groups the paths (`prompts/aicommit-split.txt`), it asks before making more than one commit, stages each group by explicit path, and lets the hooks run (it never uses `--no-verify`). If the AI answer is not a valid split, it makes one commit. Pushes once at the end. Covered by `tests/shell/commit-ai-test.bash`. |
+| `commit write` (`bin/commit`) | Prints an AI commit message for the whole diff. `AICOMMIT_CACHED=1` limits it to the index. |
+| `bin/commit` | Wrapper around `git commit` with `--no-verify` and `--branch` prefix options. Subcommands (`commit --commands`): `wip`, `staged`, `scope`, `fake` and fixed-message commits such as `commit docs`. A message equal to a subcommand name needs `commit -- docs`. |
 | `bin/fzf-git`, `bin/git-fzf-preview.sh`, `bin/git-branch.sh` | fzf views for branches and commits. |
 | `bin/gh-fzf`, `bin/gh.runs`, `bin/workflows` | GitHub PRs, runs, and workflow lookups. |
-| `config/zsh/git.sh` | Git helpers and aliases. `worktree.clean` lists linked worktrees and removes the marked ones. `_worktree_find` finds linked worktrees. |
+| `bin/gitx`, `bin/ghpr`, `bin/ghx` | Git and GitHub helper families (`<command> --commands` lists the subcommands). `gitx worktree-clean` lists linked worktrees and removes the marked ones. `config/zsh/git.sh` keeps only aliases, forgit wrappers and completion helpers. |
 | `workmux` (aliased as `worktree` in `alias.sh`) | Worktree plus session management. Config in `config/workmux`. |
 | `bin/task-checkpoint` | Writes an untracked checkpoint inside `.git` of the current worktree (intent plus next validation command). |
 | `bin/workstate` | Summary of repo state across roots. |
