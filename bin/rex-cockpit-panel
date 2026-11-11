@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Right pane of the Rex cockpit tab (see config/rex/extensions/cockpit.lua).
+# Shows the git state of the pane labelled "main" in this session. Refreshes every 2s.
+session="${REX_SESSION:?run this inside a Rex terminal}"
+
+while :; do
+    main=$(rex block ls -s "$session" --json 2>/dev/null | jq -r '[.blocks[] | select(.label == "main")][0].block_id // empty')
+    cwd=""
+    [[ -n "$main" ]] && cwd=$(rex block call -s "$session" -b "$main" process 2>/dev/null | jq -r '.foreground.cwd // empty')
+    out=$(
+        if [[ -z "$cwd" ]]; then
+            echo "no main pane"
+        elif ! git -C "$cwd" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            echo "${cwd/#$HOME/~}"; echo "not a git repo"
+        else
+            echo "${cwd/#$HOME/~}"; echo
+            git -C "$cwd" -c color.ui=always status -sb
+            echo
+            git -C "$cwd" -c color.ui=always diff --stat
+            echo
+            git -C "$cwd" -c color.ui=always log --oneline -n 8
+        fi
+    )
+    printf '\033[H\033[2J%s\n' "$out"
+    sleep 2
+done

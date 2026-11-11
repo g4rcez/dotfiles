@@ -40,12 +40,6 @@ local function popup(name, title, argv)
     }
 end
 
-popup("lazygit", "Open Lazygit", { "lazygit" })
-popup("fzf_session", "Pick Session or Directory", { BIN .. "rex-fzf-session" })
-popup("fzf_windows", "Pick Tab", { BIN .. "rex-fzf-windows" })
-popup("fzf_agents", "Pick Coding Agent", { BIN .. "rex-fzf-agents" })
-popup("filepicker", "Pick File Path", { BIN .. "filepicker", "--agent-mode" })
-popup("skillspicker", "Pick Skill Path", { BIN .. "skillspicker", "--agent-mode" })
 
 -- Persistent floating shell. Hiding detaches the block, so it keeps running.
 -- The sh loop restarts zsh on `exit` or Ctrl-d, so the pane never closes.
@@ -87,14 +81,6 @@ rex.action {
         end
     end,
 }
-bind("g", "lazygit")
-bind("e", "filepicker")
-bind("s", "skillspicker")
-bind("a", "fzf_agents")
-bind("d", "fzf_agents")
-bind("b", "fzf_windows")
-bind("o", "fzf_windows")
-bind("tab", "fzf_windows")
 
 -- Shows the focused pane's text in bare nvim: v/V select, / search, any yank copies and closes, q closes.
 rex.action {
@@ -172,17 +158,12 @@ rex.action {
         end
     end,
 }
-bind(",", "edit_scrollback")
-bind("f", "zsh")
 
 -- Open a URL from the current tab's output
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/rexurl.lua"))
-bind("u", "rexurl_open")
-bind("shift+u", "rexurl_browse")
 
 -- Prompt for a file path and open it
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/openpath.lua"))
-bind("shift+o", "open_path")
 
 -- App mode: Option+p, then n/c/g opens nvim, claude or lazygit in a new tab
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/apps.lua"))
@@ -192,7 +173,9 @@ dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extension
 
 -- Open the focused pane's git repo as a session
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/project.lua"))
-bind("n", "project_open")
+
+-- Cockpit tab: fixed session sidebar and git panel around one main terminal
+dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/cockpit.lua"))
 
 -- Number tabs ("1: name"). Starts a background watcher, because handlers cannot run from init.lua.
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/numbers.lua"))
@@ -200,42 +183,9 @@ dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extension
 -- Name tabs after the running program
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/window.lua"))
 
--- Session, tab and config
-bind("r", "session.rename")
-bind("w", "client.tab.rename")
-bind("shift+r", "client.config.reload")
-bind("shift+t", "apply_theme")
-bind("p", "fzf_session")
-bind("shift+p", "session.switch")
-bind("shift+;", "client.palette.toggle")
-bind(".", "client.sidebar.toggle")
-
--- Tabs (tmux windows)
-bind("t", "client.tab.new")
-bind("x", "client.tab.close")
-bind("shift+x", "pane.close")
-bind("]", "client.tab.next")
-bind("[", "client.tab.previous")
-bind("m", "pane.move_to_new_tab")
-bind("z", "pane.zoom")
 for i = 1, 9 do
     bind(tostring(i), "client.tab.goto", { index = i })
 end
-bind("0", "client.tab.goto", { index = 10 })
-
--- Splits
-bind("-", "pane.split", { direction = "down" })
-bind("\\", "pane.split", { direction = "right" })
-
--- Pane focus: prefix + hjkl, and Alt-arrows without prefix
-bind("h", "pane.focus", { direction = "left" })
-bind("j", "pane.focus", { direction = "down" })
-bind("k", "pane.focus", { direction = "up" })
-bind("l", "pane.focus", { direction = "right" })
-rex.bind("alt+left", "pane.focus", { direction = "left" })
-rex.bind("alt+right", "pane.focus", { direction = "right" })
-rex.bind("alt+up", "pane.focus", { direction = "up" })
-rex.bind("alt+down", "pane.focus", { direction = "down" })
 
 -- Pane resize by 5: prefix + HJKL, prefix + Alt-hjkl, prefix + Alt-arrows
 local dirs = { left = "h", down = "j", up = "k", right = "l" }
@@ -255,3 +205,58 @@ for dir, key in pairs(dirs) do
     rex.bind("resize/shift+" .. key, "pane.resize", { direction = dir, amount = 15 })
 end
 rex.bind("resize/=", "pane.balance")
+
+-- Pane focus: prefix + hjkl, and Alt-arrows without prefix
+bind("h", "pane.focus", { direction = "left" })
+bind("j", "pane.focus", { direction = "down" })
+bind("k", "pane.focus", { direction = "up" })
+bind("l", "pane.focus", { direction = "right" })
+rex.bind("alt+left", "pane.focus", { direction = "left" })
+rex.bind("alt+right", "pane.focus", { direction = "right" })
+rex.bind("alt+up", "pane.focus", { direction = "up" })
+rex.bind("alt+down", "pane.focus", { direction = "down" })
+-- Session, tab and config
+bind("r", "session.rename")
+bind("w", "client.tab.rename")
+bind("shift+r", "client.config.reload")
+bind("shift+t", "apply_theme")
+bind("p", "fzf_session")
+bind("shift+p", "session.switch")
+bind("shift+;", "client.palette.toggle")
+bind(".", "client.sidebar.toggle")
+-- Tabs (tmux windows)
+bind("t", "client.tab.new")
+bind("x", "client.tab.close")
+bind("shift+x", "pane.close")
+bind("]", "client.tab.next")
+bind("[", "client.tab.previous")
+bind("m", "pane.move_to_new_tab")
+bind("z", "pane.zoom")
+bind("g", "lazygit")
+bind("e", "filepicker")
+bind("s", "skillspicker")
+bind("a", "fzf_agents")
+bind("d", "fzf_agents")
+bind("b", "fzf_windows")
+bind("o", "fzf_windows")
+bind("tab", "fzf_windows")
+bind("shift+o", "open_path")
+bind(",", "edit_scrollback")
+bind("f", "zsh")
+bind("u", "rexurl_open")
+bind("shift+u", "rexurl_browse")
+bind("n", "project_open")
+bind("c", "cockpit_open")
+
+-- Splits
+bind("-", "pane.split", { direction = "down" })
+bind("\\", "pane.split", { direction = "right" })
+
+-- Popup
+popup("lazygit", "Open Lazygit", { "lazygit" })
+popup("fzf_windows", "Pick Tab", { BIN .. "rex-fzf-windows" })
+popup("fzf_agents", "Pick Coding Agent", { BIN .. "rex-fzf-agents" })
+popup("filepicker", "Pick File Path", { BIN .. "filepicker", "--agent-mode" })
+popup("fzf_session", "Pick Session or Directory", { BIN .. "rex-fzf-session" })
+popup("skillspicker", "Pick Skill Path", { BIN .. "skillspicker", "--agent-mode" })
+

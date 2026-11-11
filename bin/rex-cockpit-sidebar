@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Left pane of the Rex cockpit tab (see config/rex/extensions/cockpit.lua).
+# Lists sessions with the agent status they report. Enter selects a session. The list refreshes every 2s.
+source "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/lib/dotfiles-shell.sh"
+source "$DOTFILES_DIR/config/zsh/fzf.sh"
+
+function rows() {
+    local sid slabel bid status s
+    while IFS=$'\t' read -r sid slabel; do
+        status="-"
+        while read -r bid; do
+            s=$(rex block call -s "$sid" -b "$bid" program_status 2>/dev/null </dev/null \
+                | jq -r '[.records[].state] | first // empty')
+            [[ -n "$s" ]] && { status="$s"; break; }
+        done < <(rex block ls -s "$sid" --json | jq -r '.blocks[] | select(.placement == "placed") | .block_id')
+        printf '%-8s %s\t%s\n' "$status" "$slabel" "$sid"
+    done < <(rex ls --json | jq -r '.sessions[] | "\(.session_id)\t\(.label)"')
+}
+
+# fzf runs reload commands through $SHELL (zsh), which drops exported bash functions: re-run this script instead.
+if [[ "${1:-}" == "--rows" ]]; then rows; exit; fi
+self="${BASH_SOURCE[0]}"
+client=$(rex client ls --json | jq -r '[.clients[] | select(.info.kind == "app")][0].client_id')
+
+rows | fzf --no-sort --cycle --no-preview --layout=reverse \
+    --border-label "sessions" --prompt "> " \
+    --delimiter $'\t' --with-nth 1 \
+    --bind "load:reload-sync(sleep 2; \"$self\" --rows)" \
+    --bind "enter:execute-silent(rex -C '$client' do session.select session_id={2})"

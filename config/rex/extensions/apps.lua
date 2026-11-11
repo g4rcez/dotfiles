@@ -29,7 +29,7 @@ for _, app in ipairs(APPS) do
 end
 
 rex.mode("apps", { exclusive = true })
-rex.bind("alt+p", "client.mode.enter", { name = "apps", once = true })
+rex.bind("alt+shift+p", "client.mode.enter", { name = "apps", once = true })
 for _, app in ipairs(APPS) do
     rex.bind("apps/" .. app.key, "app_" .. app.name)
 end
