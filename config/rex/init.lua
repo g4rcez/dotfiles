@@ -183,6 +183,13 @@ dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extension
 -- Name tabs after the running program
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/window.lua"))
 
+-- Hint and flash labels over the focused pane's text (Rust binary, built on first use).
+-- All options: extensions/rexflash/rexflash.lua
+dofile(dir .. "extensions/rexflash/rexflash.lua") {
+    hint_key = PREFIX .. "y",
+    flash_key = PREFIX .. "/",
+}
+
 for i = 1, 9 do
     bind(tostring(i), "client.tab.goto", { index = i })
 end
