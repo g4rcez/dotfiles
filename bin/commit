@@ -302,7 +302,7 @@ cmd_write() {
     print -r -- "$commit_message"
 }
 
-# One commit per reason. Splits the changed paths with AI, asks before committing more than one group,
+# One commit per reason. Splits the changed paths with AI, shows the groups and commits without asking,
 # stages each group by explicit path and lets the git hooks run. Commit args apply to every commit.
 cmd_ai() {
     git_require_repo || return
@@ -358,15 +358,16 @@ cmd_ai() {
         group_hints=("")
     fi
 
+    # Non-interactive: show the plan, then commit. Colors only on a terminal.
+    local color=never bold="" cyan="" reset=""
+    if [[ -t 1 ]]; then
+        color=always bold=$'\e[1;33m' cyan=$'\e[36m' reset=$'\e[0m'
+    fi
     if ((${#group_lines} > 1)); then
         for ((i = 1; i <= ${#group_lines}; i++)); do
-            print -u2 -r -- "$i. ${group_hints[i]}"
-            print -u2 -rl -- "${(@Q)${(z)group_lines[i]}}" | sed 's/^/     /'
+            print -r -- "${bold}${i}. ${group_hints[i]}${reset}"
+            print -rl -- "${(@Q)${(z)group_lines[i]}}" | sed "s/^/    ${cyan}/; s/\$/${reset}/"
         done
-        local reply
-        print -n -u2 -r -- "Commit as ${#group_lines} commits? [y/N] "
-        read -r reply || return 1
-        [[ "$reply" == [yY]* ]] || { print -u2 -r -- "commit ai: aborted, nothing changed"; return 1; }
     fi
 
     local commit_message
@@ -382,7 +383,8 @@ cmd_ai() {
             print -u2 -r -- "commit ai: commit $i of ${#group_lines} failed, its files stay staged and later groups are untouched"
             return $rc
         }
-        git show --stat --format='%h %s' HEAD
+        git show --no-patch --color=$color --format='%C(bold yellow)%h%C(reset) %C(bold green)%s%C(reset)' HEAD
+        git show --stat --color=$color --format= HEAD | sed 's/^/    /'
     done
     git push "${push_args[@]}"
 }
