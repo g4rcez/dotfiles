@@ -46,6 +46,9 @@ new_repo() {
     git -C "$repo" add a.txt
     git -C "$repo" commit -q -S -m 'chore: seed'
     git -C "$repo" push -q -u origin main
+    # One line per push received, holding the number of commits that push carried.
+    printf '#!/usr/bin/env bash\nwhile read -r old new ref; do git rev-list --count "$old..$new" >>"%s/push-log"; done\n' "$bare" >"$bare/hooks/pre-receive"
+    chmod +x "$bare/hooks/pre-receive"
     printf 'two\n' >>"$repo/a.txt"
     printf 'b\n' >"$repo/b.txt"
     printf 'c\n' >"$repo/c.txt"
@@ -70,6 +73,7 @@ run_in_repo y ai
 [[ "$(git -C "$repo" log --format=%s -n 2)" == $'feat: b.txt,c.txt\nfeat: a.txt' ]] || fail "expected one commit per group, got: $(git -C "$repo" log --format=%s)"
 [[ "$(git -C "$bare" log --format=%s -n 1 main)" == 'feat: b.txt,c.txt' ]] || fail "expected the commits to be pushed"
 [[ -z "$(git -C "$repo" status --porcelain)" ]] || fail "expected a clean working tree"
+[[ "$(<"$bare/push-log")" == 2 ]] || fail "expected one push carrying both commits, got pushes of: $(paste -sd, "$bare/push-log")"
 
 # The user declines: nothing is committed.
 new_repo split-declined
@@ -86,6 +90,7 @@ run_in_repo '' ai
 assert_contains "$output" 'no valid AI split'
 [[ "$(git -C "$repo" log --format=%s -n 1)" == 'feat: a.txt,b.txt,c.txt' ]] || fail "expected one commit with all paths"
 [[ "$(git -C "$repo" rev-list --count HEAD)" == 2 ]] || fail "expected exactly one new commit"
+[[ "$(<"$bare/push-log")" == 1 ]] || fail "expected one push carrying one commit"
 
 # A failing pre-commit hook must stop the commit: commit ai never skips hooks.
 new_repo hook-fails
