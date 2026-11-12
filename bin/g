@@ -12,10 +12,14 @@ COMMANDS=(
     'new:switch to a branch, creating it when missing'
     'main:check out the main branch'
     'develop:check out the develop branch'
+    'dev:alias of develop'
     'pull:fetch, then pull origin on the current branch'
     'prune:delete local branches except the protected ones (dry run by default)'
     'merge-with:update a branch, then merge it into the current one'
     'rebase-with:update a branch, then rebase the current one onto it'
+    'mergewith:alias of merge-with'
+    'rebasewith:alias of rebase-with'
+    'rebase:run git rebase with the given arguments'
     'squash:interactive rebase of the last N commits'
     'compare:log of BRANCH1 commits that BRANCH2 lacks'
     'restore:restore a file from a branch'
@@ -44,11 +48,11 @@ _default_branch() {
 
 # Updates TARGET_BRANCH from origin, then runs ACTION (merge or rebase) for it on the current branch.
 _sync_and_run() {
-    (($# == 2)) || { print -u2 -r -- "Usage: gitx merge-with|rebase-with TARGET_BRANCH"; return 2; }
+    (($# == 2)) || { print -u2 -r -- "Usage: g merge-with|rebase-with TARGET_BRANCH"; return 2; }
     git_require_repo || return
     local action="$1" target_branch="$2" current_branch
     current_branch="$(git branch --show-current)" || return $?
-    [[ -n "$current_branch" ]] || { print -u2 -r -- "gitx ${action}-with: detached HEAD"; return 1; }
+    [[ -n "$current_branch" ]] || { print -u2 -r -- "g ${action}-with: detached HEAD"; return 1; }
     git fetch || return $?
     git switch "$target_branch" || return $?
     if ! git pull --rebase origin "$target_branch"; then
@@ -84,7 +88,7 @@ cmd_switch() {
 }
 
 cmd_new() {
-    (($# == 1)) || { print -u2 -r -- "Usage: gitx new BRANCH_NAME"; return 2; }
+    (($# == 1)) || { print -u2 -r -- "Usage: g new BRANCH_NAME"; return 2; }
     git_require_repo || return
     if git show-ref --verify --quiet "refs/heads/$1"; then
         git switch "$1"
@@ -101,11 +105,15 @@ cmd_develop() {
     git checkout "$(_default_branch develop refs/heads/{dev,devel,development})"
 }
 
+cmd_dev() {
+    cmd_develop "$@"
+}
+
 cmd_pull() {
     git_require_repo || return
     local branch
     branch="$(git branch --show-current)" || return $?
-    [[ -n "$branch" ]] || { print -u2 -r -- "gitx pull: detached HEAD"; return 1; }
+    [[ -n "$branch" ]] || { print -u2 -r -- "g pull: detached HEAD"; return 1; }
     git fetch
     git pull origin "$branch"
 }
@@ -118,10 +126,10 @@ cmd_prune() {
         --force) force=1 ;;
         --dry-run) ;;
         -h | --help)
-            print -r -- "Usage: gitx prune [--dry-run|--confirm] [--force]"
+            print -r -- "Usage: g prune [--dry-run|--confirm] [--force]"
             return 0
             ;;
-        *) print -u2 -r -- "gitx prune: unknown option: $1"; return 2 ;;
+        *) print -u2 -r -- "g prune: unknown option: $1"; return 2 ;;
         esac
         shift
     done
@@ -165,22 +173,34 @@ cmd_rebase_with() {
     _sync_and_run rebase "$1"
 }
 
+cmd_mergewith() {
+    cmd_merge_with "$@"
+}
+
+cmd_rebasewith() {
+    cmd_rebase_with "$@"
+}
+
+cmd_rebase() {
+    git rebase "$@"
+}
+
 cmd_squash() {
     git rebase -i "HEAD~${1}"
 }
 
 cmd_compare() {
-    (($# == 2)) || { print -u2 -r -- "Usage: gitx compare BRANCH1 BRANCH2"; return 2; }
+    (($# == 2)) || { print -u2 -r -- "Usage: g compare BRANCH1 BRANCH2"; return 2; }
     git log "$2..$1"
 }
 
 cmd_restore() {
-    (($# == 2)) || { print -u2 -r -- "Usage: gitx restore BRANCH_NAME FILE_PATH"; return 2; }
+    (($# == 2)) || { print -u2 -r -- "Usage: g restore BRANCH_NAME FILE_PATH"; return 2; }
     git restore --source "$1" -- "$2"
 }
 
 cmd_clone() {
-    (($# == 1)) || { print -u2 -r -- "Usage: gitx clone OWNER/REPOSITORY"; return 2; }
+    (($# == 1)) || { print -u2 -r -- "Usage: g clone OWNER/REPOSITORY"; return 2; }
     git clone "git@github.com:$1"
 }
 
@@ -197,7 +217,7 @@ cmd_tags() {
 }
 
 cmd_tag() {
-    (($# == 1)) || { print -u2 -r -- "Usage: gitx tag TAG"; return 2; }
+    (($# == 1)) || { print -u2 -r -- "Usage: g tag TAG"; return 2; }
     git_require_repo || return
     git tag "$1"
     git push origin "$1"
@@ -209,11 +229,11 @@ cmd_tag_pick() {
 
 # Enter marks/unmarks a worktree. Ctrl-d removes the marked ones (or the current one), then reopens the list.
 cmd_worktree_clean() {
-    (($# <= 1)) || { print -u2 -r -- "Usage: gitx worktree-clean [ROOT]"; return 2; }
-    (($+commands[fzf])) || { print -u2 -r -- "gitx worktree-clean: fzf not found"; return 1; }
+    (($# <= 1)) || { print -u2 -r -- "Usage: g worktree-clean [ROOT]"; return 2; }
+    (($+commands[fzf])) || { print -u2 -r -- "g worktree-clean: fzf not found"; return 1; }
     local root="${1:-.}"
     root="${root:A}"
-    [[ -d "$root" ]] || { print -u2 -r -- "gitx worktree-clean: not a directory: $root"; return 2; }
+    [[ -d "$root" ]] || { print -u2 -r -- "g worktree-clean: not a directory: $root"; return 2; }
 
     local -a found out targets
     local result wt common
@@ -225,7 +245,7 @@ cmd_worktree_clean() {
         # Each line is "full path<TAB>path relative to ROOT"; only the relative path is shown.
         result="$(for wt in "${found[@]}"; do print -r -- "$wt$TAB${${wt#$root/}:-$wt}"; done | fzf --multi --cycle --no-sort --expect=ctrl-d \
             --delimiter $'\t' --with-nth 2 \
-            --border-label "gitx worktree-clean - ctrl+d: delete worktrees" --prompt "> " \
+            --border-label "g worktree-clean - ctrl+d: delete worktrees" --prompt "> " \
             --bind 'enter:toggle+down' \
             --header 'enter: mark  ctrl+d: delete marked  esc: quit' \
             --preview-window 'right,50%' \
@@ -243,7 +263,7 @@ cmd_worktree_clean() {
         for wt in "${targets[@]}"; do
             common="$(git -C "$wt" rev-parse --path-format=absolute --git-common-dir)" &&
                 git --git-dir="$common" worktree remove --force "$wt" ||
-                print -u2 -r -- "gitx worktree-clean: failed to remove $wt"
+                print -u2 -r -- "g worktree-clean: failed to remove $wt"
         done
     done
 }
