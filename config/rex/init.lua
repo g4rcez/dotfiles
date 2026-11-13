@@ -1,10 +1,17 @@
 -- Ported from dotfiles/config/tmux/tmux.conf. Prefix is Ctrl-p, as in tmux.
 local PREFIX = "ctrl+p>"
+local CMD = "cmd+"
 local BIN = os.getenv("HOME") .. "/dotfiles/bin/"
 
 local dir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "")
 local theme = dofile(dir .. "theme.lua")
 local cwd_of = dofile(dir .. "extensions/cwd.lua")
+-- Persistent floating shell. Hiding detaches the block, so it keeps running.
+-- The sh loop restarts zsh on `exit` or Ctrl-d, so the pane never closes.
+local FLOAT_LABEL = "floating-shell"
+local FLOAT_BOUNDS = { 0.05, 0.05, 0.9, 0.9 }
+
+dofile(dir .. "extensions/theme.lua")
 
 -- Theme every terminal in the session. extensions/theme.lua also runs it for each new block.
 rex.action {
@@ -16,11 +23,6 @@ rex.action {
         for _, b in ipairs(list.blocks) do theme.apply(b.block_id) end
     end,
 }
-dofile(dir .. "extensions/theme.lua")
-
-local function bind(key, action, args)
-    rex.bind(PREFIX .. key, action, args)
-end
 
 -- Floating terminal running a command, like tmux display-popup.
 local function popup(name, title, argv)
@@ -39,12 +41,6 @@ local function popup(name, title, argv)
         end,
     }
 end
-
-
--- Persistent floating shell. Hiding detaches the block, so it keeps running.
--- The sh loop restarts zsh on `exit` or Ctrl-d, so the pane never closes.
-local FLOAT_LABEL = "floating-shell"
-local FLOAT_BOUNDS = { 0.05, 0.05, 0.9, 0.9 }
 
 rex.action {
     name = "zsh",
@@ -126,8 +122,6 @@ rex.action {
         end
     end,
 }
-bind("v", "copy_mode")
-bind("enter", "copy_mode")
 
 rex.action {
     name = "edit_scrollback",
@@ -158,6 +152,24 @@ rex.action {
         end
     end,
 }
+
+local bind = {
+    prefix = function(key, action, args)
+        rex.bind(PREFIX .. key, action, args)
+    end,
+    cmd = function(key, action, args)
+        rex.bind(CMD .. key, action, args)
+    end
+}
+
+
+-- Popup
+popup("lazygit", "Open Lazygit", { "lazygit" })
+popup("fzf_windows", "Pick Tab", { BIN .. "rex-fzf-windows" })
+popup("fzf_agents", "Pick Coding Agent", { BIN .. "rex-fzf-agents" })
+popup("filepicker", "Pick File Path", { BIN .. "filepicker", "--agent-mode" })
+popup("fzf_session", "Pick Session or Directory", { BIN .. "rex-fzf-session" })
+popup("skillspicker", "Pick Skill Path", { BIN .. "skillspicker", "--agent-mode" })
 
 -- Open a URL from the current tab's output
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/rexurl.lua"))
@@ -191,16 +203,16 @@ dofile("/opt/homebrew/opt/rexflash/share/rexflash/rexflash.lua") {
 }
 
 for i = 1, 9 do
-    bind(tostring(i), "client.tab.goto", { index = i })
+    bind.prefix(tostring(i), "client.tab.goto", { index = i })
 end
 
 -- Pane resize by 5: prefix + HJKL, prefix + Alt-hjkl, prefix + Alt-arrows
 local dirs = { left = "h", down = "j", up = "k", right = "l" }
 for dir, key in pairs(dirs) do
     local args = { direction = dir, amount = 5 }
-    bind("shift+" .. key, "pane.resize", args)
-    bind("alt+" .. key, "pane.resize", args)
-    bind("alt+" .. dir, "pane.resize", args)
+    bind.prefix("shift+" .. key, "pane.resize", args)
+    bind.prefix("alt+" .. key, "pane.resize", args)
+    bind.prefix("alt+" .. dir, "pane.resize", args)
 end
 
 -- Resize mode: Option+r toggles it, Esc also leaves. Vim keys resize by 5, shifted by 15.
@@ -214,10 +226,10 @@ end
 rex.bind("resize/=", "pane.balance")
 
 -- Pane focus: prefix + hjkl, and Alt-arrows without prefix
-bind("h", "pane.focus", { direction = "left" })
-bind("j", "pane.focus", { direction = "down" })
-bind("k", "pane.focus", { direction = "up" })
-bind("l", "pane.focus", { direction = "right" })
+bind.prefix("h", "pane.focus", { direction = "left" })
+bind.prefix("j", "pane.focus", { direction = "down" })
+bind.prefix("k", "pane.focus", { direction = "up" })
+bind.prefix("l", "pane.focus", { direction = "right" })
 rex.bind("alt+left", "pane.focus", { direction = "left" })
 rex.bind("alt+right", "pane.focus", { direction = "right" })
 rex.bind("alt+up", "pane.focus", { direction = "up" })
@@ -228,47 +240,44 @@ dofile(dir .. "extensions/scroll.lua") { key = PREFIX .. "s" }
 -- Install: brew install g4rcez/tap/rexpanes. Source and options: https://github.com/g4rcez/rexpanes
 dofile("/opt/homebrew/opt/rexpanes/share/rexpanes/rexpanes.lua") { key = PREFIX .. "q" }
 -- Session, tab and config
-bind("r", "session.rename")
-bind("w", "client.tab.rename")
-bind("shift+r", "client.config.reload")
-bind("shift+t", "apply_theme")
-bind("p", "fzf_session")
-bind("shift+p", "session.switch")
-bind("shift+;", "client.palette.toggle")
-bind(".", "client.sidebar.toggle")
+bind.prefix("r", "session.rename")
+bind.prefix("w", "client.tab.rename")
+bind.prefix("shift+r", "client.config.reload")
+bind.prefix("shift+t", "apply_theme")
+bind.prefix("p", "fzf_session")
+bind.prefix("shift+p", "session.switch")
+bind.prefix("shift+;", "client.palette.toggle")
+bind.prefix(".", "client.sidebar.toggle")
 -- Tabs (tmux windows)
-bind("t", "client.tab.new")
-bind("x", "client.tab.close")
-bind("shift+x", "pane.close")
-bind("]", "client.tab.next")
-bind("[", "client.tab.previous")
-bind("m", "pane.move_to_new_tab")
-bind("z", "pane.zoom")
-bind("g", "lazygit")
-bind("e", "filepicker")
-bind("shift+s", "skillspicker")
-bind("a", "fzf_agents")
-bind("d", "fzf_agents")
-bind("b", "fzf_windows")
-bind("o", "fzf_windows")
-bind("tab", "fzf_windows")
-bind("shift+o", "open_path")
-bind(",", "edit_scrollback")
-bind("f", "zsh")
-bind("u", "rexurl_open")
-bind("shift+u", "rexurl_browse")
-bind("n", "project_open")
-bind("c", "cockpit_open")
+bind.prefix("t", "client.tab.new")
+bind.prefix("x", "client.tab.close")
+bind.prefix("shift+x", "pane.close")
+bind.prefix("]", "client.tab.next")
+bind.prefix("[", "client.tab.previous")
+bind.prefix("m", "pane.move_to_new_tab")
+bind.prefix("z", "pane.zoom")
+bind.prefix("g", "lazygit")
+bind.prefix("e", "filepicker")
+bind.prefix("shift+s", "skillspicker")
+bind.prefix("a", "fzf_agents")
+bind.prefix("d", "fzf_agents")
+bind.prefix("b", "fzf_windows")
+bind.prefix("o", "fzf_windows")
+bind.prefix("tab", "fzf_windows")
+bind.prefix("shift+o", "open_path")
+bind.prefix(",", "edit_scrollback")
+bind.prefix("f", "zsh")
+bind.prefix("u", "rexurl_open")
+bind.prefix("shift+u", "rexurl_browse")
+bind.prefix("n", "project_open")
+bind.prefix("c", "cockpit_open")
 
 -- Splits
-bind("-", "pane.split", { direction = "down" })
-bind("\\", "pane.split", { direction = "right" })
+bind.prefix("-", "pane.split", { direction = "down" })
+bind.prefix("\\", "pane.split", { direction = "right" })
 
--- Popup
-popup("lazygit", "Open Lazygit", { "lazygit" })
-popup("fzf_windows", "Pick Tab", { BIN .. "rex-fzf-windows" })
-popup("fzf_agents", "Pick Coding Agent", { BIN .. "rex-fzf-agents" })
-popup("filepicker", "Pick File Path", { BIN .. "filepicker", "--agent-mode" })
-popup("fzf_session", "Pick Session or Directory", { BIN .. "rex-fzf-session" })
-popup("skillspicker", "Pick Skill Path", { BIN .. "skillspicker", "--agent-mode" })
+-- Copy/vim mode
+bind.prefix("v", "copy_mode")
+bind.prefix("enter", "copy_mode")
 
+bind.cmd("e", "filepicker")
