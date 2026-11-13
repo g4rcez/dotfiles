@@ -235,7 +235,9 @@ rex.bind("alt+right", "pane.focus", { direction = "right" })
 rex.bind("alt+up", "pane.focus", { direction = "up" })
 rex.bind("alt+down", "pane.focus", { direction = "down" })
 -- Scroll mode: prefix + s. K/J scroll a page, Esc leaves. Also scrolls claude.
-dofile(dir .. "extensions/scroll.lua") { key = PREFIX .. "s" }
+dofile(dir .. "extensions/scroll.lua") { keys = { PREFIX .. "s", CMD .. "s" } }
+bind.cmd("up", "scroll_up")
+bind.cmd("down", "scroll_down")
 -- Pane picker: prefix + q shows a big number over each pane, a digit focuses it (like tmux display-panes).
 -- Install: brew install g4rcez/tap/rexpanes. Source and options: https://github.com/g4rcez/rexpanes
 dofile("/opt/homebrew/opt/rexpanes/share/rexpanes/rexpanes.lua") { key = PREFIX .. "q" }
