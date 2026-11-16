@@ -7,8 +7,17 @@ wm.config {
     mouse_follows_focus = false,
     gaps = { inner = 0, outer = 0 },
     animations = { enabled = true, rate = 30 },
-    prefix = { label = { position = "bottom-center" } },
+    prefix = { label = { position = "bottom-right" } },
     border = { enabled = false, width = 1, radius = 0, active = "#89b4fa" },
+    tiling = {
+        templates = { wm.templates.one_quarter }
+    },
+    scrolling = {
+        templates = {
+            wm.templates.two_thirds,
+            { name = "70/30", key = "s", title = "Focus 70%", cells = { { 0, 0, 0.7, 1 }, { 0.7, 0, 0.3, 1 } } },
+        }
+    },
 }
 
 -- 1. Direct chords ---------------------------------------------------------
