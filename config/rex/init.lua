@@ -195,13 +195,6 @@ dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extension
 -- Name tabs after the running program
 dofile(debug.getinfo(1, "S").source:gsub("^@", ""):gsub("init%.lua$", "extensions/window.lua"))
 
--- Hint and flash labels over the focused pane's text. Install: brew install g4rcez/tap/rexflash
--- Source and options: https://github.com/g4rcez/rexflash
-dofile("/opt/homebrew/opt/rexflash/share/rexflash/rexflash.lua") {
-    hint_key = PREFIX .. "y",
-    flash_key = PREFIX .. "/",
-}
-
 for i = 1, 9 do
     bind.prefix(tostring(i), "client.tab.goto", { index = i })
 end
@@ -234,13 +227,18 @@ rex.bind("alt+left", "pane.focus", { direction = "left" })
 rex.bind("alt+right", "pane.focus", { direction = "right" })
 rex.bind("alt+up", "pane.focus", { direction = "up" })
 rex.bind("alt+down", "pane.focus", { direction = "down" })
--- Scroll mode: prefix + s. K/J scroll a page, Esc leaves. Also scrolls claude.
-dofile(dir .. "extensions/scroll.lua") { keys = { PREFIX .. "s", CMD .. "s" } }
+-- tyrannosaur: one plugin, one table per plugin. A plugin that is not listed is disabled.
+--   flash:  hint and flash labels over the focused pane's text (prefix + y, prefix + /)
+--   panes:  a big number over each pane, a digit focuses it, like tmux display-panes (prefix + q)
+--   scroll: scroll mode. K/J scroll a page, Esc leaves. Also scrolls claude.
+-- Source and options: ~/Documents/g4rcez/tyrannosaur. After a change in the Rust code: cargo build --release
+dofile(os.getenv("HOME") .. "/Documents/g4rcez/tyrannosaur/tyrannosaur.lua") {
+    flash = { hints = PREFIX .. "y", flash = PREFIX .. "/" },
+    panes = { keys = PREFIX .. "q" },
+    scroll = { keys = { PREFIX .. "s", CMD .. "s" } },
+}
 bind.cmd("up", "scroll_up")
 bind.cmd("down", "scroll_down")
--- Pane picker: prefix + q shows a big number over each pane, a digit focuses it (like tmux display-panes).
--- Install: brew install g4rcez/tap/rexpanes. Source and options: https://github.com/g4rcez/rexpanes
-dofile("/opt/homebrew/opt/rexpanes/share/rexpanes/rexpanes.lua") { key = PREFIX .. "q" }
 -- Session, tab and config
 bind.prefix("r", "session.rename")
 bind.prefix("w", "client.tab.rename")
