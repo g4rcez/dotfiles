@@ -1,3 +1,8 @@
+require("hyper")
+
+local monitor = wm.query("monitor") or {}
+local on_lg = monitor.id == 3 or string.find(string.lower(monitor.name or ""), "lg ultrafine", 1, true) ~= nil
+
 wm.config {
     layout = "tiling",
     wrap_focus = true,
@@ -7,18 +12,28 @@ wm.config {
     mouse_follows_focus = false,
     gaps = { inner = 0, outer = 0 },
     animations = { enabled = true, rate = 30 },
-    prefix = { label = { position = "bottom-right" } },
+    prefix = { label = { position = on_lg and "bottom-center" or "bottom-right" } },
+    trackpad = { enabled = true, scroll_fingers = 3 },
+    switcher = { max_scale = 0.3, thumbnails = true },
     border = { enabled = false, width = 1, radius = 0, active = "#89b4fa" },
     tiling = {
-        templates = { wm.templates.one_quarter }
+        templates = {
+            wm.templates.two,
+            wm.templates.one_quarter,
+        }
     },
     scrolling = {
         templates = {
+            wm.templates.two,
             wm.templates.two_thirds,
+            wm.templates.one_quarter,
             { name = "70/30", key = "s", title = "Focus 70%", cells = { { 0, 0, 0.7, 1 }, { 0.7, 0, 0.3, 1 } } },
         }
     },
 }
+
+-- wm.bind("cmd-tab", "palette", { repeating = true }) -- --all = every workspace, like a real Cmd-Tab
+-- wm.bind("cmd-shift-tab", "switcher prev --all")
 
 -- 1. Direct chords ---------------------------------------------------------
 
@@ -48,11 +63,13 @@ local function prefix(key, action, description)
     wm.bind("alt-space>" .. key, action, { description = description })
 end
 
+prefix("enter", "palette", "Palette")
+prefix("r", "mode resize", "Resize mode")
+prefix("o", "overview", "Overview")
 prefix("f", "window fullscreen", "Fullscreen")
 prefix("m", "window maximize", "Maximize")
 prefix("space", "window float", "Float / tile")
 prefix("tab", "focus back", "Previous window")
-prefix("g", "overview", "Overview")
 
 prefix("b", "layout balance", "Balance")
 prefix("w", "layout flip", "Flip splits")
@@ -66,12 +83,12 @@ prefix("p", "layout column width cycle", "Column width")
 prefix("v", "window send strip vertical", "To vertical strip")
 prefix("n", "window send strip horizontal", "To horizontal strip")
 
-prefix("comma", "focus monitor prev", "Monitor prev")
-prefix("period", "focus monitor next", "Monitor next")
-prefix("leftsquarebracket", "window send monitor prev", "Send to monitor prev")
-prefix("rightsquarebracket", "window send monitor next", "Send to monitor next")
-
-prefix("r", "mode resize", "Resize mode")
+-- Window memory: the next window of this app opens with the same workspace, place and mode, and takes the focus.
+-- `shift` keeps the exact title too, for an app with several windows.
+prefix("y", "window remember", "Remember window")
+prefix("shift-y", "window remember --title", "Remember window (with title)")
+prefix("u", "window forget", "Forget window")
+prefix("shift-u", "window forget --title", "Forget window (with title)")
 
 -- 3. Resize mode -------------------------------------------------------------
 
@@ -95,3 +112,4 @@ wm.rule { app = "com.apple.systempreferences", float = true, stop = false }
 wm.on("monitor_changed", function()
     wm.dispatch("pointer monitor")
 end)
+
