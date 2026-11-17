@@ -106,6 +106,12 @@ local sharedKeymaps = function()
         return vim.api.nvim_buf_get_name(0)
     end
 
+    bind.normal("<leader>cY", function()
+        local rel = buf_abs()
+        vim.fn.setreg("+", rel)
+        vim.notify("Yanked (relative): " .. rel)
+    end, { desc = "[c]ode [y]ank full path" })
+
     bind.normal("<leader>cy", function()
         local rel = vim.fn.fnamemodify(buf_abs(), ":.")
         vim.fn.setreg("+", rel)
