@@ -1,0 +1,2 @@
+# Managed by wm: the Shortcuts window rewrites this file and drops the comments.
+# init.lua loads it with wm.shortcuts(); a wm.bind in init.lua for the same keys replaces the shortcut.

@@ -1,10 +1,10 @@
 {
-  "diagnostics.neededFileStatus" : {
-    "missing-fields" : "Any",
-    "undefined-field" : "Any"
-  },
-  "runtime.version" : "Lua 5.4",
-  "workspace.library" : [
-    "/Users/allangarcez/Documents/g4rcez/wm/.build/wm.app/Contents/Resources/types"
-  ]
+    "diagnostics.neededFileStatus": {
+        "missing-fields": "Any",
+        "undefined-field": "Any"
+    },
+    "runtime.version": "Lua 5.4",
+    "workspace.library": [
+        "/Applications/wm.app/Contents/Resources/types"
+    ]
 }
