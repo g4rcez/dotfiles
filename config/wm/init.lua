@@ -1,22 +1,6 @@
---- wm configuration (single file, loaded by wm from ~/.config/wm/init.lua).
----
---- Layout of this file:
----   1. Constants        paths, apps, colors, monitor detection
----   2. Helpers          small builders for the bindings below
----   3. Settings         `wm.config`: behavior, appearance, input
----   4. Window rules     per-app floating, size and position
----   5. Alt chords       direct bindings (focus, swap, workspaces, scratchpad)
----   6. Hyper (CapsLock) CapsLock is Hyper: remaps and layers (`hyper-<letter>` then one key).
----                       The letter names the noun: w = windows, a = arrange (layout), s = system, r = raycast, b = browser, o = open.
----   7. Modes            resize, snap, float, vim
----   8. Events, gestures
----
---- Key names follow wm: `alt-`, `cmd-`, `shift-` prefixes; `leftsquarebracket`, `minus`, `equal`, `comma`, `period`, `backslash`
---- for punctuation. A command is a string for `wm dispatch` or a function.
-
 wm.shortcuts()
 
--- 1. Constants -----------------------------------------------------------------------------------------------
+-- Constants -----------------------------------------------------------------------------------------------
 local TERM = "/Applications/Alacritty.app/Contents/MacOS/alacritty"
 local BROWSER = "Helium"
 local ACCENT = "#62ccaa"
@@ -25,7 +9,7 @@ local SCRATCHPAD = "term"
 local monitor = wm.query("monitor") or {}
 local on_lg = monitor.id == 3 or string.find(string.lower(monitor.name or ""), "lg ultrafine", 1, true) ~= nil
 
--- 2. Helpers -------------------------------------------------------------------------------------------------
+-- Helpers -------------------------------------------------------------------------------------------------
 
 --- Run a shell command (as a bind action).
 local function run(command)
@@ -53,7 +37,7 @@ local function layer(name, entries)
     end
 end
 
--- 3. Settings ------------------------------------------------------------------------------------------------
+-- Settings ------------------------------------------------------------------------------------------------
 
 wm.commands = { mode = "persistent", timeout = 500 }
 
@@ -66,6 +50,15 @@ local templates = {
     -- A cell is { x, y, width, height }, all fractions of the screen (0 to 1). Here: three full-height columns.
     { name = "30/40/30", key = "o", title = "30-40-30",  cells = { { 0, 0, 0.3, 1 }, { 0.3, 0, 0.4, 1 }, { 0.7, 0, 0.3, 1 } } },
 }
+
+-- Events and gestures -------------------------------------------------------------------------------------
+
+-- Move the pointer to the monitor that gets the focus.
+wm.on("monitor_changed", function()
+    wm.dispatch("pointer monitor")
+end)
+
+wm.gesture { fingers = 4, direction = "up", command = "palette", description = "Palette" }
 
 wm.config {
     -- CapsLock becomes the hyper key (section 7).
@@ -109,9 +102,9 @@ wm.config {
     -- only, `hyper` is not allowed, Esc always closes.
     select = {
         keys = {
-            copy = { "y", "cmd-c", "enter" },
             extend = "v",
             right_click = "shift-enter",
+            copy = { "y", "cmd-c", "enter" },
             search = { "slash", "backspace" },
             left = { "h", "left" }, right = { "l", "right" }, down = { "j", "down" }, up = { "k", "up" },
             next_word = "w", previous_word = "b", word_end = "e",
@@ -123,6 +116,11 @@ wm.config {
     -- workspace in focus (`T:1`; S = scrolling, M = master, F = floating window). For a computed text, call
     -- `wm.dispatch("menubar set <text>")` in a `wm.on` handler, and `wm.dispatch("menubar reset")` to go back.
     -- NEW: `modes` sets what {mode} says per layout (tiling, scrolling, master, monocle, floating), e.g. modes = { tiling = "tiling" }.
+    appearance = {
+        style = "hud",           -- "native" (the default) or "hud"
+        theme = "system",        -- "system" | "light" | "dark"
+        density = "comfortable", -- "compact" | "comfortable" | "spacious"
+    },
     menubar = {
         workspaces = "current", current = "{mode}:{name}", other = "{name}", separator = " ",
         modes = { tiling = "i3", scrolling = "niri", master = "master", monocle = "mono", floating = "win" },
@@ -146,20 +144,17 @@ wm.config {
     -- The overview: the screen goes dark and the workspaces are small screens in one column.
     overview = { zoom = 0.5, gap = 48, backdrop = "#0f0f14db" },
     switcher = { max_scale = 0.75, thumbnails = true },
-    -- NEW: `active` can be a list of colors (a gradient); `angle` is in degrees as in CSS. The border is still off.
     border = { enabled = false },
 }
 
--- 4. Window rules --------------------------------------------------------------------------------------------
-
-wm.rule { app = "net.kovidgoyal.kitty", float = true, size = { 0.62, 0.68 }, center = true, stop = false }
-wm.rule { app = "org.alacritty", float = true, size = { 0.7, 0.7 }, center = true, stop = false }
+-- Window rules --------------------------------------------------------------------------------------------
+wm.rule { app = "net.kovidgoyal.kitty", float = true, size = { 0.9, 0.9 }, center = true, stop = false }
+wm.rule { app = "org.alacritty", float = true, size = { 0.9, 0.9 }, center = true, stop = false }
 
 -- NEW: the first time the scratchpad is shown with no window, it starts the terminal (the window goes to the scratchpad).
 wm.workspace("special:" .. SCRATCHPAD, { on_empty = TERM })
 
--- 5. Alt chords ----------------------------------------------------------------------------------------------
-
+-- Alt chords ----------------------------------------------------------------------------------------------
 -- alt-hjkl focus, alt-shift-hjkl swap.
 for key, dir in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
     wm.bind("alt-" .. key, "focus " .. dir, { description = "Focus " .. dir })
@@ -188,9 +183,9 @@ wm.bind("cmd-shift-j", "scroll")
 wm.bind("cmd-h", "")
 wm.bind("cmd-alt-h", "")
 
--- 6. Hyper (CapsLock) ----------------------------------------------------------------------------------------
+-- Hyper (CapsLock) ----------------------------------------------------------------------------------------
 
--- 6.1 Direct: Hyper + key (Raycast shortcuts and vim-like arrows everywhere)
+-- Direct: Hyper + key (Raycast shortcuts and vim-like arrows everywhere)
 wm.bind("hyper-e", raycast("raycast/emoji-symbols/search-emoji-symbols"), { description = "Open emojis" })
 wm.bind("hyper-leftsquarebracket", raycast("g4rcez/whichkey/whichkey"), { description = "Which key" })
 wm.bind("hyper-rightsquarebracket", raycast("g4rcez/snippets/snippets"), { description = "Snippets" })
@@ -201,7 +196,6 @@ wm.bind("hyper-m", "mode resize", { description = "Resize mode" })
 wm.bind("hyper-v", "mode vim", { description = "Vim mode" })
 -- NEW: go to the app whose Dock badge appeared or grew; with no urgent app, back to the window used before.
 wm.bind("hyper-u", "focus urgent-or-last", { description = "Urgent window (or the last one)" })
-wm.bind("hyper-shift-u", "jump", { description = "Jump to" })
 
 wm.remap("hyper-0", "cmd-left", { description = "Go to begin of line" })
 wm.remap("hyper-4", "cmd-right", { description = "Go to end of line" })
@@ -210,13 +204,13 @@ wm.remap("hyper-j", "down", { description = "Down arrow" })
 wm.remap("hyper-k", "up", { description = "Up arrow" })
 wm.remap("hyper-l", "right", { description = "Right arrow" })
 
--- 6.2 Caps+Enter: launcher (the tmux leader)
+-- Caps+Enter: launcher (the tmux leader)
 layer("enter", {
     b = { browser("Default"), "Personal profile" },
     backslash = { open("rectangle-pro://execute-action?name=right-half"), "Window: right half" },
     c = { run(TERM .. " -e '/opt/homebrew/bin/eva'"), "CLI math expressions" },
     enter = { run("open -n -a 'Wezterm.app'"), "New Wezterm" },
-    j = { run(TERM .. " -e . $HOME/dotfiles/bin/json-inspect"), "Inspect json" },
+    j = { "jump", "Jump to" },
     m = { run(TERM .. " -e /opt/homebrew/bin/htop"), "Monitoring with htop" },
     n = { run(TERM .. " -e /opt/homebrew/bin/nvim -- /tmp/notes.md"), "Temporary notes" },
     r = { run(TERM .. " -e '$(which node)'"), "Node REPL" },
@@ -224,7 +218,7 @@ layer("enter", {
     w = { app("Spotify"), "Spotify" },
 })
 
--- 6.3 Caps+w: Windows (focus, swap, size, monitors, scratchpad, memory, workspaces 0-9)
+-- Caps+w: Windows (focus, swap, size, monitors, scratchpad, memory, workspaces 0-9)
 local windows = {
     -- Focus (hjkl) and swap (arrows)
     h = { "focus left --wrap", "Focus left" },
@@ -256,7 +250,7 @@ local windows = {
     u = { "workspace special " .. SCRATCHPAD, "Scratchpad (show / hide)" },
     i = { "window send workspace special:" .. SCRATCHPAD, "Send window to the scratchpad" },
     -- Memory: the next window of this app opens with the same workspace, place and mode. `shift` keeps the title too.
-    r = { "window remember", "Remember window" },
+    r = { "rotate", "Remember window" },
     ["shift-r"] = { "window remember --title", "Remember window (with title)" },
     x = { "window forget", "Forget window" },
     ["shift-x"] = { "window forget --title", "Forget window (with title)" },
@@ -283,7 +277,7 @@ layer("a", {
     w = { "layout column width cycle", "Column width" },
 })
 
--- 6.5 Caps+s: system (media, brightness, notifications, text tools)
+-- Caps+s: system (media, brightness, notifications, text tools)
 layer("s", {
     equal = { "key press volume_up", "Increase volume" },
     h = { "key press previous", "Previous music" },
@@ -293,11 +287,10 @@ layer("s", {
     minus = { "key press volume_down", "Decrease volume" },
     n = { run("osascript $HOME/dotfiles/bin/clear-notifications"), "Clear notifications" },
     p = { "key press play", "Toggle play or pause" },
-    s = { run("$HOME/dotfiles/bin/proofread-selection"), "Proofread selected text" },
-    t = { "select", "Select text on screen" },
+    s = { "select", "Select text on screen" },
 })
 
--- 6.6 Caps+r: Raycast extensions
+-- Caps+r: Raycast extensions
 layer("r", {
     c = { raycast("raycast/raycast/confetti"), "Confetti" },
     d = { raycast("yakitrak/do-not-disturb/toggle"), "Do not disturb" },
@@ -312,22 +305,22 @@ layer("r", {
     w = { raycast("raycast/navigation/switch-windows"), "Switch windows" },
 })
 
--- 6.7 Caps+b: browser profiles
+-- Caps+b: browser profiles
 layer("b", {
     enter = { browser("Default"), "Personal profile" },
     t = { raycast("koinzhang/browser-tabs/index"), "Search tabs" },
     w = { browser("Profile 1"), "Work profile" },
 })
 
--- 6.8 Caps+o: open applications
+-- Caps+o: open applications
 layer("o", {
     b = { run("open -a '" .. BROWSER .. ".app'"), "Browser" },
     m = { app("Telegram"), "Telegram" },
-    t = { app("Wezterm"), "Wezterm" },
+    t = { app("Rex"), "Rex" },
     w = { app("Webstorm"), "Webstorm" },
 })
 
--- 7. Modes ---------------------------------------------------------------------------------------------------
+-- Modes ---------------------------------------------------------------------------------------------------
 -- `wm.mode(name, keys, opts)`. `once = true` ends the mode after its first action and goes back to the previous mode
 -- (`mode back`). `swallow = true` keeps the keys that the mode does not bind away from the app. `mode main` leaves any mode.
 
@@ -426,11 +419,3 @@ wm.mode("vim", {
     w = { remap = "alt-right", description = "Word right" },
 })
 
--- 8. Events and gestures -------------------------------------------------------------------------------------
-
--- Move the pointer to the monitor that gets the focus.
-wm.on("monitor_changed", function()
-    wm.dispatch("pointer monitor")
-end)
-
-wm.gesture { fingers = 4, direction = "up", command = "palette", description = "Palette" }
