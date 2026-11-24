@@ -10,6 +10,10 @@ local monitor = wm.query("monitor") or {}
 local on_lg = monitor.id == 3 or string.find(string.lower(monitor.name or ""), "lg ultrafine", 1, true) ~= nil
 
 -- Helpers -------------------------------------------------------------------------------------------------
+--
+local function merge(f, s)
+    for k, v in pairs(s) do table.insert(f, v) end
+end
 
 --- Run a shell command (as a bind action).
 local function run(command)
@@ -42,14 +46,14 @@ end
 wm.commands = { mode = "persistent", timeout = 500 }
 
 -- Layouts that `layout tile` offers in the tiling and scrolling layouts.
-local templates = {
+local templates = merge(wm.templates, {
     wm.templates.two,
     wm.templates.two_thirds,
     wm.templates.one_quarter,
     { name = "70/30",    key = "s", title = "Focus 70%", cells = { { 0, 0, 0.7, 1 }, { 0.7, 0, 0.3, 1 } } },
     -- A cell is { x, y, width, height }, all fractions of the screen (0 to 1). Here: three full-height columns.
     { name = "30/40/30", key = "o", title = "30-40-30",  cells = { { 0, 0, 0.3, 1 }, { 0.3, 0, 0.4, 1 }, { 0.7, 0, 0.3, 1 } } },
-}
+})
 
 -- Events and gestures -------------------------------------------------------------------------------------
 
@@ -67,13 +71,25 @@ wm.config {
     layout = "tiling",
     wrap_focus = true,
     start_at_login = true,
-    workspaces = "emulated",
+    workspaces = {
+        mode = "native",
+        max = 9
+    },
     focus_follows_mouse = false,
-    mouse_follows_focus = true,
+    mouse_follows_focus = false,
     -- `smart = true` takes the gaps away from a workspace with a single tiled window (no effect while the gaps are 0).
     gaps = { inner = 0, outer = 0, smart = true },
-    -- NEW: `rate` is the spring stiffness; `workspaces.style = "slide"` slides the windows in when you switch workspace.
-    animations = { enabled = true, rate = 16, workspaces = { style = "none" }, special = { style = "slide" } },
+    -- Every animation lives here. `enabled = false` is the master switch (it also turns off the overlay fades).
+    -- `fps` is how many frames per second the windows move at (30 to 240; a 60 Hz screen caps it at 60).
+    -- `wm animations` shows which kinds run, and `wm animations off overlays` switches one.
+    animations = {
+        enabled = true,                                    -- master switch: every animation is off
+        fps = 120,
+        windows = { enabled = true },                      -- a window that opens, closes or resizes
+        special = { enabled = true, style = "slide" },     -- the scratchpad toggle
+        workspaces = { enabled = false, style = "slide" }, -- "slide" slides the windows in when you switch workspace
+        overlays = { enabled = true, duration = 0.2 },     -- fades of the switcher, the overview and the cheatsheet
+    },
     -- NEW: a program started in a terminal takes the terminal's tile; the terminal comes back when it closes.
     swallow = { enabled = true, terminals = { "org.alacritty", "io.alacritty", "net.kovidgoyal.kitty", "com.github.wez.wezterm" } },
     -- NEW: `focus urgent` reads the Dock badges (Telegram, Mail...) every 2 seconds. Set enabled = false to stop it.
@@ -220,40 +236,38 @@ layer("enter", {
 
 -- Caps+w: Windows (focus, swap, size, monitors, scratchpad, memory, workspaces 0-9)
 local windows = {
-    -- Focus (hjkl) and swap (arrows)
+    ["shift-f"] = { "mode float", "Float mode (move and resize from the keyboard)" },
+    ["shift-r"] = { "window remember --title", "Remember window (with title)" },
+    ["shift-x"] = { "window forget --title", "Forget window (with title)" },
+    b = { "balance", "Balance" },
+    c = { "window center", "Center (floats the window)" },
+    comma = { "focus monitor prev", "Previous monitor" },
+    down = { "swap down", "Swap down" },
+    equal = { "resize smart +50", "Bigger" },
+    f = { "window fullscreen", "Fullscreen" },
+    g = { "switcher", "Go to window (switcher)" },
     h = { "focus left --wrap", "Focus left" },
+    i = { "window send workspace special:" .. SCRATCHPAD, "Send window to the scratchpad" },
     j = { "focus down --wrap", "Focus down" },
     k = { "focus up --wrap", "Focus up" },
     l = { "focus right --wrap", "Focus right" },
     left = { "swap left", "Swap left" },
-    down = { "swap down", "Swap down" },
-    up = { "swap up", "Swap up" },
-    right = { "swap right", "Swap right" },
-    tab = { "focus back", "Previous window" },
-    g = { "switcher", "Go to window (switcher)" },
+    leftsquarebracket = { "window send monitor prev", "Window to previous monitor" },
+    m = { "window maximize", "Maximize" },
+    minus = { "resize smart -50", "Smaller" },
     o = { "overview", "Overview" },
     p = { "palette tabs", "Palette tabs" },
-    -- Size and state
-    f = { "window fullscreen", "Fullscreen" },
-    m = { "window maximize", "Maximize" },
-    c = { "window center", "Center (floats the window)" },
-    space = { "window float", "Float / tile" },
-    ["shift-f"] = { "mode float", "Float mode (move and resize from the keyboard)" },
-    equal = { "resize smart +50", "Bigger" },
-    minus = { "resize smart -50", "Smaller" },
-    -- Monitors: [ ] to move the window, , . to move the focus
-    leftsquarebracket = { "window send monitor prev", "Window to previous monitor" },
-    rightsquarebracket = { "window send monitor next", "Window to next monitor" },
-    comma = { "focus monitor prev", "Previous monitor" },
     period = { "focus monitor next", "Next monitor" },
-    -- Scratchpad: u = show / hide, i = put the window in
-    u = { "workspace special " .. SCRATCHPAD, "Scratchpad (show / hide)" },
-    i = { "window send workspace special:" .. SCRATCHPAD, "Send window to the scratchpad" },
-    -- Memory: the next window of this app opens with the same workspace, place and mode. `shift` keeps the title too.
     r = { "rotate", "Remember window" },
-    ["shift-r"] = { "window remember --title", "Remember window (with title)" },
+    s = { "layout set scrolling", "Remember window" },
+    t = { "layout set tiling", "Remember window" },
+    right = { "swap right", "Swap right" },
+    rightsquarebracket = { "window send monitor next", "Window to next monitor" },
+    space = { "window float", "Float / tile" },
+    tab = { "focus back", "Previous window" },
+    u = { "workspace special " .. SCRATCHPAD, "Scratchpad (show / hide)" },
+    up = { "swap up", "Swap up" },
     x = { "window forget", "Forget window" },
-    ["shift-x"] = { "window forget --title", "Forget window (with title)" },
 }
 for n = 0, 9 do
     windows[tostring(n)] = { "workspace " .. n, "Workspace " .. n }
@@ -418,4 +432,3 @@ wm.mode("vim", {
     l = { remap = "right", description = "Right arrow" },
     w = { remap = "alt-right", description = "Word right" },
 })
-
