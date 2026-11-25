@@ -12,7 +12,7 @@ local on_lg = monitor.id == 3 or string.find(string.lower(monitor.name or ""), "
 -- Helpers -------------------------------------------------------------------------------------------------
 --
 local function merge(f, s)
-    for k, v in pairs(s) do table.insert(f, v) end
+    for _, v in pairs(s) do table.insert(f, v) end
 end
 
 --- Run a shell command (as a bind action).
@@ -71,10 +71,7 @@ wm.config {
     layout = "tiling",
     wrap_focus = true,
     start_at_login = true,
-    workspaces = {
-        mode = "native",
-        max = 9
-    },
+    workspaces = { mode = "emulated", max = 9 },
     focus_follows_mouse = false,
     mouse_follows_focus = false,
     -- `smart = true` takes the gaps away from a workspace with a single tiled window (no effect while the gaps are 0).
@@ -247,7 +244,7 @@ local windows = {
     f = { "window fullscreen", "Fullscreen" },
     g = { "switcher", "Go to window (switcher)" },
     h = { "focus left --wrap", "Focus left" },
-    i = { "window send workspace special:" .. SCRATCHPAD, "Send window to the scratchpad" },
+    -- i = { "window send workspace special:" .. SCRATCHPAD, "Send window to the scratchpad" },
     j = { "focus down --wrap", "Focus down" },
     k = { "focus up --wrap", "Focus up" },
     l = { "focus right --wrap", "Focus right" },
@@ -259,13 +256,12 @@ local windows = {
     p = { "palette tabs", "Palette tabs" },
     period = { "focus monitor next", "Next monitor" },
     r = { "rotate", "Remember window" },
-    s = { "layout set scrolling", "Remember window" },
-    t = { "layout set tiling", "Remember window" },
+    s = { "layout set scrolling", "Scrolling layout" },
+    t = { "layout set tiling", "Tiling layout" },
     right = { "swap right", "Swap right" },
     rightsquarebracket = { "window send monitor next", "Window to next monitor" },
     space = { "window float", "Float / tile" },
     tab = { "focus back", "Previous window" },
-    u = { "workspace special " .. SCRATCHPAD, "Scratchpad (show / hide)" },
     up = { "swap up", "Swap up" },
     x = { "window forget", "Forget window" },
 }
