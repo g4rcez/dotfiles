@@ -406,6 +406,138 @@ cmd_open() {
   exec "${cmd[@]}" "$@"
 }
 
+# Prints "mtime<TAB>path" for every Claude Code transcript, newest first.
+# `sort` is the only step that holds the whole list: -S caps its buffer and it spills to disk.
+_ai_claude_index() {
+  find "$1" -maxdepth 2 -name '*.jsonl' -not -path '*/subagents/*' -print0 \
+    | perl -0 -ne 'chomp; my @s = stat $_ or next; print "$s[9]\t$_\n"' \
+    | LC_ALL=C sort -rn -S 256M
+}
+
+# Turns index lines into rows, one at a time. Visible fields: date, title, description, directory.
+# Hidden fields: cwd, id, transcript path. The title is the user's own (/rename) or the generated one,
+# the description is the first prompt.
+# Transcripts reach hundreds of MB and one record can be several MB, so parsing JSON is too slow:
+# regexes read the first user records, and the title comes from the tail, where Claude Code rewrites it.
+_ai_claude_rows() {
+  perl -MPOSIX=strftime -MEncode=decode,encode -e '
+    $| = 1;
+    my $string = qr/((?:[^"\\]|\\.){0,400})/;
+    my %space = (n => " ", t => " ", r => " ");
+    sub text {
+      my ($raw, $max) = @_;
+      $raw =~ s{\\(["\\/ntr])}{$space{$1} // $1}ge;
+      my $text = decode("UTF-8", $raw);
+      $text =~ s/\s+/ /g;
+      return substr($text, 0, $max);
+    }
+    while (my $entry = <STDIN>) {
+      chomp $entry;
+      my ($mtime, $file) = split /\t/, $entry, 2;
+      open my $fh, "<", $file or next;
+      my ($cwd, $prompt);
+      while (my $line = <$fh>) {
+        next if index($line, q("type":"user")) < 0;
+        while ($line =~ /"(cwd|content|text)":"$string/g) {
+          if ($1 eq "cwd") { $cwd //= $2 }
+          elsif (!defined $prompt) { my $v = $2; $prompt = $v if $v !~ /^\s*[<\[]/ }
+        }
+        # Slash commands and hooks write user records with no prompt: look a little further.
+        last if defined $prompt || tell($fh) > 262144;
+      }
+      next unless defined $cwd;
+      my $size = -s $fh;
+      seek $fh, $size > 131072 ? $size - 131072 : 0, 0;
+      read $fh, my $tail, 131072;
+      my %title;
+      $title{$1} = $2 while $tail =~ /^\{"type":"(ai|custom)-title",[^\n]*?"(?:ai|custom)Title":"$string"/mg;
+      my ($id) = $file =~ m{([^/]+)\.jsonl$};
+      (my $dir = $cwd) =~ s{^\Q$ENV{HOME}\E(?=/|$)}{~};
+      print(join("\t",
+        strftime("%Y-%m-%d %H:%M", localtime $mtime),
+        encode("UTF-8", sprintf("%-36s", text($title{custom} // $title{ai} // "-", 100))),
+        encode("UTF-8", text($prompt // "", 200)),
+        $dir, $cwd, $id, $file), "\n") or exit;
+    }
+  '
+}
+
+# One search: the newest sessions whose date, title, description or directory contain every query word
+# (prefix a word with ' for a fuzzy match). Capped so the picker never holds the whole history.
+# `fzf --filter --no-sort` matches line by line and stores nothing.
+cmd_query_claude_rows() {
+  local index="$1" query="${2:-}"
+  until [[ -f "$index" ]]; do
+    [[ -d "${index%/*}" ]] || return 0 # the picker closed before the index was ready
+    sleep 0.05
+  done
+  _ai_claude_rows < "$index" \
+    | fzf --filter="$query" --exact --no-sort --delimiter $'\t' --nth '1..4' \
+    | head -n 500 || true # no match, or the cap closed the pipe
+}
+
+_ai_query_cleanup() {
+  [[ -n "${AI_QUERY_TMP:-}" ]] || return 0
+  pkill -P "$AI_QUERY_INDEX_PID" 2>/dev/null || true
+  kill "$AI_QUERY_INDEX_PID" 2>/dev/null || true
+  rm -rf "$AI_QUERY_TMP"
+  AI_QUERY_TMP=""
+}
+
+# Searches every Claude Code session on this host (all directories). The pick is resumed
+# from its recorded cwd: `claude --resume` only finds a session from its own directory.
+cmd_query_claude() {
+  if ! command -v fzf &>/dev/null; then
+    echo "error: fzf not found" >&2; exit 1
+  fi
+  local root="$HOME/.claude/projects"
+  [[ -d "$root" ]] || { echo "no claude sessions found"; return 0; }
+  AI_QUERY_TMP="$(mktemp -d)"
+  local index="$AI_QUERY_TMP/index"
+  # Listed once per picker, in the background. The rename publishes the complete list.
+  { _ai_claude_index "$root" > "$index.part" || true; mv "$index.part" "$index"; } 2>/dev/null &
+  AI_QUERY_INDEX_PID=$!
+  trap _ai_query_cleanup EXIT
+  local search selected
+  printf -v search '%q --_query-claude-rows %q' "$SCRIPT_PATH" "$index"
+  # --disabled: each keystroke starts a new search and fzf kills the previous one.
+  # Process substitution, not a pipe: a pick made during the scan stops the producer with SIGPIPE,
+  # and pipefail would turn that into a failure.
+  selected="$(fzf \
+    --disabled \
+    --bind "change:reload:sleep 0.1; $search {q}" \
+    --prompt='claude session: ' \
+    --delimiter $'\t' \
+    --with-nth '1..4' \
+    --tabstop 2 \
+    --preview-window 'down,40%,wrap' \
+    --preview 'printf "%s\n\n" {5}; grep "\"type\":\"user\"" {7} | grep -o -E "\"(content|text)\":\"[^\"]{0,250}" | sed -E "s/^\"(content|text)\":\"//" | grep -v -E "^\s*[<\[]" | head -40' \
+    < <(cmd_query_claude_rows "$index"))"
+  _ai_query_cleanup # `exec` below skips the EXIT trap
+  [[ -z "$selected" ]] && return 0
+  local dir id
+  dir="$(cut -f5 <<< "$selected")"
+  id="$(cut -f6 <<< "$selected")"
+  if [[ ! -d "$dir" ]]; then
+    echo "error: session directory no longer exists: $dir" >&2; exit 1
+  fi
+  [[ "$PWD" == "$dir" ]] || cd "$dir"
+  PROVIDER=claude
+  cmd_open --resume "$id"
+}
+
+_query_usage() {
+  printf 'Usage: ai query <harness>\n\nHarnesses:\n  claude   resume a Claude session from any directory\n'
+}
+
+cmd_query() {
+  case "${1:-}" in
+    claude)       shift; cmd_query_claude "$@" ;;
+    -h|--help)    _query_usage; exit 0 ;;
+    *)            _query_usage >&2; exit 1 ;;
+  esac
+}
+
 _ai_agent_name() {
   local argv0="$1" argv1="$2"
   local b0="${argv0##*/}" b1="${argv1##*/}"
@@ -834,6 +966,8 @@ Commands:
   skills         deploy a skill to ./<provider>/skills/
   update         re-sync all tracked projects
   list           browse available items with fzf
+  query claude   search all Claude sessions and resume one (cd's there first)
+  claude         shortcut for query claude
   sessions       switch to a tmux pane or Rex terminal running an AI CLI
   monitor        live monitor AI sessions in auto-refreshing fzf
   help           show this help
@@ -859,9 +993,12 @@ while [[ $# -gt 0 ]]; do
     skills)           shift; cmd_skills "$@"; exit 0 ;;
     update)           shift; cmd_update "$@"; exit 0 ;;
     list)             shift; cmd_list "$@"; exit 0 ;;
+    query)            shift; cmd_query "$@"; exit 0 ;;
+    claude)           shift; cmd_query_claude "$@"; exit 0 ;;
     sessions)         shift; _ai_pick_mux; cmd_sessions "$@"; exit 0 ;;
     monitor)          shift; _ai_pick_mux; cmd_monitor "$@"; exit 0 ;;
     --_sessions-rows) shift; _ai_pick_mux; cmd_sessions_rows "$@"; exit 0 ;;
+    --_query-claude-rows) shift; cmd_query_claude_rows "$@"; exit 0 ;;
     --_statusline)    _ai_pick_mux; cmd_agent_statusline; exit 0 ;;
     --_preview)       shift; _ai_pick_mux; cmd_preview "$@"; exit 0 ;;
     --_kill)          shift; _ai_pick_mux; cmd_kill_pane "$@"; exit 0 ;;

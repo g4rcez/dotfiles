@@ -18,12 +18,20 @@ _ai() {
         'skills:copy skill subdirs to ./<provider>/skills/'
         'update:re-sync all tracked projects'
         'list:browse skills and agents with fzf'
+        'query:search harness sessions and resume one'
+        'claude:shortcut for query claude'
         'sessions:switch to a tmux pane running an AI CLI'
       )
       _describe 'command' cmds
       ;;
     args)
       case $line[1] in
+        query)
+          if (( $#line == 1 )); then
+            local -a harnesses=('claude:resume a Claude session from any directory')
+            _describe 'harness' harnesses
+          fi
+          ;;
         agents)
           if (( $#line == 1 )); then
             local -a sub=(
